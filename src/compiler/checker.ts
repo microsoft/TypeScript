@@ -4439,8 +4439,8 @@ namespace ts {
                 maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 let saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
-                if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack)) expandingFlags |= 2;
+                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
+                if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
                 let result: Ternary;
                 if (expandingFlags === 3) {
                     result = Ternary.Maybe;
@@ -4474,27 +4474,6 @@ namespace ts {
                     relation[id] = reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed;
                 }
                 return result;
-            }
-
-            // Return true if the given type is part of a deeply nested chain of generic instantiations. We consider this to be the case
-            // when structural type comparisons have been started for 10 or more instantiations of the same generic type. It is possible,
-            // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely expanding.
-            // Effectively, we will generate a false positive when two types are structurally equal to at least 10 levels, but unequal at
-            // some level beyond that.
-            function isDeeplyNestedGeneric(type: ObjectType, stack: ObjectType[]): boolean {
-                // We track type references (created by createTypeReference) and instantiated types (created by instantiateType)
-                if (type.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && depth >= 10) {
-                    let symbol = type.symbol;
-                    let count = 0;
-                    for (let i = 0; i < depth; i++) {
-                        let t = stack[i];
-                        if (t.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && t.symbol === symbol) {
-                            count++;
-                            if (count >= 10) return true;
-                        }
-                    }
-                }
-                return false;
             }
 
             function propertiesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
@@ -4815,6 +4794,27 @@ namespace ts {
             }
         }
 
+        // Return true if the given type is part of a deeply nested chain of generic instantiations. We consider this to be the case
+        // when structural type comparisons have been started for 10 or more instantiations of the same generic type. It is possible,
+        // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely expanding.
+        // Effectively, we will generate a false positive when two types are structurally equal to at least 10 levels, but unequal at
+        // some level beyond that.
+        function isDeeplyNestedGeneric(type: Type, stack: Type[], depth: number): boolean {
+            // We track type references (created by createTypeReference) and instantiated types (created by instantiateType)
+            if (type.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && depth >= 5) {
+                let symbol = type.symbol;
+                let count = 0;
+                for (let i = 0; i < depth; i++) {
+                    let t = stack[i];
+                    if (t.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && t.symbol === symbol) {
+                        count++;
+                        if (count >= 5) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
             return compareProperties(sourceProp, targetProp, compareTypes) !== Ternary.False;
         }
@@ -5129,21 +5129,6 @@ namespace ts {
                 return false;
             }
 
-            function isWithinDepthLimit(type: Type, stack: Type[]) {
-                if (depth >= 5) {
-                    let target = (<TypeReference>type).target;
-                    let count = 0;
-                    for (let i = 0; i < depth; i++) {
-                        let t = stack[i];
-                        if (t.flags & TypeFlags.Reference && (<TypeReference>t).target === target) {
-                            count++;
-                        }
-                    }
-                    return count < 5;
-                }
-                return true;
-            }
-
             function inferFromTypes(source: Type, target: Type) {
                 if (source === anyFunctionType) {
                     return;
@@ -5211,22 +5196,27 @@ namespace ts {
                 else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
                     (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral))) {
                     // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
-                    if (!isInProcess(source, target) && isWithinDepthLimit(source, sourceStack) && isWithinDepthLimit(target, targetStack)) {
-                        if (depth === 0) {
-                            sourceStack = [];
-                            targetStack = [];
-                        }
-                        sourceStack[depth] = source;
-                        targetStack[depth] = target;
-                        depth++;
-                        inferFromProperties(source, target);
-                        inferFromSignatures(source, target, SignatureKind.Call);
-                        inferFromSignatures(source, target, SignatureKind.Construct);
-                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
-                        inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
-                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
-                        depth--;
+                    if (isInProcess(source, target)) {
+                        return;
                     }
+                    if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                        return;
+                    }
+
+                    if (depth === 0) {
+                        sourceStack = [];
+                        targetStack = [];
+                    }
+                    sourceStack[depth] = source;
+                    targetStack[depth] = target;
+                    depth++;
+                    inferFromProperties(source, target);
+                    inferFromSignatures(source, target, SignatureKind.Call);
+                    inferFromSignatures(source, target, SignatureKind.Construct);
+                    inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
+                    inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
+                    inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
+                    depth--;
                 }
             }
 
