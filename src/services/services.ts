@@ -5992,7 +5992,7 @@ namespace ts {
             let typeChecker = program.getTypeChecker();
 
             let result: number[] = [];
-            let typeNames = program.getTypeNames();
+            let classifiableNames = program.getClassifiableNames();
             processNode(sourceFile);
 
             return { spans: result, endOfLineState: EndOfLineState.None };
@@ -6005,6 +6005,9 @@ namespace ts {
 
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
                 let flags = symbol.getFlags();
+                if ((flags & SymbolFlags.Classifiable) === 0) {
+                    return;
+                }
 
                 if (flags & SymbolFlags.Class) {
                     return ClassificationType.className;
@@ -6054,7 +6057,7 @@ namespace ts {
                         // Only bother calling into the typechecker if this is an identifier that
                         // could possibly resolve to a type name.  This makes classification run
                         // in a third of the time it would normally take.
-                        if (typeNames[identifier.text]) {
+                        if (classifiableNames[identifier.text]) {
                             let symbol = typeChecker.getSymbolAtLocation(node);
                             if (symbol) {
                                 let type = classifySymbol(symbol, getMeaningFromLocation(node));

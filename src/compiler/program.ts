@@ -148,7 +148,7 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let typeNames: Map<string>;
+        let classifiableNames: Map<string>;
 
         let start = new Date().getTime();
 
@@ -173,7 +173,7 @@ namespace ts {
             getDeclarationDiagnostics,
             getCompilerOptionsDiagnostics,
             getTypeChecker,
-            getTypeNames,
+            getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
@@ -185,18 +185,18 @@ namespace ts {
         };
         return program;
 
-        function getTypeNames() {
-            if (!typeNames) {
+        function getClassifiableNames() {
+            if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                typeNames = {};
+                classifiableNames = {};
 
                 for (let sourceFile of files) {
-                    copyMap(sourceFile.typeNames, typeNames);
+                    copyMap(sourceFile.classifiableNames, classifiableNames);
                 }
             }
 
-            return typeNames;
+            return classifiableNames;
         }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {

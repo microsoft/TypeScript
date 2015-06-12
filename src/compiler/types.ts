@@ -422,7 +422,6 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ typeNames?: Map<string>;
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -1173,6 +1172,8 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
+
+        /* @internal */ classifiableNames?: Map<string>;
     }
 
     export interface ScriptReferenceHost {
@@ -1224,7 +1225,7 @@ namespace ts {
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
 
-        /* @internal */ getTypeNames(): Map<string>;
+        /* @internal */ getClassifiableNames(): Map<string>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -1522,6 +1523,11 @@ namespace ts {
 
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
+
+        /* @internal */
+        // The set of things we consider semantically classifiable.  Used to speed up the LS during 
+        // classification.
+        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
     }
 
     export interface Symbol {

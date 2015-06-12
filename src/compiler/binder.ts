@@ -90,12 +90,12 @@ namespace ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
-        let typeNames: Map<string> = {}; 
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
-            file.typeNames = typeNames;
+            file.classifiableNames = classifiableNames;
         }
 
         return;
@@ -197,8 +197,8 @@ namespace ts {
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
                 
-                if (name && (includes & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.TypeAlias | SymbolFlags.Interface | SymbolFlags.TypeParameter | SymbolFlags.Module))) {
-                    typeNames[name] = name;   
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
                 } 
 
                 if (symbol.flags & excludes) {
