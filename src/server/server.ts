@@ -1,7 +1,7 @@
 /// <reference path="node.d.ts" />
 /// <reference path="session.ts" />
 
-module ts.server {
+namespace ts.server {
     var nodeproto: typeof NodeJS._debugger = require('_debugger');
     var readline: NodeJS.ReadLine = require('readline');
     var path: NodeJS.Path = require('path');

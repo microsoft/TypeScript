@@ -4,7 +4,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-module ts.BreakpointResolver {
+namespace ts.BreakpointResolver {
     /**
      * Get the breakpoint span in given sourceFile
      */

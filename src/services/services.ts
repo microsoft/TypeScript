@@ -10,7 +10,7 @@
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
-module ts {
+namespace ts {
     /** The version of the language service API */
     export let servicesVersion = "0.4"
 

@@ -1,7 +1,7 @@
 /// <reference path="scanner.ts"/>
 /// <reference path="utilities.ts"/>
 
-module ts {
+namespace ts {
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
