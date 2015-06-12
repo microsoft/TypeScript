@@ -1,7 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 
-module ts {
+namespace ts {
     /* @internal */ export let programTime = 0;
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;
@@ -9,9 +9,6 @@ module ts {
 
     /** The version of the TypeScript compiler release */
     export const version = "1.5.3";
-
-    const carriageReturnLineFeed = "\r\n";
-    const lineFeed = "\n";
 
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
@@ -94,10 +91,7 @@ module ts {
             }
         }
 
-        let newLine =
-            options.newLine === NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
-            options.newLine === NewLineKind.LineFeed ? lineFeed :
-            sys.newLine;
+        const newLine = getNewLineCharacter(options);
 
         return {
             getSourceFile,
@@ -149,26 +143,28 @@ module ts {
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program {
         let program: Program;
         let files: SourceFile[] = [];
-        let filesByName: Map<SourceFile> = {};
         let diagnostics = createDiagnosticCollection();
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
+        let classifiableNames: Map<string>;
 
-        let encounteredTheNoDefaultLibTag = false;
+        let skipDefaultLib = options.noLib;
 
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
 
-        forEach(rootNames, name => processRootFile(name, /*isDefaultLib */ false));
+        let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
+
+        forEach(rootNames, name => processRootFile(name, /*isDefaultLib:*/ false));
 
         // Do not process the default library if:
         //  - The '--noLib' flag is used.
         //  - A 'no-default-lib' reference comment is encountered in
         //      processing the root files.
-        if (!(options.noLib || encounteredTheNoDefaultLibTag)) {
-            processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+        if (!skipDefaultLib) {
+            processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib:*/ true);
         }
 
         verifyCompilerOptions();
@@ -183,7 +179,9 @@ module ts {
             getGlobalDiagnostics,
             getSemanticDiagnostics,
             getDeclarationDiagnostics,
+            getCompilerOptionsDiagnostics,
             getTypeChecker,
+            getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
@@ -194,6 +192,20 @@ module ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
+
+        function getClassifiableNames() {
+            if (!classifiableNames) {
+                // Initialize a checker so that all our files are bound.
+                getTypeChecker();
+                classifiableNames = {};
+
+                for (let sourceFile of files) {
+                    copyMap(sourceFile.classifiableNames, classifiableNames);
+                }
+            }
+
+            return classifiableNames;
+        }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
@@ -246,8 +258,7 @@ module ts {
         }
 
         function getSourceFile(fileName: string) {
-            fileName = host.getCanonicalFileName(normalizeSlashes(fileName));
-            return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
+            return filesByName.get(fileName);
         }
 
         function getDiagnosticsHelper(sourceFile: SourceFile, getDiagnostics: (sourceFile: SourceFile) => Diagnostic[]): Diagnostic[] {
@@ -299,6 +310,12 @@ module ts {
             }
         }
 
+        function getCompilerOptionsDiagnostics(): Diagnostic[] {
+            let allDiagnostics: Diagnostic[] = [];
+            addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+
         function getGlobalDiagnostics(): Diagnostic[] {
             let typeChecker = getDiagnosticsProducingTypeChecker();
 
@@ -342,14 +359,17 @@ module ts {
                 }
             }
             else {
-                if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    diagnosticArgument = [fileName];
-                }
-                else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    fileName += ".ts";
-                    diagnosticArgument = [fileName];
+                var nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                if (!nonTsFile) {
+                    if (options.allowNonTsExtensions) {
+                        diagnostic = Diagnostics.File_0_not_found;
+                        diagnosticArgument = [fileName];
+                    }
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
+                        diagnostic = Diagnostics.File_0_not_found;
+                        fileName += ".ts";
+                        diagnosticArgument = [fileName];
+                    }
                 }
             }
 
@@ -366,19 +386,19 @@ module ts {
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
             let canonicalName = host.getCanonicalFileName(normalizeSlashes(fileName));
-            if (hasProperty(filesByName, canonicalName)) {
+            if (filesByName.contains(canonicalName)) {
                 // We've already looked for this file, use cached result
                 return getSourceFileFromCache(fileName, canonicalName, /*useAbsolutePath*/ false);
             }
             else {
                 let normalizedAbsolutePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
                 let canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
-                if (hasProperty(filesByName, canonicalAbsolutePath)) {
+                if (filesByName.contains(canonicalAbsolutePath)) {
                     return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, /*useAbsolutePath*/ true);
                 }
 
                 // We haven't looked for this file, do so now and cache result
-                let file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, hostErrorMessage => {
+                let file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                     if (refFile) {
                         diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
                             Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
@@ -387,11 +407,12 @@ module ts {
                         diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
+                filesByName.set(canonicalName, file);
                 if (file) {
-                    encounteredTheNoDefaultLibTag = encounteredTheNoDefaultLibTag || file.hasNoDefaultLib;
+                    skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
 
                     // Set the source file for normalized absolute path
-                    filesByName[canonicalAbsolutePath] = file;
+                    filesByName.set(canonicalAbsolutePath, file);
 
                     if (!options.noResolve) {
                         let basePath = getDirectoryPath(fileName);
@@ -399,6 +420,7 @@ module ts {
                         processImportedModules(file, basePath);
                     }
                     if (isDefaultLib) {
+                        file.isDefaultLib = true;
                         files.unshift(file);
                     }
                     else {
@@ -410,7 +432,7 @@ module ts {
             }
 
             function getSourceFileFromCache(fileName: string, canonicalName: string, useAbsolutePath: boolean): SourceFile {
-                let file = filesByName[canonicalName];
+                let file = filesByName.get(canonicalName);
                 if (file && host.useCaseSensitiveFileNames()) {
                     let sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {

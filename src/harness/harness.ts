@@ -809,9 +809,15 @@ module Harness {
             }
         }
 
-        export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, assertInvariants: boolean) {
+        export function createSourceFileAndAssertInvariants(
+            fileName: string,
+            sourceText: string,
+            languageVersion: ts.ScriptTarget,
+            assertInvariants: boolean) {
+
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
             var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
+
             if (assertInvariants) {
                 Utils.assertInvariants(result, /*parent:*/ undefined);
             }
@@ -834,13 +840,14 @@ module Harness {
             return ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
-            writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
-            scriptTarget: ts.ScriptTarget,
-            useCaseSensitiveFileNames: boolean,
-            // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
-            currentDirectory?: string,
-            newLineKind?: ts.NewLineKind): ts.CompilerHost {
+        export function createCompilerHost(
+                inputFiles: { unitName: string; content: string; }[],
+                writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
+                scriptTarget: ts.ScriptTarget,
+                useCaseSensitiveFileNames: boolean,
+                // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
+                currentDirectory?: string,
+                newLineKind?: ts.NewLineKind): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -964,14 +971,15 @@ module Harness {
                 options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
                 options.noErrorTruncation = true;
                 if (lightMode) {
-                    options.noLibCheck = true;
+                    options.skipDefaultLibCheck = true;
                 }
 
                 if (settingsCallback) {
                     settingsCallback(null);
                 }
 
-                var newLine = '\r\n';
+                let newLine = '\r\n';
+                options.skipDefaultLibCheck = true;
 
                 // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
                 // Treat them as library files, so include them in build, but not in baselines.
@@ -988,9 +996,11 @@ module Harness {
                     // always push the default lib in *last* to normalize the type/symbol baselines.
                     programFiles.push(defaultLibFileName);
                 }
-                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                var compilerHost = createCompilerHost(
+                    inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine));
+                    options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine);
+                var program = ts.createProgram(programFiles, options, compilerHost);
 
                 var emitResult = program.emit();
 
@@ -1003,7 +1013,7 @@ module Harness {
                 // reset what newline means in case the last test changed it
                 ts.sys.newLine = newLine;
                 return options;
-
+                
                 function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting) {
                     switch (setting.flag.toLowerCase()) {
                         // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
@@ -1081,6 +1091,10 @@ module Harness {
                         case 'outdiroption':
                         case 'outdir':
                             options.outDir = setting.value;
+                            break;
+
+                        case 'skipdefaultlibcheck':
+                            options.skipDefaultLibCheck = setting.value === "true";
                             break;
 
                         case 'sourceroot':

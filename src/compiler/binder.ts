@@ -1,7 +1,7 @@
 /// <reference path="parser.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     export let bindTime = 0;
 
     export const enum ModuleInstanceState {
@@ -90,10 +90,12 @@ module ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
 
         return;
@@ -194,6 +196,11 @@ module ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
+                } 
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -338,6 +345,7 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.SourceFile:
+                case SyntaxKind.TypeAliasDeclaration:
                     return ContainerFlags.IsContainerWithLocals;
 
                 case SyntaxKind.CatchClause:
@@ -385,10 +393,10 @@ module ts {
 
         function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             switch (container.kind) {
-                // Modules, source files, and classes need specialized handling for how their 
+                // Modules, source files, and classes need specialized handling for how their
                 // members are declared (for example, a member of a class will go into a specific
-                // symbol table depending on if it is static or not). As such, we defer to 
-                // specialized handlers to take care of declaring these child members.
+                // symbol table depending on if it is static or not). We defer to specialized
+                // handlers to take care of declaring these child members.
                 case SyntaxKind.ModuleDeclaration:
                     return declareModuleMember(node, symbolFlags, symbolExcludes);
 
@@ -406,9 +414,10 @@ module ts {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
                     // Interface/Object-types always have their children added to the 'members' of
-                    // their container.  They are only accessible through an instance of their 
-                    // container, and are never in scope otherwise (even inside the body of the 
-                    // object / type / interface declaring them).
+                    // their container. They are only accessible through an instance of their
+                    // container, and are never in scope otherwise (even inside the body of the
+                    // object / type / interface declaring them). An exception is type parameters,
+                    // which are in scope without qualification (similar to 'locals').
                     return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.FunctionType:
@@ -424,11 +433,12 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.TypeAliasDeclaration:
                     // All the children of these container types are never visible through another
-                    // symbol (i.e. through another symbol's 'exports' or 'members').  Instead, 
-                    // they're only accessed 'lexically' (i.e. from code that exists underneath 
+                    // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
+                    // they're only accessed 'lexically' (i.e. from code that exists underneath
                     // their container in the tree.  To accomplish this, we simply add their declared
-                    // symbol to the 'locals' of the container.  These symbols can then be found as 
+                    // symbol to the 'locals' of the container.  These symbols can then be found as
                     // the type checker walks up the containers, checking them for matching names.
                     return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
             }
@@ -658,7 +668,11 @@ module ts {
         }
 
         function bindExportAssignment(node: ExportAssignment) {
-            if (node.expression.kind === SyntaxKind.Identifier) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export assignment in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
+            }
+            else if (node.expression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -669,7 +683,11 @@ module ts {
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export * in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.ExportStar, getDeclarationName(node));
+            }
+            else if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }

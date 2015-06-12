@@ -1,7 +1,7 @@
 /// <reference path="scanner.ts"/>
 /// <reference path="utilities.ts"/>
 
-module ts {
+namespace ts {
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
@@ -103,6 +103,9 @@ module ts {
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
+            case SyntaxKind.TypePredicate:
+                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
+                    visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
             case SyntaxKind.TypeLiteral:
@@ -255,6 +258,7 @@ module ts {
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<TypeAliasDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<TypeAliasDeclaration>node).typeParameters) ||
                     visitNode(cbNode, (<TypeAliasDeclaration>node).type);
             case SyntaxKind.EnumDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -491,13 +495,6 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
-        export const enum StatementFlags {
-            None = 0,
-            Statement = 1,
-            ModuleElement = 2,
-            StatementOrModuleElement = Statement | ModuleElement
-        }
-
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
 
@@ -547,7 +544,7 @@ module ts {
             token = nextToken();
             processReferenceComments(sourceFile);
 
-            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseStatement);
             Debug.assert(token === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = parseTokenNode();
 
@@ -1125,17 +1122,14 @@ module ts {
 
             switch (parsingContext) {
                 case ParsingContext.SourceElements:
-                case ParsingContext.ModuleElements:
+                case ParsingContext.BlockStatements:
+                case ParsingContext.SwitchClauseStatements:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
                     // The problem is that ';' can show up in far too many contexts, and if we see one
                     // and assume it's a statement, then we may bail out inappropriately from whatever
                     // we're parsing.  For example, if we have a semicolon in the middle of a class, then
                     // we really don't want to assume the class is over and we're on a statement in the
                     // outer module.  We just want to consume and move on.
-                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfModuleElement();
-                case ParsingContext.BlockStatements:
-                case ParsingContext.SwitchClauseStatements:
-                    // During error recovery we don't treat empty statements as statements
                     return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfStatement();
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1246,7 +1240,6 @@ module ts {
             }
 
             switch (kind) {
-                case ParsingContext.ModuleElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauses:
                 case ParsingContext.TypeMembers:
@@ -1457,15 +1450,13 @@ module ts {
 
         function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
             switch (parsingContext) {
-                case ParsingContext.ModuleElements:
-                    return isReusableModuleElement(node);
-
                 case ParsingContext.ClassMembers:
                     return isReusableClassMember(node);
 
                 case ParsingContext.SwitchClauses:
                     return isReusableSwitchClause(node);
 
+                case ParsingContext.SourceElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
                     return isReusableStatement(node);
@@ -1528,26 +1519,6 @@ module ts {
             return false;
         }
 
-        function isReusableModuleElement(node: Node) {
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ExportDeclaration:
-                    case SyntaxKind.ExportAssignment:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return true;
-                }
-
-                return isReusableStatement(node);
-            }
-
-            return false;
-        }
-
         function isReusableClassMember(node: Node) {
             if (node) {
                 switch (node.kind) {
@@ -1600,6 +1571,15 @@ module ts {
                     case SyntaxKind.LabeledStatement:
                     case SyntaxKind.DoStatement:
                     case SyntaxKind.DebuggerStatement:
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         return true;
                 }
             }
@@ -1673,8 +1653,7 @@ module ts {
         function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
             switch (context) {
                 case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
-                case ParsingContext.ModuleElements: return Diagnostics.Declaration_or_statement_expected;
-                case ParsingContext.BlockStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
                 case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
@@ -1791,32 +1770,32 @@ module ts {
         }
 
         function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
-            // Technically a keyword is valid here as all keywords are identifier names.
-            // However, often we'll encounter this in error situations when the keyword
+            // Technically a keyword is valid here as all identifiers and keywords are identifier names.
+            // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
             //
             // So, we check for the following specific case:
             //
             //      name.
-            //      keyword identifierNameOrKeyword
+            //      identifierOrKeyword identifierNameOrKeyword
             //
             // Note: the newlines are important here.  For example, if that above code
             // were rewritten into:
             //
-            //      name.keyword
+            //      name.identifierOrKeyword
             //      identifierNameOrKeyword
             //
             // Then we would consider it valid.  That's because ASI would take effect and
-            // the code would be implicitly: "name.keyword; identifierNameOrKeyword".
+            // the code would be implicitly: "name.identifierOrKeyword; identifierNameOrKeyword".
             // In the first case though, ASI will not take effect because there is not a
-            // line terminator after the keyword.
-            if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
+            // line terminator after the identifier or keyword.
+            if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
                 let matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 if (matchesPattern) {
                     // Report that we need an identifier.  However, report it right after the dot,
                     // and not on the next token.  This is because the next token might actually
-                    // be an identifier and the error woudl be quite confusing.
+                    // be an identifier and the error would be quite confusing.
                     return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken*/ true, Diagnostics.Identifier_expected);
                 }
             }
@@ -1897,9 +1876,17 @@ module ts {
 
         // TYPES
 
-        function parseTypeReference(): TypeReferenceNode {
-            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+        function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
+            let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                nextToken();
+                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                node.parameterName = <Identifier>typeName;
+                node.type = parseType();
+                return finishNode(node);
+            }
+            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
+            node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
@@ -2336,7 +2323,7 @@ module ts {
                 case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     let node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReference();
+                    return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
@@ -2348,7 +2335,7 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReference();
+                    return parseTypeReferenceOrTypePredicate();
             }
         }
 
@@ -2686,7 +2673,7 @@ module ts {
 
         function nextTokenIsIdentifierOnSameLine() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() && isIdentifier()
+            return !scanner.hasPrecedingLineBreak() && isIdentifier();
         }
 
         function parseYieldExpression(): YieldExpression {
@@ -3799,7 +3786,7 @@ module ts {
             return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
         }
 
-        function parseDeclarationFlags(): StatementFlags {
+        function isDeclaration(): boolean {
             while (true) {
                 switch (token) {
                     case SyntaxKind.VarKeyword:
@@ -3808,28 +3795,54 @@ module ts {
                     case SyntaxKind.FunctionKeyword:
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
-                        return StatementFlags.Statement;
+                        return true;
+
+                    // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
+                    // however, an identifier cannot be followed by another identifier on the same line. This is what we
+                    // count on to parse out the respective declarations. For instance, we exploit this to say that
+                    //
+                    //    namespace n
+                    //
+                    // can be none other than the beginning of a namespace declaration, but need to respect that JavaScript sees
+                    //
+                    //    namespace
+                    //    n
+                    //
+                    // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
+                    // We need to look one token ahead to see if it permissible to try parsing a declaration.
+                    //
+                    // *Note*: 'interface' is actually a strict mode reserved word. So while
+                    //
+                    //   "use strict"
+                    //   interface
+                    //   I {}
+                    //
+                    // could be legal, it would add complexity for very little gain.
                     case SyntaxKind.InterfaceKeyword:
                     case SyntaxKind.TypeKeyword:
-                        nextToken();
-                        return isIdentifierOrKeyword() ? StatementFlags.Statement : StatementFlags.None;
+                        return nextTokenIsIdentifierOnSameLine();
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
+                        return nextTokenIsIdentifierOrStringLiteralOnSameLine();
+                    case SyntaxKind.DeclareKeyword:
                         nextToken();
-                        return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ? StatementFlags.ModuleElement : StatementFlags.None;
+                        // ASI takes effect for this modifier.
+                        if (scanner.hasPrecedingLineBreak()) {
+                            return false;
+                        }
+                        continue;
+
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
-                            token === SyntaxKind.OpenBraceToken || isIdentifierOrKeyword() ?
-                            StatementFlags.ModuleElement : StatementFlags.None;
+                            token === SyntaxKind.OpenBraceToken || isIdentifierOrKeyword();
                     case SyntaxKind.ExportKeyword:
                         nextToken();
                         if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
                             token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword) {
-                            return StatementFlags.ModuleElement;
+                            return true;
                         }
                         continue;
-                    case SyntaxKind.DeclareKeyword:
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
@@ -3837,16 +3850,16 @@ module ts {
                         nextToken();
                         continue;
                     default:
-                        return StatementFlags.None;
+                        return false;
                 }
             }
         }
 
-        function getDeclarationFlags(): StatementFlags {
-            return lookAhead(parseDeclarationFlags);
+        function isStartOfDeclaration(): boolean {
+            return lookAhead(isDeclaration);
         }
 
-        function getStatementFlags(): StatementFlags {
+        function isStartOfStatement(): boolean {
             switch (token) {
                 case SyntaxKind.AtToken:
                 case SyntaxKind.SemicolonToken:
@@ -3872,12 +3885,12 @@ module ts {
                 // however, we say they are here so that we may gracefully parse them and error later.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
-                    return StatementFlags.Statement;
+                    return true;
 
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.ImportKeyword:
-                    return getDeclarationFlags();
+                    return isStartOfDeclaration();
 
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.InterfaceKeyword:
@@ -3885,7 +3898,7 @@ module ts {
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
                     // When these don't start a declaration, they're an identifier in an expression statement
-                    return getDeclarationFlags() || StatementFlags.Statement;
+                    return true;
 
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -3893,20 +3906,11 @@ module ts {
                 case SyntaxKind.StaticKeyword:
                     // When these don't start a declaration, they may be the start of a class member if an identifier
                     // immediately follows. Otherwise they're an identifier in an expression statement.
-                    return getDeclarationFlags() ||
-                        (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? StatementFlags.None : StatementFlags.Statement);
+                    return isStartOfDeclaration() || !lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 default:
-                    return isStartOfExpression() ? StatementFlags.Statement : StatementFlags.None;
+                    return isStartOfExpression();
             }
-        }
-
-        function isStartOfStatement(): boolean {
-            return (getStatementFlags() & StatementFlags.Statement) !== 0;
-        }
-
-        function isStartOfModuleElement(): boolean {
-            return (getStatementFlags() & StatementFlags.StatementOrModuleElement) !== 0;
         }
 
         function nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine() {
@@ -3922,18 +3926,6 @@ module ts {
         }
 
         function parseStatement(): Statement {
-            return <Statement>parseModuleElementOfKind(StatementFlags.Statement);
-        }
-
-        function parseModuleElement(): ModuleElement {
-            return parseModuleElementOfKind(StatementFlags.StatementOrModuleElement);
-        }
-
-        function parseSourceElement(): ModuleElement {
-            return parseModuleElementOfKind(StatementFlags.StatementOrModuleElement);
-        }
-
-        function parseModuleElementOfKind(flags: StatementFlags): ModuleElement {
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
@@ -3971,7 +3963,7 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
-                // Include the next two for error recovery.
+                // Include 'catch' and 'finally' for error recovery.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
@@ -3979,20 +3971,21 @@ module ts {
                     return parseDebuggerStatement();
                 case SyntaxKind.AtToken:
                     return parseDeclaration();
-                case SyntaxKind.ConstKeyword:
+
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.TypeKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.ConstKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.ImportKeyword:
-                case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.ModuleKeyword:
-                case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.StaticKeyword:
-                case SyntaxKind.TypeKeyword:
-                    if (getDeclarationFlags() & flags) {
+                    if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }
                     break;
@@ -4000,7 +3993,7 @@ module ts {
             return parseExpressionOrLabeledStatement();
         }
 
-        function parseDeclaration(): ModuleElement {
+        function parseDeclaration(): Statement {
             let fullStart = getNodePos();
             let decorators = parseDecorators();
             let modifiers = parseModifiers();
@@ -4033,13 +4026,18 @@ module ts {
                     if (decorators) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.                        
-                        let node = <ModuleElement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                        let node = <Statement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         node.pos = fullStart;
                         node.decorators = decorators;
                         setModifiers(node, modifiers);
                         return finishNode(node);
                     }
             }
+        }
+
+        function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token === SyntaxKind.StringLiteral);
         }
 
         function parseFunctionBlockOrSemicolon(isGenerator: boolean, diagnosticMessage?: DiagnosticMessage): Block {
@@ -4547,6 +4545,7 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.TypeKeyword);
             node.name = parseIdentifier();
+            node.typeParameters = parseTypeParameters();
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
@@ -4583,7 +4582,7 @@ module ts {
         function parseModuleBlock(): ModuleBlock {
             let node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/false, parseModuleElement);
+                node.statements = parseList(ParsingContext.BlockStatements, /*checkForStrictMode*/ false, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4895,7 +4894,7 @@ module ts {
 
             sourceFile.referencedFiles = referencedFiles;
             sourceFile.amdDependencies = amdDependencies;
-            sourceFile.amdModuleName = amdModuleName;
+            sourceFile.moduleName = amdModuleName;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -4911,7 +4910,6 @@ module ts {
 
         const enum ParsingContext {
             SourceElements,            // Elements in source file
-            ModuleElements,            // Elements in module declaration
             BlockStatements,           // Statements in block
             SwitchClauses,             // Clauses in switch statement
             SwitchClauseStatements,    // Statements in switch clause

@@ -1,7 +1,7 @@
 /** 
   * Declaration module describing the TypeScript Server protocol 
   */
-declare module ts.server.protocol {
+declare namespace ts.server.protocol {
     /** 
       * A TypeScript Server message 
       */

@@ -3,7 +3,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
 
-module ts {
+namespace ts {
     /* @internal */
     export var optionDeclarations: CommandLineOption[] = [
         {
@@ -101,6 +101,10 @@ module ts {
         },
         {
             name: "noResolve",
+            type: "boolean",
+        },
+        {
+            name: "skipDefaultLibCheck",
             type: "boolean",
         },
         {

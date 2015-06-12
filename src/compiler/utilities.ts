@@ -1,7 +1,7 @@
 /// <reference path="binder.ts" />
 
 /* @internal */
-module ts {
+namespace ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
         diagnosticMessage?: DiagnosticMessage
@@ -1985,9 +1985,24 @@ module ts {
 
         return result;
     }
+
+    const carriageReturnLineFeed = "\r\n";
+    const lineFeed = "\n";
+    export function getNewLineCharacter(options: CompilerOptions): string {
+        if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
+            return carriageReturnLineFeed;
+        }
+        else if (options.newLine === NewLineKind.LineFeed) {
+            return lineFeed;
+        }
+        else if (sys) {
+            return sys.newLine
+        }
+        return carriageReturnLineFeed;
+    }
 }
 
-module ts {
+namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
