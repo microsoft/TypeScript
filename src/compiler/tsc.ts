@@ -1,7 +1,7 @@
 /// <reference path="program.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
-module ts {
+namespace ts {
     export interface SourceFile {
         fileWatcher: FileWatcher;
     }

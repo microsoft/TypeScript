@@ -1,7 +1,7 @@
 /// <reference path="binder.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     let nextSymbolId = 1;
     let nextNodeId = 1;
     let nextMergeId = 1;

@@ -2,7 +2,7 @@
 
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export const enum RuleFlags {
         None,
         CanDeleteNewLines

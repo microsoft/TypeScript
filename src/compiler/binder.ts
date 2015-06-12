@@ -1,7 +1,7 @@
 /// <reference path="parser.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     export let bindTime = 0;
 
     export const enum ModuleInstanceState {
@@ -90,10 +90,12 @@ module ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
 
         return;
@@ -194,6 +196,11 @@ module ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
+                } 
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;

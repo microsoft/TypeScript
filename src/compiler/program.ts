@@ -1,7 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 
-module ts {
+namespace ts {
     /* @internal */ export let programTime = 0;
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;
@@ -148,6 +148,7 @@ module ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
+        let classifiableNames: Map<string>;
 
         let start = new Date().getTime();
 
@@ -172,6 +173,7 @@ module ts {
             getDeclarationDiagnostics,
             getCompilerOptionsDiagnostics,
             getTypeChecker,
+            getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
@@ -182,6 +184,20 @@ module ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
+
+        function getClassifiableNames() {
+            if (!classifiableNames) {
+                // Initialize a checker so that all our files are bound.
+                getTypeChecker();
+                classifiableNames = {};
+
+                for (let sourceFile of files) {
+                    copyMap(sourceFile.classifiableNames, classifiableNames);
+                }
+            }
+
+            return classifiableNames;
+        }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
@@ -335,14 +351,17 @@ module ts {
                 }
             }
             else {
-                if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    diagnosticArgument = [fileName];
-                }
-                else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    fileName += ".ts";
-                    diagnosticArgument = [fileName];
+                var nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                if (!nonTsFile) {
+                    if (options.allowNonTsExtensions) {
+                        diagnostic = Diagnostics.File_0_not_found;
+                        diagnosticArgument = [fileName];
+                    }
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
+                        diagnostic = Diagnostics.File_0_not_found;
+                        fileName += ".ts";
+                        diagnosticArgument = [fileName];
+                    }
                 }
             }
 
