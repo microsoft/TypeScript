@@ -351,14 +351,17 @@ namespace ts {
                 }
             }
             else {
-                if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    diagnosticArgument = [fileName];
-                }
-                else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    fileName += ".ts";
-                    diagnosticArgument = [fileName];
+                var nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                if (!nonTsFile) {
+                    if (options.allowNonTsExtensions) {
+                        diagnostic = Diagnostics.File_0_not_found;
+                        diagnosticArgument = [fileName];
+                    }
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
+                        diagnostic = Diagnostics.File_0_not_found;
+                        fileName += ".ts";
+                        diagnosticArgument = [fileName];
+                    }
                 }
             }
 
