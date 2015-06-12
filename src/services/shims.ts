@@ -245,16 +245,22 @@ module ts {
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
+        private loggingEnabled = false;
+        private tracingEnabled = false;
 
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
         public log(s: string): void {
-            this.shimHost.log(s);
+            if (this.loggingEnabled) {
+                this.shimHost.log(s);
+            }
         }
 
         public trace(s: string): void {
-            this.shimHost.trace(s);
+            if (this.tracingEnabled) {
+                this.shimHost.trace(s);
+            }
         }
 
         public error(s: string): void {
@@ -344,15 +350,15 @@ module ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
-        if (!noPerfLogging) {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+        if (logPerformance) {
             logger.log(actionDescription);
             var start = Date.now();
         }
 
         var result = action();
 
-        if (!noPerfLogging) {
+        if (logPerformance) {
             var end = Date.now();
             logger.log(actionDescription + " completed in " + (end - start) + " msec");
             if (typeof (result) === "string") {
@@ -367,9 +373,9 @@ module ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action, noPerfLogging);
+            var result = simpleForwardCall(logger, actionDescription, action, logPerformance);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -408,6 +414,7 @@ module ts {
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
         private logger: Logger;
+        private logPerformance = false;
 
         constructor(factory: ShimFactory,
             private host: LanguageServiceShimHost,
@@ -417,7 +424,7 @@ module ts {
         }
 
         public forwardJSONCall(actionDescription: string, action: () => any): string {
-            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
+            return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
         /// DISPOSE
@@ -806,6 +813,7 @@ module ts {
 
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
+        private logPerformance = false;
 
         constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
@@ -815,7 +823,7 @@ module ts {
         public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
             return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
                 () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
-                /*noPerfLogging:*/ true);
+                this.logPerformance);
         }
 
         /// COLORIZATION
@@ -833,13 +841,14 @@ module ts {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
+        private logPerformance = false;
 
         constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
+            return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
