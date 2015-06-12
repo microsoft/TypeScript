@@ -19,7 +19,7 @@
 var debugObjectHost = (<any>this);
 
 /* @internal */
-module ts {
+namespace ts {
     export interface ScriptSnapshotShim {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;

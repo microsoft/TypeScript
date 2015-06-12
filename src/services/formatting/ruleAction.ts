@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export const enum RuleAction {
         Ignore      = 0x00000001,
         Space       = 0x00000002,

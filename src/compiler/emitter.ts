@@ -2,7 +2,7 @@
 /// <reference path="declarationEmitter.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }

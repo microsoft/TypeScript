@@ -4,7 +4,7 @@
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
 
-module ts.server {
+namespace ts.server {
     var spaceCache:string[] = [];
 
     interface StackTraceError extends Error {

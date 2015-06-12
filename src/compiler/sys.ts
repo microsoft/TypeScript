@@ -1,6 +1,6 @@
 /// <reference path="core.ts"/>
 
-module ts {
+namespace ts {
     export interface System {
         args: string[];
         newLine: string;
