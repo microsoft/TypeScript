@@ -36,6 +36,9 @@
         "istanbul": "latest"
     },
     "scripts": {
-        "test": "jake runtests"
+        "test": "jake runtests",
+        "clean": "jake clean",
+        "build": "jake local",
+        "build-tests": "jake tests"
     }
 }

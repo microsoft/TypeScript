@@ -1,0 +1,18 @@
+{
+    "scenario": "Import a module found in a mapping file",
+    "projectRoot": "tests/cases/projects/import_via_mapping_file",
+    "inputFiles": [
+        "app/main.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.d.ts",
+        "libs/library.ts",
+        "libs/library2.ts",
+        "app/main.ts"
+    ],
+    "emittedFiles": [
+        "libs/library.js",
+        "libs/library2.js",
+        "app/main.js"
+    ]
+}

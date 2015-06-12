@@ -1,0 +1,7 @@
+{
+    "scenario": "Import a module found in a mapping file",
+    "projectRoot": "tests/cases/projects/import_via_mapping_file",
+    "inputFiles": [
+        "app/main.ts"
+    ]
+}

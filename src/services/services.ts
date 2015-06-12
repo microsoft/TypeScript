@@ -753,6 +753,7 @@ namespace ts {
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
+        public resolvedModules: Map<string>;
 
         private namedDeclarations: Map<Declaration[]>;
 

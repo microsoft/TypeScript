@@ -425,54 +425,160 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
-            forEach(file.statements, node => {
-                if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ExportDeclaration) {
-                    let moduleNameExpr = getExternalModuleName(node);
-                    if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
-                        let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
-                        if (moduleNameText) {
-                            let searchPath = basePath;
-                            let searchName: string; 
-                            while (true) {
-                                searchName = normalizePath(combinePaths(searchPath, moduleNameText));
-                                if (forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr))) {
-                                    break;
-                                }
-                                let parentPath = getDirectoryPath(searchPath);
-                                if (parentPath === searchPath) {
-                                    break;
-                                }
-                                searchPath = parentPath;
-                            }
-                        }
-                    }
+            let imports: LiteralExpression[];
+            forEach(file.statements, collectImports);
+            if (imports) {
+                ensureResolvedModuleNamesAreUptoDate(file, imports);
+                for (let importNode of imports) {
+                    resolveModule(importNode);
                 }
-                else if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
-                    // TypeScript 1.0 spec (April 2014): 12.1.6
-                    // An AmbientExternalModuleDeclaration declares an external module. 
-                    // This type of declaration is permitted only in the global module.
-                    // The StringLiteral must specify a top - level external module name.
-                    // Relative external module names are not permitted
-                    forEachChild((<ModuleDeclaration>node).body, node => {
-                        if (isExternalModuleImportEqualsDeclaration(node) &&
-                            getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
-
-                            let nameLiteral = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
-                            let moduleName = nameLiteral.text;
-                            if (moduleName) {
-                                // TypeScript 1.0 spec (April 2014): 12.1.6
-                                // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                // only through top - level external module names. Relative external module names are not permitted.
-                                let searchName = normalizePath(combinePaths(basePath, moduleName));
-                                forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, nameLiteral));
-                            }
-                        }
-                    });
-                }
-            });
+            }
+            else {
+                file.resolvedModules = undefined;
+            }
+            return;
 
             function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
                 return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
+            }
+
+            function collectImports(node: Node): void  {
+                switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                        let moduleNameExpr = getExternalModuleName(node);
+                        if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
+                            return;
+                        }
+                        let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
+                        if (!moduleNameText) {
+                            return;
+                        }
+
+                        (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        break;
+                    case SyntaxKind.ModuleDeclaration:
+                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                            // TypeScript 1.0 spec (April 2014): 12.1.6
+                            // An AmbientExternalModuleDeclaration declares an external module. 
+                            // This type of declaration is permitted only in the global module.
+                            // The StringLiteral must specify a top - level external module name.
+                            // Relative external module names are not permitted
+                            forEachChild((<ModuleDeclaration>node).body, node => {
+                                if (isExternalModuleImportEqualsDeclaration(node) &&
+                                    getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                                    let moduleName = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
+                                    // TypeScript 1.0 spec (April 2014): 12.1.6
+                                    // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
+                                    // only through top - level external module names. Relative external module names are not permitted.
+                                    if (moduleName) {
+                                        (imports || (imports = [])).push(moduleName);
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                }
+            }
+
+            function generateImportMap(relativeStartDirectory: string): Map<string> {
+                // find all of the map files between startDirectory and the project root directory
+                let foundMaps: Map<string>[] = [];
+                let currentDirectory = relativeStartDirectory;
+                while (true) {
+                    let map = tryGetImportMap(currentDirectory);
+                    if (map)
+                        foundMaps.push(map);
+                    // end of the line
+                    if (!currentDirectory)
+                        break;
+                    currentDirectory = getDirectoryPath(currentDirectory);
+                }
+
+                // merge all of the found maps, in reverse order, into the final map
+                let finalMap: Map<string> = {};
+                forEach(foundMaps.reverse(), foundMap => {
+                    for (let key in foundMap)
+                        finalMap[key] = foundMap[key];
+                });
+
+                return finalMap;
+            }
+
+            function tryGetImportMap(directory: string): Map<string> {
+                directory = normalizePath(directory);
+                let mapFilePath = normalizePath(combinePaths(directory, 'typescript-definition-map.json'));
+                let absoluteMapFilePath = combinePaths(host.getCurrentDirectory(), mapFilePath);
+                if (!sys.fileExists(absoluteMapFilePath))
+                    return null;
+
+                let map: Map<string> = JSON.parse(sys.readFile(absoluteMapFilePath));
+                let rootRelativeRoot: Map<string> = {};
+                for (let key in map) {
+                    rootRelativeRoot[key] = combinePaths(directory, map[key]);
+                }
+
+                return rootRelativeRoot;
+            }
+
+            function tryResolveImportFromMap(importMap: Map<string>, moduleNameExpr: LiteralExpression): string {
+                let seenKeys: Map<boolean> = {};
+                let currentName = moduleNameExpr.text;
+                while (true) {
+                    // cycle detection
+                    if (seenKeys[currentName])
+                        return null;
+                    seenKeys[currentName] = true;
+
+                    // follow the key in the map to an alias, file or nothing
+                    currentName = importMap[currentName];
+                    if (!currentName)
+                        // TODO: add file globbing support as fallback when exact match isn't found
+                        return null;
+
+                    // if we find a file then we are done
+                    //if (sys.fileExists(combinePaths(host.getCurrentDirectory(), currentName)))
+                    if (findModuleSourceFile(currentName, moduleNameExpr))
+                        return currentName;
+                }
+            }
+
+            function resolveModule(moduleNameExpr: LiteralExpression): void {
+                let searchPath = basePath;
+                let searchName: string;
+
+                if (hasResolvedModuleName(file, moduleNameExpr)) {
+                    let fileName = getResolvedModuleFileName(file, moduleNameExpr);
+                    if (fileName) {
+                        findModuleSourceFile(fileName, moduleNameExpr);
+                    }
+                    return;
+                }
+
+                let importMap = generateImportMap(searchPath);
+                let importFromMap = tryResolveImportFromMap(importMap, moduleNameExpr);
+                if (importFromMap) {
+                    setResolvedModuleName(file, <LiteralExpression>moduleNameExpr, importFromMap);
+                    return;
+                }
+
+                while (true) {
+                    searchName = normalizePath(combinePaths(searchPath, moduleNameExpr.text));
+                    let referencedSourceFile = forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr));
+                    if (referencedSourceFile) {
+                        setResolvedModuleName(file, <LiteralExpression>moduleNameExpr, referencedSourceFile.fileName);
+                        return;
+                    }
+
+                    let parentPath = getDirectoryPath(searchPath);
+                    if (parentPath === searchPath) {
+                        break;
+                    }
+                    searchPath = parentPath;
+                }
+                // mark reference as non-resolved
+                setResolvedModuleName(file, <LiteralExpression>moduleNameExpr, undefined);
             }
         }
 
