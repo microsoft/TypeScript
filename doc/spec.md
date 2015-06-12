@@ -2567,7 +2567,7 @@ var s = data[0];  // string
 var n = data[1];  // number
 ```
 
-## <a name="4.11"/>4.11 The new Operator
+## <a name="4.11"/>4.11 The new Operator
 
 A `new` operation has one of the following forms:
 
