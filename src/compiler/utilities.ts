@@ -1,7 +1,7 @@
 /// <reference path="binder.ts" />
 
 /* @internal */
-module ts {
+namespace ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
         diagnosticMessage?: DiagnosticMessage
@@ -2002,7 +2002,7 @@ module ts {
     }
 }
 
-module ts {
+namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }

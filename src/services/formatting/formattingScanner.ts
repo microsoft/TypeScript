@@ -2,7 +2,7 @@
 /// <reference path="..\..\compiler\scanner.ts"/>
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
     export interface FormattingScanner {

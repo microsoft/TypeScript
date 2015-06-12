@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export module Shared {
         export interface ITokenAccess {
             GetTokens(): SyntaxKind[];

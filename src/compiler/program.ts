@@ -1,7 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 
-module ts {
+namespace ts {
     /* @internal */ export let programTime = 0;
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;

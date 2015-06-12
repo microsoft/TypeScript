@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
             let o: ts.Map<any> = <any>this;
