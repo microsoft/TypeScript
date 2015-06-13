@@ -970,9 +970,6 @@ module Harness {
                 options.module = options.module || ts.ModuleKind.None;
                 options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
                 options.noErrorTruncation = true;
-                if (lightMode) {
-                    options.skipDefaultLibCheck = true;
-                }
 
                 if (settingsCallback) {
                     settingsCallback(null);
@@ -991,11 +988,6 @@ module Harness {
                 var fileOutputs: GeneratedFile[] = [];
 
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
-                if (!options.noLib) {
-                    // Unless the user doesn't want a default lib at all,
-                    // always push the default lib in *last* to normalize the type/symbol baselines.
-                    programFiles.push(defaultLibFileName);
-                }
 
                 var compilerHost = createCompilerHost(
                     inputFiles.concat(includeBuiltFiles).concat(otherFiles),
