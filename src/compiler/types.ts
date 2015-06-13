@@ -1154,8 +1154,8 @@ namespace ts {
          *
          *  /// <reference no-default-lib="true"/>
          *
-         * which serves the purpose of ignoring the file in certain ways in the
-         * presence of compiler options like '--noLib' and '--noLibCheck'.
+         * If any other file has this comment, it signals not to include lib.d.ts
+         * because this containing file is intended to act as a default library.
          */
         hasNoDefaultLib: boolean;
 
