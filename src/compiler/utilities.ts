@@ -1177,6 +1177,40 @@ namespace ts {
         return false;
     }
 
+    // Return true if the given identifier is classified as an IdentifierName
+    export function isIdentifierName(node: Identifier): boolean {
+        let parent = node.parent;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.PropertyAccessExpression:
+                // Name in member declaration or property name in property access
+                return (<Declaration | PropertyAccessExpression>parent).name === node;
+            case SyntaxKind.QualifiedName:
+                // Name on right hand side of dot in a type query
+                if ((<QualifiedName>parent).right === node) {
+                    while (parent.kind === SyntaxKind.QualifiedName) {
+                        parent = parent.parent;
+                    }
+                    return parent.kind === SyntaxKind.TypeQuery;
+                }
+                return false;
+            case SyntaxKind.ImportSpecifier:
+                // Name on left hand of 'as' in import specifier
+                return (<ImportSpecifier>parent).propertyName === node;
+            case SyntaxKind.ExportSpecifier:
+                // Any name in an export specifier
+                return true;
+        }
+        return false;
+    }
+
     // An alias symbol is created by one of the following declarations:
     // import <symbol> = ...
     // import <symbol> from ...
