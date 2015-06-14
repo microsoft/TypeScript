@@ -1505,6 +1505,22 @@
         "category": "Error",
         "code": 2505
     },
+    "'{0}' is referenced directly or indirectly in its own base expression.": {
+        "category": "Error",
+        "code": 2506
+    },
+    "Base expression is not of a constructor function type.": {
+        "category": "Error",
+        "code": 2507
+    },
+    "No base constructor has the specified number of type arguments.": {
+        "category": "Error",
+        "code": 2508
+    },
+    "Base constructor does not return a class or interface type.": {
+        "category": "Error",
+        "code": 2509
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

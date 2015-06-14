@@ -2600,6 +2600,47 @@ module ts {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
         }
 
+        function isConstructorType(type: Type): boolean {
+            return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Construct).length > 0;
+        }
+
+        function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments {
+            return getClassExtendsHeritageClauseElement(<ClassLikeDeclaration>type.symbol.valueDeclaration);
+        }
+
+        function getConstructorsForTypeArguments(type: ObjectType, typeArguments: TypeNode[]): Signature[] {
+            let typeArgCount = typeArguments ? typeArguments.length : 0;
+            return filter(getSignaturesOfType(type, SignatureKind.Construct),
+                sig => (sig.typeParameters ? sig.typeParameters.length : 0) === typeArgCount);
+        }
+
+        function getBaseConstructorTypeOfClass(type: InterfaceType): ObjectType {
+            if (!type.baseConstructorType) {
+                let baseTypeNode = getBaseTypeNodeOfClass(type);
+                if (!baseTypeNode) {
+                    return type.baseConstructorType = unknownType;
+                }
+                if (!pushTypeResolution(type)) {
+                    return unknownType;
+                }
+                let baseConstructorType = checkExpressionCached(baseTypeNode.expression);
+                if (baseConstructorType.flags & TypeFlags.ObjectType) {
+                    // Force resolution of members such that we catch circularities
+                    resolveObjectOrUnionTypeMembers(baseConstructorType);
+                }
+                if (!popTypeResolution()) {
+                    error(type.symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
+                    return type.baseConstructorType = unknownType;
+                }
+                if (baseConstructorType !== unknownType && !isConstructorType(baseConstructorType)) {
+                    error(baseTypeNode, Diagnostics.Base_expression_is_not_of_a_constructor_function_type);
+                    return type.baseConstructorType = unknownType;
+                }
+                type.baseConstructorType = baseConstructorType;
+            }
+            return type.baseConstructorType;
+        }
+
         function getBaseTypes(type: InterfaceType): ObjectType[] {
             let typeWithBaseTypes = <InterfaceTypeWithBaseTypes>type;
             if (!typeWithBaseTypes.baseTypes) {
@@ -2613,30 +2654,45 @@ module ts {
                     Debug.fail("type must be class or interface");
                 }
             }
-
             return typeWithBaseTypes.baseTypes;
         }
 
         function resolveBaseTypesOfClass(type: InterfaceTypeWithBaseTypes): void {
-            type.baseTypes = [];
-            let declaration = <ClassDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
-            let baseTypeNode = getClassExtendsHeritageClauseElement(declaration);
-            if (baseTypeNode) {
-                let baseType = getTypeFromTypeNode(baseTypeNode);
-                if (baseType !== unknownType) {
-                    if (getTargetType(baseType).flags & TypeFlags.Class) {
-                        if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                            type.baseTypes.push(baseType);
-                        }
-                        else {
-                            error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
-                        }
-                    }
-                    else {
-                        error(baseTypeNode, Diagnostics.A_class_may_only_extend_another_class);
-                    }
-                }
+            type.baseTypes = emptyArray;
+            let baseContructorType = getBaseConstructorTypeOfClass(type);
+            if (baseContructorType === unknownType) {
+                return;
             }
+            let baseTypeNode = getBaseTypeNodeOfClass(type);
+            let baseType: Type;
+            if (baseContructorType.symbol && baseContructorType.symbol.flags & SymbolFlags.Class) {
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseContructorType.symbol);
+            }
+            else {
+                let constructors = getConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
+                if (!constructors.length) {
+                    error(baseTypeNode, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
+                    return;
+                }
+                let constructor = constructors[0];
+                if (baseTypeNode.typeArguments) {
+                    constructor = getSignatureInstantiation(constructor, map(baseTypeNode.typeArguments, getTypeFromTypeNode));
+                }
+                baseType = getReturnTypeOfSignature(constructor);
+            }
+            if (baseType === unknownType) {
+                return;
+            }
+            if (!(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface))) {
+                error(baseTypeNode, Diagnostics.Base_constructor_does_not_return_a_class_or_interface_type);
+                return;
+            }
+            if (type === baseType || hasBaseType(<InterfaceType>baseType, type)) {
+                error(type.symbol.valueDeclaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
+                    typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
+                return;
+            }
+            type.baseTypes = [baseType];
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceTypeWithBaseTypes): void {
@@ -2645,7 +2701,6 @@ module ts {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                     for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                         let baseType = getTypeFromTypeNode(node);
-
                         if (baseType !== unknownType) {
                             if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
                                 if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
@@ -2867,20 +2922,26 @@ module ts {
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
-        function getDefaultConstructSignatures(classType: InterfaceType): Signature[]{
-            let baseTypes = getBaseTypes(classType);
-            if (baseTypes.length) {
-                let baseType = baseTypes[0];
-                let baseSignatures = getSignaturesOfType(getTypeOfSymbol(baseType.symbol), SignatureKind.Construct);
-                return map(baseSignatures, baseSignature => {
-                    let signature = baseType.flags & TypeFlags.Reference ?
-                        getSignatureInstantiation(baseSignature, (<TypeReference>baseType).typeArguments) : cloneSignature(baseSignature);
-                    signature.typeParameters = classType.localTypeParameters;
-                    signature.resolvedReturnType = classType;
-                    return signature;
-                });
+        function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
+            if (!getBaseTypes(classType).length) {
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
             }
-            return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
+            let baseConstructorType = getBaseConstructorTypeOfClass(classType);
+            let baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
+            let baseTypeNode = getBaseTypeNodeOfClass(classType);
+            let typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
+            let typeArgCount = typeArguments ? typeArguments.length : 0;
+            let result: Signature[] = [];
+            for (let baseSig of baseSignatures) {
+                let typeParamCount = baseSig.typeParameters ? baseSig.typeParameters.length : 0;
+                if (typeParamCount === typeArgCount) {
+                    let sig = typeParamCount ? getSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
+                    sig.typeParameters = classType.localTypeParameters;
+                    sig.resolvedReturnType = classType;
+                    result.push(sig);
+                }
+            }
+            return result;
         }
 
         function createTupleTypeMemberSymbols(memberTypes: Type[]): SymbolTable {
@@ -2992,10 +3053,10 @@ module ts {
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    let baseTypes = getBaseTypes(classType);
-                    if (baseTypes.length) {
+                    let baseConstructorType = getBaseConstructorTypeOfClass(classType);
+                    if (baseConstructorType !== unknownType) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(baseTypes[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                     }
                 }
                 stringIndexType = undefined;
@@ -4127,14 +4188,14 @@ module ts {
             return !node.typeParameters && node.parameters.length && !forEach(node.parameters, p => p.type);
         }
 
-        function getTypeWithoutConstructors(type: Type): Type {
+        function getTypeWithoutSignatures(type: Type): Type {
             if (type.flags & TypeFlags.ObjectType) {
                 let resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
                 if (resolved.constructSignatures.length) {
                     let result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
                     result.members = resolved.members;
                     result.properties = resolved.properties;
-                    result.callSignatures = resolved.callSignatures;
+                    result.callSignatures = emptyArray;
                     result.constructSignatures = emptyArray;
                     type = result;
                 }
@@ -5891,15 +5952,11 @@ module ts {
 
         function checkSuperExpression(node: Node): Type {
             let isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
-            let enclosingClass = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
-            let baseClass: Type;
-            if (enclosingClass && getClassExtendsHeritageClauseElement(enclosingClass)) {
-                let classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
-                let baseTypes = getBaseTypes(classType);
-                baseClass = baseTypes.length && baseTypes[0];
-            }
+            let classDeclaration = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
+            let classType = classDeclaration && <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(classDeclaration));
+            let baseClassType = classType && getBaseTypes(classType)[0];
 
-            if (!baseClass) {
+            if (!baseClassType) {
                 error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
                 return unknownType;
             }
@@ -5954,11 +6011,11 @@ module ts {
 
                     if ((container.flags & NodeFlags.Static) || isCallExpression) {
                         getNodeLinks(node).flags |= NodeCheckFlags.SuperStatic;
-                        returnType = getTypeOfSymbol(baseClass.symbol);
+                        returnType = getBaseConstructorTypeOfClass(classType);
                     }
                     else {
                         getNodeLinks(node).flags |= NodeCheckFlags.SuperInstance;
-                        returnType = baseClass;
+                        returnType = baseClassType;
                     }
 
                     if (container.kind === SyntaxKind.Constructor && isInConstructorArgumentInitializer(node, container)) {
@@ -7381,7 +7438,7 @@ module ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 let superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
-                    return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct), candidatesOutArray);
+                    return resolveCall(node, getConstructorsForTypeArguments(superType, getEffectiveTypeArguments(node)), candidatesOutArray);
                 }
                 return resolveUntypedCall(node);
             }
@@ -8963,35 +9020,31 @@ module ts {
             checkDecorators(node);
         }
 
-        function checkTypeReferenceNode(node: TypeReferenceNode) {
-            checkGrammarTypeReferenceInStrictMode(node.typeName);
-            return checkTypeReferenceOrExpressionWithTypeArguments(node);
+        function checkTypeArgumentsAndConstraints(typeParameters: TypeParameter[], typeArguments: TypeNode[]) {
+            for (let i = 0; i < typeArguments.length; i++) {
+                let typeArgument = typeArguments[i];
+                checkSourceElement(typeArgument);
+                let constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                if (produceDiagnostics && constraint) {
+                    checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                }
+            }
         }
 
-        function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-            checkGrammarExpressionWithTypeArgumentsInStrictMode(<PropertyAccessExpression>node.expression);
-
-            return checkTypeReferenceOrExpressionWithTypeArguments(node);
-        }
-
-        function checkTypeReferenceOrExpressionWithTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments) {
-            // Grammar checking
+        function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
+            if (node.kind === SyntaxKind.TypeReference) {
+                checkGrammarTypeReferenceInStrictMode((<TypeReferenceNode>node).typeName);
+            }
+            else {
+                checkGrammarExpressionWithTypeArgumentsInStrictMode((<ExpressionWithTypeArguments>node).expression);
+            }
             checkGrammarTypeArguments(node, node.typeArguments);
-
             let type = getTypeFromTypeReference(node);
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
                 let symbol = getNodeLinks(node).resolvedSymbol;
                 let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
-                let len = node.typeArguments.length;
-                for (let i = 0; i < len; i++) {
-                    checkSourceElement(node.typeArguments[i]);
-                    let constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                    if (produceDiagnostics && constraint) {
-                        let typeArgument = (<TypeReference>type).typeArguments[i];
-                        checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
-                    }
-                }
+                checkTypeArgumentsAndConstraints(typeParameters, node.typeArguments);
             }
         }
 
@@ -10596,35 +10649,24 @@ module ts {
             let symbol = getSymbolOfNode(node);
             let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             let staticType = <ObjectType>getTypeOfSymbol(symbol);
+
             let baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                if (!isSupportedExpressionWithTypeArguments(baseTypeNode)) {
-                    error(baseTypeNode.expression, Diagnostics.Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses);
-                }
-
                 emitExtends = emitExtends || !isInAmbientContext(node);
-                checkExpressionWithTypeArguments(baseTypeNode);
-            }
-            let baseTypes = getBaseTypes(type);
-            if (baseTypes.length) {
-                if (produceDiagnostics) {
+                // !!! checkExpressionWithTypeArguments(baseTypeNode);
+                let baseTypes = getBaseTypes(type);
+                if (baseTypes.length && produceDiagnostics) {
                     let baseType = baseTypes[0];
-                    checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                    let staticBaseType = getTypeOfSymbol(baseType.symbol);
-                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node,
-                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
-
-                    if (baseType.symbol !== resolveEntityName(baseTypeNode.expression, SymbolFlags.Value)) {
-                        error(baseTypeNode, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
+                    let staticBaseType = getBaseConstructorTypeOfClass(type);
+                    if (baseTypeNode.typeArguments) {
+                        let constructors = getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments);
+                        checkTypeArgumentsAndConstraints(constructors[0].typeParameters, baseTypeNode.typeArguments);
                     }
-
+                    checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
+                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
-            }
-
-            if (baseTypes.length || (baseTypeNode && compilerOptions.isolatedModules)) {
-                // Check that base type can be evaluated as expression
-                checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
 
             let implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
@@ -10633,8 +10675,7 @@ module ts {
                     if (!isSupportedExpressionWithTypeArguments(typeRefNode)) {
                         error(typeRefNode.expression, Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
-
-                    checkExpressionWithTypeArguments(typeRefNode);
+                    checkTypeReferenceNode(typeRefNode);
                     if (produceDiagnostics) {
                         let t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
@@ -10834,8 +10875,7 @@ module ts {
                 if (!isSupportedExpressionWithTypeArguments(heritageElement)) {
                     error(heritageElement.expression, Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
                 }
-
-                checkExpressionWithTypeArguments(heritageElement);
+                checkTypeReferenceNode(heritageElement);
             });
             forEach(node.members, checkSourceElement);
 
