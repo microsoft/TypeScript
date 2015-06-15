@@ -383,6 +383,7 @@ module ts {
         Base_expression_is_not_of_a_constructor_function_type: { code: 2507, category: DiagnosticCategory.Error, key: "Base expression is not of a constructor function type." },
         No_base_constructor_has_the_specified_number_of_type_arguments: { code: 2508, category: DiagnosticCategory.Error, key: "No base constructor has the specified number of type arguments." },
         Base_constructor_does_not_return_a_class_or_interface_type: { code: 2509, category: DiagnosticCategory.Error, key: "Base constructor does not return a class or interface type." },
+        Base_constructors_must_all_have_the_same_return_type: { code: 2510, category: DiagnosticCategory.Error, key: "Base constructors must all have the same return type." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },

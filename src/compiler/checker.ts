@@ -2642,7 +2642,7 @@ module ts {
                     return type.baseConstructorType = unknownType;
                 }
                 if (baseConstructorType !== unknownType && baseConstructorType !== nullType && !isConstructorType(baseConstructorType)) {
-                    error(baseTypeNode, Diagnostics.Base_expression_is_not_of_a_constructor_function_type);
+                    error(baseTypeNode.expression, Diagnostics.Base_expression_is_not_of_a_constructor_function_type);
                     return type.baseConstructorType = unknownType;
                 }
                 type.baseConstructorType = baseConstructorType;
@@ -2680,7 +2680,7 @@ module ts {
             else {
                 let constructors = getInstantiatedConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
                 if (!constructors.length) {
-                    error(baseTypeNode, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
+                    error(baseTypeNode.expression, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
                     return;
                 }
                 baseType = getReturnTypeOfSignature(constructors[0]);
@@ -2689,7 +2689,7 @@ module ts {
                 return;
             }
             if (!(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface))) {
-                error(baseTypeNode, Diagnostics.Base_constructor_does_not_return_a_class_or_interface_type);
+                error(baseTypeNode.expression, Diagnostics.Base_constructor_does_not_return_a_class_or_interface_type);
                 return;
             }
             if (type === baseType || hasBaseType(<InterfaceType>baseType, type)) {
@@ -10638,7 +10638,6 @@ module ts {
             let baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
                 emitExtends = emitExtends || !isInAmbientContext(node);
-                // !!! checkExpressionWithTypeArguments(baseTypeNode);
                 let baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
                     let baseType = baseTypes[0];
@@ -10650,6 +10649,12 @@ module ts {
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
+                        let constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments);
+                        if (forEach(constructors, sig => getReturnTypeOfSignature(sig) !== baseType)) {
+                            error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
+                        }
+                    }
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
             }
@@ -11995,6 +12000,10 @@ module ts {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return unknownType;
+            }
+
+            if (isClassExtendsExpressionWithTypeArguments(node)) {
+                return getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
             }
 
             if (isTypeNode(node)) {

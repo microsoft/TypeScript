@@ -1521,6 +1521,10 @@
         "category": "Error",
         "code": 2509
     },
+    "Base constructors must all have the same return type.": {
+        "category": "Error",
+        "code": 2510
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
