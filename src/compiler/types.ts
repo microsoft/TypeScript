@@ -1198,7 +1198,7 @@ namespace ts {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
-    export interface Program extends ScriptReferenceHost, TypeCheckerHost {
+    export interface Program extends ScriptReferenceHost {
         /**
          * Get a list of files in the program
          */
