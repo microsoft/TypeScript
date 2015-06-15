@@ -191,8 +191,74 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             writeLine();
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
+            
+            if (compilerOptions.dependency && root && compilerOptions.module) {
+                emitDependencyFile(root);                
+            }
+            
             return;
 
+            function emitDependencyFile(sourceFile: SourceFile): void {
+                let depFile = removeFileExtension(jsFilePath) + '.dep.json';
+                let runtime: string[] = [];
+                let compileTime: string[] = [];
+                for (let node of root.amdDependencies) {
+                    runtime.push(node.path);
+                }
+                
+                function processExternalDeclaration(node: ImportDeclaration | ImportEqualsDeclaration |  ExportDeclaration): void {
+                    let name = getExternalModuleNameText(node);
+                    if (name) { 
+                        if (name.length >= 2) {
+                            let first = name[0];
+                            let last = name[name.length - 1];
+                            if ((first == '"' || first == "'") && (last == '"' || last == "'")) {
+                                name = name.substring(1, name.length - 1);
+                            }
+                        }
+                        if (isExternalDepedency(node)) {
+                            runtime.push(name);
+                        } else {
+                            compileTime.push(name);
+                        }
+                    }
+                }
+                
+                function isExternalDepedency(node: Statement) {
+                    for (let external of externalImports) {
+                        if (node === external) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                for (let node of root.statements) {
+                    let name: string;
+                    switch (node.kind) {
+                        case SyntaxKind.ImportDeclaration:
+                            processExternalDeclaration(<ImportDeclaration>node);
+                            break;
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            processExternalDeclaration(<ImportEqualsDeclaration>node);
+                            break;
+                        case SyntaxKind.ExportDeclaration:
+                            let exportDeclaration = <ExportDeclaration>node;
+                            if (exportDeclaration.moduleSpecifier) {
+                                processExternalDeclaration(<ExportDeclaration>node);                                
+                            }
+                            break;
+                    }
+                }
+                
+                let dep: any = {
+                    filePath: root.fileName,
+                    compileTime: compileTime, 
+                    runtime: runtime
+                };
+                writeFile(host, [], depFile, JSON.stringify(dep, null, 4), compilerOptions.emitBOM);
+            }
+            
             function emitSourceFile(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
@@ -679,7 +745,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
-
+            
             // Create a temporary variable with a unique unused name.
             function createTempVariable(flags: TempFlags): Identifier {
                 let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
@@ -6136,7 +6202,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             if (compilerOptions.declaration) {
                 writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
-            }
+            }            
         }
     }
 }

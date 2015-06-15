@@ -1835,6 +1835,7 @@ namespace ts {
         allowNonTsExtensions?: boolean;
         charset?: string;
         declaration?: boolean;
+        dependency?: boolean;
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
