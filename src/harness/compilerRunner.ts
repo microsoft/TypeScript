@@ -384,25 +384,21 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public initializeTests() {
-        describe("Setup compiler for compiler baselines", () => {
+        describe('Compiler tests', () => {
             var harnessCompiler = Harness.Compiler.getCompiler();
             this.parseOptions();
-        });
 
-        // this will set up a series of describe/it blocks to run between the setup and cleanup phases
-        if (this.tests.length === 0) {
-            var testFiles = this.enumerateFiles(this.basePath, /\.ts$/, { recursive: true });
-            testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
-                this.checkTestCodeOutput(fn);
-            });
-        }
-        else {
-            this.tests.forEach(test => this.checkTestCodeOutput(test));
-        }
-
-        describe("Cleanup after compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler();
+            // this will set up a series of describe/it blocks to run between the setup and cleanup phases
+            if (this.tests.length === 0) {
+                var testFiles = this.enumerateFiles(this.basePath, /\.ts$/, { recursive: true });
+                testFiles.forEach(fn => {
+                    fn = fn.replace(/\\/g, "/");
+                    this.checkTestCodeOutput(fn);
+                });
+            }
+            else {
+                this.tests.forEach(test => this.checkTestCodeOutput(test));
+            }
         });
     }
 
