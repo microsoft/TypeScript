@@ -1,4 +1,5 @@
 //// [typeCheckTypeArgument.ts]
+/// <reference no-default-lib="true"/>
 
 var f: <T extends UNKNOWN>() => void;
 
@@ -15,6 +16,7 @@ class Foo2 {
 (<T extends UNKNOWN>(a) => { });
 
 //// [typeCheckTypeArgument.js]
+/// <reference no-default-lib="true"/>
 var f;
 var Foo = (function () {
     function Foo() {
