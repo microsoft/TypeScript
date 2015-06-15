@@ -4207,7 +4207,7 @@ module ts {
                 return parsePropertyOrMethodDeclaration(fullStart, decorators, modifiers);
             }
 
-            if (decorators) {
+            if (decorators || modifiers) {
                 // treat this as a property declaration with a missing name.
                 let name = <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                 return parsePropertyDeclaration(fullStart, decorators, modifiers, name, /*questionToken*/ undefined);
@@ -4729,7 +4729,7 @@ module ts {
                 case SyntaxKind.ImportKeyword:
                     return parseImportDeclarationOrImportEqualsDeclaration(fullStart, decorators, modifiers);
                 default:
-                    if (decorators) {
+                    if (decorators || modifiers) {
                         // We reached this point because we encountered an AtToken and assumed a declaration would
                         // follow. For recovery and error reporting purposes, return an incomplete declaration.                        
                         let node = <ModuleElement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
