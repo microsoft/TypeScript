@@ -7,7 +7,7 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27):
   Types of parameters 'x' and 'x' are incompatible.
     Type 'D' is not assignable to type 'B'.
       Property 'x' is missing in type 'D'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type 'D' does not satisfy the constraint 'A'.
 
 
 ==== tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
@@ -41,7 +41,7 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12):
                               ~~~~~~~~~~~~~~~~~~~~~~
         var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-               ~~~~~~~~~~~
+                 ~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
         return y;
     ~~~~~~~~~~~~~

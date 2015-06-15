@@ -1,4 +1,4 @@
-tests/cases/compiler/constraints0.ts(14,9): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+tests/cases/compiler/constraints0.ts(14,11): error TS2344: Type 'B' does not satisfy the constraint 'A'.
   Property 'a' is missing in type 'B'.
 
 
@@ -17,7 +17,7 @@ tests/cases/compiler/constraints0.ts(14,9): error TS2344: Type 'B' does not sati
     
     var v1: C<A>; // should work
     var v2: C<B>; // should not work
-            ~~~~
+              ~
 !!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
 !!! error TS2344:   Property 'a' is missing in type 'B'.
     

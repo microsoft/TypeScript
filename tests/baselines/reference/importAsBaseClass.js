@@ -25,6 +25,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var Greeter = require("importAsBaseClass_0");
 var Hello = (function (_super) {
     __extends(Hello, _super);
     function Hello() {
