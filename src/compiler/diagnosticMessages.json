@@ -671,14 +671,6 @@
         "category": "Error",
         "code": 1213
     },
-    "Type expected. '{0}' is a reserved word in strict mode": {
-        "category": "Error",
-        "code": 1215
-    },
-    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
-        "category": "Error",
-        "code": 1216
-    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
