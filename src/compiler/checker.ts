@@ -1358,7 +1358,7 @@ module ts {
             return result;
         }
 
-        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string  {
+        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             let writer = getSingleLineStringWriter();
             getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
             let result = writer.string();
@@ -7454,7 +7454,7 @@ module ts {
 
             var valueDecl = (expressionType.symbol ? expressionType.symbol.valueDeclaration : undefined);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
+                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0_, declarationNameToString(valueDecl.name));
             }
             
             // TS 1.0 spec: 4.11
@@ -7543,6 +7543,11 @@ module ts {
             return links.resolvedSignature;
         }
 
+        /**
+         * Performs typechecking on the given node, which is a call/new expression.
+         * @param node The call expression to be checked.
+         * @returns On success, the expression's signature's return type. On failure, any.
+         */
         function checkCallExpression(node: CallExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
@@ -7553,6 +7558,11 @@ module ts {
             }
             if (node.kind === SyntaxKind.NewExpression) {
                 let declaration = signature.declaration;
+                // let newedClass = declaration.parent;
+                // if(node.expression. & NodeFlags.Abstract) {
+                //     error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declaration.name);
+                // }
+                
                 if (declaration &&
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
@@ -9123,6 +9133,9 @@ module ts {
                         else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
+                        else if (deviation & NodeFlags.Abstract) {
+                            error(o.name, Diagnostics.Overload_signatures_must_all_match_with_respect_to_modifier_0_, "abstract");
+                        }
                     });
                 }
             }
@@ -9139,7 +9152,7 @@ module ts {
                 }
             }
 
-            let flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected;
+            let flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected | NodeFlags.Abstract;
             let someNodeFlags: NodeFlags = 0;
             let allNodeFlags = flagsToCheck;
             let someHaveQuestionToken = false;
@@ -9156,6 +9169,9 @@ module ts {
                 if (node.name && nodeIsMissing(node.name)) {
                     return;
                 }
+
+                // Abstract methods can't have an implementation -- in particular, they don't need one.
+                if (node.flags & NodeFlags.Abstract) { return; }
 
                 let seen = false;
                 let subsequentNode = forEachChild(node.parent, c => {
@@ -12827,6 +12843,9 @@ module ts {
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
+                        else if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
+                        }
                         flags |= modifierToFlag(modifier.kind);
                         break;
 
@@ -12840,16 +12859,22 @@ module ts {
                         else if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
                         }
+                        else if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                        }
                         flags |= NodeFlags.Static;
                         lastStatic = modifier;
                         break;
-                        
- case SyntaxKind.ExportKeyword:
+
+                    case SyntaxKind.ExportKeyword:
                         if (flags & NodeFlags.Export) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
                         }
                         else if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
+                        }
+                        else if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "abstract");
                         }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
@@ -12874,7 +12899,28 @@ module ts {
                             return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
                         }
                         flags |= NodeFlags.Ambient;
-                        lastDeclare = modifier
+                        lastDeclare = modifier;
+                        break;
+
+                    case SyntaxKind.AbstractKeyword:
+                        if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
+                        }
+                        if (node.kind !== SyntaxKind.ClassDeclaration) {
+                            if (node.kind !== SyntaxKind.MethodDeclaration) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_class_or_member_function_declaration, "abstract");
+                            }
+                            if (!(node.parent.kind === SyntaxKind.ClassDeclaration && node.parent.flags & NodeFlags.Abstract)) {
+                                return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
+                            }
+                        }
+                        if (flags & NodeFlags.Static) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                        }
+                        if (flags & NodeFlags.Private) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
+                        }
+                        flags |= NodeFlags.Abstract;
                         break;
                 }
             }

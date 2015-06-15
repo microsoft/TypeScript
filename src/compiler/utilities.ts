@@ -1332,15 +1332,15 @@ module ts {
 
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
+            case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DeclareKeyword:
+            case SyntaxKind.DefaultKeyword:
+            case SyntaxKind.ExportKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.StaticKeyword:
-            case SyntaxKind.AbstractKeyword:
-            case SyntaxKind.ExportKeyword:
-            case SyntaxKind.DeclareKeyword:
-            case SyntaxKind.ConstKeyword:
-            case SyntaxKind.DefaultKeyword:
                 return true;
         }
         return false;

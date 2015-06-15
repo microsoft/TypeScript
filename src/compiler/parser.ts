@@ -1097,6 +1097,11 @@ module ts {
                 }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
+            if (token === SyntaxKind.AbstractKeyword) {
+                nextToken();
+                // 'abstract' can precede class declarations and member function declarations.
+                return token === SyntaxKind.ClassKeyword || token === SyntaxKind.Identifier;
+            }
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
             }
@@ -3873,6 +3878,7 @@ module ts {
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.StaticKeyword:
+                    case SyntaxKind.AbstractKeyword:
                         nextToken();
                         continue;
                     default:
@@ -4031,6 +4037,7 @@ module ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
+                case SyntaxKind.AbstractKeyword:
                 case SyntaxKind.StaticKeyword:
                     if (getDeclarationFlags() & flags) {
                         return parseDeclaration();

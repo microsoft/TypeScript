@@ -731,8 +731,18 @@
         "category": "Error",
         "code": 1230
     },
-
-
+    "'{0}' modifier can only appear on a class or member function declaration.": {
+        "category": "Error",
+        "code": 1231
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1232
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1233
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

@@ -1491,6 +1491,7 @@ module ts {
         export const exportedModifier = "export";
         export const ambientModifier = "declare";
         export const staticModifier = "static";
+        export const abstractModifier = "abstract";
     }
 
     export class ClassificationTypeNames {
@@ -2786,6 +2787,7 @@ module ts {
                             case SyntaxKind.ExportKeyword:
                             case SyntaxKind.ConstKeyword:
                             case SyntaxKind.DefaultKeyword:
+                            case SyntaxKind.AbstractKeyword:
                         }
                     }
                 }
