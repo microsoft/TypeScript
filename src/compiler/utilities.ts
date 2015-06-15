@@ -1201,9 +1201,10 @@ namespace ts {
                     return parent.kind === SyntaxKind.TypeQuery;
                 }
                 return false;
+            case SyntaxKind.BindingElement:
             case SyntaxKind.ImportSpecifier:
-                // Name on left hand of 'as' in import specifier
-                return (<ImportSpecifier>parent).propertyName === node;
+                // Property name in binding element or import specifier
+                return (<BindingElement | ImportSpecifier>parent).propertyName === node;
             case SyntaxKind.ExportSpecifier:
                 // Any name in an export specifier
                 return true;
