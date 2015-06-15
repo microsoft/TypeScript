@@ -12,7 +12,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 
     x: {
 >x : { foo: any; }
@@ -35,7 +35,7 @@ class Base2 {
 
 class Derived2 extends Base2 {
 >Derived2 : Derived2
->Base2 : Base2
+>Base2 : typeof Base2
 
     static y: {
 >y : { foo: any; }

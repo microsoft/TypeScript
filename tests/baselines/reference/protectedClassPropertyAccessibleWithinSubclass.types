@@ -13,7 +13,7 @@ class B {
 
 class C extends B {
 >C : C
->B : B
+>B : typeof B
 
     protected get y() { return this.x; }
 >y : string

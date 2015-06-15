@@ -6,7 +6,7 @@ class A<T> { }
 class B<T> extends A<T> {}
 >B : B<T>
 >T : T
->A : A<T>
+>A : typeof A
 >T : T
 
 var a = new A<Date>();

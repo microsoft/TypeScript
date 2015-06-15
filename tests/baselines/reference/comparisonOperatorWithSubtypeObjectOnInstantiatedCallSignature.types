@@ -8,7 +8,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 
     public b: string;
 >b : string

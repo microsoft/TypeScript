@@ -5,17 +5,17 @@ class Base { foo() { } }
 
 class Derived1 extends Base { bar() { } }
 >Derived1 : Derived1
->Base : Base
+>Base : typeof Base
 >bar : () => void
 
 class Derived2 extends Base { baz() { } }
 >Derived2 : Derived2
->Base : Base
+>Base : typeof Base
 >baz : () => void
 
 class Derived3 extends Base { biz() { } }
 >Derived3 : Derived3
->Base : Base
+>Base : typeof Base
 >biz : () => void
 
 function foo(tagName: 'canvas'): Derived1;

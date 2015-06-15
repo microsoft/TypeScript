@@ -340,7 +340,7 @@ function f6() {
 
         class B extends A {
 >B : B
->A : A
+>A : typeof A
 
             b: string;
 >b : string
@@ -350,7 +350,7 @@ function f6() {
 
             class C extends B {
 >C : C
->B : B
+>B : typeof B
 
                 c: string;
 >c : string

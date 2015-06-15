@@ -4,7 +4,7 @@ class Base {
 }
 class C extends Base {
 >C : C
->Base : Base
+>Base : typeof Base
 
     constructor() {
         super();

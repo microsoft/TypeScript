@@ -49,7 +49,7 @@ class C implements I {
 }
 class D extends C {
 >D : D
->C : C
+>C : typeof C
 
     name: string;
 >name : string

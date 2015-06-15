@@ -11,7 +11,7 @@ module test {
     }
     export class B extends A {
 >B : B
->A : A
+>A : typeof A
 
         bar(callback: () => void ) {
 >bar : (callback: () => void) => void

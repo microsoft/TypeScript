@@ -15,7 +15,7 @@ class MyEvent<T extends EventTarget> extends BaseEvent {
 >MyEvent : MyEvent<T>
 >T : T
 >EventTarget : EventTarget
->BaseEvent : BaseEvent
+>BaseEvent : typeof BaseEvent
 
     target: T;
 >target : T
@@ -31,7 +31,7 @@ class BaseEventWrapper {
 
 class MyEventWrapper extends BaseEventWrapper {
 >MyEventWrapper : MyEventWrapper
->BaseEventWrapper : BaseEventWrapper
+>BaseEventWrapper : typeof BaseEventWrapper
 
     t: MyEvent<any>; // any satisfies constraint and passes assignability check between 'target' properties
 >t : MyEvent<any>

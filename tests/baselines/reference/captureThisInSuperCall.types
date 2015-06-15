@@ -8,7 +8,7 @@ class A {
 
 class B extends A {
 >B : B
->A : A
+>A : typeof A
 
     constructor() { super({ test: () => this.someMethod()}); } 
 >super({ test: () => this.someMethod()}) : void

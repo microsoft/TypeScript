@@ -5,7 +5,7 @@ declare class base
 }
 declare class abc extends base
 >abc : abc
->base : base
+>base : typeof base
 {
    foo: xyz;
 >foo : xyz
@@ -13,7 +13,7 @@ declare class abc extends base
 }
 declare class xyz extends abc
 >xyz : xyz
->abc : abc
+>abc : typeof abc
 {
 }
  

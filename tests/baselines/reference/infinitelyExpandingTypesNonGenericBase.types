@@ -16,7 +16,7 @@ class Base {
 class A<T> extends Base {
 >A : A<T>
 >T : T
->Base : Base
+>Base : typeof Base
 
     options: Options<Functionality<T>[]>;
 >options : Options<Functionality<T>[]>

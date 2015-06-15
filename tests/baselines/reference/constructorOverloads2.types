@@ -17,7 +17,7 @@ class FooBase {
 
 class Foo extends FooBase {
 >Foo : Foo
->FooBase : FooBase
+>FooBase : typeof FooBase
 
     constructor(s: string);
 >s : string

@@ -123,12 +123,12 @@ class Base { private p; }
 
 class Derived1 extends Base { private m };
 >Derived1 : Derived1
->Base : Base
+>Base : typeof Base
 >m : any
 
 class Derived2 extends Base { private n };
 >Derived2 : Derived2
->Base : Base
+>Base : typeof Base
 >n : any
 
 var context3: Base[] = [new Derived1(), new Derived2()];

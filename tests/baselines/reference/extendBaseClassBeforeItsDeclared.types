@@ -1,7 +1,7 @@
 === tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts ===
 class derived extends base { }
 >derived : derived
->base : base
+>base : typeof base
  
 class base { constructor (public n: number) { } }
 >base : base

@@ -8,7 +8,7 @@ class a {
 
 class b extends a {
 >b : b
->a : a
+>a : typeof a
 
     static x: () => string;
 >x : () => string

@@ -25,7 +25,7 @@ class EventBase {
 
 class StringEvent extends EventBase {
 >StringEvent : StringEvent
->EventBase : EventBase
+>EventBase : typeof EventBase
 
     add(listener: (items: string, moreitems: number) => void ) {
 >add : (listener: (items: string, moreitems: number) => void) => void

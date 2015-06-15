@@ -25,7 +25,7 @@ class Point {
 }
 class ColoredPoint extends Point {
 >ColoredPoint : ColoredPoint
->Point : Point
+>Point : typeof Point
 
     constructor(x: number, y: number, public color: string) {
 >x : number

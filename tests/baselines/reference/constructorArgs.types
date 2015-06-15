@@ -16,7 +16,7 @@ class Super {
 
 class Sub extends Super {
 >Sub : Sub
->Super : Super
+>Super : typeof Super
 
  constructor(public options:Options) {
 >options : Options

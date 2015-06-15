@@ -61,9 +61,9 @@ import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : any
+>Backbone.Model : typeof Backbone.Model
 >Backbone : typeof Backbone
->Model : Backbone.Model
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }
@@ -74,9 +74,9 @@ import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : any
+>Backbone.Model : typeof Backbone.Model
 >Backbone : typeof Backbone
->Model : Backbone.Model
+>Model : typeof Backbone.Model
 
     // different interesting stuff here
 }

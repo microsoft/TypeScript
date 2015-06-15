@@ -13,7 +13,7 @@ class Base<T> { }
 class Derived<T> extends Base<T> { }
 >Derived : Derived<T>
 >T : T
->Base : Base<T>
+>Base : typeof Base
 >T : T
 
 interface IBar<T> {

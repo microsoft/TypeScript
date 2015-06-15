@@ -37,7 +37,7 @@ module M.P {
     }
     export class E extends C { }
 >E : E
->C : C
+>C : typeof C
 
     export enum D {
 >D : D

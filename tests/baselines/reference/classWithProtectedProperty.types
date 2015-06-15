@@ -39,7 +39,7 @@ class C {
 
 class D extends C {
 >D : D
->C : C
+>C : typeof C
 
     method() {
 >method : () => void

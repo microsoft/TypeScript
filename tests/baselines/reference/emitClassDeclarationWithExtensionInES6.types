@@ -10,7 +10,7 @@ class B {
 }
 class C extends B {
 >C : C
->B : B
+>B : typeof B
 
     foo() { }
 >foo : () => void
@@ -31,7 +31,7 @@ class C extends B {
 }
 class D extends C {
 >D : D
->C : C
+>C : typeof C
 
     constructor() {
         super();

@@ -8,7 +8,7 @@ export class A {
 
 export class B extends A {
 >B : B
->A : A
+>A : typeof A
 
     private p1: number;
 >p1 : number

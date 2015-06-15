@@ -4,5 +4,5 @@ declare class A { }
 
 declare class B extends A { }
 >B : B
->A : A
+>A : typeof A
 

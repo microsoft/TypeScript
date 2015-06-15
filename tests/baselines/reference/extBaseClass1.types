@@ -12,7 +12,7 @@ module M {
 
     export class C extends B {
 >C : C
->B : B
+>B : typeof B
     }
 }
 
@@ -21,7 +21,7 @@ module M {
 
     export class C2 extends B {
 >C2 : C2
->B : B
+>B : typeof B
     }
 }
 
@@ -30,9 +30,9 @@ module N {
 
     export class C3 extends M.B {
 >C3 : C3
->M.B : any
+>M.B : typeof M.B
 >M : typeof M
->B : M.B
+>B : typeof M.B
     }
 }
 

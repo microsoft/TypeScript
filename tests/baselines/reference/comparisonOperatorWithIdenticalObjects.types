@@ -70,11 +70,11 @@ class Base {
 }
 class A2 extends Base { }
 >A2 : A2
->Base : Base
+>Base : typeof Base
 
 class B2 extends Base { }
 >B2 : B2
->Base : Base
+>Base : typeof Base
 
 interface A3 { f(a: number): string; }
 >A3 : A3

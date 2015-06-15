@@ -14,21 +14,21 @@ interface SelectableControl extends Control {
 }
 class Button extends Control {
 >Button : Button
->Control : Control
+>Control : typeof Control
 
     select() { }
 >select : () => void
 }
 class TextBox extends Control {
 >TextBox : TextBox
->Control : Control
+>Control : typeof Control
 
     select() { }
 >select : () => void
 }
 class Image extends Control {
 >Image : Image
->Control : Control
+>Control : typeof Control
 }
 class Location {
 >Location : Location

@@ -4,7 +4,7 @@ class A { }
 
 class B extends A { x: number; }
 >B : B
->A : A
+>A : typeof A
 >x : number
 
 declare function f(p: A, q: B): number;

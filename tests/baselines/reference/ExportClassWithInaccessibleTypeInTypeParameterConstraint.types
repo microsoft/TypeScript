@@ -23,7 +23,7 @@ module A {
 
     export class Point3d extends Point {
 >Point3d : Point3d
->Point : Point
+>Point : typeof Point
 
         z: number;
 >z : number

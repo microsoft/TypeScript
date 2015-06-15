@@ -39,5 +39,5 @@ class StringTreeCollectionBase {
 
 class StringTreeCollection extends StringTreeCollectionBase { }
 >StringTreeCollection : StringTreeCollection
->StringTreeCollectionBase : StringTreeCollectionBase
+>StringTreeCollectionBase : typeof StringTreeCollectionBase
 

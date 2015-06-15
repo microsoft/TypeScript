@@ -10,7 +10,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 
     bar: string;
 >bar : string
@@ -26,7 +26,7 @@ class A {
 
 class B extends A {
 >B : B
->A : A
+>A : typeof A
 
     fooo: Derived; // ok, inherits foo
 >fooo : Derived
@@ -42,7 +42,7 @@ class A2 {
 
 class B2 extends A2 {
 >B2 : B2
->A2 : A2
+>A2 : typeof A2
 
     1.1: Derived; // ok, inherits 1
 >Derived : Derived
@@ -57,7 +57,7 @@ class A3 {
 
 class B3 extends A3 {
 >B3 : B3
->A3 : A3
+>A3 : typeof A3
 
     '1.1': Derived; // ok, inherits '1'
 >Derived : Derived

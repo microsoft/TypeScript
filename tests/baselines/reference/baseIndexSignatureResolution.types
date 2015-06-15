@@ -5,7 +5,7 @@ class Base { private a: string; }
 
 class Derived extends Base { private b: string; }
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 >b : string
 
 // Note - commmenting "extends Foo" prevents the error

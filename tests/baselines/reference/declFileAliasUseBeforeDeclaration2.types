@@ -10,7 +10,7 @@ declare module "test" {
     }
     class B extends E {
 >B : B
->E : E
+>E : typeof E
     }
     import E = A.C;
 >E : typeof E

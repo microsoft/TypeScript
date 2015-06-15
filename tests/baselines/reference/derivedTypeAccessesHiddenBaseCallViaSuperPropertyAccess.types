@@ -15,7 +15,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 
     foo(x: { a: number; b: number }): { a: number; b: number } {
 >foo : (x: { a: number; b: number; }) => { a: number; b: number; }

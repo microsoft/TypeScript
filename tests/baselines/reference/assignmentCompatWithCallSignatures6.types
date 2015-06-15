@@ -7,17 +7,17 @@ class Base { foo: string; }
 
 class Derived extends Base { bar: string; }
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 >bar : string
 
 class Derived2 extends Derived { baz: string; }
 >Derived2 : Derived2
->Derived : Derived
+>Derived : typeof Derived
 >baz : string
 
 class OtherDerived extends Base { bing: string; }
 >OtherDerived : OtherDerived
->Base : Base
+>Base : typeof Base
 >bing : string
 
 interface A {

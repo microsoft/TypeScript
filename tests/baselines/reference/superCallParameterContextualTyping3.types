@@ -29,7 +29,7 @@ class CBase<T>  {
 
 class C extends CBase<string> {
 >C : C
->CBase : CBase<T>
+>CBase : typeof CBase
 
     constructor() {
         // Should be okay.

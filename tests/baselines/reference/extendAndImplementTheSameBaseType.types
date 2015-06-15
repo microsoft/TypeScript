@@ -10,7 +10,7 @@ class C {
 }
 class D extends C implements C {
 >D : D
->C : C
+>C : typeof C
 >C : C
 
     baz() { }

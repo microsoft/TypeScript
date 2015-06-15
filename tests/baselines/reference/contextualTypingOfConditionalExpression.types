@@ -25,14 +25,14 @@ class A {
 }
 class B extends A {
 >B : B
->A : A
+>A : typeof A
 
     bar: number;
 >bar : number
 }
 class C extends A {
 >C : C
->A : A
+>A : typeof A
 
     baz: number;
 >baz : number

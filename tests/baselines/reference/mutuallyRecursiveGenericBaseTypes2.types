@@ -13,7 +13,7 @@ class foo<T>
 class foo2<T> extends foo<T> {
 >foo2 : foo2<T>
 >T : T
->foo : foo<T>
+>foo : typeof foo
 >T : T
 }
  

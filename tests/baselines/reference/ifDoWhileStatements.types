@@ -19,7 +19,7 @@ class C implements I {
 
 class C2 extends C {
 >C2 : C2
->C : C
+>C : typeof C
 
     valid: boolean;
 >valid : boolean

@@ -8,7 +8,7 @@ class Action {
 
 class ActionA extends Action {
 >ActionA : ActionA
->Action : Action
+>Action : typeof Action
 
     value: string;
 >value : string
@@ -16,7 +16,7 @@ class ActionA extends Action {
 
 class ActionB extends Action {
 >ActionB : ActionB
->Action : Action
+>Action : typeof Action
 
     trueNess: boolean;
 >trueNess : boolean

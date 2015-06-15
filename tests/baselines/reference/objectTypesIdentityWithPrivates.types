@@ -33,12 +33,12 @@ interface I {
 
 class PA extends A {
 >PA : PA
->A : A
+>A : typeof A
 }
 
 class PB extends B {
 >PB : PB
->B : B
+>B : typeof B
 }
 
 var a: { foo: string; }

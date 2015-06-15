@@ -11,7 +11,7 @@ class Base {
 }
 class Derived extends Base {
 >Derived : Derived
->Base : Base
+>Base : typeof Base
 }
 var d = new Derived(); // bug caused an error here, couldn't select overload
 >d : Derived

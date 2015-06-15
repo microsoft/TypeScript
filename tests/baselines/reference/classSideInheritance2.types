@@ -11,7 +11,7 @@ interface TextSpan {}
 
 class SubText extends TextBase {
 >SubText : SubText
->TextBase : TextBase
+>TextBase : typeof TextBase
 
         constructor(text: IText, span: TextSpan) {
 >text : IText

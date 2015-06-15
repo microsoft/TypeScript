@@ -16,7 +16,7 @@ class Bar { x }
 
 class Foo extends Bar { y }
 >Foo : Foo
->Bar : Bar
+>Bar : typeof Bar
 >y : any
 
 class FooIterator {
