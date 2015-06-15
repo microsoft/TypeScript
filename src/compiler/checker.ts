@@ -2608,22 +2608,31 @@ module ts {
             return getClassExtendsHeritageClauseElement(<ClassLikeDeclaration>type.symbol.valueDeclaration);
         }
 
-        function getConstructorsForTypeArguments(type: ObjectType, typeArguments: TypeNode[]): Signature[] {
-            let typeArgCount = typeArguments ? typeArguments.length : 0;
+        function getConstructorsForTypeArguments(type: ObjectType, typeArgumentNodes: TypeNode[]): Signature[] {
+            let typeArgCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
                 sig => (sig.typeParameters ? sig.typeParameters.length : 0) === typeArgCount);
+        }
+
+        function getInstantiatedConstructorsForTypeArguments(type: ObjectType, typeArgumentNodes: TypeNode[]): Signature[] {
+            let signatures = getConstructorsForTypeArguments(type, typeArgumentNodes);
+            if (typeArgumentNodes) {
+                let typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
+                signatures = map(signatures, sig => getSignatureInstantiation(sig, typeArguments));
+            }
+            return signatures;
         }
 
         function getBaseConstructorTypeOfClass(type: InterfaceType): ObjectType {
             if (!type.baseConstructorType) {
                 let baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
-                    return type.baseConstructorType = unknownType;
+                    return type.baseConstructorType = undefinedType;
                 }
                 if (!pushTypeResolution(type)) {
                     return unknownType;
                 }
-                let baseConstructorType = checkExpressionCached(baseTypeNode.expression);
+                let baseConstructorType = checkExpression(baseTypeNode.expression);
                 if (baseConstructorType.flags & TypeFlags.ObjectType) {
                     // Force resolution of members such that we catch circularities
                     resolveObjectOrUnionTypeMembers(baseConstructorType);
@@ -2632,7 +2641,7 @@ module ts {
                     error(type.symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
                     return type.baseConstructorType = unknownType;
                 }
-                if (baseConstructorType !== unknownType && !isConstructorType(baseConstructorType)) {
+                if (baseConstructorType !== unknownType && baseConstructorType !== nullType && !isConstructorType(baseConstructorType)) {
                     error(baseTypeNode, Diagnostics.Base_expression_is_not_of_a_constructor_function_type);
                     return type.baseConstructorType = unknownType;
                 }
@@ -2660,7 +2669,7 @@ module ts {
         function resolveBaseTypesOfClass(type: InterfaceTypeWithBaseTypes): void {
             type.baseTypes = emptyArray;
             let baseContructorType = getBaseConstructorTypeOfClass(type);
-            if (baseContructorType === unknownType) {
+            if (!(baseContructorType.flags & TypeFlags.ObjectType)) {
                 return;
             }
             let baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -2669,16 +2678,12 @@ module ts {
                 baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseContructorType.symbol);
             }
             else {
-                let constructors = getConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
+                let constructors = getInstantiatedConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
                 if (!constructors.length) {
                     error(baseTypeNode, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
                     return;
                 }
-                let constructor = constructors[0];
-                if (baseTypeNode.typeArguments) {
-                    constructor = getSignatureInstantiation(constructor, map(baseTypeNode.typeArguments, getTypeFromTypeNode));
-                }
-                baseType = getReturnTypeOfSignature(constructor);
+                baseType = getReturnTypeOfSignature(constructors[0]);
             }
             if (baseType === unknownType) {
                 return;
@@ -3054,7 +3059,7 @@ module ts {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
                     let baseConstructorType = getBaseConstructorTypeOfClass(classType);
-                    if (baseConstructorType !== unknownType) {
+                    if (baseConstructorType.flags & TypeFlags.ObjectType) {
                         members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                     }
@@ -7202,35 +7207,13 @@ module ts {
             return args;
         }
 
-        /**
-         * In a 'super' call, type arguments are not provided within the CallExpression node itself.
-         * Instead, they must be fetched from the class declaration's base type node.
-         *
-         * If 'node' is a 'super' call (e.g. super(...), new super(...)), then we attempt to fetch
-         * the type arguments off the containing class's first heritage clause (if one exists). Note that if
-         * type arguments are supplied on the 'super' call, they are ignored (though this is syntactically incorrect).
-         *
-         * In all other cases, the call's explicit type arguments are returned.
-         */
-        function getEffectiveTypeArguments(callExpression: CallExpression): TypeNode[] {
-            if (callExpression.expression.kind === SyntaxKind.SuperKeyword) {
-                let containingClass = <ClassDeclaration>getAncestor(callExpression, SyntaxKind.ClassDeclaration);
-                let baseClassTypeNode = containingClass && getClassExtendsHeritageClauseElement(containingClass);
-                return baseClassTypeNode && baseClassTypeNode.typeArguments;
-            }
-            else {
-                // Ordinary case - simple function invocation.
-                return callExpression.typeArguments;
-            }
-        }
-
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             let isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
 
             let typeArguments: TypeNode[];
 
             if (!isTaggedTemplate) {
-                typeArguments = getEffectiveTypeArguments(<CallExpression>node);
+                typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
                 if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
@@ -7438,7 +7421,9 @@ module ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 let superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
-                    return resolveCall(node, getConstructorsForTypeArguments(superType, getEffectiveTypeArguments(node)), candidatesOutArray);
+                    let baseTypeNode = getClassExtendsHeritageClauseElement(<ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration));
+                    let baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
+                    return resolveCall(node, baseConstructors, candidatesOutArray);
                 }
                 return resolveUntypedCall(node);
             }
