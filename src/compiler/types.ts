@@ -1149,6 +1149,14 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
 
+        /**
+         * lib.d.ts should have a reference comment like
+         *
+         *  /// <reference no-default-lib="true"/>
+         *
+         * If any other file has this comment, it signals not to include lib.d.ts
+         * because this containing file is intended to act as a default library.
+         */
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
@@ -1860,7 +1868,10 @@ namespace ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+
+        // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
+
         [option: string]: string | number | boolean;
     }
 

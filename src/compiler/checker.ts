@@ -11609,7 +11609,9 @@ namespace ts {
 
         function checkSourceFile(node: SourceFile) {
             let start = new Date().getTime();
+
             checkSourceFileWorker(node);
+
             checkTime += new Date().getTime() - start;
         }
 
@@ -11617,6 +11619,8 @@ namespace ts {
         function checkSourceFileWorker(node: SourceFile) {
             let links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+                // Check whether the file has declared it is the default lib,
+                // and whether the user has specifically chosen to avoid checking it.
                 if (node.isDefaultLib && compilerOptions.skipDefaultLibCheck) {
                     return;
                 }

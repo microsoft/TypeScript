@@ -144,21 +144,30 @@ namespace ts {
         let program: Program;
         let files: SourceFile[] = [];
         let diagnostics = createDiagnosticCollection();
-        let skipDefaultLib = options.noLib;
+
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
 
+        let skipDefaultLib = options.noLib;
+
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
+
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
 
         forEach(rootNames, name => processRootFile(name, /*isDefaultLib:*/ false));
+
+        // Do not process the default library if:
+        //  - The '--noLib' flag is used.
+        //  - A 'no-default-lib' reference comment is encountered in
+        //      processing the root files.
         if (!skipDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib:*/ true);
         }
+
         verifyCompilerOptions();
 
         programTime += new Date().getTime() - start;
