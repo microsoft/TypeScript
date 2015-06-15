@@ -18,6 +18,7 @@
 /// <reference path='fourslashRunner.ts' />
 /// <reference path='projectsRunner.ts' />
 /// <reference path='rwcRunner.ts' />
+/// <reference path='harness.ts' />
 
 function runTests(runners: RunnerBase[]) {
     for (var i = iterations; i > 0; i--) {
@@ -39,6 +40,9 @@ var testConfigFile =
 
 if (testConfigFile !== '') {
     var testConfig = JSON.parse(testConfigFile);
+    if (testConfig.light) {
+        Harness.lightMode = true;
+    }
 
     if (testConfig.test && testConfig.test.length > 0) {
         for (let option of testConfig.test) {

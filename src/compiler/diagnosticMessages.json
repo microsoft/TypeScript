@@ -671,14 +671,6 @@
         "category": "Error",
         "code": 1213
     },
-    "Type expected. '{0}' is a reserved word in strict mode": {
-        "category": "Error",
-        "code": 1215
-    },
-    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
-        "category": "Error",
-        "code": 1216
-    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
@@ -731,17 +723,37 @@
         "category": "Error",
         "code": 1230
     },
-    "'{0}' modifier can only appear on a class or member function declaration.": {
+    "An export assignment can only be used in a module.": {
         "category": "Error",
         "code": 1231
     },
-    "'{0}' modifier cannot be used with '{1}' modifier.": {
+    "An import declaration can only be used in a namespace or module.": {
         "category": "Error",
         "code": 1232
     },
-    "Abstract methods can only appear within an abstract class.": {
+    "An export declaration can only be used in a module.": {
         "category": "Error",
         "code": 1233
+    },
+    "An ambient module declaration is only allowed at the top level in a file.": {
+        "category": "Error",
+        "code": 1234
+    },
+    "A namespace declaration is only allowed in a namespace or module.": {
+        "category": "Error",
+        "code": 1235
+    },
+    "'{0}' modifier can only appear on a class or member function declaration.": {
+        "category": "Error",
+        "code": 1236
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1237
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1238
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

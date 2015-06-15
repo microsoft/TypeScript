@@ -4,7 +4,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
 
     export interface TextRangeWithKind extends TextRange {
         kind: SyntaxKind;

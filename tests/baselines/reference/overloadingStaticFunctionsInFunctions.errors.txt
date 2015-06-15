@@ -1,12 +1,12 @@
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(1,14): error TS1005: '(' expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,3): error TS1129: Statement expected.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,10): error TS2304: Cannot find name 'test'.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,3): error TS1129: Statement expected.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,10): error TS2304: Cannot find name 'test'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,15): error TS2304: Cannot find name 'name'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,19): error TS1005: ',' expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,20): error TS2304: Cannot find name 'string'.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,3): error TS1129: Statement expected.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,10): error TS2304: Cannot find name 'test'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,15): error TS2304: Cannot find name 'name'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,20): error TS1109: Expression expected.
@@ -20,12 +20,12 @@ tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,25): error TS100
 !!! error TS1005: '(' expected.
       static test()
       ~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
              ~~~~
 !!! error TS2304: Cannot find name 'test'.
       static test(name:string)
       ~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
              ~~~~
 !!! error TS2304: Cannot find name 'test'.
                   ~~~~
@@ -36,7 +36,7 @@ tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,25): error TS100
 !!! error TS2304: Cannot find name 'string'.
       static test(name?:any){ }
       ~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
              ~~~~
 !!! error TS2304: Cannot find name 'test'.
                   ~~~~

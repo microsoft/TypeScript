@@ -1,7 +1,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
-module ts {
+namespace ts {
     export interface ErrorCallback {
         (message: DiagnosticMessage, length: number): void;
     }

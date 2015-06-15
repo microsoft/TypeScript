@@ -1,6 +1,6 @@
 /// <reference path="session.ts" />
  
-module ts.server {
+namespace ts.server {
 
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;

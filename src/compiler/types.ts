@@ -1,4 +1,4 @@
-module ts {
+namespace ts {
     export interface Map<T> {
         [index: string]: T;
     }
@@ -810,7 +810,7 @@ module ts {
         expression: UnaryExpression;
     }
 
-    export interface Statement extends Node, ModuleElement {
+    export interface Statement extends Node {
         _statementBrand: any;
     }
 
@@ -913,10 +913,6 @@ module ts {
         block: Block;
     }
 
-    export interface ModuleElement extends Node {
-        _moduleElementBrand: any;
-    }
-
     export interface ClassLikeDeclaration extends Declaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -964,16 +960,16 @@ module ts {
         members: NodeArray<EnumMember>;
     }
 
-    export interface ModuleDeclaration extends Declaration, ModuleElement {
+    export interface ModuleDeclaration extends Declaration, Statement {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
 
-    export interface ModuleBlock extends Node, ModuleElement {
-        statements: NodeArray<ModuleElement>
+    export interface ModuleBlock extends Node, Statement {
+        statements: NodeArray<Statement>
     }
 
-    export interface ImportEqualsDeclaration extends Declaration, ModuleElement {
+    export interface ImportEqualsDeclaration extends Declaration, Statement {
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -989,7 +985,7 @@ module ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends ModuleElement {
+    export interface ImportDeclaration extends Statement {
         importClause?: ImportClause;
         moduleSpecifier: Expression;
     }
@@ -1009,7 +1005,7 @@ module ts {
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends Declaration, ModuleElement {
+    export interface ExportDeclaration extends Declaration, Statement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -1029,7 +1025,7 @@ module ts {
     export type ImportSpecifier = ImportOrExportSpecifier;
     export type ExportSpecifier = ImportOrExportSpecifier;
 
-    export interface ExportAssignment extends Declaration, ModuleElement {
+    export interface ExportAssignment extends Declaration, Statement {
         isExportEquals?: boolean;
         expression: Expression;
     }
@@ -1145,7 +1141,7 @@ module ts {
 
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
-        statements: NodeArray<ModuleElement>;
+        statements: NodeArray<Statement>;
         endOfFileToken: Node;
 
         fileName: string;
@@ -1155,6 +1151,14 @@ module ts {
         moduleName: string;
         referencedFiles: FileReference[];
 
+        /**
+         * lib.d.ts should have a reference comment like
+         *
+         *  /// <reference no-default-lib="true"/>
+         *
+         * If any other file has this comment, it signals not to include lib.d.ts
+         * because this containing file is intended to act as a default library.
+         */
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
@@ -1178,6 +1182,8 @@ module ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
+
+        /* @internal */ classifiableNames?: Map<string>;
     }
 
     export interface ScriptReferenceHost {
@@ -1228,6 +1234,8 @@ module ts {
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
+
+        /* @internal */ getClassifiableNames(): Map<string>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -1525,6 +1533,11 @@ module ts {
 
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
+
+        /* @internal */
+        // The set of things we consider semantically classifiable.  Used to speed up the LS during 
+        // classification.
+        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
     }
 
     export interface Symbol {
@@ -1857,7 +1870,10 @@ module ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+
+        // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
+
         [option: string]: string | number | boolean;
     }
 

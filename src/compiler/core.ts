@@ -1,7 +1,7 @@
 /// <reference path="types.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     // Ternary values are defined such that
     // x & y is False if either x or y is False.
     // x & y is Maybe if either x or y is Maybe, but neither x or y is False.

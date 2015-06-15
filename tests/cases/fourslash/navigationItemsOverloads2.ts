@@ -8,5 +8,5 @@
 ////interface I {
 ////    interfaceMethodSignature(b: boolean): boolean;
 ////}
-debugger;
+
 verify.navigationItemsListCount(2, "interfaceMethodSignature", "exact");

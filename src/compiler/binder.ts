@@ -1,7 +1,7 @@
 /// <reference path="parser.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     export let bindTime = 0;
 
     export const enum ModuleInstanceState {
@@ -90,10 +90,12 @@ module ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
 
         return;
@@ -194,6 +196,11 @@ module ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
+                } 
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -553,6 +560,23 @@ module ts {
             bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
         }
 
+        // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
+        // check for reserved words used as identifiers in strict mode code.
+        function checkStrictModeIdentifier(node: Identifier) {
+            if (node.parserContextFlags & ParserContextFlags.StrictMode &&
+                node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
+                node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
+                !isIdentifierName(node)) {
+                // Report error only if there are no parse errors in file
+                if (!file.parseDiagnostics.length) {
+                    let message = getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression) ?
+                        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode :
+                        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, message, declarationNameToString(node)));
+                }
+            }
+        }
+
         function getDestructuringParameterName(node: Declaration) {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
@@ -581,6 +605,8 @@ module ts {
         
         function bindWorker(node: Node) {
             switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
@@ -661,7 +687,11 @@ module ts {
         }
 
         function bindExportAssignment(node: ExportAssignment) {
-            if (node.expression.kind === SyntaxKind.Identifier) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export assignment in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
+            }
+            else if (node.expression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -672,7 +702,11 @@ module ts {
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export * in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.ExportStar, getDeclarationName(node));
+            }
+            else if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
