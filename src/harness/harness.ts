@@ -943,14 +943,13 @@ module Harness {
             public emitAll(ioHost?: IEmitterIOHost) {
                 this.compileFiles(this.inputFiles,
                     /*otherFiles*/ [],
-                    /*onComplete*/ (result) => {
+                    /*onComplete*/ result => {
                         result.files.forEach(writeFile);
                         result.declFilesCode.forEach(writeFile);
                         result.sourceMaps.forEach(writeFile);
                     },
                     /*settingsCallback*/ () => { },
-                    this.compileOptions,
-                    /*currentDirectory*/ undefined);
+                    this.compileOptions);
 
                 function writeFile(file: GeneratedFile) {
                     ioHost.writeFile(file.fileName, file.code, false);
