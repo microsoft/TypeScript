@@ -1,7 +1,7 @@
 /// <reference path="parser.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     export let bindTime = 0;
 
     export const enum ModuleInstanceState {
@@ -90,10 +90,12 @@ module ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
 
         return;
@@ -194,6 +196,11 @@ module ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
+                } 
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -661,7 +668,11 @@ module ts {
         }
 
         function bindExportAssignment(node: ExportAssignment) {
-            if (node.expression.kind === SyntaxKind.Identifier) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export assignment in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
+            }
+            else if (node.expression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -672,7 +683,11 @@ module ts {
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export * in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.ExportStar, getDeclarationName(node));
+            }
+            else if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
