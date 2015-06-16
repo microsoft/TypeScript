@@ -88,7 +88,11 @@ namespace ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
-        let inStrictMode = false;
+
+        // If this file is an external module, then it is automatically in strict-mode according to
+        // ES6.  If it is not an external module, then we'll determine if it is in strict mode or 
+        // not depending on if we see "use strict" in certain places.
+        let inStrictMode = !!file.externalModuleIndicator;
 
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
