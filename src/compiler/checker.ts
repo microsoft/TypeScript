@@ -12002,16 +12002,18 @@ module ts {
                 return unknownType;
             }
 
-            if (isClassExtendsExpressionWithTypeArguments(node)) {
-                return getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
-            }
-
             if (isTypeNode(node)) {
                 return getTypeFromTypeNode(<TypeNode>node);
             }
 
             if (isExpression(node)) {
                 return getTypeOfExpression(<Expression>node);
+            }
+
+            if (isClassExtendsExpressionWithTypeArguments(node)) {
+                // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
+                // extends clause of a class. We handle that case here.
+                return getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
             }
 
             if (isTypeDeclaration(node)) {
