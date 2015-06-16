@@ -22,7 +22,7 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error T
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(27,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(27,17): error TS2304: Cannot find name 'package'.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error TS2503: Cannot find namespace 'package'.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error TS2304: Cannot find name 'package'.
 
 
 ==== tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts (25 errors) ====
@@ -103,4 +103,4 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error T
                     ~~~~~~~
 !!! error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                     ~~~~~~~
-!!! error TS2503: Cannot find namespace 'package'.
+!!! error TS2304: Cannot find name 'package'.

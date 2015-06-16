@@ -671,6 +671,14 @@
         "category": "Error",
         "code": 1213
     },
+    "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "Invalid use of '{0}'. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1215
+    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
@@ -1531,13 +1539,33 @@
         "category": "Error",
         "code": 2505
     },
-    "Cannot create an instance of the abstract class '{0}'": {
+    "'{0}' is referenced directly or indirectly in its own base expression.": {
         "category": "Error",
         "code": 2506
     },
-    "All overload signatures must match with respect to modifier '{0}'.": {
+    "Base expression is not of a constructor function type.": {
         "category": "Error",
         "code": 2507
+    },
+    "No base constructor has the specified number of type arguments.": {
+        "category": "Error",
+        "code": 2508
+    },
+    "Base constructor does not return a class or interface type.": {
+        "category": "Error",
+        "code": 2509
+    },
+    "Base constructors must all have the same return type.": {
+        "category": "Error",
+        "code": 2510
+    },
+    "Cannot create an instance of the abstract class '{0}'": {
+        "category": "Error",
+        "code": 2511
+    },
+    "All overload signatures must match with respect to modifier '{0}'.": {
+        "category": "Error",
+        "code": 2512
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
