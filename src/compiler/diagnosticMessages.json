@@ -755,6 +755,10 @@
         "category": "Error",
         "code": 1238
     },
+    "Abstract member functions cannot have an implementation.": {
+        "category": "Error",
+        "code": 1240
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1530,6 +1534,10 @@
     "Cannot create an instance of the abstract class '{0}'": {
         "category": "Error",
         "code": 2506
+    },
+    "All overload signatures must match with respect to modifier '{0}'.": {
+        "category": "Error",
+        "code": 2507
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

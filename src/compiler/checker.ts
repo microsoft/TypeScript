@@ -7445,7 +7445,7 @@ namespace ts {
             // If the expression is of abstract type, then it cannot be instantiated.
             var valueDecl = (expressionType.symbol ? expressionType.symbol.valueDeclaration : undefined);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0_, declarationNameToString(valueDecl.name));
+                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
             }
 
             // TS 1.0 spec: 4.11
@@ -9111,7 +9111,7 @@ namespace ts {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & NodeFlags.Abstract) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_match_with_respect_to_modifier_0_, "abstract");
+                            error(o.name, Diagnostics.All_overload_signatures_must_match_with_respect_to_modifier_0, "abstract");
                         }
                     });
                 }
@@ -9228,6 +9228,11 @@ namespace ts {
                     if (nodeIsPresent(node.body)) {
                         if (!bodyDeclaration) {
                             bodyDeclaration = node;
+                        }
+
+                        // abstract functions cannot have an implementation
+                        if(currentNodeFlags & NodeFlags.Abstract) {
+                            error(node, Diagnostics.Abstract_member_functions_cannot_have_an_implementation)
                         }
                     }
                     else {
