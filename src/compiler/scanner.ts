@@ -1,7 +1,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
-module ts {
+namespace ts {
     export interface ErrorCallback {
         (message: DiagnosticMessage, length: number): void;
     }
@@ -72,6 +72,7 @@ module ts {
         "in": SyntaxKind.InKeyword,
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
+        "is": SyntaxKind.IsKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,

@@ -1,5 +1,5 @@
 /* @internal */
-module ts {
+namespace ts {
     // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
     export enum PatternMatchKind {
         exact,

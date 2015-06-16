@@ -1,7 +1,7 @@
 ///<reference path='..\services.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export module SmartIndenter {
 
         const enum Value {

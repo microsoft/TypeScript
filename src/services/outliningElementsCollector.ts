@@ -1,5 +1,5 @@
 /* @internal */
-module ts {
+namespace ts {
     export module OutliningElementsCollector {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
             let elements: OutliningSpan[] = [];

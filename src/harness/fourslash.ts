@@ -343,7 +343,8 @@ module FourSlash {
                 if (!resolvedResult.isLibFile) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
                 }
-            } else {
+            }
+            else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 ts.forEachKey(this.inputFiles, fileName => {
                     if (!Harness.isLibraryFile(fileName)) {

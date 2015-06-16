@@ -1,7 +1,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-module ts.NavigationBar {
+namespace ts.NavigationBar {
     export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
         // If the source file has any child items, then it included in the tree
         // and takes lexical ownership of all other top-level items.

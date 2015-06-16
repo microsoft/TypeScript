@@ -2,7 +2,7 @@
 /// <reference path="..\..\compiler\scanner.ts"/>
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
     export interface FormattingScanner {
@@ -225,7 +225,7 @@ module ts.formatting {
         }
 
         function isOnToken(): boolean {
-            let current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
+            let current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
             let startPos = (lastTokenInfo && lastTokenInfo.token.start) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }

@@ -857,7 +857,7 @@ declare module "typescript" {
         getCurrentDirectory(): string;
     }
     interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
     interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
@@ -999,6 +999,7 @@ declare module "typescript" {
         UseOnlyExternalAliasing = 2,
     }
     const enum SymbolFlags {
+        None = 0,
         FunctionScopedVariable = 1,
         BlockScopedVariable = 2,
         Property = 4,
@@ -1057,10 +1058,8 @@ declare module "typescript" {
         AliasExcludes = 8388608,
         ModuleMember = 8914931,
         ExportHasLocal = 944,
-        HasLocals = 255504,
         HasExports = 1952,
         HasMembers = 6240,
-        IsContainer = 262128,
         PropertyOrAccessor = 98308,
         Export = 7340032,
     }
@@ -1068,9 +1067,9 @@ declare module "typescript" {
         flags: SymbolFlags;
         name: string;
         declarations?: Declaration[];
+        valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
-        valueDeclaration?: Declaration;
     }
     interface SymbolTable {
         [index: string]: Symbol;
@@ -1092,8 +1091,9 @@ declare module "typescript" {
         Tuple = 8192,
         Union = 16384,
         Anonymous = 32768,
-        ObjectLiteral = 131072,
-        ESSymbol = 1048576,
+        Instantiated = 65536,
+        ObjectLiteral = 262144,
+        ESSymbol = 2097152,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
@@ -1282,7 +1282,7 @@ declare module "typescript" {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string): string[];
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -1358,7 +1358,6 @@ declare module "typescript" {
     function getTypeParameterOwner(d: Declaration): Declaration;
 }
 declare module "typescript" {
-    var throwOnJSDocErrors: boolean;
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
@@ -1913,6 +1912,7 @@ declare module "typescript" {
         static typeParameterName: string;
         static typeAliasName: string;
         static parameterName: string;
+        static docCommentTagName: string;
     }
     const enum ClassificationType {
         comment = 1,
@@ -1932,6 +1932,7 @@ declare module "typescript" {
         typeParameterName = 15,
         typeAliasName = 16,
         parameterName = 17,
+        docCommentTagName = 18,
     }
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];

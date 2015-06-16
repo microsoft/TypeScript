@@ -1,6 +1,6 @@
 ///<reference path='services.ts' />
 /* @internal */
-module ts.SignatureHelp {
+namespace ts.SignatureHelp {
 
     // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression
     // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference. 
