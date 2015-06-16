@@ -748,7 +748,8 @@ namespace ts {
         function updateStrictMode(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
-                    updateStrictModeStatementList((<SourceFile>node).statements);
+                case SyntaxKind.ModuleBlock:
+                    updateStrictModeStatementList((<SourceFile | ModuleBlock>node).statements);
                     return;
                 case SyntaxKind.Block:
                     if (isFunctionLike(node.parent)) {
@@ -757,6 +758,7 @@ namespace ts {
                     return;
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
+                    // All classes are automatically in strict mode in ES6.
                     inStrictMode = true;
                     return;
             }
