@@ -23,6 +23,8 @@ module ts {
         reScanTemplateToken(): SyntaxKind;
         reScanJsxIdentifier(): SyntaxKind;
         reScanLessThanToken(): SyntaxKind;
+        reScanJsxText(): SyntaxKind;
+        scanJsxText(): SyntaxKind;
         scan(): SyntaxKind;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
@@ -683,6 +685,8 @@ module ts {
             reScanTemplateToken,
             reScanJsxIdentifier,
             reScanLessThanToken,
+            reScanJsxText,
+            scanJsxText,
             scan,
             setText,
             setScriptTarget,
@@ -810,25 +814,6 @@ module ts {
                     result += text.substring(start, pos);
                     tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
-                    break;
-                }
-                pos++;
-            }
-            return result;
-        }
-
-        function scanJsxText() {
-            let result = "";
-            let start = pos;
-            while (true) {
-                if (pos >= end) {
-                    result += text.substring(start, pos);
-                    error(Diagnostics.Unexpected_end_of_text);
-                    break;
-                }
-                let ch = text.charCodeAt(pos);
-                if (ch === CharacterCodes.lessThan || ch === CharacterCodes.openBrace || ch === CharacterCodes.closeBrace) {
-                    result += text.substring(start, pos);
                     break;
                 }
                 pos++;
@@ -1518,6 +1503,43 @@ module ts {
             return token = scanTemplateAndSetTokenValue();
         }
         
+        function reScanJsxText(): SyntaxKind {
+            pos = startPos;
+            return token = scanJsxText();
+        }
+
+        function scanJsxText(): SyntaxKind {
+            if (pos >= text.length) {
+                return token = SyntaxKind.EndOfFileToken;
+            }
+
+            let char = text.charCodeAt(pos);
+            if (char === CharacterCodes.lessThan) {
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    pos += 2;
+                    return token = SyntaxKind.LessThanSlashToken;
+                }
+                else {
+                    pos++;
+                    return token = SyntaxKind.LessThanToken;
+                }
+            }
+            else if (char === CharacterCodes.openBrace) {
+                pos++;
+                return token = SyntaxKind.OpenBraceToken;
+            }
+            else {
+                while (pos < end) {
+                    pos++;
+                    char = text.charCodeAt(pos);
+                    if ((char === CharacterCodes.openBrace) || (char === CharacterCodes.lessThan)) {
+                        break;
+                    }
+                }
+                return token = SyntaxKind.JsxText;
+            }
+        }
+
         function reScanJsxIdentifier(): SyntaxKind {
             if (token === SyntaxKind.Identifier) {
                 while (pos < end) {
@@ -1526,7 +1548,7 @@ module ts {
                         tokenValue += String.fromCharCode(ch);
                         pos++;
                     } 
-                    else  if (ch === CharacterCodes.backslash) {
+                    else if (ch === CharacterCodes.backslash) {
                         tokenValue += scanIdentifierParts();
                     }
                     else {

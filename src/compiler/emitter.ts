@@ -1110,20 +1110,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function jsxEmitReact(node: JsxElement) {
-                /// The parser (currently) eats the whitespace in "<Foo> {x} </Foo>", but
-                /// this is semantically relevant in React.
-                function getIntermediateTrivia(prevNode: Node, nextNode: Node) {
-                    Debug.assert(!!nextNode);
-
-                    var nextNodeContentStart = skipTrivia(currentSourceFile.text, nextNode.pos, false);
-                    if (prevNode.end + 1 === nextNodeContentStart) {
-                        return undefined;
-                    }
-                    else {
-                        return currentSourceFile.text.substr(prevNode.end, nextNodeContentStart - nextNode.pos);
-                    }
-                }
-
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier|QualifiedName) {
@@ -1224,34 +1210,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
 
                     // Children
-                    // Whitespace between the opening tag and the closing tag
-                    if (node.children.length > 0) {
-                        var leadingTrivia = getIntermediateTrivia(node.openingElement, node.children[0]);
-                        if (leadingTrivia) {
-                            write(', "' + leadingTrivia + '"');
-                        }
-                    }
-
+                    emit(node.children[i]);
                     for (var i = 0; i < node.children.length; i++) {
                         write(', ');
-                        // Manually restore the leading/trailing whitespace eaten by the parser
-                        if (node.children[i].kind === SyntaxKind.JsxText) {
-                            var nextElement = (i === node.children.length - 1) ? node.closingElement : node.children[i + 1];
-                            write('"');
-                            write(getTextOfNode(node.children[i], true));
-                            write(getIntermediateTrivia(node.children[i], nextElement) || "");
-                            write('"');
-                        }
-                        else {
-                            emit(node.children[i]);
-                        }
-                    }
-
-                    if (node.children.length > 0) {
-                        var trailingTrivia = getIntermediateTrivia(node.children[node.children.length - 1], node.closingElement);
-                        if (trailingTrivia) {
-                            write(', "' + trailingTrivia + '"');
-                        }
+                        emit(node.children[i]);
                     }
 
                     // Closing paren
@@ -1309,21 +1271,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 function emitJsxElement(node: JsxElement) {
                     emitJsxOpeningElement(node.openingElement);
 
-                    // We actually need to emit all whitespace from the original file as it
-                    // appeared between the original nodes. The scanner/parser eat these.
-                    var startWs = node.openingElement.end;
-                    function emitLeadingTrivia(node: Node) {
-                        write(currentSourceFile.text.substr(startWs, skipTrivia(currentSourceFile.text, node.pos) - startWs));
-                        startWs = node.end;
-                    }
-
                     for (var i = 0, n = node.children.length; i < n; i++) {
-                        emitLeadingTrivia(node.children[i]);
                         emit(node.children[i]);
                     }
 
                     if (node.closingElement) {
-                        emitLeadingTrivia(node.closingElement);
                         emitJsxClosingElement(node.closingElement);
                     }
                 }
@@ -5900,29 +5852,47 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
+                        // Remove all whitespace that is at the start or end of a line
+                        let lines = getTextOfNode(node, true).split(/\r?\n/g);
+                        lines = lines.map((line, index) => {
+                            if (lines.length === 1) {
+                                return line; // Only spans one line, don't trim anything
+                            } else if (index === 0) {
+                                return /(.*)\s*/.exec(line)[1]; // First line, trim end only
+                            }
+                            else if (index === lines.length - 1) {
+                                return /\s*(.*)/.exec(line)[1]; // Last line, trim start only
+                            }
+                            else {
+                                return line.trim();
+                            }
+                        }).filter(line => line.length > 0);
                         write('"');
-                        write(getTextOfNode(node));
+                        // write(lines.join('" + \' \' + "'));
+                        write(getTextOfNode(node, true));
                         write('"');
                         break;
 
                     case JsxEmit.Preserve:
                     default: // Emit JSX-preserve as default when no --jsx flag is specified
-                        write(getTextOfNode(node));
+                        write(getTextOfNode(node, true));
                         break;
                 }
             }
 
             function emitJsxExpression(node: JsxExpression) {
-                switch (compilerOptions.jsx) {
-                    case JsxEmit.Preserve:
-                    default:
-                        write('{');
-                        emit(node.expression);
-                        write('}');
-                        break;
-                    case JsxEmit.React:
-                        emit(node.expression);
-                        break;
+                if (node.expression && node.expression.kind !== SyntaxKind.OmittedExpression) {
+                    switch (compilerOptions.jsx) {
+                        case JsxEmit.Preserve:
+                        default:
+                            write('{');
+                            emit(node.expression);
+                            write('}');
+                            break;
+                        case JsxEmit.React:
+                            emit(node.expression);
+                            break;
+                    }
                 }
             }
 

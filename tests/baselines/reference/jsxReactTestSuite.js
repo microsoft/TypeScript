@@ -138,15 +138,15 @@ var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
     "baz" + "bug"} attr4="baz">
   </div>;
 (<div>
-    {}
-    {}
+    
+    
     <span>
-      {}
+      
     </span>
-    {}
+    
     <br />
-    {}
-    {}
+    
+    
   </div>);
 (<div attr1="foo">
     <span // a double-slash comment

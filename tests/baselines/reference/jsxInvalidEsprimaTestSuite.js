@@ -39,7 +39,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 < />;
 <a />;
 < a=/>;
-<a b={d /  > }>
+<a b= d=/>;
 <a>;
 <a></b>;
 <a foo="bar;>
@@ -52,29 +52,20 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a>[foo]></a>[foo]>;
 <a>['foo']></a>['foo']>;
 <a><a />;
-<a b={}>;
+<a b=>;
 var x = <div>one</div><div>two</div>;;
 var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>two</div>;;
-<a>{"str"};</></></></></></>;
-< />;
-a > ;
+<a>{"str"};}</a>;
 <span className="a" id="b"/>;
 <div className=>"app">;
 <div {...props}/>;
 
-<div>stuff</div> {}...props</>;
- > ;
-<div {...props}>stuff</div>;
-{
-    props;
-}
- > ;
+<div>stuff</div> {}...props}>;
+<div {...props}>stuff</div> {}...props}>;
+
 <a>></a>;
 <a> ></a>;
-<a b={}>;
-<a b=<></>></></>;
- > ;
-;
-< />;
-a > ;
-<a asdf=/>;
+<a b=>}>;
+<a b=<>}>;
+<a>}</a>;
+<a asdf=/></>></></></></></></></>;
