@@ -546,7 +546,7 @@ namespace ts {
             token = nextToken();
             processReferenceComments(sourceFile);
 
-            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseStatement);
+            sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = parseTokenNode();
 
@@ -649,10 +649,6 @@ namespace ts {
             }
         }
 
-        function setStrictModeContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.StrictMode);
-        }
-
         function setDisallowInContext(val: boolean) {
             setContextFlag(val, ParserContextFlags.DisallowIn);
         }
@@ -753,10 +749,6 @@ namespace ts {
 
         function inYieldContext() {
             return inContext(ParserContextFlags.Yield);
-        }
-
-        function inStrictModeContext() {
-            return inContext(ParserContextFlags.StrictMode);
         }
 
         function inDisallowInContext() {
@@ -1327,30 +1319,16 @@ namespace ts {
         }
 
         // Parses a list of elements
-        function parseList<T extends Node>(kind: ParsingContext, checkForStrictMode: boolean, parseElement: () => T): NodeArray<T> {
+        function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             let saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             let result = <NodeArray<T>>[];
             result.pos = getNodePos();
-            let savedStrictModeContext = inStrictModeContext();
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     let element = parseListElement(kind, parseElement);
                     result.push(element);
-
-                    // test elements only if we are not already in strict mode
-                    if (checkForStrictMode && !inStrictModeContext()) {
-                        if (isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(element)) {
-                                setStrictModeContext(true);
-                                checkForStrictMode = false;
-                            }
-                        }
-                        else {
-                            checkForStrictMode = false;
-                        }
-                    }
 
                     continue;
                 }
@@ -1360,20 +1338,9 @@ namespace ts {
                 }
             }
 
-            setStrictModeContext(savedStrictModeContext);
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
-        }
-
-        /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-        function isUseStrictPrologueDirective(node: Node): boolean {
-            Debug.assert(isPrologueDirective(node));
-            let nodeText = getTextOfNodeFromSourceText(sourceText, (<ExpressionStatement>node).expression);
-
-            // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
-            // string to contain unicode escapes (as per ES5).
-            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
 
         function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
@@ -2280,7 +2247,7 @@ namespace ts {
         function parseObjectTypeMembers(): NodeArray<Declaration> {
             let members: NodeArray<Declaration>;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                members = parseList(ParsingContext.TypeMembers, /*checkForStrictMode*/ false, parseTypeMember);
+                members = parseList(ParsingContext.TypeMembers, parseTypeMember);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -2643,12 +2610,6 @@ namespace ts {
                     return true;
                 }
 
-                if (inStrictModeContext()) {
-                    // If we're in strict mode, then 'yield' is a keyword, could only ever start
-                    // a yield expression.
-                    return true;
-                }
-
                 // We're in a context where 'yield expr' is not allowed.  However, if we can
                 // definitely tell that the user was trying to parse a 'yield expr' and not
                 // just a normal expr that start with a 'yield' identifier, then parse out
@@ -2663,7 +2624,7 @@ namespace ts {
                 // for now we just check if the next token is an identifier.  More heuristics
                 // can be added here later as necessary.  We just need to make sure that we
                 // don't accidently consume something legal.
-                return lookAhead(nextTokenIsIdentifierOnSameLine);
+                return lookAhead(nextTokenIsIdentifierOrKeywordOrNumberOnSameLine);
             }
 
             return false;
@@ -3566,10 +3527,10 @@ namespace ts {
         }
 
         // STATEMENTS
-        function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+        function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             let node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
-                node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -3592,7 +3553,7 @@ namespace ts {
                 setDecoratorContext(false);
             }
 
-            let block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true, diagnosticMessage);
+            let block = parseBlock(ignoreMissingOpenBrace, diagnosticMessage);
 
             if (saveDecoratorContext) {
                 setDecoratorContext(true);
@@ -3735,7 +3696,7 @@ namespace ts {
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
             return finishNode(node);
         }
 
@@ -3743,7 +3704,7 @@ namespace ts {
             let node = <DefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
             return finishNode(node);
         }
 
@@ -3759,7 +3720,7 @@ namespace ts {
             parseExpected(SyntaxKind.CloseParenToken);
             let caseBlock = <CaseBlock>createNode(SyntaxKind.CaseBlock, scanner.getStartPos());
             parseExpected(SyntaxKind.OpenBraceToken);
-            caseBlock.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
+            caseBlock.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
             parseExpected(SyntaxKind.CloseBraceToken);
             node.caseBlock = finishNode(caseBlock);
             return finishNode(node);
@@ -3786,14 +3747,14 @@ namespace ts {
             let node = <TryStatement>createNode(SyntaxKind.TryStatement);
 
             parseExpected(SyntaxKind.TryKeyword);
-            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
+            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             node.catchClause = token === SyntaxKind.CatchKeyword ? parseCatchClause() : undefined;
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
             if (!node.catchClause || token === SyntaxKind.FinallyKeyword) {
                 parseExpected(SyntaxKind.FinallyKeyword);
-                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
+                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
             return finishNode(node);
@@ -3807,7 +3768,7 @@ namespace ts {
             }
 
             parseExpected(SyntaxKind.CloseParenToken);
-            result.block = parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
+            result.block = parseBlock(/*ignoreMissingOpenBrace*/ false);
             return finishNode(result);
         }
 
@@ -3851,6 +3812,11 @@ namespace ts {
         function nextTokenIsFunctionKeywordOnSameLine() {
             nextToken();
             return token === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak();
+        }
+
+        function nextTokenIsIdentifierOrKeywordOrNumberOnSameLine() {
+            nextToken();
+            return (isIdentifierOrKeyword() || token === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
         }
 
         function isDeclaration(): boolean {
@@ -3983,16 +3949,15 @@ namespace ts {
             }
         }
 
-        function nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine() {
+        function nextTokenIsIdentifierOrStartOfDestructuring() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() &&
-                (isIdentifier() || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken);
+            return isIdentifier() || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken;
         }
 
         function isLetDeclaration() {
-            // It is let declaration if in strict mode or next token is identifier\open bracket\open curly on same line.
-            // otherwise it needs to be treated like identifier
-            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
+            // In ES6 'let' always starts a lexical declaration if followed by an identifier or { 
+            // or [.
+            return lookAhead(nextTokenIsIdentifierOrStartOfDestructuring);
         }
 
         function parseStatement(): Statement {
@@ -4000,7 +3965,7 @@ namespace ts {
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
                 case SyntaxKind.OpenBraceToken:
-                    return parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
+                    return parseBlock(/*ignoreMissingOpenBrace*/ false);
                 case SyntaxKind.VarKeyword:
                     return parseVariableStatement(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
                 case SyntaxKind.LetKeyword:
@@ -4541,10 +4506,6 @@ namespace ts {
         }
         
         function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
-            // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
-            let savedStrictModeContext = inStrictModeContext();
-            setStrictModeContext(true);
-
             var node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
@@ -4563,9 +4524,7 @@ namespace ts {
                 node.members = createMissingList<ClassElement>();
             }
 
-            var finishedNode = finishNode(node);
-            setStrictModeContext(savedStrictModeContext);
-            return finishedNode;
+            return finishNode(node);
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
@@ -4573,10 +4532,14 @@ namespace ts {
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
 
             if (isHeritageClause()) {
-                return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode:*/ false, parseHeritageClause);
+                return parseList(ParsingContext.HeritageClauses, parseHeritageClause);
             }
 
             return undefined;
+        }
+
+        function parseHeritageClausesWorker() {
+            return parseList(ParsingContext.HeritageClauses, parseHeritageClause);
         }
 
         function parseHeritageClause() {
@@ -4606,7 +4569,7 @@ namespace ts {
         }
 
         function parseClassMembers() {
-            return parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassElement);
+            return parseList(ParsingContext.ClassMembers, parseClassElement);
         }
 
         function parseInterfaceDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): InterfaceDeclaration {
@@ -4664,7 +4627,7 @@ namespace ts {
         function parseModuleBlock(): ModuleBlock {
             let node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.BlockStatements, /*checkForStrictMode*/ false, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
