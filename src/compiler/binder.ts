@@ -1,7 +1,7 @@
 /// <reference path="parser.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     export let bindTime = 0;
 
     export const enum ModuleInstanceState {
@@ -88,12 +88,20 @@ module ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
+
+        // If this file is an external module, then it is automatically in strict-mode according to
+        // ES6.  If it is not an external module, then we'll determine if it is in strict mode or 
+        // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
+        let inStrictMode = !!file.externalModuleIndicator;
+
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
 
         return;
@@ -194,6 +202,11 @@ module ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
+                } 
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -524,6 +537,51 @@ module ts {
             typeLiteralSymbol.members = { [symbol.name]: symbol };
         }
 
+        function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
+            const enum ElementKind {
+                Property = 1,
+                Accessor = 2
+            }
+
+            if (inStrictMode) {
+                let seen: Map<ElementKind> = {};
+
+                for (let prop of node.properties) {
+                    if (prop.name.kind !== SyntaxKind.Identifier) {
+                        continue;
+                    }
+
+                    let identifier = <Identifier>prop.name;
+
+                    // ECMA-262 11.1.5 Object Initialiser
+                    // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
+                    // a.This production is contained in strict code and IsDataDescriptor(previous) is true and
+                    // IsDataDescriptor(propId.descriptor) is true.
+                    //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
+                    //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
+                    //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
+                    // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
+                    let currentKind = prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.MethodDeclaration
+                        ? ElementKind.Property
+                        : ElementKind.Accessor;
+
+                    let existingKind = seen[identifier.text];
+                    if (!existingKind) {
+                        seen[identifier.text] = currentKind;
+                        continue;
+                    }
+
+                    if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
+                        let span = getErrorSpanForNode(file, identifier);
+                        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
+                            Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
+                    }
+                }
+            }
+
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
+        }
+
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
             let symbol = createSymbol(symbolFlags, name);
             addDeclarationToSymbol(symbol, node, symbolFlags);
@@ -553,12 +611,149 @@ module ts {
             bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
         }
 
+        // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
+        // check for reserved words used as identifiers in strict mode code.
+        function checkStrictModeIdentifier(node: Identifier) {
+            if (inStrictMode &&
+                node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
+                node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
+                !isIdentifierName(node)) {
+
+                // Report error only if there are no parse errors in file
+                if (!file.parseDiagnostics.length) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node,
+                        getStrictModeIdentifierMessage(node), declarationNameToString(node)));
+                }
+            }
+        }
+
+        function getStrictModeIdentifierMessage(node: Node) {
+            // Provide specialized messages to help the user understand why we think they're in 
+            // strict mode.
+            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+                return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
+            }
+
+            if (file.externalModuleIndicator) {
+                return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
+            }
+
+            return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
+        }
+
+        function checkStrictModeBinaryExpression(node: BinaryExpression) {
+            if (inStrictMode && isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operatorToken.kind)) {
+                // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+                // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                checkStrictModeEvalOrArguments(node, <Identifier>node.left);
+            }
+        }
+
+        function checkStrictModeCatchClause(node: CatchClause) {
+            // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
+            // Catch production is eval or arguments
+            if (inStrictMode && node.variableDeclaration) {
+                checkStrictModeEvalOrArguments(node, node.variableDeclaration.name);
+            }
+        }
+
+        function checkStrictModeDeleteExpression(node: DeleteExpression) {
+            // Grammar checking
+            if (inStrictMode && node.expression.kind === SyntaxKind.Identifier) {
+                // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its
+                // UnaryExpression is a direct reference to a variable, function argument, or function name
+                let span = getErrorSpanForNode(file, node.expression);
+                file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode));
+            }
+        }
+
+        function isEvalOrArgumentsIdentifier(node: Node): boolean {
+            return node.kind === SyntaxKind.Identifier &&
+                ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
+        }
+
+        function checkStrictModeEvalOrArguments(contextNode: Node, name: Node) {
+            if (name && name.kind === SyntaxKind.Identifier) {
+                let identifier = <Identifier>name;
+                if (isEvalOrArgumentsIdentifier(identifier)) {
+                    // We check first if the name is inside class declaration or class expression; if so give explicit message
+                    // otherwise report generic error message.
+                    let span = getErrorSpanForNode(file, name);
+                    file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
+                        getStrictModeEvalOrArgumentsMessage(contextNode), identifier.text));
+                }
+            }
+        }
+
+        function getStrictModeEvalOrArgumentsMessage(node: Node) {
+            // Provide specialized messages to help the user understand why we think they're in 
+            // strict mode.
+            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+                return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
+            }
+
+            if (file.externalModuleIndicator) {
+                return Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode;
+            }
+
+            return Diagnostics.Invalid_use_of_0_in_strict_mode;
+        }
+
+        function checkStrictModeFunctionName(node: FunctionLikeDeclaration) {
+            if (inStrictMode) {
+                // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
+                checkStrictModeEvalOrArguments(node, node.name);
+            }
+        }
+
+        function checkStrictModeNumericLiteral(node: LiteralExpression) {
+            if (inStrictMode && node.flags & NodeFlags.OctalLiteral) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
+            }
+        }
+
+        function checkStrictModePostfixUnaryExpression(node: PostfixUnaryExpression) {
+            // Grammar checking
+            // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+            // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
+            // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator.
+            if (inStrictMode) {
+                checkStrictModeEvalOrArguments(node, <Identifier>node.operand);
+            }
+        }
+
+        function checkStrictModePrefixUnaryExpression(node: PrefixUnaryExpression) {
+            // Grammar checking
+            if (inStrictMode) {
+                if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
+                    checkStrictModeEvalOrArguments(node, <Identifier>node.operand);
+                }
+            }
+        }
+
+        function checkStrictModeWithStatement(node: WithStatement) {
+            // Grammar checking for withStatement
+            if (inStrictMode) {
+                grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+            }
+        }
+
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+            let span = getSpanOfTokenAtPosition(file, node.pos);
+            file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
+        }
+
         function getDestructuringParameterName(node: Declaration) {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
         function bind(node: Node) {
             node.parent = parent;
+
+            var savedInStrictMode = inStrictMode;
+            if (!savedInStrictMode) {
+                updateStrictMode(node);
+            }
 
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible 
@@ -577,10 +772,70 @@ module ts {
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
             bindChildren(node);
+
+            inStrictMode = savedInStrictMode;
+        }
+
+        function updateStrictMode(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.SourceFile:
+                case SyntaxKind.ModuleBlock:
+                    updateStrictModeStatementList((<SourceFile | ModuleBlock>node).statements);
+                    return;
+                case SyntaxKind.Block:
+                    if (isFunctionLike(node.parent)) {
+                        updateStrictModeStatementList((<Block>node).statements);
+                    }
+                    return;
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    // All classes are automatically in strict mode in ES6.
+                    inStrictMode = true;
+                    return;
+            }
+        }
+
+        function updateStrictModeStatementList(statements: NodeArray<Statement>) {
+            for (let statement of statements) {
+                if (!isPrologueDirective(statement)) {
+                    return;
+                }
+
+                if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
+                    inStrictMode = true;
+                    return;
+                }
+            }
         }
         
+        /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+        function isUseStrictPrologueDirective(node: ExpressionStatement): boolean {
+            let nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
+
+            // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
+            // string to contain unicode escapes (as per ES5).
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
+        }
+
         function bindWorker(node: Node) {
             switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return checkStrictModeIdentifier(<Identifier>node);
+                case SyntaxKind.BinaryExpression:
+                    return checkStrictModeBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.CatchClause:
+                    return checkStrictModeCatchClause(<CatchClause>node);
+                case SyntaxKind.DeleteExpression:
+                    return checkStrictModeDeleteExpression(<DeleteExpression>node);
+                case SyntaxKind.NumericLiteral:
+                    return checkStrictModeNumericLiteral(<LiteralExpression>node);
+                case SyntaxKind.PostfixUnaryExpression:
+                    return checkStrictModePostfixUnaryExpression(<PostfixUnaryExpression>node);
+                case SyntaxKind.PrefixUnaryExpression:
+                    return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
+                case SyntaxKind.WithStatement:
+                    return checkStrictModeWithStatement(<WithStatement>node);
+
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
@@ -609,6 +864,7 @@ module ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
                 case SyntaxKind.FunctionDeclaration:
+                    checkStrictModeFunctionName(<FunctionDeclaration>node);
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
                 case SyntaxKind.Constructor:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
@@ -622,9 +878,10 @@ module ts {
                 case SyntaxKind.TypeLiteral:
                     return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
                 case SyntaxKind.ObjectLiteralExpression:
-                    return bindAnonymousDeclaration(<ObjectLiteralExpression>node, SymbolFlags.ObjectLiteral, "__object");
+                    return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                    checkStrictModeFunctionName(<FunctionExpression>node);
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function");
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
@@ -661,7 +918,11 @@ module ts {
         }
 
         function bindExportAssignment(node: ExportAssignment) {
-            if (node.expression.kind === SyntaxKind.Identifier) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export assignment in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
+            }
+            else if (node.expression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -672,7 +933,11 @@ module ts {
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
+            if (!container.symbol || !container.symbol.exports) {
+                // Export * in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.ExportStar, getDeclarationName(node));
+            }
+            else if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
@@ -722,6 +987,10 @@ module ts {
         }
 
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
+            if (inStrictMode) {
+                checkStrictModeEvalOrArguments(node, node.name)
+            }
+
             if (!isBindingPattern(node.name)) {
                 if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedVariableDeclaration(node);
@@ -745,6 +1014,12 @@ module ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
+            if (inStrictMode) {
+                // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
+                // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
+                checkStrictModeEvalOrArguments(node, node.name);
+            }
+
             if (isBindingPattern(node.name)) {
                 bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
             }

@@ -3,7 +3,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
 
-module ts {
+namespace ts {
     /* @internal */
     export var optionDeclarations: CommandLineOption[] = [
         {

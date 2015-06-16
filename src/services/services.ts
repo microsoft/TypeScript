@@ -10,7 +10,7 @@
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
-module ts {
+namespace ts {
     /** The version of the language service API */
     export let servicesVersion = "0.4"
 
@@ -5993,6 +5993,7 @@ module ts {
             let typeChecker = program.getTypeChecker();
 
             let result: number[] = [];
+            let classifiableNames = program.getClassifiableNames();
             processNode(sourceFile);
 
             return { spans: result, endOfLineState: EndOfLineState.None };
@@ -6005,6 +6006,9 @@ module ts {
 
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
                 let flags = symbol.getFlags();
+                if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
+                    return;
+                }
 
                 if (flags & SymbolFlags.Class) {
                     return ClassificationType.className;
@@ -6047,13 +6051,20 @@ module ts {
 
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
-                if (node && textSpanIntersectsWith(span, node.getStart(), node.getWidth())) {
-                    if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
-                        let symbol = typeChecker.getSymbolAtLocation(node);
-                        if (symbol) {
-                            let type = classifySymbol(symbol, getMeaningFromLocation(node));
-                            if (type) {
-                                pushClassification(node.getStart(), node.getWidth(), type);
+                if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
+                    if (node.kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
+                        let identifier = <Identifier>node;
+
+                        // Only bother calling into the typechecker if this is an identifier that
+                        // could possibly resolve to a type name.  This makes classification run
+                        // in a third of the time it would normally take.
+                        if (classifiableNames[identifier.text]) {
+                            let symbol = typeChecker.getSymbolAtLocation(node);
+                            if (symbol) {
+                                let type = classifySymbol(symbol, getMeaningFromLocation(node));
+                                if (type) {
+                                    pushClassification(node.getStart(), node.getWidth(), type);
+                                }
                             }
                         }
                     }

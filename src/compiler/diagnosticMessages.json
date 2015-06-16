@@ -671,13 +671,13 @@
         "category": "Error",
         "code": 1213
     },
-    "Type expected. '{0}' is a reserved word in strict mode": {
+    "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "Invalid use of '{0}'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1215
-    },
-    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
-        "category": "Error",
-        "code": 1216
     },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
@@ -730,6 +730,26 @@
     "A type predicate cannot reference element '{0}' in a binding pattern.": {
         "category": "Error",
         "code": 1230
+    },
+    "An export assignment can only be used in a module.": {
+        "category": "Error",
+        "code": 1231
+    },
+    "An import declaration can only be used in a namespace or module.": {
+        "category": "Error",
+        "code": 1232
+    },
+    "An export declaration can only be used in a module.": {
+        "category": "Error",
+        "code": 1233
+    },
+    "An ambient module declaration is only allowed at the top level in a file.": {
+        "category": "Error",
+        "code": 1234
+    },
+    "A namespace declaration is only allowed in a namespace or module.": {
+        "category": "Error",
+        "code": 1235
     },
 
 
