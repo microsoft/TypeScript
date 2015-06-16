@@ -367,25 +367,25 @@ namespace ts {
         None = 0,
 
         // If this node was parsed in a context where 'in-expressions' are not allowed.
-        DisallowIn = 1 << 1,
+        DisallowIn = 1 << 0,
 
         // If this node was parsed in the 'yield' context created when parsing a generator.
-        Yield = 1 << 2,
+        Yield = 1 << 1,
 
         // If this node was parsed as part of a decorator
-        Decorator = 1 << 4,
+        Decorator = 1 << 2,
 
         // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 5,
+        Await = 1 << 3,
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.
-        ThisNodeHasError = 1 << 7,
+        ThisNodeHasError = 1 << 4,
 
         // This node was parsed in a JavaScript file and can be processed differently.  For example
         // its type can be specified usign a JSDoc comment.
-        JavaScriptFile = 1 << 8,
+        JavaScriptFile = 1 << 5,
 
         // Context flags set directly by the parser.
         ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
@@ -397,13 +397,10 @@ namespace ts {
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 9,
-
-        // Used to know if we've computed whether any children of this node are or contain an 'await' or 'yield' expression.
-        ThisNodeOrAnySubNodesHasAwaitOrYield = 1 << 10,
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 11
+        HasAggregatedChildData = 1 << 7
     }
 
     /* @internal */
