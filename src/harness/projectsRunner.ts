@@ -241,7 +241,7 @@ class ProjectRunner extends RunnerBase {
                 if (Harness.Compiler.isJS(fileName)) {
                     // Make sure if there is URl we have it cleaned up
                     var indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
-                    if (indexOfSourceMapUrl != -1) {
+                    if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
                 }

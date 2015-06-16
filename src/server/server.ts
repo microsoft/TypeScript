@@ -123,7 +123,7 @@ namespace ts.server {
                 if (err) {
                     watchedFile.callback(watchedFile.fileName);
                 }
-                else if (watchedFile.mtime.getTime() != stats.mtime.getTime()) {
+                else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
                     watchedFile.callback(watchedFile.fileName);
                 }
@@ -138,7 +138,7 @@ namespace ts.server {
                 var count = 0;
                 var nextToCheck = this.nextFileToCheck;
                 var firstCheck = -1;
-                while ((count < this.chunkSize) && (nextToCheck != firstCheck)) {
+                while ((count < this.chunkSize) && (nextToCheck !== firstCheck)) {
                     this.poll(nextToCheck);
                     if (firstCheck < 0) {
                         firstCheck = nextToCheck;

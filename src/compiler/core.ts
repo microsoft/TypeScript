@@ -572,7 +572,7 @@ namespace ts {
     export function getNormalizedPathComponents(path: string, currentDirectory: string) {
         path = normalizeSlashes(path);
         let rootLength = getRootLength(path);
-        if (rootLength == 0) {
+        if (rootLength === 0) {
             // If the path is not rooted it is relative to current directory
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
