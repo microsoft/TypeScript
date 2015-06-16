@@ -6132,13 +6132,7 @@ namespace ts {
                 result.push(type);
             }
 
-            function classifyLeadingTrivia(token: Node): void {
-                let tokenStart = skipTrivia(sourceFile.text, token.pos, /*stopAfterLineBreak:*/ false);
-                if (tokenStart === token.pos) {
-                    return;
-                }
-
-                // token has trivia.  Classify them appropriately.
+            function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
                 triviaScanner.setTextPos(token.pos);
                 while (true) {
                     let start = triviaScanner.getTextPos();
@@ -6148,13 +6142,23 @@ namespace ts {
 
                     // The moment we get something that isn't trivia, then stop processing.
                     if (!isTrivia(kind)) {
-                        return;
+                        return start;
+                    }
+
+                    // Don't bother with newlines/whitespace.
+                    if (kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.WhitespaceTrivia) {
+                        continue;
                     }
 
                     // Only bother with the trivia if it at least intersects the span of interest.
                     if (textSpanIntersectsWith(span, start, width)) {
                         if (isComment(kind)) {
                             classifyComment(token, kind, start, width);
+                            
+                            // Classifying a comment might cause us to reuse the trivia scanner 
+                            // (because of jsdoc comments).  So after we classify the comment make
+                            // sure we set the scanner position back to where it needs to be.
+                            triviaScanner.setTextPos(end);
                             continue;
                         }
 
@@ -6292,12 +6296,14 @@ namespace ts {
             }
 
             function classifyToken(token: Node): void {
-                classifyLeadingTrivia(token);
+                let tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
 
-                if (token.getWidth() > 0) {
+                let tokenWidth = token.getEnd() - tokenStart;
+                Debug.assert(tokenWidth >= 0);
+                if (tokenWidth > 0) {
                     let type = classifyTokenType(token.kind, token);
                     if (type) {
-                        pushClassification(token.getStart(), token.getWidth(), type);
+                        pushClassification(tokenStart, tokenWidth, type);
                     }
                 }
             }
