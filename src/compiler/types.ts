@@ -366,58 +366,41 @@ namespace ts {
     export const enum ParserContextFlags {
         None = 0,
 
-        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
-        // checking if the node can be reused in incremental settings.
-        StrictMode = 1 << 0,
-
         // If this node was parsed in a context where 'in-expressions' are not allowed.
-        DisallowIn = 1 << 1,
+        DisallowIn = 1 << 0,
 
         // If this node was parsed in the 'yield' context created when parsing a generator.
-        Yield = 1 << 2,
-
-        // If this node was parsed in the parameters of a generator.
-        GeneratorParameter = 1 << 3,
+        Yield = 1 << 1,
 
         // If this node was parsed as part of a decorator
-        Decorator = 1 << 4,
+        Decorator = 1 << 2,
 
         // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 5,
-
-        // If this node was parsed in the parameters of an async function.
-        AsyncParameter = 1 << 6,
+        Await = 1 << 3,
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.
-        ThisNodeHasError = 1 << 7,
+        ThisNodeHasError = 1 << 4,
 
         // This node was parsed in a JavaScript file and can be processed differently.  For example
         // its type can be specified usign a JSDoc comment.
-        JavaScriptFile = 1 << 8,
+        JavaScriptFile = 1 << 5,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError | Await | AsyncParameter,
-
-        // Context flags passed as part of the modified ES6 grammar.
-        YieldAndGeneratorParameterFlags = Yield | GeneratorParameter,
-        AwaitAndAsyncParameterFlags = Await | AsyncParameter,
+        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
         
         // Exclude these flags when parsing a Type
-        TypeExcludesFlags = YieldAndGeneratorParameterFlags | AwaitAndAsyncParameterFlags,       
+        TypeExcludesFlags = Yield | Await,       
         
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 9,
-
-        // Used to know if we've computed whether any children of this node are or contain an 'await' or 'yield' expression.
-        ThisNodeOrAnySubNodesHasAwaitOrYield = 1 << 10,
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 11
+        HasAggregatedChildData = 1 << 7
     }
 
     /* @internal */

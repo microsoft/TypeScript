@@ -252,11 +252,6 @@ module ts {
         });
 
         it('Strict mode 1',() => {
-            // In non-strict mode 'package' means nothing and can be reused.  In strict mode though
-            // we'll have to reparse the nodes (and generate an error for 'package();'
-            //
-            // Note: in this test we don't actually add 'use strict'.  This is so we can compare 
-            // reuse with/without a strict mode change.
             var source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
 
             var oldText = ScriptSnapshot.fromString(source);
@@ -266,23 +261,15 @@ module ts {
         });
 
         it('Strict mode 2',() => {
-            // In non-strict mode 'package' means nothing and can be reused.  In strict mode though
-            // we'll have to reparse the nodes (and generate an error for 'package();'
             var source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
 
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, 0, "'use strict';\r\n");
 
-            // Note the decreased reuse of nodes compared to 'Strict mode 1'
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it('Strict mode 3',() => {
-            // In non-strict mode 'package' means nothing and can be reused.  In strict mode though
-            // we'll have to reparse the nodes (and generate an error for 'package();'
-            //
-            // Note: in this test we don't actually remove 'use strict'.  This is so we can compare 
-            // reuse with/without a strict mode change.
             var source = "'strict';\r\nfoo1();\r\nfoo1();\r\nfoo1();\r\npackage();";
 
             var index = source.indexOf('f');
@@ -293,16 +280,13 @@ module ts {
         });
 
         it('Strict mode 4',() => {
-            // In non-strict mode 'package' means nothing and can be reused.  In strict mode though
-            // we'll have to reparse the nodes (and generate an error for 'package();'
             var source = "'use strict';\r\nfoo1();\r\nfoo1();\r\nfoo1();\r\npackage();";
 
             var index = source.indexOf('f');
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, 0, index);
 
-            // Note the decreased reuse of nodes compared to testStrictMode3
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it('Strict mode 5',() => {
@@ -312,7 +296,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, index, 6, "strict");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 27);
         });
 
         it('Strict mode 6',() => {
@@ -322,7 +306,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, index, 6, "blahhh");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 27);
         });
 
         it('Strict mode 7',() => {
@@ -492,7 +476,6 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, index, ": Foo<Bar<".length, "= ");
 
-            // Note the decreased reuse of nodes compared to testStrictMode3
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
@@ -545,7 +528,7 @@ module ts {
             var index = source.lastIndexOf(";");
             var newTextAndChange = withDelete(oldText, index, 1);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 11);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 14);
         });
 
         it('Edit after empty type parameter list',() => {
@@ -555,7 +538,7 @@ module ts {
             var index = source.length;
             var newTextAndChange = withInsert(oldText, index, "var x;");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 2);
         });
 
         it('Delete parameter after comment',() => {
@@ -595,7 +578,7 @@ constructor(name) { }\
             var index = source.indexOf("100");
             var newTextAndChange = withInsert(oldText, index, "'1', ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 5);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 7);
         });
 
         it('Insert declare modifier before module',() => {
@@ -718,7 +701,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);  // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Moving methods from object literal to class in strict mode', () => {
@@ -736,7 +719,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "class".length, "interface");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);   // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
         });
 
         it('Moving index signatures from class to interface in strict mode', () => {
@@ -754,7 +737,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "interface".length, "class");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);   // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
         });
 
 
@@ -782,7 +765,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);  // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
 
