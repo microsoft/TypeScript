@@ -9,7 +9,7 @@ async function bar(): Promise<void> {
 function bar() {
     return __awaiter(function* () {
         // 'await' here is an identifier, and not a yield expression.
-        function foo(a = await) {
+        function foo(a = yield ) {
             return __awaiter(function* () {
             },
             this, void 0, Promise);

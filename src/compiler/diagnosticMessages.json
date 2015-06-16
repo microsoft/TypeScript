@@ -1570,7 +1570,6 @@
         "category": "Error",
         "code": 2505
     },
-
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
@@ -1582,6 +1581,14 @@
     "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
         "category": "Error",
         "code": 2522
+    },
+    "'yield' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2523
+    },
+    "'await' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2524
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

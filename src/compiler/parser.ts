@@ -661,10 +661,6 @@ namespace ts {
             setContextFlag(val, ParserContextFlags.Yield);
         }
 
-        function setGeneratorParameterContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.GeneratorParameter);
-        }
-
         function setDecoratorContext(val: boolean) {
             setContextFlag(val, ParserContextFlags.Decorator);
         }
@@ -672,11 +668,7 @@ namespace ts {
         function setAwaitContext(val: boolean) {
             setContextFlag(val, ParserContextFlags.Await);
         }
-        
-        function setAsyncParameterContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.AsyncParameter);
-        }
-        
+                
         function doOutsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
             // contextFlagsToClear will contain only the context flags that are 
             // currently set that we need to temporarily clear
@@ -767,10 +759,6 @@ namespace ts {
             return inContext(ParserContextFlags.StrictMode);
         }
 
-        function inGeneratorParameterContext() {
-            return inContext(ParserContextFlags.GeneratorParameter);
-        }
-
         function inDisallowInContext() {
             return inContext(ParserContextFlags.DisallowIn);
         }
@@ -782,15 +770,7 @@ namespace ts {
         function inAwaitContext() {
             return inContext(ParserContextFlags.Await);
         }
-
-        function inAsyncParameterContext() {
-            return inContext(ParserContextFlags.AsyncParameter);
-        }
         
-        function inGeneratorParameterOrAsyncParameterContext() {
-            return inContext(ParserContextFlags.GeneratorParameter | ParserContextFlags.AsyncParameter);
-        }
-
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
             let start = scanner.getTokenPos();
             let length = scanner.getTextPos() - start;
@@ -1083,24 +1063,16 @@ namespace ts {
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
-            // PropertyName[Yield,GeneratorParameter] :
-            //     LiteralPropertyName
-            //     [+GeneratorParameter] ComputedPropertyName
-            //     [+AsyncParameter] ComputedPropertyName
-            //     [~GeneratorParameter,~AsyncParameter] ComputedPropertyName[?Yield,?Await]
-            //
-            // ComputedPropertyName[Yield] :
-            //     [ AssignmentExpression[In, ?Yield] ]
-            //
+            // PropertyName [Yield]:
+            //      LiteralPropertyName
+            //      ComputedPropertyName[?Yield]
             let node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
 
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            node.expression = inGeneratorParameterOrAsyncParameterContext() 
-                ? doOutsideOfYieldAndAwaitContext(allowInAndParseExpression) 
-                : allowInAnd(parseExpression);
+            node.expression = allowInAnd(parseExpression);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
@@ -1991,8 +1963,8 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             setModifiers(node, parseModifiers());
 
-            // FormalParameter[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.1
-            //      BindingElement[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
+            // FormalParameter [Yield,Await]:
+            //      BindingElement[?Yield,?Await]
 
             node.name = parseIdentifierOrPattern();
 
@@ -2024,18 +1996,7 @@ namespace ts {
         }
         
         function parseBindingElementInitializer(inParameter: boolean) {
-            // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
-            //      [+GeneratorParameter] BindingPattern[?Yield,?Await,?AsyncParameter,GeneratorParameter] Initializer[In]opt
-            //      [+AsyncParameter] BindingPattern[?Yield,?GeneratorParameter,?Await,AsyncParameter] Initializer[In]opt
-            //      [~GeneratorParameter,~AsyncParameter] BindingPattern[?Yield,?Await] Initializer[In,?Yield,?Await]opt
-            // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : 
-            //      [+GeneratorParameter] BindingIdentifier[Yield, ?Await] Initializer[In]opt
-            //      [+AsyncParameter] BindingIdentifier[Await, ?Yield] Initializer[In]opt
-            //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
-            let parseInitializer = inParameter ? parseParameterInitializer : parseNonParameterInitializer;
-            return inGeneratorParameterOrAsyncParameterContext() 
-                ? doOutsideOfYieldAndAwaitContext(parseInitializer) 
-                : parseInitializer();
+            return inParameter ? parseParameterInitializer() : parseNonParameterInitializer();
         }
 
         function parseParameterInitializer() {
@@ -2043,14 +2004,15 @@ namespace ts {
         }
         
         function fillSignature(
-            returnToken: SyntaxKind,
-            yieldAndGeneratorParameterContext: boolean,
-            awaitAndAsyncParameterContext: boolean,
-            requireCompleteParameterList: boolean,
-            signature: SignatureDeclaration): void {
+                returnToken: SyntaxKind,
+                yieldContext: boolean,
+                awaitContext: boolean,
+                requireCompleteParameterList: boolean,
+                signature: SignatureDeclaration): void {
+
             let returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
-            signature.parameters = parseParameterList(yieldAndGeneratorParameterContext, awaitAndAsyncParameterContext, requireCompleteParameterList);
+            signature.parameters = parseParameterList(yieldContext, awaitContext, requireCompleteParameterList);
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
@@ -2061,44 +2023,31 @@ namespace ts {
             }
         }
 
-        // Note: after careful analysis of the grammar, it does not appear to be possible to
-        // have 'Yield' And 'GeneratorParameter' not in sync.  i.e. any production calling
-        // this FormalParameters production either always sets both to true, or always sets
-        // both to false.  As such we only have a single parameter to represent both.
-        function parseParameterList(yieldAndGeneratorParameterContext: boolean, awaitAndAsyncParameterContext: boolean, requireCompleteParameterList: boolean) {
-            // FormalParameters[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified)
-            //      ...
+        function parseParameterList(yieldContext: boolean, awaitContext: boolean, requireCompleteParameterList: boolean) {
+            // FormalParameters [Yield,Await]: (modified)
+            //      [empty]
+            //      FormalParameterList[?Yield,Await]
             //
-            // FormalParameter[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified)
-            //      BindingElement[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
+            // FormalParameter[Yield,Await]: (modified)
+            //      BindingElement[?Yield,Await]
             //
-            // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 13.2.3
-            //      SingleNameBinding[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
-            //      [+GeneratorParameter]BindingPattern[?Yield,?Await,?AsyncParameter,GeneratorParameter] Initializer[In]opt
-            //      [+AsyncParameter]BindingPattern[?Yield,?Await,?GeneratorParameter,AsyncParameter] Initializer[In]opt
-            //      [~GeneratorParameter,~AsyncParameter]BindingPattern[?Yield,?Await]Initializer[In,?Yield,?Await]opt
+            // BindingElement [Yield,Await]: (modified)
+            //      SingleNameBinding[?Yield,?Await]
+            //      BindingPattern[?Yield,?Await]Initializer [In, ?Yield,?Await] opt
             //
-            // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 13.2.3
-            //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
-            //      [+AsyncParameter]BindingIdentifier[Await]Initializer[In]opt
-            //      [~GeneratorParameter,~AsyncParameter]BindingIdentifier[?Yield,?Await]Initializer[In,?Yield,?Await]opt
+            // SingleNameBinding [Yield,Await]:
+            //      BindingIdentifier[?Yield,?Await]Initializer [In, ?Yield,?Await] opt
             if (parseExpected(SyntaxKind.OpenParenToken)) {
                 let savedYieldContext = inYieldContext();
-                let savedGeneratorParameterContext = inGeneratorParameterContext();
                 let savedAwaitContext = inAwaitContext();
-                let savedAsyncParameterContext = inAsyncParameterContext();
                 
-                setYieldContext(yieldAndGeneratorParameterContext);
-                setGeneratorParameterContext(yieldAndGeneratorParameterContext);
-                setAwaitContext(awaitAndAsyncParameterContext);
-                setAsyncParameterContext(awaitAndAsyncParameterContext);
+                setYieldContext(yieldContext);
+                setAwaitContext(awaitContext);
                 
                 let result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
                 
                 setYieldContext(savedYieldContext);
-                setGeneratorParameterContext(savedGeneratorParameterContext);
                 setAwaitContext(savedAwaitContext);
-                setAsyncParameterContext(savedAsyncParameterContext);
                 
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
@@ -2131,7 +2080,7 @@ namespace ts {
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*awaitAndAsyncParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
             parseTypeMemberSemicolon();
             return finishNode(node);
         }
@@ -2220,8 +2169,8 @@ namespace ts {
                 method.questionToken = questionToken;
 
                 // Method signatues don't exist in expression contexts.  So they have neither
-                // [Yield] nor [GeneratorParameter]
-                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*awaitAndAsyncParameterContext*/ false, /*requireCompleteParameterList*/ false, method);
+                // [Yield] nor [Await]
+                fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, method);
                 parseTypeMemberSemicolon();
                 return finishNode(method);
             }
@@ -2360,7 +2309,7 @@ namespace ts {
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext*/ false, /*awaitAndAsyncParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
             return finishNode(node);
         }
 
@@ -2912,7 +2861,7 @@ namespace ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList*/ !allowAmbiguity, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ !allowAmbiguity, node);
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {
@@ -3566,11 +3515,12 @@ namespace ts {
             return finishNode(node);
         }
 
-            // GeneratorExpression :
         function parseFunctionExpression(): FunctionExpression {
-            //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
+            // GeneratorExpression:
+            //      function* BindingIdentifier [Yield][opt](FormalParameters[Yield]){ GeneratorBody }
+            //
             // FunctionExpression:
-            //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
+            //      function BindingIdentifier[opt](FormalParameters){ FunctionBody }
             let saveDecoratorContext = inDecoratorContext();
             if (saveDecoratorContext) {
                 setDecoratorContext(false);
@@ -3589,7 +3539,7 @@ namespace ts {
                 isAsync ? doInAwaitContext(parseOptionalIdentifier) :
                 parseOptionalIdentifier();
             
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ isGenerator, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);
             
             if (saveDecoratorContext) {
@@ -4303,7 +4253,7 @@ namespace ts {
             node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             let isGenerator = !!node.asteriskToken;
             let isAsync = isAsyncFunctionLike(node);
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ isGenerator, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, Diagnostics.or_expected);
             return finishNode(node);
         }
@@ -4313,7 +4263,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*awaitAndAsyncParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false, Diagnostics.or_expected);
             return finishNode(node);
         }
@@ -4327,7 +4277,7 @@ namespace ts {
             method.questionToken = questionToken;
             let isGenerator = !!asteriskToken;
             let isAsync = isAsyncFunctionLike(method);
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ isGenerator, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);
             return finishNode(method);
         }
@@ -4381,7 +4331,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*awaitAndAsyncParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false);
             return finishNode(node);
         }

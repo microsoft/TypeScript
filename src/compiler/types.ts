@@ -376,17 +376,11 @@ namespace ts {
         // If this node was parsed in the 'yield' context created when parsing a generator.
         Yield = 1 << 2,
 
-        // If this node was parsed in the parameters of a generator.
-        GeneratorParameter = 1 << 3,
-
         // If this node was parsed as part of a decorator
         Decorator = 1 << 4,
 
         // If this node was parsed in the 'await' context created when parsing an async function.
         Await = 1 << 5,
-
-        // If this node was parsed in the parameters of an async function.
-        AsyncParameter = 1 << 6,
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
@@ -398,14 +392,10 @@ namespace ts {
         JavaScriptFile = 1 << 8,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError | Await | AsyncParameter,
-
-        // Context flags passed as part of the modified ES6 grammar.
-        YieldAndGeneratorParameterFlags = Yield | GeneratorParameter,
-        AwaitAndAsyncParameterFlags = Await | AsyncParameter,
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
         
         // Exclude these flags when parsing a Type
-        TypeExcludesFlags = YieldAndGeneratorParameterFlags | AwaitAndAsyncParameterFlags,       
+        TypeExcludesFlags = Yield | Await,       
         
         // Context flags computed by aggregating child flags upwards.
 
