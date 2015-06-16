@@ -2623,11 +2623,16 @@ module ts {
             return signatures;
         }
 
+        // The base constructor of a class can resolve to
+        // undefinedType if the class has no extends clause,
+        // unknownType if an error occurred during resolution of the extends expression,
+        // nullType if the extends expression is the null value, or
+        // an object type with at least one construct signature.
         function getBaseConstructorTypeOfClass(type: InterfaceType): ObjectType {
-            if (!type.baseConstructorType) {
+            if (!type.resolvedBaseConstructorType) {
                 let baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
-                    return type.baseConstructorType = undefinedType;
+                    return type.resolvedBaseConstructorType = undefinedType;
                 }
                 if (!pushTypeResolution(type)) {
                     return unknownType;
@@ -2639,35 +2644,34 @@ module ts {
                 }
                 if (!popTypeResolution()) {
                     error(type.symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
-                    return type.baseConstructorType = unknownType;
+                    return type.resolvedBaseConstructorType = unknownType;
                 }
                 if (baseConstructorType !== unknownType && baseConstructorType !== nullType && !isConstructorType(baseConstructorType)) {
                     error(baseTypeNode.expression, Diagnostics.Base_expression_is_not_of_a_constructor_function_type);
-                    return type.baseConstructorType = unknownType;
+                    return type.resolvedBaseConstructorType = unknownType;
                 }
-                type.baseConstructorType = baseConstructorType;
+                type.resolvedBaseConstructorType = baseConstructorType;
             }
-            return type.baseConstructorType;
+            return type.resolvedBaseConstructorType;
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
-            let typeWithBaseTypes = <InterfaceTypeWithBaseTypes>type;
-            if (!typeWithBaseTypes.baseTypes) {
+            if (!type.resolvedBaseTypes) {
                 if (type.symbol.flags & SymbolFlags.Class) {
-                    resolveBaseTypesOfClass(typeWithBaseTypes);
+                    resolveBaseTypesOfClass(type);
                 }
                 else if (type.symbol.flags & SymbolFlags.Interface) {
-                    resolveBaseTypesOfInterface(typeWithBaseTypes);
+                    resolveBaseTypesOfInterface(type);
                 }
                 else {
                     Debug.fail("type must be class or interface");
                 }
             }
-            return typeWithBaseTypes.baseTypes;
+            return type.resolvedBaseTypes;
         }
 
-        function resolveBaseTypesOfClass(type: InterfaceTypeWithBaseTypes): void {
-            type.baseTypes = emptyArray;
+        function resolveBaseTypesOfClass(type: InterfaceType): void {
+            type.resolvedBaseTypes = emptyArray;
             let baseContructorType = getBaseConstructorTypeOfClass(type);
             if (!(baseContructorType.flags & TypeFlags.ObjectType)) {
                 return;
@@ -2675,9 +2679,15 @@ module ts {
             let baseTypeNode = getBaseTypeNodeOfClass(type);
             let baseType: Type;
             if (baseContructorType.symbol && baseContructorType.symbol.flags & SymbolFlags.Class) {
+                // When base constructor type is a class we know that the constructors all have the same type parameters as the
+                // class and all return the instance type of the class. There is no need for further checks and we can apply the
+                // type arguments in the same manner as a type reference to get the same error reporting experience.
                 baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseContructorType.symbol);
             }
             else {
+                // The class derives from a "class-like" constructor function, check that we have at least one construct signature
+                // with a matching number of type parameters and use the return type of the first instantiated signature. Elsewhere
+                // we check that all instantiated signatures return the same type.
                 let constructors = getInstantiatedConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
                 if (!constructors.length) {
                     error(baseTypeNode.expression, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
@@ -2697,11 +2707,11 @@ module ts {
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return;
             }
-            type.baseTypes = [baseType];
+            type.resolvedBaseTypes = [baseType];
         }
 
-        function resolveBaseTypesOfInterface(type: InterfaceTypeWithBaseTypes): void {
-            type.baseTypes = [];
+        function resolveBaseTypesOfInterface(type: InterfaceType): void {
+            type.resolvedBaseTypes = [];
             for (let declaration of type.symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                     for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
@@ -2709,7 +2719,7 @@ module ts {
                         if (baseType !== unknownType) {
                             if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
                                 if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                    type.baseTypes.push(baseType);
+                                    type.resolvedBaseTypes.push(baseType);
                                 }
                                 else {
                                     error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
@@ -7421,6 +7431,8 @@ module ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 let superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
+                    // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
+                    // with the type arguments specified in the extends clause.
                     let baseTypeNode = getClassExtendsHeritageClauseElement(<ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration));
                     let baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
                     return resolveCall(node, baseConstructors, candidatesOutArray);
