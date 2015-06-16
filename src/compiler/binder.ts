@@ -91,7 +91,7 @@ namespace ts {
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or 
-        // not depending on if we see "use strict" in certain places.
+        // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
         let inStrictMode = !!file.externalModuleIndicator;
 
         let symbolCount = 0;
@@ -538,10 +538,13 @@ namespace ts {
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
+            const enum ElementKind {
+                Property = 1,
+                Accessor = 2
+            }
+
             if (inStrictMode) {
-                let seen: Map<number> = {};
-                const Property = 1;
-                const NonProperty = 2;
+                let seen: Map<ElementKind> = {};
 
                 for (let prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -559,8 +562,8 @@ namespace ts {
                     //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
                     // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
                     let currentKind = prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.MethodDeclaration
-                        ? Property
-                        : NonProperty;
+                        ? ElementKind.Property
+                        : ElementKind.Accessor;
 
                     let existingKind = seen[identifier.text];
                     if (!existingKind) {
@@ -568,7 +571,7 @@ namespace ts {
                         continue;
                     }
 
-                    if (currentKind === Property && existingKind === Property) {
+                    if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
                         let span = getErrorSpanForNode(file, identifier);
                         file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
                             Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
@@ -798,7 +801,7 @@ namespace ts {
                     return;
                 }
 
-                if (isUseStrictPrologueDirective(statement)) {
+                if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
                     inStrictMode = true;
                     return;
                 }
@@ -806,9 +809,8 @@ namespace ts {
         }
         
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-        function isUseStrictPrologueDirective(node: Node): boolean {
-            Debug.assert(isPrologueDirective(node));
-            let nodeText = getTextOfNodeFromSourceText(file.text, (<ExpressionStatement>node).expression);
+        function isUseStrictPrologueDirective(node: ExpressionStatement): boolean {
+            let nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
@@ -838,9 +840,9 @@ namespace ts {
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
-                case SyntaxKind.BindingElement:
                 case SyntaxKind.VariableDeclaration:
-                    return bindVariableDeclarationOrBindingElement(<BindingElement | VariableDeclaration>node);
+                case SyntaxKind.BindingElement:
+                    return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
