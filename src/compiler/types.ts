@@ -362,10 +362,6 @@ namespace ts {
     export const enum ParserContextFlags {
         None = 0,
 
-        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
-        // checking if the node can be reused in incremental settings.
-        StrictMode = 1 << 0,
-
         // If this node was parsed in a context where 'in-expressions' are not allowed.
         DisallowIn = 1 << 1,
 
@@ -388,7 +384,7 @@ namespace ts {
         JavaScriptFile = 1 << 6,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
+        ParserGeneratedFlags = DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
 
         // Context flags computed by aggregating child flags upwards.
 
