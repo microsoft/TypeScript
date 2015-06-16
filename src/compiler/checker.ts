@@ -10662,6 +10662,8 @@ module ts {
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
+                        // When the static base type is a "class-like" constructor function (but not actually a class), we verify
+                        // that all instantiated base constructor signatures return the same type.
                         let constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments);
                         if (forEach(constructors, sig => getReturnTypeOfSignature(sig) !== baseType)) {
                             error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
