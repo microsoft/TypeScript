@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/modules/t3.ts(1,17): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode
+tests/cases/conformance/es6/modules/t3.ts(1,17): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
 
 
 ==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/es6/modules/t3.ts(1,17): error TS1212: Identifier expect
 ==== tests/cases/conformance/es6/modules/t3.ts (1 errors) ====
     import { set as yield } from "./t1";
                     ~~~~~
-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode
+!!! error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
     
 ==== tests/cases/conformance/es6/modules/t4.ts (0 errors) ====
     import { get } from "./t1";

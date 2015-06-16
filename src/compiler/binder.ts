@@ -618,19 +618,31 @@ namespace ts {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
-                    let message = getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression) ?
-                        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode :
-                        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, message, declarationNameToString(node)));
+                    file.bindDiagnostics.push(createDiagnosticForNode(node,
+                        getStrictModeIdentifierMessage(node), declarationNameToString(node)));
                 }
             }
+        }
+
+        function getStrictModeIdentifierMessage(node: Node) {
+            // Provide specialized messages to help the user understand why we think they're in 
+            // strict mode.
+            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+                return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
+            }
+
+            if (file.externalModuleIndicator) {
+                return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
+            }
+
+            return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
         }
 
         function checkStrictModeBinaryExpression(node: BinaryExpression) {
             if (inStrictMode && isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operatorToken.kind)) {
                 // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
                 // Assignment operator(11.13) or of a PostfixExpression(11.3)
-                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.left);
+                checkStrictModeEvalOrArguments(node, <Identifier>node.left);
             }
         }
 
@@ -638,7 +650,7 @@ namespace ts {
             // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
             // Catch production is eval or arguments
             if (inStrictMode && node.variableDeclaration) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.variableDeclaration.name);
+                checkStrictModeEvalOrArguments(node, node.variableDeclaration.name);
             }
         }
 
@@ -657,25 +669,37 @@ namespace ts {
                 ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
         }
 
-        function checkGrammarEvalOrArgumentsInStrictMode(contextNode: Node, name: Node) {
+        function checkStrictModeEvalOrArguments(contextNode: Node, name: Node) {
             if (name && name.kind === SyntaxKind.Identifier) {
                 let identifier = <Identifier>name;
                 if (isEvalOrArgumentsIdentifier(identifier)) {
                     // We check first if the name is inside class declaration or class expression; if so give explicit message
                     // otherwise report generic error message.
                     let span = getErrorSpanForNode(file, name);
-                    let message = getAncestor(identifier, SyntaxKind.ClassDeclaration) || getAncestor(identifier, SyntaxKind.ClassExpression) ?
-                        Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode :
-                        Diagnostics.Invalid_use_of_0_in_strict_mode;
-                    file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, identifier.text));
+                    file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
+                        getStrictModeEvalOrArgumentsMessage(contextNode), identifier.text));
                 }
             }
+        }
+
+        function getStrictModeEvalOrArgumentsMessage(node: Node) {
+            // Provide specialized messages to help the user understand why we think they're in 
+            // strict mode.
+            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+                return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
+            }
+
+            if (file.externalModuleIndicator) {
+                return Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode;
+            }
+
+            return Diagnostics.Invalid_use_of_0_in_strict_mode;
         }
 
         function checkStrictModeFunctionName(node: FunctionLikeDeclaration) {
             if (inStrictMode) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.name);
+                checkStrictModeEvalOrArguments(node, node.name);
             }
         }
 
@@ -691,7 +715,7 @@ namespace ts {
             // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
             // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator.
             if (inStrictMode) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.operand);
+                checkStrictModeEvalOrArguments(node, <Identifier>node.operand);
             }
         }
 
@@ -699,7 +723,7 @@ namespace ts {
             // Grammar checking
             if (inStrictMode) {
                 if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
-                    checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.operand);
+                    checkStrictModeEvalOrArguments(node, <Identifier>node.operand);
                 }
             }
         }
@@ -962,7 +986,7 @@ namespace ts {
 
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
             if (inStrictMode) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.name)
+                checkStrictModeEvalOrArguments(node, node.name)
             }
 
             if (!isBindingPattern(node.name)) {
@@ -991,7 +1015,7 @@ namespace ts {
             if (inStrictMode) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.name);
+                checkStrictModeEvalOrArguments(node, node.name);
             }
 
             if (isBindingPattern(node.name)) {
