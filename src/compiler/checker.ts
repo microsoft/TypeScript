@@ -5747,11 +5747,31 @@ namespace ts {
                 markAliasSymbolAsReferenced(symbol);
             }
 
+            if (symbol.flags & SymbolFlags.Enum) {
+                checkEnumIdentifier(node, symbol);
+            }
+
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
+        }
+
+        function checkEnumIdentifier(node: Node, symbol: Symbol) {
+            // const enums are only permitted in:
+            // - 'left' in property access
+            // - 'object' in indexed access
+            // - target in rhs of import statement
+            // - in a type query
+            if (isConstEnumSymbol(symbol) &&
+                !((node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
+                    (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
+                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node)) ||
+                    isInTypeQuery(node))
+                ) {
+                error(node, Diagnostics.const_enum_can_only_be_used_in_property_or_index_access_expressions_the_right_hand_side_of_an_import_declaration_or_export_assignment_a_typeof_query);
+            }
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -8438,21 +8458,6 @@ namespace ts {
             else {
                 let uninstantiatedType = checkExpressionWorker(<Expression>node, contextualMapper);
                 type = instantiateTypeWithSingleGenericCallSignature(<Expression>node, uninstantiatedType, contextualMapper);
-            }
-
-            if (isConstEnumObjectType(type)) {
-                // enum object type for const enums are only permitted in:
-                // - 'left' in property access
-                // - 'object' in indexed access
-                // - target in rhs of import statement
-                let ok =
-                    (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
-                    (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
-                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node));
-
-                if (!ok) {
-                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
-                }
             }
             return type;
         }
