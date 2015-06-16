@@ -1,12 +1,12 @@
 === tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts ===
 class A extends B<string> { }
 >A : A
->B : typeof B
+>B : B<string>
 
 class B<U> extends C { }
 >B : B<U>
 >U : U
->C : typeof C
+>C : C
 
 class C {
 >C : C

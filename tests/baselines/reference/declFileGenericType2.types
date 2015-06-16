@@ -86,7 +86,7 @@ module templa.dom.mvc {
 >templa : any
 >mvc : any
 >IModel : templa.mvc.IModel
->templa.mvc.AbstractController : typeof templa.mvc.AbstractController
+>templa.mvc.AbstractController : templa.mvc.AbstractController<ModelType>
 >templa.mvc : typeof templa.mvc
 >templa : typeof templa
 >mvc : typeof templa.mvc
@@ -116,7 +116,7 @@ module templa.dom.mvc.composite {
 >mvc : any
 >composite : any
 >ICompositeControllerModel : templa.mvc.composite.ICompositeControllerModel
->templa.dom.mvc.AbstractElementController : typeof AbstractElementController
+>templa.dom.mvc.AbstractElementController : AbstractElementController<ModelType>
 >templa.dom.mvc : typeof mvc
 >templa.dom : typeof dom
 >templa : typeof templa

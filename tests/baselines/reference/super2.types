@@ -20,7 +20,7 @@ class Base5 {
 
 class Sub5 extends Base5 {
 >Sub5 : Sub5
->Base5 : typeof Base5
+>Base5 : Base5
 
     public x() {
 >x : () => string
@@ -32,7 +32,7 @@ class Sub5 extends Base5 {
 
 class SubSub5 extends Sub5 {
 >SubSub5 : SubSub5
->Sub5 : typeof Sub5
+>Sub5 : Sub5
 
     public x() {
 >x : () => string
@@ -68,7 +68,7 @@ class Base6 {
 
 class Sub6 extends Base6 {
 >Sub6 : Sub6
->Base6 : typeof Base6
+>Base6 : Base6
 
     public y() {
 >y : () => string
@@ -80,7 +80,7 @@ class Sub6 extends Base6 {
 
 class SubSub6 extends Sub6 {
 >SubSub6 : SubSub6
->Sub6 : typeof Sub6
+>Sub6 : Sub6
 
     public y() {
 >y : () => string

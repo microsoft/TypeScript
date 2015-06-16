@@ -190,7 +190,7 @@ class Base { private m; }
 
 class Derived extends Base { private q; }
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 >q : any
 
 var b: Base;
@@ -311,7 +311,7 @@ function f6(): number {
 
 class Derived2 extends Base { private r: string; }
 >Derived2 : Derived2
->Base : typeof Base
+>Base : Base
 >r : string
 
 class AnotherClass { private x }

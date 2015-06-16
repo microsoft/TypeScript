@@ -25,7 +25,7 @@ class baz {}
 
 class foo extends baz {}
 >foo : foo
->baz : typeof baz
+>baz : baz
 
 
 

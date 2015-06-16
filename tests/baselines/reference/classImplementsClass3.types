@@ -18,7 +18,7 @@ class C implements A {
 
 class C2 extends A {}
 >C2 : C2
->A : typeof A
+>A : A
 
 // no errors
 var c: C;

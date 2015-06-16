@@ -177,7 +177,7 @@ class c2 {
 }
 class c3 extends c2 {
 >c3 : c3
->c2 : typeof c2
+>c2 : c2
 
     constructor() {
         super(10);
@@ -232,7 +232,7 @@ c2_i = c3_i;
 
 class c4 extends c2 {
 >c4 : c4
->c2 : typeof c2
+>c2 : c2
 }
 var c4_i = new c4(10);
 >c4_i : c4

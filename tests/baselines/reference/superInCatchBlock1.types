@@ -7,7 +7,7 @@ class A {
 }
 class B extends A {
 >B : B
->A : typeof A
+>A : A
 
  m() {
 >m : () => void

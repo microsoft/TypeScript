@@ -9,14 +9,14 @@ class B {
 
 class D extends B {
 >D : D
->B : typeof B
+>B : B
 
     public x: string;
 >x : string
 }
 class D2 extends B {
 >D2 : D2
->B : typeof B
+>B : B
 
     public x: number;
 >x : number

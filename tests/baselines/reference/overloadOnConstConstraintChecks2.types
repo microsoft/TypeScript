@@ -4,11 +4,11 @@ class A {}
 
 class B extends A {}
 >B : B
->A : typeof A
+>A : A
 
 class C extends A {
 >C : C
->A : typeof A
+>A : A
 
     public foo() { }
 >foo : () => void

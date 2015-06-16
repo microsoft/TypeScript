@@ -15,7 +15,7 @@ module EmptyTypes {
 
     class derived extends base { }
 >derived : derived
->base : typeof base
+>base : base
 
 
     class f {
@@ -417,7 +417,7 @@ module NonEmptyTypes {
 
     class derived extends base { a: string; }
 >derived : derived
->base : typeof base
+>base : base
 >a : string
 
 

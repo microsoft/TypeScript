@@ -2,7 +2,7 @@
 
 class A extends B {
 >A : A
->B : typeof B
+>B : B
 
   foo() { this.bar(); }
 >foo : () => void

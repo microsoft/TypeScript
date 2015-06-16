@@ -8,12 +8,12 @@ class X { propertyX: any; propertyX1: number; propertyX2: string };
 
 class A extends X { propertyA: number };
 >A : A
->X : typeof X
+>X : X
 >propertyA : number
 
 class B extends X { propertyB: string };
 >B : B
->X : typeof X
+>X : X
 >propertyB : string
 
 var x: X;

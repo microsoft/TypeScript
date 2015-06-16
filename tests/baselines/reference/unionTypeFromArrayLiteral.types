@@ -58,12 +58,12 @@ class D { foo2() { } }
 
 class E extends C { foo3() { } }
 >E : E
->C : typeof C
+>C : C
 >foo3 : () => void
 
 class F extends C { foo4() { } }
 >F : F
->C : typeof C
+>C : C
 >foo4 : () => void
 
 var c: C, d: D, e: E, f: F;

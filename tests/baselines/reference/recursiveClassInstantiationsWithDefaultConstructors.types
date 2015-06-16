@@ -18,7 +18,7 @@ public prefix: string = "";
 }
 export class MemberNameArray extends MemberName {
 >MemberNameArray : MemberNameArray
->MemberName : typeof MemberName
+>MemberName : MemberName
 }
 }
 

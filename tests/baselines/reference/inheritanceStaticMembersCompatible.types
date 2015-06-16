@@ -9,7 +9,7 @@ class a {
 
 class b extends a {
 >b : b
->a : typeof a
+>a : a
 
     static x: b;
 >x : b

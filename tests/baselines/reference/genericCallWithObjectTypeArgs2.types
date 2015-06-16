@@ -7,14 +7,14 @@ class Base {
 }
 class Derived extends Base {
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 
     y: string;
 >y : string
 }
 class Derived2 extends Base {
 >Derived2 : Derived2
->Base : typeof Base
+>Base : Base
 
     z: string;
 >z : string

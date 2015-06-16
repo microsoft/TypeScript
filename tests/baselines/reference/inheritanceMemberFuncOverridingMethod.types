@@ -12,7 +12,7 @@ class a {
 
 class b extends a {
 >b : b
->a : typeof a
+>a : a
 
     x() {
 >x : () => string

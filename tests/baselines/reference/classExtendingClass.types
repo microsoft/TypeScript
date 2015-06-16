@@ -14,7 +14,7 @@ class C {
 
 class D extends C {
 >D : D
->C : typeof C
+>C : C
 
     bar: string;
 >bar : string
@@ -73,7 +73,7 @@ class C2<T> {
 class D2<T> extends C2<T> {
 >D2 : D2<T>
 >T : T
->C2 : typeof C2
+>C2 : C2<T>
 >T : T
 
     bar: string;

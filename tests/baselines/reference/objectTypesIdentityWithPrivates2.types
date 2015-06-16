@@ -13,7 +13,7 @@ class C<T> {
 class D<T> extends C<T> {
 >D : D<T>
 >T : T
->C : typeof C
+>C : C<T>
 >T : T
 }
 

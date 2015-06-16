@@ -11,7 +11,7 @@ class Base {
 
 class D0 extends Base {
 >D0 : D0
->Base : typeof Base
+>Base : Base
 
     foo: any;
 >foo : any
@@ -19,7 +19,7 @@ class D0 extends Base {
 
 class DA extends Base {
 >DA : DA
->Base : typeof Base
+>Base : Base
 
     foo: typeof undefined; 
 >foo : any
@@ -28,7 +28,7 @@ class DA extends Base {
 
 class D1 extends Base {
 >D1 : D1
->Base : typeof Base
+>Base : Base
 
     foo: string;
 >foo : string
@@ -36,7 +36,7 @@ class D1 extends Base {
 
 class D1A extends Base {
 >D1A : D1A
->Base : typeof Base
+>Base : Base
 
     foo: String;
 >foo : String
@@ -46,7 +46,7 @@ class D1A extends Base {
 
 class D2 extends Base {
 >D2 : D2
->Base : typeof Base
+>Base : Base
 
     foo: number;
 >foo : number
@@ -54,7 +54,7 @@ class D2 extends Base {
 
 class D2A extends Base {
 >D2A : D2A
->Base : typeof Base
+>Base : Base
 
     foo: Number;
 >foo : Number
@@ -64,7 +64,7 @@ class D2A extends Base {
 
 class D3 extends Base {
 >D3 : D3
->Base : typeof Base
+>Base : Base
 
     foo: boolean;
 >foo : boolean
@@ -72,7 +72,7 @@ class D3 extends Base {
 
 class D3A extends Base {
 >D3A : D3A
->Base : typeof Base
+>Base : Base
 
     foo: Boolean;
 >foo : Boolean
@@ -82,7 +82,7 @@ class D3A extends Base {
 
 class D4 extends Base {
 >D4 : D4
->Base : typeof Base
+>Base : Base
 
     foo: RegExp;
 >foo : RegExp
@@ -91,7 +91,7 @@ class D4 extends Base {
 
 class D5 extends Base {
 >D5 : D5
->Base : typeof Base
+>Base : Base
 
     foo: Date;
 >foo : Date
@@ -101,7 +101,7 @@ class D5 extends Base {
 
 class D6 extends Base {
 >D6 : D6
->Base : typeof Base
+>Base : Base
 
     foo: number[];
 >foo : number[]
@@ -109,7 +109,7 @@ class D6 extends Base {
 
 class D7 extends Base {
 >D7 : D7
->Base : typeof Base
+>Base : Base
 
     foo: { bar: number };
 >foo : { bar: number; }
@@ -119,7 +119,7 @@ class D7 extends Base {
 
 class D8 extends Base {
 >D8 : D8
->Base : typeof Base
+>Base : Base
 
     foo: D7;
 >foo : D7
@@ -134,7 +134,7 @@ interface I1 {
 }
 class D9 extends Base {
 >D9 : D9
->Base : typeof Base
+>Base : Base
 
     foo: I1;
 >foo : I1
@@ -144,7 +144,7 @@ class D9 extends Base {
 
 class D10 extends Base {
 >D10 : D10
->Base : typeof Base
+>Base : Base
 
     foo: () => number;
 >foo : () => number
@@ -156,7 +156,7 @@ enum E { A }
 
 class D11 extends Base {
 >D11 : D11
->Base : typeof Base
+>Base : Base
 
     foo: E;
 >foo : E
@@ -175,7 +175,7 @@ module f {
 }
 class D12 extends Base {
 >D12 : D12
->Base : typeof Base
+>Base : Base
 
     foo: typeof f;
 >foo : typeof f
@@ -196,7 +196,7 @@ module c {
 }
 class D13 extends Base {
 >D13 : D13
->Base : typeof Base
+>Base : Base
 
     foo: typeof c;
 >foo : typeof c
@@ -207,7 +207,7 @@ class D13 extends Base {
 class D14<T> extends Base {
 >D14 : D14<T>
 >T : T
->Base : typeof Base
+>Base : Base
 
     foo: T;
 >foo : T
@@ -219,7 +219,7 @@ class D15<T, U> extends Base {
 >D15 : D15<T, U>
 >T : T
 >U : U
->Base : typeof Base
+>Base : Base
 
     foo: U;
 >foo : U
@@ -233,7 +233,7 @@ class D15<T, U> extends Base {
 
 class D16 extends Base {
 >D16 : D16
->Base : typeof Base
+>Base : Base
 
     foo: Object;
 >foo : Object
@@ -243,7 +243,7 @@ class D16 extends Base {
 
 class D17 extends Base {
 >D17 : D17
->Base : typeof Base
+>Base : Base
 
     foo: {};
 >foo : {}

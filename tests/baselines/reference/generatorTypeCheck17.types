@@ -5,7 +5,7 @@ class Foo { x: number }
 
 class Bar extends Foo { y: string }
 >Bar : Bar
->Foo : typeof Foo
+>Foo : Foo
 >y : string
 
 function* g(): IterableIterator<Foo> {

@@ -19,7 +19,7 @@ class C2 {
 }
 class D1 extends C1 {
 >D1 : D1
->C1 : typeof C1
+>C1 : C1
 
     p3: number;
 >p3 : number

@@ -23,7 +23,7 @@ class E implements base { e }
 
 class F extends C { f }
 >F : F
->C : typeof C
+>C : C
 >f : any
 
 class C1 implements base1 { i = "foo"; c }
@@ -35,7 +35,7 @@ class C1 implements base1 { i = "foo"; c }
 
 class D1 extends C1 { i = "bar"; d }
 >D1 : D1
->C1 : typeof C1
+>C1 : C1
 >i : string
 >"bar" : string
 >d : any

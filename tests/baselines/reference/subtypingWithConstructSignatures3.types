@@ -11,17 +11,17 @@ module Errors {
 
     class Derived extends Base { bar: string; }
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 >bar : string
 
     class Derived2 extends Derived { baz: string; }
 >Derived2 : Derived2
->Derived : typeof Derived
+>Derived : Derived
 >baz : string
 
     class OtherDerived extends Base { bing: string; }
 >OtherDerived : OtherDerived
->Base : typeof Base
+>Base : Base
 >bing : string
 
     declare function foo2(a2: new (x: number) => string[]): typeof a2;

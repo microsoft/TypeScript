@@ -17,7 +17,7 @@ class Class1
 
 class Class2 extends Class1
 >Class2 : Class2
->Class1 : typeof Class1
+>Class1 : Class1
 
 {
 
@@ -42,7 +42,7 @@ class Class3<T>
 class Class4<T> extends Class3<T>
 >Class4 : Class4<T>
 >T : T
->Class3 : typeof Class3
+>Class3 : Class3<T>
 >T : T
 
 {

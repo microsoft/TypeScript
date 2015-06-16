@@ -2,7 +2,7 @@
 ///<reference path="a.ts"/>
 declare class E extends C {
 >E : E
->C : typeof C
+>C : C
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */

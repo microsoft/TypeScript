@@ -16,7 +16,7 @@ class B {
 
 class C extends A {
 >C : C
->A : typeof A
+>A : A
 
     propC: number;
 >propC : number

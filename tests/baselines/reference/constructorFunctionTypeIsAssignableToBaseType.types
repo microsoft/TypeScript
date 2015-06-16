@@ -13,7 +13,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 
     // ok
     static foo: {
@@ -26,7 +26,7 @@ class Derived extends Base {
 
 class Derived2 extends Base {
 >Derived2 : Derived2
->Base : typeof Base
+>Base : Base
 
     // ok, use assignability here
     static foo: {

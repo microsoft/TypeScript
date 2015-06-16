@@ -11,7 +11,7 @@ module NonGeneric {
 
     class D extends C {
 >D : D
->C : typeof C
+>C : C
 
         bar: string;
 >bar : string
@@ -61,7 +61,7 @@ module Generic {
 >D : D<T, U>
 >T : T
 >U : U
->C : typeof C
+>C : C<T, U>
 >T : T
 >U : U
 

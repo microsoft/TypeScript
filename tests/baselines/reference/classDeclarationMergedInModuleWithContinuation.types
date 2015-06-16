@@ -19,7 +19,7 @@ module M {
 
     export class O extends M.N {
 >O : O
->M.N : typeof N
+>M.N : N
 >M : typeof M
 >N : typeof N
     }

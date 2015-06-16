@@ -11,7 +11,7 @@ class A {
 
 class B extends A {
 >B : B
->A : typeof A
+>A : A
 
     bar(): string {
 >bar : () => string

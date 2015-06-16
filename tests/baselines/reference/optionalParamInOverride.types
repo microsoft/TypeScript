@@ -7,7 +7,7 @@ class Z {
 }
 class Y extends Z {
 >Y : Y
->Z : typeof Z
+>Z : Z
 
     public func(value?: any): void { }
 >func : (value?: any) => void

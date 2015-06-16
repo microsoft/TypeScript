@@ -62,7 +62,7 @@ module TypeScript2 {
 >A : A
 >B : B
 >C : C
->PullSymbol : typeof PullSymbol
+>PullSymbol : PullSymbol
   }
 }
 

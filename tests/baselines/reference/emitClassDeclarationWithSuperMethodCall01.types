@@ -10,7 +10,7 @@ class Parent {
 
 class Foo extends Parent {
 >Foo : Foo
->Parent : typeof Parent
+>Parent : Parent
 
     foo() {
 >foo : () => void

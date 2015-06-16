@@ -99,7 +99,7 @@ class C { id: number; }
 
 class D extends C { name: string }
 >D : D
->C : typeof C
+>C : C
 >name : string
 
 switch (new C()) {

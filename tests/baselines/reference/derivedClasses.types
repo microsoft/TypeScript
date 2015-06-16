@@ -1,7 +1,7 @@
 === tests/cases/compiler/derivedClasses.ts ===
 class Red extends Color {
 >Red : Red
->Color : typeof Color
+>Color : Color
 
     public shade() { 
 >shade : () => string
@@ -36,7 +36,7 @@ class Color {
 
 class Blue extends Color {
 >Blue : Blue
->Color : typeof Color
+>Color : Color
     
     public shade() { 
 >shade : () => string

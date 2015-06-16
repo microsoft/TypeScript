@@ -11,7 +11,7 @@ class Base {
 }
 class C extends Base {
 >C : C
->Base : typeof Base
+>Base : Base
 
     foo() {
 >foo : () => number

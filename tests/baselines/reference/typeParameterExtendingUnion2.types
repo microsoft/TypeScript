@@ -5,12 +5,12 @@ class Animal { run() { } }
 
 class Cat extends Animal { meow }
 >Cat : Cat
->Animal : typeof Animal
+>Animal : Animal
 >meow : any
 
 class Dog extends Animal { woof }
 >Dog : Dog
->Animal : typeof Animal
+>Animal : Animal
 >woof : any
 
 function run(a: Cat | Dog) {

@@ -205,7 +205,7 @@ class C {
 
 class D extends C {
 >D : D
->C : typeof C
+>C : C
 
     constructor() {
         super(1, 2);

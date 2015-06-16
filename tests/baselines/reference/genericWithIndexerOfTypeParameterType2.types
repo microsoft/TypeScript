@@ -12,7 +12,7 @@ export class Collection<TItem extends CollectionItem> {
 
 export class List extends Collection<ListItem>{
 >List : List
->Collection : typeof Collection
+>Collection : Collection<ListItem>
 >ListItem : ListItem
 
     Bar() {}
@@ -24,7 +24,7 @@ export class CollectionItem {}
 
 export class ListItem extends CollectionItem {
 >ListItem : ListItem
->CollectionItem : typeof CollectionItem
+>CollectionItem : CollectionItem
 
     __isNew: boolean;
 >__isNew : boolean

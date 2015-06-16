@@ -28,7 +28,7 @@ return null;
  
 class d extends c {
 >d : d
->c : typeof c
+>c : c
 
 foo(): B<number> {
 >foo : () => B<number>

@@ -48,7 +48,7 @@ class C1 {
 // Derived class overriding protected members
 class C2 extends C1 {
 >C2 : C2
->C1 : typeof C1
+>C1 : C1
 
     protected f() {
 >f : () => number
@@ -81,7 +81,7 @@ class C2 extends C1 {
 // Derived class making protected members public
 class C3 extends C2 {
 >C3 : C3
->C2 : typeof C2
+>C2 : C2
 
     x: number;
 >x : number

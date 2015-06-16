@@ -2,7 +2,7 @@
 // There should be no errors in this file
 class Derived extends Base {
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 
     public static createEmpty(): Derived {
 >createEmpty : () => Derived

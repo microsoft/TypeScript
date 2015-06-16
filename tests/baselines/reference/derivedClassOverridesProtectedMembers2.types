@@ -65,7 +65,7 @@ constructor(a: typeof x) { }
 // Increase visibility of all protected members to public
 class Derived extends Base {
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 
     a: typeof y;
 >a : { foo: string; bar: string; }
@@ -208,7 +208,7 @@ class Base2 {
 
 class Derived2 extends Base2 {
 >Derived2 : Derived2
->Base2 : typeof Base2
+>Base2 : Base2
 
     [i: string]: typeof x;
 >i : string

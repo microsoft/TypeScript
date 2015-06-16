@@ -8,7 +8,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 
     public b: string;
 >b : string
@@ -47,7 +47,7 @@ class A2 {
 
 class B2 extends A2 {
 >B2 : B2
->A2 : typeof A2
+>A2 : A2
 
     private b;
 >b : any

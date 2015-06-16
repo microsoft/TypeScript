@@ -17,7 +17,7 @@ class Base {
 
 class Derived extends Base {
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 
     foo() { return 2; }
 >foo : () => number

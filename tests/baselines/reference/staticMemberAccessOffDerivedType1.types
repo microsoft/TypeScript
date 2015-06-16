@@ -11,7 +11,7 @@ class SomeBase {
 }
 class P extends SomeBase {
 >P : P
->SomeBase : typeof SomeBase
+>SomeBase : SomeBase
 
     static SomeNumber = P.GetNumber();
 >SomeNumber : number

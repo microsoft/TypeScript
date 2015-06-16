@@ -112,7 +112,7 @@ interface ISeries {
 
 class MyView extends View {
 >MyView : MyView
->View : typeof View
+>View : View
 
     public getDataSeries(): ISeries[] {
 >getDataSeries : () => ISeries[]

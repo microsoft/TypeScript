@@ -7,7 +7,7 @@ class Base { foo: string; }
 
 class Derived extends Base { bar: string; }
 >Derived : Derived
->Base : typeof Base
+>Base : Base
 >bar : string
 
 class A {
@@ -45,12 +45,12 @@ interface I {
 
 class PA extends A {
 >PA : PA
->A : typeof A
+>A : A
 }
 
 class PB extends B {
 >PB : PB
->B : typeof B
+>B : B
 }
 
 var a: {

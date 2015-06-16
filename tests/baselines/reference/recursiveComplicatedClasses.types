@@ -39,15 +39,15 @@ class Symbol {
 }
 class InferenceSymbol extends Symbol {
 >InferenceSymbol : InferenceSymbol
->Symbol : typeof Symbol
+>Symbol : Symbol
 }
 
 class ParameterSymbol extends InferenceSymbol {
 >ParameterSymbol : ParameterSymbol
->InferenceSymbol : typeof InferenceSymbol
+>InferenceSymbol : InferenceSymbol
 }
 
 class TypeSymbol extends InferenceSymbol {
 >TypeSymbol : TypeSymbol
->InferenceSymbol : typeof InferenceSymbol
+>InferenceSymbol : InferenceSymbol
 }

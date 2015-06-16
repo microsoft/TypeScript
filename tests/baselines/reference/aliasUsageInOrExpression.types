@@ -79,7 +79,7 @@ import Backbone = require("aliasUsageInOrExpression_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : typeof Backbone.Model
+>Backbone.Model : Backbone.Model
 >Backbone : typeof Backbone
 >Model : typeof Backbone.Model
 

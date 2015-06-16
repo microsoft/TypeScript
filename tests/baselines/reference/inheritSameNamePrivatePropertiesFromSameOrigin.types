@@ -7,11 +7,11 @@ class B {
 }
 class C extends B { }
 >C : C
->B : typeof B
+>B : B
 
 class C2 extends B { }
 >C2 : C2
->B : typeof B
+>B : B
 
 interface A extends C, C2 { // ok
 >A : A

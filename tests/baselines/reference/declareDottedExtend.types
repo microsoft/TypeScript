@@ -14,13 +14,13 @@ import ab = A.B;
 
 class D extends ab.C{ }
 >D : D
->ab.C : typeof ab.C
+>ab.C : ab.C
 >ab : typeof ab
 >C : typeof ab.C
 
 class E extends A.B.C{ }
 >E : E
->A.B.C : typeof ab.C
+>A.B.C : ab.C
 >A.B : typeof ab
 >A : typeof A
 >B : typeof ab

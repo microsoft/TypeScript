@@ -2,7 +2,7 @@
 class C<T1> extends CBase<T1> {
 >C : C<T1>
 >T1 : T1
->CBase : typeof CBase
+>CBase : CBase<T1>
 >T1 : T1
 
     public works() {
@@ -35,7 +35,7 @@ class C<T1> extends CBase<T1> {
 class CBase<T2> extends CBaseBase<Wrapper<T2>> {
 >CBase : CBase<T2>
 >T2 : T2
->CBaseBase : typeof CBaseBase
+>CBaseBase : CBaseBase<Wrapper<T2>>
 >Wrapper : Wrapper<T5>
 >T2 : T2
 

@@ -5,7 +5,7 @@ class AbstractGreeter {
 
 class Greeter extends AbstractGreeter {
 >Greeter : Greeter
->AbstractGreeter : typeof AbstractGreeter
+>AbstractGreeter : AbstractGreeter
 
     public a = 10;
 >a : number

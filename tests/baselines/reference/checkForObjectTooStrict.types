@@ -13,7 +13,7 @@ module Foo {
 
 class Bar extends Foo.Object { // should work
 >Bar : Bar
->Foo.Object : typeof Foo.Object
+>Foo.Object : Foo.Object
 >Foo : typeof Foo
 >Object : typeof Foo.Object
 
@@ -30,7 +30,7 @@ class Bar extends Foo.Object { // should work
 
 class Baz extends Object {
 >Baz : Baz
->Object : ObjectConstructor
+>Object : Object
 
     constructor () { // ERROR, as expected
 

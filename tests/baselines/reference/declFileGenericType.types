@@ -153,7 +153,7 @@ export var g = C.F5<C.A<C.B>>();
 
 export class h extends C.A<C.B>{ }
 >h : h
->C.A : typeof C.A
+>C.A : C.A<C.B>
 >C : typeof C
 >A : typeof C.A
 >C : any
