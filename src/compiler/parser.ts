@@ -2695,13 +2695,15 @@ namespace ts {
                 // Didn't appear to actually be a parenthesized arrow function.  Just bail out.
                 return undefined;
             }
+            
+            let isAsync = !!(arrowFunction.flags & NodeFlags.Async);
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
             var lastToken = token;
             arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
-                ? parseArrowFunctionExpressionBody(/*isAsync*/ isAsyncFunctionLike(arrowFunction))
+                ? parseArrowFunctionExpressionBody(isAsync)
                 : parseIdentifier();
 
             return finishNode(arrowFunction);
@@ -2813,7 +2815,7 @@ namespace ts {
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             setModifiers(node, parseModifiersForArrowFunction());
-            let isAsync = isAsyncFunctionLike(node);
+            let isAsync = !!(node.flags & NodeFlags.Async);
             
             // Arrow functions are never generators.
             //
@@ -3493,7 +3495,7 @@ namespace ts {
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             
             let isGenerator = !!node.asteriskToken;
-            let isAsync = isAsyncFunctionLike(node);
+            let isAsync = !!(node.flags & NodeFlags.Async);
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
                 isGenerator ? doInYieldContext(parseOptionalIdentifier) :
@@ -4217,7 +4219,7 @@ namespace ts {
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             let isGenerator = !!node.asteriskToken;
-            let isAsync = isAsyncFunctionLike(node);
+            let isAsync = !!(node.flags & NodeFlags.Async);
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, Diagnostics.or_expected);
             return finishNode(node);
@@ -4241,7 +4243,7 @@ namespace ts {
             method.name = name;
             method.questionToken = questionToken;
             let isGenerator = !!asteriskToken;
-            let isAsync = isAsyncFunctionLike(method);
+            let isAsync = !!(method.flags & NodeFlags.Async);
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);
             return finishNode(method);
