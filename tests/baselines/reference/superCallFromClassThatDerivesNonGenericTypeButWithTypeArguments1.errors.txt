@@ -1,8 +1,7 @@
 tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts(8,17): error TS2315: Type 'A' is not generic.
-tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts(9,21): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts (2 errors) ====
+==== tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts (1 errors) ====
     
     class A {
         constructor(private map: (value: number) => string) {
@@ -14,6 +13,4 @@ tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArgum
                     ~~~~~~~~~~~~~~~~~
 !!! error TS2315: Type 'A' is not generic.
         constructor() { super(value => String(value)); }
-                        ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
     }

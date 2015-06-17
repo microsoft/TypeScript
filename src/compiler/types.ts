@@ -1669,10 +1669,8 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
-    }
-
-    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
-        baseTypes: ObjectType[];
+        resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
+        resolvedBaseTypes: ObjectType[];           // Resolved base types
     }
 
     export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {

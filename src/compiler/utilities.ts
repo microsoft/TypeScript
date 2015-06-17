@@ -426,7 +426,7 @@ namespace ts {
                 // Specialized signatures can have string literals as their parameters' type names
                 return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return true;
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -460,7 +460,7 @@ namespace ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return true;
+                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
@@ -872,7 +872,6 @@ namespace ts {
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
                 }
-
                 return node.parent.kind === SyntaxKind.TypeQuery;
             case SyntaxKind.Identifier:
                 if (node.parent.kind === SyntaxKind.TypeQuery) {
@@ -920,6 +919,8 @@ namespace ts {
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
                         return true;
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1911,6 +1912,12 @@ namespace ts {
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+        return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
+            (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
+            node.parent.parent.kind === SyntaxKind.ClassDeclaration;
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported

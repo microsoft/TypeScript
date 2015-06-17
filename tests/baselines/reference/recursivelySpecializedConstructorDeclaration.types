@@ -29,7 +29,7 @@ module MsPortal.Controls.Base.ItemList {
     export class ViewModel<TValue> extends ItemValue<TValue> {
 >ViewModel : ViewModel<TValue>
 >TValue : TValue
->ItemValue : ItemValue<T>
+>ItemValue : ItemValue<TValue>
 >TValue : TValue
     }
 }
