@@ -3337,7 +3337,7 @@ module ts {
                     else if (token === SyntaxKind.OpenBraceToken) {
                         let expr = parseJsxExpression();
                         expr.pos = correctStartPos;
-                        if (expr && expr.expression) {
+                        if (expr) {
                             node.children.push(expr);
                         }
                         token = scanner.reScanJsxText();

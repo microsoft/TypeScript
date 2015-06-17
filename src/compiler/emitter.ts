@@ -1210,8 +1210,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
 
                     // Children
-                    emit(node.children[i]);
                     for (var i = 0; i < node.children.length; i++) {
+                        // Don't emit empty expressions
+                        if (node.children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>node.children[i]).expression)) continue;
+
+                        // Don't emit empty strings
+                        if (node.children[i].kind === SyntaxKind.JsxText && !shouldEmitJsxText(<JsxText>node.children[i])) continue;
+                        
                         write(', ');
                         emit(node.children[i]);
                     }
@@ -5849,27 +5854,53 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
+            function trimReactWhitespace(node: JsxText): string {
+                // Could be empty string, do not use !node.formattedReactText
+                if (node.formattedReactText !== undefined) {
+                    return node.formattedReactText;
+                }
+
+                let lines: string[] = [];
+                let text = getTextOfNode(node, true);
+                let firstNonWhitespace = 0;
+                let lastNonWhitespace = -1;
+
+                for (var i = 0; i < text.length; i++) {
+                    var c = text.charCodeAt(i);
+                    if (c === CharacterCodes.lineFeed || c === CharacterCodes.carriageReturn) {
+                        if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
+                            lines.push(text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
+                        }
+                        firstNonWhitespace = -1;
+                    }
+                    else if (!isWhiteSpace(c)) {
+                        lastNonWhitespace = i;
+                        if (firstNonWhitespace === -1) {
+                            firstNonWhitespace = i;
+                        }
+                    }
+                }
+                if (firstNonWhitespace !== -1) {
+                    lines.push(text.substr(firstNonWhitespace));
+                }
+
+                return node.formattedReactText = lines.join('" + \' \' + "');
+            }
+
+            function shouldEmitJsxText(node: JsxText) {
+                if (compilerOptions.jsx === JsxEmit.React) {
+                    return trimReactWhitespace(node).length > 0;
+                }
+                else {
+                    return true;
+                }
+            }
+
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
-                        // Remove all whitespace that is at the start or end of a line
-                        let lines = getTextOfNode(node, true).split(/\r?\n/g);
-                        lines = lines.map((line, index) => {
-                            if (lines.length === 1) {
-                                return line; // Only spans one line, don't trim anything
-                            } else if (index === 0) {
-                                return /(.*)\s*/.exec(line)[1]; // First line, trim end only
-                            }
-                            else if (index === lines.length - 1) {
-                                return /\s*(.*)/.exec(line)[1]; // Last line, trim start only
-                            }
-                            else {
-                                return line.trim();
-                            }
-                        }).filter(line => line.length > 0);
                         write('"');
-                        // write(lines.join('" + \' \' + "'));
-                        write(getTextOfNode(node, true));
+                        write(trimReactWhitespace(node));
                         write('"');
                         break;
 

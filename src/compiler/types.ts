@@ -854,6 +854,7 @@ module ts {
 
     export interface JsxText extends Node {
         _jsxTextExpressionBrand: any;
+        formattedReactText?: string;
     }
 
     export interface HeritageClauseElement extends TypeNode {
