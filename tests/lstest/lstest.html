@@ -38,15 +38,19 @@
         <script src="lstest.js"></script>
         <script>
             var lsTest = prepareTestLS();
-            doClassify();
             function appendText(str) {
                 var outputPane = $("#outputPane");
                 outputPane.val(outputPane.val() + str);
             }
-            function doClassify() {
+            function doSemanticClassify() {
                 $("#outputPane").val("");
                 lsTest.runSemanticClassificationForFile("checker.ts");
-                appendText("===doClassify - done===");
+                appendText("===doSemanticClassify - done===");
+            }
+            function doSyntacticClassify() {
+                $("#outputPane").val("");
+                lsTest.runSyntacticClassificationForFile("checker.ts");
+                appendText("===doSyntacticClassify - done===");
             }
             function doGetDiagnostics() {
                 $("#outputPane").val("");
@@ -71,7 +75,8 @@
                     <textarea id="outputPane"></textarea>
                 </div>
                 <div id="side">
-                    <button onclick="doClassify()">Run semantic classification</button>
+                    <button onclick="doSematicClassify()">Run semantic classification</button>
+                    <button onclick="doSyntacticClassify()">Run syntactic classification</button>
                     <button onclick="doModify()">Mark files as modified (causes up-to-date check to fail)</button>
                     <button onclick="doGetDiagnostics()">Get semantic diagnostics</button>
                 </div>

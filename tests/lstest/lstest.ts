@@ -8,6 +8,7 @@ interface FileInfo {
 
 interface TestLS {
     runSemanticClassificationForFile(name: string): void;
+    runSyntacticClassificationForFile(name: string): void;
     runGetSemanticDiagnostics(name: string): void;
     incrementVersions(): void;
 }
@@ -34,6 +35,7 @@ function prepareTestLS(): TestLS {
 
     return {
         runSemanticClassificationForFile,
+        runSyntacticClassificationForFile,
         incrementVersions: () => version++,
         runGetSemanticDiagnostics
     }
@@ -46,6 +48,12 @@ function prepareTestLS(): TestLS {
         let file = host.getScriptSnapshot(name);
         ts.Debug.assert(file !== undefined)
         ls.getEncodedSemanticClassifications(name, ts.createTextSpanFromBounds(0, file.getLength()));
+    }
+
+    function runSyntacticClassificationForFile(name: string) {
+        let file = host.getScriptSnapshot(name);
+        ts.Debug.assert(file !== undefined)
+        ls.getEncodedSyntacticClassifications(name, ts.createTextSpanFromBounds(0, file.getLength()));
     }
 }
 
