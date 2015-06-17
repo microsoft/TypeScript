@@ -26,8 +26,7 @@ define(["require", "exports"], function (require, exports) {
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (require, exports, q) {
     var M = (function (_super) {
