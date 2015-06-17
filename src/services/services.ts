@@ -5812,7 +5812,7 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isClassExtendsExpressionWithTypeArguments(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
         }
 
         function isNamespaceReference(node: Node): boolean {

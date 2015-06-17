@@ -1529,7 +1529,7 @@
         "category": "Error",
         "code": 2506
     },
-    "Base expression is not of a constructor function type.": {
+    "Type '{0}' is not a constructor function type.": {
         "category": "Error",
         "code": 2507
     },
@@ -1537,7 +1537,7 @@
         "category": "Error",
         "code": 2508
     },
-    "Base constructor does not return a class or interface type.": {
+    "Base constructor return type '{0}' is not a class or interface type.": {
         "category": "Error",
         "code": 2509
     },

@@ -2639,7 +2639,8 @@ namespace ts {
                 }
                 let baseConstructorType = checkExpression(baseTypeNode.expression);
                 if (baseConstructorType.flags & TypeFlags.ObjectType) {
-                    // Force resolution of members such that we catch circularities
+                    // Resolving the members of a class requires us to resolve the base class of that class.
+                    // We force resolution here such that we catch circularities now.
                     resolveObjectOrUnionTypeMembers(baseConstructorType);
                 }
                 if (!popTypeResolution()) {
@@ -2647,7 +2648,7 @@ namespace ts {
                     return type.resolvedBaseConstructorType = unknownType;
                 }
                 if (baseConstructorType !== unknownType && baseConstructorType !== nullType && !isConstructorType(baseConstructorType)) {
-                    error(baseTypeNode.expression, Diagnostics.Base_expression_is_not_of_a_constructor_function_type);
+                    error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
                     return type.resolvedBaseConstructorType = unknownType;
                 }
                 type.resolvedBaseConstructorType = baseConstructorType;
@@ -2699,7 +2700,7 @@ namespace ts {
                 return;
             }
             if (!(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface))) {
-                error(baseTypeNode.expression, Diagnostics.Base_constructor_does_not_return_a_class_or_interface_type);
+                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
                 return;
             }
             if (type === baseType || hasBaseType(<InterfaceType>baseType, type)) {
@@ -5962,7 +5963,9 @@ namespace ts {
             let baseClassType = classType && getBaseTypes(classType)[0];
 
             if (!baseClassType) {
-                error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+                if (!classDeclaration || !getClassExtendsHeritageClauseElement(classDeclaration)) {
+                    error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+                }
                 return unknownType;
             }
 
@@ -8970,13 +8973,14 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentsAndConstraints(typeParameters: TypeParameter[], typeArguments: TypeNode[]) {
-            for (let i = 0; i < typeArguments.length; i++) {
-                let typeArgument = typeArguments[i];
-                checkSourceElement(typeArgument);
-                let constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (produceDiagnostics && constraint) {
-                    checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArguments: TypeNode[]) {
+            if (produceDiagnostics) {
+                for (let i = 0; i < typeParameters.length; i++) {
+                    let constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                    if (constraint) {
+                        let typeArgument = typeArguments[i];
+                        checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    }
                 }
             }
         }
@@ -8986,9 +8990,10 @@ namespace ts {
             let type = getTypeFromTypeReference(node);
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
+                forEach(node.typeArguments, checkSourceElement);
                 let symbol = getNodeLinks(node).resolvedSymbol;
                 let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
-                checkTypeArgumentsAndConstraints(typeParameters, node.typeArguments);
+                checkTypeArgumentConstraints(typeParameters, node.typeArguments);
             }
         }
 
@@ -10588,15 +10593,19 @@ namespace ts {
                     let baseType = baseTypes[0];
                     let staticBaseType = getBaseConstructorTypeOfClass(type);
                     if (baseTypeNode.typeArguments) {
-                        let constructors = getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments);
-                        checkTypeArgumentsAndConstraints(constructors[0].typeParameters, baseTypeNode.typeArguments);
+                        forEach(baseTypeNode.typeArguments, checkSourceElement);
+                        for (let constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments)) {
+                            checkTypeArgumentConstraints(constructor.typeParameters, baseTypeNode.typeArguments);
+                        }
                     }
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
-                        // that all instantiated base constructor signatures return the same type.
+                        // that all instantiated base constructor signatures return the same type. We can simply compare the type
+                        // references (as opposed to checking the structure of the types) because elsewhere we have already checked
+                        // that the base type is a class or interface type (and not, for example, an anonymous object type).
                         let constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments);
                         if (forEach(constructors, sig => getReturnTypeOfSignature(sig) !== baseType)) {
                             error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
@@ -11997,7 +12006,7 @@ namespace ts {
                 return getTypeOfExpression(<Expression>node);
             }
 
-            if (isClassExtendsExpressionWithTypeArguments(node)) {
+            if (isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
                 // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
                 // extends clause of a class. We handle that case here.
                 return getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
