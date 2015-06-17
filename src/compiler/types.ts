@@ -1835,7 +1835,6 @@ namespace ts {
         allowNonTsExtensions?: boolean;
         charset?: string;
         declaration?: boolean;
-        dependency?: boolean;
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
@@ -1868,6 +1867,7 @@ namespace ts {
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
+        emitModuleDependencies?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

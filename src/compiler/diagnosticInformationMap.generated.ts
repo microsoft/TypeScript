@@ -529,6 +529,7 @@ namespace ts {
         Option_experimentalDecorators_must_also_be_specified_when_option_emitDecoratorMetadata_is_specified: { code: 6064, category: DiagnosticCategory.Error, key: "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified." },
         Enables_experimental_support_for_ES7_decorators: { code: 6065, category: DiagnosticCategory.Message, key: "Enables experimental support for ES7 decorators." },
         Enables_experimental_support_for_emitting_type_metadata_for_decorators: { code: 6066, category: DiagnosticCategory.Message, key: "Enables experimental support for emitting type metadata for decorators." },
+        Enables_experimental_support_for_emitting_moduleDependencies: { code: 6067, category: DiagnosticCategory.Message, key: "Enables experimental support for emitting module dependency data." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },

@@ -192,7 +192,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             writeLine();
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
             
-            if (compilerOptions.dependency && root && compilerOptions.module) {
+            if (compilerOptions.emitModuleDependencies && root && compilerOptions.module) {
                 emitDependencyFile(root);                
             }
             
