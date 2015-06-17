@@ -5755,8 +5755,8 @@ namespace ts {
             // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
-            let container = getContainingFunction(node);
             if (symbol === argumentsSymbol) {
+                let container = getContainingFunction(node);
                 if (container.kind === SyntaxKind.ArrowFunction) {
                     if (languageVersion < ScriptTarget.ES6) {
                         error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
