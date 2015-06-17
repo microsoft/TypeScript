@@ -640,19 +640,6 @@ namespace ts {
             }
         }
     }
-
-    export function getContainingParameter(node: Node): ParameterDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isFunctionLike(node)) {
-                return undefined;
-            }
-
-            if (node.kind === SyntaxKind.Parameter) {
-                return <ParameterDeclaration>node;
-            }
-        }
-    }
     
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
