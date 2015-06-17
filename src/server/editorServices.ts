@@ -1262,7 +1262,7 @@ module ts.server {
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
         private currentVersion = 0;
-        private host: System;
+        private host: ServerHost;
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;

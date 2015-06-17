@@ -107,21 +107,6 @@ module ts.server {
 
     export interface ServerHost extends ts.System {
     }
-    
-    export interface Environment {
-        byteLength: (buf: string, encoding?: string) => number;
-        hrtime: (start?: number[]) => number[]; //array of seconds, nanoseconds
-    }
-    
-    export interface Message {
-        type: string,
-        seq: number
-    }
-    
-    export interface Event extends Message {
-        event: string;
-        body?: any;
-    }
 
     export class Session {
         projectService: ProjectService;
@@ -132,7 +117,12 @@ module ts.server {
         immediateId: any;
         changeSeq = 0;
 
-        constructor(private host: ServerHost, private environment: Environment, private logger: Logger) {
+        constructor(
+            private host: ServerHost, 
+            private byteLength: (buf: string, encoding?: string) => number, 
+            private hrtime: (start?: number[]) => number[], 
+            private logger: Logger
+        ) {
             this.projectService =
                 new ProjectService(host, logger, (eventName,project,fileName) => {
                 this.handleEvent(eventName, project, fileName);
@@ -163,17 +153,17 @@ module ts.server {
             this.host.write(line + this.host.newLine);
         }
 
-        send(msg: Message) {
+        send(msg: protocol.Message) {
             var json = JSON.stringify(msg);
             if (this.logger.isVerbose()) {
                 this.logger.info(msg.type + ": " + json);
             }
-            this.sendLineToClient('Content-Length: ' + (1 + this.environment.byteLength(json, 'utf8')) +
+            this.sendLineToClient('Content-Length: ' + (1 + this.byteLength(json, 'utf8')) +
                 '\r\n\r\n' + json);
         }
 
         event(info: any, eventName: string) {
-            var ev: Event = {
+            var ev: protocol.Event = {
                 seq: 0,
                 type: "event",
                 event: eventName,
@@ -852,7 +842,7 @@ module ts.server {
         onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
-                var start = this.environment.hrtime();                
+                var start = this.hrtime();                
             }
             try {
                 var request = <protocol.Request>JSON.parse(message);
@@ -994,7 +984,7 @@ module ts.server {
                 }
 
                 if (this.logger.isVerbose()) {
-                    var elapsed = this.environment.hrtime(start);
+                    var elapsed = this.hrtime(start);
                     var seconds = elapsed[0]
                     var nanoseconds = elapsed[1];
                     var elapsedMs = ((1e9 * seconds) + nanoseconds)/1000000.0;

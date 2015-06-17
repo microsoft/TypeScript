@@ -173,8 +173,8 @@ module ts.server {
     } 
 
     class IOSession extends Session {
-        constructor(host: ServerHost, env: NodeEnvironment, logger: ts.server.Logger) {
-            super(host, env, logger);
+        constructor(host: ServerHost, logger: ts.server.Logger) {
+            super(host, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
@@ -265,7 +265,7 @@ module ts.server {
         }
 
     };
-    var ioSession = new IOSession(ts.sys, new NodeEnvironment(), logger);
+    var ioSession = new IOSession(ts.sys, logger);
     process.on('uncaughtException', function(err: Error) {
         ioSession.logError(err, "unknown");
     });

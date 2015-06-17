@@ -100,7 +100,6 @@ var serverSources = [
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
-    "nodeimpl.ts",
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
@@ -112,7 +111,7 @@ var languageServiceLibrarySources = [
     "session.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-});
+}).concat(servicesSources);
 
 var harnessSources = [
     "harness.ts",
@@ -146,7 +145,6 @@ var harnessSources = [
     "protocol.d.ts",
     "session.ts",
     "client.ts",
-    "nodeimpl.ts",
     "editorServices.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
@@ -383,7 +381,7 @@ var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
 compileFile(
     lsslFile, 
     languageServiceLibrarySources, 
-    [builtLocalDirectory, copyright].concat(serverSources).concat(languageServiceLibrarySources),
+    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
     /*prefixes*/ [copyright], 
     /*useBuiltCompiler*/ true, 
     /*noOutFile*/ false, 
