@@ -737,6 +737,7 @@ namespace ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
+        invalidDotExpression?: LeftHandSideExpression; // 1.toString() we attach the node but never emit it
     }
 
     export interface TemplateExpression extends PrimaryExpression {
@@ -1881,7 +1882,7 @@ namespace ts {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-	
+
     export interface LineAndCharacter {
         line: number;
         /*

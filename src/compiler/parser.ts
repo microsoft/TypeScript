@@ -100,6 +100,8 @@ namespace ts {
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
                     visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
+            case SyntaxKind.NumericLiteral:
+                return visitNode(cbNode, (<LiteralExpression>node).invalidDotExpression);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
@@ -1830,20 +1832,37 @@ namespace ts {
             }
 
             let tokenPos = scanner.getTokenPos();
+            let nextCharCode: number;
+
             nextToken();
             finishNode(node);
 
-            // Octal literals are not allowed in strict mode or ES5
-            // Note that theoretically the following condition would hold true literals like 009,
-            // which is not octal.But because of how the scanner separates the tokens, we would
-            // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
-            // We also do not need to check for negatives because any prefix operator would be part of a
-            // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
-                && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
-                && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
-
-                node.flags |= NodeFlags.OctalLiteral;
+            if (node.kind === SyntaxKind.NumericLiteral) {
+                // Octal literals are not allowed in strict mode or ES5
+                // Note that theoretically the following condition would hold true literals like 009,
+                // which is not octal.But because of how the scanner separates the tokens, we would
+                // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
+                // We also do not need to check for negatives because any prefix operator would be part of a
+                // parent unary expression.
+                if (sourceText.charCodeAt(tokenPos) === CharacterCodes._0 && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
+                    node.flags |= NodeFlags.OctalLiteral;
+                }
+                else if (token === SyntaxKind.DotToken) {
+                    // Issue #2632 Keep space for  3 .toString()
+                    if (isWhiteSpace(sourceText.charCodeAt(node.end))) {
+						node.end++;
+                        scanner.setTextPos(node.end + 1);
+                    }
+                }
+                else if (token === SyntaxKind.Identifier && sourceText.charCodeAt(node.end-1) === CharacterCodes.dot) {
+                    nextCharCode = sourceText.charCodeAt(node.end);
+                    if (!isWhiteSpace(nextCharCode) && !isLineBreak(nextCharCode)) {
+                        // Eat up an invalid expression following '1.' e.g. 1.something()
+                        node.invalidDotExpression = parseLeftHandSideExpressionOrHigher();
+                        parseErrorAtPosition(node.end, node.invalidDotExpression.end - node.end, Diagnostics.Numeric_literal_0_cannot_be_followed_by_an_expression, "'" + sourceText.substring(tokenPos, node.end) + "'");
+                        node.end = node.invalidDotExpression.end;
+                    }
+                }
             }
 
             return node;

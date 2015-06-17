@@ -2268,5 +2268,9 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
+    },
+    "Numeric literal {0} cannot be followed by an expression.": {
+        "category": "Error",
+        "code": 9004
     }
 }
