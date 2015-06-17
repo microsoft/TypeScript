@@ -516,7 +516,6 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
-        let closingTagsMap: Map<number[]>;
         export const enum StatementFlags {
             None = 0,
             Statement = 1,
@@ -546,7 +545,6 @@ module ts {
 
             contextFlags = isJavaScript(fileName) ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
-            closingTagsMap = null;
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
@@ -1569,6 +1567,11 @@ module ts {
                 // name list, and there can be left hand side expressions (which can have type
                 // arguments.)
                 case ParsingContext.HeritageClauseElement:
+
+                // Perhaps safe to reuse, but it's unlikely we'd see more than a dozen attributes
+                // on any given element
+                case ParsingContext.JsxAttributes:
+
             }
 
             return false;
@@ -3292,13 +3295,6 @@ module ts {
                 return entityNameToString(qualifiedName.left) + '.' + entityNameToString(qualifiedName.right);
             }
             return "";
-        }
-
-        function hasClosingTagAfterPos(tagName: string, currentPos: number): boolean {
-            if (!closingTagsMap) {
-                closingTagsMap = retrieveClosingTagsMap(sourceText, sourceFile.languageVersion);
-            }
-            return hasProperty(closingTagsMap, tagName) && forEach(closingTagsMap[tagName], p => p >= currentPos);
         }
 
         function parseJsxElement(speculative = false, fixedOpeningPosition: number = undefined): JsxElement {

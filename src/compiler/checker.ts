@@ -168,7 +168,7 @@ module ts {
             JSX: 'JSX',
             IntrinsicElements: 'IntrinsicElements',
             ElementClass: 'ElementClass',
-            ElementAttributesProperty: 'ElementAttributesProperty',
+            ElementAttributesPropertyNameContainer: 'ElementAttributesProperty',
             Element: 'Element'
         };
 
@@ -3690,7 +3690,7 @@ module ts {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
         }
 
-        function getNamespacedType(namespace: string, name: string): Type {
+        function getExportedTypeOfNamespace(namespace: string, name: string): Type {
             var namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             var typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
@@ -6659,21 +6659,22 @@ module ts {
         function isJsxIntrinsicIdentifier(tagName: Identifier|QualifiedName) {
             if (tagName.kind === SyntaxKind.QualifiedName) {
                 return false;
-            } else {
+            }
+            else {
                 let firstChar = (<Identifier>tagName).text.charAt(0);
                 return firstChar.toLowerCase() === firstChar;
             }
         }
 
         function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
-            var correspondingPropType: Type = unknownType;
+            var correspondingPropType: Type = undefined;
 
             // Look up the corresponding property for this attribute
             if (elementAttributesType === emptyObjectType && isIdentifierLike(node.name.text)) {
                 // If there is no 'props' property, you may not have non-"data-" attributes
                 error(node.parent, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
-            else if (elementAttributesType && !(elementAttributesType.flags & TypeFlags.Any)) {
+            else if (elementAttributesType && !isTypeAny(elementAttributesType)) {
                 var correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
                 correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
                 if (!correspondingPropType) {
@@ -6690,10 +6691,11 @@ module ts {
                 exprType = checkExpression(node.initializer);
             }
             else {
+                // <Elem attr /> is sugar for <Elem attr={true} />
                 exprType = booleanType;
             }
 
-            if (!isTypeAny(elementAttributesType) && correspondingPropType) {
+            if (correspondingPropType) {
                 checkTypeAssignableTo(exprType, correspondingPropType, node);
             }
 
@@ -6853,9 +6855,13 @@ module ts {
         /// or '' if it has 0 properties (which means all
         ///     non-instrinsic elements' attributes type is the element instance type)
         function getJsxElementPropertiesName() {
+            // JSX
             let jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
-            let attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesProperty, SymbolFlags.Type);
+            // JSX.ElementAttributesProperty [symbol]
+            let attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesPropertyNameContainer, SymbolFlags.Type);
+            // JSX.ElementAttributesProperty [type]
             let attribPropType = attribsPropTypeSym && getDeclaredTypeOfSymbol(attribsPropTypeSym);
+            // The properites of JSX.ElementAttributesProperty
             let attribProperties = attribPropType && getPropertiesOfType(attribPropType);
 
             if (attribProperties) {
@@ -6866,7 +6872,7 @@ module ts {
                     return attribProperties[0].name;
                 }
                 else {
-                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesProperty);
+                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
                     return undefined;
                 }
             }
@@ -6880,59 +6886,56 @@ module ts {
         function getJsxElementAttributesType(node: JsxOpeningElement): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = lookup();
-            }
-            return links.resolvedType;
-
-            function lookup() {
                 let sym = getJsxElementTagSymbol(node);
 
                 if (links.jsxFlags & JsxFlags.ClassElement) {
                     let elemInstanceType = getJsxElementInstanceType(node);
 
                     if (isTypeAny(elemInstanceType)) {
-                        return anyType;
+                        return links.resolvedType = anyType;
                     }
 
                     var propsName = getJsxElementPropertiesName();
                     if (propsName === undefined) {
                         // There is no type ElementAttributesProperty, return 'any'
-                        return anyType;
+                        return links.resolvedType = anyType;
                     }
                     else if (propsName === '') {
                         // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
-                        return elemInstanceType;
+                        return links.resolvedType = elemInstanceType;
                     }
                     else {
                         var attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
 
                         if (!attributesType) {
                             // There is no property named 'props' on this instance type
-                            return emptyObjectType;
+                            return links.resolvedType = emptyObjectType;
                         }
                         else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
-                            return attributesType;
+                            return links.resolvedType = attributesType;
                         }
                         else if (!(attributesType.flags & TypeFlags.ObjectType)) {
                             error(node.tagName, Diagnostics.JSX_element_attributes_type_0_must_be_an_object_type, typeToString(attributesType));
-                            return anyType;
+                            return links.resolvedType = anyType;
                         }
                         else {
-                            return attributesType;
+                            return links.resolvedType = attributesType;
                         }
                     }
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
-                    return getTypeOfSymbol(sym);
+                    return links.resolvedType = getTypeOfSymbol(sym);
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
-                    return getIndexTypeOfSymbol(sym, IndexKind.String);
+                    return links.resolvedType = getIndexTypeOfSymbol(sym, IndexKind.String);
                 }
                 else {
                     // Resolution failed
-                    return anyType;
+                    return links.resolvedType = anyType;
                 }
             }
+
+            return links.resolvedType;
         }
 
         /// Given a JSX attribute, returns the symbol for the corresponds property
@@ -6957,9 +6960,9 @@ module ts {
         }
 
         /// Returns all the properties of the Jsx.IntrinsicElements interface
-        function getJsxIntrinsicTagNames(): Symbol[]{
+        function getJsxIntrinsicTagNames(): Symbol[] {
             let intrinsics = getJsxIntrinsicElementsType();
-            return intrinsics ? getPropertiesOfType(intrinsics) : [];
+            return intrinsics ? getPropertiesOfType(intrinsics) : emptyArray;
         }
 
         function checkJsxOpeningElement(node: JsxOpeningElement) {
@@ -6973,11 +6976,9 @@ module ts {
                 if (node.attributes[i].kind === SyntaxKind.JsxAttribute) {
                     checkJsxAttribute(<JsxAttribute>(node.attributes[i]), targetAttributesType, nameTable);
                 }
-                else if (node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute) {
-                    checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
-                }
                 else {
-                    throw new Error('Unknown JSX attribute kind');
+                    Debug.assert(node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
+                    checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
                 }
             }
 
@@ -12256,7 +12257,6 @@ module ts {
             return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-// <<<<<<< HEAD
         function isTypeNode(node: Node): boolean {
             if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
                 return true;
@@ -13097,7 +13097,7 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            jsxElementType = getNamespacedType("JSX", JsxNames.Element);
+            jsxElementType = getExportedTypeOfNamespace("JSX", JsxNames.Element);
             getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
