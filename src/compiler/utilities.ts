@@ -2083,6 +2083,12 @@ namespace ts {
         return start <= textSpanEnd(span) && end >= span.start;
     }
 
+    export function textSpanIntersectsWith2(start1: number, length1: number, start2: number, length2: number) {
+        let end1 = start1 + length1;
+        let end2 = start2 + length2;
+        return start2 <= end1 && end2 >= start1;
+    }
+
     export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
         return position <= textSpanEnd(span) && position >= span.start;
     }

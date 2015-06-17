@@ -376,8 +376,31 @@ namespace ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
 
+    export function couldStartTrivia(text: string, pos: number): boolean {
+        // Keep in sync with skipTrivia
+        let ch = text.charCodeAt(pos);
+        switch (ch) {
+            case CharacterCodes.carriageReturn:
+            case CharacterCodes.lineFeed:
+            case CharacterCodes.tab:
+            case CharacterCodes.verticalTab:
+            case CharacterCodes.formFeed:
+            case CharacterCodes.space:
+            case CharacterCodes.slash:
+                // starts of normal trivia
+            case CharacterCodes.lessThan:
+            case CharacterCodes.equals:
+            case CharacterCodes.greaterThan:
+                // Starts of conflict marker trivia
+                return true;
+            default:
+                return ch > CharacterCodes.maxAsciiCharacter;
+        }
+    }
+
     /* @internal */ 
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+        // Keep in sync with couldStartTrivia
         while (true) {
             let ch = text.charCodeAt(pos);
             switch (ch) {
