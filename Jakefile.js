@@ -505,9 +505,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, testConfigFile) {
+function writeTestConfigFile(tests, light, testConfigFile) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests]});
+    var testConfigContents = JSON.stringify({ test: [tests], light: light });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -523,13 +523,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
     host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -572,12 +573,13 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
     port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     tests = tests ? tests : '';

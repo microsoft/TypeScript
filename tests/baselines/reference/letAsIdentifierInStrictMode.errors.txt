@@ -1,20 +1,20 @@
+tests/cases/compiler/letAsIdentifierInStrictMode.ts(2,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode
 tests/cases/compiler/letAsIdentifierInStrictMode.ts(3,5): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/letAsIdentifierInStrictMode.ts(4,5): error TS1134: Variable declaration expected.
-tests/cases/compiler/letAsIdentifierInStrictMode.ts(4,7): error TS1134: Variable declaration expected.
+tests/cases/compiler/letAsIdentifierInStrictMode.ts(4,1): error TS1212: Identifier expected. 'let' is a reserved word in strict mode
 tests/cases/compiler/letAsIdentifierInStrictMode.ts(6,1): error TS2300: Duplicate identifier 'a'.
 
 
 ==== tests/cases/compiler/letAsIdentifierInStrictMode.ts (4 errors) ====
     "use strict";
     var let = 10;
+        ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode
     var a = 10;
         ~
 !!! error TS2300: Duplicate identifier 'a'.
     let = 30;
-        ~
-!!! error TS1134: Variable declaration expected.
-          ~~
-!!! error TS1134: Variable declaration expected.
+    ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode
     let
     a;
     ~
