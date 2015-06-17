@@ -203,6 +203,10 @@
         "category": "Error",
         "code": 1061
     },
+    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+        "category": "Error",
+        "code": 1062
+    },
     "An export assignment cannot be used in a namespace.": {
         "category": "Error",
         "code": 1063

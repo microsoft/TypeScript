@@ -54,6 +54,7 @@ namespace ts {
         Return_expression_in_async_function_does_not_have_a_valid_callable_then_member: { code: 1059, category: DiagnosticCategory.Error, key: "Return expression in async function does not have a valid callable 'then' member." },
         Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member: { code: 1060, category: DiagnosticCategory.Error, key: "Expression body for async arrow function does not have a valid callable 'then' member." },
         Enum_member_must_have_initializer: { code: 1061, category: DiagnosticCategory.Error, key: "Enum member must have initializer." },
+        _0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method: { code: 1062, category: DiagnosticCategory.Error, key: "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method." },
         An_export_assignment_cannot_be_used_in_a_namespace: { code: 1063, category: DiagnosticCategory.Error, key: "An export assignment cannot be used in a namespace." },
         Ambient_enum_elements_can_only_have_integer_literal_initializers: { code: 1066, category: DiagnosticCategory.Error, key: "Ambient enum elements can only have integer literal initializers." },
         Unexpected_token_A_constructor_method_accessor_or_property_was_expected: { code: 1068, category: DiagnosticCategory.Error, key: "Unexpected token. A constructor, method, accessor, or property was expected." },

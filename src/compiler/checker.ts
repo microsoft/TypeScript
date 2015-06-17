@@ -9604,11 +9604,7 @@ namespace ts {
                     //  }
                     //
                     if (location) {
-                        if (!message) {
-                            message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
-                        }
-                        
-                        error(location, message);
+                        error(location, Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method, symbolToString(type.symbol));
                     }
                     
                     type = unknownType;
@@ -9640,8 +9636,7 @@ namespace ts {
             let globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
             if (globalPromiseConstructorLikeType === emptyObjectType) {
                 // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
-                // compatibility with __awaiter, so we report an error.
-                error(node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                // compatibility with __awaiter.
                 return unknownType;
             }
 
