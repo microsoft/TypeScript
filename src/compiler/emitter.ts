@@ -320,7 +320,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                     let prevEncodedEmittedColumn = lastEncodedSourceMapSpan.emittedColumn;
                     // Line/Comma delimiters
-                    if (lastEncodedSourceMapSpan.emittedLine == lastRecordedSourceMapSpan.emittedLine) {
+                    if (lastEncodedSourceMapSpan.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
                         // Emit comma to separate the entry
                         if (sourceMapData.sourceMapMappings) {
                             sourceMapData.sourceMapMappings += ",";
@@ -403,8 +403,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                     // If this location wasn't recorded or the location in source is going backwards, record the span
                     if (!lastRecordedSourceMapSpan ||
-                        lastRecordedSourceMapSpan.emittedLine != emittedLine ||
-                        lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
+                        lastRecordedSourceMapSpan.emittedLine !== emittedLine ||
+                        lastRecordedSourceMapSpan.emittedColumn !== emittedColumn ||
                         (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
                             (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
                                 (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
@@ -654,7 +654,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         if (nodeIsSynthesized(node)) {
                             return emitNodeWithoutSourceMap(node);
                         }
-                        if (node.kind != SyntaxKind.SourceFile) {
+                        if (node.kind !== SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
                             emitNodeWithoutSourceMap(node);
                             recordEmitNodeEndSpan(node);
@@ -1962,7 +1962,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (operand.kind == SyntaxKind.TypeAssertionExpression) {
+                        while (operand.kind === SyntaxKind.TypeAssertionExpression) {
                             operand = (<TypeAssertion>operand).expression;
                         }
 

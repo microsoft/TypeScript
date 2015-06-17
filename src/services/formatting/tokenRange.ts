@@ -54,7 +54,7 @@ namespace ts.formatting {
             }
 
             public Contains(tokenValue: SyntaxKind): boolean {
-                return tokenValue == this.token;
+                return tokenValue === this.token;
             }
         }
 

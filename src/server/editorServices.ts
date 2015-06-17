@@ -629,7 +629,7 @@ namespace ts.server {
                 for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                     var f = this.openFilesReferenced[i];
                     // if f was referenced by the removed project, remember it
-                    if (f.defaultProject == removedProject) {
+                    if (f.defaultProject === removedProject) {
                         f.defaultProject = undefined;
                         orphanFiles.push(f);
                     }
@@ -656,7 +656,7 @@ namespace ts.server {
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 var inferredProject = this.inferredProjects[i];
                 inferredProject.updateGraph();
-                if (inferredProject != excludedProject) {
+                if (inferredProject !== excludedProject) {
                     if (inferredProject.getSourceFile(info)) {
                         info.defaultProject = inferredProject;
                         referencingProjects.push(inferredProject);
@@ -710,7 +710,7 @@ namespace ts.server {
                 var rootFile = this.openFileRoots[i];
                 var rootedProject = rootFile.defaultProject;
                 var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
-                if (referencingProjects.length == 0) {
+                if (referencingProjects.length === 0) {
                     rootFile.defaultProject = rootedProject;
                     openFileRoots.push(rootFile);
                 }
@@ -1082,7 +1082,7 @@ namespace ts.server {
 
             for (var k = this.endBranch.length - 1; k >= 0; k--) {
                 (<LineNode>this.endBranch[k]).updateCounts();
-                if (this.endBranch[k].charCount() == 0) {
+                if (this.endBranch[k].charCount() === 0) {
                     lastZeroCount = this.endBranch[k];
                     if (k > 0) {
                         branchParent = <LineNode>this.endBranch[k - 1];
@@ -1147,7 +1147,7 @@ namespace ts.server {
         post(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineCollection, nodeType: CharRangeSection): LineCollection {
             // have visited the path for start of range, now looking for end
             // if range is on single line, we will never make this state transition
-            if (lineCollection == this.lineCollectionAtBranch) {
+            if (lineCollection === this.lineCollectionAtBranch) {
                 this.state = CharRangeSection.End;
             }
             // always pop stack because post only called when child has been visited
@@ -1159,7 +1159,7 @@ namespace ts.server {
             // currentNode corresponds to parent, but in the new tree
             var currentNode = this.stack[this.stack.length - 1];
 
-            if ((this.state == CharRangeSection.Entire) && (nodeType == CharRangeSection.Start)) {
+            if ((this.state === CharRangeSection.Entire) && (nodeType === CharRangeSection.Start)) {
                 // if range is on single line, we will never make this state transition
                 this.state = CharRangeSection.Start;
                 this.branchNode = currentNode;
@@ -1176,12 +1176,12 @@ namespace ts.server {
             switch (nodeType) {
                 case CharRangeSection.PreStart:
                     this.goSubtree = false;
-                    if (this.state != CharRangeSection.End) {
+                    if (this.state !== CharRangeSection.End) {
                         currentNode.add(lineCollection);
                     }
                     break;
                 case CharRangeSection.Start:
-                    if (this.state == CharRangeSection.End) {
+                    if (this.state === CharRangeSection.End) {
                         this.goSubtree = false;
                     }
                     else {
@@ -1191,7 +1191,7 @@ namespace ts.server {
                     }
                     break;
                 case CharRangeSection.Entire:
-                    if (this.state != CharRangeSection.End) {
+                    if (this.state !== CharRangeSection.End) {
                         child = fresh(lineCollection);
                         currentNode.add(child);
                         this.startPath[this.startPath.length] = child;
@@ -1208,7 +1208,7 @@ namespace ts.server {
                     this.goSubtree = false;
                     break;
                 case CharRangeSection.End:
-                    if (this.state != CharRangeSection.End) {
+                    if (this.state !== CharRangeSection.End) {
                         this.goSubtree = false;
                     }
                     else {
@@ -1221,7 +1221,7 @@ namespace ts.server {
                     break;
                 case CharRangeSection.PostEnd:
                     this.goSubtree = false;
-                    if (this.state != CharRangeSection.Start) {
+                    if (this.state !== CharRangeSection.Start) {
                         currentNode.add(lineCollection);
                     }
                     break;
@@ -1233,10 +1233,10 @@ namespace ts.server {
         }
         // just gather text from the leaves
         leaf(relativeStart: number, relativeLength: number, ll: LineLeaf) {
-            if (this.state == CharRangeSection.Start) {
+            if (this.state === CharRangeSection.Start) {
                 this.initialText = ll.text.substring(0, relativeStart);
             }
-            else if (this.state == CharRangeSection.Entire) {
+            else if (this.state === CharRangeSection.Entire) {
                 this.initialText = ll.text.substring(0, relativeStart);
                 this.trailingText = ll.text.substring(relativeStart + relativeLength);
             }
@@ -1499,8 +1499,8 @@ namespace ts.server {
             function editFlat(source: string, s: number, dl: number, nt = "") {
                 return source.substring(0, s) + nt + source.substring(s + dl, source.length);
             }
-            if (this.root.charCount() == 0) {
-                // TODO: assert deleteLength == 0
+            if (this.root.charCount() === 0) {
+                // TODO: assert deleteLength === 0
                 if (newText) {
                     this.load(LineIndex.linesFromText(newText).lines);
                     return this;
@@ -1528,7 +1528,7 @@ namespace ts.server {
                     // check whether last characters deleted are line break
                     var e = pos + deleteLength;
                     var lineInfo = this.charOffsetToLineNumberAndPos(e);
-                    if ((lineInfo && (lineInfo.offset == 0))) {
+                    if ((lineInfo && (lineInfo.offset === 0))) {
                         // move range end just past line that will merge with previous line
                         deleteLength += lineInfo.text.length;
                         // store text by appending to end of insertedText
@@ -1574,7 +1574,7 @@ namespace ts.server {
                 interiorNodes[i].totalChars = charCount;
                 interiorNodes[i].totalLines = lineCount;
             }
-            if (interiorNodes.length == 1) {
+            if (interiorNodes.length === 1) {
                 return interiorNodes[0];
             }
             else {
@@ -1585,7 +1585,7 @@ namespace ts.server {
         static linesFromText(text: string) {
             var lineStarts = ts.computeLineStarts(text);
 
-            if (lineStarts.length == 0) {
+            if (lineStarts.length === 0) {
                 return { lines: <string[]>[], lineMap: lineStarts };
             }
             var lines = <string[]>new Array(lineStarts.length);
@@ -1821,7 +1821,7 @@ namespace ts.server {
         findChildIndex(child: LineCollection) {
             var childIndex = 0;
             var clen = this.children.length;
-            while ((this.children[childIndex] != child) && (childIndex < clen)) childIndex++;
+            while ((this.children[childIndex] !== child) && (childIndex < clen)) childIndex++;
             return childIndex;
         }
 
@@ -1830,7 +1830,7 @@ namespace ts.server {
             var clen = this.children.length;
             var nodeCount = nodes.length;
             // if child is last and there is more room and only one node to place, place it
-            if ((clen < lineCollectionCapacity) && (childIndex == (clen - 1)) && (nodeCount == 1)) {
+            if ((clen < lineCollectionCapacity) && (childIndex === (clen - 1)) && (nodeCount === 1)) {
                 this.add(nodes[0]);
                 this.updateCounts();
                 return [];
@@ -1854,13 +1854,13 @@ namespace ts.server {
                     var splitNode = <LineNode>splitNodes[0];
                     while (nodeIndex < nodeCount) {
                         splitNode.add(nodes[nodeIndex++]);
-                        if (splitNode.children.length == lineCollectionCapacity) {
+                        if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
                             splitNode = <LineNode>splitNodes[splitNodeIndex];
                         }
                     }
                     for (i = splitNodes.length - 1; i >= 0; i--) {
-                        if (splitNodes[i].children.length == 0) {
+                        if (splitNodes[i].children.length === 0) {
                             splitNodes.length--;
                         }
                     }

@@ -3523,7 +3523,7 @@ namespace ts {
                             // -> typeParameter and symbol.declaration originate from the same type parameter list
                             // -> illegal for all declarations in symbol
                             // forEach === exists
-                            links.isIllegalTypeReferenceInConstraint = forEach(symbol.declarations, d => d.parent == typeParameter.parent);
+                            links.isIllegalTypeReferenceInConstraint = forEach(symbol.declarations, d => d.parent === typeParameter.parent);
                         }
                     }
                     if (links.isIllegalTypeReferenceInConstraint) {
@@ -8432,7 +8432,7 @@ namespace ts {
         // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
             let type: Type;
-            if (node.kind == SyntaxKind.QualifiedName) {
+            if (node.kind === SyntaxKind.QualifiedName) {
                 type = checkQualifiedName(<QualifiedName>node);
             }
             else {
@@ -9871,7 +9871,7 @@ namespace ts {
         function checkForStatement(node: ForStatement) {
             // Grammar checking
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.initializer && node.initializer.kind == SyntaxKind.VariableDeclarationList) {
+                if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     checkGrammarVariableDeclarationList(<VariableDeclarationList>node.initializer);
                 }
             }
@@ -11751,7 +11751,7 @@ namespace ts {
         }
 
         function isTypeDeclarationName(name: Node): boolean {
-            return name.kind == SyntaxKind.Identifier &&
+            return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
                 (<Declaration>name.parent).name === name;
         }
@@ -11920,7 +11920,7 @@ namespace ts {
                 // Intentional fall-through
                 case SyntaxKind.NumericLiteral:
                     // index access
-                    if (node.parent.kind == SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
+                    if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
                         let objectType = checkExpression((<ElementAccessExpression>node.parent).expression);
                         if (objectType === unknownType) return undefined;
                         let apparentType = getApparentType(objectType);
