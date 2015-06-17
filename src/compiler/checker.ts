@@ -8973,16 +8973,16 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArguments: TypeNode[]) {
-            if (produceDiagnostics) {
-                for (let i = 0; i < typeParameters.length; i++) {
-                    let constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                    if (constraint) {
-                        let typeArgument = typeArguments[i];
-                        checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
-                    }
+        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArguments: TypeNode[]): boolean {
+            let result = true;
+            for (let i = 0; i < typeParameters.length; i++) {
+                let constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                if (constraint) {
+                    let typeArgument = typeArguments[i];
+                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
+            return result;
         }
 
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
@@ -8991,9 +8991,11 @@ namespace ts {
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
                 forEach(node.typeArguments, checkSourceElement);
-                let symbol = getNodeLinks(node).resolvedSymbol;
-                let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
-                checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+                if (produceDiagnostics) {
+                    let symbol = getNodeLinks(node).resolvedSymbol;
+                    let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
+                    checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+                }
             }
         }
 
@@ -10595,7 +10597,9 @@ namespace ts {
                     if (baseTypeNode.typeArguments) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (let constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments)) {
-                            checkTypeArgumentConstraints(constructor.typeParameters, baseTypeNode.typeArguments);
+                            if (!checkTypeArgumentConstraints(constructor.typeParameters, baseTypeNode.typeArguments)) {
+                                break;
+                            }
                         }
                     }
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
