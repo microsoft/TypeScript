@@ -5855,10 +5855,6 @@ namespace ts {
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
-            else if (node.parserContextFlags & ParserContextFlags.Await) {
-                // if 'this' is part of an async function, we will need to capture 'this'
-                needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
-            }
 
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
