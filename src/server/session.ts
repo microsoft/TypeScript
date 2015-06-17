@@ -1,6 +1,5 @@
 /// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
-/// <reference path="node.d.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
 
@@ -61,7 +60,7 @@ namespace ts.server {
         };
     }
 
-    interface PendingErrorCheck {
+    export interface PendingErrorCheck {
         fileName: string;
         project: Project;
     }
@@ -108,17 +107,34 @@ namespace ts.server {
 
     export interface ServerHost extends ts.System {
     }
+    
+    export interface Environment {
+        byteLength: (buf: string, encoding?: string) => number;
+        hrtime: (start?: number[]) => number[]; //array of seconds, nanoseconds
+    }
+    
+    export interface Message {
+        type: string,
+        seq: number
+    }
+    
+    export interface Event extends Message {
+        event: string;
+        body?: any;
+    }
+    
+    export type ProtocolHandler = (request: protocol.Request) => boolean;
 
     export class Session {
         projectService: ProjectService;
         pendingOperation = false;
         fileHash: ts.Map<number> = {};
         nextFileId = 1;
-        errorTimer: NodeJS.Timer;
+        errorTimer: any; /*NodeJS.Timer | number*/
         immediateId: any;
         changeSeq = 0;
 
-        constructor(private host: ServerHost, private logger: Logger) {
+        constructor(private host: ServerHost, private environment: Environment, private logger: Logger) {
             this.projectService =
                 new ProjectService(host, logger, (eventName,project,fileName) => {
                 this.handleEvent(eventName, project, fileName);
@@ -149,17 +165,17 @@ namespace ts.server {
             this.host.write(line + this.host.newLine);
         }
 
-        send(msg: NodeJS._debugger.Message) {
+        send(msg: Message) {
             var json = JSON.stringify(msg);
             if (this.logger.isVerbose()) {
                 this.logger.info(msg.type + ": " + json);
             }
-            this.sendLineToClient('Content-Length: ' + (1 + Buffer.byteLength(json, 'utf8')) +
+            this.sendLineToClient('Content-Length: ' + (1 + this.environment.byteLength(json, 'utf8')) +
                 '\r\n\r\n' + json);
         }
 
         event(info: any, eventName: string) {
-            var ev: NodeJS._debugger.Event = {
+            var ev: Event = {
                 seq: 0,
                 type: "event",
                 event: eventName,
@@ -834,153 +850,178 @@ namespace ts.server {
 
         exit() {
         }
+        
+        private handlers : Map<ProtocolHandler> = {};
+        addProtocolHandler(command: string, handler: ProtocolHandler) {
+            this.handlers[command] = handler;
+        }
+        removeProtocolHandler(command: string, handler: ProtocolHandler) {
+            delete this.handlers[command];
+        }
+        
+        onMessageParsed(request: protocol.Request) : boolean {
+            var response: any;
+            var errorMessage: string;
+            var responseRequired = true;
+            switch (request.command) {
+                case CommandNames.Exit: {
+                    this.exit();
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Definition: { 
+                    var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                    response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
+                    break;
+                }
+                case CommandNames.TypeDefinition: {
+                    var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                    response = this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file);
+                    break;
+                }
+                case CommandNames.References: { 
+                    var refArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                    response = this.getReferences(refArgs.line, refArgs.offset, refArgs.file);
+                    break;
+                }
+                case CommandNames.Rename: {
+                    var renameArgs = <protocol.RenameRequestArgs>request.arguments;
+                    response = this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
+                    break;
+                }
+                case CommandNames.Open: {
+                    var openArgs = <protocol.OpenRequestArgs>request.arguments;
+                    this.openClientFile(openArgs.file);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Quickinfo: {
+                    var quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                    response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file);
+                    break;
+                }
+                case CommandNames.Format: {
+                    var formatArgs = <protocol.FormatRequestArgs>request.arguments;
+                    response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file);
+                    break;
+                }
+                case CommandNames.Formatonkey: {
+                    var formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
+                    response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file);
+                    break;
+                }
+                case CommandNames.Completions: {
+                    var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
+                    response = this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file);
+                    break;
+                }
+                case CommandNames.CompletionDetails: {
+                    var completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
+                    response =
+                        this.getCompletionEntryDetails(completionDetailsArgs.line,completionDetailsArgs.offset,
+                                                       completionDetailsArgs.entryNames,completionDetailsArgs.file);
+                    break;
+                }
+                case CommandNames.SignatureHelp: {
+                    var signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
+                    response = this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file);
+                    break;
+                }    
+                case CommandNames.Geterr: {
+                    var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
+                    response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Change: {
+                    var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
+                    this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
+                                changeArgs.insertString, changeArgs.file);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Configure: {
+                    var configureArgs = <protocol.ConfigureRequestArguments>request.arguments;
+                    this.projectService.setHostConfiguration(configureArgs);
+                    this.output(undefined, CommandNames.Configure, request.seq);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Reload: {
+                    var reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
+                    this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Saveto: {
+                    var savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
+                    this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Close: {
+                    var closeArgs = <protocol.FileRequestArgs>request.arguments;
+                    this.closeClientFile(closeArgs.file);
+                    responseRequired = false;
+                    break;
+                }
+                case CommandNames.Navto: {
+                    var navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
+                    response = this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount);
+                    break;
+                }
+                case CommandNames.Brace: {
+                    var braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
+                    response = this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file);
+                    break;
+                }
+                case CommandNames.NavBar: {
+                    var navBarArgs = <protocol.FileRequestArgs>request.arguments;
+                    response = this.getNavigationBarItems(navBarArgs.file);
+                    break;
+                }
+                case CommandNames.Occurrences: {
+                    var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
+                    response = this.getOccurrences(line, offset, fileName);
+                    break;
+                }
+                case CommandNames.ProjectInfo: {
+                    var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
+                    response = this.getProjectInfo(file, needFileNameList);
+                    break;
+                }
+                default: {
+                    if (this.handlers[request.command]) {
+                        this.logger.info(`Invoking dynamic protocol handler "${request.command}"`);
+                        return this.handlers[request.command](request);
+                    } else {
+                        this.projectService.log("Unrecognized JSON command: " + JSON.stringify(request));
+                        this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
+                    }
+                    break;
+                }
+            }
+            if (response) {
+                this.output(response, request.command, request.seq);
+            }
+            else if (responseRequired) {
+                this.output(undefined, request.command, request.seq, "No content available.");
+            }
+            
+            return responseRequired;
+        }
 
         onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
-                var start = process.hrtime();                
+                var start = this.environment.hrtime();                
             }
             try {
                 var request = <protocol.Request>JSON.parse(message);
-                var response: any;
-                var errorMessage: string;
-                var responseRequired = true;
-                switch (request.command) {
-                    case CommandNames.Exit: {
-                        this.exit();
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Definition: { 
-                        var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
-                        break;
-                    }
-                    case CommandNames.TypeDefinition: {
-                        var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file);
-                        break;
-                    }
-                    case CommandNames.References: { 
-                        var refArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getReferences(refArgs.line, refArgs.offset, refArgs.file);
-                        break;
-                    }
-                    case CommandNames.Rename: {
-                        var renameArgs = <protocol.RenameRequestArgs>request.arguments;
-                        response = this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
-                        break;
-                    }
-                    case CommandNames.Open: {
-                        var openArgs = <protocol.OpenRequestArgs>request.arguments;
-                        this.openClientFile(openArgs.file);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Quickinfo: {
-                        var quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file);
-                        break;
-                    }
-                    case CommandNames.Format: {
-                        var formatArgs = <protocol.FormatRequestArgs>request.arguments;
-                        response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file);
-                        break;
-                    }
-                    case CommandNames.Formatonkey: {
-                        var formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
-                        response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file);
-                        break;
-                    }
-                    case CommandNames.Completions: {
-                        var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
-                        response = this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file);
-                        break;
-                    }
-                    case CommandNames.CompletionDetails: {
-                        var completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
-                        response =
-                            this.getCompletionEntryDetails(completionDetailsArgs.line,completionDetailsArgs.offset,
-                                                           completionDetailsArgs.entryNames,completionDetailsArgs.file);
-                        break;
-                    }
-                    case CommandNames.SignatureHelp: {
-                        var signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
-                        response = this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file);
-                        break;
-                    }    
-                    case CommandNames.Geterr: {
-                        var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
-                        response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Change: {
-                        var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
-                        this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
-                                    changeArgs.insertString, changeArgs.file);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Configure: {
-                        var configureArgs = <protocol.ConfigureRequestArguments>request.arguments;
-                        this.projectService.setHostConfiguration(configureArgs);
-                        this.output(undefined, CommandNames.Configure, request.seq);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Reload: {
-                        var reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
-                        this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Saveto: {
-                        var savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
-                        this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Close: {
-                        var closeArgs = <protocol.FileRequestArgs>request.arguments;
-                        this.closeClientFile(closeArgs.file);
-                        responseRequired = false;
-                        break;
-                    }
-                    case CommandNames.Navto: {
-                        var navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                        response = this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount);
-                        break;
-                    }
-                    case CommandNames.Brace: {
-                        var braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file);
-                        break;
-                    }
-                    case CommandNames.NavBar: {
-                        var navBarArgs = <protocol.FileRequestArgs>request.arguments;
-                        response = this.getNavigationBarItems(navBarArgs.file);
-                        break;
-                    }
-                    case CommandNames.Occurrences: {
-                        var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getOccurrences(line, offset, fileName);
-                        break;
-                    }
-                    case CommandNames.ProjectInfo: {
-                        var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
-                        response = this.getProjectInfo(file, needFileNameList);
-                        break;
-                    }
-                    default: {
-                        this.projectService.log("Unrecognized JSON command: " + message);
-                        this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
-                        break;
-                    }
-                }
+                var responseRequired = this.onMessageParsed(request);
 
                 if (this.logger.isVerbose()) {
-                    var elapsed = process.hrtime(start);
+                    var elapsed = this.environment.hrtime(start);
                     var seconds = elapsed[0]
                     var nanoseconds = elapsed[1];
                     var elapsedMs = ((1e9 * seconds) + nanoseconds)/1000000.0;
@@ -989,13 +1030,7 @@ namespace ts.server {
                         leader = "Async elapsed time (in milliseconds)";
                     }
                     this.logger.msg(leader + ": " + elapsedMs.toFixed(4).toString(), "Perf");
-                }
-                if (response) {
-                    this.output(response, request.command, request.seq);
-                }
-                else if (responseRequired) {
-                    this.output(undefined, request.command, request.seq, "No content available.");
-                }
+                }                
             } catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions

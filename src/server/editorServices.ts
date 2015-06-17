@@ -2,7 +2,6 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="session.ts" />
-/// <reference path="node.d.ts" />
 
 namespace ts.server {
     export interface Logger {
@@ -28,7 +27,7 @@ namespace ts.server {
         });
     }
 
-    class ScriptInfo {
+    export class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
@@ -36,7 +35,7 @@ namespace ts.server {
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
-            this.svc = ScriptVersionCache.fromString(content);
+            this.svc = ScriptVersionCache.fromString(host, content);
         }
 
         setFormatOptions(formatOptions: protocol.FormatOptions): void {
@@ -80,7 +79,7 @@ namespace ts.server {
         }
     }
 
-    class LSHost implements ts.LanguageServiceHost {
+    export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
@@ -273,7 +272,7 @@ namespace ts.server {
         }
     }
 
-    interface ProjectOptions {
+    export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
@@ -376,7 +375,7 @@ namespace ts.server {
         }
     }
 
-    interface ProjectOpenResult {
+    export interface ProjectOpenResult {
         success?: boolean;
         errorMsg?: string;
         project?: Project;
@@ -392,11 +391,11 @@ namespace ts.server {
         return copiedList;
     }
 
-    interface ProjectServiceEventHandler {
+    export interface ProjectServiceEventHandler {
         (eventName: string, project: Project, fileName: string): void;
     }
 
-    interface HostConfiguration {
+    export interface HostConfiguration {
         formatCodeOptions: ts.FormatCodeOptions;
         hostInfo: string;
     }
@@ -916,7 +915,7 @@ namespace ts.server {
                 return rawConfig.error;
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, ts.sys, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }
@@ -953,7 +952,7 @@ namespace ts.server {
 
     }
 
-    class CompilerService {
+    export class CompilerService {
         host: LSHost;
         languageService: ts.LanguageService;
         classifier: ts.Classifier;
@@ -985,7 +984,7 @@ namespace ts.server {
         static defaultFormatCodeOptions: ts.FormatCodeOptions = {
             IndentSize: 4,
             TabSize: 4,
-            NewLineCharacter: ts.sys.newLine,
+            NewLineCharacter: ts.sys ? ts.sys.newLine : '\n',
             ConvertTabsToSpaces: true,
             InsertSpaceAfterCommaDelimiter: true,
             InsertSpaceAfterSemicolonInForStatements: true,
@@ -999,7 +998,7 @@ namespace ts.server {
 
     }
 
-    interface LineCollection {
+    export interface LineCollection {
         charCount(): number;
         lineCount(): number;
         isLeaf(): boolean;
@@ -1013,7 +1012,7 @@ namespace ts.server {
         leaf?: LineLeaf;
     }
 
-    enum CharRangeSection {
+    export enum CharRangeSection {
         PreStart,
         Start,
         Entire,
@@ -1022,7 +1021,7 @@ namespace ts.server {
         PostEnd
     }
 
-    interface ILineIndexWalker {
+    export interface ILineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -1248,7 +1247,7 @@ namespace ts.server {
     }
 
     // text change information
-    class TextChange {
+    export class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
 
@@ -1263,6 +1262,7 @@ namespace ts.server {
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
         private currentVersion = 0;
+        private host: System;
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;
@@ -1290,7 +1290,7 @@ namespace ts.server {
         }
 
         reloadFromFile(filename: string, cb?: () => any) {
-            var content = ts.sys.readFile(filename);
+            var content = this.host.readFile(filename);
             this.reload(content);
             if (cb)
                 cb();
@@ -1360,10 +1360,11 @@ namespace ts.server {
             }
         }
 
-        static fromString(script: string) {
+        static fromString(host: System, script: string) {
             var svc = new ScriptVersionCache();
             var snap = new LineIndexSnapshot(0, svc);
             svc.versions[svc.currentVersion] = snap;
+            svc.host = host;
             snap.index = new LineIndex();
             var lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
@@ -1371,7 +1372,7 @@ namespace ts.server {
         }
     }
 
-    class LineIndexSnapshot implements ts.IScriptSnapshot {
+    export class LineIndexSnapshot implements ts.IScriptSnapshot {
         index: LineIndex;
         changesSincePreviousVersion: TextChange[] = [];
 
@@ -1605,7 +1606,7 @@ namespace ts.server {
         }
     }
 
-    class LineNode implements LineCollection {
+    export class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
         children: LineCollection[] = [];
@@ -1891,7 +1892,7 @@ namespace ts.server {
         }
     }
 
-    class LineLeaf implements LineCollection {
+    export class LineLeaf implements LineCollection {
         udata: any;
 
         constructor(public text: string) {

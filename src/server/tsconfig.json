@@ -12,6 +12,7 @@
         "editorServices.ts",
         "protocol.d.ts",
         "server.ts",
+        "nodeimpl.ts",
         "session.ts"
     ]
 }
