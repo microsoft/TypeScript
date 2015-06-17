@@ -31,7 +31,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 
 ## Building
 
-In order to build the TypeScript compiler, ensure that you have [Git](http://git-scm.com/downloads) and [Node.js](http://nodejs.org/) installed. Note that you need to have autocrlf off as we track whitespace changes (`git config --global core.autocrlf false`).
+In order to build the TypeScript compiler, ensure that you have [Git](http://git-scm.com/downloads) and [Node.js](http://nodejs.org/) installed.
 
 Clone a copy of the repo:
 

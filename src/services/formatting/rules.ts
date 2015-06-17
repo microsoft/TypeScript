@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
             let o: ts.Map<any> = <any>this;
@@ -193,7 +193,7 @@ module ts.formatting {
         // Insert space after function keyword for anonymous functions
         public SpaceAfterAnonymousFunctionKeyword: Rule;
         public NoSpaceAfterAnonymousFunctionKeyword: Rule;
-        
+
         // Insert space after @ in decorator
         public SpaceBeforeAt: Rule;
         public NoSpaceAfterAt: Rule;
@@ -470,8 +470,9 @@ module ts.formatting {
             switch (context.contextNode.kind) {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.TypePredicate:
                     return true;
-                
+
                 // equals in binding elements: function foo([[x, y] = [1, 2]])
                 case SyntaxKind.BindingElement:
                 // equals in type X = ...
@@ -691,7 +692,7 @@ module ts.formatting {
         }
 
         static IsNotFormatOnEnter(context: FormattingContext): boolean {
-            return context.formattingRequestKind != FormattingRequestKind.FormatOnEnter;
+            return context.formattingRequestKind !== FormattingRequestKind.FormatOnEnter;
         }
 
         static IsModuleDeclContext(context: FormattingContext): boolean {

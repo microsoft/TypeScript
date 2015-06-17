@@ -1,7 +1,7 @@
 /// <reference path="references.ts"/>
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export class FormattingContext {
         public currentTokenSpan: TextRangeWithKind;
         public nextTokenSpan: TextRangeWithKind;
@@ -59,7 +59,7 @@ module ts.formatting {
             if (this.tokensAreOnSameLine === undefined) {
                 let startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.pos).line;
                 let endLine = this.sourceFile.getLineAndCharacterOfPosition(this.nextTokenSpan.pos).line;
-                this.tokensAreOnSameLine = (startLine == endLine);
+                this.tokensAreOnSameLine = (startLine === endLine);
             }
 
             return this.tokensAreOnSameLine;
@@ -84,7 +84,7 @@ module ts.formatting {
         private NodeIsOnOneLine(node: Node): boolean {
             let startLine = this.sourceFile.getLineAndCharacterOfPosition(node.getStart(this.sourceFile)).line;
             let endLine = this.sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
-            return startLine == endLine;
+            return startLine === endLine;
         }
 
         private BlockIsOnOneLine(node: Node): boolean {

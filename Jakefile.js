@@ -129,7 +129,8 @@ var harnessSources = [
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
     "versionCache.ts",
-    "convertToBase64.ts"
+    "convertToBase64.ts",
+    "transpile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -148,7 +149,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -504,9 +505,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, testConfigFile) {
+function writeTestConfigFile(tests, light, testConfigFile) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
+    var testConfigContents = JSON.stringify({ test: [tests], light: light });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -522,13 +523,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
     host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -571,12 +573,13 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
     port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     tests = tests ? tests : '';

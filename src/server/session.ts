@@ -4,7 +4,7 @@
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
 
-module ts.server {
+namespace ts.server {
     var spaceCache:string[] = [];
 
     interface StackTraceError extends Error {
@@ -31,7 +31,7 @@ module ts.server {
         if (a < b) {
             return -1;
         }
-        else if (a == b) {
+        else if (a === b) {
             return 0;
         }
         else return 1;
@@ -43,7 +43,7 @@ module ts.server {
         }
         else if (a.file == b.file) {
             var n = compareNumber(a.start.line, b.start.line);
-            if (n == 0) {
+            if (n === 0) {
                 return compareNumber(a.start.offset, b.start.offset);
             }
             else return n;
@@ -129,7 +129,7 @@ module ts.server {
             if (eventName == "context") {
                 this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
                 this.updateErrorCheck([{ fileName, project }], this.changeSeq,
-                    (n) => n == this.changeSeq, 100);
+                    (n) => n === this.changeSeq, 100);
             }
         }
 
@@ -546,7 +546,7 @@ module ts.server {
             // getFormattingEditsAfterKeytroke either empty or pertaining
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
-            if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, position))) {
+            if ((key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
                 var scriptInfo = compilerService.host.getScriptInfo(file);
                 if (scriptInfo) {
                     var lineInfo = scriptInfo.getLineInfo(line);
@@ -622,7 +622,7 @@ module ts.server {
             }
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
-                if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) == 0)) {
+                if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                     result.push(entry);
                 }
                 return result;
@@ -689,7 +689,7 @@ module ts.server {
             }, []);
 
             if (checkList.length > 0) {
-                this.updateErrorCheck(checkList, this.changeSeq,(n) => n == this.changeSeq, delay)
+                this.updateErrorCheck(checkList, this.changeSeq,(n) => n === this.changeSeq, delay)
             }
         }
 
@@ -704,7 +704,7 @@ module ts.server {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
                 }
-                this.updateProjectStructure(this.changeSeq, (n) => n == this.changeSeq);
+                this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
             }
         }
 

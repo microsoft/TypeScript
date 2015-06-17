@@ -5,7 +5,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1129: Statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: '=' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1109: Expression expected.
@@ -129,7 +129,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
     
                      case  = bfs.STATEMENTS(4);
                      ~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
                              ~~~
 !!! error TS2304: Cannot find name 'bfs'.
                     if (retValue != 0) {

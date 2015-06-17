@@ -1,7 +1,7 @@
 /// <reference path="node.d.ts" />
 /// <reference path="session.ts" />
 
-module ts.server {
+namespace ts.server {
     var nodeproto: typeof NodeJS._debugger = require('_debugger');
     var readline: NodeJS.ReadLine = require('readline');
     var path: NodeJS.Path = require('path');
@@ -123,7 +123,7 @@ module ts.server {
                 if (err) {
                     watchedFile.callback(watchedFile.fileName);
                 }
-                else if (watchedFile.mtime.getTime() != stats.mtime.getTime()) {
+                else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
                     watchedFile.callback(watchedFile.fileName);
                 }
@@ -138,7 +138,7 @@ module ts.server {
                 var count = 0;
                 var nextToCheck = this.nextFileToCheck;
                 var firstCheck = -1;
-                while ((count < this.chunkSize) && (nextToCheck != firstCheck)) {
+                while ((count < this.chunkSize) && (nextToCheck !== firstCheck)) {
                     this.poll(nextToCheck);
                     if (firstCheck < 0) {
                         firstCheck = nextToCheck;

@@ -671,13 +671,13 @@
         "category": "Error",
         "code": 1213
     },
-    "Type expected. '{0}' is a reserved word in strict mode": {
+    "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "Invalid use of '{0}'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1215
-    },
-    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
-        "category": "Error",
-        "code": 1216
     },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
@@ -703,6 +703,55 @@
         "category": "Error",
         "code": 1223
     },
+    "Signature '{0}' must have a type predicate.": {
+        "category": "Error",
+        "code": 1224
+    },
+    "Cannot find parameter '{0}'.": {
+        "category": "Error",
+        "code": 1225
+    },
+    "Type predicate '{0}' is not assignable to '{1}'.": {
+        "category": "Error",
+        "code": 1226
+    },
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
+        "category": "Error",
+        "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
+    },
+    "A type predicate cannot reference a rest parameter.": {
+        "category": "Error",
+        "code": 1229
+    },
+    "A type predicate cannot reference element '{0}' in a binding pattern.": {
+        "category": "Error",
+        "code": 1230
+    },
+    "An export assignment can only be used in a module.": {
+        "category": "Error",
+        "code": 1231
+    },
+    "An import declaration can only be used in a namespace or module.": {
+        "category": "Error",
+        "code": 1232
+    },
+    "An export declaration can only be used in a module.": {
+        "category": "Error",
+        "code": 1233
+    },
+    "An ambient module declaration is only allowed at the top level in a file.": {
+        "category": "Error",
+        "code": 1234
+    },
+    "A namespace declaration is only allowed in a namespace or module.": {
+        "category": "Error",
+        "code": 1235
+    },
+
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1476,9 +1525,29 @@
         "category": "Error",
         "code": 2505
     },
-    "Only an ambient class can be merged with an interface.": {
+    "'{0}' is referenced directly or indirectly in its own base expression.": {
         "category": "Error",
         "code": 2506
+    },
+    "Type '{0}' is not a constructor function type.": {
+        "category": "Error",
+        "code": 2507
+    },
+    "No base constructor has the specified number of type arguments.": {
+        "category": "Error",
+        "code": 2508
+    },
+    "Base constructor return type '{0}' is not a class or interface type.": {
+        "category": "Error",
+        "code": 2509
+    },
+    "Base constructors must all have the same return type.": {
+        "category": "Error",
+        "code": 2510
+    },
+    "Only an ambient class can be merged with an interface.": {
+        "category": "Error",
+        "code": 2511
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
