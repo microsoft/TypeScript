@@ -204,7 +204,7 @@ namespace ts {
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
         {
-            name: "emitModuleDepedencies",
+            name: "emitModuleDependencies",
             type: "boolean",
             experimental: true,
             description: Diagnostics.Enables_experimental_support_for_emitting_moduleDependencies
