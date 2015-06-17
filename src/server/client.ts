@@ -219,7 +219,7 @@ namespace ts.server {
 
             var request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             var response = this.processResponse<protocol.CompletionDetailsResponse>(request);
-            Debug.assert(response.body.length == 1, "Unexpected length of completion details response body.");
+            Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
             return response.body[0];
         }
 
@@ -429,8 +429,8 @@ namespace ts.server {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.fileName !== fileName ||
                 this.lastRenameEntry.position !== position ||
-                this.lastRenameEntry.findInStrings != findInStrings ||
-                this.lastRenameEntry.findInComments != findInComments) {
+                this.lastRenameEntry.findInStrings !== findInStrings ||
+                this.lastRenameEntry.findInComments !== findInComments) {
                 this.getRenameInfo(fileName, position, findInStrings, findInComments);
             }
 

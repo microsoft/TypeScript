@@ -234,6 +234,7 @@ namespace ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            // TODO: should this be '==='?
             if (encoded == null) {
                 return null;
             }
@@ -283,6 +284,7 @@ namespace ts {
 
         public getCompilationSettings(): CompilerOptions {
             var settingsJson = this.shimHost.getCompilationSettings();
+            // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;

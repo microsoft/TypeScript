@@ -6044,7 +6044,8 @@ namespace ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(declaration) == ModuleInstanceState.Instantiated;
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && 
+                            getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated;
                     });
                 }
             }

@@ -831,6 +831,7 @@ module FourSlash {
                 if (expectedText !== undefined) {
                     assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
                 }
+                // TODO: should be '==='?
                 if (expectedDocumentation != undefined) {
                     assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, this.messageAtLastKnownMarker("quick info doc comment"));
                 }
@@ -838,6 +839,7 @@ module FourSlash {
                 if (expectedText !== undefined) {
                     assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
                 }
+                // TODO: should be '==='?
                 if (expectedDocumentation != undefined) {
                     assert.equal(actualQuickInfoDocumentation, expectedDocumentation, assertionMessage("quick info doc"));
                 }
@@ -1820,7 +1822,7 @@ module FourSlash {
         }
 
         private verifyProjectInfo(expected: string[]) {
-            if (this.testType == FourSlashTestType.Server) {
+            if (this.testType === FourSlashTestType.Server) {
                 let actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(
                     this.activeFile.fileName,
                     /* needFileNameList */ true
@@ -1937,7 +1939,7 @@ module FourSlash {
                 }
             }
 
-            if (expected != actual) {
+            if (expected !== actual) {
                 this.raiseError('verifyNavigationItemsCount failed - found: ' + actual + ' navigation items, expected: ' + expected + '.');
             }
         }
@@ -1984,7 +1986,7 @@ module FourSlash {
             var items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             var actual = this.getNavigationBarItemsCount(items);
 
-            if (expected != actual) {
+            if (expected !== actual) {
                 this.raiseError('verifyGetScriptLexicalStructureListCount failed - found: ' + actual + ' navigation items, expected: ' + expected + '.');
             }
         }
@@ -2402,6 +2404,7 @@ module FourSlash {
                         globalOptions[match[1]] = match[2];
                     }
                 }
+            // TODO: should be '==='?
             } else if (line == '' || lineLength === 0) {
                 // Previously blank lines between fourslash content caused it to be considered as 2 files,
                 // Remove this behavior since it just causes errors now

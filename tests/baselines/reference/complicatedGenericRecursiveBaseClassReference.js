@@ -9,8 +9,7 @@ class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var S18 = (function (_super) {
     __extends(S18, _super);

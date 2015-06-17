@@ -934,7 +934,7 @@ namespace ts {
                 error(Diagnostics.Unexpected_end_of_text);
                 isInvalidExtendedEscape = true;
             }
-            else if (text.charCodeAt(pos) == CharacterCodes.closeBrace) {
+            else if (text.charCodeAt(pos) === CharacterCodes.closeBrace) {
                 // Only swallow the following character up if it's a '}'.
                 pos++;
             }

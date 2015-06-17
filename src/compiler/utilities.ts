@@ -42,7 +42,7 @@ namespace ts {
     // Pool writers to avoid needing to allocate them for every symbol we write.
     let stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
+        if (stringWriters.length === 0) {
             let str = "";
 
             let writeText: (text: string) => void = text => str += text;
