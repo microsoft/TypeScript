@@ -1559,13 +1559,17 @@
         "category": "Error",
         "code": 2510
     },
-    "Cannot create an instance of the abstract class '{0}'": {
+    "Cannot create an instance of the abstract class '{0}'.": {
         "category": "Error",
         "code": 2511
     },
     "All overload signatures must match with respect to modifier '{0}'.": {
         "category": "Error",
         "code": 2512
+    },
+    "Abstract member function '{0}' on type '{1}' cannot be called via super expression.": {
+        "category": "Error",
+        "code": 2513
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -6714,8 +6714,18 @@ namespace ts {
                 // - In a static member function or static member accessor
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
-                if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                    error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                if (left.kind === SyntaxKind.SuperKeyword) {
+                    if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
+                        error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                    }
+                    
+                    // Abstract methods cannot be accessed through super property accesses. Eg:
+                    //  class A { abstract foo(); }
+                    //  class B extends A { bar() { super.foo();} }
+                    // is illegal.
+                    if (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Abstract) {
+                        error(right, Diagnostics.Abstract_member_function_0_on_type_1_cannot_be_called_via_super_expression, declarationNameToString(right), typeToString(type));
+                    }
                 }
                 else {
                     checkClassPropertyAccess(node, left, type, prop);
