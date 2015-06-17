@@ -7632,12 +7632,10 @@ namespace ts {
             if (globalPromiseType !== emptyObjectType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType);
-                if (promisedType !== unknownType) {
-                    return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
-                }
+                return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
             }
             
-            return undefined;
+            return emptyObjectType;
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
@@ -7678,7 +7676,7 @@ namespace ts {
                         if (isAsync) {
                             // For an async function, the return type will not be void, but rather a Promise for void.
                             let promiseType = createPromiseType(voidType);
-                            if (!promiseType) {
+                            if (promiseType === emptyObjectType) {
                                 error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
                                 return unknownType;
                             }
@@ -7688,7 +7686,7 @@ namespace ts {
                         else {
                             return voidType;
                         }
-		    }	
+                    }	
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
                 // Otherwise we require the yield/return expressions to have a best common supertype.
@@ -7718,7 +7716,7 @@ namespace ts {
                 // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
                 // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
                 let promiseType = createPromiseType(widenedType);
-                if (!promiseType) {
+                if (promiseType === emptyObjectType) {
                     error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
                     return unknownType;
                 }
@@ -9556,7 +9554,7 @@ namespace ts {
                 let promisedType = getPromisedType(type);
                 if (promisedType === undefined) {
                     // The type was not a PromiseLike, so it could not be unwrapped any further.
-                    // As long as the type does not have a known callable "then" property, then it is 
+                    // As long as the type does not have a callable "then" property, then it is 
                     // safe to return the type; otherwise, an error will have been reported in
                     // the call to checkNonThenableType and we will return unknownType.
                     //
@@ -9570,11 +9568,10 @@ namespace ts {
                     // of a runtime problem. If the user wants to return this value from an async 
                     // function, they would need to wrap it in some other value. If they want it to
                     // be treated as a promise, they can cast to <any>.
-                    if (checkNonThenableType(type, location, message)) {
-                        break;
+                    if (!checkNonThenableType(type, location, message)) {
+                        type = unknownType;
                     }
                     
-                    type = unknownType;
                     break;
                 }
                 
