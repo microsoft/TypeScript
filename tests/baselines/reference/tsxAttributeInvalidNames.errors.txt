@@ -1,0 +1,25 @@
+tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx(9,8): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx(10,8): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx(10,22): error TS1005: '</' expected.
+tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx(10,22): error TS17002: Expected corresponding JSX closing tag for 'test1'.
+
+
+==== tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx (4 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		test1: { "data-foo"?: string };
+    	}
+    }
+    
+    // Invalid names
+    <test1 32data={32} />;
+           ~~
+!!! error TS1003: Identifier expected.
+    <test1 -data={32} />;
+           ~
+!!! error TS1003: Identifier expected.
+                         
+!!! error TS1005: '</' expected.
+                         
+!!! error TS17002: Expected corresponding JSX closing tag for 'test1'.

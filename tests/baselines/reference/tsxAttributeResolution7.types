@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsx/tsxAttributeResolution7.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		test1: { "data-foo"?: string };
+>test1 : { "data-foo"?: string; }
+	}
+}
+
+// Error
+<test1 data-foo={32} />;
+><test1 data-foo={32} /> : JSX.Element
+>test1 : any
+>data-foo : any
+
+// OK
+<test1 data-foo={'32'} />;
+><test1 data-foo={'32'} /> : JSX.Element
+>test1 : any
+>data-foo : any
+
+<test1 data-bar={'32'} />;
+><test1 data-bar={'32'} /> : JSX.Element
+>test1 : any
+>data-bar : any
+
+<test1 data-bar={32} />;
+><test1 data-bar={32} /> : JSX.Element
+>test1 : any
+>data-bar : any
+

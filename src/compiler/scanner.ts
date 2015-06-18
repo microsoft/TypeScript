@@ -1506,18 +1506,17 @@ module ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (token === SyntaxKind.Identifier) {
-                let first = true;
+                let firstCharPosition = pos;
                 while (pos < end) {
                     let ch = text.charCodeAt(pos);
-                    if (ch === CharacterCodes.minus || (first ? isIdentifierStart(ch) : isIdentifierPart(ch))) {
-                        tokenValue += String.fromCharCode(ch);
+                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch) : isIdentifierPart(ch))) {
                         pos++;
                     } 
                     else {
                         break;
                     }
-                    first = false;
                 }
+                tokenValue += text.substr(firstCharPosition, pos - firstCharPosition - 1);
             }
             return token;
         }
