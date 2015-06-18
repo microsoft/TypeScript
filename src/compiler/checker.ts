@@ -2808,7 +2808,7 @@ namespace ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
-        function resolveClassOrInterfaceMembers(type: InterfaceType): void {
+        function resolveClassOrInterfaceMembers(type: InterfaceType, filter?: ResolveFilter): void {
             let target = resolveDeclaredMembers(type);
             let members = target.symbol.members;
             let callSignatures = target.declaredCallSignatures;
@@ -2818,15 +2818,34 @@ namespace ts {
             let baseTypes = getBaseTypes(target);
             if (baseTypes.length) {
                 members = createSymbolTable(target.declaredProperties);
+                let filter = <ResolveFilter>{ excludeInherited: {}, excludeTemp: {} };
                 for (let baseType of baseTypes) {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
-                    callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
-                    constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
+                    callSignatures = addSignatures(callSignatures, getSignaturesOfObjectType(baseType, SignatureKind.Call), filter);
+                    constructSignatures = addSignatures(constructSignatures, getSignaturesOfObjectType(baseType, SignatureKind.Construct), filter);
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
                     numberIndexType = numberIndexType || getIndexTypeOfType(baseType, IndexKind.Number);
+                    for (let symbolId in filter.excludeTemp) {
+                        filter.excludeInherited[symbolId] = true;
+                    }
+                    filter.excludeTemp = {};
                 }
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+        }
+
+        function addSignatures(signatures: Signature[], inherited: Signature[], filter: ResolveFilter) {
+            let add: Signature[] = [];
+            let symbolId: number
+            for (let signature of inherited) {
+                symbolId = signature.declaration.parent.symbol.id;
+                if (filter.excludeInherited[symbolId]) {
+                    continue;
+                }
+                filter.excludeTemp[symbolId] = true;
+                add.push(signature)
+            }
+            return add.length ? signatures.concat(add) : signatures;
         }
 
         function resolveTypeReferenceMembers(type: TypeReference): void {
@@ -2837,14 +2856,22 @@ namespace ts {
             let constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
             let stringIndexType = target.declaredStringIndexType ? instantiateType(target.declaredStringIndexType, mapper) : undefined;
             let numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
-            forEach(getBaseTypes(target), baseType => {
-                let instantiatedBaseType = instantiateType(baseType, mapper);
-                addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
-                callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
-                constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
-                numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
-            });
+            let baseTypes = getBaseTypes(target);
+            if (baseTypes.length) {
+                let filter = <ResolveFilter>{ excludeInherited: {}, excludeTemp: {} };
+                for (let baseType of baseTypes) {
+                    let instantiatedBaseType = instantiateType(baseType, mapper);
+                    addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
+                    callSignatures = addSignatures(callSignatures, getSignaturesOfObjectType(instantiatedBaseType, SignatureKind.Call), filter);
+                    constructSignatures = addSignatures(constructSignatures, getSignaturesOfObjectType(instantiatedBaseType, SignatureKind.Construct), filter);
+                    stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
+                    numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
+                    for (let symbolId in filter.excludeTemp) {
+                        filter.excludeInherited[symbolId] = true;
+                    }
+                    filter.excludeTemp = {};
+                }
+            }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
@@ -3163,6 +3190,14 @@ namespace ts {
                 return getPropertyOfUnionType(<UnionType>type, name);
             }
             return undefined;
+        }
+
+        function getSignaturesOfObjectType(type: Type, kind: SignatureKind): Signature[] {
+            let resolved = <ResolvedType>type;
+            if (!resolved.members) {
+                resolveClassOrInterfaceMembers(<InterfaceType>type);
+            }
+            return kind === SignatureKind.Call ? resolved.callSignatures : resolved.constructSignatures;
         }
 
         function getSignaturesOfObjectOrUnionType(type: Type, kind: SignatureKind): Signature[] {

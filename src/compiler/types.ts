@@ -1719,6 +1719,12 @@ namespace ts {
         numberIndexType?: Type;            // Numeric index type
     }
 
+    /* @internal */
+    export interface ResolveFilter {
+        excludeInherited: { [symbolId: number]: boolean };
+        excludeTemp: { [symbolId: number]: boolean };
+    }
+
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
@@ -1883,7 +1889,7 @@ namespace ts {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-	
+
     export interface LineAndCharacter {
         line: number;
         /*
