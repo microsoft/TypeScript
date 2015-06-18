@@ -6830,7 +6830,7 @@ module ts {
             }
             if (signatures.length === 0) {
                 // We found no signatures at all, which is an error
-                error(node.tagName, Diagnostics.JSX_element_0_is_not_a_constructor_function_or_factory_function, getTextOfNode(node.tagName));
+                error(node.tagName, Diagnostics.JSX_element_0_is_not_a_constructor_function, getTextOfNode(node.tagName));
                 return undefined;
             }
 
@@ -6838,7 +6838,7 @@ module ts {
                 // Check that the constructor/factory returns an object type
                 var returnType = getUnionType(signatures.map(s => getReturnTypeOfSignature(s)));
                 if (!isTypeAny(returnType) && !(returnType.flags & TypeFlags.ObjectType)) {
-                    error(node.tagName, Diagnostics.The_return_type_of_a_JSX_element_constructor_or_factory_function_must_return_an_object_type);
+                    error(node.tagName, Diagnostics.The_return_type_of_a_JSX_element_constructor_must_return_an_object_type);
                     return undefined;
                 }
 
@@ -6846,7 +6846,7 @@ module ts {
                 // TODO: Move this to a 'check' function
                 var elemClassType = getJsxGlobalElementClassType();
                 if (elemClassType) {
-                    checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_0_is_not_a_constructor_function_or_factory_function_for_JSX_elements);
+                    checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_0_is_not_a_constructor_function_for_JSX_elements);
                 }
 
                 return returnType;

@@ -22,7 +22,7 @@ module ts {
         reScanLessThanSlashToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
-        reScanJsxIdentifier(): SyntaxKind;
+        scanJsxIdentifier(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
         scan(): SyntaxKind;
@@ -648,7 +648,7 @@ module ts {
             reScanLessThanSlashToken,
             reScanSlashToken,
             reScanTemplateToken,
-            reScanJsxIdentifier,
+            scanJsxIdentifier,
             reScanJsxToken,
             scanJsxToken,
             scan,
@@ -1513,7 +1513,7 @@ module ts {
 
         // Scans a JSX identifier; these differ from normal identifiers in that
         // they allow dashes
-        function reScanJsxIdentifier(): SyntaxKind {
+        function scanJsxIdentifier(): SyntaxKind {
             if (token === SyntaxKind.Identifier) {
                 let first = true;
                 while (pos < end) {

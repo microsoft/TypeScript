@@ -1510,7 +1510,7 @@
         "category": "Error",
         "code": 2600
     },
-    "The return type of a JSX element constructor or factory function must return an object type.": {
+    "The return type of a JSX element constructor must return an object type.": {
         "category": "Error",
         "code": 2601
     },
@@ -1522,11 +1522,11 @@
         "category": "Error",
         "code": 2603
     },
-    "JSX element '{0}' is not a constructor function or factory function.": {
+    "JSX element '{0}' is not a constructor function.": {
         "category": "Error",
         "code": 2604
     },
-    "JSX element '{0}' is not a constructor function or factory function for JSX elements.": {
+    "JSX element '{0}' is not a constructor function for JSX elements.": {
         "category": "Error",
         "code": 2605
     },

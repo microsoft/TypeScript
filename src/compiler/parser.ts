@@ -842,8 +842,8 @@ module ts {
             return token = scanner.reScanTemplateToken();
         }
 
-        function reScanJsxIdentifier(): SyntaxKind {
-            return token = scanner.reScanJsxIdentifier();
+        function scanJsxIdentifier(): SyntaxKind {
+            return token = scanner.scanJsxIdentifier();
         }
         
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
@@ -1322,6 +1322,7 @@ module ts {
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JsxAttributes:
+                    // For error recovery, include } here (otherwise an over-braced {expr}} will close the surrounding statement block and mess up the entire file).
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JsxChildren:
                     return token === SyntaxKind.LessThanSlashToken;
@@ -3369,10 +3370,10 @@ module ts {
         }
         
         function parseJsxElementName(): EntityName {
-            reScanJsxIdentifier();
+            scanJsxIdentifier();
             let elementName: EntityName = parseIdentifier();
             while (parseOptional(SyntaxKind.DotToken)) {
-                reScanJsxIdentifier();
+                scanJsxIdentifier();
                 let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
                 node.left = elementName;
                 node.right = parseIdentifierName();
@@ -3409,7 +3410,7 @@ module ts {
             if (token === SyntaxKind.OpenBraceToken) {
                 return parseJsxSpreadAttribute();
             }
-            reScanJsxIdentifier();
+            scanJsxIdentifier();
             let node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
             node.name = parseIdentifierName();
             if (parseOptional(SyntaxKind.EqualsToken)) {
