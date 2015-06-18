@@ -683,16 +683,40 @@ module ts.server {
             let { configFileName, fileNameList } = this.getProjectInfo(fileName, true);
             fileNameList = fileNameList.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
 
-            let project = this.projectService.getProjectForFile(ts.normalizePath(fileName));
+            // Sort the file name list to make the recently touched files come first
+            let highPriorityFiles: string[] = [];
+            let mediumPriorityFiles: string[] = [];
+            let lowPriorityFiles: string[] = [];
+            let veryLowPriorityFiles: string[] = [];
+            let normalizedFilePath = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(normalizedFilePath);
+            this.logger.info("fileName: " + fileName);
             for (let oneFile of fileNameList) {
-                let info = this.projectService.getScriptInfo(oneFile);
-                if (!info || !info.isOpen)
-                    this.projectService.openFile(oneFile, true);
+                if (oneFile == normalizedFilePath)
+                    highPriorityFiles.push(oneFile);
+                else {
+                    let info = this.projectService.getScriptInfo(oneFile);
+                    if (!info || !info.isOpen) {
+                        if (oneFile.indexOf(".d.ts") > 0)
+                            veryLowPriorityFiles.push(oneFile);
+                        else
+                            lowPriorityFiles.push(oneFile);
+                        this.projectService.openFile(oneFile, true);
+                    }
+                    else
+                        mediumPriorityFiles.push(oneFile);
+                }
             }
+            this.logger.info("highPriorityFiles: " + highPriorityFiles);
+            this.logger.info("mediumPriorityFiles: " + mediumPriorityFiles);
+            this.logger.info("lowPriorityFiles: " + lowPriorityFiles);
+            this.logger.info("veryLowPriorityFiles: " + veryLowPriorityFiles);
+
+            fileNameList = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
+
             if (fileNameList.length > 1) {
                 let checkList = fileNameList.map<PendingErrorCheck>((fileName: string) => { 
                     let normalizedFileName = ts.normalizePath(fileName);
-                    this.logger.info(normalizedFileName);
                     return { fileName: normalizedFileName, project };
                 });
                 this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay);
