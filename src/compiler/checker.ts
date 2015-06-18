@@ -1402,15 +1402,8 @@ namespace ts {
              * for the name of the symbol if it is available to match how the user inputted the name.
              */
             function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
-                if (symbol.declarations && symbol.declarations.length > 0) {
-                    let declaration = symbol.declarations[0];
-                    if (declaration.name) {
-                        writer.writeSymbol(declarationNameToString(declaration.name), symbol);
-                        return;
-                    }
-                }
-
-                writer.writeSymbol(symbol.name, symbol);
+                let name = symbol.declarations && symbol.declarations.length > 0 ? declarationToString(symbol.declarations[0]) : symbol.name;
+                writer.writeSymbol(name, symbol);
             }
 
             /**
@@ -10565,9 +10558,8 @@ namespace ts {
         }
 
         function checkClassExpression(node: ClassExpression): Type {
-            grammarErrorOnNode(node, Diagnostics.class_expressions_are_not_currently_supported);
-            forEach(node.members, checkSourceElement);
-            return unknownType;
+            checkClassLikeDeclaration(node);
+            return getTypeOfSymbol(getSymbolOfNode(node));
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
@@ -10575,7 +10567,10 @@ namespace ts {
             if (!node.name && !(node.flags & NodeFlags.Default)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
+            checkClassLikeDeclaration(node);
+        }
 
+        function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
             checkGrammarClassDeclarationHeritageClauses(node);
             checkDecorators(node);
             if (node.name) {
@@ -12921,7 +12916,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarClassDeclarationHeritageClauses(node: ClassDeclaration) {
+        function checkGrammarClassDeclarationHeritageClauses(node: ClassLikeDeclaration) {
             let seenExtendsClause = false;
             let seenImplementsClause = false;
 
