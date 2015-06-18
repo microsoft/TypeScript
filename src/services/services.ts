@@ -1813,7 +1813,7 @@ namespace ts {
 
         var program = createProgram([inputFileName], options, compilerHost);
 
-        addRange(/*to*/ diagnostics, /*from*/ sourceFile.parseDiagnostics);
+        addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
 
         // Emit
