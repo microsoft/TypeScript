@@ -104,11 +104,13 @@ namespace ts {
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile): Diagnostic[] {
-        let diagnostics = program.getSyntacticDiagnostics(sourceFile).concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics(sourceFile));
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[] {
+        let diagnostics = program.getSyntacticDiagnostics(sourceFile, cancellationToken).concat(
+                          program.getGlobalDiagnostics(cancellationToken)).concat(
+                          program.getSemanticDiagnostics(sourceFile, cancellationToken));
 
         if (program.getCompilerOptions().declaration) {
-            diagnostics.concat(program.getDeclarationDiagnostics(sourceFile));
+            diagnostics.concat(program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
         return sortAndDeduplicateDiagnostics(diagnostics);
@@ -230,10 +232,15 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback): EmitResult {
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationTokenObject): EmitResult {
+            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
+        }
+
+        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationTokenObject): EmitResult {
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
-            // immediately bail out.
-            if (options.noEmitOnError && getPreEmitDiagnostics(this).length > 0) {
+            // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we 
+            // get any preEmit diagnostics, not just the ones 
+            if (options.noEmitOnError && getPreEmitDiagnostics(program, /*sourceFile:*/ undefined, cancellationToken).length > 0) {
                 return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
             }
 
@@ -262,53 +269,79 @@ namespace ts {
             return filesByName.get(fileName);
         }
 
-        function getDiagnosticsHelper(sourceFile: SourceFile, getDiagnostics: (sourceFile: SourceFile) => Diagnostic[]): Diagnostic[] {
+        function getDiagnosticsHelper(
+                sourceFile: SourceFile,
+                getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationTokenObject) => Diagnostic[],
+                cancellationToken: CancellationTokenObject): Diagnostic[] {
             if (sourceFile) {
-                return getDiagnostics(sourceFile);
+                return getDiagnostics(sourceFile, cancellationToken);
             }
 
             let allDiagnostics: Diagnostic[] = [];
             forEach(program.getSourceFiles(), sourceFile => {
-                addRange(allDiagnostics, getDiagnostics(sourceFile));
+                if (cancellationToken) {
+                    cancellationToken.throwIfCancellationRequested();
+                }
+                addRange(allDiagnostics, getDiagnostics(sourceFile, cancellationToken));
             });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
-        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile);
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
+        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile);
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
             return sourceFile.parseDiagnostics;
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
-            let typeChecker = getDiagnosticsProducingTypeChecker();
+        function runWithCancellationToken<T>(func: () => T): T {
+            try {
+                return func();
+            }
+            catch (e) {
+                if (e instanceof OperationCanceledException) {
+                    // We were canceled while performing the operation.  Because our type checker 
+                    // might be a bad state, we need to throw it away.
+                    noDiagnosticsTypeChecker = undefined;
+                    diagnosticsProducingTypeChecker = undefined;
+                }
 
-            Debug.assert(!!sourceFile.bindDiagnostics);
-            let bindDiagnostics = sourceFile.bindDiagnostics;
-            let checkDiagnostics = typeChecker.getDiagnostics(sourceFile);
-            let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
-
-            return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+                throw e;
+            }
         }
 
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
-            if (!isDeclarationFile(sourceFile)) {
-                let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
-                // Don't actually write any files since we're just getting diagnostics.
-                var writeFile: WriteFileCallback = () => { };
-                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
-            }
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+            return runWithCancellationToken(() => {
+                let typeChecker = getDiagnosticsProducingTypeChecker();
+
+                Debug.assert(!!sourceFile.bindDiagnostics);
+                let bindDiagnostics = sourceFile.bindDiagnostics;
+                let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+
+                return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+            });
+        }
+
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+            return runWithCancellationToken(() => {
+                if (!isDeclarationFile(sourceFile)) {
+                    let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
+                    // Don't actually write any files since we're just getting diagnostics.
+                    var writeFile: WriteFileCallback = () => { };
+                    return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
+                }
+            });
         }
 
         function getCompilerOptionsDiagnostics(): Diagnostic[] {

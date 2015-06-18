@@ -1610,26 +1610,6 @@ namespace ts {
         };
     }
 
-    export class OperationCanceledException { }
-
-    export class CancellationTokenObject {
-
-        public static None: CancellationTokenObject = new CancellationTokenObject(null)
-
-        constructor(private cancellationToken: CancellationToken) {
-        }
-
-        public isCancellationRequested() {
-            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
-        }
-
-        public throwIfCancellationRequested(): void {
-            if (this.isCancellationRequested()) {
-                throw new OperationCanceledException();
-            }
-        }
-    }
-
     // Cache host information about scrip Should be refreshed 
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
@@ -2600,7 +2580,7 @@ namespace ts {
         function getSyntacticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
         }
 
         /**
@@ -2622,13 +2602,13 @@ namespace ts {
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile);
+            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
                 return semanticDiagnostics;
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
+            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
@@ -2790,7 +2770,7 @@ namespace ts {
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getGlobalDiagnostics();
+            return program.getGlobalDiagnostics(cancellationToken);
         }
 
         /// Completion
@@ -5732,7 +5712,7 @@ namespace ts {
                 });
             }
 
-            let emitOutput = program.emit(sourceFile, writeFile);
+            let emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
 
             return {
                 outputFiles,

@@ -1210,13 +1210,13 @@ namespace ts {
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationTokenObject): EmitResult;
 
-        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
-        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
+        getGlobalDiagnostics(cancellationToken?: CancellationTokenObject): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
+        /* @internal */ getCompilerOptionsDiagnostics(cancellationToken?: CancellationTokenObject): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1324,9 +1324,9 @@ namespace ts {
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
-        /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
-        /* @internal */ getEmitResolver(sourceFile?: SourceFile): EmitResolver;
+        /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;

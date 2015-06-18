@@ -159,10 +159,10 @@ namespace ts {
             }
         };
 
-        function getEmitResolver(sourceFile?: SourceFile) {
+        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationTokenObject) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
-            getDiagnostics(sourceFile);
+            getDiagnostics(sourceFile, cancellationToken);
             return emitResolver;
         }
 
@@ -11405,8 +11405,24 @@ namespace ts {
         }
 
         function checkSourceElement(node: Node): void {
-            if (!node) return;
-            switch (node.kind) {
+            if (!node) {
+                return;
+            }
+
+            let kind = node.kind;
+            if (cancellationToken) {
+                // Only bother checking on a few construct kinds.  We don't want to be excessivly
+                // hitting the cancellation token on every node we check.
+                switch (kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        cancellationToken.throwIfCancellationRequested();
+                }
+            }
+
+            switch (kind) {
                 case SyntaxKind.TypeParameter:
                     return checkTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.Parameter:
@@ -11661,7 +11677,18 @@ namespace ts {
             }
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+        var cancellationToken: CancellationTokenObject;
+        function getDiagnostics(sourceFile: SourceFile, ct: CancellationTokenObject): Diagnostic[] {
+            try {
+                cancellationToken = ct;
+                return getDiagnosticsWorker(sourceFile);
+            }
+            finally {
+                cancellationToken = undefined;
+            }
+        }
+
+        function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);
