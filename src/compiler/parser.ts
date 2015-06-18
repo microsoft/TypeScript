@@ -1082,11 +1082,6 @@ namespace ts {
                 }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
-            // if (token === SyntaxKind.AbstractKeyword) {
-            //     nextToken();
-            //     // 'abstract' can precede class declarations and member function declarations.
-            //     return token === SyntaxKind.ClassKeyword || token === SyntaxKind.Identifier;
-            // }
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
             }
