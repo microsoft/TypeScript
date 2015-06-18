@@ -589,6 +589,9 @@ namespace ts {
             if (node.flags & NodeFlags.Static) {
                 write("static ");
             }
+            if (node.flags & NodeFlags.Abstract) {
+                write("abstract ");
+            }
         }
 
         function writeImportEqualsDeclaration(node: ImportEqualsDeclaration) {
