@@ -6413,7 +6413,7 @@ namespace ts {
                 }
 
                 // Ignore nodes that don't intersect the original span to classify.
-                if (textSpanIntersectsWith2(spanStart, spanLength, element.pos, element.getFullWidth())) {
+                if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                     let children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         let child = children[i];
