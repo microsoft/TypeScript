@@ -27,7 +27,7 @@ class RunnerBase {
         var fixedPath = path;
 
         // full paths either start with a drive letter or / for *nix, shouldn't have \ in the path at this point
-        var fullPath = /(\w+:|\/)?([\w+\-\.]|\/)*\.ts/g; 
+        var fullPath = /(\w+:|\/)?([\w+\-\.]|\/)*\.tsx?/g; 
         var fullPathList = fixedPath.match(fullPath);
         if (fullPathList) {
             fullPathList.forEach((match: string) => fixedPath = fixedPath.replace(match, Harness.Path.getFileName(match)));
