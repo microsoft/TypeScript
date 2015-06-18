@@ -1792,6 +1792,11 @@ namespace ts {
             sourceFile.moduleName = moduleName;
         }
 
+        // Store syntactic diagnostics
+        if (diagnostics && sourceFile.parseDiagnostics) {
+            diagnostics.push(...sourceFile.parseDiagnostics);
+        }
+
         let newLine = getNewLineCharacter(options);
 
         // Output

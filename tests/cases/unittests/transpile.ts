@@ -68,6 +68,7 @@ var x = 0;`,
                 `});\n`;
             runTest("var x = 1;", { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, /*fileName*/ undefined, "NamedModule", output)
         });
+
         it("No extra errors for file without extension", () => {
             runTest(`var x = 0;`, { module: ModuleKind.CommonJS }, "file", /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/[]);
         });
