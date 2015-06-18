@@ -7653,7 +7653,7 @@ namespace ts {
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
                     // return type of the body should be unwrapped to its awaited type, which we will wrap in 
                     // the native Promise<T> type later in this function.
-                    type = getAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                    type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                 }
             }
             else {
@@ -7762,7 +7762,7 @@ namespace ts {
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
                         // return type of the body should be unwrapped to its awaited type, which should be wrapped in 
                         // the native Promise<T> type by the caller.
-                        type = getAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member); 
+                        type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member); 
                     }
 
                     if (!contains(aggregatedTypes, type)) {
@@ -7914,7 +7914,7 @@ namespace ts {
                     let exprType = checkExpression(<Expression>node.body);
                     if (returnType) {
                         if (isAsync) {
-                            let awaitedType = getAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
+                            let awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
                             checkTypeAssignableTo(awaitedType, promisedType, node.body);
                         }
                         else {
@@ -8041,7 +8041,7 @@ namespace ts {
             }
 
             let operandType = checkExpression(node.expression);
-            return getAwaitedType(operandType, node);
+            return checkAwaitedType(operandType, node);
         }
         
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
@@ -9474,10 +9474,10 @@ namespace ts {
                     error(location, message);
                 }
                 
-                return false;
+                return unknownType;
             }
             
-            return true;
+            return type;
         }
 
         /**
@@ -9537,7 +9537,7 @@ namespace ts {
             return getTypeAtPosition(signature, 0);
         }
         
-        let alreadySeenTypesForAwait: boolean[] = [];
+        let awaitedTypeStack: number[] = [];
         
         /**
           * Gets the "awaited type" of a type.
@@ -9546,76 +9546,96 @@ namespace ts {
           * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
           * The runtime behavior of the `await` keyword.
           */
-        function getAwaitedType(type: Type, location?: Node, message?: DiagnosticMessage): Type {
-            // reset the set of visited types
-            alreadySeenTypesForAwait.length = 0;
-            while (true) {
-                let promisedType = getPromisedType(type);
-                if (promisedType === undefined) {
-                    // The type was not a PromiseLike, so it could not be unwrapped any further.
-                    // As long as the type does not have a callable "then" property, then it is 
-                    // safe to return the type; otherwise, an error will have been reported in
-                    // the call to checkNonThenableType and we will return unknownType.
-                    //
-                    // An example of a non-promise "thenable" might be:
-                    //
-                    //  await { then(): void {} }
-                    //
-                    // The "thenable" does not match the minimal definition for a PromiseLike. When
-                    // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
-                    // will never settle. We treat this as an error to help flag an early indicator
-                    // of a runtime problem. If the user wants to return this value from an async 
-                    // function, they would need to wrap it in some other value. If they want it to
-                    // be treated as a promise, they can cast to <any>.
-                    if (!checkNonThenableType(type, location, message)) {
-                        type = unknownType;
-                    }
-                    
-                    break;
-                }
-                
-                // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
-                // See the comments below for more information.
-                alreadySeenTypesForAwait[type.id] = true;
-
-                if (alreadySeenTypesForAwait[promisedType.id]) {
-                    // We have a bad actor in the form of a promise whose promised type is the same 
-                    // promise type, or a mutually recursive promise. Return the unknown type as we cannot guess 
-                    // the shape. If this were the actual case in the JavaScript, this Promise would never resolve.
-                    //
-                    // An example of a bad actor with a singly-recursive promise type might be:
-                    //
-                    //  interface BadPromise {
-                    //      then(onfulfilled: (value: BadPromise) => any, onrejected: (error: any) => any): BadPromise;
-                    //  }
-                    //
-                    // The above interface will pass the PromiseLike check, and return a promised type of `BadPromise`.
-                    // Since this is a self reference, we don't want to keep recursing ad infinitum.
-                    //
-                    // An example of a bad actor in the form of a mutually-recursive promise type might be:
-                    //
-                    //  interface BadPromiseA {
-                    //      then(onfulfilled: (value: BadPromiseB) => any, onrejected: (error: any) => any): BadPromiseB;
-                    //  }
-                    //
-                    //  interface BadPromiseB {
-                    //      then(onfulfilled: (value: BadPromiseA) => any, onrejected: (error: any) => any): BadPromiseA;
-                    //  }
-                    //
-                    if (location) {
-                        error(location, Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method, symbolToString(type.symbol));
-                    }
-                    
-                    type = unknownType;
-                    break;
-                }
-                
-                type = promisedType;
-            }
+        function getAwaitedType(type: Type) {
+            return checkAwaitedType(type, /*location*/ undefined, /*message*/ undefined);
+        }
+        
+        function checkAwaitedType(type: Type, location?: Node, message?: DiagnosticMessage) {
+            return getAwaitedTypeWorker(type);
             
-            // Cleanup, reset the set of visited types
-            alreadySeenTypesForAwait.length = 0;
-            return type;
+            function getAwaitedTypeWorker(type: Type): Type {
+                if (type.flags & TypeFlags.Union) {
+                    let types: Type[] = [];
+                    for (let constituentType of (<UnionType>type).types) {
+                        types.push(getAwaitedTypeWorker(constituentType));
+                    }
+                    
+                    return getUnionType(types);
+                }
+                else {
+                    let promisedType = getPromisedType(type);
+                    if (promisedType === undefined) {
+                        // The type was not a PromiseLike, so it could not be unwrapped any further.
+                        // As long as the type does not have a callable "then" property, it is 
+                        // safe to return the type; otherwise, an error will have been reported in
+                        // the call to checkNonThenableType and we will return unknownType.
+                        //
+                        // An example of a non-promise "thenable" might be:
+                        //
+                        //  await { then(): void {} }
+                        //
+                        // The "thenable" does not match the minimal definition for a PromiseLike. When
+                        // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
+                        // will never settle. We treat this as an error to help flag an early indicator
+                        // of a runtime problem. If the user wants to return this value from an async 
+                        // function, they would need to wrap it in some other value. If they want it to
+                        // be treated as a promise, they can cast to <any>.
+                        return checkNonThenableType(type, location, message);
+                    }
+                    else {
+                        if (type.id === promisedType.id || awaitedTypeStack.indexOf(promisedType.id) >= 0) {
+                            // We have a bad actor in the form of a promise whose promised type is
+                            // the same promise type, or a mutually recursive promise. Return the 
+                            // unknown type as we cannot guess the shape. If this were the actual 
+                            // case in the JavaScript, this Promise would never resolve.
+                            //
+                            // An example of a bad actor with a singly-recursive promise type might 
+                            // be:
+                            //
+                            //  interface BadPromise {
+                            //      then(
+                            //          onfulfilled: (value: BadPromise) => any, 
+                            //          onrejected: (error: any) => any): BadPromise;
+                            //  }
+                            //
+                            // The above interface will pass the PromiseLike check, and return a 
+                            // promised type of `BadPromise`. Since this is a self reference, we 
+                            // don't want to keep recursing ad infinitum.
+                            //
+                            // An example of a bad actor in the form of a mutually-recursive 
+                            // promise type might be:
+                            //
+                            //  interface BadPromiseA {
+                            //      then(
+                            //          onfulfilled: (value: BadPromiseB) => any, 
+                            //          onrejected: (error: any) => any): BadPromiseB;
+                            //  }
+                            //
+                            //  interface BadPromiseB {
+                            //      then(
+                            //          onfulfilled: (value: BadPromiseA) => any, 
+                            //          onrejected: (error: any) => any): BadPromiseA;
+                            //  }
+                            //
+                            if (location) {
+                                error(
+                                    location, 
+                                    Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method, 
+                                    symbolToString(type.symbol));
+                            }
+                            
+                            return unknownType;
+                        }
+                        
+                        // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
+                        // See the comments above for more information.
+                        awaitedTypeStack.push(type.id);
+                        let awaitedType = getAwaitedTypeWorker(promisedType);
+                        awaitedTypeStack.pop();
+                        return awaitedType;                
+                    }
+                }
+            }
         }
 
         /**
@@ -9691,7 +9711,7 @@ namespace ts {
             }
 
             // Get and return the awaited type of the return type.
-            return getAwaitedType(promiseType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return checkAwaitedType(promiseType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
         }
                 
         /** Check a decorator */
@@ -10664,7 +10684,7 @@ namespace ts {
                     else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || signature.typePredicate) {
                         if (isAsyncFunctionLike(func)) {
                             let promisedType = getPromisedType(returnType);
-                            let awaitedType = getAwaitedType(exprType, node.expression, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                            let awaitedType = checkAwaitedType(exprType, node.expression, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                             checkTypeAssignableTo(awaitedType, promisedType, node.expression);
                         }
                         else {
