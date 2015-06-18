@@ -11,7 +11,7 @@ namespace ts.server {
         input: process.stdin,
         output: process.stdout,
         terminal: false,
-    });
+    });  
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -170,11 +170,11 @@ namespace ts.server {
         removeFile(file: WatchedFile) {
             this.watchedFiles = WatchedFileSet.copyListRemovingItem(file, this.watchedFiles);
         }
-    }
+    } 
 
     class IOSession extends Session {
         constructor(host: ServerHost, logger: ts.server.Logger) {
-            super(host, logger);
+            super(host, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
