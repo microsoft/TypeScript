@@ -77,6 +77,46 @@ declare module ts.server.protocol {
         body?: any;
     }
 
+    
+    /** 
+      * Arguments for ProjectInfoRequest request.
+      */
+    export interface ProjectInfoRequestArgs extends FileRequestArgs {
+        /**
+          * Indicate if the file name list of the project is needed
+          */
+        needFileNameList: boolean;
+    }
+
+    /**
+      * A request to get the project information of the current file
+      */
+    export interface ProjectInfoRequest extends Request {
+        arguments: ProjectInfoRequestArgs
+    }
+
+    /** 
+      * Response message body for "projectInfo" request
+      */
+    export interface ProjectInfo {
+        /**
+          * For configured project, this is the normalized path of the 'tsconfig.json' file
+          * For inferred project, this is undefined
+          */
+        configFileName: string;
+        /**
+          * The list of normalized file name in the project, including 'lib.d.ts'
+          */
+        fileNameList?: string[];
+    }
+
+    /** 
+      * Response message for "projectInfo" request
+      */
+    export interface ProjectInfoResponse extends Response {
+        body?: ProjectInfo;
+    }
+
     /** 
       * Arguments for FileRequest messages.
       */
@@ -814,6 +854,15 @@ declare module ts.server.protocol {
      */  
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    export interface GeterrForProjectRequestArgs {
+        file: string;
+        delay: number;
+    }
+
+    export interface GeterrForProjectRequest extends Request {
+        arguments: GeterrForProjectRequestArgs
     }
     
     /**

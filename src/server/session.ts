@@ -87,6 +87,7 @@ module ts.server {
         export var Format = "format";
         export var Formatonkey = "formatonkey";
         export var Geterr = "geterr";
+        export var GeterrForProject = "geterrForProject";
         export var NavBar = "navbar";
         export var Navto = "navto";
         export var Occurrences = "occurrences";
@@ -98,6 +99,7 @@ module ts.server {
         export var Saveto = "saveto";
         export var SignatureHelp = "signatureHelp";        
         export var TypeDefinition = "typeDefinition";        
+        export var ProjectInfo = "projectInfo";
         export var Unknown = "unknown";
     }
 
@@ -677,6 +679,26 @@ module ts.server {
             }
         }
 
+        getDiagnosticsForProject(delay: number, fileName: string) {
+            let { configFileName, fileNameList } = this.getProjectInfo(fileName, true);
+            fileNameList = fileNameList.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+
+            let project = this.projectService.getProjectForFile(ts.normalizePath(fileName));
+            for (let oneFile of fileNameList) {
+                let info = this.projectService.getScriptInfo(oneFile);
+                if (!info || !info.isOpen)
+                    this.projectService.openFile(oneFile, true);
+            }
+            if (fileNameList.length > 1) {
+                let checkList = fileNameList.map<PendingErrorCheck>((fileName: string) => { 
+                    let normalizedFileName = ts.normalizePath(fileName);
+                    this.logger.info(normalizedFileName);
+                    return { fileName: normalizedFileName, project };
+                });
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay);
+            }
+        }
+
         change(line: number, offset: number, endLine: number, endOffset: number, insertString: string, fileName: string) {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
@@ -816,6 +838,21 @@ module ts.server {
             }));
         }
 
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
+            fileName = ts.normalizePath(fileName)
+            let project = this.projectService.getProjectForFile(fileName)
+
+            let projectInfo: protocol.ProjectInfo = {
+                configFileName: project.projectFilename
+            }
+
+            if (needFileNameList) {
+                projectInfo.fileNameList = project.getFileNameList();
+            }
+
+            return projectInfo;
+        }
+
         exit() {
         }
 
@@ -899,6 +936,13 @@ module ts.server {
                         responseRequired = false;
                         break;
                     }
+                    case CommandNames.GeterrForProject: {
+                        this.logger.info(request.arguments);
+                        let { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
+                        response = this.getDiagnosticsForProject(delay, file);
+                        responseRequired = false;
+                        break;
+                    }
                     case CommandNames.Change: {
                         var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                         this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
@@ -949,6 +993,11 @@ module ts.server {
                     case CommandNames.Occurrences: {
                         var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getOccurrences(line, offset, fileName);
+                        break;
+                    }
+                    case CommandNames.ProjectInfo: {
+                        var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
+                        response = this.getProjectInfo(file, needFileNameList);
                         break;
                     }
                     default: {
