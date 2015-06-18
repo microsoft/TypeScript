@@ -23,6 +23,10 @@ function hasMissingIsKeyword(): x {
     return true;
 }
 
+function hasMissingParameter(): x is A {
+    return true;
+}
+
 function hasMissingTypeInTypeGuardType(x): x is {
     return true;
 }
@@ -132,4 +136,10 @@ function b6([a, b, p1], p2, p3): p1 is A {
 
 function b7({a, b, c: {p1}}, p2, p3): p1 is A {
     return true;
+}
+
+// Should not crash the compiler
+var x: A;
+if (hasMissingParameter()) {
+    x.propA;
 }

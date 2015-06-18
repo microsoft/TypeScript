@@ -5765,6 +5765,7 @@ namespace ts {
                 let signature = getResolvedSignature(expr);
 
                 if (signature.typePredicate &&
+                    expr.arguments[signature.typePredicate.parameterIndex] &&
                     getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
 
                     if (!assumeTrue) {
