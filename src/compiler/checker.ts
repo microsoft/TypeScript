@@ -11684,6 +11684,9 @@ namespace ts {
         var cancellationToken: CancellationTokenObject;
         function getDiagnostics(sourceFile: SourceFile, ct: CancellationTokenObject): Diagnostic[] {
             try {
+                // Record the cancellation token so it can be checked later on during checkSourceElement.
+                // Do this in a finally block so we can ensure that it gets reset back to nothing after
+                // this call is done.
                 cancellationToken = ct;
                 return getDiagnosticsWorker(sourceFile);
             }
