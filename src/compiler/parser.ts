@@ -3351,8 +3351,6 @@ module ts {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, fullStart);
                 node.openingElement = opening;
 
-                let tagName = entityNameToString(node.openingElement.tagName);
-
                 // Rescan since parsing the > messed up the scanner state
                 token = scanner.reScanJsxToken();
                 node.children = parseList(ParsingContext.JsxChildren, false, parseJsxChild);
@@ -3405,21 +3403,9 @@ module ts {
 
         function parseJsxExpression(): JsxExpression {
             let node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
-            let isExpressionEmpty = lookAhead(() => {
-                do {
-                    nextToken();
-                    if (token === SyntaxKind.CloseBraceToken) {
-                        return true;
-                    }
-                    else if (!isTrivia(token)) {
-                        return false;
-                    }
-                } while (token != SyntaxKind.EndOfFileToken);
-                return true;
-            });
 
             parseExpected(SyntaxKind.OpenBraceToken);
-            if (!isExpressionEmpty) {
+            if (token !== SyntaxKind.CloseBraceToken) {
                 node.expression = parseExpression();
             }
             parseExpected(SyntaxKind.CloseBraceToken);

@@ -65,7 +65,7 @@ var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>
 
 <a>></a>;
 <a> ></a>;
-<a b={}>;
+<a b=>;
 <a b=<>}>;
 <a>}</a>;
 <a asdf=/>;</>></></></></></></></></>;
