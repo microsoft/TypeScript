@@ -247,19 +247,6 @@ namespace ts {
             declaration.parent.kind === SyntaxKind.CatchClause;
     }
 
-    export function declarationToString(declaration: Declaration) {
-        if (!declaration.name) {
-            switch (declaration.kind) {
-                case SyntaxKind.ClassExpression:
-                    return "(Anonymous class)";
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    return "(Anonymous function)";
-            }
-        }
-        return declarationNameToString(declaration.name);
-    }
-
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.

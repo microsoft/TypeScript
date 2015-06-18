@@ -409,6 +409,13 @@ namespace ts {
                             }
                             break loop;
                         }
+                        if (location.kind === SyntaxKind.ClassExpression && meaning & SymbolFlags.Class) {
+                            let className = (<ClassExpression>location).name;
+                            if (className && name === className.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
+                        }
                         break;
 
                     // It is not legal to reference a class's own type parameters from a computed property name that
@@ -450,15 +457,6 @@ namespace ts {
                         if (meaning & SymbolFlags.Function) {
                             let functionName = (<FunctionExpression>location).name;
                             if (functionName && name === functionName.text) {
-                                result = location.symbol;
-                                break loop;
-                            }
-                        }
-                        break;
-                    case SyntaxKind.ClassExpression:
-                        if (meaning & SymbolFlags.Class) {
-                            let className = (<ClassExpression>location).name;
-                            if (className && name === className.text) {
                                 result = location.symbol;
                                 break loop;
                             }
@@ -1397,13 +1395,30 @@ namespace ts {
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         let _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
+
+            function getNameOfSymbol(symbol: Symbol): string {
+                if (symbol.declarations && symbol.declarations.length) {
+                    let declaration = symbol.declarations[0];
+                    if (declaration.name) {
+                        return declarationNameToString(declaration.name);
+                    }
+                    switch (declaration.kind) {
+                        case SyntaxKind.ClassExpression:
+                            return "(Anonymous class)";
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                            return "(Anonymous function)";
+                    }
+                }
+                return symbol.name;
+            }
+
             /**
              * Writes only the name of the symbol out to the writer. Uses the original source text
              * for the name of the symbol if it is available to match how the user inputted the name.
              */
             function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
-                let name = symbol.declarations && symbol.declarations.length > 0 ? declarationToString(symbol.declarations[0]) : symbol.name;
-                writer.writeSymbol(name, symbol);
+                writer.writeSymbol(getNameOfSymbol(symbol), symbol);
             }
 
             /**
@@ -7851,7 +7866,7 @@ namespace ts {
                     if (node.type) {
                         checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                     }
-                    checkFunctionExpressionBodies(node.body);
+                    checkFunctionAndClassExpressionBodies(node.body);
                 }
             }
         }
@@ -9567,7 +9582,7 @@ namespace ts {
 
             forEach(node.statements, checkSourceElement);
             if (isFunctionBlock(node) || node.kind === SyntaxKind.ModuleBlock) {
-                checkFunctionExpressionBodies(node);
+                checkFunctionAndClassExpressionBodies(node);
             }
         }
 
@@ -10563,11 +10578,11 @@ namespace ts {
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
-            // Grammar checking
             if (!node.name && !(node.flags & NodeFlags.Default)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
             checkClassLikeDeclaration(node);
+            forEach(node.members, checkSourceElement);
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -10638,7 +10653,6 @@ namespace ts {
                 });
             }
 
-            forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
@@ -11511,8 +11525,8 @@ namespace ts {
             }
         }
 
-        // Function expression bodies are checked after all statements in the enclosing body. This is to ensure
-        // constructs like the following are permitted:
+        // Function and class expression bodies are checked after all statements in the enclosing body. This is
+        // to ensure constructs like the following are permitted:
         //     let foo = function () {
         //        let s = foo();
         //        return "hello";
@@ -11520,17 +11534,20 @@ namespace ts {
         // Here, performing a full type check of the body of the function expression whilst in the process of
         // determining the type of foo would cause foo to be given type any because of the recursive reference.
         // Delaying the type check of the body ensures foo has been assigned a type.
-        function checkFunctionExpressionBodies(node: Node): void {
+        function checkFunctionAndClassExpressionBodies(node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionExpressionBodies);
+                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
                     checkFunctionExpressionOrObjectLiteralMethodBody(<FunctionExpression>node);
+                    break;
+                case SyntaxKind.ClassExpression:
+                    forEach((<ClassExpression>node).members, checkSourceElement);
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    forEach(node.decorators, checkFunctionExpressionBodies);
-                    forEach((<MethodDeclaration>node).parameters, checkFunctionExpressionBodies);
+                    forEach(node.decorators, checkFunctionAndClassExpressionBodies);
+                    forEach((<MethodDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
                     if (isObjectLiteralMethod(node)) {
                         checkFunctionExpressionOrObjectLiteralMethodBody(<MethodDeclaration>node);
                     }
@@ -11539,10 +11556,10 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionDeclaration:
-                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionExpressionBodies);
+                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
                     break;
                 case SyntaxKind.WithStatement:
-                    checkFunctionExpressionBodies((<WithStatement>node).expression);
+                    checkFunctionAndClassExpressionBodies((<WithStatement>node).expression);
                     break;
                 case SyntaxKind.Decorator:
                 case SyntaxKind.Parameter:
@@ -11599,7 +11616,7 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.SourceFile:
-                    forEachChild(node, checkFunctionExpressionBodies);
+                    forEachChild(node, checkFunctionAndClassExpressionBodies);
                     break;
             }
         }
@@ -11631,7 +11648,7 @@ namespace ts {
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
-                checkFunctionExpressionBodies(node);
+                checkFunctionAndClassExpressionBodies(node);
 
                 if (isExternalModule(node)) {
                     checkExternalModuleExports(node);
