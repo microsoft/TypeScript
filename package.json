@@ -36,6 +36,6 @@
         "istanbul": "latest"
     },
     "scripts": {
-        "test": "jake runtests"
+        "test": "jake --trace runtests"
     }
 }
