@@ -1491,12 +1491,20 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.IndexSignature:
-                    case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.SemicolonClassElement:
                         return true;
+                    case SyntaxKind.MethodDeclaration:
+                        // Method declarations are not necessarily reusable.  An object-literal
+                        // may have a method calls "constructor(...)" and we must reparse that
+                        // into an actual .ConstructorDeclaration.
+                        let methodDeclaration = <MethodDeclaration>node;
+                        let nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
+                            (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
+
+                        return !nameIsConstructor;
                 }
             }
 
