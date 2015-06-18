@@ -369,7 +369,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-                definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
+                definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
             });
 
