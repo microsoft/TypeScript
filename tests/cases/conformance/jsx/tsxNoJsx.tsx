@@ -1,3 +1,3 @@
-/// @jsx: preserve
+//@jsx: preserve
 
 <nope />;
