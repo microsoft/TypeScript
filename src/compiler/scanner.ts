@@ -1516,7 +1516,7 @@ module ts {
                         break;
                     }
                 }
-                tokenValue += text.substr(firstCharPosition, pos - firstCharPosition - 1);
+                tokenValue += text.substr(firstCharPosition, pos - firstCharPosition);
             }
             return token;
         }
