@@ -167,7 +167,7 @@ namespace ts {
         }
 
         public getFullWidth(): number {
-            return this.end - this.getFullStart();
+            return this.end - this.pos;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
@@ -6096,6 +6096,8 @@ namespace ts {
         function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let spanStart = span.start;
+            let spanLength = span.length;
 
             // Make a scanner we can get trivia from.
             let triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
@@ -6112,48 +6114,55 @@ namespace ts {
                 result.push(type);
             }
 
-            function classifyLeadingTrivia(token: Node): void {
-                let tokenStart = skipTrivia(sourceFile.text, token.pos, /*stopAfterLineBreak:*/ false);
-                if (tokenStart === token.pos) {
-                    return;
-                }
-
-                // token has trivia.  Classify them appropriately.
+            function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
                 triviaScanner.setTextPos(token.pos);
                 while (true) {
                     let start = triviaScanner.getTextPos();
+                    // only bother scanning if we have something that could be trivia.
+                    if (!couldStartTrivia(sourceFile.text, start)) {
+                        return start;
+                    }
+
                     let kind = triviaScanner.scan();
                     let end = triviaScanner.getTextPos();
                     let width = end - start;
 
                     // The moment we get something that isn't trivia, then stop processing.
                     if (!isTrivia(kind)) {
-                        return;
+                        return start;
+                    }
+
+                    // Don't bother with newlines/whitespace.
+                    if (kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.WhitespaceTrivia) {
+                        continue;
                     }
 
                     // Only bother with the trivia if it at least intersects the span of interest.
-                    if (textSpanIntersectsWith(span, start, width)) {
-                        if (isComment(kind)) {
-                            classifyComment(token, kind, start, width);
+                    if (isComment(kind)) {
+                        classifyComment(token, kind, start, width);
+                            
+                        // Classifying a comment might cause us to reuse the trivia scanner 
+                        // (because of jsdoc comments).  So after we classify the comment make
+                        // sure we set the scanner position back to where it needs to be.
+                        triviaScanner.setTextPos(end);
+                        continue;
+                    }
+
+                    if (kind === SyntaxKind.ConflictMarkerTrivia) {
+                        let text = sourceFile.text;
+                        let ch = text.charCodeAt(start);
+
+                        // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
+                        // in the classification stream.
+                        if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
+                            pushClassification(start, width, ClassificationType.comment);
                             continue;
                         }
 
-                        if (kind === SyntaxKind.ConflictMarkerTrivia) {
-                            let text = sourceFile.text;
-                            let ch = text.charCodeAt(start);
-
-                            // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
-                            // in the classification stream.
-                            if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
-                                pushClassification(start, width, ClassificationType.comment);
-                                continue;
-                            }
-
-                            // for the ======== add a comment for the first line, and then lex all
-                            // subsequent lines up until the end of the conflict marker.
-                            Debug.assert(ch === CharacterCodes.equals);
-                            classifyDisabledMergeCode(text, start, end);
-                        }
+                        // for the ======== add a comment for the first line, and then lex all
+                        // subsequent lines up until the end of the conflict marker.
+                        Debug.assert(ch === CharacterCodes.equals);
+                        classifyDisabledMergeCode(text, start, end);
                     }
                 }
             }
@@ -6272,12 +6281,14 @@ namespace ts {
             }
 
             function classifyToken(token: Node): void {
-                classifyLeadingTrivia(token);
+                let tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
 
-                if (token.getWidth() > 0) {
+                let tokenWidth = token.end - tokenStart;
+                Debug.assert(tokenWidth >= 0);
+                if (tokenWidth > 0) {
                     let type = classifyTokenType(token.kind, token);
                     if (type) {
-                        pushClassification(token.getStart(), token.getWidth(), type);
+                        pushClassification(tokenStart, tokenWidth, type);
                     }
                 }
             }
@@ -6382,9 +6393,10 @@ namespace ts {
                 }
 
                 // Ignore nodes that don't intersect the original span to classify.
-                if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
+                if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                     let children = element.getChildren(sourceFile);
-                    for (let child of children) {
+                    for (let i = 0, n = children.length; i < n; i++) {
+                        let child = children[i];
                         if (isToken(child)) {
                             classifyToken(child);
                         }
