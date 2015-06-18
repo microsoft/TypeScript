@@ -12853,6 +12853,9 @@ namespace ts {
                 if (flags & NodeFlags.Static) {
                     return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "static");
                 }
+                if (flags & NodeFlags.Abstract) {
+                    return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract");
+                }
                 else if (flags & NodeFlags.Protected) {
                     return grammarErrorOnNode(lastProtected, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
                 }
