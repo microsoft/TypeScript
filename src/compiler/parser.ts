@@ -162,6 +162,9 @@ namespace ts {
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
                     visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
+            case SyntaxKind.AsExpression:
+                return visitNode(cbNode, (<AsExpression>node).expression) ||
+                    visitNode(cbNode, (<AsExpression>node).type);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -319,6 +322,25 @@ namespace ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNodes, node.decorators);
+
+            case SyntaxKind.JsxElement:
+                return visitNode(cbNode, (<JsxElement>node).openingElement) ||
+                    visitNodes(cbNodes, (<JsxElement>node).children) ||
+                    visitNode(cbNode, (<JsxElement>node).closingElement);
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
+                    visitNodes(cbNodes, (<JsxOpeningLikeElement>node).attributes);
+            case SyntaxKind.JsxAttribute:
+                return visitNode(cbNode, (<JsxAttribute>node).name) ||
+                    visitNode(cbNode, (<JsxAttribute>node).initializer);
+            case SyntaxKind.JsxSpreadAttribute:
+                return visitNode(cbNode, (<JsxSpreadAttribute>node).expression);
+            case SyntaxKind.JsxExpression:
+                return visitNode(cbNode, (<JsxExpression>node).expression);
+            case SyntaxKind.JsxClosingElement:
+                return visitNode(cbNode, (<JsxClosingElement>node).tagName);
+
             case SyntaxKind.JSDocTypeExpression:
                 return visitNode(cbNode, (<JSDocTypeExpression>node).type);
             case SyntaxKind.JSDocUnionType:
@@ -634,6 +656,7 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.isTSXFile = fileExtensionIs(sourceFile.fileName, ".tsx");
 
             return sourceFile;
         }
@@ -804,6 +827,10 @@ namespace ts {
             return token = scanner.reScanTemplateToken();
         }
 
+        function scanJsxIdentifier(): SyntaxKind {
+            return token = scanner.scanJsxIdentifier();
+        }
+        
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
@@ -1175,6 +1202,10 @@ namespace ts {
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
                     return isIdentifierOrKeyword();
+                case ParsingContext.JsxAttributes:
+                    return isIdentifierOrKeyword() || token === SyntaxKind.OpenBraceToken;
+                case ParsingContext.JsxChildren:
+                    return token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.JsxText;
                 case ParsingContext.JSDocFunctionParameters:
                 case ParsingContext.JSDocTypeArguments:
                 case ParsingContext.JSDocTupleTypes:
@@ -1265,6 +1296,11 @@ namespace ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JsxAttributes:
+                    // For error recovery, include } here (otherwise an over-braced {expr}} will close the surrounding statement block and mess up the entire file).
+                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JsxChildren:
+                    return token === SyntaxKind.LessThanSlashToken;
                 case ParsingContext.JSDocFunctionParameters:
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.ColonToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JSDocTypeArguments:
@@ -1481,6 +1517,12 @@ namespace ts {
                 // name list, and there can be left hand side expressions (which can have type
                 // arguments.)
                 case ParsingContext.HeritageClauseElement:
+
+                // Perhaps safe to reuse, but it's unlikely we'd see more than a dozen attributes
+                // on any given element. Same for children.
+                case ParsingContext.JsxAttributes:
+                case ParsingContext.JsxChildren:
+
             }
 
             return false;
@@ -1639,6 +1681,8 @@ namespace ts {
                 case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
                 case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
                 case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
+                case ParsingContext.JsxAttributes: return Diagnostics.Identifier_expected;
+                case ParsingContext.JsxChildren: return Diagnostics.Identifier_expected;
                 case ParsingContext.JSDocFunctionParameters: return Diagnostics.Parameter_declaration_expected;
                 case ParsingContext.JSDocTypeArguments: return Diagnostics.Type_argument_expected;
                 case ParsingContext.JSDocTupleTypes: return Diagnostics.Type_expected;
@@ -2794,6 +2838,32 @@ namespace ts {
                     return Tristate.False;
                 }
 
+                // JSX overrides
+                if (sourceFile.isTSXFile) {
+                    let isArrowFunctionInJsx = lookAhead(() => {
+                        let third = nextToken();
+                        let fourth = nextToken();
+                        if (third === SyntaxKind.ExtendsKeyword) {
+                            switch (fourth) {
+                                case SyntaxKind.EqualsToken:
+                                case SyntaxKind.GreaterThanToken:
+                                    return false;
+                                default:
+                                    return true;
+                            }
+                        }
+                        else if (third === SyntaxKind.CommaToken) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (isArrowFunctionInJsx) {
+                        return Tristate.Unknown;
+                    } else {
+                        return Tristate.False;
+                    }
+                }
+
                 // This *could* be a parenthesized arrow function.
                 return Tristate.Unknown;
             }
@@ -2910,7 +2980,23 @@ namespace ts {
                     break;
                 }
 
-                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                if (token === SyntaxKind.AsKeyword) {
+                    // Make sure we *do* perform ASI for constructs like this:
+                    //    var x = foo
+                    //    as (Bar)
+                    // This should be parsed as an initialized variable, followed
+                    // by a function call to 'as' with the argument 'Bar'
+                    if (scanner.hasPrecedingLineBreak()) {
+                        break;
+                    }
+                    else {
+                        nextToken();
+                        leftOperand = makeAsExpression(leftOperand, parseType());
+                    }
+                }
+                else {
+                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                }
             }
 
             return leftOperand;
@@ -2947,6 +3033,7 @@ namespace ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                     return 7;
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
@@ -2971,6 +3058,13 @@ namespace ts {
             node.left = left;
             node.operatorToken = operatorToken;
             node.right = right;
+            return finishNode(node);
+        }
+
+        function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
+            let node = <AsExpression>createNode(SyntaxKind.AsExpression, left.pos);
+            node.expression = left;
+            node.type = right;
             return finishNode(node);
         }
 
@@ -3019,7 +3113,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    return parseTypeAssertion();
+                    return sourceFile.isTSXFile ? parseJsxElementOrSelfClosingElement() : parseTypeAssertion();
                 default:
                     return parsePostfixExpressionOrHigher();
             }
@@ -3144,6 +3238,136 @@ namespace ts {
             node.expression = expression;
             node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+            return finishNode(node);
+        }
+        
+        function parseJsxChild(): JsxChild {
+            let result: JsxChild = undefined;
+            switch (token) {
+                case SyntaxKind.JsxText:
+                    result = <JsxText>createNode(SyntaxKind.JsxText);
+                    token = scanner.scanJsxToken();
+                    result = finishNode(result);
+                    break;
+                case SyntaxKind.OpenBraceToken:
+                    result = parseJsxExpression();
+                    break;
+                default:
+                    Debug.assert(token === SyntaxKind.LessThanToken);
+                    result = parseJsxElementOrSelfClosingElement();
+                    break;
+            }
+            token = scanner.reScanJsxToken();
+            Debug.assert(result !== undefined, "parsed some JSX child");
+            return result;
+        }
+
+        function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
+            let opening = parseJsxOpeningOrSelfClosingElement();
+            if (opening.kind === SyntaxKind.JsxOpeningElement) {
+                let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
+                node.openingElement = opening;
+
+                // Rescan since parsing the > messed up the scanner state
+                token = scanner.reScanJsxToken();
+                node.children = parseList(ParsingContext.JsxChildren, parseJsxChild);
+                node.closingElement = parseJsxClosingElement();
+                return finishNode(node);
+            }
+            else {
+                Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
+                // Nothing else to do for self-closing elements
+                return <JsxSelfClosingElement>opening;
+            }
+        }
+        
+        function parseJsxOpeningOrSelfClosingElement(): JsxOpeningElement|JsxSelfClosingElement {
+            let fullStart = scanner.getStartPos();
+
+            parseExpected(SyntaxKind.LessThanToken);
+
+            let tagName = parseJsxElementName();
+            let attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
+            let node: JsxOpeningLikeElement;
+            if (token === SyntaxKind.SlashToken) {
+                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
+
+                nextToken();
+            }
+            else {
+                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
+            } 
+            parseExpected(SyntaxKind.GreaterThanToken);
+
+            node.tagName = tagName;
+            node.attributes = attributes;
+
+            return finishNode(node);
+        }
+        
+        function parseJsxElementName(): EntityName {
+            scanJsxIdentifier();
+            let elementName: EntityName = parseIdentifier();
+            while (parseOptional(SyntaxKind.DotToken)) {
+                scanJsxIdentifier();
+                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                node.left = elementName;
+                node.right = parseIdentifierName();
+                elementName = finishNode(node);
+            }
+            return elementName;
+        }
+
+        function parseJsxExpression(): JsxExpression {
+            let node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
+
+            parseExpected(SyntaxKind.OpenBraceToken);
+            if (token !== SyntaxKind.CloseBraceToken) {
+                node.expression = parseExpression();
+            }
+            parseExpected(SyntaxKind.CloseBraceToken);
+
+            return finishNode(node);
+        }
+
+        function parseJsxAttribute(): JsxAttribute | JsxSpreadAttribute {
+            if (token === SyntaxKind.OpenBraceToken) {
+                return parseJsxSpreadAttribute();
+            }
+
+            scanJsxIdentifier();
+            let node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
+            node.name = parseIdentifierName();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                switch (token) {
+                    case SyntaxKind.LessThanToken:
+                        node.initializer = parseJsxElementOrSelfClosingElement();
+                        break;
+                    case SyntaxKind.StringLiteral:
+                        node.initializer = parseLiteralNode();
+                        break;
+                    default:
+                        node.initializer = parseJsxExpression();
+                        break;
+                }
+            }
+            return finishNode(node);
+        }
+
+        function parseJsxSpreadAttribute(): JsxSpreadAttribute {
+            let node = <JsxSpreadAttribute>createNode(SyntaxKind.JsxSpreadAttribute);
+            parseExpected(SyntaxKind.OpenBraceToken);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.expression = parseExpression();
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseJsxClosingElement(): JsxClosingElement {
+            let node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement);
+            parseExpected(SyntaxKind.LessThanSlashToken);
+            node.tagName = parseJsxElementName();
+            parseExpected(SyntaxKind.GreaterThanToken);
             return finishNode(node);
         }
 
@@ -4881,6 +5105,8 @@ namespace ts {
             ArrayBindingElements,      // Binding elements in array binding list
             ArgumentExpressions,       // Expressions in argument list
             ObjectLiteralMembers,      // Members in object literal
+            JsxAttributes,             // Attributes in jsx element
+            JsxChildren,               // Things between opening and closing JSX tags
             ArrayLiteralMembers,       // Members in array literal
             Parameters,                // Parameters in parameter list
             TypeParameters,            // Type parameters in type parameter list
