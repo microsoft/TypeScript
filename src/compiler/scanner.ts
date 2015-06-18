@@ -19,7 +19,6 @@ module ts {
         isReservedWord(): boolean;
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
-        reScanLessThanSlashToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -645,7 +644,6 @@ module ts {
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => tokenIsUnterminated,
             reScanGreaterToken,
-            reScanLessThanSlashToken,
             reScanSlashToken,
             reScanTemplateToken,
             scanJsxIdentifier,
@@ -1467,11 +1465,6 @@ module ts {
             return token = scanTemplateAndSetTokenValue();
         }
 
-        function reScanLessThanSlashToken(): SyntaxKind {
-            pos = tokenPos;
-            return token = scanJsxToken();
-        }
-        
         function reScanJsxToken(): SyntaxKind {
             pos = tokenPos = startPos;
             return token = scanJsxToken();
