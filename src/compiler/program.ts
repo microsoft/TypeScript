@@ -105,8 +105,9 @@ namespace ts {
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[] {
-        let diagnostics = program.getSyntacticDiagnostics(sourceFile, cancellationToken).concat(
-                          program.getGlobalDiagnostics(cancellationToken)).concat(
+        let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
+                          program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                          program.getGlobalDiagnostics(cancellationToken),
                           program.getSemanticDiagnostics(sourceFile, cancellationToken));
 
         if (program.getCompilerOptions().declaration) {
@@ -179,10 +180,10 @@ namespace ts {
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
+            getOptionsDiagnostics,
             getGlobalDiagnostics,
             getSemanticDiagnostics,
             getDeclarationDiagnostics,
-            getCompilerOptionsDiagnostics,
             getTypeChecker,
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
@@ -344,19 +345,15 @@ namespace ts {
             });
         }
 
-        function getCompilerOptionsDiagnostics(): Diagnostic[] {
+        function getOptionsDiagnostics(): Diagnostic[] {
             let allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            let typeChecker = getDiagnosticsProducingTypeChecker();
-
             let allDiagnostics: Diagnostic[] = [];
-            addRange(allDiagnostics, typeChecker.getGlobalDiagnostics());
-            addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
-
+            addRange(allDiagnostics, getDiagnosticsProducingTypeChecker().getGlobalDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 

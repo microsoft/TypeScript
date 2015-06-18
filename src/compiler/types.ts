@@ -1212,11 +1212,11 @@ namespace ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationTokenObject): EmitResult;
 
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
+        getOptionsDiagnostics(cancellationToken?: CancellationTokenObject): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationTokenObject): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[];
-        /* @internal */ getCompilerOptionsDiagnostics(cancellationToken?: CancellationTokenObject): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.

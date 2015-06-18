@@ -973,6 +973,9 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
+        // diagnostics present for the program level, and not just 'options' diagnostics.
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
@@ -1790,8 +1793,8 @@ namespace ts {
 
         var program = createProgram([inputFileName], options, compilerHost);
 
-        addRange(/*to*/ diagnostics, /*from*/ sourceFile.parseDiagnostics);
-        addRange(/*to*/ diagnostics, /*from*/ program.getCompilerOptionsDiagnostics());
+        addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
+        addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
 
         // Emit
         program.emit();
@@ -2770,7 +2773,8 @@ namespace ts {
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getGlobalDiagnostics(cancellationToken);
+            return program.getOptionsDiagnostics(cancellationToken).concat(
+                   program.getGlobalDiagnostics(cancellationToken));
         }
 
         /// Completion
