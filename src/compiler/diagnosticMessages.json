@@ -1579,6 +1579,10 @@
         "category": "Error",
         "code": 2515
     },
+    "All declarations of an abstract member function must be consecutive.": {
+        "category": "Error",
+        "code": 2516
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

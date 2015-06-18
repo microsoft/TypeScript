@@ -9191,9 +9191,6 @@ namespace ts {
                     return;
                 }
 
-                // Abstract methods can't have an implementation -- in particular, they don't need one.
-                if (node.flags & NodeFlags.Abstract) { return; }
-
                 let seen = false;
                 let subsequentNode = forEachChild(node.parent, c => {
                     if (seen) {
@@ -9226,7 +9223,13 @@ namespace ts {
                     error(errorNode, Diagnostics.Constructor_implementation_is_missing);
                 }
                 else {
-                    error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+                    // Report different errors regarding non-consecutive blocks of declarations depending on whether
+                    // the node in question is abstract.
+                    if (node.flags & NodeFlags.Abstract) {
+                        error(errorNode, Diagnostics.All_declarations_of_an_abstract_member_function_must_be_consecutive);
+                    } else {
+                        error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+                    }
                 }
             }
 
@@ -9303,7 +9306,8 @@ namespace ts {
                 });
             }
 
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
+            // Abstract methods can't have an implementation -- in particular, they don't need one.
+            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body && !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) ) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
