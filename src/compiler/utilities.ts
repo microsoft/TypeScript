@@ -868,6 +868,7 @@ module ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
@@ -1854,6 +1855,7 @@ module ts {
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:

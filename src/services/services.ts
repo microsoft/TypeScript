@@ -3009,6 +3009,7 @@ module ts {
 
             function tryGetGlobalSymbols(): boolean {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
+                let jsxElement: JsxElement, jsxSelfClosingElement: JsxSelfClosingElement;
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -3024,6 +3025,7 @@ module ts {
                         // Add filtered items to the completion list
                         symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
                     }
+                    return true;
                 }
                 else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
                     // cursor is in import clause
@@ -3045,61 +3047,77 @@ module ts {
                         //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
                         symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                     }
+                    return true;
                 }
-                else if (getAncestor(contextToken, SyntaxKind.JsxElement)) {
-                    // Defer to global completion if we're inside an {expression}
-                    var expr = getAncestor(contextToken, SyntaxKind.JsxExpression);
-                    if (!expr) {
-                        // Cursor is inside a JSX element
-                        var t = typeChecker.getJsxElementAttributesType((<JsxElement>getAncestor(contextToken, SyntaxKind.JsxElement)).openingElement);
-                        symbols = typeChecker.getPropertiesOfType(t);
-                        isMemberCompletion = true;
+                else if (getAncestor(contextToken, SyntaxKind.JsxElement) || getAncestor(contextToken, SyntaxKind.JsxSelfClosingElement)) {
+                    // Go up until we hit either the element or expression
+                    let jsxNode = contextToken;
+
+                    while (jsxNode) {
+                        if (jsxNode.kind === SyntaxKind.JsxExpression) {
+                            // Defer to global completion if we're inside an {expression}
+                            break;
+                        } else if (jsxNode.kind === SyntaxKind.JsxSelfClosingElement || jsxNode.kind === SyntaxKind.JsxElement) {
+                            let attrsType: Type;
+                            if (jsxNode.kind === SyntaxKind.JsxSelfClosingElement) {
+                                // Cursor is inside a JSX self-closing element
+                                attrsType = typeChecker.getJsxElementAttributesType(<JsxSelfClosingElement>jsxNode);
+                            }
+                            else {
+                                Debug.assert(jsxNode.kind === SyntaxKind.JsxElement);
+                                // Cursor is inside a JSX element
+                                attrsType = typeChecker.getJsxElementAttributesType((<JsxElement>jsxNode).openingElement);
+                            }
+                            symbols = typeChecker.getPropertiesOfType(attrsType);
+                            isMemberCompletion = true;
+                            return true;
+                        }
+                        jsxNode = jsxNode.parent;
                     }
                 }
-                else {
-                    // Get all entities in the current scope.
-                    isMemberCompletion = false;
-                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
 
-                    if (previousToken !== contextToken) {
-                        Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
-                    }
-                    // We need to find the node that will give us an appropriate scope to begin
-                    // aggregating completion candidates. This is achieved in 'getScopeNode'
-                    // by finding the first node that encompasses a position, accounting for whether a node
-                    // is "complete" to decide whether a position belongs to the node.
-                    // 
-                    // However, at the end of an identifier, we are interested in the scope of the identifier
-                    // itself, but fall outside of the identifier. For instance:
-                    // 
-                    //      xyz => x$
-                    //
-                    // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
-                    // so 'xyz' is not returned in our results.
-                    //
-                    // We define 'adjustedPosition' so that we may appropriately account for
-                    // being at the end of an identifier. The intention is that if requesting completion
-                    // at the end of an identifier, it should be effectively equivalent to requesting completion
-                    // anywhere inside/at the beginning of the identifier. So in the previous case, the
-                    // 'adjustedPosition' will work as if requesting completion in the following:
-                    //
-                    //      xyz => $x
-                    //
-                    // If previousToken !== contextToken, then
-                    //   - 'contextToken' was adjusted to the token prior to 'previousToken'
-                    //      because we were at the end of an identifier.
-                    //   - 'previousToken' is defined.
-                    let adjustedPosition = previousToken !== contextToken ?
-                        previousToken.getStart() :
-                        position;
+                // Get all entities in the current scope.
+                isMemberCompletion = false;
+                isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
 
-                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
-
-                    /// TODO filter meaning based on the current context
-                    let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+                if (previousToken !== contextToken) {
+                    Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
                 }
+                // We need to find the node that will give us an appropriate scope to begin
+                // aggregating completion candidates. This is achieved in 'getScopeNode'
+                // by finding the first node that encompasses a position, accounting for whether a node
+                // is "complete" to decide whether a position belongs to the node.
+                // 
+                // However, at the end of an identifier, we are interested in the scope of the identifier
+                // itself, but fall outside of the identifier. For instance:
+                // 
+                //      xyz => x$
+                //
+                // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
+                // so 'xyz' is not returned in our results.
+                //
+                // We define 'adjustedPosition' so that we may appropriately account for
+                // being at the end of an identifier. The intention is that if requesting completion
+                // at the end of an identifier, it should be effectively equivalent to requesting completion
+                // anywhere inside/at the beginning of the identifier. So in the previous case, the
+                // 'adjustedPosition' will work as if requesting completion in the following:
+                //
+                //      xyz => $x
+                //
+                // If previousToken !== contextToken, then
+                //   - 'contextToken' was adjusted to the token prior to 'previousToken'
+                //      because we were at the end of an identifier.
+                //   - 'previousToken' is defined.
+                let adjustedPosition = previousToken !== contextToken ?
+                    previousToken.getStart() :
+                    position;
 
+                let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
+
+                /// TODO filter meaning based on the current context
+                let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
+                symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+ 
                 return true;
             }
 

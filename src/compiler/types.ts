@@ -266,6 +266,7 @@ module ts {
 
         //JSX
         JsxElement,
+        JsxSelfClosingElement,
         JsxOpeningElement,
         JsxText,
         JsxClosingElement,
@@ -822,17 +823,27 @@ module ts {
         typeArguments?: NodeArray<TypeNode>;
     }
 
+    /// A JSX expression of the form <TagName attrs>...</TagName>
     export interface JsxElement extends PrimaryExpression {
         openingElement: JsxOpeningElement;
-        children?: NodeArray<JsxElement | JsxExpression | JsxText>;
-        closingElement?: JsxClosingElement;
+        children: NodeArray<JsxElement | JsxExpression | JsxText>;
+        closingElement: JsxClosingElement;
     }
 
+    /// The opening element of a <Tag>...</Tag> JsxElement
     export interface JsxOpeningElement extends Expression {
+        _openingElementBrand?: any;
         tagName: EntityName;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
-        isSelfClosing: boolean;
     }
+
+    /// A JSX expression of the form <TagName attrs />
+    export interface JsxSelfClosingElement extends PrimaryExpression, JsxOpeningElement {
+        _selfClosingElementBrand?: any;
+    }
+
+    /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
+    export type JsxOpeningLikeElement = JsxSelfClosingElement|JsxOpeningElement;
 
     export interface JsxAttribute extends Node {
         name: Identifier;
@@ -854,8 +865,11 @@ module ts {
 
     export interface JsxText extends Node {
         _jsxTextExpressionBrand: any;
+        /// Used by the emitter to avoid recomputation
         formattedReactText?: string;
     }
+
+    export type JsxChild = JsxText|JsxExpression|JsxElement|JsxSelfClosingElement;
 
     export interface HeritageClauseElement extends TypeNode {
         expression: LeftHandSideExpression;
@@ -869,7 +883,7 @@ module ts {
         template: LiteralExpression | TemplateExpression;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | JsxElement;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;

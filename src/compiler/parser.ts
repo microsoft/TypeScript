@@ -327,9 +327,10 @@ module ts {
                 return visitNode(cbNode, (<JsxElement>node).openingElement) ||
                     visitNodes(cbNodes, (<JsxElement>node).children) ||
                     visitNode(cbNode, (<JsxElement>node).closingElement);
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
-                return visitNode(cbNode, (<JsxOpeningElement>node).tagName) ||
-                    visitNodes(cbNodes, (<JsxOpeningElement>node).attributes);
+                return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
+                    visitNodes(cbNodes, (<JsxOpeningLikeElement>node).attributes);
             case SyntaxKind.JsxAttribute:
                 return visitNode(cbNode, (<JsxAttribute>node).name) ||
                     visitNode(cbNode, (<JsxAttribute>node).initializer);
@@ -1569,8 +1570,9 @@ module ts {
                 case ParsingContext.HeritageClauseElement:
 
                 // Perhaps safe to reuse, but it's unlikely we'd see more than a dozen attributes
-                // on any given element
+                // on any given element. Same for children.
                 case ParsingContext.JsxAttributes:
+                case ParsingContext.JsxChildren:
 
             }
 
@@ -1743,6 +1745,7 @@ module ts {
                 case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
                 case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
                 case ParsingContext.JsxAttributes: return Diagnostics.Identifier_expected;
+                case ParsingContext.JsxChildren: return Diagnostics.Identifier_expected;
                 case ParsingContext.JSDocFunctionParameters: return Diagnostics.Parameter_declaration_expected;
                 case ParsingContext.JSDocTypeArguments: return Diagnostics.Type_argument_expected;
                 case ParsingContext.JSDocTupleTypes: return Diagnostics.Type_expected;
@@ -3154,7 +3157,7 @@ module ts {
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
                     if (sourceFile.isTSXFile) {
-                        return parseJsxElement();
+                        return parseJsxElementOrSelfClosingElement();
                     }
                     else {
                         return parseTypeAssertion();
@@ -3297,8 +3300,8 @@ module ts {
             return "";
         }
 
-        function parseJsxChild(): JsxText | JsxExpression | JsxElement {
-            let result: JsxText | JsxExpression | JsxElement = undefined;
+        function parseJsxChild(): JsxChild {
+            let result: JsxChild = undefined;
             switch (token) {
                 case SyntaxKind.JsxText:
                     result = <JsxText>createNode(SyntaxKind.JsxText);
@@ -3310,7 +3313,7 @@ module ts {
                     break;
                 default:
                     Debug.assert(token === SyntaxKind.LessThanToken);
-                    result = parseJsxElement();
+                    result = parseJsxElementOrSelfClosingElement();
                     break;
             }
             token = scanner.reScanJsxToken();
@@ -3318,39 +3321,49 @@ module ts {
             return result;
         }
 
-        function parseJsxElement(): JsxElement {
-            let node = <JsxElement>createNode(SyntaxKind.JsxElement);
-            node.openingElement = parseJsxOpeningElement();
+        function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
+            let fullStart = scanner.getStartPos();
 
-            let tagName = entityNameToString(node.openingElement.tagName);
+            let opening = parseJsxOpeningOrSelfClosingElement();
+            if (opening.kind === SyntaxKind.JsxOpeningElement) {
+                let node = <JsxElement>createNode(SyntaxKind.JsxElement, fullStart);
+                node.openingElement = opening;
 
-            if (node.openingElement.isSelfClosing) {
-                node.children = <NodeArray<JsxText | JsxExpression | JsxElement>>[];
-            }
-            else {
+                let tagName = entityNameToString(node.openingElement.tagName);
+
                 // Rescan since parsing the > messed up the scanner state
                 token = scanner.reScanJsxToken();
                 node.children = parseList(ParsingContext.JsxChildren, false, parseJsxChild);
-                node.closingElement = parseJsxClosingElement(tagName);
-            } 
-
-            return finishNode(node);
-        }
-        
-        function parseJsxOpeningElement(): JsxOpeningElement {
-            let node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement);
-
-            parseExpected(SyntaxKind.LessThanToken);
-            node.tagName = parseJsxElementName();
-            node.attributes = parseList(ParsingContext.JsxAttributes, /*checkForStrictMode*/ false, parseJsxAttribute);
-            if (token === SyntaxKind.SlashToken) {
-                node.isSelfClosing = true;
-                nextToken();
-                parseExpected(SyntaxKind.GreaterThanToken);
+                node.closingElement = parseJsxClosingElement();
+                return finishNode(node);
             }
             else {
-                parseExpected(SyntaxKind.GreaterThanToken);
+                Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
+                // Nothing else to do for self-closing elements
+                return <JsxSelfClosingElement>opening;
+            }
+        }
+        
+        function parseJsxOpeningOrSelfClosingElement(): JsxOpeningElement|JsxSelfClosingElement {
+            let fullStart = scanner.getStartPos();
+
+            parseExpected(SyntaxKind.LessThanToken);
+
+            let tagName = parseJsxElementName();
+            let attributes = parseList(ParsingContext.JsxAttributes, /*checkForStrictMode*/ false, parseJsxAttribute);
+            let node: JsxOpeningLikeElement;
+            if (token === SyntaxKind.SlashToken) {
+                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
+
+                nextToken();
+            }
+            else {
+                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
             } 
+            parseExpected(SyntaxKind.GreaterThanToken);
+
+            node.tagName = tagName;
+            node.attributes = attributes;
 
             return finishNode(node);
         }
@@ -3402,7 +3415,7 @@ module ts {
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 switch (token) {
                     case SyntaxKind.LessThanToken:
-                        node.initializer = parseJsxElement();
+                        node.initializer = parseJsxElementOrSelfClosingElement();
                         break;
                     case SyntaxKind.StringLiteral:
                         node.initializer = parseLiteralNode();
@@ -3424,13 +3437,10 @@ module ts {
             return finishNode(node);
         }
 
-        function parseJsxClosingElement(expectedTagName: string): JsxClosingElement {
+        function parseJsxClosingElement(): JsxClosingElement {
             let node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement);
             parseExpected(SyntaxKind.LessThanSlashToken);
             node.tagName = parseJsxElementName();
-            if (entityNameToString(node.tagName) !== expectedTagName) {
-                parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, expectedTagName);
-            }
             parseExpected(SyntaxKind.GreaterThanToken);
             return finishNode(node);
         }

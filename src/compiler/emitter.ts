@@ -1109,7 +1109,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emit(span.literal);
             }
 
-            function jsxEmitReact(node: JsxElement) {
+            function jsxEmitReact(node: JsxElement|JsxSelfClosingElement) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier|QualifiedName) {
@@ -1152,22 +1152,22 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emit(node.initializer);
                 }
 
-                function emitJsxElement(node: JsxElement) {
+                function emitJsxElement(openingNode: JsxOpeningElement|JsxSelfClosingElement, children?: JsxChild[]) {
                     // Call React.createElement(tag, ...
-                    emitLeadingComments(node);
+                    emitLeadingComments(openingNode);
                     write('React.createElement(');
-                    emitTagName(node.openingElement.tagName);
+                    emitTagName(openingNode.tagName);
                     write(', ');
 
                     // Attribute list
-                    if (node.openingElement.attributes.length === 0) {
+                    if (openingNode.attributes.length === 0) {
                         // When there are no attributes, React wants 'null'
                         write('null');
                     }
                     else {
                         // Either emit one big object literal (no spread attribs), or
                         // a call to React.__spread
-                        let attrs = node.openingElement.attributes;
+                        let attrs = openingNode.attributes;
                         if (attrs.some(attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
                             write('React.__spread(');
 
@@ -1210,26 +1210,34 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
 
                     // Children
-                    for (var i = 0; i < node.children.length; i++) {
-                        // Don't emit empty expressions
-                        if (node.children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>node.children[i]).expression)) continue;
+                    if (children) {
+                        for (var i = 0; i < children.length; i++) {
+                            // Don't emit empty expressions
+                            if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) continue;
 
-                        // Don't emit empty strings
-                        if (node.children[i].kind === SyntaxKind.JsxText && !shouldEmitJsxText(<JsxText>node.children[i])) continue;
-                        
-                        write(', ');
-                        emit(node.children[i]);
+                            // Don't emit empty strings
+                            if (children[i].kind === SyntaxKind.JsxText && !shouldEmitJsxText(<JsxText>children[i])) continue;
+
+                            write(', ');
+                            emit(children[i]);
+                        }
                     }
 
                     // Closing paren
                     write(')'); // closes 'React.createElement('
-                    emitTrailingComments(node);
+                    emitTrailingComments(openingNode);
                 }
 
-                emitJsxElement(node);
+                if (node.kind === SyntaxKind.JsxElement) {
+                    emitJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children);
+                }
+                else {
+                    Debug.assert(node.kind === SyntaxKind.JsxSelfClosingElement);
+                    emitJsxElement(<JsxSelfClosingElement>node);
+                }
             }
 
-            function jsxEmitPreserve(node: JsxElement) {
+            function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emit(node.name);
                     write('=');
@@ -1242,24 +1250,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write('}');
                 }
 
-                function emitJsxOpeningElement(node: JsxOpeningElement) {
+                function emitAttributes(attribs: NodeArray<JsxAttribute|JsxSpreadAttribute>) {
+                    for (var i = 0, n = attribs.length; i < n; i++) {
+                        if (i > 0) write(' ');
+
+                        if (attribs[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                            emitJsxSpreadAttribute(<JsxSpreadAttribute>attribs[i]);
+                        }
+                        else {
+                            Debug.assert(attribs[i].kind === SyntaxKind.JsxAttribute);
+                            emitJsxAttribute(<JsxAttribute>attribs[i]);
+                        }
+                    }
+                }
+
+                function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement|JsxSelfClosingElement) {
                     write('<');
                     emit(node.tagName);
-                    if (node.attributes.length > 0 || node.isSelfClosing) {
+                    if (node.attributes.length > 0 || (node.kind === SyntaxKind.JsxSelfClosingElement)) {
                         write(' ');
                     }
 
-                    for (var i = 0, n = node.attributes.length; i < n; i++) {
-                        if (i > 0) write(' ');
-                        if (node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute) {
-                            emitJsxSpreadAttribute(<JsxSpreadAttribute>node.attributes[i]);
-                        }
-                        else {
-                            Debug.assert(node.attributes[i].kind === SyntaxKind.JsxAttribute);
-                            emitJsxAttribute(<JsxAttribute>node.attributes[i]);
-                        }
-                    }
-                    if (node.isSelfClosing) {
+                    emitAttributes(node.attributes);
+
+                    if (node.kind === SyntaxKind.JsxSelfClosingElement) {
                         write('/>');
                     }
                     else {
@@ -1274,18 +1288,22 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
 
                 function emitJsxElement(node: JsxElement) {
-                    emitJsxOpeningElement(node.openingElement);
+                    emitJsxOpeningOrSelfClosingElement(node.openingElement);
 
                     for (var i = 0, n = node.children.length; i < n; i++) {
                         emit(node.children[i]);
                     }
 
-                    if (node.closingElement) {
-                        emitJsxClosingElement(node.closingElement);
-                    }
+                    emitJsxClosingElement(node.closingElement);
                 }
 
-                emitJsxElement(node);
+                if (node.kind === SyntaxKind.JsxElement) {
+                    emitJsxElement(<JsxElement>node);
+                }
+                else {
+                    Debug.assert(node.kind === SyntaxKind.JsxSelfClosingElement);
+                    emitJsxOpeningOrSelfClosingElement(<JsxSelfClosingElement>node);
+                }
             }
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
@@ -1364,6 +1382,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                     case SyntaxKind.IfStatement:
+                    case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:
@@ -5842,7 +5861,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
-            function emitJsxElement(node: JsxElement) {
+            function emitJsxElement(node: JsxElement|JsxSelfClosingElement) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
                         jsxEmitReact(node);
@@ -6115,7 +6134,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     case SyntaxKind.TemplateSpan:
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.JsxElement:
-                        return emitJsxElement(<JsxElement>node);
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return emitJsxElement(<JsxElement|JsxSelfClosingElement>node);
                     case SyntaxKind.JsxText:
                         return emitJsxText(<JsxText>node);
                     case SyntaxKind.JsxExpression:
