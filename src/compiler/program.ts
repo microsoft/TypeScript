@@ -105,7 +105,10 @@ namespace ts {
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile): Diagnostic[] {
-        let diagnostics = program.getOptionsDiagnostics().concat(program.getSyntacticDiagnostics(sourceFile)).concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics(sourceFile));
+        let diagnostics = program.getOptionsDiagnostics().concat(
+                          program.getSyntacticDiagnostics(sourceFile),
+                          program.getGlobalDiagnostics(),
+                          program.getSemanticDiagnostics(sourceFile));
 
         if (program.getCompilerOptions().declaration) {
             diagnostics.concat(program.getDeclarationDiagnostics(sourceFile));
