@@ -9551,13 +9551,13 @@ namespace ts {
         }
         
         function checkAwaitedType(type: Type, location?: Node, message?: DiagnosticMessage) {
-            return getAwaitedTypeWorker(type);
+            return checkAwaitedTypeWorker(type);
             
-            function getAwaitedTypeWorker(type: Type): Type {
+            function checkAwaitedTypeWorker(type: Type): Type {
                 if (type.flags & TypeFlags.Union) {
                     let types: Type[] = [];
                     for (let constituentType of (<UnionType>type).types) {
-                        types.push(getAwaitedTypeWorker(constituentType));
+                        types.push(checkAwaitedTypeWorker(constituentType));
                     }
                     
                     return getUnionType(types);
@@ -9630,7 +9630,7 @@ namespace ts {
                         // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
                         // See the comments above for more information.
                         awaitedTypeStack.push(type.id);
-                        let awaitedType = getAwaitedTypeWorker(promisedType);
+                        let awaitedType = checkAwaitedTypeWorker(promisedType);
                         awaitedTypeStack.pop();
                         return awaitedType;                
                     }
