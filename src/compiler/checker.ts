@@ -167,7 +167,7 @@ namespace ts {
 
         return checker;
 
-        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationTokenObject) {
+        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
             getDiagnostics(sourceFile, cancellationToken);
@@ -11681,8 +11681,8 @@ namespace ts {
             }
         }
 
-        var cancellationToken: CancellationTokenObject;
-        function getDiagnostics(sourceFile: SourceFile, ct: CancellationTokenObject): Diagnostic[] {
+        var cancellationToken: CancellationToken;
+        function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): Diagnostic[] {
             try {
                 // Record the cancellation token so it can be checked later on during checkSourceElement.
                 // Do this in a finally block so we can ensure that it gets reset back to nothing after

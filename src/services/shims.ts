@@ -51,7 +51,7 @@ namespace ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): CancellationToken;
+        getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
@@ -326,7 +326,7 @@ namespace ts {
             }
         }
 
-        public getCancellationToken(): CancellationToken {
+        public getCancellationToken(): HostCancellationToken {
             return this.shimHost.getCancellationToken();
         }
 

@@ -799,24 +799,3 @@ namespace ts {
         }
     }
 }
-
-namespace ts {
-    export class OperationCanceledException { }
-
-    export class CancellationTokenObject {
-        public static None: CancellationTokenObject = new CancellationTokenObject(null)
-
-        constructor(private cancellationToken: CancellationToken) {
-        }
-
-        public isCancellationRequested() {
-            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
-        }
-
-        public throwIfCancellationRequested(): void {
-            if (this.isCancellationRequested()) {
-                throw new OperationCanceledException();
-            }
-        }
-    }
-}

@@ -104,7 +104,7 @@ namespace ts {
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationTokenObject): Diagnostic[] {
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
         let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
                           program.getSyntacticDiagnostics(sourceFile, cancellationToken),
                           program.getGlobalDiagnostics(cancellationToken),
@@ -233,11 +233,11 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationTokenObject): EmitResult {
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
             return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationTokenObject): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken): EmitResult {
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we 
             // get any preEmit diagnostics, not just the ones 
@@ -272,8 +272,8 @@ namespace ts {
 
         function getDiagnosticsHelper(
                 sourceFile: SourceFile,
-                getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationTokenObject) => Diagnostic[],
-                cancellationToken: CancellationTokenObject): Diagnostic[] {
+                getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[],
+                cancellationToken: CancellationToken): Diagnostic[] {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -289,19 +289,19 @@ namespace ts {
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return sourceFile.parseDiagnostics;
         }
 
@@ -321,7 +321,7 @@ namespace ts {
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
                 let typeChecker = getDiagnosticsProducingTypeChecker();
 
@@ -334,7 +334,7 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationTokenObject): Diagnostic[] {
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (!isDeclarationFile(sourceFile)) {
                     let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);

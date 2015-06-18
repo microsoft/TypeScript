@@ -944,6 +944,10 @@ namespace ts {
         }
     }
 
+    export interface HostCancellationToken {
+        isCancellationRequested(): boolean;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -955,7 +959,7 @@ namespace ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
-        getCancellationToken?(): CancellationToken;
+        getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
         log? (s: string): void;
@@ -2377,6 +2381,21 @@ namespace ts {
                 return ScriptElementKind.alias;
         }
         return ScriptElementKind.unknown;
+    }
+
+    class CancellationTokenObject implements CancellationToken {
+        constructor(private cancellationToken: HostCancellationToken) {
+        }
+
+        public isCancellationRequested() {
+            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
+        }
+
+        public throwIfCancellationRequested(): void {
+            if (this.isCancellationRequested()) {
+                throw new OperationCanceledException();
+            }
+        }
     }
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
