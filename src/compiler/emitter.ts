@@ -264,6 +264,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return makeUniqueName("default");
             }
 
+            function generateNameForClassExpression() {
+                return makeUniqueName("class");
+            }
+
             function generateNameForNode(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -276,9 +280,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.ExportAssignment:
                         return generateNameForExportDefault();
+                    case SyntaxKind.ClassExpression:
+                        return generateNameForClassExpression();
                 }
             }
 
