@@ -11,10 +11,10 @@ tests/cases/compiler/nameCollisions.ts(33,11): error TS2300: Duplicate identifie
 tests/cases/compiler/nameCollisions.ts(34,14): error TS2300: Duplicate identifier 'C'.
 tests/cases/compiler/nameCollisions.ts(36,14): error TS2300: Duplicate identifier 'C2'.
 tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifier 'C2'.
-tests/cases/compiler/nameCollisions.ts(42,11): error TS2506: Only an ambient class can be merged with an interface.
-tests/cases/compiler/nameCollisions.ts(43,15): error TS2506: Only an ambient class can be merged with an interface.
-tests/cases/compiler/nameCollisions.ts(45,15): error TS2506: Only an ambient class can be merged with an interface.
-tests/cases/compiler/nameCollisions.ts(46,11): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/compiler/nameCollisions.ts(42,11): error TS2511: Only an ambient class can be merged with an interface.
+tests/cases/compiler/nameCollisions.ts(43,15): error TS2511: Only an ambient class can be merged with an interface.
+tests/cases/compiler/nameCollisions.ts(45,15): error TS2511: Only an ambient class can be merged with an interface.
+tests/cases/compiler/nameCollisions.ts(46,11): error TS2511: Only an ambient class can be merged with an interface.
 
 
 ==== tests/cases/compiler/nameCollisions.ts (17 errors) ====
@@ -87,15 +87,15 @@ tests/cases/compiler/nameCollisions.ts(46,11): error TS2506: Only an ambient cla
     
         class cli { }
               ~~~
-!!! error TS2506: Only an ambient class can be merged with an interface.
+!!! error TS2511: Only an ambient class can be merged with an interface.
         interface cli { } // error
                   ~~~
-!!! error TS2506: Only an ambient class can be merged with an interface.
+!!! error TS2511: Only an ambient class can be merged with an interface.
     
         interface cli2 { }
                   ~~~~
-!!! error TS2506: Only an ambient class can be merged with an interface.
+!!! error TS2511: Only an ambient class can be merged with an interface.
         class cli2 { } // error
               ~~~~
-!!! error TS2506: Only an ambient class can be merged with an interface.
+!!! error TS2511: Only an ambient class can be merged with an interface.
     }

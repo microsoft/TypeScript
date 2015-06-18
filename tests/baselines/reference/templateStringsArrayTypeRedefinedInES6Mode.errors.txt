@@ -1,5 +1,4 @@
-lib.d.ts(521,11): error TS2506: Only an ambient class can be merged with an interface.
-tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(2,7): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(2,7): error TS2511: Only an ambient class can be merged with an interface.
 tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(8,3): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
   Property 'raw' is missing in type '{}'.
 
@@ -8,7 +7,7 @@ tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(8,3): error T
     
     class TemplateStringsArray {
           ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2506: Only an ambient class can be merged with an interface.
+!!! error TS2511: Only an ambient class can be merged with an interface.
     }
     
     function f(x: TemplateStringsArray, y: number, z: number) {
