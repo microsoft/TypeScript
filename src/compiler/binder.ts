@@ -176,7 +176,7 @@ namespace ts {
         /**
          * Declares a Symbol for the node and adds it to symbols. Reports errors for conflicting identifier names.
          * @param symbolTable - The symbol table which node will be added to.
-         * @param parent - If node is in a class, parent denotes the parent declaration.
+         * @param parent - node's parent declaration.
          * @param node - The declaration to be added to the symbol table
          * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
          * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations. 
@@ -211,11 +211,11 @@ namespace ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
-                    
+
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;   
+                    classifiableNames[name] = name;
                 }
-                
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
