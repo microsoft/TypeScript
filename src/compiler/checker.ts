@@ -2818,11 +2818,11 @@ namespace ts {
             let baseTypes = getBaseTypes(target);
             if (baseTypes.length) {
                 members = createSymbolTable(target.declaredProperties);
-                let filter = <ResolveFilter>{ excludeInherited: {}, excludeTemp: {} };
+                filter = filter || <ResolveFilter>{ excludeInherited: {}, excludeTemp: {} };
                 for (let baseType of baseTypes) {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
-                    callSignatures = addSignatures(callSignatures, getSignaturesOfObjectType(baseType, SignatureKind.Call), filter);
-                    constructSignatures = addSignatures(constructSignatures, getSignaturesOfObjectType(baseType, SignatureKind.Construct), filter);
+                    callSignatures = addSignatures(callSignatures, getSignaturesOfObjectType(baseType, SignatureKind.Call, filter), filter);
+                    constructSignatures = addSignatures(constructSignatures, getSignaturesOfObjectType(baseType, SignatureKind.Construct, filter), filter);
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
                     numberIndexType = numberIndexType || getIndexTypeOfType(baseType, IndexKind.Number);
                     for (let symbolId in filter.excludeTemp) {
@@ -2862,8 +2862,8 @@ namespace ts {
                 for (let baseType of baseTypes) {
                     let instantiatedBaseType = instantiateType(baseType, mapper);
                     addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
-                    callSignatures = addSignatures(callSignatures, getSignaturesOfObjectType(instantiatedBaseType, SignatureKind.Call), filter);
-                    constructSignatures = addSignatures(constructSignatures, getSignaturesOfObjectType(instantiatedBaseType, SignatureKind.Construct), filter);
+                    callSignatures = addSignatures(callSignatures, getSignaturesOfObjectType(instantiatedBaseType, SignatureKind.Call, filter), filter);
+                    constructSignatures = addSignatures(constructSignatures, getSignaturesOfObjectType(instantiatedBaseType, SignatureKind.Construct, filter), filter);
                     stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
                     numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
                     for (let symbolId in filter.excludeTemp) {
@@ -3192,10 +3192,10 @@ namespace ts {
             return undefined;
         }
 
-        function getSignaturesOfObjectType(type: Type, kind: SignatureKind): Signature[] {
+        function getSignaturesOfObjectType(type: Type, kind: SignatureKind, filter: ResolveFilter): Signature[] {
             let resolved = <ResolvedType>type;
             if (!resolved.members) {
-                resolveClassOrInterfaceMembers(<InterfaceType>type);
+                resolveClassOrInterfaceMembers(<InterfaceType>type, filter);
             }
             return kind === SignatureKind.Call ? resolved.callSignatures : resolved.constructSignatures;
         }
