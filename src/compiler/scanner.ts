@@ -1483,25 +1483,23 @@ module ts {
                     pos += 2;
                     return token = SyntaxKind.LessThanSlashToken;
                 }
-                else {
-                    pos++;
-                    return token = SyntaxKind.LessThanToken;
-                }
+                pos++;
+                return token = SyntaxKind.LessThanToken;
             }
-            else if (char === CharacterCodes.openBrace) {
+
+            if (char === CharacterCodes.openBrace) {
                 pos++;
                 return token = SyntaxKind.OpenBraceToken;
             }
-            else {
-                while (pos < end) {
-                    pos++;
-                    char = text.charCodeAt(pos);
-                    if ((char === CharacterCodes.openBrace) || (char === CharacterCodes.lessThan)) {
-                        break;
-                    }
+
+            while (pos < end) {
+                pos++;
+                char = text.charCodeAt(pos);
+                if ((char === CharacterCodes.openBrace) || (char === CharacterCodes.lessThan)) {
+                    break;
                 }
-                return token = SyntaxKind.JsxText;
             }
+            return token = SyntaxKind.JsxText;
         }
 
         // Scans a JSX identifier; these differ from normal identifiers in that
