@@ -690,7 +690,6 @@ module ts.server {
             let veryLowPriorityFiles: string[] = [];
             let normalizedFilePath = ts.normalizePath(fileName);
             let project = this.projectService.getProjectForFile(normalizedFilePath);
-            this.logger.info("fileName: " + fileName);
             for (let oneFile of fileNameList) {
                 if (oneFile == normalizedFilePath)
                     highPriorityFiles.push(oneFile);
@@ -707,10 +706,6 @@ module ts.server {
                         mediumPriorityFiles.push(oneFile);
                 }
             }
-            this.logger.info("highPriorityFiles: " + highPriorityFiles);
-            this.logger.info("mediumPriorityFiles: " + mediumPriorityFiles);
-            this.logger.info("lowPriorityFiles: " + lowPriorityFiles);
-            this.logger.info("veryLowPriorityFiles: " + veryLowPriorityFiles);
 
             fileNameList = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
 
