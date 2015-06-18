@@ -1789,11 +1789,6 @@ namespace ts {
             sourceFile.moduleName = moduleName;
         }
 
-        // Store syntactic diagnostics
-        if (diagnostics && sourceFile.parseDiagnostics) {
-            diagnostics.push(...sourceFile.parseDiagnostics);
-        }
-
         let newLine = getNewLineCharacter(options);
 
         // Output
@@ -1815,9 +1810,8 @@ namespace ts {
 
         var program = createProgram([inputFileName], options, compilerHost);
 
-        if (diagnostics) {
-            diagnostics.push(...program.getCompilerOptionsDiagnostics());
-        }
+        addRange(/*to*/ diagnostics, /*from*/ sourceFile.parseDiagnostics);
+        addRange(/*to*/ diagnostics, /*from*/ program.getCompilerOptionsDiagnostics());
 
         // Emit
         program.emit();
@@ -4188,7 +4182,7 @@ namespace ts {
                 var result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
-                        result.push(...getDefinitionFromSymbol(t.symbol, node));
+                        addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(t.symbol, node));
                     }
                 });
                 return result;
