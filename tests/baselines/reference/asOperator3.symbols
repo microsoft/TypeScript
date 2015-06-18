@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/asOperator/asOperator3.ts ===
+declare function tag(...x: any[]): any;
+>tag : Symbol(tag, Decl(asOperator3.ts, 0, 0))
+>x : Symbol(x, Decl(asOperator3.ts, 0, 21))
+
+var a = `${123 + 456 as number}`;
+>a : Symbol(a, Decl(asOperator3.ts, 2, 3))
+
+var b = `leading ${123 + 456 as number}`;
+>b : Symbol(b, Decl(asOperator3.ts, 3, 3))
+
+var c = `${123 + 456 as number} trailing`;
+>c : Symbol(c, Decl(asOperator3.ts, 4, 3))
+
+var d = `Hello ${123} World` as string;
+>d : Symbol(d, Decl(asOperator3.ts, 5, 3))
+
+var e = `Hello` as string;
+>e : Symbol(e, Decl(asOperator3.ts, 6, 3))
+
+var f = 1 + `${1} end of string` as string;
+>f : Symbol(f, Decl(asOperator3.ts, 7, 3))
+
+var g = tag `Hello ${123} World` as string;
+>g : Symbol(g, Decl(asOperator3.ts, 8, 3))
+>tag : Symbol(tag, Decl(asOperator3.ts, 0, 0))
+
+var h = tag `Hello` as string;
+>h : Symbol(h, Decl(asOperator3.ts, 9, 3))
+>tag : Symbol(tag, Decl(asOperator3.ts, 0, 0))
+

@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsx/consumer.tsx ===
+///<reference path="file.tsx" />
+// Should keep s1 and elide s2
+import s1 = require('elements1');
+>s1 : typeof s1
+
+import s2 = require('elements2');
+>s2 : typeof s2
+
+<s1.MyElement />;
+><s1.MyElement /> : JSX.Element
+>s1 : any
+>MyElement : any
+
+=== tests/cases/conformance/jsx/file.tsx ===
+
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements { }
+>IntrinsicElements : IntrinsicElements
+}
+
+declare module 'elements1' {
+	class MyElement {
+>MyElement : MyElement
+
+	}
+}
+
+declare module 'elements2' {
+	class MyElement {
+>MyElement : MyElement
+
+	}
+}
+

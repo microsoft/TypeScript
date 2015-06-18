@@ -1,0 +1,9 @@
+tests/cases/conformance/jsx/tsxNoJsx.tsx(2,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+
+
+==== tests/cases/conformance/jsx/tsxNoJsx.tsx (1 errors) ====
+    
+    <nope />;
+    ~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
