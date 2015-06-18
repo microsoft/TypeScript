@@ -824,7 +824,7 @@ namespace ts {
         }
 
         // Resolves a qualified name and any involved aliases
-        function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags, location?: Node): Symbol {
+        function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags): Symbol {
             if (nodeIsMissing(name)) {
                 return undefined;
             }
@@ -833,7 +833,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 let message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
 
-                symbol = resolveName(location || name, (<Identifier>name).text, meaning, message, <Identifier>name);
+                symbol = resolveName(name, (<Identifier>name).text, meaning, message, <Identifier>name);
                 if (!symbol) {
                     return undefined;
                 }
@@ -842,7 +842,7 @@ namespace ts {
                 let left = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).left : (<PropertyAccessExpression>name).expression;
                 let right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
 
-                let namespace = resolveEntityName(left, SymbolFlags.Namespace, location);
+                let namespace = resolveEntityName(left, SymbolFlags.Namespace);
                 if (!namespace || namespace === unknownSymbol || nodeIsMissing(right)) {
                     return undefined;
                 }
@@ -8839,7 +8839,6 @@ namespace ts {
             }
 
             if (produceDiagnostics) {
-                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -9632,7 +9631,7 @@ namespace ts {
           * a `resolve` function as one of its arguments and results in an object with a 
           * callable `then` signature.
           */
-        function checkAsyncFunctionReturnType(node: SignatureDeclaration): Type {
+        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
             let globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
             if (globalPromiseConstructorLikeType === emptyObjectType) {
                 // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
@@ -9640,10 +9639,10 @@ namespace ts {
                 return unknownType;
             }
 
-            // The return type of an async function will be the type of the instance. For this
-            // to be a type compatible with our async function emit, we must also check that
-            // the type of the declaration (e.g. the static side or "constructor" type of the 
-            // promise) is a compatible `PromiseConstructorLike`.
+            // As part of our emit for an async function, we will need to emit the entity name of
+            // the return type annotation as an expression. To meet the necessary runtime semantics
+            // for __awaiter, we must also check that the type of the declaration (e.g. the static 
+            // side or "constructor" of the promise type) is compatible `PromiseConstructorLike`.
             //
             // An example might be (from lib.es6.d.ts):
             //
@@ -9666,36 +9665,33 @@ namespace ts {
             //
             // When we get the type of the `Promise` symbol here, we get the type of the static
             // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
-            let returnType = getTypeFromTypeNode(node.type);
-            let entityName = getEntityNameFromTypeNode(node.type);
-            let resolvedName = entityName ? resolveEntityName(entityName, SymbolFlags.Value, node) : undefined;
-            if (!resolvedName || !returnType.symbol) {
-                error(node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-                return unknownType;
-            }
-
-            if (getMergedSymbol(resolvedName) !== getMergedSymbol(returnType.symbol)) {
-                // If we were unable to resolve the return type as a value, report an error.
-                let identifier = getFirstIdentifier(entityName);
-                error(resolvedName.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                    identifier.text,
-                    identifier.text);
-                return unknownType;
-            }
-
-            // When we emit the async function, we need to ensure we emit any imports that might 
-            // otherwise have been elided if the return type were only ever referenced in a type
-            // position. As such, we check the entity name as an expression.
-            let declaredType = checkExpression(entityName);
-
-            if (!isTypeAssignableTo(declaredType, globalPromiseConstructorLikeType)) {
-                // If the declared type of the return type is not assignable to a PromiseConstructorLike, report an error.
-                error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-                return unknownType;
+            
+            let promiseType = getTypeFromTypeNode(node.type);
+            let promiseConstructor = getMergedSymbol(promiseType.symbol);
+            if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
+                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
+                return unknownType
             }
             
+            // Validate the promise constructor type.
+            let promiseConstructorType = getTypeOfSymbol(promiseConstructor);
+            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
+                return unknownType;
+            }
+
+            // Verify there is no local declaration that could collide with the promise constructor.
+            let promiseName = getEntityNameFromTypeNode(node.type);
+            let root = getFirstIdentifier(promiseName);
+            let rootSymbol = getSymbol(node.locals, root.text, SymbolFlags.Value);
+            if (rootSymbol) {
+                error(rootSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
+                    root.text,
+                    getFullyQualifiedName(promiseConstructor));
+                return unknownType;
+            }
+
             // Get and return the awaited type of the return type.
-            return getAwaitedType(returnType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return getAwaitedType(promiseType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
         }
                 
         /** Check a decorator */
@@ -10090,22 +10086,6 @@ namespace ts {
                             error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
                         }
                     }
-                }
-            }
-        }
-
-        function checkCollisionWithAwaiterVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
-            if (!name || name.kind !== SyntaxKind.Identifier || isTypeNode(name)) {
-                return;
-            }
-            
-            let identifier = <Identifier>name;
-            let container = getContainingFunction(name);
-            if (container && isAsyncFunctionLike(container) && node.kind !== SyntaxKind.Identifier) {
-                let promiseConstructorName = getEntityNameFromTypeNode(container.type);
-                let firstIdentifier = promiseConstructorName ? getFirstIdentifier(promiseConstructorName) : undefined;
-                if (firstIdentifier && firstIdentifier.text === identifier.text) {
-                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, getTextOfNode(promiseConstructorName));
                 }
             }
         }
@@ -10954,7 +10934,6 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
             }
             checkTypeParameters(node.typeParameters);
             checkExportsOnMergedDeclarations(node);
@@ -11398,7 +11377,6 @@ namespace ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);

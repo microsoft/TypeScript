@@ -11,7 +11,6 @@ class C {
 class C {
     method() {
         function other() { }
-        var fn = () => __awaiter(function* (arguments) { return yield other.apply(this, arguments); },
-        this, arguments);
+        var fn = () => __awaiter([this, , arguments], function* (arguments) { return yield other.apply(this, arguments); });
     }
 }

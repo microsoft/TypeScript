@@ -48,6 +48,7 @@ namespace ts {
         A_set_accessor_parameter_cannot_have_an_initializer: { code: 1052, category: DiagnosticCategory.Error, key: "A 'set' accessor parameter cannot have an initializer." },
         A_set_accessor_cannot_have_rest_parameter: { code: 1053, category: DiagnosticCategory.Error, key: "A 'set' accessor cannot have rest parameter." },
         A_get_accessor_cannot_have_parameters: { code: 1054, category: DiagnosticCategory.Error, key: "A 'get' accessor cannot have parameters." },
+        Type_0_is_not_a_valid_async_function_return_type: { code: 1055, category: DiagnosticCategory.Error, key: "Type '{0}' is not a valid async function return type." },
         Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1056, category: DiagnosticCategory.Error, key: "Accessors are only available when targeting ECMAScript 5 and higher." },
         An_async_function_or_method_must_have_a_valid_awaitable_return_type: { code: 1057, category: DiagnosticCategory.Error, key: "An async function or method must have a valid awaitable return type." },
         Operand_for_await_does_not_have_a_valid_callable_then_member: { code: 1058, category: DiagnosticCategory.Error, key: "Operand for 'await' does not have a valid callable 'then' member." },

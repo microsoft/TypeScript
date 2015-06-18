@@ -7,9 +7,8 @@ async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration13_es6.js]
 function foo() {
-    return __awaiter(function* () {
+    return __awaiter([this, Promise], function* () {
         // Legal to use 'await' in a type context.
         var v;
-    },
-    this, void 0, Promise);
+    });
 }

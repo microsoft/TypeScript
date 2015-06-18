@@ -49,10 +49,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };`;
 
         const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, PromiseConstructor) {
-    PromiseConstructor || (PromiseConstructor = Promise);
+var __awaiter = (this && this.__awaiter) || function (args, generator) {
+    var PromiseConstructor = args[1] || Promise;
     return new PromiseConstructor(function (resolve, reject) {
-        generator = generator.call(thisArg, args);
+        generator = generator.call(args[0], args[2]);
         function cast(value) { return value instanceof PromiseConstructor ? value : new PromiseConstructor(function (resolve) { resolve(value); }); }
         function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
         function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
@@ -3359,6 +3359,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
             function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration) {
                 let promiseConstructor = getEntityNameFromTypeNode(node.type);
                 let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
+                let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
                 let args: string;
 
                 // An async function is emit as an outer function that calls an inner
@@ -3373,7 +3374,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
                 //  let a = async (b) => { await b; }
                 //
                 //  // output
-                //  let a = (b) => __awaiter(function* (b) {
+                //  let a = (b) => __awaiter([this], function* (b) {
                 //      yield b;
                 //  }, this);
                 //
@@ -3383,9 +3384,9 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
                 //  let a = async (b) => { await arguments[0]; }
                 //
                 //  // output
-                //  let a = (b) => __awaiter(function* (arguments) {
+                //  let a = (b) => __awaiter([this, arguments], function* (arguments) {
                 //      yield arguments[0];
-                //  }, this, arguments);
+                //  });
                 //
                 // The emit for an async function expression without a lexical `arguments` binding
                 // might be:
@@ -3397,7 +3398,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter(function* () {
+                //      return __awaiter([this], function* () {
                 //          yield b;
                 //      }, this);
                 //  }
@@ -3412,9 +3413,24 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter(function* (arguments) {
+                //      return __awaiter([this, arguments], function* (arguments) {
                 //          yield arguments[0];
-                //      }, this, arguments);
+                //      });
+                //  }
+                //
+                // The emit for an async function expression with a lexical `arguments` binding
+                // and a return type annotation might be:
+                //
+                //  // input
+                //  let a = async function (b): MyPromise<any> {
+                //      await arguments[0];
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter([this, arguments, MyPromise], function* (arguments) {
+                //          yield arguments[0];
+                //      });
                 //  }
                 //
                 
@@ -3427,42 +3443,27 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
                     write("return");
                 }
                 
+                write(" __awaiter([this");
+                if (promiseConstructor || hasLexicalArguments) {
+                    write(", ");
+                    if (promiseConstructor) {
+                        emitNodeWithoutSourceMap(promiseConstructor);
+                    }
+                    if (hasLexicalArguments) {
+                        write(", arguments");
+                    }
+                }
                 
                 // Emit the call to __awaiter.
-                let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
                 if (hasLexicalArguments) {
-                    write(" __awaiter(function* (arguments)");
+                    write("], function* (arguments)");
                 }
                 else {
-                    write(" __awaiter(function* ()");
+                    write("], function* ()");
                 }
                 
                 // Emit the signature and body for the inner generator function.
                 emitFunctionBody(node);
-                
-                // Emit the current `this` binding.
-                write(",");
-                writeLine();
-                write("this");
-                
-                // Optionally emit the lexical arguments.
-                if (hasLexicalArguments) {
-                    write(", arguments");
-                }
-
-                // If the function has an explicit type annotation for a promise, emit the 
-                // constructor.
-                if (promiseConstructor) {
-                    // If we did not have lexical arguments, supply undefined (void 0) for
-                    // the `arguments` parameter.
-                    if (!hasLexicalArguments) {
-                        write(", void 0");
-                    }
-                    
-                    write(", ");
-                    emitNodeWithoutSourceMap(promiseConstructor);
-                }
-                
                 write(")");
                 
                 // If this is not an async arrow, emit the closing brace of the outer function body.

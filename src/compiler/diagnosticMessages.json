@@ -179,6 +179,10 @@
         "category": "Error",
         "code": 1054
     },
+    "Type '{0}' is not a valid async function return type.": {
+        "category": "Error",
+        "code": 1055  
+    },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056

@@ -13,10 +13,9 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression3_es6.js]
 function func() {
-    return __awaiter(function* () {
+    return __awaiter([this, Promise], function* () {
         "before";
         var b = fn(a, yield p, a);
         "after";
-    },
-    this, void 0, Promise);
+    });
 }
