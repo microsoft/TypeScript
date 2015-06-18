@@ -1227,7 +1227,7 @@ module ts {
                 case ParsingContext.ImportOrExportSpecifiers:
                     return isIdentifierOrKeyword();
                 case ParsingContext.JsxAttributes:
-                    return isIdentifier() || token === SyntaxKind.OpenBraceToken;
+                    return isIdentifierOrKeyword() || token === SyntaxKind.OpenBraceToken;
                 case ParsingContext.JsxChildren:
                     return token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.JsxText;
                 case ParsingContext.JSDocFunctionParameters:
@@ -2908,6 +2908,32 @@ module ts {
                     return Tristate.False;
                 }
 
+                // JSX overrides
+                if (sourceFile.isTSXFile) {
+                    let isArrowFunctionInJsx = lookAhead(() => {
+                        let third = nextToken();
+                        let fourth = nextToken();
+                        if (third === SyntaxKind.ExtendsKeyword) {
+                            switch (fourth) {
+                                case SyntaxKind.EqualsToken:
+                                case SyntaxKind.GreaterThanToken:
+                                    return false;
+                                default:
+                                    return true;
+                            }
+                        }
+                        else if (third === SyntaxKind.CommaToken) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (isArrowFunctionInJsx) {
+                        return Tristate.Unknown;
+                    } else {
+                        return Tristate.False;
+                    }
+                }
+
                 // This *could* be a parenthesized arrow function.
                 return Tristate.Unknown;
             }
@@ -3157,12 +3183,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    if (sourceFile.isTSXFile) {
-                        return parseJsxElementOrSelfClosingElement();
-                    }
-                    else {
-                        return parseTypeAssertion();
-                    }
+                    return sourceFile.isTSXFile ? parseJsxElementOrSelfClosingElement() : parseTypeAssertion();
                 default:
                     return parsePostfixExpressionOrHigher();
             }
@@ -3410,6 +3431,7 @@ module ts {
             if (token === SyntaxKind.OpenBraceToken) {
                 return parseJsxSpreadAttribute();
             }
+
             scanJsxIdentifier();
             let node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
             node.name = parseIdentifierName();
