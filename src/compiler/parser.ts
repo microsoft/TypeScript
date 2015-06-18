@@ -3344,11 +3344,9 @@ module ts {
         }
 
         function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
-            let fullStart = scanner.getStartPos();
-
             let opening = parseJsxOpeningOrSelfClosingElement();
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
-                let node = <JsxElement>createNode(SyntaxKind.JsxElement, fullStart);
+                let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
                 // Rescan since parsing the > messed up the scanner state

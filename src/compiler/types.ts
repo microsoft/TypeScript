@@ -826,7 +826,7 @@ module ts {
     /// A JSX expression of the form <TagName attrs>...</TagName>
     export interface JsxElement extends PrimaryExpression {
         openingElement: JsxOpeningElement;
-        children: NodeArray<JsxElement | JsxExpression | JsxText>;
+        children: NodeArray<JsxChild>;
         closingElement: JsxClosingElement;
     }
 
@@ -843,7 +843,7 @@ module ts {
     }
 
     /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
-    export type JsxOpeningLikeElement = JsxSelfClosingElement|JsxOpeningElement;
+    export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
 
     export interface JsxAttribute extends Node {
         name: Identifier;
@@ -869,7 +869,7 @@ module ts {
         formattedReactText?: string;
     }
 
-    export type JsxChild = JsxText|JsxExpression|JsxElement|JsxSelfClosingElement;
+    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
     export interface HeritageClauseElement extends TypeNode {
         expression: LeftHandSideExpression;
