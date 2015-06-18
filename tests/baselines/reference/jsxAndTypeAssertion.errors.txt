@@ -1,12 +1,34 @@
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,13): error TS2304: Cannot find name 'test'.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,17): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,19): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(9,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(9,10): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(11,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(11,17): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(11,32): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(13,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(13,16): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(13,36): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,16): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,31): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,45): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(17,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(17,23): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,7): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,12): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,34): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,39): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,53): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,58): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: ':' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expected corresponding JSX closing tag for 'any'.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expected corresponding JSX closing tag for 'foo'.
 
 
-==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (6 errors) ====
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (28 errors) ====
     
     declare var createElement: any;
     
@@ -14,45 +36,90 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: ':' exp
     
     var x: any;
     x = <any> { test: <any></any> };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                ~~~~
+!!! error TS2304: Cannot find name 'test'.
                     ~
 !!! error TS1005: '}' expected.
-    
+                      ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     x = <any><any></any>;
-    ~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+             ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
      
-    ~
     x = <foo>hello {<foo>{}} </foo>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                    ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
                                    ~
 !!! error TS1005: '}' expected.
     
-    
     x = <foo test={<foo>{}}>hello</foo>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
                                        ~
 !!! error TS1005: '}' expected.
     
     
     x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                                  ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
                                                 ~
 !!! error TS1005: '}' expected.
     
     
+    
     x = <foo>x</foo>, x = <foo/>;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                          ~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
     
     
     <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+          ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+               ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                                     ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                                          ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                                                        ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                                                             ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
     
     
         
+    ~~~~
     ~~~~
     
     
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
 !!! error TS1005: ':' expected.
+    
+!!! error TS17002: Expected corresponding JSX closing tag for 'any'.
+    
+!!! error TS17002: Expected corresponding JSX closing tag for 'foo'.

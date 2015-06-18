@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/tsxElementResolution8.tsx(8,2): error TS2604: JSX element 'Div' is not a constructor function or factory function.
-tests/cases/conformance/jsx/tsxElementResolution8.tsx(16,2): error TS2601: The return type of a JSX element constructor or factory function must return an object type.
-tests/cases/conformance/jsx/tsxElementResolution8.tsx(29,2): error TS2601: The return type of a JSX element constructor or factory function must return an object type.
-tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX element 'Obj3' is not a constructor function or factory function.
+tests/cases/conformance/jsx/tsxElementResolution8.tsx(8,2): error TS2604: JSX element 'Div' is not a constructor function.
+tests/cases/conformance/jsx/tsxElementResolution8.tsx(16,2): error TS2601: The return type of a JSX element constructor must return an object type.
+tests/cases/conformance/jsx/tsxElementResolution8.tsx(29,2): error TS2601: The return type of a JSX element constructor must return an object type.
+tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX element 'Obj3' is not a constructor function.
 
 
 ==== tests/cases/conformance/jsx/tsxElementResolution8.tsx (4 errors) ====
@@ -14,7 +14,7 @@ tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX e
     var Div = 3;
     <Div />;
      ~~~
-!!! error TS2604: JSX element 'Div' is not a constructor function or factory function.
+!!! error TS2604: JSX element 'Div' is not a constructor function.
     
     // OK
     function Fact(): any { return null; }
@@ -24,7 +24,7 @@ tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX e
     function Fnum(): number{ return 42; }
     <Fnum />
      ~~~~
-!!! error TS2601: The return type of a JSX element constructor or factory function must return an object type.
+!!! error TS2601: The return type of a JSX element constructor must return an object type.
     
     interface Obj1 {
     	new(): {};
@@ -39,12 +39,12 @@ tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX e
     var Obj2: Obj2;
     <Obj2 />; // Error
      ~~~~
-!!! error TS2601: The return type of a JSX element constructor or factory function must return an object type.
+!!! error TS2601: The return type of a JSX element constructor must return an object type.
     
     interface Obj3 {
     }
     var Obj3: Obj3;
     <Obj3 />; // Error
      ~~~~
-!!! error TS2604: JSX element 'Obj3' is not a constructor function or factory function.
+!!! error TS2604: JSX element 'Obj3' is not a constructor function.
     

@@ -1,11 +1,20 @@
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(15,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(17,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(21,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(22,3): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(22,8): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(23,3): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(23,19): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(24,3): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(28,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(32,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(33,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(37,3): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(55,3): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(58,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(62,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(69,3): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(73,5): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(79,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(81,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(83,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
@@ -22,10 +31,11 @@ tests/cases/conformance/jsx/jsxReactTestSuite.tsx(105,1): error TS2602: The glob
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(107,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(109,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(112,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(112,38): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxReactTestSuite.tsx(114,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 
 
-==== tests/cases/conformance/jsx/jsxReactTestSuite.tsx (25 errors) ====
+==== tests/cases/conformance/jsx/jsxReactTestSuite.tsx (35 errors) ====
     
     declare var React: any;
     declare var Component:any;
@@ -41,45 +51,47 @@ tests/cases/conformance/jsx/jsxReactTestSuite.tsx(114,1): error TS2602: The glob
     declare var hasOwnProperty:any;
     
     <div>text</div>;
-    ~~~~~~~~~~~~~~~
+    ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <div>
     ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
       {this.props.children}
-    ~~~~~~~~~~~~~~~~~~~~~~~
     </div>;
-    ~~~~~~
-!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <div>
     ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
       <div><br /></div>
-    ~~~~~~~~~~~~~~~~~~~
+      ~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+           ~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
       <Component>{foo}<br />{bar}</Component>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                      ~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
       <br />
-    ~~~~~~~~
+      ~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     </div>;
-    ~~~~~~
-!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     
     <Composite>
     ~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
         {this.props.children}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
     </Composite>;
-    ~~~~~~~~~~~~
-!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <Composite>
     ~~~~~~~~~~~
-        <Composite2 />
-    ~~~~~~~~~~~~~~~~~~
-    </Composite>;
-    ~~~~~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+        <Composite2 />
+        ~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    </Composite>;
     
     var x =
       <div
@@ -112,34 +124,27 @@ tests/cases/conformance/jsx/jsxReactTestSuite.tsx(114,1): error TS2602: The glob
     ~~~~~
         attr4="baz">
     ~~~~~~~~~~~~~~~~
-      </div>;
-    ~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+      </div>;
     
     (
       <div>
       ~~~~~
-        {/* A comment at the beginning */}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        {/* A second comment at the beginning */}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        <span>
-    ~~~~~~~~~~
-          {/* A nested comment */}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        </span>
-    ~~~~~~~~~~~
-        {/* A sandwiched comment */}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        <br />
-    ~~~~~~~~~~
-        {/* A comment at the end */}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        {/* A second comment at the end */}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      </div>
-    ~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+        {/* A comment at the beginning */}
+        {/* A second comment at the beginning */}
+        <span>
+        ~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+          {/* A nested comment */}
+        </span>
+        {/* A sandwiched comment */}
+        <br />
+        ~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+        {/* A comment at the end */}
+        {/* A second comment at the end */}
+      </div>
     );
     
     (
@@ -151,27 +156,27 @@ tests/cases/conformance/jsx/jsxReactTestSuite.tsx(114,1): error TS2602: The glob
     ~~~~~~~~~~~~~~~~~
         attr1="foo">
     ~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
         <span // a double-slash comment
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           attr2="bar"
     ~~~~~~~~~~~~~~~~~
         />
     ~~~~~~
-      </div>
-    ~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+      </div>
     );
     
     <div>&nbsp;</div>;
-    ~~~~~~~~~~~~~~~~~
+    ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <div>&nbsp; </div>;
-    ~~~~~~~~~~~~~~~~~~
+    ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <hasOwnProperty>testing</hasOwnProperty>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <Component constructor="foo" />;
@@ -228,11 +233,13 @@ tests/cases/conformance/jsx/jsxReactTestSuite.tsx(114,1): error TS2602: The glob
     
     
     <Component x={1} y="2" {...z} {...z}><Child /></Component>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+                                         ~~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     

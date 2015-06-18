@@ -1,13 +1,9 @@
-tests/cases/conformance/jsx/tsxNoJsx.tsx(3,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
-tests/cases/conformance/jsx/tsxNoJsx.tsx(3,1): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+tests/cases/conformance/jsx/tsxNoJsx.tsx(2,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 
 
-==== tests/cases/conformance/jsx/tsxNoJsx.tsx (2 errors) ====
-    /// @jsx: preserve
+==== tests/cases/conformance/jsx/tsxNoJsx.tsx (1 errors) ====
     
     <nope />;
     ~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
-    ~~~~~~~~
-!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
     

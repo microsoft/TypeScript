@@ -34,7 +34,7 @@ module M {
 >Foo, <Foo /> : JSX.Element
 >Foo : typeof Foo
 ><Foo /> : JSX.Element
->Foo : any
+>Foo : typeof Foo
 
 	export module S {
 >S : typeof S
@@ -44,14 +44,14 @@ module M {
 >Foo, <Foo /> : JSX.Element
 >Foo : typeof Foo
 ><Foo /> : JSX.Element
->Foo : any
+>Foo : typeof Foo
 
 		// Emit S.Bar
 		Bar, <Bar />;
 >Bar, <Bar /> : JSX.Element
 >Bar : typeof Bar
 ><Bar /> : JSX.Element
->Bar : any
+>Bar : typeof Bar
 	}
 
 }
@@ -82,6 +82,6 @@ module M {
 >Foo, <Foo /> : JSX.Element
 >Foo : typeof Foo
 ><Foo /> : JSX.Element
->Foo : any
+>Foo : typeof Foo
 }
 
