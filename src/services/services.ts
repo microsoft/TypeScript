@@ -198,8 +198,8 @@ namespace ts {
             list._children = [];
             let pos = nodes.pos;
 
-            
-            
+
+
             for (let node of nodes) {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
@@ -737,6 +737,7 @@ namespace ts {
         public amdDependencies: { name: string; path: string }[];
         public moduleName: string;
         public referencedFiles: FileReference[];
+        public isTSXFile: boolean;
 
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
@@ -875,7 +876,7 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.TypeLiteral:
                         addDeclaration(<Declaration>node);
-                        // fall through
+                    // fall through
                     case SyntaxKind.Constructor:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.VariableDeclarationList:
@@ -1095,7 +1096,7 @@ namespace ts {
         export const definition = "definition";
         export const reference = "reference";
         export const writtenReference = "writtenReference";
-    } 
+    }
 
     export interface HighlightSpan {
         textSpan: TextSpan;
@@ -1610,6 +1611,7 @@ namespace ts {
         return {
             target: ScriptTarget.ES5,
             module: ModuleKind.None,
+            jsx: JsxEmit.Preserve
         };
     }
 
@@ -2895,11 +2897,18 @@ namespace ts {
                 return undefined;
             }
 
+            let location = getTouchingPropertyName(sourceFile, position);
+            let options = program.getCompilerOptions();
+            let jsx = options.jsx !== JsxEmit.None;
+            let target = options.target;
+
             // Find the node where completion is requested on, in the case of a completion after 
             // a dot, it is the member access expression other wise, it is a request for all 
             // visible symbols in the scope, and the node is the current location.
             let node = currentToken;
             let isRightOfDot = false;
+            let isRightOfOpenTag = false;
+
             if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = (<PropertyAccessExpression>contextToken.parent).expression;
                 isRightOfDot = true;
@@ -2907,10 +2916,10 @@ namespace ts {
             else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
                 node = (<QualifiedName>contextToken.parent).left;
                 isRightOfDot = true;
+            } else if (contextToken && contextToken.kind === SyntaxKind.LessThanToken && sourceFile.isTSXFile) {
+                isRightOfOpenTag = true;
+                location = contextToken;
             }
-
-            let location = getTouchingPropertyName(sourceFile, position);
-            var target = program.getCompilerOptions().target;
 
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
@@ -2919,6 +2928,17 @@ namespace ts {
 
             if (isRightOfDot) {
                 getTypeScriptMemberSymbols();
+            }
+            else if (isRightOfOpenTag) {
+                // TODO include all in-scope value identifiers
+                let tagSymbols = typeChecker.getJsxIntrinsicTagNames();;
+                if (tryGetGlobalSymbols()) {
+                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
+                } else {
+                    symbols = tagSymbols;
+                }
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
             }
             else {
                 // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
@@ -2931,7 +2951,7 @@ namespace ts {
 
             log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
-            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot };
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag) };
 
             function getTypeScriptMemberSymbols(): void {
                 // Right of dot member completion list
@@ -2986,6 +3006,7 @@ namespace ts {
 
             function tryGetGlobalSymbols(): boolean {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
+                let jsxElement: JsxElement, jsxSelfClosingElement: JsxSelfClosingElement;
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -3001,6 +3022,7 @@ namespace ts {
                         // Add filtered items to the completion list
                         symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
                     }
+                    return true;
                 }
                 else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
                     // cursor is in import clause
@@ -3022,51 +3044,77 @@ namespace ts {
                         //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
                         symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                     }
+                    return true;
                 }
-                else {
-                    // Get all entities in the current scope.
-                    isMemberCompletion = false;
-                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
+                else if (getAncestor(contextToken, SyntaxKind.JsxElement) || getAncestor(contextToken, SyntaxKind.JsxSelfClosingElement)) {
+                    // Go up until we hit either the element or expression
+                    let jsxNode = contextToken;
 
-                    if (previousToken !== contextToken) {
-                        Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
+                    while (jsxNode) {
+                        if (jsxNode.kind === SyntaxKind.JsxExpression) {
+                            // Defer to global completion if we're inside an {expression}
+                            break;
+                        } else if (jsxNode.kind === SyntaxKind.JsxSelfClosingElement || jsxNode.kind === SyntaxKind.JsxElement) {
+                            let attrsType: Type;
+                            if (jsxNode.kind === SyntaxKind.JsxSelfClosingElement) {
+                                // Cursor is inside a JSX self-closing element
+                                attrsType = typeChecker.getJsxElementAttributesType(<JsxSelfClosingElement>jsxNode);
+                            }
+                            else {
+                                Debug.assert(jsxNode.kind === SyntaxKind.JsxElement);
+                                // Cursor is inside a JSX element
+                                attrsType = typeChecker.getJsxElementAttributesType((<JsxElement>jsxNode).openingElement);
+                            }
+                            symbols = typeChecker.getPropertiesOfType(attrsType);
+                            isMemberCompletion = true;
+                            return true;
+                        }
+                        jsxNode = jsxNode.parent;
                     }
-                    // We need to find the node that will give us an appropriate scope to begin
-                    // aggregating completion candidates. This is achieved in 'getScopeNode'
-                    // by finding the first node that encompasses a position, accounting for whether a node
-                    // is "complete" to decide whether a position belongs to the node.
-                    // 
-                    // However, at the end of an identifier, we are interested in the scope of the identifier
-                    // itself, but fall outside of the identifier. For instance:
-                    // 
-                    //      xyz => x$
-                    //
-                    // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
-                    // so 'xyz' is not returned in our results.
-                    //
-                    // We define 'adjustedPosition' so that we may appropriately account for
-                    // being at the end of an identifier. The intention is that if requesting completion
-                    // at the end of an identifier, it should be effectively equivalent to requesting completion
-                    // anywhere inside/at the beginning of the identifier. So in the previous case, the
-                    // 'adjustedPosition' will work as if requesting completion in the following:
-                    //
-                    //      xyz => $x
-                    //
-                    // If previousToken !== contextToken, then
-                    //   - 'contextToken' was adjusted to the token prior to 'previousToken'
-                    //      because we were at the end of an identifier.
-                    //   - 'previousToken' is defined.
-                    let adjustedPosition = previousToken !== contextToken ?
-                        previousToken.getStart() :
-                        position;
-
-                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
-
-                    /// TODO filter meaning based on the current context
-                    let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
 
+                // Get all entities in the current scope.
+                isMemberCompletion = false;
+                isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
+
+                if (previousToken !== contextToken) {
+                    Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
+                }
+                // We need to find the node that will give us an appropriate scope to begin
+                // aggregating completion candidates. This is achieved in 'getScopeNode'
+                // by finding the first node that encompasses a position, accounting for whether a node
+                // is "complete" to decide whether a position belongs to the node.
+                // 
+                // However, at the end of an identifier, we are interested in the scope of the identifier
+                // itself, but fall outside of the identifier. For instance:
+                // 
+                //      xyz => x$
+                //
+                // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
+                // so 'xyz' is not returned in our results.
+                //
+                // We define 'adjustedPosition' so that we may appropriately account for
+                // being at the end of an identifier. The intention is that if requesting completion
+                // at the end of an identifier, it should be effectively equivalent to requesting completion
+                // anywhere inside/at the beginning of the identifier. So in the previous case, the
+                // 'adjustedPosition' will work as if requesting completion in the following:
+                //
+                //      xyz => $x
+                //
+                // If previousToken !== contextToken, then
+                //   - 'contextToken' was adjusted to the token prior to 'previousToken'
+                //      because we were at the end of an identifier.
+                //   - 'previousToken' is defined.
+                let adjustedPosition = previousToken !== contextToken ?
+                    previousToken.getStart() :
+                    position;
+
+                let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
+
+                /// TODO filter meaning based on the current context
+                let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
+                symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+ 
                 return true;
             }
 
@@ -4200,7 +4248,7 @@ namespace ts {
 
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             let results = getOccurrencesAtPositionCore(fileName, position);
-            
+
             if (results) {
                 let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
 
@@ -4869,7 +4917,7 @@ namespace ts {
             return convertReferences(referencedSymbols);
         }
 
-        function findReferences(fileName: string, position: number): ReferencedSymbol[]{
+        function findReferences(fileName: string, position: number): ReferencedSymbol[] {
             var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
 
             // Only include referenced symbols that have a valid definition.
@@ -5804,7 +5852,7 @@ namespace ts {
         }
 
         function isTypeReference(node: Node): boolean {
-            if (isRightSideOfQualifiedNameOrPropertyAccess(node) ) {
+            if (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
                 node = node.parent;
             }
 
@@ -5973,13 +6021,13 @@ namespace ts {
             return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
-        function getNavigationBarItems(fileName: string): NavigationBarItem[]{
+        function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             return convertClassifications(getEncodedSemanticClassifications(fileName, span));
         }
 
@@ -6108,7 +6156,7 @@ namespace ts {
             return result;
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
+        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             return convertClassifications(getEncodedSyntacticClassifications(fileName, span));
         }
 
@@ -6471,14 +6519,14 @@ namespace ts {
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken:      return ts.SyntaxKind.CloseBraceToken
-                    case ts.SyntaxKind.OpenParenToken:      return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken:    return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken:       return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken:     return ts.SyntaxKind.OpenBraceToken
-                    case ts.SyntaxKind.CloseParenToken:     return ts.SyntaxKind.OpenParenToken;
-                    case ts.SyntaxKind.CloseBracketToken:   return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken:    return ts.SyntaxKind.LessThanToken;
+                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
                 }
 
                 return undefined;
@@ -6693,6 +6741,7 @@ namespace ts {
                         if (defaultLibFileName) {
                             for (let current of declarations) {
                                 let sourceFile = current.getSourceFile();
+                                var canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
                                     return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
                                 }
@@ -6921,7 +6970,7 @@ namespace ts {
                 case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
                 case ClassificationType.whiteSpace: return TokenClass.Whitespace;
                 case ClassificationType.punctuation: return TokenClass.Punctuation;
-                case ClassificationType.identifier: 
+                case ClassificationType.identifier:
                 case ClassificationType.className:
                 case ClassificationType.enumName:
                 case ClassificationType.interfaceName:
@@ -6976,7 +7025,7 @@ namespace ts {
                 case EndOfLineState.InTemplateMiddleOrTail:
                     text = "}\n" + text;
                     offset = 2;
-                    // fallthrough
+                // fallthrough
                 case EndOfLineState.InTemplateSubstitutionPosition:
                     templateStack.push(SyntaxKind.TemplateHead);
                     break;
@@ -7015,9 +7064,9 @@ namespace ts {
 
                 if (!isTrivia(token)) {
                     if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
-                         if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
-                             token = SyntaxKind.RegularExpressionLiteral;
-                         }
+                        if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                            token = SyntaxKind.RegularExpressionLiteral;
+                        }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
                         token = SyntaxKind.Identifier;
@@ -7030,7 +7079,7 @@ namespace ts {
                         token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
-                             token === SyntaxKind.LessThanToken) {
+                        token === SyntaxKind.LessThanToken) {
                         // Could be the start of something generic.  Keep track of that by bumping 
                         // up the current count of generic contexts we may be in.
                         angleBracketStack++;
@@ -7041,10 +7090,10 @@ namespace ts {
                         angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
-                             token === SyntaxKind.StringKeyword ||
-                             token === SyntaxKind.NumberKeyword ||
-                             token === SyntaxKind.BooleanKeyword ||
-                             token === SyntaxKind.SymbolKeyword) {
+                        token === SyntaxKind.StringKeyword ||
+                        token === SyntaxKind.NumberKeyword ||
+                        token === SyntaxKind.BooleanKeyword ||
+                        token === SyntaxKind.SymbolKeyword) {
                         if (angleBracketStack > 0 && !syntacticClassifierAbsent) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
@@ -7280,7 +7329,7 @@ namespace ts {
     declare let __dirname: string;
     
     /**
-      * Get the path of the default library file (lib.d.ts) as distributed with the typescript
+      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
       * node package.
       * The functionality is not supported if the ts module is consumed outside of a node module. 
       */

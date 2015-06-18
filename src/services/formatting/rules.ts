@@ -470,6 +470,7 @@ namespace ts.formatting {
             switch (context.contextNode.kind) {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.TypePredicate:
                     return true;
 
