@@ -1978,7 +1978,7 @@ namespace ts {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
-                        // Otherwise fall through
+                    // Otherwise fall through
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -2172,8 +2172,8 @@ namespace ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 type = getTypeOfPropertyOfType(parentType, name.text) ||
-                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                    getIndexTypeOfType(parentType, IndexKind.String);
+                isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
@@ -3686,8 +3686,8 @@ namespace ts {
                 let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
                 let type = symbol === unknownSymbol ? unknownType :
                     symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                    symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                        getTypeFromNonGenericTypeReference(node, symbol);
+                        symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
+                            getTypeFromNonGenericTypeReference(node, symbol);
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
@@ -4561,7 +4561,24 @@ namespace ts {
                 let requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectLiteral);
                 for (let targetProp of properties) {
                     let sourceProp = getPropertyOfType(source, targetProp.name);
-                    if (sourceProp !== targetProp) {
+
+                    if (sourceProp === targetProp) { // source inherits targetProp and doesn't redeclare/override it.
+
+                        if (source.flags & TypeFlags.Class && target.flags & TypeFlags.Class) {
+
+                            let targetPropFlags = getDeclarationFlagsFromSymbol(targetProp);
+                            let sourceDecl = getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
+
+                            // if target is a class and it has an abstract method, then source, inheriting that method, must be declared abstract.
+                            if (targetPropFlags & NodeFlags.Abstract && !(sourceDecl.flags & NodeFlags.Abstract)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2,
+                                        typeToString(source), typeToString(target), symbolToString(targetProp));
+                                }
+                                return Ternary.False;
+                            }
+                        }
+                    } else { // sourceProp !== targetProp -- ie: source and target have distinct declarations with the same name
                         if (!sourceProp) {
                             if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
                                 if (reportErrors) {
@@ -4571,24 +4588,24 @@ namespace ts {
                             }
                         }
                         else if (!(targetProp.flags & SymbolFlags.Prototype)) {
-                            let sourceFlags = getDeclarationFlagsFromSymbol(sourceProp);
-                            let targetFlags = getDeclarationFlagsFromSymbol(targetProp);
-                            if (sourceFlags & NodeFlags.Private || targetFlags & NodeFlags.Private) {
+                            let sourcePropFlags = getDeclarationFlagsFromSymbol(sourceProp);
+                            let targetPropFlags = getDeclarationFlagsFromSymbol(targetProp);
+                            if (sourcePropFlags & NodeFlags.Private || targetPropFlags & NodeFlags.Private) {
                                 if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
                                     if (reportErrors) {
-                                        if (sourceFlags & NodeFlags.Private && targetFlags & NodeFlags.Private) {
+                                        if (sourcePropFlags & NodeFlags.Private && targetPropFlags & NodeFlags.Private) {
                                             reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
                                         }
                                         else {
                                             reportError(Diagnostics.Property_0_is_private_in_type_1_but_not_in_type_2, symbolToString(targetProp),
-                                                typeToString(sourceFlags & NodeFlags.Private ? source : target),
-                                                typeToString(sourceFlags & NodeFlags.Private ? target : source));
+                                                typeToString(sourcePropFlags & NodeFlags.Private ? source : target),
+                                                typeToString(sourcePropFlags & NodeFlags.Private ? target : source));
                                         }
                                     }
                                     return Ternary.False;
                                 }
                             }
-                            else if (targetFlags & NodeFlags.Protected) {
+                            else if (targetPropFlags & NodeFlags.Protected) {
                                 let sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
                                 let sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(sourceProp.parent) : undefined;
                                 let targetClass = <InterfaceType>getDeclaredTypeOfSymbol(targetProp.parent);
@@ -4600,7 +4617,7 @@ namespace ts {
                                     return Ternary.False;
                                 }
                             }
-                            else if (sourceFlags & NodeFlags.Protected) {
+                            else if (sourcePropFlags & NodeFlags.Protected) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2,
                                         symbolToString(targetProp), typeToString(source), typeToString(target));
@@ -5993,20 +6010,20 @@ namespace ts {
                     if (container && container.parent && container.parent.kind === SyntaxKind.ClassDeclaration) {
                         if (container.flags & NodeFlags.Static) {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor;
                         }
                         else {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor ||
-                                container.kind === SyntaxKind.PropertyDeclaration ||
-                                container.kind === SyntaxKind.PropertySignature ||
-                                container.kind === SyntaxKind.Constructor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor ||
+                            container.kind === SyntaxKind.PropertyDeclaration ||
+                            container.kind === SyntaxKind.PropertySignature ||
+                            container.kind === SyntaxKind.Constructor;
                         }
                     }
                 }
@@ -6637,7 +6654,7 @@ namespace ts {
             return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.PropertyDeclaration;
         }
 
-        function getDeclarationFlagsFromSymbol(s: Symbol) {
+        function getDeclarationFlagsFromSymbol(s: Symbol): NodeFlags {
             return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
@@ -8101,8 +8118,8 @@ namespace ts {
                     let type = isTypeAny(sourceType)
                         ? sourceType
                         : getTypeOfPropertyOfType(sourceType, name.text) ||
-                            isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
-                            getIndexTypeOfType(sourceType, IndexKind.String);
+                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
                     }
@@ -8290,7 +8307,7 @@ namespace ts {
                     if (!checkForDisallowedESSymbolOperand(operator)) {
                         return booleanType;
                     }
-                    // fall-through
+                // fall-through
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
@@ -8318,8 +8335,8 @@ namespace ts {
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 let offendingSymbolOperand =
                     someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? node.left :
-                    someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
-                    undefined;
+                        someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
+                            undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
                     return false;
@@ -9258,7 +9275,7 @@ namespace ts {
                         }
 
                         // abstract functions cannot have an implementation
-                        if(currentNodeFlags & NodeFlags.Abstract) {
+                        if (currentNodeFlags & NodeFlags.Abstract) {
                             error(node, Diagnostics.Abstract_member_functions_cannot_have_an_implementation)
                         }
                     }
@@ -9505,7 +9522,7 @@ namespace ts {
 
                     case SyntaxKind.MethodDeclaration:
                         checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                        // fall-through
+                    // fall-through
 
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.GetAccessor:
@@ -10627,6 +10644,9 @@ namespace ts {
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+
+
+
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
                         // that all instantiated base constructor signatures return the same type.
@@ -10662,6 +10682,11 @@ namespace ts {
             }
 
             forEach(node.members, checkSourceElement);
+            
+            // Classes containing abstract members must be marked abstract
+            if (!(node.flags & NodeFlags.Abstract) && forEach(node.members, (element: ClassElement) => element.flags & NodeFlags.Abstract)) {
+                error(node, Diagnostics.Classes_containing_abstract_functions_must_be_marked_abstract);
+            }
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
@@ -10700,8 +10725,19 @@ namespace ts {
                 }
 
                 let derived = getTargetSymbol(getPropertyOfObjectType(type, base.name));
-                if (derived) {
-                    let baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
+                let baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
+
+                if (!derived) { // derived class inherits base without override/redeclaration
+                    let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+                    Debug.assert(derivedClassDecl !== undefined);
+
+                    // It is an error to inherit an abstract member without implementing it or being declared abstract.
+                    if ((baseDeclarationFlags & NodeFlags.Abstract) && !(derivedClassDecl.flags & NodeFlags.Abstract)) {
+                        error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2,
+                            typeToString(type), typeToString(baseType), symbolToString(baseProperty));
+                    }
+
+                } else { // derived !== undefined -- derived overrides base
                     let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
                     if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
                         // either base or derived property is private - not override, skip it
@@ -11990,7 +12026,7 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    // fall-through
+                // fall-through
 
                 case SyntaxKind.NumericLiteral:
                     // index access
@@ -12163,7 +12199,7 @@ namespace ts {
                 if (links.isNestedRedeclaration === undefined) {
                     let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
                     links.isNestedRedeclaration = isStatementWithLocals(container) &&
-                        !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                    !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 }
                 return links.isNestedRedeclaration;
             }
@@ -12414,11 +12450,11 @@ namespace ts {
             // 
             // For rules on serializing type annotations, see `serializeTypeNode`.
             switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:       return "Function";
-                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type);
-                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type);
-                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type);
-                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
+                case SyntaxKind.ClassDeclaration: return "Function";
+                case SyntaxKind.PropertyDeclaration: return serializeTypeNode((<PropertyDeclaration>node).type);
+                case SyntaxKind.Parameter: return serializeTypeNode((<ParameterDeclaration>node).type);
+                case SyntaxKind.GetAccessor: return serializeTypeNode((<AccessorDeclaration>node).type);
+                case SyntaxKind.SetAccessor: return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
             }
             if (isFunctionLike(node)) {
                 return "Function";

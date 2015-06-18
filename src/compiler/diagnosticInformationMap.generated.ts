@@ -396,6 +396,8 @@ namespace ts {
         Cannot_create_an_instance_of_the_abstract_class_0: { code: 2511, category: DiagnosticCategory.Error, key: "Cannot create an instance of the abstract class '{0}'." },
         All_overload_signatures_must_match_with_respect_to_modifier_0: { code: 2512, category: DiagnosticCategory.Error, key: "All overload signatures must match with respect to modifier '{0}'." },
         Abstract_member_function_0_on_type_1_cannot_be_called_via_super_expression: { code: 2513, category: DiagnosticCategory.Error, key: "Abstract member function '{0}' on type '{1}' cannot be called via super expression." },
+        Classes_containing_abstract_functions_must_be_marked_abstract: { code: 2514, category: DiagnosticCategory.Error, key: "Classes containing abstract functions must be marked abstract." },
+        Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2: { code: 2515, category: DiagnosticCategory.Error, key: "Non-abstract class '{0}' does not implement inherited abstract member '{1}.{2}'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },

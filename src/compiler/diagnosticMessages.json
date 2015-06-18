@@ -1571,6 +1571,14 @@
         "category": "Error",
         "code": 2513
     },
+    "Classes containing abstract functions must be marked abstract.": {
+        "category": "Error",
+        "code": 2514
+    },
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}.{2}'." : {
+        "category": "Error",
+        "code": 2515
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
