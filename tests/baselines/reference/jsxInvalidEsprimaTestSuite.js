@@ -39,7 +39,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 < />;
 <a />;
 < a=/>;
-<a b= d=/>;
+<a b={d /  > }>
 <a>;
 <a></b>;
 <a foo="bar;>
@@ -65,7 +65,7 @@ var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>
 
 <a>></a>;
 <a> ></a>;
-<a b=>}>;
+<a b={}>;
 <a b=<>}>;
 <a>}</a>;
-<a asdf=/></>></></></></></></></>;
+<a asdf=/>;</>></></></></></></></></>;

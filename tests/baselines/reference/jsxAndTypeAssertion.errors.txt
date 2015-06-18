@@ -3,16 +3,10 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,17): error TS1005: '}' exp
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(11,32): error TS1005: '}' expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(13,36): error TS1005: '}' expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,45): error TS1005: '}' expected.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,83): error TS17002: Expected corresponding JSX closing tag for 'any'.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,83): error TS17002: Expected corresponding JSX closing tag for 'foo'.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: ':' expected.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: '}' expected.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expected corresponding JSX closing tag for 'any'.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expected corresponding JSX closing tag for 'foo'.
 
 
-==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (12 errors) ====
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (6 errors) ====
     
     declare var createElement: any;
     
@@ -53,21 +47,12 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
     
     <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
-                                                                                      
-!!! error TS17002: Expected corresponding JSX closing tag for 'any'.
-                                                                                      
-!!! error TS17002: Expected corresponding JSX closing tag for 'foo'.
+    
     
         
+    ~~~~
     
+    
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
 !!! error TS1005: ':' expected.
-    
-!!! error TS1005: '>' expected.
-    
-!!! error TS1005: '}' expected.
-    
-!!! error TS17002: Expected corresponding JSX closing tag for 'any'.
-    
-!!! error TS17002: Expected corresponding JSX closing tag for 'foo'.

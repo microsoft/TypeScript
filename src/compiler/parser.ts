@@ -845,10 +845,6 @@ module ts {
             return token = scanner.reScanJsxIdentifier();
         }
         
-        function reScanLessThanToken(): SyntaxKind {
-            return token = scanner.reScanLessThanToken();
-        }
-        
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
@@ -1231,6 +1227,8 @@ module ts {
                     return isIdentifierOrKeyword();
                 case ParsingContext.JsxAttributes:
                     return isIdentifier() || token === SyntaxKind.OpenBraceToken;
+                case ParsingContext.JsxChildren:
+                    return token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.JsxText;
                 case ParsingContext.JSDocFunctionParameters:
                 case ParsingContext.JSDocTypeArguments:
                 case ParsingContext.JSDocTupleTypes:
@@ -1324,6 +1322,8 @@ module ts {
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JsxAttributes:
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JsxChildren:
+                    return token === SyntaxKind.LessThanSlashToken;
                 case ParsingContext.JSDocFunctionParameters:
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.ColonToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JSDocTypeArguments:
@@ -3154,7 +3154,7 @@ module ts {
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
                     if (sourceFile.isTSXFile) {
-                        return parseJsxElement(true);
+                        return parseJsxElement();
                     }
                     else {
                         return parseTypeAssertion();
@@ -3297,80 +3297,41 @@ module ts {
             return "";
         }
 
-        function parseJsxElement(speculative = false, fixedOpeningPosition: number = undefined): JsxElement {
-            let node = <JsxElement>createNode(SyntaxKind.JsxElement, fixedOpeningPosition);
+        function parseJsxChild(): JsxText | JsxExpression | JsxElement {
+            let result: JsxText | JsxExpression | JsxElement = undefined;
+            switch (token) {
+                case SyntaxKind.JsxText:
+                    result = <JsxText>createNode(SyntaxKind.JsxText);
+                    token = scanner.scanJsxToken();
+                    result = finishNode(result);
+                    break;
+                case SyntaxKind.OpenBraceToken:
+                    result = parseJsxExpression();
+                    break;
+                default:
+                    Debug.assert(token === SyntaxKind.LessThanToken);
+                    result = parseJsxElement();
+                    break;
+            }
+            token = scanner.reScanJsxToken();
+            Debug.assert(result !== undefined, "parsed some JSX child");
+            return result;
+        }
 
+        function parseJsxElement(): JsxElement {
+            let node = <JsxElement>createNode(SyntaxKind.JsxElement);
             node.openingElement = parseJsxOpeningElement();
-            node.openingElement.pos = node.pos;
 
             let tagName = entityNameToString(node.openingElement.tagName);
 
-            node.children = <NodeArray<JsxText | JsxExpression | JsxElement>>[];
-            node.children.pos = getNodePos();
-
             if (node.openingElement.isSelfClosing) {
-                node.children.end = getNodeEnd();
+                node.children = <NodeArray<JsxText | JsxExpression | JsxElement>>[];
             }
             else {
-                token = scanner.reScanJsxText();
-
-                while (true) {
-                    let startPos = scanner.getStartPos();
-                    // The scanner treats leading trivia as part of the full text of a node, but
-                    // this isn't the case for JSX elements. This value is used to fix the
-                    // starting positions of non-JSXText elements.
-                    let correctStartPos = scanner.getTextPos();
-
-                    if (token === SyntaxKind.JsxText) {
-                        let text = <JsxText>createNode(SyntaxKind.JsxText);
-                        text.end = scanner.getTextPos();
-
-                        token = scanner.scanJsxText();
-                        if (token !== SyntaxKind.EndOfFileToken) {
-                            node.children.push(text);
-                        }
-                    }
-                    else if (token === SyntaxKind.OpenBraceToken) {
-                        let expr = parseJsxExpression();
-                        expr.pos = correctStartPos;
-                        if (expr) {
-                            node.children.push(expr);
-                        }
-                        token = scanner.reScanJsxText();
-                    }
-                    else if (token === SyntaxKind.LessThanToken) {
-                        let expr = parseJsxElement(/*speculative: */ false, correctStartPos);
-                        node.children.push(expr);
-                        token = scanner.reScanJsxText();
-                    }
-                    else if (token === SyntaxKind.EndOfFileToken) {
-                        parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, tagName);
-                        break;
-                    }
-                    else {
-                        Debug.assert(token === SyntaxKind.LessThanSlashToken);
-                        break;
-                    }
-                }
-
-                node.children.end = getNodeEnd();
-
-                if (token === SyntaxKind.LessThanSlashToken) {
-                    // Closing tag
-                    let start = scanner.getTextPos();
-                    node.closingElement = parseJsxClosingElement();
-                    
-                    if (!node.closingElement.tagName || tagName !== entityNameToString(node.closingElement.tagName)) {
-                        var length = scanner.getTokenPos() - start;
-                        parseErrorAtPosition(start, length, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, tagName);
-                    }
-                    speculative = false;
-                } 
-                else {
-                    node.closingElement = <JsxClosingElement>createMissingNode(SyntaxKind.JsxClosingElement, /*reportAtCurrentPosition:*/ true, 
-                        Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, tagName);
-                    node.children.end = getNodeEnd();
-                }
+                // Rescan since parsing the > messed up the scanner state
+                token = scanner.reScanJsxToken();
+                node.children = parseList(ParsingContext.JsxChildren, false, parseJsxChild);
+                node.closingElement = parseJsxClosingElement(tagName);
             } 
 
             return finishNode(node);
@@ -3422,10 +3383,7 @@ module ts {
                 return true;
             });
 
-            if (!parseExpected(SyntaxKind.OpenBraceToken)) {
-                return undefined;
-            }
-
+            parseExpected(SyntaxKind.OpenBraceToken);
             if (!isExpressionEmpty) {
                 node.expression = parseExpression();
             }
@@ -3466,10 +3424,13 @@ module ts {
             return finishNode(node);
         }
 
-        function parseJsxClosingElement(): JsxClosingElement {
+        function parseJsxClosingElement(expectedTagName: string): JsxClosingElement {
             let node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement);
             parseExpected(SyntaxKind.LessThanSlashToken);
             node.tagName = parseJsxElementName();
+            if (entityNameToString(node.tagName) !== expectedTagName) {
+                parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, expectedTagName);
+            }
             parseExpected(SyntaxKind.GreaterThanToken);
             return finishNode(node);
         }
@@ -5234,6 +5195,7 @@ module ts {
             ArgumentExpressions,       // Expressions in argument list
             ObjectLiteralMembers,      // Members in object literal
             JsxAttributes,             // Attributes in jsx element
+            JsxChildren,               // Things between opening and closing JSX tags
             ArrayLiteralMembers,       // Members in array literal
             Parameters,                // Parameters in parameter list
             TypeParameters,            // Type parameters in type parameter list

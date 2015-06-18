@@ -19,12 +19,12 @@ module ts {
         isReservedWord(): boolean;
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
+        reScanLessThanSlashToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         reScanJsxIdentifier(): SyntaxKind;
-        reScanLessThanToken(): SyntaxKind;
-        reScanJsxText(): SyntaxKind;
-        scanJsxText(): SyntaxKind;
+        reScanJsxToken(): SyntaxKind;
+        scanJsxToken(): SyntaxKind;
         scan(): SyntaxKind;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
@@ -645,12 +645,12 @@ module ts {
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => tokenIsUnterminated,
             reScanGreaterToken,
+            reScanLessThanSlashToken,
             reScanSlashToken,
             reScanTemplateToken,
             reScanJsxIdentifier,
-            reScanLessThanToken,
-            reScanJsxText,
-            scanJsxText,
+            reScanJsxToken,
+            scanJsxToken,
             scan,
             setText,
             setScriptTarget,
@@ -1466,14 +1466,21 @@ module ts {
             pos = tokenPos;
             return token = scanTemplateAndSetTokenValue();
         }
+
+        function reScanLessThanSlashToken(): SyntaxKind {
+            pos = tokenPos;
+            return token = scanJsxToken();
+        }
         
-        function reScanJsxText(): SyntaxKind {
-            pos = startPos;
-            return token = scanJsxText();
+        function reScanJsxToken(): SyntaxKind {
+            pos = tokenPos = startPos;
+            return token = scanJsxToken();
         }
 
-        function scanJsxText(): SyntaxKind {
-            if (pos >= text.length) {
+        function scanJsxToken(): SyntaxKind {
+            startPos = tokenPos = pos;
+
+            if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
 
@@ -1524,14 +1531,6 @@ module ts {
             return token;
         }
         
-        function reScanLessThanToken(): SyntaxKind {
-            Debug.assert(token === SyntaxKind.LessThanToken, "'reScanLessThanToken' should only be called on a '<'");
-            if (text.charCodeAt(pos) === CharacterCodes.slash) {
-                return pos++, token = SyntaxKind.LessThanSlashToken;
-            }
-            return token;
-        }
-
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             let savePos = pos;
             let saveStartPos = startPos;

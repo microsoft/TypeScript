@@ -15,11 +15,11 @@ var x = <div><div><span><div></div></span></div></div>;
 >x : JSX.Element
 ><div><div><span><div></div></span></div></div> : JSX.Element
 >div : any
->div><span><div></div></span></div> : JSX.Element
+><div><span><div></div></span></div> : JSX.Element
 >div : any
->span><div></div></span> : JSX.Element
+><span><div></div></span> : JSX.Element
 >span : any
->div></div> : JSX.Element
+><div></div> : JSX.Element
 >div : any
 >div : any
 >span : any

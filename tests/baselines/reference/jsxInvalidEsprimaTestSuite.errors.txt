@@ -6,18 +6,20 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,1): error TS2602: T
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,2): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(7,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(8,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,9): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,10): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(7,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(8,7): error TS17002: Expected corresponding JSX closing tag for 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(9,13): error TS1002: Unterminated string literal.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,1): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,8): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,9): error TS17002: Expected corresponding JSX closing tag for 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,3): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,5): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,11): error TS1005: '>' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,5): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,13): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(13,10): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(13,11): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,2): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,7): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,4): error TS1003: Identifier expected.
@@ -37,10 +39,10 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,29): error TS1109:
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,7): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,20): error TS17002: Expected corresponding JSX closing tag for ''.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (40 errors) ====
+==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (42 errors) ====
     declare var React: any;
     
     </>;
@@ -59,15 +61,20 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,20): error TS17002
      ~
 !!! error TS1003: Identifier expected.
     <a b=d />;
-    ~~~~~~~~~
-!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    ~~~~~~~~~~
          ~
 !!! error TS1005: '{' expected.
+            ~
+!!! error TS1109: Expression expected.
+             ~
+!!! error TS1109: Expression expected.
     <a>;
     ~~~~
+    ~
+!!! error TS1003: Identifier expected.
     <a></b>;
     ~~~~~~~~
-         ~~
+          ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
     <a foo="bar;
     ~~~~~~~~~~~~
@@ -79,7 +86,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,20): error TS17002
 !!! error TS1003: Identifier expected.
       ~
 !!! error TS1003: Identifier expected.
-           ~~
+            ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
     <a:b.c></a:b.c>;
     ~~~~~~~~~~~~~~~~
@@ -97,7 +104,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,20): error TS17002
 !!! error TS1005: '>' expected.
     <a.b.c></a>;
     ~~~~~~~~~~~~
-             ~~
+              ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
     <.a></.a>;
     ~~~~~~~~~~
@@ -178,9 +185,9 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,20): error TS17002
     <a>}</a>;
     ~~~~~~~~~
     <a .../*hai*/asdf/>;
-    ~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
        ~~~
 !!! error TS1003: Identifier expected.
-                       ~
-!!! error TS17002: Expected corresponding JSX closing tag for ''.
+                        
+!!! error TS1005: '</' expected.
