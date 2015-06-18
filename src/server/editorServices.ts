@@ -1360,7 +1360,7 @@ module ts.server {
             }
         }
 
-        static fromString(host: System, script: string) {
+        static fromString(host: ServerHost, script: string) {
             var svc = new ScriptVersionCache();
             var snap = new LineIndexSnapshot(0, svc);
             svc.versions[svc.currentVersion] = snap;
