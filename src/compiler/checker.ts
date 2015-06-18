@@ -159,6 +159,14 @@ namespace ts {
             }
         };
 
+        let subtypeRelation: Map<RelationComparisonResult> = {};
+        let assignableRelation: Map<RelationComparisonResult> = {};
+        let identityRelation: Map<RelationComparisonResult> = {};
+
+        initializeTypeChecker();
+
+        return checker;
+
         function getEmitResolver(sourceFile?: SourceFile) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
@@ -4221,10 +4229,6 @@ namespace ts {
 
         // TYPE CHECKING
 
-        let subtypeRelation: Map<RelationComparisonResult> = {};
-        let assignableRelation: Map<RelationComparisonResult> = {};
-        let identityRelation: Map<RelationComparisonResult> = {};
-
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
         }
@@ -5761,6 +5765,7 @@ namespace ts {
                 let signature = getResolvedSignature(expr);
 
                 if (signature.typePredicate &&
+                    expr.arguments[signature.typePredicate.parameterIndex] &&
                     getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
 
                     if (!assumeTrue) {
@@ -13614,9 +13619,5 @@ namespace ts {
                 return true;
             }
         }
-
-        initializeTypeChecker();
-
-        return checker;
     }
 }
