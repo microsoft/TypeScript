@@ -1525,9 +1525,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        serializeTypeOfNode(node: Node): string | string[];
-        serializeParameterTypesOfNode(node: Node): (string | string[])[];
-        serializeReturnTypeOfNode(node: Node): string | string[];
+        isTypeReferenceWithValueDeclaration(node: TypeReferenceNode): boolean; 
     }
 
     export const enum SymbolFlags {

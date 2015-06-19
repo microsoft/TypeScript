@@ -2025,11 +2025,50 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
-
+            
             function emitQualifiedName(node: QualifiedName) {
                 emit(node.left);
                 write(".");
                 emit(node.right);
+            }
+
+            function emitQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean) {
+                if (node.left.kind === SyntaxKind.Identifier) {
+                    emitEntityNameAsExpression(node.left, useFallback);
+                }
+                else if (useFallback) {
+                    let temp = createAndRecordTempVariable(TempFlags.Auto);
+                    write("(");
+                    emitNodeWithoutSourceMap(temp);
+                    write(" = ");
+                    emitEntityNameAsExpression(node.left, /*useFallback*/ true);
+                    write(") && ");
+                    emitNodeWithoutSourceMap(temp);
+                }
+                else {
+                    emitEntityNameAsExpression(node.left, /*useFallback*/ false);
+                }
+                
+                write(".");
+                emitNodeWithoutSourceMap(node.right);
+            }
+            
+            function emitEntityNameAsExpression(node: EntityName, useFallback: boolean) {                
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        if (useFallback) {
+                            write("typeof ");
+                            emitExpressionIdentifier(<Identifier>node);
+                            write(" !== 'undefined' && ");
+                        }
+                        
+                        emitExpressionIdentifier(<Identifier>node);
+                        break;
+                        
+                    case SyntaxKind.QualifiedName:
+                        emitQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                        break;
+                }
             }
 
             function emitIndexedAccess(node: ElementAccessExpression) {
@@ -4569,83 +4608,219 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 return false;
             }
+            
+            /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the __metadata decorator for a class member. */
+            function emitSerializedTypeOfNode(node: Node) {
+                // serialization of the type of a declaration uses the following rules:
+                //
+                // * The serialized type of a ClassDeclaration is "Function"
+                // * The serialized type of a ParameterDeclaration is the serialized type of its type annotation.
+                // * The serialized type of a PropertyDeclaration is the serialized type of its type annotation.
+                // * The serialized type of an AccessorDeclaration is the serialized type of the return type annotation of its getter or parameter type annotation of its setter.
+                // * The serialized type of any other FunctionLikeDeclaration is "Function".
+                // * The serialized type of any other node is "void 0".
+                // 
+                // For rules on serializing type annotations, see `serializeTypeNode`.
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        write("Function");
+                        return;
+                        
+                    case SyntaxKind.PropertyDeclaration:    
+                        emitSerializedTypeNode((<PropertyDeclaration>node).type);
+                        return;
+                        
+                    case SyntaxKind.Parameter:              
+                        emitSerializedTypeNode((<ParameterDeclaration>node).type);
+                        return;
+                        
+                    case SyntaxKind.GetAccessor:            
+                        emitSerializedTypeNode((<AccessorDeclaration>node).type);
+                        return;
+                        
+                    case SyntaxKind.SetAccessor:            
+                        emitSerializedTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
+                        return;
+                        
+                }
+                
+                if (isFunctionLike(node)) {
+                    write("Function");
+                    return;
+                }
+                
+                write("void 0");
+            }
+            
+            function emitSerializedTypeNode(node: TypeNode) {
+                switch (node.kind) {
+                    case SyntaxKind.VoidKeyword:
+                        write("void 0");
+                        return;
 
+                    case SyntaxKind.ParenthesizedType:
+                        emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
+                        return;
+                        
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                        write("Function");
+                        return;
+                        
+                    case SyntaxKind.ArrayType:
+                    case SyntaxKind.TupleType:
+                        write("Array");
+                        return;
+                        
+                    case SyntaxKind.BooleanKeyword:
+                        write("Boolean");
+                        return;
+
+                    case SyntaxKind.StringKeyword:
+                    case SyntaxKind.StringLiteral:
+                        write("String");
+                        return;
+                        
+                    case SyntaxKind.NumberKeyword:
+                        write("Number");
+                        return;
+                        
+                    case SyntaxKind.SymbolKeyword:
+                        write("Symbol");
+                        return;
+
+                    case SyntaxKind.TypeReference:
+                        emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
+                        return;
+                        
+                    case SyntaxKind.TypeQuery:
+                    case SyntaxKind.TypeLiteral:
+                    case SyntaxKind.UnionType:
+                    case SyntaxKind.AnyKeyword:
+                        break;
+                        
+                    default:
+                        Debug.fail("Cannot serialize unexpected type node.");
+                        break;
+                }
+                
+                write("Object");
+            }
+            
+            /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
+            function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
+                let typeName = node.typeName;
+                if (resolver.isTypeReferenceWithValueDeclaration(node)) {
+                    emitEntityNameAsExpression(typeName, /*useFallback*/ false);
+                }
+                else {
+                    write("(");
+                    emitEntityNameAsExpression(typeName, /*useFallback*/ true);
+                    write(") || Object");
+                }
+            }
+            
+            /** Serializes the parameter types of a function or the constructor of a class. Used by the __metadata decorator for a method or set accessor. */
+            function emitSerializedParameterTypesOfNode(node: Node) {
+                // serialization of parameter types uses the following rules:
+                //
+                // * If the declaration is a class, the parameters of the first constructor with a body are used.
+                // * If the declaration is function-like and has a body, the parameters of the function are used.
+                // 
+                // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
+                if (node) {
+                    var valueDeclaration: FunctionLikeDeclaration;
+                    if (node.kind === SyntaxKind.ClassDeclaration) {
+                        valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
+                    }
+                    else if (isFunctionLike(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                        valueDeclaration = <FunctionLikeDeclaration>node;
+                    }
+                    
+                    if (valueDeclaration) {
+                        var parameters = valueDeclaration.parameters;
+                        var parameterCount = parameters.length;
+                        if (parameterCount > 0) {
+                            for (var i = 0; i < parameterCount; i++) {
+                                if (i > 0) {
+                                    write(", ");
+                                }
+                                
+                                if (parameters[i].dotDotDotToken) {
+                                    var parameterType = parameters[i].type;
+                                    if (parameterType.kind === SyntaxKind.ArrayType) {
+                                        parameterType = (<ArrayTypeNode>parameterType).elementType;
+                                    }
+                                    else if (parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
+                                        parameterType = (<TypeReferenceNode>parameterType).typeArguments[0];
+                                    }
+                                    else {
+                                        parameterType = undefined;
+                                    }
+                                    
+                                    emitSerializedTypeNode(parameterType);
+                                }
+                                else {
+                                    emitSerializedTypeOfNode(parameters[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            /** Serializes the return type of function. Used by the __metadata decorator for a method. */
+            function emitSerializedReturnTypeOfNode(node: Node): string | string[] {
+                if (node && isFunctionLike(node)) {
+                    emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
+                    return;
+                }
+                
+                write("void 0");
+            }
+            
+            
             function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
                 // This method emits the serialized type metadata for a decorator target.
                 // The caller should have already tested whether the node has decorators.
                 let argumentsWritten = 0;
                 if (compilerOptions.emitDecoratorMetadata) {
                     if (shouldEmitTypeMetadata(node)) {
-                        var serializedType = resolver.serializeTypeOfNode(node);
-                        if (serializedType) {
-                            if (writeComma) {
-                                write(", ");
-                            }
-                            writeLine();
-                            write("__metadata('design:type', ");
-                            emitSerializedType(node, serializedType);
-                            write(")");
-                            argumentsWritten++;
+                        if (writeComma) {
+                            write(", ");
                         }
+                        writeLine();
+                        write("__metadata('design:type', ");
+                        emitSerializedTypeOfNode(node);
+                        write(")");
+                        argumentsWritten++;
                     }
                     if (shouldEmitParamTypesMetadata(node)) {
-                        var serializedTypes = resolver.serializeParameterTypesOfNode(node);
-                        if (serializedTypes) {
-                            if (writeComma || argumentsWritten) {
-                                write(", ");
-                            }
-                            writeLine();
-                            write("__metadata('design:paramtypes', [");
-                            for (var i = 0; i < serializedTypes.length; ++i) {
-                                if (i > 0) {
-                                    write(", ");
-                                }
-                                emitSerializedType(node, serializedTypes[i]);
-                            }
-                            write("])");
-                            argumentsWritten++;
+                        if (writeComma || argumentsWritten) {
+                            write(", ");
                         }
+                        writeLine();
+                        write("__metadata('design:paramtypes', [");
+                        emitSerializedParameterTypesOfNode(node);
+                        write("])");
+                        argumentsWritten++;
                     }
                     if (shouldEmitReturnTypeMetadata(node)) {
-                        var serializedType = resolver.serializeReturnTypeOfNode(node);
-                        if (serializedType) {
-                            if (writeComma || argumentsWritten) {
-                                write(", ");
-                            }
-                            writeLine();
-                            write("__metadata('design:returntype', ");
-                            emitSerializedType(node, serializedType);
-                            write(")");
-                            argumentsWritten++;
+                        if (writeComma || argumentsWritten) {
+                            write(", ");
                         }
+                        
+                        writeLine();
+                        write("__metadata('design:returntype', ");
+                        emitSerializedReturnTypeOfNode(node);
+                        write(")");
+                        argumentsWritten++;
                     }
                 }
+                
                 return argumentsWritten;
             }
-
-            function serializeTypeNameSegment(location: Node, path: string[], index: number): string {
-                switch (index) {
-                    case 0:
-                        return `typeof ${path[index]} !== 'undefined' && ${path[index]}`;
-                    case 1:
-                        return `${serializeTypeNameSegment(location, path, index - 1) }.${path[index]}`;
-                    default:
-                        let temp = createAndRecordTempVariable(TempFlags.Auto).text;
-                        return `(${temp} = ${serializeTypeNameSegment(location, path, index - 1) }) && ${temp}.${path[index]}`;
-                }
-            }
-
-            function emitSerializedType(location: Node, name: string | string[]): void {
-                if (typeof name === "string") {
-                    write(name);
-                    return;
-                }
-                else {
-                    Debug.assert(name.length > 0, "Invalid serialized type name");
-                    write(`(${serializeTypeNameSegment(location, name, name.length - 1) }) || Object`);
-                }
-            }
-
+            
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 emitOnlyPinnedOrTripleSlashComments(node);
             }
