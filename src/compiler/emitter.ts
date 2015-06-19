@@ -1148,7 +1148,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emitAttributeName(node.name);
                     write(': ');
-                    emit(node.initializer);
+                    if (node.initializer) {
+                        emit(node.initializer);
+                    }
+                    else {
+                        write('true');
+                    }
                 }
 
                 function emitJsxElement(openingNode: JsxOpeningElement|JsxSelfClosingElement, children?: JsxChild[]) {

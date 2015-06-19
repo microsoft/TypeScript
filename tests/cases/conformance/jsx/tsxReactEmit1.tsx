@@ -14,13 +14,13 @@ var selfClosed3 = <div x='1' />;
 var selfClosed4 = <div x="1" y='0' />;
 var selfClosed5 = <div x={0} y='0' />;
 var selfClosed6 = <div x={"1"} y='0' />;
-var selfClosed7 = <div x={p} y='p' />;
+var selfClosed7 = <div x={p} y='p' b />;
 
 var openClosed1 = <div></div>;
 var openClosed2 = <div n='m'>foo</div>;
 var openClosed3 = <div n='m'>{p}</div>;
 var openClosed4 = <div n='m'>{p < p}</div>;
-var openClosed5 = <div n='m'>{p > p}</div>;
+var openClosed5 = <div n='m' b>{p > p}</div>;
 
 class SomeClass {
 	f() {

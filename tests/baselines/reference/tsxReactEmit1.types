@@ -54,13 +54,14 @@ var selfClosed6 = <div x={"1"} y='0' />;
 >x : any
 >y : any
 
-var selfClosed7 = <div x={p} y='p' />;
+var selfClosed7 = <div x={p} y='p' b />;
 >selfClosed7 : JSX.Element
-><div x={p} y='p' /> : JSX.Element
+><div x={p} y='p' b /> : JSX.Element
 >div : any
 >x : any
 >p : any
 >y : any
+>b : any
 
 var openClosed1 = <div></div>;
 >openClosed1 : JSX.Element
@@ -93,11 +94,12 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >p : any
 >div : any
 
-var openClosed5 = <div n='m'>{p > p}</div>;
+var openClosed5 = <div n='m' b>{p > p}</div>;
 >openClosed5 : JSX.Element
-><div n='m'>{p > p}</div> : JSX.Element
+><div n='m' b>{p > p}</div> : JSX.Element
 >div : any
 >n : any
+>b : any
 >p > p : boolean
 >p : any
 >p : any
