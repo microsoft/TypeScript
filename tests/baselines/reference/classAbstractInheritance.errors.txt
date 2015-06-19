@@ -1,0 +1,39 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts(13,7): error TS2415: Class 'CC' incorrectly extends base class 'AA'.
+  Non-abstract class 'CC' does not implement inherited abstract member 'AA.foo'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts(15,7): error TS2415: Class 'DD' incorrectly extends base class 'BB'.
+  Non-abstract class 'DD' does not implement inherited abstract member 'BB.foo'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts(19,7): error TS2415: Class 'FF' incorrectly extends base class 'CC'.
+  Non-abstract class 'FF' does not implement inherited abstract member 'CC.foo'.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts (3 errors) ====
+    abstract class A {}
+    
+    abstract class B extends A {}
+    
+    class C extends A {}
+    
+    abstract class AA {
+        abstract foo();
+    }
+    
+    abstract class BB extends AA {}
+    
+    class CC extends AA {}
+          ~~
+!!! error TS2415: Class 'CC' incorrectly extends base class 'AA'.
+!!! error TS2415:   Non-abstract class 'CC' does not implement inherited abstract member 'AA.foo'.
+    
+    class DD extends BB {}
+          ~~
+!!! error TS2415: Class 'DD' incorrectly extends base class 'BB'.
+!!! error TS2415:   Non-abstract class 'DD' does not implement inherited abstract member 'BB.foo'.
+    
+    abstract class EE extends BB {}
+    
+    class FF extends CC {}
+          ~~
+!!! error TS2415: Class 'FF' incorrectly extends base class 'CC'.
+!!! error TS2415:   Non-abstract class 'FF' does not implement inherited abstract member 'CC.foo'.
+    
+    abstract class GG extends CC {}

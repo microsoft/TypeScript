@@ -1,0 +1,12 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts(2,5): error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts(2,5): error TS1240: Abstract member functions cannot have an implementation.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts (2 errors) ====
+    abstract class A {
+        abstract constructor() {}
+        ~~~~~~~~
+!!! error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1240: Abstract member functions cannot have an implementation.
+    }
