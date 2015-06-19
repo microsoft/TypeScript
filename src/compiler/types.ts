@@ -1595,12 +1595,13 @@ namespace ts {
         SuperInstance               = 0x00000100,  // Instance 'super' reference
         SuperStatic                 = 0x00000200,  // Static 'super' reference
         ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        CaptureArguments            = 0x00000800,  // Lexical 'arguments' used in body (for async functions)
+        LexicalArguments            = 0x00000800,
+        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00001000,
-        BlockScopedBindingInLoop    = 0x00002000,
-        LexicalModuleMergesWithClass= 0x00004000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00002000,
+        BlockScopedBindingInLoop    = 0x00004000,
+        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 

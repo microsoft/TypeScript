@@ -49,11 +49,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };`;
 
         const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (args, generator) {
-    var PromiseConstructor = args[1] || Promise;
-    return new PromiseConstructor(function (resolve, reject) {
-        generator = generator.call(args[0], args[2]);
-        function cast(value) { return value instanceof PromiseConstructor ? value : new PromiseConstructor(function (resolve) { resolve(value); }); }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
+    return new Promise(function (resolve, reject) {
+        generator = generator.call(thisArg, _arguments);
+        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
         function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
         function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
         function step(verb, value) {
@@ -1239,6 +1238,11 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
             }
 
             function emitExpressionIdentifier(node: Identifier) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
+                    write("_arguments");
+                    return;
+                }
+                
                 let container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -3374,9 +3378,9 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
                 //  let a = async (b) => { await b; }
                 //
                 //  // output
-                //  let a = (b) => __awaiter([this], function* (b) {
+                //  let a = (b) => __awaiter(this, void 0, void 0, function* () {
                 //      yield b;
-                //  }, this);
+                //  });
                 //
                 // The emit for an async arrow with a lexical `arguments` binding might be:
                 //
@@ -3384,7 +3388,7 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
                 //  let a = async (b) => { await arguments[0]; }
                 //
                 //  // output
-                //  let a = (b) => __awaiter([this, arguments], function* (arguments) {
+                //  let a = (b) => __awaiter(this, arguments, void 0, function* (arguments) {
                 //      yield arguments[0];
                 //  });
                 //
@@ -3398,9 +3402,9 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter([this], function* () {
+                //      return __awaiter(this, void 0, void 0, function* () {
                 //          yield b;
-                //      }, this);
+                //      });
                 //  }
                 //
                 // The emit for an async function expression with a lexical `arguments` binding
@@ -3413,8 +3417,8 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter([this, arguments], function* (arguments) {
-                //          yield arguments[0];
+                //      return __awaiter(this, arguments, void 0, function* (_arguments) {
+                //          yield _arguments[0];
                 //      });
                 //  }
                 //
@@ -3428,8 +3432,8 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter([this, arguments, MyPromise], function* (arguments) {
-                //          yield arguments[0];
+                //      return __awaiter(this, arguments, MyPromise, function* (_arguments) {
+                //          yield _arguments[0];
                 //      });
                 //  }
                 //
@@ -3443,23 +3447,28 @@ var __awaiter = (this && this.__awaiter) || function (args, generator) {
                     write("return");
                 }
                 
-                write(" __awaiter([this");
-                if (promiseConstructor || hasLexicalArguments) {
+                write(" __awaiter(this");
+                if (hasLexicalArguments) {
+                    write(", arguments");
+                }
+                else {
+                    write(", void 0");
+                }
+
+                if (promiseConstructor) {
                     write(", ");
-                    if (promiseConstructor) {
-                        emitNodeWithoutSourceMap(promiseConstructor);
-                    }
-                    if (hasLexicalArguments) {
-                        write(", arguments");
-                    }
+                    emitNodeWithoutSourceMap(promiseConstructor);
+                }
+                else {
+                    write(", Promise");
                 }
                 
                 // Emit the call to __awaiter.
                 if (hasLexicalArguments) {
-                    write("], function* (arguments)");
+                    write(", function* (_arguments)");
                 }
                 else {
-                    write("], function* ()");
+                    write(", function* ()");
                 }
                 
                 // Emit the signature and body for the inner generator function.

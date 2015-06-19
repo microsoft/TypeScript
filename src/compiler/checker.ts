@@ -5765,6 +5765,7 @@ namespace ts {
                 
                 if (node.parserContextFlags & ParserContextFlags.Await) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
+                    getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
                 }
             }
 
