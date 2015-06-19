@@ -42,7 +42,7 @@ namespace ts {
     // Pool writers to avoid needing to allocate them for every symbol we write.
     let stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
+        if (stringWriters.length === 0) {
             let str = "";
 
             let writeText: (text: string) => void = text => str += text;
@@ -426,7 +426,7 @@ namespace ts {
                 // Specialized signatures can have string literals as their parameters' type names
                 return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isClassExtendsExpressionWithTypeArguments(node);
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -460,7 +460,7 @@ namespace ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return !isClassExtendsExpressionWithTypeArguments(parent);
+                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
@@ -920,7 +920,7 @@ namespace ts {
                     case SyntaxKind.Decorator:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return isClassExtendsExpressionWithTypeArguments(parent);
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1916,7 +1916,7 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    export function isClassExtendsExpressionWithTypeArguments(node: Node): boolean {
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
             node.parent.parent.kind === SyntaxKind.ClassDeclaration;
@@ -2090,6 +2090,12 @@ namespace ts {
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
         let end = start + length;
         return start <= textSpanEnd(span) && end >= span.start;
+    }
+
+    export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
+        let end1 = start1 + length1;
+        let end2 = start2 + length2;
+        return start2 <= end1 && end2 >= start1;
     }
 
     export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {

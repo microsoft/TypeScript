@@ -49,7 +49,6 @@ if (testConfigFile !== '') {
             if (!option) {
                 continue;
             }
-            ts.sys.write("Option: " + option + "\r\n");
             switch (option) {
                 case 'compiler':
                     runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));

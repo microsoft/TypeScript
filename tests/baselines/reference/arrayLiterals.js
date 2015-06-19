@@ -41,8 +41,7 @@ var context4: Base[] = [new Derived1(), new Derived1()];
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var arr1 = [[], [1], ['']];
 var arr2 = [[null], [1], ['']];

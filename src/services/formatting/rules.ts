@@ -692,7 +692,7 @@ namespace ts.formatting {
         }
 
         static IsNotFormatOnEnter(context: FormattingContext): boolean {
-            return context.formattingRequestKind != FormattingRequestKind.FormatOnEnter;
+            return context.formattingRequestKind !== FormattingRequestKind.FormatOnEnter;
         }
 
         static IsModuleDeclContext(context: FormattingContext): boolean {

@@ -105,6 +105,14 @@ var serverSources = [
     return path.join(serverDirectory, f);
 });
 
+var languageServiceLibrarySources = [
+    "editorServices.ts",
+    "protocol.d.ts",
+    "session.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+}).concat(servicesSources);
+
 var harnessSources = [
     "harness.ts",
     "sourceMapRecorder.ts",
@@ -361,13 +369,27 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-                definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
+                definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
             });
 
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+
+var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
+compileFile(
+    lsslFile, 
+    languageServiceLibrarySources, 
+    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    /*prefixes*/ [copyright], 
+    /*useBuiltCompiler*/ true, 
+    /*noOutFile*/ false, 
+    /*generateDeclarations*/ true);
+
+// Local target to build the language service server library
+desc("Builds language service server library");
+task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");

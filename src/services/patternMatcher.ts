@@ -686,7 +686,7 @@ namespace ts {
 
             if (charIsPunctuation(identifier.charCodeAt(i - 1)) ||
                 charIsPunctuation(identifier.charCodeAt(i)) ||
-                lastIsDigit != currentIsDigit ||
+                lastIsDigit !== currentIsDigit ||
                 hasTransitionFromLowerToUpper ||
                 hasTransitionFromUpperToLower) {
 
@@ -757,7 +757,7 @@ namespace ts {
             // 3) HTMLDocument -> HTML, Document
             //
             // etc.
-            if (index != wordStart &&
+            if (index !== wordStart &&
                 index + 1 < identifier.length) {
                 let currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
                 let nextIsLower = isLowerCaseLetter(identifier.charCodeAt(index + 1));

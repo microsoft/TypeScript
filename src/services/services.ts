@@ -167,7 +167,7 @@ namespace ts {
         }
 
         public getFullWidth(): number {
-            return this.end - this.getFullStart();
+            return this.end - this.pos;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
@@ -973,6 +973,9 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
+        // diagnostics present for the program level, and not just 'options' diagnostics.
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
@@ -1790,11 +1793,6 @@ namespace ts {
             sourceFile.moduleName = moduleName;
         }
 
-        // Store syntactic diagnostics
-        if (diagnostics && sourceFile.parseDiagnostics) {
-            diagnostics.push(...sourceFile.parseDiagnostics);
-        }
-
         let newLine = getNewLineCharacter(options);
 
         // Output
@@ -1816,9 +1814,8 @@ namespace ts {
 
         var program = createProgram([inputFileName], options, compilerHost);
 
-        if (diagnostics) {
-            diagnostics.push(...program.getCompilerOptionsDiagnostics());
-        }
+        addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
+        addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
 
         // Emit
         program.emit();
@@ -2798,7 +2795,7 @@ namespace ts {
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getGlobalDiagnostics();
+            return program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
         }
 
         /// Completion
@@ -4190,7 +4187,7 @@ namespace ts {
                 var result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
-                        result.push(...getDefinitionFromSymbol(t.symbol, node));
+                        addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(t.symbol, node));
                     }
                 });
                 return result;
@@ -5814,7 +5811,7 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isClassExtendsExpressionWithTypeArguments(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -6046,7 +6043,8 @@ namespace ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(declaration) == ModuleInstanceState.Instantiated;
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && 
+                            getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated;
                     });
                 }
             }
@@ -6119,6 +6117,8 @@ namespace ts {
         function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let spanStart = span.start;
+            let spanLength = span.length;
 
             // Make a scanner we can get trivia from.
             let triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
@@ -6135,48 +6135,55 @@ namespace ts {
                 result.push(type);
             }
 
-            function classifyLeadingTrivia(token: Node): void {
-                let tokenStart = skipTrivia(sourceFile.text, token.pos, /*stopAfterLineBreak:*/ false);
-                if (tokenStart === token.pos) {
-                    return;
-                }
-
-                // token has trivia.  Classify them appropriately.
+            function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
                 triviaScanner.setTextPos(token.pos);
                 while (true) {
                     let start = triviaScanner.getTextPos();
+                    // only bother scanning if we have something that could be trivia.
+                    if (!couldStartTrivia(sourceFile.text, start)) {
+                        return start;
+                    }
+
                     let kind = triviaScanner.scan();
                     let end = triviaScanner.getTextPos();
                     let width = end - start;
 
                     // The moment we get something that isn't trivia, then stop processing.
                     if (!isTrivia(kind)) {
-                        return;
+                        return start;
+                    }
+
+                    // Don't bother with newlines/whitespace.
+                    if (kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.WhitespaceTrivia) {
+                        continue;
                     }
 
                     // Only bother with the trivia if it at least intersects the span of interest.
-                    if (textSpanIntersectsWith(span, start, width)) {
-                        if (isComment(kind)) {
-                            classifyComment(token, kind, start, width);
+                    if (isComment(kind)) {
+                        classifyComment(token, kind, start, width);
+                            
+                        // Classifying a comment might cause us to reuse the trivia scanner 
+                        // (because of jsdoc comments).  So after we classify the comment make
+                        // sure we set the scanner position back to where it needs to be.
+                        triviaScanner.setTextPos(end);
+                        continue;
+                    }
+
+                    if (kind === SyntaxKind.ConflictMarkerTrivia) {
+                        let text = sourceFile.text;
+                        let ch = text.charCodeAt(start);
+
+                        // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
+                        // in the classification stream.
+                        if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
+                            pushClassification(start, width, ClassificationType.comment);
                             continue;
                         }
 
-                        if (kind === SyntaxKind.ConflictMarkerTrivia) {
-                            let text = sourceFile.text;
-                            let ch = text.charCodeAt(start);
-
-                            // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
-                            // in the classification stream.
-                            if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
-                                pushClassification(start, width, ClassificationType.comment);
-                                continue;
-                            }
-
-                            // for the ======== add a comment for the first line, and then lex all
-                            // subsequent lines up until the end of the conflict marker.
-                            Debug.assert(ch === CharacterCodes.equals);
-                            classifyDisabledMergeCode(text, start, end);
-                        }
+                        // for the ======== add a comment for the first line, and then lex all
+                        // subsequent lines up until the end of the conflict marker.
+                        Debug.assert(ch === CharacterCodes.equals);
+                        classifyDisabledMergeCode(text, start, end);
                     }
                 }
             }
@@ -6295,12 +6302,14 @@ namespace ts {
             }
 
             function classifyToken(token: Node): void {
-                classifyLeadingTrivia(token);
+                let tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
 
-                if (token.getWidth() > 0) {
+                let tokenWidth = token.end - tokenStart;
+                Debug.assert(tokenWidth >= 0);
+                if (tokenWidth > 0) {
                     let type = classifyTokenType(token.kind, token);
                     if (type) {
-                        pushClassification(token.getStart(), token.getWidth(), type);
+                        pushClassification(tokenStart, tokenWidth, type);
                     }
                 }
             }
@@ -6405,9 +6414,10 @@ namespace ts {
                 }
 
                 // Ignore nodes that don't intersect the original span to classify.
-                if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
+                if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                     let children = element.getChildren(sourceFile);
-                    for (let child of children) {
+                    for (let i = 0, n = children.length; i < n; i++) {
+                        let child = children[i];
                         if (isToken(child)) {
                             classifyToken(child);
                         }
