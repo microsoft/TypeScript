@@ -866,7 +866,7 @@ module ts.server {
             }
 
             if (needFileNameList) {
-                projectInfo.fileNameList = project.getFileNameList();
+                projectInfo.fileNameList = project.getFileNames();
             }
 
             return projectInfo;

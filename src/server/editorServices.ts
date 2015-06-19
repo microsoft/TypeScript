@@ -309,7 +309,7 @@ module ts.server {
             return this.filenameToSourceFile[info.fileName];
         }
 
-        getFileNameList() {
+        getFileNames() {
             let sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
