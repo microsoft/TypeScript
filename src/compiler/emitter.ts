@@ -1178,6 +1178,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             let haveOpenedObjectLiteral = false;
                             for (var i = 0; i < attrs.length; i++) {
                                 if (attrs[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                                    // If this is the first argument, we need to emit a {} as the first argument
+                                    if(i === 0) {
+                                        write('{}, ');
+                                    }
+
                                     if (haveOpenedObjectLiteral) {
                                         write('}');
                                         haveOpenedObjectLiteral = false;

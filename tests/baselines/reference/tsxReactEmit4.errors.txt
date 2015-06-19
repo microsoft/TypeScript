@@ -18,3 +18,5 @@ tests/cases/conformance/jsx/tsxReactEmit4.tsx(11,5): error TS2304: Cannot find n
     
     </div>;
     
+    // Should emit React.__spread({}, p, {x: 0})
+    var spread1 = <div {...p} x={0} />;
