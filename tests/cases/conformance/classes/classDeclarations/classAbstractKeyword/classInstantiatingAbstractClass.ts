@@ -16,3 +16,11 @@ var c : C;
 a = new B;
 b = new B;
 c = new B;
+
+module M {
+    export abstract class A {}
+}
+
+import myA = M.A;
+
+var aa = new myA;
