@@ -911,11 +911,11 @@
         "category": "Error",
         "code": 2336
     },
-    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+    "Super calls are not permitted outside constructors or in nested functions inside constructors.": {
         "category": "Error",
         "code": 2337
     },
-    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.": {
         "category": "Error",
         "code": 2338
     },
@@ -923,7 +923,7 @@
         "category": "Error",
         "code": 2339
     },
-    "Only public and protected methods of the base class are accessible via the 'super' keyword": {
+    "Only public and protected methods of the base class are accessible via the 'super' keyword.": {
         "category": "Error",
         "code": 2340
     },

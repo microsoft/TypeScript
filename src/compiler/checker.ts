@@ -6658,42 +6658,91 @@ namespace ts {
             return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) {
+        /**
+         * Check whether the requested property access is valid.
+         * Returns true if node passed the check, and false otherwise.
+         * @param node The node to be checked.
+         * @param left The left hand side of the property access (eg: the super is `super.*`).
+         * @param type The type of left.
+         * @param prop The symbol for the right hand side of the property access.
+         */
+        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) : boolean {
             let flags = getDeclarationFlagsFromSymbol(prop);
-            // Public properties are always accessible
-            if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
-                return;
+            let declaringClass : InterfaceType;
+
+            if (left.kind === SyntaxKind.SuperKeyword) {
+                let errorNode = (<PropertyAccessExpression>node).name ?
+                    (<PropertyAccessExpression>node).name :
+                    (<QualifiedName>node).right;
+
+                // TS 1.0 spec (April 2014): 4.8.2
+                // - In a constructor, instance member function, instance member accessor, or
+                //   instance member variable initializer where this references a derived class instance,
+                //   a super property access is permitted and must specify a public instance member function of the base class.
+                // - In a static member function or static member accessor
+                //   where this references the constructor function object of a derived class,
+                //   a super property access is permitted and must specify a public static member function of the base class.
+                if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) { // prop is a property access
+
+                    error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                    return false;
+                }
+                
+                // In a super call, the member function can be accessed if the method is not abstract.
+                // Note that a member cannot be private and abstract -- this is checked elsewhere.
+                if (flags & NodeFlags.Abstract) {
+                    // Get the declaring the class instance type for the error message.
+                    declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+
+                    error(errorNode, Diagnostics.Abstract_member_function_0_on_type_1_cannot_be_called_via_super_expression, symbolToString(prop), typeToString(declaringClass));
+                    return false;
+                }
             }
-            // Property is known to be private or protected at this point
-            // Get the declaring and enclosing class instance types
+
+            // Public properties are otherwise accessible.
+            if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
+                return true;
+            }
+
+            // Property is known to be private or protected at this point.
+
+            // Get the declaring and enclosing class instance types.
             let enclosingClassDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
+            // Debug.assert(!!enclosingClassDeclaration, "Should be defined");
             let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
-            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+            declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+
             // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
                 if (declaringClass !== enclosingClass) {
                     error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                    return false;
                 }
-                return;
+                return true;
             }
+
             // Property is known to be protected at this point
+
             // All protected properties of a supertype are accessible in a super access
             if (left.kind === SyntaxKind.SuperKeyword) {
-                return;
+                return true;
             }
             // A protected property is accessible in the declaring class and classes derived from it
             if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
-                return;
+                return false;
             }
             // No further restrictions for static properties
             if (flags & NodeFlags.Static) {
-                return;
+                return true;
             }
             // An instance property must be accessed through an instance of the enclosing class
+            // TODO: why is the first part of this check here?
             if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+                return false;
             }
+            return true;
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -6722,31 +6771,12 @@ namespace ts {
                 }
                 return unknownType;
             }
+
+            // TODO: Why is this line here?
             getNodeLinks(node).resolvedSymbol = prop;
+
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                // TS 1.0 spec (April 2014): 4.8.2
-                // - In a constructor, instance member function, instance member accessor, or
-                //   instance member variable initializer where this references a derived class instance,
-                //   a super property access is permitted and must specify a public instance member function of the base class.
-                // - In a static member function or static member accessor
-                //   where this references the constructor function object of a derived class,
-                //   a super property access is permitted and must specify a public static member function of the base class.
-                if (left.kind === SyntaxKind.SuperKeyword) {
-                    if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                        error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                    }
-                    
-                    // Abstract methods cannot be accessed through super property accesses. Eg:
-                    //  class A { abstract foo(); }
-                    //  class B extends A { bar() { super.foo();} }
-                    // is illegal.
-                    if (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Abstract) {
-                        error(right, Diagnostics.Abstract_member_function_0_on_type_1_cannot_be_called_via_super_expression, declarationNameToString(right), typeToString(type));
-                    }
-                }
-                else {
-                    checkClassPropertyAccess(node, left, type, prop);
-                }
+                checkClassPropertyAccess(node, left, type, prop);
             }
             return getTypeOfSymbol(prop);
         }
@@ -6760,14 +6790,7 @@ namespace ts {
             if (type !== unknownType && !isTypeAny(type)) {
                 let prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                    if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                        return false;
-                    }
-                    else {
-                        let modificationCount = diagnostics.getModificationCount();
-                        checkClassPropertyAccess(node, left, type, prop);
-                        return diagnostics.getModificationCount() === modificationCount;
-                    }
+                    return checkClassPropertyAccess(node, left, type, prop);
                 }
             }
             return true;
