@@ -1,5 +1,6 @@
 // @target: ES6
 // @noEmitHelpers: true
+// @experimentalAsyncFunctions: true
 declare let a: number | string;
 declare let b: PromiseLike<number> | PromiseLike<string>;
 declare let c: PromiseLike<number | string>;

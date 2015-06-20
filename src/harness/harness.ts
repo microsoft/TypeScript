@@ -1055,6 +1055,10 @@ module Harness {
                         case 'emitdecoratormetadata':
                             options.emitDecoratorMetadata = setting.value === 'true';
                             break;
+                            
+                        case 'experimentalasyncfunctions':
+                            options.experimentalAsyncFunctions = setting.value === 'true';
+                            break;
 
                         case 'noemithelpers':
                             options.noEmitHelpers = setting.value === 'true';

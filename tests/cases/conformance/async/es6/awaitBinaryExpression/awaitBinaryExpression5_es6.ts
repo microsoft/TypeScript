@@ -1,5 +1,6 @@
 // @target: ES6
 // @noEmitHelpers: true
+// @experimentalAsyncFunctions: true
 declare var a: boolean;
 declare var p: Promise<boolean>;
 async function func(): Promise<void> {

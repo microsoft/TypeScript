@@ -1,5 +1,6 @@
 // @target: ES6
 // @noEmitHelpers: true
+// @experimentalAsyncFunctions: true
 
 var bar = async (): Promise<void> => {
   // 'await' here is an identifier, and not an await expression.
