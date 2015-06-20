@@ -1722,7 +1722,9 @@ namespace ts {
     /* @internal */
     export interface ResolveFilter {
         excludeInherited: { [symbolId: number]: boolean };
-        excludeTemp: { [symbolId: number]: boolean };
+        callSignatures: Signature[];
+        constructSignatures: Signature[];
+        excludeLater: { [symbolId: number]: boolean };
     }
 
     // Just a place to cache element types of iterables and iterators
