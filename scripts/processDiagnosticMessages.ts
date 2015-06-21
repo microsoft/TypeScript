@@ -41,10 +41,10 @@ function main(): void {
 function buildUniqueNameMap(names: string[]): IIndexable<string> {
     var nameMap: IIndexable<string> = {};
 
-    var uniqueNames = NameGenerator.ensureUniqueness(names, /* isCaseSensitive */ false, /* isFixed */ undefined);
+    var uniqueNames = NameGenerator.mangle(names, /* isCaseSensitive */ false, /* isFixed */ undefined);
 
     for (var i = 0; i < names.length; i++) {
-        nameMap[names[i]] = uniqueNames[i];
+        nameMap[uniqueNames[i]] = names[i];
     }
 
     return nameMap;
@@ -57,16 +57,16 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         '/* @internal */\r\n' +
         'namespace ts {\r\n' +
         '    export var Diagnostics = {\r\n';
-    var names = Utilities.getObjectKeys(messageTable);
+    var names = Utilities.getObjectKeys(nameMap);
     for (var i = 0; i < names.length; i++) {
         var name = names[i];
-        var diagnosticDetails = messageTable[name];
+        var diagnosticDetails = messageTable[nameMap[name]];
 
         result +=
-        '        ' + convertPropertyName(nameMap[name]) +
+        '        ' + name +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + name.replace(/[\"]/g, '\\"') + '"' +
+        ', key: "' + nameMap[name].replace(/[\"]/g, '\\"') + '"' +
         ' },\r\n';
     }
 
@@ -75,36 +75,36 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
     return result;
 }
 
-function convertPropertyName(origName: string): string {
-    var result = origName.split("").map(char => {
-        if (char === '*') { return "_Asterisk"; }
-        if (char === '/') { return "_Slash"; }
-        if (char === ':') { return "_Colon"; }
-        return /\w/.test(char) ? char : "_";
-    }).join("");
-
-
-    // get rid of all multi-underscores
-    result = result.replace(/_+/g, "_");
-
-    // remove any leading underscore, unless it is followed by a number.
-    result = result.replace(/^_([^\d])/, "$1")
-
-    // get rid of all trailing underscores.
-    result = result.replace(/_$/, "");
-
-    return result;
-}
-
 module NameGenerator {
-    export function ensureUniqueness(names: string[], isCaseSensitive: boolean, isFixed?: boolean[]): string[]{
+    export function mangle(names: string[], isCaseSensitive: boolean, isFixed?: boolean[]): string[]{
         if (!isFixed) {
             isFixed = names.map(() => false)
         }
 
-        var names = names.slice();
-        ensureUniquenessInPlace(names, isCaseSensitive, isFixed);
-        return names;
+        var mangledNames = names.map(name => convertToPropertyName(name));
+        ensureUniquenessInPlace(mangledNames, isCaseSensitive, isFixed);
+        return mangledNames;
+    }
+
+    function convertToPropertyName(origName: string): string {
+        var result = origName.split("").map(char => {
+            if (char === '*') { return "_Asterisk"; }
+            if (char === '/') { return "_Slash"; }
+            if (char === ':') { return "_Colon"; }
+            return /\w/.test(char) ? char : "_";
+        }).join("");
+
+
+        // get rid of all multi-underscores
+        result = result.replace(/_+/g, "_");
+
+        // remove any leading underscore, unless it is followed by a number.
+        result = result.replace(/^_([^\d])/, "$1")
+
+        // get rid of all trailing underscores.
+        result = result.replace(/_$/, "");
+
+        return result;
     }
 
     function ensureUniquenessInPlace(names: string[], isCaseSensitive: boolean, isFixed: boolean[]): void {
@@ -134,7 +134,7 @@ module NameGenerator {
             }
 
             while (true) {
-                var newName = name + suffix;
+                var newName = name + "@" + suffix;
                 suffix++;
 
                 // Check if we've synthesized a unique name, and if so
