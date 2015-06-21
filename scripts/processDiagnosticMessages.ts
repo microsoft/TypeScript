@@ -108,17 +108,26 @@ module NameGenerator {
     }
 
     function ensureUniquenessInPlace(names: string[], isCaseSensitive: boolean, isFixed: boolean[]): void {
+        var nameToIndicesMap = Utilities.collectMatchingIndices(names, isCaseSensitive);
         for (var i = 0; i < names.length; i++) {
             var name = names[i];
-            var collisionIndices = Utilities.collectMatchingIndices(name, names, isCaseSensitive);
 
-            // We will always have one "collision" because getCollisionIndices returns the index of name itself as well;
-            // so if we only have one collision, then there are no issues.
-            if (collisionIndices.length < 2) {
-                continue;
+            // Since we're operating in place, `names[i]` may refer to an element that was part
+            // part of a set of collisions that is now resolved.  If so, it won't be in the map,
+            // since it has a new name, different from the one it had when we called
+            // `collectMatchingIndices`.
+            if (Utilities.mapHasKey(nameToIndicesMap, name)) {
+                var collisionIndices = nameToIndicesMap[name];
+
+                // We will always have one "collision" because `i` itself will be present in the
+                // list, so if we only have one item in `collisionIndices`, then there are no
+                // issues.
+                if (collisionIndices.length < 2) {
+                    continue;
+                }
+
+                handleCollisions(name, names, isFixed, collisionIndices, isCaseSensitive);
             }
-
-            handleCollisions(name, names, isFixed, collisionIndices, isCaseSensitive);
         }
     }
 
@@ -149,17 +158,22 @@ module NameGenerator {
 }
 
 module Utilities {
-    /// Return a list of all indices where a string occurs.
-    export function collectMatchingIndices(name: string, proposedNames: string[], isCaseSensitive: boolean): number[] {
-        var matchingIndices: number[] = [];
-
+    export function collectMatchingIndices(proposedNames: string[], isCaseSensitive: boolean): IIndexable<number[]> {
+        var nameToIndicesMap: IIndexable<number[]> = {};
         for (var i = 0; i < proposedNames.length; i++) {
-            if (stringEquals(name, proposedNames[i], isCaseSensitive)) {
-                matchingIndices.push(i);
+            var name = proposedNames[i];
+            if (!mapHasKey(nameToIndicesMap, name)) {
+                nameToIndicesMap[name] = [];
             }
+
+            nameToIndicesMap[name].push(i);
         }
 
-        return matchingIndices;
+        return nameToIndicesMap;
+    }
+
+    export function mapHasKey<T>(map: IIndexable<T>, key: string): boolean {
+        return Object.prototype.hasOwnProperty.call(map, key);
     }
 
     export function stringEquals(s1: string, s2: string, caseSensitive: boolean): boolean {
