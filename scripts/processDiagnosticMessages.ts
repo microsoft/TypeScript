@@ -66,7 +66,7 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         '        ' + name +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + nameMap[name].replace(/[\"]/g, '\\"') + '"' +
+        ', key: ' + JSON.stringify(nameMap[name]) +
         ' },\r\n';
     }
 
