@@ -1,4 +1,4 @@
-//// [classInstantiatingAbstractClass.ts]
+//// [classAbstractInstantiations1.ts]
 
 abstract class A {}
 
@@ -18,16 +18,8 @@ a = new B;
 b = new B;
 c = new B;
 
-module M {
-    export abstract class A {}
-}
 
-import myA = M.A;
-
-var aa = new myA;
-
-
-//// [classInstantiatingAbstractClass.js]
+//// [classAbstractInstantiations1.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -61,14 +53,3 @@ var c;
 a = new B;
 b = new B;
 c = new B;
-var M;
-(function (M) {
-    var A = (function () {
-        function A() {
-        }
-        return A;
-    })();
-    M.A = A;
-})(M || (M = {}));
-var myA = M.A;
-var aa = new myA;
