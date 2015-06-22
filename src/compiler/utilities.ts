@@ -1067,7 +1067,7 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    export function isBindingPattern(node: Node) {
+    export function isBindingPattern(node: Node): node is BindingPattern {
         return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 

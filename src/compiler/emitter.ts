@@ -3142,12 +3142,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             return;
                         }
 
-                        if (isBindingPattern(parameter.name)) {
-                            writeLine();
-                            write("var ");
-                            emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
-                            write(";");
-                            tempIndex++;
+                        let paramName = parameter.name;
+                        if (isBindingPattern(paramName)) {
+                            // In cases where a binding patternm is simply '[]' or '{}',
+                            // we don't want to emit anything.
+                            if (paramName.elements.length > 0) {
+                                writeLine();
+                                write("var ");
+                                emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                                write(";");
+                                tempIndex++;
+                            }
                         }
                         else if (parameter.initializer) {
                             writeLine();
