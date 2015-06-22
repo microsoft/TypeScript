@@ -410,17 +410,17 @@ namespace ts {
         }
 
         function getFileNames(): string[] {
-            var fileNames: string[] = [];
+            let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
             }
             else {
-                var exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                var sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
-                for (var i = 0; i < sysFiles.length; i++) {
-                    var name = sysFiles[i];
+                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                for (let i = 0; i < sysFiles.length; i++) {
+                    let name = sysFiles[i];
                     if (fileExtensionIs(name, ".d.ts")) {
                         let baseName = name.substr(0, name.length - ".d.ts".length);
                         if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {

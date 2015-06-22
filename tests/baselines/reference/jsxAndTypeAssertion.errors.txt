@@ -60,15 +60,14 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
 !!! error TS1005: '}' expected.
     
     x = <foo test={<foo>{}}>hello</foo>;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
                    ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
                                        ~
 !!! error TS1005: '}' expected.
     
-    
     x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                    ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
@@ -78,9 +77,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
 !!! error TS1005: '}' expected.
     
     
-    
     x = <foo>x</foo>, x = <foo/>;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
@@ -88,9 +85,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     
-    
     <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
@@ -108,13 +103,9 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
     
-    
         
     ~~~~
-    ~~~~
     
-    
-!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     
 !!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
     

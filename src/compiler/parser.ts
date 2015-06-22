@@ -1205,7 +1205,7 @@ namespace ts {
                 case ParsingContext.JsxAttributes:
                     return isIdentifierOrKeyword() || token === SyntaxKind.OpenBraceToken;
                 case ParsingContext.JsxChildren:
-                    return token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.JsxText;
+                    return true;
                 case ParsingContext.JSDocFunctionParameters:
                 case ParsingContext.JSDocTypeArguments:
                 case ParsingContext.JSDocTupleTypes:
@@ -1297,10 +1297,10 @@ namespace ts {
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JsxAttributes:
-                    // For error recovery, include } here (otherwise an over-braced {expr}} will close the surrounding statement block and mess up the entire file).
-                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken || token === SyntaxKind.CloseBraceToken;
+                    // REMOVE -> // For error recovery, include } here (otherwise an over-braced {expr}} will close the surrounding statement block and mess up the entire file).
+                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken;
                 case ParsingContext.JsxChildren:
-                    return token === SyntaxKind.LessThanSlashToken;
+                    return token === SyntaxKind.LessThanToken && lookAhead(nextTokenIsSlash);
                 case ParsingContext.JSDocFunctionParameters:
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.ColonToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JSDocTypeArguments:
@@ -3113,7 +3113,13 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    return sourceFile.isTSXFile ? parseJsxElementOrSelfClosingElement() : parseTypeAssertion();
+                    if (!sourceFile.isTSXFile) {
+                        return parseTypeAssertion();
+                    }
+                    if(lookAhead(nextTokenIsIdentifier)) {
+                        return parseJsxElementOrSelfClosingElement();
+                    }
+                    // Fall through
                 default:
                     return parsePostfixExpressionOrHigher();
             }
@@ -3241,36 +3247,14 @@ namespace ts {
             return finishNode(node);
         }
         
-        function parseJsxChild(): JsxChild {
-            let result: JsxChild = undefined;
-            switch (token) {
-                case SyntaxKind.JsxText:
-                    result = <JsxText>createNode(SyntaxKind.JsxText);
-                    token = scanner.scanJsxToken();
-                    result = finishNode(result);
-                    break;
-                case SyntaxKind.OpenBraceToken:
-                    result = parseJsxExpression();
-                    break;
-                default:
-                    Debug.assert(token === SyntaxKind.LessThanToken);
-                    result = parseJsxElementOrSelfClosingElement();
-                    break;
-            }
-            token = scanner.reScanJsxToken();
-            Debug.assert(result !== undefined, "parsed some JSX child");
-            return result;
-        }
-
         function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
             let opening = parseJsxOpeningOrSelfClosingElement();
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
-                // Rescan since parsing the > messed up the scanner state
-                token = scanner.reScanJsxToken();
-                node.children = parseList(ParsingContext.JsxChildren, parseJsxChild);
+                debugger;
+                node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement();
                 return finishNode(node);
             }
@@ -3280,6 +3264,49 @@ namespace ts {
                 return <JsxSelfClosingElement>opening;
             }
         }
+
+        function parseJsxText(): JsxText {
+            let node = <JsxText>createNode(SyntaxKind.JsxText, scanner.getStartPos());
+            token = scanner.scanJsxToken();
+            return finishNode(node);
+        }
+
+        function parseJsxChild(): JsxChild {
+            switch (token) {
+                case SyntaxKind.JsxText:
+                    return parseJsxText();
+                case SyntaxKind.OpenBraceToken:
+                    return parseJsxExpression();
+                case SyntaxKind.LessThanToken:
+                    return parseJsxElementOrSelfClosingElement();
+            }
+            Debug.fail('Unknown JSX child kind ' + token);
+        }
+
+        function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
+            let result = <NodeArray<JsxChild>>[];
+            result.pos = scanner.getStartPos();
+            let saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JsxChildren;
+
+            while(true) {
+                token = scanner.reScanJsxToken();
+                if (token === SyntaxKind.LessThanSlashToken) {
+                    break;
+                }
+                else if (token === SyntaxKind.EndOfFileToken) {
+                    parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                    break;
+                }
+                result.push(parseJsxChild());
+            }
+
+            result.end = scanner.getTokenPos();
+
+            parsingContext = saveParsingContext;
+
+            return result;
+        }
         
         function parseJsxOpeningOrSelfClosingElement(): JsxOpeningElement|JsxSelfClosingElement {
             let fullStart = scanner.getStartPos();
@@ -3287,17 +3314,18 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanToken);
 
             let tagName = parseJsxElementName();
+
             let attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
             let node: JsxOpeningLikeElement;
-            if (token === SyntaxKind.SlashToken) {
-                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
 
-                nextToken();
+            if (parseOptional(SyntaxKind.GreaterThanToken)) {
+                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
             }
             else {
-                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
-            } 
-            parseExpected(SyntaxKind.GreaterThanToken);
+                parseExpected(SyntaxKind.SlashToken);
+                parseExpected(SyntaxKind.GreaterThanToken);
+                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
+            }
 
             node.tagName = tagName;
             node.attributes = attributes;
@@ -4816,6 +4844,10 @@ namespace ts {
 
         function nextTokenIsOpenParen() {
             return nextToken() === SyntaxKind.OpenParenToken;
+        }
+
+        function nextTokenIsSlash() {
+            return nextToken() === SyntaxKind.SlashToken;
         }
 
         function nextTokenIsCommaOrFromKeyword() {

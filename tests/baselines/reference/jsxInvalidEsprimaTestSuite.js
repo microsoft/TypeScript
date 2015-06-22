@@ -36,28 +36,33 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a .../*hai*/asdf/>;
 
 //// [jsxInvalidEsprimaTestSuite.jsx]
-< />;
-<a />;
-< a=/>;
-<a b={d /  > }>
-<a>;
+    < />;
+    < a;
+/>;
+    < ;
+a /  > ;
+<a b={d /  > }/>
+    < a > ;
 <a></b>;
-<a foo="bar;>
-<a b=></b>;
-<a b= c=></a>:b.c>;
-<a.b c=></a.b>:c>;
-<a.b.c></a>;
-<.a></.a>;
-<a.></a.>;
-<a>[foo]></a>[foo]>;
-<a>['foo']></a>['foo']>;
-<a><a />;
+<a foo="bar;/>
+    < a;
+b >  < /b>;
+    < a;
+b.c >  < /a:b.c>;
+    < a.b;
+c >  < /a.b:c>;
+    < a.b.c >  < /a>;
+    < .a >  < /.a>;
+    < a. >  < /a.>;
+    < a[foo] >  < /a[foo]>;
+    < a['foo'] >  < /a['foo']>;
+    < a > <a />;
 <a b=>;
 var x = <div>one</div><div>two</div>;;
 var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>two</div>;;
 <a>{"str"};}</a>;
-<span className="a" id="b"/>;
-<div className=>"app">;
+<span className="a"/>, id="b" />;
+<div className=/>"app">;
 <div {...props}/>;
 
 <div>stuff</div> {}...props}>;
@@ -66,6 +71,6 @@ var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>
 <a>></a>;
 <a> ></a>;
 <a b=>;
-<a b=<>}>;
+<a b=< />/>}>;
 <a>}</a>;
-<a asdf=/>;</>></></></></></></></></>;
+<a /> .../*hai*/asdf/>;</></>;

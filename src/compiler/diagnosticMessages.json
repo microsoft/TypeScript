@@ -1562,11 +1562,11 @@
         "category": "Error",
         "code": 2603
     },
-    "JSX element '{0}' is not a constructor function.": {
+    "JSX element type '{0}' does not have any construct or call signatures.": {
         "category": "Error",
         "code": 2604
     },
-    "JSX element '{0}' is not a constructor function for JSX elements.": {
+    "JSX element type '{0}' is not a constructor function for JSX elements.": {
         "category": "Error",
         "code": 2605
     },
@@ -1582,11 +1582,6 @@
         "category": "Error",
         "code": 2608
     },
-    "JSX element implicitly has type 'any' because no interface JSX.{0} exists": {
-        "category": "Error",
-        "code": 2609
-    },
-
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
@@ -2165,7 +2160,7 @@
         "category": "Message",
         "code": 6080
     },
-    "Argument for --jsx must be 'preserve' or 'react'.": {
+    "Argument for '--jsx' must be 'preserve' or 'react'.": {
         "category": "Message",
         "code": 6081
     },
@@ -2246,6 +2241,12 @@
         "category": "Error",
         "code": 7025
     },
+    "JSX element implicitly has type 'any' because no interface 'JSX.{0}' exists": {
+        "category": "Error",
+        "code": 7026
+    },
+
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -2322,10 +2323,6 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
-    },
-    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
-        "category": "Error",
-        "code": 9004
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",

@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/tsxElementResolution10.tsx(13,1): error TS2605: JSX element '{ x: number; }' is not a constructor function for JSX elements.
+tests/cases/conformance/jsx/tsxElementResolution10.tsx(13,1): error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
   Property 'render' is missing in type '{ x: number; }'.
 
 
@@ -17,7 +17,7 @@ tests/cases/conformance/jsx/tsxElementResolution10.tsx(13,1): error TS2605: JSX 
     var Obj1: Obj1type;
     <Obj1 x={10} />; // Error, no render member
     ~~~~~~~~~~~~~~~
-!!! error TS2605: JSX element '{ x: number; }' is not a constructor function for JSX elements.
+!!! error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
 !!! error TS2605:   Property 'render' is missing in type '{ x: number; }'.
     
     interface Obj2type {

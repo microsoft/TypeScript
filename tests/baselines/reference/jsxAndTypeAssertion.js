@@ -35,7 +35,9 @@ x = <any><any></any>;
  
 x = <foo>hello {<foo>} </foo>};
 
-x = <foo test={<foo>}>hello</foo>} x=<foo test={<foo>}>hello{<foo>}</foo>};
+x = <foo test={<foo>}>hello</foo>}/>;
+
+x = <foo test={<foo>}>hello{<foo>}</foo>};
 
 x = <foo>x</foo>, x = <foo />;
 
@@ -44,4 +46,4 @@ x = <foo>x</foo>, x = <foo />;
 }
 
     
-</></>}</></>}></>></></></></>;
+</></>}</></>}/></></></>;

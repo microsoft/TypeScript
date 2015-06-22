@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/tsxElementResolution8.tsx(8,2): error TS2604: JSX element 'Div' is not a constructor function.
+tests/cases/conformance/jsx/tsxElementResolution8.tsx(8,2): error TS2604: JSX element type 'Div' does not have any construct or call signatures.
 tests/cases/conformance/jsx/tsxElementResolution8.tsx(16,2): error TS2601: The return type of a JSX element constructor must return an object type.
 tests/cases/conformance/jsx/tsxElementResolution8.tsx(29,2): error TS2601: The return type of a JSX element constructor must return an object type.
-tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX element 'Obj3' is not a constructor function.
+tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construct or call signatures.
 
 
 ==== tests/cases/conformance/jsx/tsxElementResolution8.tsx (4 errors) ====
@@ -14,7 +14,7 @@ tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX e
     var Div = 3;
     <Div />;
      ~~~
-!!! error TS2604: JSX element 'Div' is not a constructor function.
+!!! error TS2604: JSX element type 'Div' does not have any construct or call signatures.
     
     // OK
     function Fact(): any { return null; }
@@ -46,5 +46,5 @@ tests/cases/conformance/jsx/tsxElementResolution8.tsx(34,2): error TS2604: JSX e
     var Obj3: Obj3;
     <Obj3 />; // Error
      ~~~~
-!!! error TS2604: JSX element 'Obj3' is not a constructor function.
+!!! error TS2604: JSX element type 'Obj3' does not have any construct or call signatures.
     
