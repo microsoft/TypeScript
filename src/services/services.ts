@@ -737,7 +737,6 @@ namespace ts {
         public amdDependencies: { name: string; path: string }[];
         public moduleName: string;
         public referencedFiles: FileReference[];
-        public isTSXFile: boolean;
 
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
@@ -752,6 +751,7 @@ namespace ts {
         public symbolCount: number;
         public version: string;
         public languageVersion: ScriptTarget;
+        public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
 
@@ -2916,7 +2916,7 @@ namespace ts {
             else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
                 node = (<QualifiedName>contextToken.parent).left;
                 isRightOfDot = true;
-            } else if (contextToken && contextToken.kind === SyntaxKind.LessThanToken && sourceFile.isTSXFile) {
+            } else if (contextToken && contextToken.kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
                 isRightOfOpenTag = true;
                 location = contextToken;
             }
@@ -6167,8 +6167,8 @@ namespace ts {
             let spanLength = span.length;
 
             // Make a scanner we can get trivia from.
-            let triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
-            let mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
+            let triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.languageVariant, sourceFile.text);
+            let mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.languageVariant, sourceFile.text);
 
             let result: number[] = [];
             processElement(sourceFile);

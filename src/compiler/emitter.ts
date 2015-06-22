@@ -53,12 +53,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
-        let jsxDesugaring = host.getCompilerOptions().jsx === JsxEmit.React;
+        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
+        let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, (!sourceFile.isTSXFile || jsxDesugaring) ? ".js" : ".jsx");
+                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -70,7 +71,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, (host.getSourceFiles().every(f => !f.isTSXFile) || jsxDesugaring) ? ".js" : ".jsx");
+                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, host.getSourceFiles().some(shouldEmitJsx) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {

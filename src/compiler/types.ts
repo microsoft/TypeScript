@@ -1223,7 +1223,7 @@ namespace ts {
         amdDependencies: {path: string; name: string}[];
         moduleName: string;
         referencedFiles: FileReference[];
-        isTSXFile: boolean;
+        languageVariant: LanguageVariant;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1986,6 +1986,11 @@ namespace ts {
         ES5 = 1,
         ES6 = 2,
         Latest = ES6,
+    }
+
+    export const enum LanguageVariant {
+        Standard,
+        JSX
     }
 
     export interface ParsedCommandLine {

@@ -544,6 +544,7 @@ namespace ts {
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
+            scanner.setLanguageVariant(isTsx(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
         }
 
         function clearState() {
@@ -656,7 +657,7 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.isTSXFile = fileExtensionIs(sourceFile.fileName, ".tsx");
+            sourceFile.languageVariant = fileExtensionIs(sourceFile.fileName, ".tsx") ? LanguageVariant.JSX : LanguageVariant.Standard;
 
             return sourceFile;
         }
@@ -2839,7 +2840,7 @@ namespace ts {
                 }
 
                 // JSX overrides
-                if (sourceFile.isTSXFile) {
+                if (sourceFile.languageVariant === LanguageVariant.JSX) {
                     let isArrowFunctionInJsx = lookAhead(() => {
                         let third = nextToken();
                         let fourth = nextToken();
@@ -3113,7 +3114,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    if (!sourceFile.isTSXFile) {
+                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return parseTypeAssertion();
                     }
                     if(lookAhead(nextTokenIsIdentifier)) {
@@ -5050,7 +5051,7 @@ namespace ts {
         }
 
         function processReferenceComments(sourceFile: SourceFile): void {
-            let triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, sourceText);
+            let triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
             let referencedFiles: FileReference[] = [];
             let amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;

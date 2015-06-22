@@ -30,6 +30,7 @@ namespace ts {
         setText(text: string, start?: number, length?: number): void;
         setOnError(onError: ErrorCallback): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
+        setLanguageVariant(variant: LanguageVariant): void;
         setTextPos(textPos: number): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it 
         // was in immediately prior to invoking the callback.  The result of invoking the callback
@@ -630,6 +631,7 @@ namespace ts {
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
+                                  languageVariant = LanguageVariant.Standard,
                                   text?: string,
                                   onError?: ErrorCallback,
                                   start?: number,
@@ -675,6 +677,7 @@ namespace ts {
             scan,
             setText,
             setScriptTarget,
+            setLanguageVariant,
             setOnError,
             setTextPos,
             tryScan,
@@ -1309,6 +1312,9 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                         }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash && languageVariant === LanguageVariant.JSX) {
+                            return pos += 2, token = SyntaxKind.LessThanSlashToken;
+                        }
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
                         if (isConflictMarkerTrivia(text, pos)) {
@@ -1586,6 +1592,10 @@ namespace ts {
 
         function setScriptTarget(scriptTarget: ScriptTarget) {
             languageVersion = scriptTarget;
+        }
+
+        function setLanguageVariant(variant: LanguageVariant) {
+            languageVariant = variant;
         }
 
         function setTextPos(textPos: number) {

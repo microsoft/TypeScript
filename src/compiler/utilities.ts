@@ -274,7 +274,7 @@ namespace ts {
     }
 
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text, /*onError:*/ undefined, pos);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
         return createTextSpanFromBounds(start, scanner.getTextPos());
@@ -1955,6 +1955,10 @@ namespace ts {
 
     export function isJavaScript(fileName: string) {
         return fileExtensionIs(fileName, ".js");
+    }
+
+    export function isTsx(fileName: string) {
+        return fileExtensionIs(fileName, ".tsx");
     }
 
     /**
