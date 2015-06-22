@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter03.ts ===
+
+
+function f({}, a) {
+>f : Symbol(f, Decl(emptyObjectBindingPatternParameter03.ts, 0, 0))
+>a : Symbol(a, Decl(emptyObjectBindingPatternParameter03.ts, 2, 14))
+
+	var x, y, z;
+>x : Symbol(x, Decl(emptyObjectBindingPatternParameter03.ts, 3, 4))
+>y : Symbol(y, Decl(emptyObjectBindingPatternParameter03.ts, 3, 7))
+>z : Symbol(z, Decl(emptyObjectBindingPatternParameter03.ts, 3, 10))
+}
