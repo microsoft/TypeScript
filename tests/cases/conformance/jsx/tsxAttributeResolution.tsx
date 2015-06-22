@@ -1,4 +1,4 @@
-/// @jsx: preserve
+//@jsx: preserve
 
 declare namespace JSX {
 	interface IntrinsicElements {

@@ -1,5 +1,4 @@
 //// [tsxAttributeResolution.tsx]
-/// @jsx: preserve
 
 declare namespace JSX {
 	interface IntrinsicElements {
@@ -11,4 +10,3 @@ declare namespace JSX {
 
 
 //// [tsxAttributeResolution.jsx]
-/// @jsx: preserve

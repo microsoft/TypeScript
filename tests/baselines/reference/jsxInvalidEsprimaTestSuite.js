@@ -36,9 +36,8 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a .../*hai*/asdf/>;
 
 //// [jsxInvalidEsprimaTestSuite.jsx]
-    < />;
-    < a;
-/>;
+ > ;
+<a />;
     < ;
 a /  > ;
 <a b={d /  > }/>
@@ -46,17 +45,23 @@ a /  > ;
 <a></b>;
 <a foo="bar;/>
     < a;
-b >  < /b>;
-    < a;
-b.c >  < /a:b.c>;
-    < a.b;
-c >  < /a.b:c>;
-    < a.b.c >  < /a>;
-    < .a >  < /.a>;
-    < a. >  < /a.>;
-    < a[foo] >  < /a[foo]>;
-    < a['foo'] >  < /a['foo']>;
-    < a > <a />;
+b > ;
+b > ;
+<a b= c=></a>;
+b.c > ;
+<a.b c=></a.b>;
+c > ;
+<a.b.c></a>;
+    < .a > ;
+a > ;
+<a.></a.>;
+<a />;
+[foo] > ;
+a[foo] > ;
+<a />;
+['foo'] > ;
+a['foo'] > ;
+<a><a />;
 <a b=>;
 var x = <div>one</div><div>two</div>;;
 var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>two</div>;;
@@ -73,4 +78,4 @@ var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>
 <a b=>;
 <a b=< />/>}>;
 <a>}</a>;
-<a /> .../*hai*/asdf/>;</></>;
+<a /> .../*hai*/asdf/>;</></></>;
