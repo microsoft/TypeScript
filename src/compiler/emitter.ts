@@ -3135,33 +3135,33 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6) {
                     let tempIndex = 0;
-                    forEach(node.parameters, p => {
+                    forEach(node.parameters, parameter => {
                         // A rest parameter cannot have a binding pattern or an initializer,
                         // so let's just ignore it.
-                        if (p.dotDotDotToken) {
+                        if (parameter.dotDotDotToken) {
                             return;
                         }
 
-                        if (isBindingPattern(p.name)) {
+                        if (isBindingPattern(parameter.name)) {
                             writeLine();
                             write("var ");
-                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                            emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
                             write(";");
                             tempIndex++;
                         }
-                        else if (p.initializer) {
+                        else if (parameter.initializer) {
                             writeLine();
-                            emitStart(p);
+                            emitStart(parameter);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitNodeWithoutSourceMap(parameter.name);
                             write(" === void 0)");
-                            emitEnd(p);
+                            emitEnd(parameter);
                             write(" { ");
-                            emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitStart(parameter);
+                            emitNodeWithoutSourceMap(parameter.name);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
-                            emitEnd(p);
+                            emitNodeWithoutSourceMap(parameter.initializer);
+                            emitEnd(parameter);
                             write("; }");
                         }
                     });
