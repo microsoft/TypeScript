@@ -7,6 +7,5 @@ function f(a, []) {
 
 //// [emptyArrayBindingPatternParameter02.js]
 function f(a, _a) {
-    var ;
     var x, y, z;
 }

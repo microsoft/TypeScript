@@ -7,6 +7,5 @@ function f({}) {
 
 //// [emptyObjectBindingPatternParameter01.js]
 function f(_a) {
-    var ;
     var x, y, z;
 }
