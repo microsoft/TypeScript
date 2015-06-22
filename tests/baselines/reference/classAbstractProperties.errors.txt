@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(2,5): error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(3,12): error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(4,15): error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(5,13): error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(2,5): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(3,12): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(4,15): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(5,13): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(10,13): error TS1237: 'private' modifier cannot be used with 'abstract' modifier.
 
 
@@ -9,16 +9,16 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     abstract class A {
         abstract x : number;
         ~~~~~~~~
-!!! error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+!!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
         public abstract y : number;
                ~~~~~~~~
-!!! error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+!!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
         protected abstract z : number;
                   ~~~~~~~~
-!!! error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+!!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
         private abstract w : number;
                 ~~~~~~~~
-!!! error TS1236: 'abstract' modifier can only appear on a class or member function declaration.
+!!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
         
         abstract foo_x() : number;
         public abstract foo_y() : number;

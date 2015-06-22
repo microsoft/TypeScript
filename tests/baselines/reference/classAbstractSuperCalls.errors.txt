@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(14,26): error TS2513: Abstract member function 'foo' on type 'B' cannot be called via super expression.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(14,26): error TS2513: Abstract method 'foo.B' cannot be called via super expression.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts (1 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
         foo() { return 2; }
         qux() { return super.foo(); } // error, super is abstract
                              ~~~
-!!! error TS2513: Abstract member function 'foo' on type 'B' cannot be called via super expression.
+!!! error TS2513: Abstract method 'foo.B' cannot be called via super expression.
         norf() { return super.bar(); }
     }
     
