@@ -2710,15 +2710,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     else {
                         if (node.flags & NodeFlags.Default) {
                             if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
-                                write("Object.defineProperty(exports, \"__esModule\", {");
-                                writeLine();
-                                increaseIndent();
-                                // default value of configurable, enumerable, writable are `false`. 
-                                write("value: true");
-                                writeLine();
-                                decreaseIndent();
-                                write("};");
-                                writeLine();
+                                if (languageVersion >= ScriptTarget.ES5) {
+                                    write("Object.defineProperty(exports, \"__esModule\", {");
+                                    writeLine();
+                                    increaseIndent();
+                                    // default value of configurable, enumerable, writable are `false`. 
+                                    write("value: true");
+                                    writeLine();
+                                    decreaseIndent();
+                                    write("};");
+                                    writeLine();
+                                } else {
+                                    write("exports.__esModule = true;");
+                                    writeLine();
+                                }
                             }
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("exports[\"default\"]");
