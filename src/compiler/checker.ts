@@ -4584,7 +4584,9 @@ namespace ts {
                 for (let targetProp of properties) {
                     let sourceProp = getPropertyOfType(source, targetProp.name);
 
-                    if (sourceProp !== targetProp) { // sourceProp !== targetProp -- ie: source and target have distinct declarations with the same name
+                    if (sourceProp !== targetProp) {
+                        // sourceProp !== targetProp -- ie: source and target have distinct declarations with the same name
+                        
                         if (!sourceProp) {
                             if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
                                 if (reportErrors) {
