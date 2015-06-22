@@ -751,7 +751,7 @@
         "category": "Error",
         "code": 1235
     },
-    "'{0}' modifier can only appear on a class or member function declaration.": {
+    "'abstract' modifier can only appear on a class or method declaration.": {
         "category": "Error",
         "code": 1236
     },
@@ -763,7 +763,7 @@
         "category": "Error",
         "code": 1238
     },
-    "Abstract member functions cannot have an implementation.": {
+    "Method '{0}' cannot have an implementation because it is marked abstract.": {
         "category": "Error",
         "code": 1240
     },
@@ -1563,11 +1563,11 @@
         "category": "Error",
         "code": 2511
     },
-    "All overload signatures must match with respect to modifier '{0}'.": {
+    "Overload signatures must all be `abstract` or not `abstract.": {
         "category": "Error",
         "code": 2512
     },
-    "Abstract member function '{0}' on type '{1}' cannot be called via super expression.": {
+    "Abstract method '{0}.{1}' cannot be called via super expression.": {
         "category": "Error",
         "code": 2513
     },
@@ -1579,7 +1579,7 @@
         "category": "Error",
         "code": 2515
     },
-    "All declarations of an abstract member function must be consecutive.": {
+    "All declarations of an abstract method must be consecutive.": {
         "category": "Error",
         "code": 2516
     },

@@ -6693,18 +6693,21 @@ namespace ts {
                 // - In a static member function or static member accessor
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
-                if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) { // prop is a property access.
+                if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
+                    // `prop` refers to a *property* declared in the super class
+                    // rather than a *method*, so it does not satisfy the above criteria.
+
                     error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                     return false;
                 }
-                
-                // In a super call, the member function can be accessed if the method is not abstract.
+
+                // In a super call, the methods cannot be accessed if the method is abstract.
                 // Note that a member cannot be private and abstract -- this is checked elsewhere.
                 if (flags & NodeFlags.Abstract) {
                     // Get the declaring the class instance type for the error message.
                     declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
-                    error(errorNode, Diagnostics.Abstract_member_function_0_on_type_1_cannot_be_called_via_super_expression, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Abstract_method_0_1_cannot_be_called_via_super_expression, symbolToString(prop), typeToString(declaringClass));
                     return false;
                 }
             }
@@ -9142,7 +9145,7 @@ namespace ts {
             error(signatureDeclarationNode, Diagnostics.Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature);
         }
 
-        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags) {
+        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags) : NodeFlags {
             let flags = getCombinedNodeFlags(n);
             if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
                 if (!(flags & NodeFlags.Ambient)) {
@@ -9189,7 +9192,7 @@ namespace ts {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & NodeFlags.Abstract) {
-                            error(o.name, Diagnostics.All_overload_signatures_must_match_with_respect_to_modifier_0, "abstract");
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract, "abstract");
                         }
                     });
                 }
@@ -9260,7 +9263,7 @@ namespace ts {
                     // Report different errors regarding non-consecutive blocks of declarations depending on whether
                     // the node in question is abstract.
                     if (node.flags & NodeFlags.Abstract) {
-                        error(errorNode, Diagnostics.All_declarations_of_an_abstract_member_function_must_be_consecutive);
+                        error(errorNode, Diagnostics.All_declarations_of_an_abstract_method_must_be_consecutive);
                     } 
                     else {
                         error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
@@ -9312,9 +9315,10 @@ namespace ts {
                             bodyDeclaration = node;
                         }
 
-                        // abstract functions cannot have an implementation
-                        if (currentNodeFlags & NodeFlags.Abstract) {
-                            error(node, Diagnostics.Abstract_member_functions_cannot_have_an_implementation)
+                        // abstract functions cannot have an implementation.
+                        // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
+                        if (currentNodeFlags & NodeFlags.Abstract && node.kind === SyntaxKind.MethodDeclaration && !isConstructor) {
+                            error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name))
                         }
                     }
                     else {
@@ -9561,7 +9565,7 @@ namespace ts {
 
                     case SyntaxKind.MethodDeclaration:
                         checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                        // Otherwise fall through
+                        // Fall through
 
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.GetAccessor:
@@ -10725,11 +10729,12 @@ namespace ts {
             }
 
             forEach(node.members, checkSourceElement);
-            
-            // Classes containing abstract members must be marked abstract
-            if (!(node.flags & NodeFlags.Abstract) && forEach(node.members, (element: ClassElement) => element.flags & NodeFlags.Abstract)) {
+
+            // Classes containing abstract methods must be marked abstract
+            if (!(node.flags & NodeFlags.Abstract) && forEach(node.members, element => element.flags & NodeFlags.Abstract)) {
                 error(node, Diagnostics.Classes_containing_abstract_functions_must_be_marked_abstract);
             }
+
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
@@ -12074,7 +12079,7 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    // Otherwise fall through
+                    // Fall through
 
                 case SyntaxKind.NumericLiteral:
                     // index access
@@ -12880,7 +12885,7 @@ namespace ts {
                         }
                         if (node.kind !== SyntaxKind.ClassDeclaration) {
                             if (node.kind !== SyntaxKind.MethodDeclaration) {
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_class_or_member_function_declaration, "abstract");
+                                return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_or_method_declaration);
                             }
                             if (!(node.parent.kind === SyntaxKind.ClassDeclaration && node.parent.flags & NodeFlags.Abstract)) {
                                 return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
