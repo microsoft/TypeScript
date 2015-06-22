@@ -1687,6 +1687,7 @@ namespace ts {
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
+        resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
     }
 
     export const enum TypeFlags {

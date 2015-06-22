@@ -3255,7 +3255,6 @@ namespace ts {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
-                debugger;
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement();
                 return finishNode(node);

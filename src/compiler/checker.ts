@@ -6980,57 +6980,57 @@ namespace ts {
          */
         function getJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
             let links = getNodeLinks(node);
-            if (!links.resolvedType) {
+            if (!links.resolvedJsxType) {
                 let sym = getJsxElementTagSymbol(node);
 
                 if (links.jsxFlags & JsxFlags.ClassElement) {
                     let elemInstanceType = getJsxElementInstanceType(node);
 
                     if (isTypeAny(elemInstanceType)) {
-                        return links.resolvedType = anyType;
+                        return links.resolvedJsxType = anyType;
                     }
 
                     var propsName = getJsxElementPropertiesName();
                     if (propsName === undefined) {
                         // There is no type ElementAttributesProperty, return 'any'
-                        return links.resolvedType = anyType;
+                        return links.resolvedJsxType = anyType;
                     }
                     else if (propsName === '') {
                         // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
-                        return links.resolvedType = elemInstanceType;
+                        return links.resolvedJsxType = elemInstanceType;
                     }
                     else {
                         var attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
 
                         if (!attributesType) {
                             // There is no property named 'props' on this instance type
-                            return links.resolvedType = emptyObjectType;
+                            return links.resolvedJsxType = emptyObjectType;
                         }
                         else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
-                            return links.resolvedType = attributesType;
+                            return links.resolvedJsxType = attributesType;
                         }
                         else if (!(attributesType.flags & TypeFlags.ObjectType)) {
                             error(node.tagName, Diagnostics.JSX_element_attributes_type_0_must_be_an_object_type, typeToString(attributesType));
-                            return links.resolvedType = anyType;
+                            return links.resolvedJsxType = anyType;
                         }
                         else {
-                            return links.resolvedType = attributesType;
+                            return links.resolvedJsxType = attributesType;
                         }
                     }
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
-                    return links.resolvedType = getTypeOfSymbol(sym);
+                    return links.resolvedJsxType = getTypeOfSymbol(sym);
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
-                    return links.resolvedType = getIndexTypeOfSymbol(sym, IndexKind.String);
+                    return links.resolvedJsxType = getIndexTypeOfSymbol(sym, IndexKind.String);
                 }
                 else {
                     // Resolution failed
-                    return links.resolvedType = anyType;
+                    return links.resolvedJsxType = anyType;
                 }
             }
 
-            return links.resolvedType;
+            return links.resolvedJsxType;
         }
 
         /**
@@ -7100,6 +7100,7 @@ namespace ts {
                     if (!(targetProperties[i].flags & SymbolFlags.Optional) &&
                         nameTable[targetProperties[i].name] === undefined) {
 
+                        console.log('oops?');
                         error(node, Diagnostics.Property_0_is_missing_in_type_1, targetProperties[i].name, typeToString(targetAttributesType));
                     }
                 }
