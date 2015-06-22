@@ -6671,15 +6671,15 @@ namespace ts {
 
         /**
          * Check whether the requested property access is valid.
-         * Returns true if node passed the check, and false otherwise.
+         * Returns true if node is a valid property access, and false otherwise.
          * @param node The node to be checked.
-         * @param left The left hand side of the property access (eg: the super is `super.*`).
+         * @param left The left hand side of the property access (e.g.: the super in `super.foo`).
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) : boolean {
+        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             let flags = getDeclarationFlagsFromSymbol(prop);
-            let declaringClass : InterfaceType;
+            let declaringClass: InterfaceType;
 
             if (left.kind === SyntaxKind.SuperKeyword) {
                 let errorNode = (<PropertyAccessExpression>node).name ?
@@ -6693,8 +6693,7 @@ namespace ts {
                 // - In a static member function or static member accessor
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
-                if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) { // prop is a property access
-
+                if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) { // prop is a property access.
                     error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                     return false;
                 }
@@ -6715,11 +6714,8 @@ namespace ts {
                 return true;
             }
 
-            // Property is known to be private or protected at this point.
-
             // Get the declaring and enclosing class instance types.
             let enclosingClassDeclaration = getAncestor(node, SyntaxKind.ClassDeclaration);
-            // Debug.assert(!!enclosingClassDeclaration, "Should be defined");
             let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
             declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
@@ -7558,7 +7554,7 @@ namespace ts {
             }
 
             // If the expression is of abstract type, then it cannot be instantiated.
-            var valueDecl = (expressionType.symbol ? expressionType.symbol.valueDeclaration : undefined);
+            let valueDecl = expressionType.symbol && expressionType.symbol.valueDeclaration;
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
             }
@@ -7650,8 +7646,8 @@ namespace ts {
         }
 
         /**
-         * Performs typechecking on the given node, which is a call/new expression.
-         * @param node The call expression to be checked.
+         * Syntactically and semantically checks a call or new expression.
+         * @param node The call/new expression to be checked.
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
         function checkCallExpression(node: CallExpression): Type {
@@ -8341,7 +8337,7 @@ namespace ts {
                     if (!checkForDisallowedESSymbolOperand(operator)) {
                         return booleanType;
                     }
-                    // Otherwise fall through
+                    // Fall through
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
@@ -9265,7 +9261,8 @@ namespace ts {
                     // the node in question is abstract.
                     if (node.flags & NodeFlags.Abstract) {
                         error(errorNode, Diagnostics.All_declarations_of_an_abstract_member_function_must_be_consecutive);
-                    } else {
+                    } 
+                    else {
                         error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
                     }
                 }
@@ -10775,7 +10772,9 @@ namespace ts {
 
                 Debug.assert(!!derived, "derived should point to something, even if it is the base class' declaration.");
 
-                if (derived === base) { // derived class inherits base without override/redeclaration
+                if (derived === base) { 
+                    // derived class inherits base without override/redeclaration
+
                     let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
                     Debug.assert(derivedClassDecl !== undefined);
 
@@ -10784,7 +10783,9 @@ namespace ts {
                         error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2,
                             typeToString(type), typeToString(baseType), symbolToString(baseProperty));
                     }
-                } else { // derived overrides base
+                } 
+                else { 
+                    // derived overrides base.
                     let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
                     if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
                         // either base or derived property is private - not override, skip it

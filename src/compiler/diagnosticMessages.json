@@ -1575,7 +1575,7 @@
         "category": "Error",
         "code": 2514
     },
-    "Non-abstract class '{0}' does not implement inherited abstract member '{1}.{2}'." : {
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}.{2}'.": {
         "category": "Error",
         "code": 2515
     },
