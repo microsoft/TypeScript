@@ -1468,12 +1468,15 @@ module Harness {
                     if (isDTS(emittedFile.fileName)) {
                         // .d.ts file, add to declFiles emit
                         this.declFilesCode.push(emittedFile);
-                    } else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
+                    }
+                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
                         // .js file, add to files
                         this.files.push(emittedFile);
-                    } else if (isJSMap(emittedFile.fileName)) {
+                    }
+                    else if (isJSMap(emittedFile.fileName)) {
                         this.sourceMaps.push(emittedFile);
-                    } else {
+                    }
+                    else {
                         throw new Error('Unrecognized file extension for file ' + emittedFile.fileName);
                     }
                 });

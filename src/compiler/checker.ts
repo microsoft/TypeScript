@@ -6698,19 +6698,21 @@ namespace ts {
         }
 
         function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
-            if(lhs.kind !== rhs.kind) {
+            if (lhs.kind !== rhs.kind) {
                 return false;
             }
-            if(lhs.kind === SyntaxKind.Identifier) {
+
+            if (lhs.kind === SyntaxKind.Identifier) {
                 return (<Identifier>lhs).text === (<Identifier>rhs).text;
             }
+
             return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
                 tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
         }
 
         function checkJsxElement(node: JsxElement) {
             // Check that the closing tag matches
-            if(!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
+            if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
                 error(node.closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNode(node.openingElement.tagName));
             }
 
@@ -6718,21 +6720,20 @@ namespace ts {
             checkJsxOpeningLikeElement(node.openingElement);
 
             // Check children
-            let children = node.children;
-            for (var i = 0, n = children.length; i < n; i++) {
-                switch (children[i].kind) {
+            for(let child of node.children) {
+                switch (child.kind) {
                     case SyntaxKind.JsxExpression:
-                        checkJsxExpression(<JsxExpression>children[i]);
+                        checkJsxExpression(<JsxExpression>child);
                         break;
                     case SyntaxKind.JsxElement:
-                        checkJsxElement(<JsxElement>children[i]);
+                        checkJsxElement(<JsxElement>child);
                         break;
                     case SyntaxKind.JsxSelfClosingElement:
-                        checkJsxSelfClosingElement(<JsxSelfClosingElement>children[i]);
+                        checkJsxSelfClosingElement(<JsxSelfClosingElement>child);
                         break;
                     default:
                         // No checks for JSX Text
-                        Debug.assert(children[i].kind === SyntaxKind.JsxText);
+                        Debug.assert(child.kind === SyntaxKind.JsxText);
                 }
             }
 
@@ -6742,7 +6743,7 @@ namespace ts {
         /**
          * Returns true iff the JSX element name would be a valid JS identifier, ignoring restrictions about keywords not being identifiers
          */
-        function isIdentifierLike(name: string) {
+        function isUnhyphenatedJsxName(name: string) {
             // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
             return name.indexOf('-') < 0;
         }
@@ -6764,7 +6765,7 @@ namespace ts {
             let correspondingPropType: Type = undefined;
 
             // Look up the corresponding property for this attribute
-            if (elementAttributesType === emptyObjectType && isIdentifierLike(node.name.text)) {
+            if (elementAttributesType === emptyObjectType && isUnhyphenatedJsxName(node.name.text)) {
                 // If there is no 'props' property, you may not have non-"data-" attributes
                 error(node.parent, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
@@ -6772,7 +6773,7 @@ namespace ts {
                 let correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
                 correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
                     // If there's no corresponding property with this name, error
-                if (!correspondingPropType && isIdentifierLike(node.name.text)) {
+                if (!correspondingPropType && isUnhyphenatedJsxName(node.name.text)) {
                     error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
                     return unknownType;
                 }

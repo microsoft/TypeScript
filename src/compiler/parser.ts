@@ -2858,11 +2858,12 @@ namespace ts {
                         }
                         return false;
                     });
+
                     if (isArrowFunctionInJsx) {
                         return Tristate.Unknown;
-                    } else {
-                        return Tristate.False;
                     }
+                    
+                    return Tristate.False;
                 }
 
                 // This *could* be a parenthesized arrow function.

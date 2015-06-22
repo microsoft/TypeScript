@@ -1157,7 +1157,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
 
-                function emitJsxElement(openingNode: JsxOpeningElement|JsxSelfClosingElement, children?: JsxChild[]) {
+                function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     // Call React.createElement(tag, ...
                     emitLeadingComments(openingNode);
                     write('React.createElement(');
@@ -1177,10 +1177,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             write('React.__spread(');
 
                             let haveOpenedObjectLiteral = false;
-                            for (var i = 0; i < attrs.length; i++) {
+                            for (let i = 0; i < attrs.length; i++) {
                                 if (attrs[i].kind === SyntaxKind.JsxSpreadAttribute) {
                                     // If this is the first argument, we need to emit a {} as the first argument
-                                    if(i === 0) {
+                                    if (i === 0) {
                                         write('{}, ');
                                     }
 
@@ -1188,7 +1188,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                                         write('}');
                                         haveOpenedObjectLiteral = false;
                                     }
-                                    if (i > 0) write(', ');
+                                    if (i > 0) {
+                                        write(', ');
+                                    }
                                     emit((<JsxSpreadAttribute>attrs[i]).expression);
                                 }
                                 else {
@@ -1198,7 +1200,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                                     }
                                     else {
                                         haveOpenedObjectLiteral = true;
-                                        if (i > 0) write(', ');
+                                        if (i > 0) {
+                                            write(', ');
+                                        }
                                         write('{');
                                     }
                                     emitJsxAttribute(<JsxAttribute>attrs[i]);
@@ -1212,7 +1216,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             // One object literal with all the attributes in them
                             write('{');
                             for (var i = 0; i < attrs.length; i++) {
-                                if (i > 0) write(', ');
+                                if (i > 0) {
+                                    write(', ');
+                                }
                                 emitJsxAttribute(<JsxAttribute>attrs[i]);
                             }
                             write('}');
@@ -1223,10 +1229,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     if (children) {
                         for (var i = 0; i < children.length; i++) {
                             // Don't emit empty expressions
-                            if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) continue;
+                            if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) {
+                                continue;
+                            }
 
                             // Don't emit empty strings
-                            if (children[i].kind === SyntaxKind.JsxText && !shouldEmitJsxText(<JsxText>children[i])) continue;
+                            if (children[i].kind === SyntaxKind.JsxText && !shouldEmitJsxText(<JsxText>children[i])) {
+                                continue;
+                            }
 
                             write(', ');
                             emit(children[i]);
@@ -1261,8 +1271,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
 
                 function emitAttributes(attribs: NodeArray<JsxAttribute|JsxSpreadAttribute>) {
-                    for (var i = 0, n = attribs.length; i < n; i++) {
-                        if (i > 0) write(' ');
+                    for (let i = 0, n = attribs.length; i < n; i++) {
+                        if (i > 0) {
+                            write(' ');
+                        }
 
                         if (attribs[i].kind === SyntaxKind.JsxSpreadAttribute) {
                             emitJsxSpreadAttribute(<JsxSpreadAttribute>attribs[i]);
@@ -5869,11 +5881,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
-            function emitJsxElement(node: JsxElement|JsxSelfClosingElement) {
+            function emitJsxElement(node: JsxElement | JsxSelfClosingElement) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
                         jsxEmitReact(node);
                         break;
+                    case JsxEmit.Preserve:
                     // Fall back to preserve if None was specified (we'll error earlier)
                     default:
                         jsxEmitPreserve(node);
@@ -5892,8 +5905,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 let firstNonWhitespace = 0;
                 let lastNonWhitespace = -1;
 
-                for (var i = 0; i < text.length; i++) {
-                    var c = text.charCodeAt(i);
+                // JSX trims whitespace at the end and beginning of lines, except that the
+                // start/end of a tag is considered a start/end of a line only if that line is
+                // on the same line as the closing tag. See examples in tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
+                for (let i = 0; i < text.length; i++) {
+                    let c = text.charCodeAt(i);
                     if (c === CharacterCodes.lineFeed || c === CharacterCodes.carriageReturn) {
                         if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
                             lines.push(text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
@@ -5915,11 +5931,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function shouldEmitJsxText(node: JsxText) {
-                if (compilerOptions.jsx === JsxEmit.React) {
-                    return trimReactWhitespace(node).length > 0;
-                }
-                else {
-                    return true;
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.React:
+                        return trimReactWhitespace(node).length > 0;
+                    case JsxEmit.Preserve:
+                    default:
+                        return true;
                 }
             }
 
@@ -5939,7 +5956,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitJsxExpression(node: JsxExpression) {
-                if (node.expression && node.expression.kind !== SyntaxKind.OmittedExpression) {
+                if (node.expression) {
                     switch (compilerOptions.jsx) {
                         case JsxEmit.Preserve:
                         default:

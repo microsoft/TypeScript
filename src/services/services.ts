@@ -2909,16 +2909,20 @@ namespace ts {
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
 
-            if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                node = (<PropertyAccessExpression>contextToken.parent).expression;
-                isRightOfDot = true;
-            }
-            else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
-                node = (<QualifiedName>contextToken.parent).left;
-                isRightOfDot = true;
-            } else if (contextToken && contextToken.kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
-                isRightOfOpenTag = true;
-                location = contextToken;
+            if(contextToken) {
+                let kind = contextToken.kind;
+                if (kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                    node = (<PropertyAccessExpression>contextToken.parent).expression;
+                    isRightOfDot = true;
+                }
+                else if (kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
+                    node = (<QualifiedName>contextToken.parent).left;
+                    isRightOfDot = true;
+                }
+                else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
+                    isRightOfOpenTag = true;
+                    location = contextToken;
+                }
             }
 
             let semanticStart = new Date().getTime();
@@ -2930,11 +2934,11 @@ namespace ts {
                 getTypeScriptMemberSymbols();
             }
             else if (isRightOfOpenTag) {
-                // TODO include all in-scope value identifiers
                 let tagSymbols = typeChecker.getJsxIntrinsicTagNames();;
                 if (tryGetGlobalSymbols()) {
                     symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
-                } else {
+                }
+                else {
                     symbols = tagSymbols;
                 }
                 isMemberCompletion = true;
@@ -3006,7 +3010,7 @@ namespace ts {
 
             function tryGetGlobalSymbols(): boolean {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
-                let jsxElement: JsxElement, jsxSelfClosingElement: JsxSelfClosingElement;
+
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
