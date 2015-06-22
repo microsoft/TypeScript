@@ -3598,7 +3598,8 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
+    catch<TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+    catch<TResult>(onrejected?: (reason: any) => void): Promise<TResult>;
 
     [Symbol.toStringTag]: string;
 }
