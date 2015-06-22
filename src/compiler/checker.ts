@@ -2197,8 +2197,8 @@ namespace ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 type = getTypeOfPropertyOfType(parentType, name.text) ||
-                isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                getIndexTypeOfType(parentType, IndexKind.String);
+                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                    getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
@@ -4584,21 +4584,7 @@ namespace ts {
                 for (let targetProp of properties) {
                     let sourceProp = getPropertyOfType(source, targetProp.name);
 
-                    if (sourceProp === targetProp) { // source inherits targetProp and doesn't redeclare/override it.
-                        if (source.flags & TypeFlags.Class && target.flags & TypeFlags.Class) {
-                            let targetPropFlags = getDeclarationFlagsFromSymbol(targetProp);
-                            let sourceDecl = getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
-
-                            // if target is a class and it has an abstract method, then source, inheriting that method, must be declared abstract.
-                            if (targetPropFlags & NodeFlags.Abstract && !(sourceDecl.flags & NodeFlags.Abstract)) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2,
-                                        typeToString(source), typeToString(target), symbolToString(targetProp));
-                                }
-                                return Ternary.False;
-                            }
-                        }
-                    } else { // sourceProp !== targetProp -- ie: source and target have distinct declarations with the same name
+                    if (sourceProp !== targetProp) { // sourceProp !== targetProp -- ie: source and target have distinct declarations with the same name
                         if (!sourceProp) {
                             if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
                                 if (reportErrors) {
@@ -10785,7 +10771,9 @@ namespace ts {
                 let derived = getTargetSymbol(getPropertyOfObjectType(type, base.name));
                 let baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
 
-                if (!derived) { // derived class inherits base without override/redeclaration
+                Debug.assert(!!derived, "derived should point to something, even if it is the base class' declaration.");
+
+                if (derived === base) { // derived class inherits base without override/redeclaration
                     let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
                     Debug.assert(derivedClassDecl !== undefined);
 
@@ -10794,7 +10782,7 @@ namespace ts {
                         error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2,
                             typeToString(type), typeToString(baseType), symbolToString(baseProperty));
                     }
-                } else { // derived !== undefined -- derived overrides base
+                } else { // derived overrides base
                     let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
                     if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
                         // either base or derived property is private - not override, skip it

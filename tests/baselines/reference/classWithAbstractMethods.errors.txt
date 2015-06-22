@@ -1,9 +1,7 @@
 tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(1,7): error TS2514: Classes containing abstract functions must be marked abstract.
 tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(2,5): error TS1238: Abstract methods can only appear within an abstract class.
-tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(5,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
-  Non-abstract class 'B' does not implement inherited abstract member 'A.foo'.
-tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(21,7): error TS2415: Class 'BB' incorrectly extends base class 'AA'.
-  Non-abstract class 'BB' does not implement inherited abstract member 'AA.foo'.
+tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(5,7): error TS2515: Non-abstract class 'B' does not implement inherited abstract member 'A.foo'.
+tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(21,7): error TS2515: Non-abstract class 'BB' does not implement inherited abstract member 'AA.foo'.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts (4 errors) ====
@@ -17,8 +15,7 @@ tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(21
     
     class B extends A  {}
           ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
-!!! error TS2415:   Non-abstract class 'B' does not implement inherited abstract member 'A.foo'.
+!!! error TS2515: Non-abstract class 'B' does not implement inherited abstract member 'A.foo'.
     
     abstract class C extends A {}
     
@@ -36,8 +33,7 @@ tests/cases/conformance/classes/classDeclarations/classWithAbstractMethods.ts(21
     
     class BB extends AA  {}
           ~~
-!!! error TS2415: Class 'BB' incorrectly extends base class 'AA'.
-!!! error TS2415:   Non-abstract class 'BB' does not implement inherited abstract member 'AA.foo'.
+!!! error TS2515: Non-abstract class 'BB' does not implement inherited abstract member 'AA.foo'.
     
     abstract class CC extends AA {}
     
