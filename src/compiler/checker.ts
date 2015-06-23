@@ -6709,7 +6709,7 @@ namespace ts {
 
                     declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
-                    error(errorNode, Diagnostics.Abstract_method_0_1_cannot_be_accessed_via_super_expression, typeToString(declaringClass), symbolToString(prop));
+                    error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(declaringClass));
                     return false;
                 }
             }

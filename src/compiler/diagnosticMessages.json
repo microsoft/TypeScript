@@ -1567,7 +1567,7 @@
         "category": "Error",
         "code": 2512
     },
-    "Abstract method '{0}.{1}' cannot be accessed via super expression.": {
+    "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
         "category": "Error",
         "code": 2513
     },
