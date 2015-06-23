@@ -27,13 +27,13 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     new AA;
     
     function constructB(Factory : typeof B) {
-        new Factory; // error -- Factory is of type typeof C
+        new Factory; // error -- Factory is of type typeof B.
         ~~~~~~~~~~~
 !!! error TS2511: Cannot create an instance of the abstract class 'B'.
     }
     
     var BB = B;
-    new BB; // error -- BB is of type typeof C
+    new BB; // error -- BB is of type typeof B.
     ~~~~~~
 !!! error TS2511: Cannot create an instance of the abstract class 'B'.
     

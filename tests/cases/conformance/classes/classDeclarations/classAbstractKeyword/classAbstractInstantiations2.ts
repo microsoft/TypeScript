@@ -14,11 +14,11 @@ var AA: typeof A = BB; // error, AA is not of abstract type.
 new AA;
 
 function constructB(Factory : typeof B) {
-    new Factory; // error -- Factory is of type typeof C
+    new Factory; // error -- Factory is of type typeof B.
 }
 
 var BB = B;
-new BB; // error -- BB is of type typeof C
+new BB; // error -- BB is of type typeof B.
 
 var x : any = C;
 new x; // okay -- undefined behavior at runtime
