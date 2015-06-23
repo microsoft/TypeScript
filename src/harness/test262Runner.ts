@@ -1,6 +1,5 @@
 /// <reference path='harness.ts' />
 /// <reference path='runnerbase.ts' />
-/// <reference path='syntacticCleaner.ts' />
 
 class Test262BaselineRunner extends RunnerBase {
     private static basePath = 'internal/cases/test262';
@@ -65,7 +64,7 @@ class Test262BaselineRunner extends RunnerBase {
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', testState.filename + '.output.js', () => {
                     var files = testState.compilerResult.files.filter(f=> f.fileName !== Test262BaselineRunner.helpersFilePath);
-                    return Harness.Compiler.collateOutputs(files, s => SyntacticCleaner.clean(s));
+                    return Harness.Compiler.collateOutputs(files);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
 

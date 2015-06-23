@@ -1,7 +1,7 @@
 /// <reference path="binder.ts" />
 
 /* @internal */
-module ts {
+namespace ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
         diagnosticMessage?: DiagnosticMessage
@@ -42,7 +42,7 @@ module ts {
     // Pool writers to avoid needing to allocate them for every symbol we write.
     let stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
+        if (stringWriters.length === 0) {
             let str = "";
 
             let writeText: (text: string) => void = text => str += text;
@@ -426,7 +426,7 @@ module ts {
                 // Specialized signatures can have string literals as their parameters' type names
                 return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return true;
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -460,7 +460,7 @@ module ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return true;
+                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
@@ -872,7 +872,6 @@ module ts {
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
                 }
-
                 return node.parent.kind === SyntaxKind.TypeQuery;
             case SyntaxKind.Identifier:
                 if (node.parent.kind === SyntaxKind.TypeQuery) {
@@ -920,6 +919,8 @@ module ts {
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
                         return true;
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1174,6 +1175,41 @@ module ts {
             return (<Declaration>parent).name === name;
         }
 
+        return false;
+    }
+
+    // Return true if the given identifier is classified as an IdentifierName
+    export function isIdentifierName(node: Identifier): boolean {
+        let parent = node.parent;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.PropertyAccessExpression:
+                // Name in member declaration or property name in property access
+                return (<Declaration | PropertyAccessExpression>parent).name === node;
+            case SyntaxKind.QualifiedName:
+                // Name on right hand side of dot in a type query
+                if ((<QualifiedName>parent).right === node) {
+                    while (parent.kind === SyntaxKind.QualifiedName) {
+                        parent = parent.parent;
+                    }
+                    return parent.kind === SyntaxKind.TypeQuery;
+                }
+                return false;
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.ImportSpecifier:
+                // Property name in binding element or import specifier
+                return (<BindingElement | ImportSpecifier>parent).propertyName === node;
+            case SyntaxKind.ExportSpecifier:
+                // Any name in an export specifier
+                return true;
+        }
         return false;
     }
 
@@ -1878,6 +1914,12 @@ module ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+        return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
+            (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
+            node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+    }
+
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
     export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
@@ -1985,9 +2027,24 @@ module ts {
 
         return result;
     }
+
+    const carriageReturnLineFeed = "\r\n";
+    const lineFeed = "\n";
+    export function getNewLineCharacter(options: CompilerOptions): string {
+        if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
+            return carriageReturnLineFeed;
+        }
+        else if (options.newLine === NewLineKind.LineFeed) {
+            return lineFeed;
+        }
+        else if (sys) {
+            return sys.newLine
+        }
+        return carriageReturnLineFeed;
+    }
 }
 
-module ts {
+namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
@@ -2031,6 +2088,12 @@ module ts {
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
         let end = start + length;
         return start <= textSpanEnd(span) && end >= span.start;
+    }
+
+    export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
+        let end1 = start1 + length1;
+        let end2 = start2 + length2;
+        return start2 <= end1 && end2 >= start1;
     }
 
     export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {

@@ -379,8 +379,8 @@ var rg7 = a7 || a6;         // object    || enum is object | enum
 >a6 : E
 
 var rg8 = a8 || a6;         // array     || enum is array | enum
->rg8 : string[] | E
->a8 || a6 : string[] | E
+>rg8 : E | string[]
+>a8 || a6 : E | string[]
 >a8 : string[]
 >a6 : E
 
@@ -439,8 +439,8 @@ var rh7 = a7 || a7;         // object    || object is object
 >a7 : { a: string; }
 
 var rh8 = a8 || a7;         // array     || object is array | object
->rh8 : string[] | { a: string; }
->a8 || a7 : string[] | { a: string; }
+>rh8 : { a: string; } | string[]
+>a8 || a7 : { a: string; } | string[]
 >a8 : string[]
 >a7 : { a: string; }
 
@@ -487,14 +487,14 @@ var ri5 = a5 || a8;         // void      || array is void | array
 >a8 : string[]
 
 var ri6 = a6 || a8;         // enum      || array is enum | array
->ri6 : string[] | E
->a6 || a8 : string[] | E
+>ri6 : E | string[]
+>a6 || a8 : E | string[]
 >a6 : E
 >a8 : string[]
 
 var ri7 = a7 || a8;         // object    || array is object | array
->ri7 : string[] | { a: string; }
->a7 || a8 : string[] | { a: string; }
+>ri7 : { a: string; } | string[]
+>a7 || a8 : { a: string; } | string[]
 >a7 : { a: string; }
 >a8 : string[]
 

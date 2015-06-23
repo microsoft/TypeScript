@@ -31,6 +31,36 @@ var ts;
 /// <reference path="types.ts"/>
 var ts;
 (function (ts) {
+    function createFileMap(getCanonicalFileName) {
+        var files = {};
+        return {
+            get: get,
+            set: set,
+            contains: contains,
+            remove: remove,
+            forEachValue: forEachValueInMap
+        };
+        function set(fileName, value) {
+            files[normalizeKey(fileName)] = value;
+        }
+        function get(fileName) {
+            return files[normalizeKey(fileName)];
+        }
+        function contains(fileName) {
+            return hasProperty(files, normalizeKey(fileName));
+        }
+        function remove(fileName) {
+            var key = normalizeKey(fileName);
+            delete files[key];
+        }
+        function forEachValueInMap(f) {
+            forEachValue(files, f);
+        }
+        function normalizeKey(key) {
+            return getCanonicalFileName(normalizeSlashes(key));
+        }
+    }
+    ts.createFileMap = createFileMap;
     function forEach(array, callback) {
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
@@ -498,7 +528,7 @@ var ts;
     function getNormalizedPathComponents(path, currentDirectory) {
         path = normalizeSlashes(path);
         var rootLength = getRootLength(path);
-        if (rootLength == 0) {
+        if (rootLength === 0) {
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
         }
@@ -738,6 +768,9 @@ var ts;
                     fileStream.Close();
                 }
             }
+            function getCanonicalPath(path) {
+                return path.toLowerCase();
+            }
             function getNames(collection) {
                 var result = [];
                 for (var e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
@@ -745,23 +778,28 @@ var ts;
                 }
                 return result.sort();
             }
-            function readDirectory(path, extension) {
+            function readDirectory(path, extension, exclude) {
                 var result = [];
+                exclude = ts.map(exclude, function (s) { return getCanonicalPath(ts.combinePaths(path, s)); });
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
                     for (var _i = 0; _i < files.length; _i++) {
-                        var name_1 = files[_i];
-                        if (!extension || ts.fileExtensionIs(name_1, extension)) {
-                            result.push(ts.combinePaths(path, name_1));
+                        var current = files[_i];
+                        var name_1 = ts.combinePaths(path, current);
+                        if ((!extension || ts.fileExtensionIs(name_1, extension)) && !ts.contains(exclude, getCanonicalPath(name_1))) {
+                            result.push(name_1);
                         }
                     }
                     var subfolders = getNames(folder.subfolders);
                     for (var _a = 0; _a < subfolders.length; _a++) {
                         var current = subfolders[_a];
-                        visitDirectory(ts.combinePaths(path, current));
+                        var name_2 = ts.combinePaths(path, current);
+                        if (!ts.contains(exclude, getCanonicalPath(name_2))) {
+                            visitDirectory(name_2);
+                        }
                     }
                 }
             }
@@ -839,8 +877,12 @@ var ts;
                 }
                 _fs.writeFileSync(fileName, data, "utf8");
             }
-            function readDirectory(path, extension) {
+            function getCanonicalPath(path) {
+                return useCaseSensitiveFileNames ? path.toLowerCase() : path;
+            }
+            function readDirectory(path, extension, exclude) {
                 var result = [];
+                exclude = ts.map(exclude, function (s) { return getCanonicalPath(ts.combinePaths(path, s)); });
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path) {
@@ -849,14 +891,16 @@ var ts;
                     for (var _i = 0; _i < files.length; _i++) {
                         var current = files[_i];
                         var name = ts.combinePaths(path, current);
-                        var stat = _fs.statSync(name);
-                        if (stat.isFile()) {
-                            if (!extension || ts.fileExtensionIs(name, extension)) {
-                                result.push(name);
+                        if (!ts.contains(exclude, getCanonicalPath(name))) {
+                            var stat = _fs.statSync(name);
+                            if (stat.isFile()) {
+                                if (!extension || ts.fileExtensionIs(name, extension)) {
+                                    result.push(name);
+                                }
                             }
-                        }
-                        else if (stat.isDirectory()) {
-                            directories.push(name);
+                            else if (stat.isDirectory()) {
+                                directories.push(name);
+                            }
                         }
                     }
                     for (var _a = 0; _a < directories.length; _a++) {
@@ -1102,14 +1146,26 @@ var ts;
         A_class_declaration_without_the_default_modifier_must_have_a_name: { code: 1211, category: ts.DiagnosticCategory.Error, key: "A class declaration without the 'default' modifier must have a name" },
         Identifier_expected_0_is_a_reserved_word_in_strict_mode: { code: 1212, category: ts.DiagnosticCategory.Error, key: "Identifier expected. '{0}' is a reserved word in strict mode" },
         Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode: { code: 1213, category: ts.DiagnosticCategory.Error, key: "Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode." },
-        Type_expected_0_is_a_reserved_word_in_strict_mode: { code: 1215, category: ts.DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode" },
-        Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode: { code: 1216, category: ts.DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode." },
+        Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode: { code: 1214, category: ts.DiagnosticCategory.Error, key: "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode." },
+        Invalid_use_of_0_Modules_are_automatically_in_strict_mode: { code: 1215, category: ts.DiagnosticCategory.Error, key: "Invalid use of '{0}'. Modules are automatically in strict mode." },
         Export_assignment_is_not_supported_when_module_flag_is_system: { code: 1218, category: ts.DiagnosticCategory.Error, key: "Export assignment is not supported when '--module' flag is 'system'." },
         Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Specify_experimentalDecorators_to_remove_this_warning: { code: 1219, category: ts.DiagnosticCategory.Error, key: "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning." },
         Generators_are_only_available_when_targeting_ECMAScript_6_or_higher: { code: 1220, category: ts.DiagnosticCategory.Error, key: "Generators are only available when targeting ECMAScript 6 or higher." },
         Generators_are_not_allowed_in_an_ambient_context: { code: 1221, category: ts.DiagnosticCategory.Error, key: "Generators are not allowed in an ambient context." },
         An_overload_signature_cannot_be_declared_as_a_generator: { code: 1222, category: ts.DiagnosticCategory.Error, key: "An overload signature cannot be declared as a generator." },
         _0_tag_already_specified: { code: 1223, category: ts.DiagnosticCategory.Error, key: "'{0}' tag already specified." },
+        Signature_0_must_have_a_type_predicate: { code: 1224, category: ts.DiagnosticCategory.Error, key: "Signature '{0}' must have a type predicate." },
+        Cannot_find_parameter_0: { code: 1225, category: ts.DiagnosticCategory.Error, key: "Cannot find parameter '{0}'." },
+        Type_predicate_0_is_not_assignable_to_1: { code: 1226, category: ts.DiagnosticCategory.Error, key: "Type predicate '{0}' is not assignable to '{1}'." },
+        Parameter_0_is_not_in_the_same_position_as_parameter_1: { code: 1227, category: ts.DiagnosticCategory.Error, key: "Parameter '{0}' is not in the same position as parameter '{1}'." },
+        A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods: { code: 1228, category: ts.DiagnosticCategory.Error, key: "A type predicate is only allowed in return type position for functions and methods." },
+        A_type_predicate_cannot_reference_a_rest_parameter: { code: 1229, category: ts.DiagnosticCategory.Error, key: "A type predicate cannot reference a rest parameter." },
+        A_type_predicate_cannot_reference_element_0_in_a_binding_pattern: { code: 1230, category: ts.DiagnosticCategory.Error, key: "A type predicate cannot reference element '{0}' in a binding pattern." },
+        An_export_assignment_can_only_be_used_in_a_module: { code: 1231, category: ts.DiagnosticCategory.Error, key: "An export assignment can only be used in a module." },
+        An_import_declaration_can_only_be_used_in_a_namespace_or_module: { code: 1232, category: ts.DiagnosticCategory.Error, key: "An import declaration can only be used in a namespace or module." },
+        An_export_declaration_can_only_be_used_in_a_module: { code: 1233, category: ts.DiagnosticCategory.Error, key: "An export declaration can only be used in a module." },
+        An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file: { code: 1234, category: ts.DiagnosticCategory.Error, key: "An ambient module declaration is only allowed at the top level in a file." },
+        A_namespace_declaration_is_only_allowed_in_a_namespace_or_module: { code: 1235, category: ts.DiagnosticCategory.Error, key: "A namespace declaration is only allowed in a namespace or module." },
         Duplicate_identifier_0: { code: 2300, category: ts.DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: ts.DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: ts.DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -1303,6 +1359,11 @@ var ts;
         Cannot_find_namespace_0: { code: 2503, category: ts.DiagnosticCategory.Error, key: "Cannot find namespace '{0}'." },
         No_best_common_type_exists_among_yield_expressions: { code: 2504, category: ts.DiagnosticCategory.Error, key: "No best common type exists among yield expressions." },
         A_generator_cannot_have_a_void_type_annotation: { code: 2505, category: ts.DiagnosticCategory.Error, key: "A generator cannot have a 'void' type annotation." },
+        _0_is_referenced_directly_or_indirectly_in_its_own_base_expression: { code: 2506, category: ts.DiagnosticCategory.Error, key: "'{0}' is referenced directly or indirectly in its own base expression." },
+        Type_0_is_not_a_constructor_function_type: { code: 2507, category: ts.DiagnosticCategory.Error, key: "Type '{0}' is not a constructor function type." },
+        No_base_constructor_has_the_specified_number_of_type_arguments: { code: 2508, category: ts.DiagnosticCategory.Error, key: "No base constructor has the specified number of type arguments." },
+        Base_constructor_return_type_0_is_not_a_class_or_interface_type: { code: 2509, category: ts.DiagnosticCategory.Error, key: "Base constructor return type '{0}' is not a class or interface type." },
+        Base_constructors_must_all_have_the_same_return_type: { code: 2510, category: ts.DiagnosticCategory.Error, key: "Base constructors must all have the same return type." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: ts.DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: ts.DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: ts.DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -1460,7 +1521,7 @@ var ts;
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: ts.DiagnosticCategory.Error, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: ts.DiagnosticCategory.Error, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
         Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: ts.DiagnosticCategory.Error, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
-        _0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer: { code: 7022, category: ts.DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer." },
+        _0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer: { code: 7022, category: ts.DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer." },
         _0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7023, category: ts.DiagnosticCategory.Error, key: "'{0}' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: ts.DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type: { code: 7025, category: ts.DiagnosticCategory.Error, key: "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type." },
@@ -1512,7 +1573,7 @@ var ts;
         "false": 80,
         "finally": 81,
         "for": 82,
-        "from": 125,
+        "from": 126,
         "function": 83,
         "get": 116,
         "if": 84,
@@ -1521,36 +1582,37 @@ var ts;
         "in": 86,
         "instanceof": 87,
         "interface": 103,
+        "is": 117,
         "let": 104,
-        "module": 117,
-        "namespace": 118,
+        "module": 118,
+        "namespace": 119,
         "new": 88,
         "null": 89,
-        "number": 120,
+        "number": 121,
         "package": 105,
         "private": 106,
         "protected": 107,
         "public": 108,
-        "require": 119,
+        "require": 120,
         "return": 90,
-        "set": 121,
+        "set": 122,
         "static": 109,
-        "string": 122,
+        "string": 123,
         "super": 91,
         "switch": 92,
-        "symbol": 123,
+        "symbol": 124,
         "this": 93,
         "throw": 94,
         "true": 95,
         "try": 96,
-        "type": 124,
+        "type": 125,
         "typeof": 97,
         "var": 98,
         "void": 99,
         "while": 100,
         "with": 101,
         "yield": 110,
-        "of": 126,
+        "of": 127,
         "{": 14,
         "}": 15,
         "(": 16,
@@ -1642,9 +1704,9 @@ var ts;
     }
     function makeReverseMap(source) {
         var result = [];
-        for (var name_2 in source) {
-            if (source.hasOwnProperty(name_2)) {
-                result[source[name_2]] = name_2;
+        for (var name_3 in source) {
+            if (source.hasOwnProperty(name_3)) {
+                result[source[name_3]] = name_3;
             }
         }
         return result;
@@ -1753,6 +1815,25 @@ var ts;
         return ch >= 48 && ch <= 55;
     }
     ts.isOctalDigit = isOctalDigit;
+    function couldStartTrivia(text, pos) {
+        var ch = text.charCodeAt(pos);
+        switch (ch) {
+            case 13:
+            case 10:
+            case 9:
+            case 11:
+            case 12:
+            case 32:
+            case 47:
+            case 60:
+            case 61:
+            case 62:
+                return true;
+            default:
+                return ch > 127;
+        }
+    }
+    ts.couldStartTrivia = couldStartTrivia;
     function skipTrivia(text, pos, stopAfterLineBreak) {
         while (true) {
             var ch = text.charCodeAt(pos);
@@ -2215,7 +2296,7 @@ var ts;
                 error(ts.Diagnostics.Unexpected_end_of_text);
                 isInvalidExtendedEscape = true;
             }
-            else if (text.charCodeAt(pos) == 125) {
+            else if (text.charCodeAt(pos) === 125) {
                 pos++;
             }
             else {
@@ -2736,16 +2817,16 @@ var ts;
 (function (ts) {
     ts.bindTime = 0;
     function getModuleInstanceState(node) {
-        if (node.kind === 203 || node.kind === 204) {
+        if (node.kind === 205 || node.kind === 206) {
             return 0;
         }
         else if (ts.isConstEnumDeclaration(node)) {
             return 2;
         }
-        else if ((node.kind === 210 || node.kind === 209) && !(node.flags & 1)) {
+        else if ((node.kind === 212 || node.kind === 211) && !(node.flags & 1)) {
             return 0;
         }
-        else if (node.kind === 207) {
+        else if (node.kind === 209) {
             var state = 0;
             ts.forEachChild(node, function (n) {
                 switch (getModuleInstanceState(n)) {
@@ -2761,7 +2842,7 @@ var ts;
             });
             return state;
         }
-        else if (node.kind === 206) {
+        else if (node.kind === 208) {
             return getModuleInstanceState(node.body);
         }
         else {
@@ -2780,11 +2861,14 @@ var ts;
         var container;
         var blockScopeContainer;
         var lastContainer;
+        var inStrictMode = !!file.externalModuleIndicator;
         var symbolCount = 0;
         var Symbol = ts.objectAllocator.getSymbolConstructor();
+        var classifiableNames = {};
         if (!file.locals) {
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
         return;
         function createSymbol(flags, name) {
@@ -2810,10 +2894,10 @@ var ts;
         }
         function getDeclarationName(node) {
             if (node.name) {
-                if (node.kind === 206 && node.name.kind === 8) {
+                if (node.kind === 208 && node.name.kind === 8) {
                     return '"' + node.name.text + '"';
                 }
-                if (node.name.kind === 128) {
+                if (node.name.kind === 129) {
                     var nameExpression = node.name.expression;
                     ts.Debug.assert(ts.isWellKnownSymbolSyntactically(nameExpression));
                     return ts.getPropertyNameForKnownSymbolName(nameExpression.name.text);
@@ -2821,22 +2905,22 @@ var ts;
                 return node.name.text;
             }
             switch (node.kind) {
-                case 136:
+                case 137:
                     return "__constructor";
-                case 143:
-                case 139:
-                    return "__call";
-                case 144:
+                case 145:
                 case 140:
-                    return "__new";
+                    return "__call";
+                case 146:
                 case 141:
+                    return "__new";
+                case 142:
                     return "__index";
-                case 216:
+                case 218:
                     return "__export";
-                case 215:
+                case 217:
                     return node.isExportEquals ? "export=" : "default";
-                case 201:
-                case 202:
+                case 203:
+                case 204:
                     return node.flags & 256 ? "default" : undefined;
             }
         }
@@ -2851,6 +2935,9 @@ var ts;
                 symbol = ts.hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(0, name));
+                if (name && (includes & 788448)) {
+                    classifiableNames[name] = name;
+                }
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -2875,7 +2962,7 @@ var ts;
         function declareModuleMember(node, symbolFlags, symbolExcludes) {
             var hasExportModifier = ts.getCombinedNodeFlags(node) & 1;
             if (symbolFlags & 8388608) {
-                if (node.kind === 218 || (node.kind === 209 && hasExportModifier)) {
+                if (node.kind === 220 || (node.kind === 211 && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {
@@ -2921,36 +3008,37 @@ var ts;
         }
         function getContainerFlags(node) {
             switch (node.kind) {
-                case 175:
-                case 202:
-                case 203:
+                case 177:
+                case 204:
                 case 205:
-                case 146:
-                case 155:
+                case 207:
+                case 148:
+                case 157:
                     return 1;
-                case 139:
                 case 140:
                 case 141:
-                case 135:
-                case 134:
-                case 201:
+                case 142:
                 case 136:
+                case 135:
+                case 203:
                 case 137:
                 case 138:
-                case 143:
-                case 144:
-                case 163:
-                case 164:
-                case 206:
-                case 228:
-                    return 5;
-                case 224:
-                case 187:
-                case 188:
-                case 189:
+                case 139:
+                case 145:
+                case 146:
+                case 165:
+                case 166:
                 case 208:
+                case 230:
+                case 206:
+                    return 5;
+                case 226:
+                case 189:
+                case 190:
+                case 191:
+                case 210:
                     return 2;
-                case 180:
+                case 182:
                     return ts.isFunctionLike(node.parent) ? 0 : 2;
             }
             return 0;
@@ -2966,32 +3054,33 @@ var ts;
         }
         function declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes) {
             switch (container.kind) {
-                case 206:
+                case 208:
                     return declareModuleMember(node, symbolFlags, symbolExcludes);
-                case 228:
+                case 230:
                     return declareSourceFileMember(node, symbolFlags, symbolExcludes);
-                case 175:
-                case 202:
+                case 177:
+                case 204:
                     return declareClassMember(node, symbolFlags, symbolExcludes);
-                case 205:
+                case 207:
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
-                case 146:
-                case 155:
-                case 203:
+                case 148:
+                case 157:
+                case 205:
                     return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
-                case 143:
-                case 144:
-                case 139:
+                case 145:
+                case 146:
                 case 140:
                 case 141:
-                case 135:
-                case 134:
+                case 142:
                 case 136:
+                case 135:
                 case 137:
                 case 138:
-                case 201:
-                case 163:
-                case 164:
+                case 139:
+                case 203:
+                case 165:
+                case 166:
+                case 206:
                     return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
             }
         }
@@ -3015,11 +3104,11 @@ var ts;
             return false;
         }
         function hasExportDeclarations(node) {
-            var body = node.kind === 228 ? node : node.body;
-            if (body.kind === 228 || body.kind === 207) {
+            var body = node.kind === 230 ? node : node.body;
+            if (body.kind === 230 || body.kind === 209) {
                 for (var _i = 0, _a = body.statements; _i < _a.length; _i++) {
                     var stat = _a[_i];
-                    if (stat.kind === 216 || stat.kind === 215) {
+                    if (stat.kind === 218 || stat.kind === 217) {
                         return true;
                     }
                 }
@@ -3064,16 +3153,41 @@ var ts;
             typeLiteralSymbol.members = (_a = {}, _a[symbol.name] = symbol, _a);
             var _a;
         }
+        function bindObjectLiteralExpression(node) {
+            if (inStrictMode) {
+                var seen = {};
+                for (var _i = 0, _a = node.properties; _i < _a.length; _i++) {
+                    var prop = _a[_i];
+                    if (prop.name.kind !== 65) {
+                        continue;
+                    }
+                    var identifier = prop.name;
+                    var currentKind = prop.kind === 227 || prop.kind === 228 || prop.kind === 136
+                        ? 1
+                        : 2;
+                    var existingKind = seen[identifier.text];
+                    if (!existingKind) {
+                        seen[identifier.text] = currentKind;
+                        continue;
+                    }
+                    if (currentKind === 1 && existingKind === 1) {
+                        var span = ts.getErrorSpanForNode(file, identifier);
+                        file.bindDiagnostics.push(ts.createFileDiagnostic(file, span.start, span.length, ts.Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
+                    }
+                }
+            }
+            return bindAnonymousDeclaration(node, 4096, "__object");
+        }
         function bindAnonymousDeclaration(node, symbolFlags, name) {
             var symbol = createSymbol(symbolFlags, name);
             addDeclarationToSymbol(symbol, node, symbolFlags);
         }
         function bindBlockScopedDeclaration(node, symbolFlags, symbolExcludes) {
             switch (blockScopeContainer.kind) {
-                case 206:
+                case 208:
                     declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
-                case 228:
+                case 230:
                     if (ts.isExternalModule(container)) {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
@@ -3089,79 +3203,223 @@ var ts;
         function bindBlockScopedVariableDeclaration(node) {
             bindBlockScopedDeclaration(node, 2, 107455);
         }
+        function checkStrictModeIdentifier(node) {
+            if (inStrictMode &&
+                node.originalKeywordKind >= 102 &&
+                node.originalKeywordKind <= 110 &&
+                !ts.isIdentifierName(node)) {
+                if (!file.parseDiagnostics.length) {
+                    file.bindDiagnostics.push(ts.createDiagnosticForNode(node, getStrictModeIdentifierMessage(node), ts.declarationNameToString(node)));
+                }
+            }
+        }
+        function getStrictModeIdentifierMessage(node) {
+            if (ts.getAncestor(node, 204) || ts.getAncestor(node, 177)) {
+                return ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
+            }
+            if (file.externalModuleIndicator) {
+                return ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
+            }
+            return ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
+        }
+        function checkStrictModeBinaryExpression(node) {
+            if (inStrictMode && ts.isLeftHandSideExpression(node.left) && ts.isAssignmentOperator(node.operatorToken.kind)) {
+                checkStrictModeEvalOrArguments(node, node.left);
+            }
+        }
+        function checkStrictModeCatchClause(node) {
+            if (inStrictMode && node.variableDeclaration) {
+                checkStrictModeEvalOrArguments(node, node.variableDeclaration.name);
+            }
+        }
+        function checkStrictModeDeleteExpression(node) {
+            if (inStrictMode && node.expression.kind === 65) {
+                var span = ts.getErrorSpanForNode(file, node.expression);
+                file.bindDiagnostics.push(ts.createFileDiagnostic(file, span.start, span.length, ts.Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode));
+            }
+        }
+        function isEvalOrArgumentsIdentifier(node) {
+            return node.kind === 65 &&
+                (node.text === "eval" || node.text === "arguments");
+        }
+        function checkStrictModeEvalOrArguments(contextNode, name) {
+            if (name && name.kind === 65) {
+                var identifier = name;
+                if (isEvalOrArgumentsIdentifier(identifier)) {
+                    var span = ts.getErrorSpanForNode(file, name);
+                    file.bindDiagnostics.push(ts.createFileDiagnostic(file, span.start, span.length, getStrictModeEvalOrArgumentsMessage(contextNode), identifier.text));
+                }
+            }
+        }
+        function getStrictModeEvalOrArgumentsMessage(node) {
+            if (ts.getAncestor(node, 204) || ts.getAncestor(node, 177)) {
+                return ts.Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
+            }
+            if (file.externalModuleIndicator) {
+                return ts.Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode;
+            }
+            return ts.Diagnostics.Invalid_use_of_0_in_strict_mode;
+        }
+        function checkStrictModeFunctionName(node) {
+            if (inStrictMode) {
+                checkStrictModeEvalOrArguments(node, node.name);
+            }
+        }
+        function checkStrictModeNumericLiteral(node) {
+            if (inStrictMode && node.flags & 16384) {
+                file.bindDiagnostics.push(ts.createDiagnosticForNode(node, ts.Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
+            }
+        }
+        function checkStrictModePostfixUnaryExpression(node) {
+            if (inStrictMode) {
+                checkStrictModeEvalOrArguments(node, node.operand);
+            }
+        }
+        function checkStrictModePrefixUnaryExpression(node) {
+            if (inStrictMode) {
+                if (node.operator === 38 || node.operator === 39) {
+                    checkStrictModeEvalOrArguments(node, node.operand);
+                }
+            }
+        }
+        function checkStrictModeWithStatement(node) {
+            if (inStrictMode) {
+                grammarErrorOnFirstToken(node, ts.Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+            }
+        }
+        function grammarErrorOnFirstToken(node, message, arg0, arg1, arg2) {
+            var span = ts.getSpanOfTokenAtPosition(file, node.pos);
+            file.bindDiagnostics.push(ts.createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
+        }
         function getDestructuringParameterName(node) {
             return "__" + ts.indexOf(node.parent.parameters, node);
         }
         function bind(node) {
             node.parent = parent;
+            var savedInStrictMode = inStrictMode;
+            if (!savedInStrictMode) {
+                updateStrictMode(node);
+            }
             bindWorker(node);
             bindChildren(node);
+            inStrictMode = savedInStrictMode;
+        }
+        function updateStrictMode(node) {
+            switch (node.kind) {
+                case 230:
+                case 209:
+                    updateStrictModeStatementList(node.statements);
+                    return;
+                case 182:
+                    if (ts.isFunctionLike(node.parent)) {
+                        updateStrictModeStatementList(node.statements);
+                    }
+                    return;
+                case 204:
+                case 177:
+                    inStrictMode = true;
+                    return;
+            }
+        }
+        function updateStrictModeStatementList(statements) {
+            for (var _i = 0; _i < statements.length; _i++) {
+                var statement = statements[_i];
+                if (!ts.isPrologueDirective(statement)) {
+                    return;
+                }
+                if (isUseStrictPrologueDirective(statement)) {
+                    inStrictMode = true;
+                    return;
+                }
+            }
+        }
+        function isUseStrictPrologueDirective(node) {
+            var nodeText = ts.getTextOfNodeFromSourceText(file.text, node.expression);
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
         function bindWorker(node) {
             switch (node.kind) {
-                case 129:
-                    return declareSymbolAndAddToSymbolTable(node, 262144, 530912);
-                case 130:
-                    return bindParameter(node);
-                case 199:
-                case 153:
-                    return bindVariableDeclarationOrBindingElement(node);
-                case 133:
-                case 132:
-                    return bindPropertyOrMethodOrAccessor(node, 4 | (node.questionToken ? 536870912 : 0), 107455);
-                case 225:
+                case 65:
+                    return checkStrictModeIdentifier(node);
+                case 172:
+                    return checkStrictModeBinaryExpression(node);
                 case 226:
-                    return bindPropertyOrMethodOrAccessor(node, 4, 107455);
+                    return checkStrictModeCatchClause(node);
+                case 167:
+                    return checkStrictModeDeleteExpression(node);
+                case 7:
+                    return checkStrictModeNumericLiteral(node);
+                case 171:
+                    return checkStrictModePostfixUnaryExpression(node);
+                case 170:
+                    return checkStrictModePrefixUnaryExpression(node);
+                case 195:
+                    return checkStrictModeWithStatement(node);
+                case 130:
+                    return declareSymbolAndAddToSymbolTable(node, 262144, 530912);
+                case 131:
+                    return bindParameter(node);
+                case 201:
+                case 155:
+                    return bindVariableDeclarationOrBindingElement(node);
+                case 134:
+                case 133:
+                    return bindPropertyOrMethodOrAccessor(node, 4 | (node.questionToken ? 536870912 : 0), 107455);
                 case 227:
+                case 228:
+                    return bindPropertyOrMethodOrAccessor(node, 4, 107455);
+                case 229:
                     return bindPropertyOrMethodOrAccessor(node, 8, 107455);
-                case 139:
                 case 140:
                 case 141:
+                case 142:
                     return declareSymbolAndAddToSymbolTable(node, 131072, 0);
-                case 135:
-                case 134:
-                    return bindPropertyOrMethodOrAccessor(node, 8192 | (node.questionToken ? 536870912 : 0), ts.isObjectLiteralMethod(node) ? 107455 : 99263);
-                case 201:
-                    return declareSymbolAndAddToSymbolTable(node, 16, 106927);
                 case 136:
-                    return declareSymbolAndAddToSymbolTable(node, 16384, 0);
-                case 137:
-                    return bindPropertyOrMethodOrAccessor(node, 32768, 41919);
-                case 138:
-                    return bindPropertyOrMethodOrAccessor(node, 65536, 74687);
-                case 143:
-                case 144:
-                    return bindFunctionOrConstructorType(node);
-                case 146:
-                    return bindAnonymousDeclaration(node, 2048, "__type");
-                case 155:
-                    return bindAnonymousDeclaration(node, 4096, "__object");
-                case 163:
-                case 164:
-                    return bindAnonymousDeclaration(node, 16, "__function");
-                case 175:
-                case 202:
-                    return bindClassLikeDeclaration(node);
+                case 135:
+                    return bindPropertyOrMethodOrAccessor(node, 8192 | (node.questionToken ? 536870912 : 0), ts.isObjectLiteralMethod(node) ? 107455 : 99263);
                 case 203:
-                    return bindBlockScopedDeclaration(node, 64, 792992);
+                    checkStrictModeFunctionName(node);
+                    return declareSymbolAndAddToSymbolTable(node, 16, 106927);
+                case 137:
+                    return declareSymbolAndAddToSymbolTable(node, 16384, 0);
+                case 138:
+                    return bindPropertyOrMethodOrAccessor(node, 32768, 41919);
+                case 139:
+                    return bindPropertyOrMethodOrAccessor(node, 65536, 74687);
+                case 145:
+                case 146:
+                    return bindFunctionOrConstructorType(node);
+                case 148:
+                    return bindAnonymousDeclaration(node, 2048, "__type");
+                case 157:
+                    return bindObjectLiteralExpression(node);
+                case 165:
+                case 166:
+                    checkStrictModeFunctionName(node);
+                    return bindAnonymousDeclaration(node, 16, "__function");
+                case 177:
                 case 204:
-                    return bindBlockScopedDeclaration(node, 524288, 793056);
+                    return bindClassLikeDeclaration(node);
                 case 205:
-                    return bindEnumDeclaration(node);
+                    return bindBlockScopedDeclaration(node, 64, 792992);
                 case 206:
+                    return bindBlockScopedDeclaration(node, 524288, 793056);
+                case 207:
+                    return bindEnumDeclaration(node);
+                case 208:
                     return bindModuleDeclaration(node);
-                case 209:
-                case 212:
-                case 214:
-                case 218:
-                    return declareSymbolAndAddToSymbolTable(node, 8388608, 8388608);
                 case 211:
-                    return bindImportClause(node);
+                case 214:
                 case 216:
+                case 220:
+                    return declareSymbolAndAddToSymbolTable(node, 8388608, 8388608);
+                case 213:
+                    return bindImportClause(node);
+                case 218:
                     return bindExportDeclaration(node);
-                case 215:
+                case 217:
                     return bindExportAssignment(node);
-                case 228:
+                case 230:
                     return bindSourceFileIfExternalModule();
             }
         }
@@ -3172,7 +3430,10 @@ var ts;
             }
         }
         function bindExportAssignment(node) {
-            if (node.expression.kind === 65) {
+            if (!container.symbol || !container.symbol.exports) {
+                bindAnonymousDeclaration(node, 8388608, getDeclarationName(node));
+            }
+            else if (node.expression.kind === 65) {
                 declareSymbol(container.symbol.exports, container.symbol, node, 8388608, 107455 | 8388608);
             }
             else {
@@ -3180,7 +3441,10 @@ var ts;
             }
         }
         function bindExportDeclaration(node) {
-            if (!node.exportClause) {
+            if (!container.symbol || !container.symbol.exports) {
+                bindAnonymousDeclaration(node, 1073741824, getDeclarationName(node));
+            }
+            else if (!node.exportClause) {
                 declareSymbol(container.symbol.exports, container.symbol, node, 1073741824, 0);
             }
         }
@@ -3190,7 +3454,7 @@ var ts;
             }
         }
         function bindClassLikeDeclaration(node) {
-            if (node.kind === 202) {
+            if (node.kind === 204) {
                 bindBlockScopedDeclaration(node, 32, 899583);
             }
             else {
@@ -3213,6 +3477,9 @@ var ts;
                 : bindBlockScopedDeclaration(node, 256, 899327);
         }
         function bindVariableDeclarationOrBindingElement(node) {
+            if (inStrictMode) {
+                checkStrictModeEvalOrArguments(node, node.name);
+            }
             if (!ts.isBindingPattern(node.name)) {
                 if (ts.isBlockOrCatchScoped(node)) {
                     bindBlockScopedVariableDeclaration(node);
@@ -3226,6 +3493,9 @@ var ts;
             }
         }
         function bindParameter(node) {
+            if (inStrictMode) {
+                checkStrictModeEvalOrArguments(node, node.name);
+            }
             if (ts.isBindingPattern(node.name)) {
                 bindAnonymousDeclaration(node, 1, getDestructuringParameterName(node));
             }
@@ -3233,8 +3503,8 @@ var ts;
                 declareSymbolAndAddToSymbolTable(node, 1, 107455);
             }
             if (node.flags & 112 &&
-                node.parent.kind === 136 &&
-                (node.parent.parent.kind === 202 || node.parent.parent.kind === 175)) {
+                node.parent.kind === 137 &&
+                (node.parent.parent.kind === 204 || node.parent.parent.kind === 177)) {
                 var classDeclaration = node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, 4, 107455);
             }
@@ -3262,7 +3532,7 @@ var ts;
     ts.getDeclarationOfKind = getDeclarationOfKind;
     var stringWriters = [];
     function getSingleLineStringWriter() {
-        if (stringWriters.length == 0) {
+        if (stringWriters.length === 0) {
             var str = "";
             var writeText = function (text) { return str += text; };
             return {
@@ -3309,7 +3579,7 @@ var ts;
         }
     }
     function getSourceFileOfNode(node) {
-        while (node && node.kind !== 228) {
+        while (node && node.kind !== 230) {
             node = node.parent;
         }
         return node;
@@ -3398,15 +3668,15 @@ var ts;
                 return current;
             }
             switch (current.kind) {
-                case 228:
+                case 230:
+                case 210:
+                case 226:
                 case 208:
-                case 224:
-                case 206:
-                case 187:
-                case 188:
                 case 189:
+                case 190:
+                case 191:
                     return current;
-                case 180:
+                case 182:
                     if (!isFunctionLike(current.parent)) {
                         return current;
                     }
@@ -3417,9 +3687,9 @@ var ts;
     ts.getEnclosingBlockScopeContainer = getEnclosingBlockScopeContainer;
     function isCatchClauseVariableDeclaration(declaration) {
         return declaration &&
-            declaration.kind === 199 &&
+            declaration.kind === 201 &&
             declaration.parent &&
-            declaration.parent.kind === 224;
+            declaration.parent.kind === 226;
     }
     ts.isCatchClauseVariableDeclaration = isCatchClauseVariableDeclaration;
     function declarationNameToString(name) {
@@ -3455,22 +3725,22 @@ var ts;
     function getErrorSpanForNode(sourceFile, node) {
         var errorNode = node;
         switch (node.kind) {
-            case 228:
+            case 230:
                 var pos_1 = ts.skipTrivia(sourceFile.text, 0, false);
                 if (pos_1 === sourceFile.text.length) {
                     return ts.createTextSpan(0, 0);
                 }
                 return getSpanOfTokenAtPosition(sourceFile, pos_1);
-            case 199:
-            case 153:
-            case 202:
-            case 175:
-            case 203:
-            case 206:
-            case 205:
-            case 227:
             case 201:
-            case 163:
+            case 155:
+            case 204:
+            case 177:
+            case 205:
+            case 208:
+            case 207:
+            case 229:
+            case 203:
+            case 165:
                 errorNode = node.name;
                 break;
         }
@@ -3492,11 +3762,11 @@ var ts;
     }
     ts.isDeclarationFile = isDeclarationFile;
     function isConstEnumDeclaration(node) {
-        return node.kind === 205 && isConst(node);
+        return node.kind === 207 && isConst(node);
     }
     ts.isConstEnumDeclaration = isConstEnumDeclaration;
     function walkUpBindingElementsAndPatterns(node) {
-        while (node && (node.kind === 153 || isBindingPattern(node))) {
+        while (node && (node.kind === 155 || isBindingPattern(node))) {
             node = node.parent;
         }
         return node;
@@ -3504,14 +3774,14 @@ var ts;
     function getCombinedNodeFlags(node) {
         node = walkUpBindingElementsAndPatterns(node);
         var flags = node.flags;
-        if (node.kind === 199) {
+        if (node.kind === 201) {
             node = node.parent;
         }
-        if (node && node.kind === 200) {
+        if (node && node.kind === 202) {
             flags |= node.flags;
             node = node.parent;
         }
-        if (node && node.kind === 181) {
+        if (node && node.kind === 183) {
             flags |= node.flags;
         }
         return flags;
@@ -3526,11 +3796,11 @@ var ts;
     }
     ts.isLet = isLet;
     function isPrologueDirective(node) {
-        return node.kind === 183 && node.expression.kind === 8;
+        return node.kind === 185 && node.expression.kind === 8;
     }
     ts.isPrologueDirective = isPrologueDirective;
     function getLeadingCommentRangesOfNode(node, sourceFileOfNode) {
-        if (node.kind === 130 || node.kind === 129) {
+        if (node.kind === 131 || node.kind === 130) {
             return ts.concatenate(ts.getTrailingCommentRanges(sourceFileOfNode.text, node.pos), ts.getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
         }
         else {
@@ -3549,68 +3819,68 @@ var ts;
     ts.getJsDocComments = getJsDocComments;
     ts.fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
     function isTypeNode(node) {
-        if (142 <= node.kind && node.kind <= 150) {
+        if (144 <= node.kind && node.kind <= 152) {
             return true;
         }
         switch (node.kind) {
             case 112:
-            case 120:
-            case 122:
-            case 113:
+            case 121:
             case 123:
+            case 113:
+            case 124:
                 return true;
             case 99:
-                return node.parent.kind !== 167;
+                return node.parent.kind !== 169;
             case 8:
-                return node.parent.kind === 130;
-            case 177:
-                return true;
+                return node.parent.kind === 131;
+            case 179:
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
             case 65:
-                if (node.parent.kind === 127 && node.parent.right === node) {
+                if (node.parent.kind === 128 && node.parent.right === node) {
                     node = node.parent;
                 }
-                else if (node.parent.kind === 156 && node.parent.name === node) {
+                else if (node.parent.kind === 158 && node.parent.name === node) {
                     node = node.parent;
                 }
-            case 127:
-            case 156:
-                ts.Debug.assert(node.kind === 65 || node.kind === 127 || node.kind === 156, "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
+            case 128:
+            case 158:
+                ts.Debug.assert(node.kind === 65 || node.kind === 128 || node.kind === 158, "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
                 var parent_1 = node.parent;
-                if (parent_1.kind === 145) {
+                if (parent_1.kind === 147) {
                     return false;
                 }
-                if (142 <= parent_1.kind && parent_1.kind <= 150) {
+                if (144 <= parent_1.kind && parent_1.kind <= 152) {
                     return true;
                 }
                 switch (parent_1.kind) {
-                    case 177:
-                        return true;
-                    case 129:
-                        return node === parent_1.constraint;
-                    case 133:
-                    case 132:
+                    case 179:
+                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent_1);
                     case 130:
-                    case 199:
-                        return node === parent_1.type;
+                        return node === parent_1.constraint;
+                    case 134:
+                    case 133:
+                    case 131:
                     case 201:
-                    case 163:
-                    case 164:
+                        return node === parent_1.type;
+                    case 203:
+                    case 165:
+                    case 166:
+                    case 137:
                     case 136:
                     case 135:
-                    case 134:
-                    case 137:
                     case 138:
-                        return node === parent_1.type;
                     case 139:
+                        return node === parent_1.type;
                     case 140:
                     case 141:
+                    case 142:
                         return node === parent_1.type;
-                    case 161:
+                    case 163:
                         return node === parent_1.type;
-                    case 158:
-                    case 159:
-                        return parent_1.typeArguments && ts.indexOf(parent_1.typeArguments, node) >= 0;
                     case 160:
+                    case 161:
+                        return parent_1.typeArguments && ts.indexOf(parent_1.typeArguments, node) >= 0;
+                    case 162:
                         return false;
                 }
         }
@@ -3621,23 +3891,23 @@ var ts;
         return traverse(body);
         function traverse(node) {
             switch (node.kind) {
-                case 192:
+                case 194:
                     return visitor(node);
-                case 208:
-                case 180:
-                case 184:
-                case 185:
+                case 210:
+                case 182:
                 case 186:
                 case 187:
                 case 188:
                 case 189:
-                case 193:
-                case 194:
-                case 221:
-                case 222:
+                case 190:
+                case 191:
                 case 195:
-                case 197:
+                case 196:
+                case 223:
                 case 224:
+                case 197:
+                case 199:
+                case 226:
                     return ts.forEachChild(node, traverse);
             }
         }
@@ -3647,23 +3917,23 @@ var ts;
         return traverse(body);
         function traverse(node) {
             switch (node.kind) {
-                case 173:
+                case 175:
                     visitor(node);
                     var operand = node.expression;
                     if (operand) {
                         traverse(operand);
                     }
+                case 207:
                 case 205:
-                case 203:
+                case 208:
                 case 206:
                 case 204:
-                case 202:
                     return;
                 default:
                     if (isFunctionLike(node)) {
-                        var name_3 = node.name;
-                        if (name_3 && name_3.kind === 128) {
-                            traverse(name_3.expression);
+                        var name_4 = node.name;
+                        if (name_4 && name_4.kind === 129) {
+                            traverse(name_4.expression);
                             return;
                         }
                     }
@@ -3677,14 +3947,14 @@ var ts;
     function isVariableLike(node) {
         if (node) {
             switch (node.kind) {
-                case 153:
+                case 155:
+                case 229:
+                case 131:
                 case 227:
-                case 130:
-                case 225:
+                case 134:
                 case 133:
-                case 132:
-                case 226:
-                case 199:
+                case 228:
+                case 201:
                     return true;
             }
         }
@@ -3694,8 +3964,8 @@ var ts;
     function isAccessor(node) {
         if (node) {
             switch (node.kind) {
-                case 137:
                 case 138:
+                case 139:
                     return true;
             }
         }
@@ -3704,26 +3974,26 @@ var ts;
     ts.isAccessor = isAccessor;
     function isClassLike(node) {
         if (node) {
-            return node.kind === 202 || node.kind === 175;
+            return node.kind === 204 || node.kind === 177;
         }
     }
     ts.isClassLike = isClassLike;
     function isFunctionLike(node) {
         if (node) {
             switch (node.kind) {
-                case 136:
-                case 163:
-                case 201:
-                case 164:
-                case 135:
-                case 134:
                 case 137:
+                case 165:
+                case 203:
+                case 166:
+                case 136:
+                case 135:
                 case 138:
                 case 139:
                 case 140:
                 case 141:
-                case 143:
-                case 144:
+                case 142:
+                case 145:
+                case 146:
                     return true;
             }
         }
@@ -3731,11 +4001,11 @@ var ts;
     }
     ts.isFunctionLike = isFunctionLike;
     function isFunctionBlock(node) {
-        return node && node.kind === 180 && isFunctionLike(node.parent);
+        return node && node.kind === 182 && isFunctionLike(node.parent);
     }
     ts.isFunctionBlock = isFunctionBlock;
     function isObjectLiteralMethod(node) {
-        return node && node.kind === 135 && node.parent.kind === 155;
+        return node && node.kind === 136 && node.parent.kind === 157;
     }
     ts.isObjectLiteralMethod = isObjectLiteralMethod;
     function getContainingFunction(node) {
@@ -3754,36 +4024,36 @@ var ts;
                 return undefined;
             }
             switch (node.kind) {
-                case 128:
-                    if (node.parent.parent.kind === 202) {
+                case 129:
+                    if (node.parent.parent.kind === 204) {
                         return node;
                     }
                     node = node.parent;
                     break;
-                case 131:
-                    if (node.parent.kind === 130 && isClassElement(node.parent.parent)) {
+                case 132:
+                    if (node.parent.kind === 131 && isClassElement(node.parent.parent)) {
                         node = node.parent.parent;
                     }
                     else if (isClassElement(node.parent)) {
                         node = node.parent;
                     }
                     break;
-                case 164:
+                case 166:
                     if (!includeArrowFunctions) {
                         continue;
                     }
-                case 201:
-                case 163:
-                case 206:
-                case 133:
-                case 132:
-                case 135:
+                case 203:
+                case 165:
+                case 208:
                 case 134:
+                case 133:
                 case 136:
+                case 135:
                 case 137:
                 case 138:
-                case 205:
-                case 228:
+                case 139:
+                case 207:
+                case 230:
                     return node;
             }
         }
@@ -3795,40 +4065,40 @@ var ts;
             if (!node)
                 return node;
             switch (node.kind) {
-                case 128:
-                    if (node.parent.parent.kind === 202) {
+                case 129:
+                    if (node.parent.parent.kind === 204) {
                         return node;
                     }
                     node = node.parent;
                     break;
-                case 131:
-                    if (node.parent.kind === 130 && isClassElement(node.parent.parent)) {
+                case 132:
+                    if (node.parent.kind === 131 && isClassElement(node.parent.parent)) {
                         node = node.parent.parent;
                     }
                     else if (isClassElement(node.parent)) {
                         node = node.parent;
                     }
                     break;
-                case 201:
-                case 163:
-                case 164:
+                case 203:
+                case 165:
+                case 166:
                     if (!includeFunctions) {
                         continue;
                     }
-                case 133:
-                case 132:
-                case 135:
                 case 134:
+                case 133:
                 case 136:
+                case 135:
                 case 137:
                 case 138:
+                case 139:
                     return node;
             }
         }
     }
     ts.getSuperContainer = getSuperContainer;
     function getInvokedExpression(node) {
-        if (node.kind === 160) {
+        if (node.kind === 162) {
             return node.tag;
         }
         return node.expression;
@@ -3836,40 +4106,40 @@ var ts;
     ts.getInvokedExpression = getInvokedExpression;
     function nodeCanBeDecorated(node) {
         switch (node.kind) {
-            case 202:
+            case 204:
                 return true;
-            case 133:
-                return node.parent.kind === 202;
-            case 130:
-                return node.parent.body && node.parent.parent.kind === 202;
-            case 137:
+            case 134:
+                return node.parent.kind === 204;
+            case 131:
+                return node.parent.body && node.parent.parent.kind === 204;
             case 138:
-            case 135:
-                return node.body && node.parent.kind === 202;
+            case 139:
+            case 136:
+                return node.body && node.parent.kind === 204;
         }
         return false;
     }
     ts.nodeCanBeDecorated = nodeCanBeDecorated;
     function nodeIsDecorated(node) {
         switch (node.kind) {
-            case 202:
+            case 204:
                 if (node.decorators) {
                     return true;
                 }
                 return false;
-            case 133:
-            case 130:
+            case 134:
+            case 131:
                 if (node.decorators) {
                     return true;
                 }
                 return false;
-            case 137:
+            case 138:
                 if (node.body && node.decorators) {
                     return true;
                 }
                 return false;
-            case 135:
-            case 138:
+            case 136:
+            case 139:
                 if (node.body && node.decorators) {
                     return true;
                 }
@@ -3880,10 +4150,10 @@ var ts;
     ts.nodeIsDecorated = nodeIsDecorated;
     function childIsDecorated(node) {
         switch (node.kind) {
-            case 202:
+            case 204:
                 return ts.forEach(node.members, nodeOrChildIsDecorated);
-            case 135:
-            case 138:
+            case 136:
+            case 139:
                 return ts.forEach(node.parameters, nodeIsDecorated);
         }
         return false;
@@ -3901,8 +4171,6 @@ var ts;
             case 95:
             case 80:
             case 9:
-            case 154:
-            case 155:
             case 156:
             case 157:
             case 158:
@@ -3911,71 +4179,75 @@ var ts;
             case 161:
             case 162:
             case 163:
-            case 175:
             case 164:
-            case 167:
             case 165:
+            case 177:
             case 166:
-            case 168:
             case 169:
+            case 167:
+            case 168:
             case 170:
             case 171:
-            case 174:
             case 172:
-            case 10:
-            case 176:
             case 173:
+            case 176:
+            case 174:
+            case 10:
+            case 178:
+            case 175:
                 return true;
-            case 127:
-                while (node.parent.kind === 127) {
+            case 128:
+                while (node.parent.kind === 128) {
                     node = node.parent;
                 }
-                return node.parent.kind === 145;
+                return node.parent.kind === 147;
             case 65:
-                if (node.parent.kind === 145) {
+                if (node.parent.kind === 147) {
                     return true;
                 }
             case 7:
             case 8:
                 var parent_2 = node.parent;
                 switch (parent_2.kind) {
-                    case 199:
-                    case 130:
+                    case 201:
+                    case 131:
+                    case 134:
                     case 133:
-                    case 132:
+                    case 229:
                     case 227:
-                    case 225:
-                    case 153:
+                    case 155:
                         return parent_2.initializer === node;
-                    case 183:
-                    case 184:
                     case 185:
                     case 186:
-                    case 192:
-                    case 193:
-                    case 194:
-                    case 221:
-                    case 196:
-                    case 194:
-                        return parent_2.expression === node;
                     case 187:
+                    case 188:
+                    case 194:
+                    case 195:
+                    case 196:
+                    case 223:
+                    case 198:
+                    case 196:
+                        return parent_2.expression === node;
+                    case 189:
                         var forStatement = parent_2;
-                        return (forStatement.initializer === node && forStatement.initializer.kind !== 200) ||
+                        return (forStatement.initializer === node && forStatement.initializer.kind !== 202) ||
                             forStatement.condition === node ||
                             forStatement.incrementor === node;
-                    case 188:
-                    case 189:
+                    case 190:
+                    case 191:
                         var forInStatement = parent_2;
-                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== 200) ||
+                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== 202) ||
                             forInStatement.expression === node;
-                    case 161:
+                    case 163:
                         return node === parent_2.expression;
-                    case 178:
+                    case 180:
                         return node === parent_2.expression;
-                    case 128:
+                    case 129:
                         return node === parent_2.expression;
-                    case 131:
+                    case 132:
                         return true;
+                    case 179:
+                        return parent_2.expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent_2);
                     default:
                         if (isExpression(parent_2)) {
                             return true;
@@ -3992,7 +4264,7 @@ var ts;
     }
     ts.isInstantiatedModule = isInstantiatedModule;
     function isExternalModuleImportEqualsDeclaration(node) {
-        return node.kind === 209 && node.moduleReference.kind === 220;
+        return node.kind === 211 && node.moduleReference.kind === 222;
     }
     ts.isExternalModuleImportEqualsDeclaration = isExternalModuleImportEqualsDeclaration;
     function getExternalModuleImportEqualsDeclarationExpression(node) {
@@ -4001,20 +4273,20 @@ var ts;
     }
     ts.getExternalModuleImportEqualsDeclarationExpression = getExternalModuleImportEqualsDeclarationExpression;
     function isInternalModuleImportEqualsDeclaration(node) {
-        return node.kind === 209 && node.moduleReference.kind !== 220;
+        return node.kind === 211 && node.moduleReference.kind !== 222;
     }
     ts.isInternalModuleImportEqualsDeclaration = isInternalModuleImportEqualsDeclaration;
     function getExternalModuleName(node) {
-        if (node.kind === 210) {
+        if (node.kind === 212) {
             return node.moduleSpecifier;
         }
-        if (node.kind === 209) {
+        if (node.kind === 211) {
             var reference = node.moduleReference;
-            if (reference.kind === 220) {
+            if (reference.kind === 222) {
                 return reference.expression;
             }
         }
-        if (node.kind === 216) {
+        if (node.kind === 218) {
             return node.moduleSpecifier;
         }
     }
@@ -4022,15 +4294,15 @@ var ts;
     function hasQuestionToken(node) {
         if (node) {
             switch (node.kind) {
-                case 130:
+                case 131:
                     return node.questionToken !== undefined;
+                case 136:
                 case 135:
-                case 134:
                     return node.questionToken !== undefined;
-                case 226:
-                case 225:
+                case 228:
+                case 227:
+                case 134:
                 case 133:
-                case 132:
                     return node.questionToken !== undefined;
             }
         }
@@ -4038,9 +4310,9 @@ var ts;
     }
     ts.hasQuestionToken = hasQuestionToken;
     function isJSDocConstructSignature(node) {
-        return node.kind === 241 &&
+        return node.kind === 243 &&
             node.parameters.length > 0 &&
-            node.parameters[0].type.kind === 243;
+            node.parameters[0].type.kind === 245;
     }
     ts.isJSDocConstructSignature = isJSDocConstructSignature;
     function getJSDocTag(node, kind) {
@@ -4054,15 +4326,15 @@ var ts;
         }
     }
     function getJSDocTypeTag(node) {
-        return getJSDocTag(node, 249);
+        return getJSDocTag(node, 251);
     }
     ts.getJSDocTypeTag = getJSDocTypeTag;
     function getJSDocReturnTag(node) {
-        return getJSDocTag(node, 248);
+        return getJSDocTag(node, 250);
     }
     ts.getJSDocReturnTag = getJSDocReturnTag;
     function getJSDocTemplateTag(node) {
-        return getJSDocTag(node, 250);
+        return getJSDocTag(node, 252);
     }
     ts.getJSDocTemplateTag = getJSDocTemplateTag;
     function getCorrespondingJSDocParameterTag(parameter) {
@@ -4071,10 +4343,10 @@ var ts;
             var docComment = parameter.parent.jsDocComment;
             if (docComment) {
                 return ts.forEach(docComment.tags, function (t) {
-                    if (t.kind === 247) {
+                    if (t.kind === 249) {
                         var parameterTag = t;
-                        var name_4 = parameterTag.preParameterName || parameterTag.postParameterName;
-                        if (name_4.text === parameterName) {
+                        var name_5 = parameterTag.preParameterName || parameterTag.postParameterName;
+                        if (name_5.text === parameterName) {
                             return t;
                         }
                     }
@@ -4090,12 +4362,12 @@ var ts;
     function isRestParameter(node) {
         if (node) {
             if (node.parserContextFlags & 64) {
-                if (node.type && node.type.kind === 242) {
+                if (node.type && node.type.kind === 244) {
                     return true;
                 }
                 var paramTag = getCorrespondingJSDocParameterTag(node);
                 if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type.kind === 242;
+                    return paramTag.typeExpression.type.kind === 244;
                 }
             }
             return node.dotDotDotToken !== undefined;
@@ -4116,7 +4388,7 @@ var ts;
     }
     ts.isTemplateLiteralKind = isTemplateLiteralKind;
     function isBindingPattern(node) {
-        return !!node && (node.kind === 152 || node.kind === 151);
+        return !!node && (node.kind === 154 || node.kind === 153);
     }
     ts.isBindingPattern = isBindingPattern;
     function isInAmbientContext(node) {
@@ -4131,33 +4403,33 @@ var ts;
     ts.isInAmbientContext = isInAmbientContext;
     function isDeclaration(node) {
         switch (node.kind) {
-            case 164:
-            case 153:
-            case 202:
-            case 136:
-            case 205:
-            case 227:
-            case 218:
-            case 201:
-            case 163:
-            case 137:
-            case 211:
-            case 209:
-            case 214:
-            case 203:
-            case 135:
-            case 134:
-            case 206:
-            case 212:
-            case 130:
-            case 225:
-            case 133:
-            case 132:
-            case 138:
-            case 226:
+            case 166:
+            case 155:
             case 204:
-            case 129:
-            case 199:
+            case 137:
+            case 207:
+            case 229:
+            case 220:
+            case 203:
+            case 165:
+            case 138:
+            case 213:
+            case 211:
+            case 216:
+            case 205:
+            case 136:
+            case 135:
+            case 208:
+            case 214:
+            case 131:
+            case 227:
+            case 134:
+            case 133:
+            case 139:
+            case 228:
+            case 206:
+            case 130:
+            case 201:
                 return true;
         }
         return false;
@@ -4165,25 +4437,25 @@ var ts;
     ts.isDeclaration = isDeclaration;
     function isStatement(n) {
         switch (n.kind) {
-            case 191:
-            case 190:
-            case 198:
-            case 185:
-            case 183:
-            case 182:
-            case 188:
-            case 189:
-            case 187:
-            case 184:
-            case 195:
-            case 192:
-            case 194:
-            case 94:
-            case 197:
-            case 181:
-            case 186:
             case 193:
-            case 215:
+            case 192:
+            case 200:
+            case 187:
+            case 185:
+            case 184:
+            case 190:
+            case 191:
+            case 189:
+            case 186:
+            case 197:
+            case 194:
+            case 196:
+            case 94:
+            case 199:
+            case 183:
+            case 188:
+            case 195:
+            case 217:
                 return true;
             default:
                 return false;
@@ -4192,13 +4464,13 @@ var ts;
     ts.isStatement = isStatement;
     function isClassElement(n) {
         switch (n.kind) {
-            case 136:
-            case 133:
-            case 135:
             case 137:
-            case 138:
             case 134:
-            case 141:
+            case 136:
+            case 138:
+            case 139:
+            case 135:
+            case 142:
                 return true;
             default:
                 return false;
@@ -4210,7 +4482,7 @@ var ts;
             return false;
         }
         var parent = name.parent;
-        if (parent.kind === 214 || parent.kind === 218) {
+        if (parent.kind === 216 || parent.kind === 220) {
             if (parent.propertyName) {
                 return true;
             }
@@ -4221,13 +4493,43 @@ var ts;
         return false;
     }
     ts.isDeclarationName = isDeclarationName;
+    function isIdentifierName(node) {
+        var parent = node.parent;
+        switch (parent.kind) {
+            case 134:
+            case 133:
+            case 136:
+            case 135:
+            case 138:
+            case 139:
+            case 229:
+            case 227:
+            case 158:
+                return parent.name === node;
+            case 128:
+                if (parent.right === node) {
+                    while (parent.kind === 128) {
+                        parent = parent.parent;
+                    }
+                    return parent.kind === 147;
+                }
+                return false;
+            case 155:
+            case 216:
+                return parent.propertyName === node;
+            case 220:
+                return true;
+        }
+        return false;
+    }
+    ts.isIdentifierName = isIdentifierName;
     function isAliasSymbolDeclaration(node) {
-        return node.kind === 209 ||
-            node.kind === 211 && !!node.name ||
-            node.kind === 212 ||
+        return node.kind === 211 ||
+            node.kind === 213 && !!node.name ||
             node.kind === 214 ||
-            node.kind === 218 ||
-            node.kind === 215 && node.expression.kind === 65;
+            node.kind === 216 ||
+            node.kind === 220 ||
+            node.kind === 217 && node.expression.kind === 65;
     }
     ts.isAliasSymbolDeclaration = isAliasSymbolDeclaration;
     function getClassExtendsHeritageClauseElement(node) {
@@ -4310,7 +4612,7 @@ var ts;
     }
     ts.getFileReferenceFromReferencePath = getFileReferenceFromReferencePath;
     function isKeyword(token) {
-        return 66 <= token && token <= 126;
+        return 66 <= token && token <= 127;
     }
     ts.isKeyword = isKeyword;
     function isTrivia(token) {
@@ -4319,19 +4621,19 @@ var ts;
     ts.isTrivia = isTrivia;
     function hasDynamicName(declaration) {
         return declaration.name &&
-            declaration.name.kind === 128 &&
+            declaration.name.kind === 129 &&
             !isWellKnownSymbolSyntactically(declaration.name.expression);
     }
     ts.hasDynamicName = hasDynamicName;
     function isWellKnownSymbolSyntactically(node) {
-        return node.kind === 156 && isESSymbolIdentifier(node.expression);
+        return node.kind === 158 && isESSymbolIdentifier(node.expression);
     }
     ts.isWellKnownSymbolSyntactically = isWellKnownSymbolSyntactically;
     function getPropertyNameForPropertyNameNode(name) {
         if (name.kind === 65 || name.kind === 8 || name.kind === 7) {
             return name.text;
         }
-        if (name.kind === 128) {
+        if (name.kind === 129) {
             var nameExpression = name.expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
                 var rightHandSideName = nameExpression.name.text;
@@ -4366,18 +4668,18 @@ var ts;
     ts.isModifier = isModifier;
     function isParameterDeclaration(node) {
         var root = getRootDeclaration(node);
-        return root.kind === 130;
+        return root.kind === 131;
     }
     ts.isParameterDeclaration = isParameterDeclaration;
     function getRootDeclaration(node) {
-        while (node.kind === 153) {
+        while (node.kind === 155) {
             node = node.parent.parent;
         }
         return node;
     }
     ts.getRootDeclaration = getRootDeclaration;
     function nodeStartsNewLexicalEnvironment(n) {
-        return isFunctionLike(n) || n.kind === 206 || n.kind === 228;
+        return isFunctionLike(n) || n.kind === 208 || n.kind === 230;
     }
     ts.nodeStartsNewLexicalEnvironment = nodeStartsNewLexicalEnvironment;
     function nodeIsSynthesized(node) {
@@ -4601,7 +4903,7 @@ var ts;
     ts.getLineOfLocalPosition = getLineOfLocalPosition;
     function getFirstConstructorWithBody(node) {
         return ts.forEach(node.members, function (member) {
-            if (member.kind === 136 && nodeIsPresent(member.body)) {
+            if (member.kind === 137 && nodeIsPresent(member.body)) {
                 return member;
             }
         });
@@ -4624,10 +4926,10 @@ var ts;
         var setAccessor;
         if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
-            if (accessor.kind === 137) {
+            if (accessor.kind === 138) {
                 getAccessor = accessor;
             }
-            else if (accessor.kind === 138) {
+            else if (accessor.kind === 139) {
                 setAccessor = accessor;
             }
             else {
@@ -4636,7 +4938,7 @@ var ts;
         }
         else {
             ts.forEach(declarations, function (member) {
-                if ((member.kind === 137 || member.kind === 138)
+                if ((member.kind === 138 || member.kind === 139)
                     && (member.flags & 128) === (accessor.flags & 128)) {
                     var memberName = getPropertyNameForPropertyNameNode(member.name);
                     var accessorName = getPropertyNameForPropertyNameNode(accessor.name);
@@ -4647,10 +4949,10 @@ var ts;
                         else if (!secondAccessor) {
                             secondAccessor = member;
                         }
-                        if (member.kind === 137 && !getAccessor) {
+                        if (member.kind === 138 && !getAccessor) {
                             getAccessor = member;
                         }
-                        if (member.kind === 138 && !setAccessor) {
+                        if (member.kind === 139 && !setAccessor) {
                             setAccessor = member;
                         }
                     }
@@ -4771,22 +5073,22 @@ var ts;
     function isLeftHandSideExpression(expr) {
         if (expr) {
             switch (expr.kind) {
-                case 156:
-                case 157:
-                case 159:
                 case 158:
+                case 159:
+                case 161:
                 case 160:
-                case 154:
                 case 162:
-                case 155:
-                case 175:
-                case 163:
+                case 156:
+                case 164:
+                case 157:
+                case 177:
+                case 165:
                 case 65:
                 case 9:
                 case 7:
                 case 8:
                 case 10:
-                case 172:
+                case 174:
                 case 80:
                 case 89:
                 case 93:
@@ -4802,6 +5104,12 @@ var ts;
         return token >= 53 && token <= 64;
     }
     ts.isAssignmentOperator = isAssignmentOperator;
+    function isExpressionWithTypeArgumentsInClassExtendsClause(node) {
+        return node.kind === 179 &&
+            node.parent.token === 79 &&
+            node.parent.parent.kind === 204;
+    }
+    ts.isExpressionWithTypeArgumentsInClassExtendsClause = isExpressionWithTypeArgumentsInClassExtendsClause;
     function isSupportedExpressionWithTypeArguments(node) {
         return isSupportedExpressionWithTypeArgumentsRest(node.expression);
     }
@@ -4810,7 +5118,7 @@ var ts;
         if (node.kind === 65) {
             return true;
         }
-        else if (node.kind === 156) {
+        else if (node.kind === 158) {
             return isSupportedExpressionWithTypeArgumentsRest(node.expression);
         }
         else {
@@ -4818,8 +5126,8 @@ var ts;
         }
     }
     function isRightSideOfQualifiedNameOrPropertyAccess(node) {
-        return (node.parent.kind === 127 && node.parent.right === node) ||
-            (node.parent.kind === 156 && node.parent.name === node);
+        return (node.parent.kind === 128 && node.parent.right === node) ||
+            (node.parent.kind === 158 && node.parent.name === node);
     }
     ts.isRightSideOfQualifiedNameOrPropertyAccess = isRightSideOfQualifiedNameOrPropertyAccess;
     function getLocalSymbolForExportDefault(symbol) {
@@ -4884,6 +5192,21 @@ var ts;
         return result;
     }
     ts.convertToBase64 = convertToBase64;
+    var carriageReturnLineFeed = "\r\n";
+    var lineFeed = "\n";
+    function getNewLineCharacter(options) {
+        if (options.newLine === 0) {
+            return carriageReturnLineFeed;
+        }
+        else if (options.newLine === 1) {
+            return lineFeed;
+        }
+        else if (ts.sys) {
+            return ts.sys.newLine;
+        }
+        return carriageReturnLineFeed;
+    }
+    ts.getNewLineCharacter = getNewLineCharacter;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
@@ -4931,6 +5254,12 @@ var ts;
         return start <= textSpanEnd(span) && end >= span.start;
     }
     ts.textSpanIntersectsWith = textSpanIntersectsWith;
+    function decodedTextSpanIntersectsWith(start1, length1, start2, length2) {
+        var end1 = start1 + length1;
+        var end2 = start2 + length2;
+        return start2 <= end1 && end2 >= start1;
+    }
+    ts.decodedTextSpanIntersectsWith = decodedTextSpanIntersectsWith;
     function textSpanIntersectsWithPosition(span, position) {
         return position <= textSpanEnd(span) && position >= span.start;
     }
@@ -5001,9 +5330,9 @@ var ts;
     }
     ts.collapseTextChangeRangesAcrossMultipleVersions = collapseTextChangeRangesAcrossMultipleVersions;
     function getTypeParameterOwner(d) {
-        if (d && d.kind === 129) {
+        if (d && d.kind === 130) {
             for (var current = d; current; current = current.parent) {
-                if (ts.isFunctionLike(current) || ts.isClassLike(current) || current.kind === 203) {
+                if (ts.isFunctionLike(current) || ts.isClassLike(current) || current.kind === 205) {
                     return current;
                 }
             }
@@ -5015,7 +5344,7 @@ var ts;
 /// <reference path="utilities.ts"/>
 var ts;
 (function (ts) {
-    var nodeConstructors = new Array(252);
+    var nodeConstructors = new Array(254);
     ts.parseTime = 0;
     function getNodeConstructor(kind) {
         return nodeConstructors[kind] || (nodeConstructors[kind] = ts.objectAllocator.getNodeConstructor(kind));
@@ -5053,20 +5382,20 @@ var ts;
         var visitNodes = cbNodeArray ? visitNodeArray : visitEachNode;
         var cbNodes = cbNodeArray || cbNode;
         switch (node.kind) {
-            case 127:
+            case 128:
                 return visitNode(cbNode, node.left) ||
                     visitNode(cbNode, node.right);
-            case 129:
+            case 130:
                 return visitNode(cbNode, node.name) ||
                     visitNode(cbNode, node.constraint) ||
                     visitNode(cbNode, node.expression);
-            case 130:
+            case 131:
+            case 134:
             case 133:
-            case 132:
-            case 225:
-            case 226:
-            case 199:
-            case 153:
+            case 227:
+            case 228:
+            case 201:
+            case 155:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.propertyName) ||
@@ -5075,24 +5404,24 @@ var ts;
                     visitNode(cbNode, node.questionToken) ||
                     visitNode(cbNode, node.type) ||
                     visitNode(cbNode, node.initializer);
-            case 143:
-            case 144:
-            case 139:
+            case 145:
+            case 146:
             case 140:
             case 141:
+            case 142:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNodes(cbNodes, node.typeParameters) ||
                     visitNodes(cbNodes, node.parameters) ||
                     visitNode(cbNode, node.type);
-            case 135:
-            case 134:
             case 136:
+            case 135:
             case 137:
             case 138:
-            case 163:
-            case 201:
-            case 164:
+            case 139:
+            case 165:
+            case 203:
+            case 166:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.asteriskToken) ||
@@ -5103,263 +5432,267 @@ var ts;
                     visitNode(cbNode, node.type) ||
                     visitNode(cbNode, node.equalsGreaterThanToken) ||
                     visitNode(cbNode, node.body);
-            case 142:
+            case 144:
                 return visitNode(cbNode, node.typeName) ||
                     visitNodes(cbNodes, node.typeArguments);
-            case 145:
-                return visitNode(cbNode, node.exprName);
-            case 146:
-                return visitNodes(cbNodes, node.members);
+            case 143:
+                return visitNode(cbNode, node.parameterName) ||
+                    visitNode(cbNode, node.type);
             case 147:
-                return visitNode(cbNode, node.elementType);
+                return visitNode(cbNode, node.exprName);
             case 148:
-                return visitNodes(cbNodes, node.elementTypes);
+                return visitNodes(cbNodes, node.members);
             case 149:
-                return visitNodes(cbNodes, node.types);
+                return visitNode(cbNode, node.elementType);
             case 150:
-                return visitNode(cbNode, node.type);
+                return visitNodes(cbNodes, node.elementTypes);
             case 151:
+                return visitNodes(cbNodes, node.types);
             case 152:
-                return visitNodes(cbNodes, node.elements);
+                return visitNode(cbNode, node.type);
+            case 153:
             case 154:
                 return visitNodes(cbNodes, node.elements);
-            case 155:
-                return visitNodes(cbNodes, node.properties);
             case 156:
+                return visitNodes(cbNodes, node.elements);
+            case 157:
+                return visitNodes(cbNodes, node.properties);
+            case 158:
                 return visitNode(cbNode, node.expression) ||
                     visitNode(cbNode, node.dotToken) ||
                     visitNode(cbNode, node.name);
-            case 157:
+            case 159:
                 return visitNode(cbNode, node.expression) ||
                     visitNode(cbNode, node.argumentExpression);
-            case 158:
-            case 159:
+            case 160:
+            case 161:
                 return visitNode(cbNode, node.expression) ||
                     visitNodes(cbNodes, node.typeArguments) ||
                     visitNodes(cbNodes, node.arguments);
-            case 160:
+            case 162:
                 return visitNode(cbNode, node.tag) ||
                     visitNode(cbNode, node.template);
-            case 161:
+            case 163:
                 return visitNode(cbNode, node.type) ||
                     visitNode(cbNode, node.expression);
-            case 162:
-                return visitNode(cbNode, node.expression);
-            case 165:
-                return visitNode(cbNode, node.expression);
-            case 166:
+            case 164:
                 return visitNode(cbNode, node.expression);
             case 167:
                 return visitNode(cbNode, node.expression);
             case 168:
+                return visitNode(cbNode, node.expression);
+            case 169:
+                return visitNode(cbNode, node.expression);
+            case 170:
                 return visitNode(cbNode, node.operand);
-            case 173:
+            case 175:
                 return visitNode(cbNode, node.asteriskToken) ||
                     visitNode(cbNode, node.expression);
-            case 169:
+            case 171:
                 return visitNode(cbNode, node.operand);
-            case 170:
+            case 172:
                 return visitNode(cbNode, node.left) ||
                     visitNode(cbNode, node.operatorToken) ||
                     visitNode(cbNode, node.right);
-            case 171:
+            case 173:
                 return visitNode(cbNode, node.condition) ||
                     visitNode(cbNode, node.questionToken) ||
                     visitNode(cbNode, node.whenTrue) ||
                     visitNode(cbNode, node.colonToken) ||
                     visitNode(cbNode, node.whenFalse);
-            case 174:
+            case 176:
                 return visitNode(cbNode, node.expression);
-            case 180:
-            case 207:
+            case 182:
+            case 209:
                 return visitNodes(cbNodes, node.statements);
-            case 228:
+            case 230:
                 return visitNodes(cbNodes, node.statements) ||
                     visitNode(cbNode, node.endOfFileToken);
-            case 181:
+            case 183:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.declarationList);
-            case 200:
+            case 202:
                 return visitNodes(cbNodes, node.declarations);
-            case 183:
+            case 185:
                 return visitNode(cbNode, node.expression);
-            case 184:
+            case 186:
                 return visitNode(cbNode, node.expression) ||
                     visitNode(cbNode, node.thenStatement) ||
                     visitNode(cbNode, node.elseStatement);
-            case 185:
+            case 187:
                 return visitNode(cbNode, node.statement) ||
                     visitNode(cbNode, node.expression);
-            case 186:
+            case 188:
                 return visitNode(cbNode, node.expression) ||
                     visitNode(cbNode, node.statement);
-            case 187:
+            case 189:
                 return visitNode(cbNode, node.initializer) ||
                     visitNode(cbNode, node.condition) ||
                     visitNode(cbNode, node.incrementor) ||
                     visitNode(cbNode, node.statement);
-            case 188:
-                return visitNode(cbNode, node.initializer) ||
-                    visitNode(cbNode, node.expression) ||
-                    visitNode(cbNode, node.statement);
-            case 189:
-                return visitNode(cbNode, node.initializer) ||
-                    visitNode(cbNode, node.expression) ||
-                    visitNode(cbNode, node.statement);
             case 190:
-            case 191:
-                return visitNode(cbNode, node.label);
-            case 192:
-                return visitNode(cbNode, node.expression);
-            case 193:
-                return visitNode(cbNode, node.expression) ||
+                return visitNode(cbNode, node.initializer) ||
+                    visitNode(cbNode, node.expression) ||
                     visitNode(cbNode, node.statement);
+            case 191:
+                return visitNode(cbNode, node.initializer) ||
+                    visitNode(cbNode, node.expression) ||
+                    visitNode(cbNode, node.statement);
+            case 192:
+            case 193:
+                return visitNode(cbNode, node.label);
             case 194:
-                return visitNode(cbNode, node.expression) ||
-                    visitNode(cbNode, node.caseBlock);
-            case 208:
-                return visitNodes(cbNodes, node.clauses);
-            case 221:
-                return visitNode(cbNode, node.expression) ||
-                    visitNodes(cbNodes, node.statements);
-            case 222:
-                return visitNodes(cbNodes, node.statements);
+                return visitNode(cbNode, node.expression);
             case 195:
-                return visitNode(cbNode, node.label) ||
+                return visitNode(cbNode, node.expression) ||
                     visitNode(cbNode, node.statement);
             case 196:
-                return visitNode(cbNode, node.expression);
+                return visitNode(cbNode, node.expression) ||
+                    visitNode(cbNode, node.caseBlock);
+            case 210:
+                return visitNodes(cbNodes, node.clauses);
+            case 223:
+                return visitNode(cbNode, node.expression) ||
+                    visitNodes(cbNodes, node.statements);
+            case 224:
+                return visitNodes(cbNodes, node.statements);
             case 197:
+                return visitNode(cbNode, node.label) ||
+                    visitNode(cbNode, node.statement);
+            case 198:
+                return visitNode(cbNode, node.expression);
+            case 199:
                 return visitNode(cbNode, node.tryBlock) ||
                     visitNode(cbNode, node.catchClause) ||
                     visitNode(cbNode, node.finallyBlock);
-            case 224:
+            case 226:
                 return visitNode(cbNode, node.variableDeclaration) ||
                     visitNode(cbNode, node.block);
-            case 131:
+            case 132:
                 return visitNode(cbNode, node.expression);
-            case 202:
-            case 175:
-                return visitNodes(cbNodes, node.decorators) ||
-                    visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, node.name) ||
-                    visitNodes(cbNodes, node.typeParameters) ||
-                    visitNodes(cbNodes, node.heritageClauses) ||
-                    visitNodes(cbNodes, node.members);
-            case 203:
-                return visitNodes(cbNodes, node.decorators) ||
-                    visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, node.name) ||
-                    visitNodes(cbNodes, node.typeParameters) ||
-                    visitNodes(cbNodes, node.heritageClauses) ||
-                    visitNodes(cbNodes, node.members);
             case 204:
+            case 177:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.name) ||
-                    visitNode(cbNode, node.type);
+                    visitNodes(cbNodes, node.typeParameters) ||
+                    visitNodes(cbNodes, node.heritageClauses) ||
+                    visitNodes(cbNodes, node.members);
             case 205:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.name) ||
+                    visitNodes(cbNodes, node.typeParameters) ||
+                    visitNodes(cbNodes, node.heritageClauses) ||
                     visitNodes(cbNodes, node.members);
-            case 227:
-                return visitNode(cbNode, node.name) ||
-                    visitNode(cbNode, node.initializer);
             case 206:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.name) ||
+                    visitNodes(cbNodes, node.typeParameters) ||
+                    visitNode(cbNode, node.type);
+            case 207:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, node.name) ||
+                    visitNodes(cbNodes, node.members);
+            case 229:
+                return visitNode(cbNode, node.name) ||
+                    visitNode(cbNode, node.initializer);
+            case 208:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, node.name) ||
                     visitNode(cbNode, node.body);
-            case 209:
+            case 211:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.name) ||
                     visitNode(cbNode, node.moduleReference);
-            case 210:
+            case 212:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.importClause) ||
                     visitNode(cbNode, node.moduleSpecifier);
-            case 211:
+            case 213:
                 return visitNode(cbNode, node.name) ||
                     visitNode(cbNode, node.namedBindings);
-            case 212:
+            case 214:
                 return visitNode(cbNode, node.name);
-            case 213:
-            case 217:
+            case 215:
+            case 219:
                 return visitNodes(cbNodes, node.elements);
-            case 216:
+            case 218:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.exportClause) ||
                     visitNode(cbNode, node.moduleSpecifier);
-            case 214:
-            case 218:
+            case 216:
+            case 220:
                 return visitNode(cbNode, node.propertyName) ||
                     visitNode(cbNode, node.name);
-            case 215:
+            case 217:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, node.expression);
-            case 172:
+            case 174:
                 return visitNode(cbNode, node.head) || visitNodes(cbNodes, node.templateSpans);
-            case 178:
+            case 180:
                 return visitNode(cbNode, node.expression) || visitNode(cbNode, node.literal);
-            case 128:
+            case 129:
                 return visitNode(cbNode, node.expression);
-            case 223:
+            case 225:
                 return visitNodes(cbNodes, node.types);
-            case 177:
+            case 179:
                 return visitNode(cbNode, node.expression) ||
                     visitNodes(cbNodes, node.typeArguments);
-            case 220:
+            case 222:
                 return visitNode(cbNode, node.expression);
-            case 219:
+            case 221:
                 return visitNodes(cbNodes, node.decorators);
-            case 229:
-                return visitNode(cbNode, node.type);
-            case 233:
-                return visitNodes(cbNodes, node.types);
-            case 234:
-                return visitNodes(cbNodes, node.types);
-            case 232:
-                return visitNode(cbNode, node.elementType);
-            case 236:
+            case 231:
                 return visitNode(cbNode, node.type);
             case 235:
+                return visitNodes(cbNodes, node.types);
+            case 236:
+                return visitNodes(cbNodes, node.types);
+            case 234:
+                return visitNode(cbNode, node.elementType);
+            case 238:
                 return visitNode(cbNode, node.type);
             case 237:
-                return visitNodes(cbNodes, node.members);
+                return visitNode(cbNode, node.type);
             case 239:
+                return visitNodes(cbNodes, node.members);
+            case 241:
                 return visitNode(cbNode, node.name) ||
                     visitNodes(cbNodes, node.typeArguments);
-            case 240:
-                return visitNode(cbNode, node.type);
-            case 241:
-                return visitNodes(cbNodes, node.parameters) ||
-                    visitNode(cbNode, node.type);
             case 242:
                 return visitNode(cbNode, node.type);
             case 243:
-                return visitNode(cbNode, node.type);
+                return visitNodes(cbNodes, node.parameters) ||
+                    visitNode(cbNode, node.type);
             case 244:
                 return visitNode(cbNode, node.type);
-            case 238:
+            case 245:
+                return visitNode(cbNode, node.type);
+            case 246:
+                return visitNode(cbNode, node.type);
+            case 240:
                 return visitNode(cbNode, node.name) ||
                     visitNode(cbNode, node.type);
-            case 245:
-                return visitNodes(cbNodes, node.tags);
             case 247:
+                return visitNodes(cbNodes, node.tags);
+            case 249:
                 return visitNode(cbNode, node.preParameterName) ||
                     visitNode(cbNode, node.typeExpression) ||
                     visitNode(cbNode, node.postParameterName);
-            case 248:
-                return visitNode(cbNode, node.typeExpression);
-            case 249:
-                return visitNode(cbNode, node.typeExpression);
             case 250:
+                return visitNode(cbNode, node.typeExpression);
+            case 251:
+                return visitNode(cbNode, node.typeExpression);
+            case 252:
                 return visitNodes(cbNodes, node.typeParameters);
         }
     }
@@ -5433,7 +5766,7 @@ var ts;
             sourceFile = createSourceFile(fileName, languageVersion);
             token = nextToken();
             processReferenceComments(sourceFile);
-            sourceFile.statements = parseList(0, true, parseSourceElement);
+            sourceFile.statements = parseList(0, parseStatement);
             ts.Debug.assert(token === 1);
             sourceFile.endOfFileToken = parseTokenNode();
             setExternalModuleIndicator(sourceFile);
@@ -5454,9 +5787,9 @@ var ts;
             return;
             function visit(node) {
                 switch (node.kind) {
-                    case 181:
-                    case 201:
-                    case 130:
+                    case 183:
+                    case 203:
+                    case 131:
                         addJSDocComment(node);
                 }
                 forEachChild(node, visit);
@@ -5494,7 +5827,7 @@ var ts;
         }
         Parser.fixupParentReferences = fixupParentReferences;
         function createSourceFile(fileName, languageVersion) {
-            var sourceFile = createNode(228, 0);
+            var sourceFile = createNode(230, 0);
             sourceFile.pos = 0;
             sourceFile.end = sourceText.length;
             sourceFile.text = sourceText;
@@ -5511,9 +5844,6 @@ var ts;
             else {
                 contextFlags &= ~flag;
             }
-        }
-        function setStrictModeContext(val) {
-            setContextFlag(val, 1);
         }
         function setDisallowInContext(val) {
             setContextFlag(val, 2);
@@ -5584,9 +5914,6 @@ var ts;
         }
         function inYieldContext() {
             return (contextFlags & 4) !== 0;
-        }
-        function inStrictModeContext() {
-            return (contextFlags & 1) !== 0;
         }
         function inGeneratorParameterContext() {
             return (contextFlags & 8) !== 0;
@@ -5796,7 +6123,7 @@ var ts;
             return token === 8 || token === 7 || isIdentifierOrKeyword();
         }
         function parseComputedPropertyName() {
-            var node = createNode(128);
+            var node = createNode(129);
             parseExpected(18);
             var yieldContext = inYieldContext();
             if (inGeneratorParameterContext()) {
@@ -5850,23 +6177,21 @@ var ts;
             switch (parsingContext) {
                 case 0:
                 case 1:
-                    return !(token === 22 && inErrorRecovery) && isStartOfModuleElement();
-                case 2:
-                case 4:
-                    return !(token === 22 && inErrorRecovery) && isStartOfStatement();
                 case 3:
+                    return !(token === 22 && inErrorRecovery) && isStartOfStatement();
+                case 2:
                     return token === 67 || token === 73;
-                case 5:
+                case 4:
                     return isStartOfTypeMember();
-                case 6:
+                case 5:
                     return lookAhead(isClassMemberStart) || (token === 22 && !inErrorRecovery);
-                case 7:
+                case 6:
                     return token === 18 || isLiteralPropertyName();
-                case 13:
+                case 12:
                     return token === 18 || token === 35 || isLiteralPropertyName();
-                case 10:
+                case 9:
                     return isLiteralPropertyName();
-                case 8:
+                case 7:
                     if (token === 14) {
                         return lookAhead(isValidHeritageClauseObjectLiteral);
                     }
@@ -5876,29 +6201,29 @@ var ts;
                     else {
                         return isIdentifier() && !isHeritageClauseExtendsOrImplementsKeyword();
                     }
-                case 9:
+                case 8:
                     return isIdentifierOrPattern();
-                case 11:
+                case 10:
                     return token === 23 || token === 21 || isIdentifierOrPattern();
-                case 16:
-                    return isIdentifier();
-                case 12:
-                case 14:
-                    return token === 23 || token === 21 || isStartOfExpression();
                 case 15:
+                    return isIdentifier();
+                case 11:
+                case 13:
+                    return token === 23 || token === 21 || isStartOfExpression();
+                case 14:
                     return isStartOfParameter();
+                case 16:
                 case 17:
-                case 18:
                     return token === 23 || isStartOfType();
-                case 19:
+                case 18:
                     return isHeritageClause();
-                case 20:
+                case 19:
                     return isIdentifierOrKeyword();
+                case 20:
                 case 21:
-                case 22:
-                case 24:
-                    return JSDocParser.isJSDocType();
                 case 23:
+                    return JSDocParser.isJSDocType();
+                case 22:
                     return isSimplePropertyName();
             }
             ts.Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -5933,41 +6258,40 @@ var ts;
             switch (kind) {
                 case 1:
                 case 2:
-                case 3:
+                case 4:
                 case 5:
                 case 6:
-                case 7:
-                case 13:
-                case 10:
-                case 20:
-                    return token === 15;
-                case 4:
-                    return token === 15 || token === 67 || token === 73;
-                case 8:
-                    return token === 14 || token === 79 || token === 102;
-                case 9:
-                    return isVariableDeclaratorListTerminator();
-                case 16:
-                    return token === 25 || token === 16 || token === 14 || token === 79 || token === 102;
                 case 12:
-                    return token === 17 || token === 22;
-                case 14:
-                case 18:
-                case 11:
-                    return token === 19;
-                case 15:
-                    return token === 17 || token === 19;
-                case 17:
-                    return token === 25 || token === 16;
+                case 9:
                 case 19:
+                    return token === 15;
+                case 3:
+                    return token === 15 || token === 67 || token === 73;
+                case 7:
+                    return token === 14 || token === 79 || token === 102;
+                case 8:
+                    return isVariableDeclaratorListTerminator();
+                case 15:
+                    return token === 25 || token === 16 || token === 14 || token === 79 || token === 102;
+                case 11:
+                    return token === 17 || token === 22;
+                case 13:
+                case 17:
+                case 10:
+                    return token === 19;
+                case 14:
+                    return token === 17 || token === 19;
+                case 16:
+                    return token === 25 || token === 16;
+                case 18:
                     return token === 14 || token === 15;
-                case 21:
+                case 20:
                     return token === 17 || token === 51 || token === 15;
-                case 22:
+                case 21:
                     return token === 25 || token === 15;
-                case 24:
-                    return token === 19 || token === 15;
                 case 23:
+                    return token === 19 || token === 15;
+                case 22:
                     return token === 15;
             }
         }
@@ -5984,7 +6308,7 @@ var ts;
             return false;
         }
         function isInSomeParsingContext() {
-            for (var kind = 0; kind < 25; kind++) {
+            for (var kind = 0; kind < 24; kind++) {
                 if (parsingContext & (1 << kind)) {
                     if (isListElement(kind, true) || isListTerminator(kind)) {
                         return true;
@@ -5993,42 +6317,24 @@ var ts;
             }
             return false;
         }
-        function parseList(kind, checkForStrictMode, parseElement) {
+        function parseList(kind, parseElement) {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = [];
             result.pos = getNodePos();
-            var savedStrictModeContext = inStrictModeContext();
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, false)) {
                     var element = parseListElement(kind, parseElement);
                     result.push(element);
-                    if (checkForStrictMode && !inStrictModeContext()) {
-                        if (ts.isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(element)) {
-                                setStrictModeContext(true);
-                                checkForStrictMode = false;
-                            }
-                        }
-                        else {
-                            checkForStrictMode = false;
-                        }
-                    }
                     continue;
                 }
                 if (abortParsingListOrMoveToNextToken(kind)) {
                     break;
                 }
             }
-            setStrictModeContext(savedStrictModeContext);
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
-        }
-        function isUseStrictPrologueDirective(node) {
-            ts.Debug.assert(ts.isPrologueDirective(node));
-            var nodeText = ts.getTextOfNodeFromSourceText(sourceText, node.expression);
-            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
         function parseListElement(parsingContext, parseElement) {
             var node = currentNode(parsingContext);
@@ -6054,7 +6360,7 @@ var ts;
             if (ts.containsParseError(node)) {
                 return undefined;
             }
-            var nodeContextFlags = node.parserContextFlags & 63;
+            var nodeContextFlags = node.parserContextFlags & 62;
             if (nodeContextFlags !== contextFlags) {
                 return undefined;
             }
@@ -6070,61 +6376,47 @@ var ts;
         }
         function canReuseNode(node, parsingContext) {
             switch (parsingContext) {
-                case 1:
-                    return isReusableModuleElement(node);
-                case 6:
-                    return isReusableClassMember(node);
-                case 3:
-                    return isReusableSwitchClause(node);
-                case 2:
-                case 4:
-                    return isReusableStatement(node);
-                case 7:
-                    return isReusableEnumMember(node);
                 case 5:
+                    return isReusableClassMember(node);
+                case 2:
+                    return isReusableSwitchClause(node);
+                case 0:
+                case 1:
+                case 3:
+                    return isReusableStatement(node);
+                case 6:
+                    return isReusableEnumMember(node);
+                case 4:
                     return isReusableTypeMember(node);
-                case 9:
-                    return isReusableVariableDeclaration(node);
-                case 15:
-                    return isReusableParameter(node);
-                case 19:
-                case 16:
-                case 18:
-                case 17:
-                case 12:
-                case 13:
                 case 8:
-            }
-            return false;
-        }
-        function isReusableModuleElement(node) {
-            if (node) {
-                switch (node.kind) {
-                    case 210:
-                    case 209:
-                    case 216:
-                    case 215:
-                    case 202:
-                    case 203:
-                    case 206:
-                    case 205:
-                        return true;
-                }
-                return isReusableStatement(node);
+                    return isReusableVariableDeclaration(node);
+                case 14:
+                    return isReusableParameter(node);
+                case 18:
+                case 15:
+                case 17:
+                case 16:
+                case 11:
+                case 12:
+                case 7:
             }
             return false;
         }
         function isReusableClassMember(node) {
             if (node) {
                 switch (node.kind) {
-                    case 136:
-                    case 141:
-                    case 135:
                     case 137:
+                    case 142:
                     case 138:
-                    case 133:
-                    case 179:
+                    case 139:
+                    case 134:
+                    case 181:
                         return true;
+                    case 136:
+                        var methodDeclaration = node;
+                        var nameIsConstructor = methodDeclaration.name.kind === 65 &&
+                            methodDeclaration.name.originalKeywordKind === 114;
+                        return !nameIsConstructor;
                 }
             }
             return false;
@@ -6132,8 +6424,8 @@ var ts;
         function isReusableSwitchClause(node) {
             if (node) {
                 switch (node.kind) {
-                    case 221:
-                    case 222:
+                    case 223:
+                    case 224:
                         return true;
                 }
             }
@@ -6142,56 +6434,65 @@ var ts;
         function isReusableStatement(node) {
             if (node) {
                 switch (node.kind) {
-                    case 201:
-                    case 181:
-                    case 180:
-                    case 184:
+                    case 203:
                     case 183:
-                    case 196:
-                    case 192:
-                    case 194:
-                    case 191:
-                    case 190:
-                    case 188:
-                    case 189:
-                    case 187:
-                    case 186:
-                    case 193:
                     case 182:
-                    case 197:
-                    case 195:
+                    case 186:
                     case 185:
                     case 198:
+                    case 194:
+                    case 196:
+                    case 193:
+                    case 192:
+                    case 190:
+                    case 191:
+                    case 189:
+                    case 188:
+                    case 195:
+                    case 184:
+                    case 199:
+                    case 197:
+                    case 187:
+                    case 200:
+                    case 212:
+                    case 211:
+                    case 218:
+                    case 217:
+                    case 208:
+                    case 204:
+                    case 205:
+                    case 207:
+                    case 206:
                         return true;
                 }
             }
             return false;
         }
         function isReusableEnumMember(node) {
-            return node.kind === 227;
+            return node.kind === 229;
         }
         function isReusableTypeMember(node) {
             if (node) {
                 switch (node.kind) {
-                    case 140:
-                    case 134:
                     case 141:
-                    case 132:
-                    case 139:
+                    case 135:
+                    case 142:
+                    case 133:
+                    case 140:
                         return true;
                 }
             }
             return false;
         }
         function isReusableVariableDeclaration(node) {
-            if (node.kind !== 199) {
+            if (node.kind !== 201) {
                 return false;
             }
             var variableDeclarator = node;
             return variableDeclarator.initializer === undefined;
         }
         function isReusableParameter(node) {
-            if (node.kind !== 130) {
+            if (node.kind !== 131) {
                 return false;
             }
             var parameter = node;
@@ -6209,29 +6510,28 @@ var ts;
             switch (context) {
                 case 0: return ts.Diagnostics.Declaration_or_statement_expected;
                 case 1: return ts.Diagnostics.Declaration_or_statement_expected;
-                case 2: return ts.Diagnostics.Statement_expected;
-                case 3: return ts.Diagnostics.case_or_default_expected;
-                case 4: return ts.Diagnostics.Statement_expected;
-                case 5: return ts.Diagnostics.Property_or_signature_expected;
-                case 6: return ts.Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-                case 7: return ts.Diagnostics.Enum_member_expected;
-                case 8: return ts.Diagnostics.Expression_expected;
-                case 9: return ts.Diagnostics.Variable_declaration_expected;
-                case 10: return ts.Diagnostics.Property_destructuring_pattern_expected;
-                case 11: return ts.Diagnostics.Array_element_destructuring_pattern_expected;
-                case 12: return ts.Diagnostics.Argument_expression_expected;
-                case 13: return ts.Diagnostics.Property_assignment_expected;
-                case 14: return ts.Diagnostics.Expression_or_comma_expected;
-                case 15: return ts.Diagnostics.Parameter_declaration_expected;
-                case 16: return ts.Diagnostics.Type_parameter_declaration_expected;
-                case 17: return ts.Diagnostics.Type_argument_expected;
-                case 18: return ts.Diagnostics.Type_expected;
-                case 19: return ts.Diagnostics.Unexpected_token_expected;
-                case 20: return ts.Diagnostics.Identifier_expected;
-                case 21: return ts.Diagnostics.Parameter_declaration_expected;
-                case 22: return ts.Diagnostics.Type_argument_expected;
-                case 24: return ts.Diagnostics.Type_expected;
-                case 23: return ts.Diagnostics.Property_assignment_expected;
+                case 2: return ts.Diagnostics.case_or_default_expected;
+                case 3: return ts.Diagnostics.Statement_expected;
+                case 4: return ts.Diagnostics.Property_or_signature_expected;
+                case 5: return ts.Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+                case 6: return ts.Diagnostics.Enum_member_expected;
+                case 7: return ts.Diagnostics.Expression_expected;
+                case 8: return ts.Diagnostics.Variable_declaration_expected;
+                case 9: return ts.Diagnostics.Property_destructuring_pattern_expected;
+                case 10: return ts.Diagnostics.Array_element_destructuring_pattern_expected;
+                case 11: return ts.Diagnostics.Argument_expression_expected;
+                case 12: return ts.Diagnostics.Property_assignment_expected;
+                case 13: return ts.Diagnostics.Expression_or_comma_expected;
+                case 14: return ts.Diagnostics.Parameter_declaration_expected;
+                case 15: return ts.Diagnostics.Type_parameter_declaration_expected;
+                case 16: return ts.Diagnostics.Type_argument_expected;
+                case 17: return ts.Diagnostics.Type_expected;
+                case 18: return ts.Diagnostics.Unexpected_token_expected;
+                case 19: return ts.Diagnostics.Identifier_expected;
+                case 20: return ts.Diagnostics.Parameter_declaration_expected;
+                case 21: return ts.Diagnostics.Type_argument_expected;
+                case 23: return ts.Diagnostics.Type_expected;
+                case 22: return ts.Diagnostics.Property_assignment_expected;
             }
         }
         ;
@@ -6290,7 +6590,7 @@ var ts;
         function parseEntityName(allowReservedWords, diagnosticMessage) {
             var entity = parseIdentifier(diagnosticMessage);
             while (parseOptional(20)) {
-                var node = createNode(127, entity.pos);
+                var node = createNode(128, entity.pos);
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -6298,7 +6598,7 @@ var ts;
             return entity;
         }
         function parseRightSideOfDot(allowIdentifierNames) {
-            if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
+            if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
                 var matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
                 if (matchesPattern) {
                     return createMissingNode(65, true, ts.Diagnostics.Identifier_expected);
@@ -6307,7 +6607,7 @@ var ts;
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
         function parseTemplateExpression() {
-            var template = createNode(172);
+            var template = createNode(174);
             template.head = parseLiteralNode();
             ts.Debug.assert(template.head.kind === 11, "Template head has wrong token kind");
             var templateSpans = [];
@@ -6320,7 +6620,7 @@ var ts;
             return finishNode(template);
         }
         function parseTemplateSpan() {
-            var span = createNode(178);
+            var span = createNode(180);
             span.expression = allowInAnd(parseExpression);
             var literal;
             if (token === 15) {
@@ -6353,22 +6653,30 @@ var ts;
             }
             return node;
         }
-        function parseTypeReference() {
-            var node = createNode(142);
-            node.typeName = parseEntityName(false, ts.Diagnostics.Type_expected);
+        function parseTypeReferenceOrTypePredicate() {
+            var typeName = parseEntityName(false, ts.Diagnostics.Type_expected);
+            if (typeName.kind === 65 && token === 117 && !scanner.hasPrecedingLineBreak()) {
+                nextToken();
+                var node_1 = createNode(143, typeName.pos);
+                node_1.parameterName = typeName;
+                node_1.type = parseType();
+                return finishNode(node_1);
+            }
+            var node = createNode(144, typeName.pos);
+            node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === 24) {
-                node.typeArguments = parseBracketedList(17, parseType, 24, 25);
+                node.typeArguments = parseBracketedList(16, parseType, 24, 25);
             }
             return finishNode(node);
         }
         function parseTypeQuery() {
-            var node = createNode(145);
+            var node = createNode(147);
             parseExpected(97);
             node.exprName = parseEntityName(true);
             return finishNode(node);
         }
         function parseTypeParameter() {
-            var node = createNode(129);
+            var node = createNode(130);
             node.name = parseIdentifier();
             if (parseOptional(79)) {
                 if (isStartOfType() || !isStartOfExpression()) {
@@ -6382,7 +6690,7 @@ var ts;
         }
         function parseTypeParameters() {
             if (token === 24) {
-                return parseBracketedList(16, parseTypeParameter, 24, 25);
+                return parseBracketedList(15, parseTypeParameter, 24, 25);
             }
         }
         function parseParameterType() {
@@ -6403,7 +6711,7 @@ var ts;
             }
         }
         function parseParameter() {
-            var node = createNode(130);
+            var node = createNode(131);
             node.decorators = parseDecorators();
             setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(21);
@@ -6437,7 +6745,7 @@ var ts;
                 var savedGeneratorParameterContext = inGeneratorParameterContext();
                 setYieldContext(yieldAndGeneratorParameterContext);
                 setGeneratorParameterContext(yieldAndGeneratorParameterContext);
-                var result = parseDelimitedList(15, parseParameter);
+                var result = parseDelimitedList(14, parseParameter);
                 setYieldContext(savedYieldContext);
                 setGeneratorParameterContext(savedGeneratorParameterContext);
                 if (!parseExpected(17) && requireCompleteParameterList) {
@@ -6455,7 +6763,7 @@ var ts;
         }
         function parseSignatureMember(kind) {
             var node = createNode(kind);
-            if (kind === 140) {
+            if (kind === 141) {
                 parseExpected(88);
             }
             fillSignature(51, false, false, node);
@@ -6495,10 +6803,10 @@ var ts;
             return token === 51 || token === 23 || token === 19;
         }
         function parseIndexSignatureDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(141, fullStart);
+            var node = createNode(142, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.parameters = parseBracketedList(15, parseParameter, 18, 19);
+            node.parameters = parseBracketedList(14, parseParameter, 18, 19);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
             return finishNode(node);
@@ -6508,7 +6816,7 @@ var ts;
             var name = parsePropertyName();
             var questionToken = parseOptionalToken(50);
             if (token === 16 || token === 24) {
-                var method = createNode(134, fullStart);
+                var method = createNode(135, fullStart);
                 method.name = name;
                 method.questionToken = questionToken;
                 fillSignature(51, false, false, method);
@@ -6516,7 +6824,7 @@ var ts;
                 return finishNode(method);
             }
             else {
-                var property = createNode(132, fullStart);
+                var property = createNode(133, fullStart);
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
@@ -6558,14 +6866,14 @@ var ts;
             switch (token) {
                 case 16:
                 case 24:
-                    return parseSignatureMember(139);
+                    return parseSignatureMember(140);
                 case 18:
                     return isIndexSignature()
                         ? parseIndexSignatureDeclaration(scanner.getStartPos(), undefined, undefined)
                         : parsePropertyOrMethodSignature();
                 case 88:
                     if (lookAhead(isStartOfConstructSignature)) {
-                        return parseSignatureMember(140);
+                        return parseSignatureMember(141);
                     }
                 case 8:
                 case 7:
@@ -6595,14 +6903,14 @@ var ts;
             return token === 16 || token === 24;
         }
         function parseTypeLiteral() {
-            var node = createNode(146);
+            var node = createNode(148);
             node.members = parseObjectTypeMembers();
             return finishNode(node);
         }
         function parseObjectTypeMembers() {
             var members;
             if (parseExpected(14)) {
-                members = parseList(5, false, parseTypeMember);
+                members = parseList(4, parseTypeMember);
                 parseExpected(15);
             }
             else {
@@ -6611,12 +6919,12 @@ var ts;
             return members;
         }
         function parseTupleType() {
-            var node = createNode(148);
-            node.elementTypes = parseBracketedList(18, parseType, 18, 19);
+            var node = createNode(150);
+            node.elementTypes = parseBracketedList(17, parseType, 18, 19);
             return finishNode(node);
         }
         function parseParenthesizedType() {
-            var node = createNode(150);
+            var node = createNode(152);
             parseExpected(16);
             node.type = parseType();
             parseExpected(17);
@@ -6624,7 +6932,7 @@ var ts;
         }
         function parseFunctionOrConstructorType(kind) {
             var node = createNode(kind);
-            if (kind === 144) {
+            if (kind === 146) {
                 parseExpected(88);
             }
             fillSignature(32, false, false, node);
@@ -6637,12 +6945,12 @@ var ts;
         function parseNonArrayType() {
             switch (token) {
                 case 112:
-                case 122:
-                case 120:
-                case 113:
                 case 123:
+                case 121:
+                case 113:
+                case 124:
                     var node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReference();
+                    return node || parseTypeReferenceOrTypePredicate();
                 case 99:
                     return parseTokenNode();
                 case 97:
@@ -6654,16 +6962,16 @@ var ts;
                 case 16:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReference();
+                    return parseTypeReferenceOrTypePredicate();
             }
         }
         function isStartOfType() {
             switch (token) {
                 case 112:
-                case 122:
-                case 120:
-                case 113:
                 case 123:
+                case 121:
+                case 113:
+                case 124:
                 case 99:
                 case 97:
                 case 14:
@@ -6685,7 +6993,7 @@ var ts;
             var type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(18)) {
                 parseExpected(19);
-                var node = createNode(147, type.pos);
+                var node = createNode(149, type.pos);
                 node.elementType = type;
                 type = finishNode(node);
             }
@@ -6700,7 +7008,7 @@ var ts;
                     types.push(parseArrayTypeOrHigher());
                 }
                 types.end = getNodeEnd();
-                var node = createNode(149, type.pos);
+                var node = createNode(151, type.pos);
                 node.types = types;
                 type = finishNode(node);
             }
@@ -6745,10 +7053,10 @@ var ts;
         }
         function parseTypeWorker() {
             if (isStartOfFunctionType()) {
-                return parseFunctionOrConstructorType(143);
+                return parseFunctionOrConstructorType(145);
             }
             if (token === 88) {
-                return parseFunctionOrConstructorType(144);
+                return parseFunctionOrConstructorType(146);
             }
             return parseUnionTypeOrHigher();
         }
@@ -6869,10 +7177,7 @@ var ts;
                 if (inYieldContext()) {
                     return true;
                 }
-                if (inStrictModeContext()) {
-                    return true;
-                }
-                return lookAhead(nextTokenIsIdentifierOnSameLine);
+                return lookAhead(nextTokenIsIdentifierOrKeywordOrNumberOnSameLine);
             }
             return false;
         }
@@ -6881,7 +7186,7 @@ var ts;
             return !scanner.hasPrecedingLineBreak() && isIdentifier();
         }
         function parseYieldExpression() {
-            var node = createNode(173);
+            var node = createNode(175);
             nextToken();
             if (!scanner.hasPrecedingLineBreak() &&
                 (token === 35 || isStartOfExpression())) {
@@ -6895,8 +7200,8 @@ var ts;
         }
         function parseSimpleArrowFunctionExpression(identifier) {
             ts.Debug.assert(token === 32, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
-            var node = createNode(164, identifier.pos);
-            var parameter = createNode(130, identifier.pos);
+            var node = createNode(166, identifier.pos);
+            var parameter = createNode(131, identifier.pos);
             parameter.name = identifier;
             finishNode(parameter);
             node.parameters = [parameter];
@@ -6974,7 +7279,7 @@ var ts;
             return parseParenthesizedArrowFunctionExpressionHead(false);
         }
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity) {
-            var node = createNode(164);
+            var node = createNode(166);
             fillSignature(51, false, !allowAmbiguity, node);
             if (!node.parameters) {
                 return undefined;
@@ -7002,7 +7307,7 @@ var ts;
             if (!questionToken) {
                 return leftOperand;
             }
-            var node = createNode(171, leftOperand.pos);
+            var node = createNode(173, leftOperand.pos);
             node.condition = leftOperand;
             node.questionToken = questionToken;
             node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
@@ -7015,7 +7320,7 @@ var ts;
             return parseBinaryExpressionRest(precedence, leftOperand);
         }
         function isInOrOfKeyword(t) {
-            return t === 86 || t === 126;
+            return t === 86 || t === 127;
         }
         function parseBinaryExpressionRest(precedence, leftOperand) {
             while (true) {
@@ -7076,33 +7381,33 @@ var ts;
             return -1;
         }
         function makeBinaryExpression(left, operatorToken, right) {
-            var node = createNode(170, left.pos);
+            var node = createNode(172, left.pos);
             node.left = left;
             node.operatorToken = operatorToken;
             node.right = right;
             return finishNode(node);
         }
         function parsePrefixUnaryExpression() {
-            var node = createNode(168);
+            var node = createNode(170);
             node.operator = token;
             nextToken();
             node.operand = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
         function parseDeleteExpression() {
-            var node = createNode(165);
+            var node = createNode(167);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
         function parseTypeOfExpression() {
-            var node = createNode(166);
+            var node = createNode(168);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
         function parseVoidExpression() {
-            var node = createNode(167);
+            var node = createNode(169);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
@@ -7132,7 +7437,7 @@ var ts;
             var expression = parseLeftHandSideExpressionOrHigher();
             ts.Debug.assert(ts.isLeftHandSideExpression(expression));
             if ((token === 38 || token === 39) && !scanner.hasPrecedingLineBreak()) {
-                var node = createNode(169, expression.pos);
+                var node = createNode(171, expression.pos);
                 node.operand = expression;
                 node.operator = token;
                 nextToken();
@@ -7155,14 +7460,14 @@ var ts;
             if (token === 16 || token === 20) {
                 return expression;
             }
-            var node = createNode(156, expression.pos);
+            var node = createNode(158, expression.pos);
             node.expression = expression;
             node.dotToken = parseExpectedToken(20, false, ts.Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(true);
             return finishNode(node);
         }
         function parseTypeAssertion() {
-            var node = createNode(161);
+            var node = createNode(163);
             parseExpected(24);
             node.type = parseType();
             parseExpected(25);
@@ -7173,7 +7478,7 @@ var ts;
             while (true) {
                 var dotToken = parseOptionalToken(20);
                 if (dotToken) {
-                    var propertyAccess = createNode(156, expression.pos);
+                    var propertyAccess = createNode(158, expression.pos);
                     propertyAccess.expression = expression;
                     propertyAccess.dotToken = dotToken;
                     propertyAccess.name = parseRightSideOfDot(true);
@@ -7181,7 +7486,7 @@ var ts;
                     continue;
                 }
                 if (!inDecoratorContext() && parseOptional(18)) {
-                    var indexedAccess = createNode(157, expression.pos);
+                    var indexedAccess = createNode(159, expression.pos);
                     indexedAccess.expression = expression;
                     if (token !== 19) {
                         indexedAccess.argumentExpression = allowInAnd(parseExpression);
@@ -7195,7 +7500,7 @@ var ts;
                     continue;
                 }
                 if (token === 10 || token === 11) {
-                    var tagExpression = createNode(160, expression.pos);
+                    var tagExpression = createNode(162, expression.pos);
                     tagExpression.tag = expression;
                     tagExpression.template = token === 10
                         ? parseLiteralNode()
@@ -7214,7 +7519,7 @@ var ts;
                     if (!typeArguments) {
                         return expression;
                     }
-                    var callExpr = createNode(158, expression.pos);
+                    var callExpr = createNode(160, expression.pos);
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
@@ -7222,7 +7527,7 @@ var ts;
                     continue;
                 }
                 else if (token === 16) {
-                    var callExpr = createNode(158, expression.pos);
+                    var callExpr = createNode(160, expression.pos);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
                     expression = finishNode(callExpr);
@@ -7233,7 +7538,7 @@ var ts;
         }
         function parseArgumentList() {
             parseExpected(16);
-            var result = parseDelimitedList(12, parseArgumentExpression);
+            var result = parseDelimitedList(11, parseArgumentExpression);
             parseExpected(17);
             return result;
         }
@@ -7241,7 +7546,7 @@ var ts;
             if (!parseOptional(24)) {
                 return undefined;
             }
-            var typeArguments = parseDelimitedList(17, parseType);
+            var typeArguments = parseDelimitedList(16, parseType);
             if (!parseExpected(25)) {
                 return undefined;
             }
@@ -7312,41 +7617,41 @@ var ts;
             return parseIdentifier(ts.Diagnostics.Expression_expected);
         }
         function parseParenthesizedExpression() {
-            var node = createNode(162);
+            var node = createNode(164);
             parseExpected(16);
             node.expression = allowInAnd(parseExpression);
             parseExpected(17);
             return finishNode(node);
         }
         function parseSpreadElement() {
-            var node = createNode(174);
+            var node = createNode(176);
             parseExpected(21);
             node.expression = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
         function parseArgumentOrArrayLiteralElement() {
             return token === 21 ? parseSpreadElement() :
-                token === 23 ? createNode(176) :
+                token === 23 ? createNode(178) :
                     parseAssignmentExpressionOrHigher();
         }
         function parseArgumentExpression() {
             return doOutsideOfContext(disallowInAndDecoratorContext, parseArgumentOrArrayLiteralElement);
         }
         function parseArrayLiteralExpression() {
-            var node = createNode(154);
+            var node = createNode(156);
             parseExpected(18);
             if (scanner.hasPrecedingLineBreak())
                 node.flags |= 512;
-            node.elements = parseDelimitedList(14, parseArgumentOrArrayLiteralElement);
+            node.elements = parseDelimitedList(13, parseArgumentOrArrayLiteralElement);
             parseExpected(19);
             return finishNode(node);
         }
         function tryParseAccessorDeclaration(fullStart, decorators, modifiers) {
             if (parseContextualModifier(116)) {
-                return parseAccessorDeclaration(137, fullStart, decorators, modifiers);
-            }
-            else if (parseContextualModifier(121)) {
                 return parseAccessorDeclaration(138, fullStart, decorators, modifiers);
+            }
+            else if (parseContextualModifier(122)) {
+                return parseAccessorDeclaration(139, fullStart, decorators, modifiers);
             }
             return undefined;
         }
@@ -7367,13 +7672,13 @@ var ts;
                 return parseMethodDeclaration(fullStart, decorators, modifiers, asteriskToken, propertyName, questionToken);
             }
             if ((token === 23 || token === 15) && tokenIsIdentifier) {
-                var shorthandDeclaration = createNode(226, fullStart);
+                var shorthandDeclaration = createNode(228, fullStart);
                 shorthandDeclaration.name = propertyName;
                 shorthandDeclaration.questionToken = questionToken;
                 return finishNode(shorthandDeclaration);
             }
             else {
-                var propertyAssignment = createNode(225, fullStart);
+                var propertyAssignment = createNode(227, fullStart);
                 propertyAssignment.name = propertyName;
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(51);
@@ -7382,12 +7687,12 @@ var ts;
             }
         }
         function parseObjectLiteralExpression() {
-            var node = createNode(155);
+            var node = createNode(157);
             parseExpected(14);
             if (scanner.hasPrecedingLineBreak()) {
                 node.flags |= 512;
             }
-            node.properties = parseDelimitedList(13, parseObjectLiteralElement, true);
+            node.properties = parseDelimitedList(12, parseObjectLiteralElement, true);
             parseExpected(15);
             return finishNode(node);
         }
@@ -7396,7 +7701,7 @@ var ts;
             if (saveDecoratorContext) {
                 setDecoratorContext(false);
             }
-            var node = createNode(163);
+            var node = createNode(165);
             parseExpected(83);
             node.asteriskToken = parseOptionalToken(35);
             node.name = node.asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
@@ -7411,7 +7716,7 @@ var ts;
             return isIdentifier() ? parseIdentifier() : undefined;
         }
         function parseNewExpression() {
-            var node = createNode(159);
+            var node = createNode(161);
             parseExpected(88);
             node.expression = parseMemberExpressionOrHigher();
             node.typeArguments = tryParse(parseTypeArgumentsInExpression);
@@ -7420,10 +7725,10 @@ var ts;
             }
             return finishNode(node);
         }
-        function parseBlock(ignoreMissingOpenBrace, checkForStrictMode, diagnosticMessage) {
-            var node = createNode(180);
+        function parseBlock(ignoreMissingOpenBrace, diagnosticMessage) {
+            var node = createNode(182);
             if (parseExpected(14, diagnosticMessage) || ignoreMissingOpenBrace) {
-                node.statements = parseList(2, checkForStrictMode, parseStatement);
+                node.statements = parseList(1, parseStatement);
                 parseExpected(15);
             }
             else {
@@ -7438,7 +7743,7 @@ var ts;
             if (saveDecoratorContext) {
                 setDecoratorContext(false);
             }
-            var block = parseBlock(ignoreMissingOpenBrace, true, diagnosticMessage);
+            var block = parseBlock(ignoreMissingOpenBrace, diagnosticMessage);
             if (saveDecoratorContext) {
                 setDecoratorContext(true);
             }
@@ -7446,12 +7751,12 @@ var ts;
             return block;
         }
         function parseEmptyStatement() {
-            var node = createNode(182);
+            var node = createNode(184);
             parseExpected(22);
             return finishNode(node);
         }
         function parseIfStatement() {
-            var node = createNode(184);
+            var node = createNode(186);
             parseExpected(84);
             parseExpected(16);
             node.expression = allowInAnd(parseExpression);
@@ -7461,7 +7766,7 @@ var ts;
             return finishNode(node);
         }
         function parseDoStatement() {
-            var node = createNode(185);
+            var node = createNode(187);
             parseExpected(75);
             node.statement = parseStatement();
             parseExpected(100);
@@ -7472,7 +7777,7 @@ var ts;
             return finishNode(node);
         }
         function parseWhileStatement() {
-            var node = createNode(186);
+            var node = createNode(188);
             parseExpected(100);
             parseExpected(16);
             node.expression = allowInAnd(parseExpression);
@@ -7495,21 +7800,21 @@ var ts;
             }
             var forOrForInOrForOfStatement;
             if (parseOptional(86)) {
-                var forInStatement = createNode(188, pos);
+                var forInStatement = createNode(190, pos);
                 forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(17);
                 forOrForInOrForOfStatement = forInStatement;
             }
-            else if (parseOptional(126)) {
-                var forOfStatement = createNode(189, pos);
+            else if (parseOptional(127)) {
+                var forOfStatement = createNode(191, pos);
                 forOfStatement.initializer = initializer;
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(17);
                 forOrForInOrForOfStatement = forOfStatement;
             }
             else {
-                var forStatement = createNode(187, pos);
+                var forStatement = createNode(189, pos);
                 forStatement.initializer = initializer;
                 parseExpected(22);
                 if (token !== 22 && token !== 17) {
@@ -7527,7 +7832,7 @@ var ts;
         }
         function parseBreakOrContinueStatement(kind) {
             var node = createNode(kind);
-            parseExpected(kind === 191 ? 66 : 71);
+            parseExpected(kind === 193 ? 66 : 71);
             if (!canParseSemicolon()) {
                 node.label = parseIdentifier();
             }
@@ -7535,7 +7840,7 @@ var ts;
             return finishNode(node);
         }
         function parseReturnStatement() {
-            var node = createNode(192);
+            var node = createNode(194);
             parseExpected(90);
             if (!canParseSemicolon()) {
                 node.expression = allowInAnd(parseExpression);
@@ -7544,7 +7849,7 @@ var ts;
             return finishNode(node);
         }
         function parseWithStatement() {
-            var node = createNode(193);
+            var node = createNode(195);
             parseExpected(101);
             parseExpected(16);
             node.expression = allowInAnd(parseExpression);
@@ -7553,32 +7858,32 @@ var ts;
             return finishNode(node);
         }
         function parseCaseClause() {
-            var node = createNode(221);
+            var node = createNode(223);
             parseExpected(67);
             node.expression = allowInAnd(parseExpression);
             parseExpected(51);
-            node.statements = parseList(4, false, parseStatement);
+            node.statements = parseList(3, parseStatement);
             return finishNode(node);
         }
         function parseDefaultClause() {
-            var node = createNode(222);
+            var node = createNode(224);
             parseExpected(73);
             parseExpected(51);
-            node.statements = parseList(4, false, parseStatement);
+            node.statements = parseList(3, parseStatement);
             return finishNode(node);
         }
         function parseCaseOrDefaultClause() {
             return token === 67 ? parseCaseClause() : parseDefaultClause();
         }
         function parseSwitchStatement() {
-            var node = createNode(194);
+            var node = createNode(196);
             parseExpected(92);
             parseExpected(16);
             node.expression = allowInAnd(parseExpression);
             parseExpected(17);
-            var caseBlock = createNode(208, scanner.getStartPos());
+            var caseBlock = createNode(210, scanner.getStartPos());
             parseExpected(14);
-            caseBlock.clauses = parseList(3, false, parseCaseOrDefaultClause);
+            caseBlock.clauses = parseList(2, parseCaseOrDefaultClause);
             parseExpected(15);
             node.caseBlock = finishNode(caseBlock);
             return finishNode(node);
@@ -7586,35 +7891,35 @@ var ts;
         function parseThrowStatement() {
             // ThrowStatement[Yield] :
             //      throw [no LineTerminator here]Expression[In, ?Yield];
-            var node = createNode(196);
+            var node = createNode(198);
             parseExpected(94);
             node.expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
             return finishNode(node);
         }
         function parseTryStatement() {
-            var node = createNode(197);
+            var node = createNode(199);
             parseExpected(96);
-            node.tryBlock = parseBlock(false, false);
+            node.tryBlock = parseBlock(false);
             node.catchClause = token === 68 ? parseCatchClause() : undefined;
             if (!node.catchClause || token === 81) {
                 parseExpected(81);
-                node.finallyBlock = parseBlock(false, false);
+                node.finallyBlock = parseBlock(false);
             }
             return finishNode(node);
         }
         function parseCatchClause() {
-            var result = createNode(224);
+            var result = createNode(226);
             parseExpected(68);
             if (parseExpected(16)) {
                 result.variableDeclaration = parseVariableDeclaration();
             }
             parseExpected(17);
-            result.block = parseBlock(false, false);
+            result.block = parseBlock(false);
             return finishNode(result);
         }
         function parseDebuggerStatement() {
-            var node = createNode(198);
+            var node = createNode(200);
             parseExpected(72);
             parseSemicolon();
             return finishNode(node);
@@ -7623,13 +7928,13 @@ var ts;
             var fullStart = scanner.getStartPos();
             var expression = allowInAnd(parseExpression);
             if (expression.kind === 65 && parseOptional(51)) {
-                var labeledStatement = createNode(195, fullStart);
+                var labeledStatement = createNode(197, fullStart);
                 labeledStatement.label = expression;
                 labeledStatement.statement = parseStatement();
                 return finishNode(labeledStatement);
             }
             else {
-                var expressionStatement = createNode(183, fullStart);
+                var expressionStatement = createNode(185, fullStart);
                 expressionStatement.expression = expression;
                 parseSemicolon();
                 return finishNode(expressionStatement);
@@ -7642,7 +7947,11 @@ var ts;
             nextToken();
             return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
         }
-        function parseDeclarationFlags() {
+        function nextTokenIsIdentifierOrKeywordOrNumberOnSameLine() {
+            nextToken();
+            return (isIdentifierOrKeyword() || token === 7) && !scanner.hasPrecedingLineBreak();
+        }
+        function isDeclaration() {
             while (true) {
                 switch (token) {
                     case 98:
@@ -7651,28 +7960,30 @@ var ts;
                     case 83:
                     case 69:
                     case 77:
-                        return 1;
+                        return true;
                     case 103:
-                    case 124:
-                        nextToken();
-                        return isIdentifierOrKeyword() ? 1 : 0;
-                    case 117:
+                    case 125:
+                        return nextTokenIsIdentifierOnSameLine();
                     case 118:
+                    case 119:
+                        return nextTokenIsIdentifierOrStringLiteralOnSameLine();
+                    case 115:
                         nextToken();
-                        return isIdentifierOrKeyword() || token === 8 ? 2 : 0;
+                        if (scanner.hasPrecedingLineBreak()) {
+                            return false;
+                        }
+                        continue;
                     case 85:
                         nextToken();
                         return token === 8 || token === 35 ||
-                            token === 14 || isIdentifierOrKeyword() ?
-                            2 : 0;
+                            token === 14 || isIdentifierOrKeyword();
                     case 78:
                         nextToken();
                         if (token === 53 || token === 35 ||
                             token === 14 || token === 73) {
-                            return 2;
+                            return true;
                         }
                         continue;
-                    case 115:
                     case 108:
                     case 106:
                     case 107:
@@ -7680,14 +7991,14 @@ var ts;
                         nextToken();
                         continue;
                     default:
-                        return 0;
+                        return false;
                 }
             }
         }
-        function getDeclarationFlags() {
-            return lookAhead(parseDeclarationFlags);
+        function isStartOfDeclaration() {
+            return lookAhead(isDeclaration);
         }
-        function getStatementFlags() {
+        function isStartOfStatement() {
             switch (token) {
                 case 52:
                 case 22:
@@ -7711,56 +8022,39 @@ var ts;
                 case 72:
                 case 68:
                 case 81:
-                    return 1;
+                    return true;
                 case 70:
                 case 78:
                 case 85:
-                    return getDeclarationFlags();
+                    return isStartOfDeclaration();
                 case 115:
                 case 103:
-                case 117:
                 case 118:
-                case 124:
-                    return getDeclarationFlags() || 1;
+                case 119:
+                case 125:
+                    return true;
                 case 108:
                 case 106:
                 case 107:
                 case 109:
-                    return getDeclarationFlags() ||
-                        (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? 0 : 1);
+                    return isStartOfDeclaration() || !lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
                 default:
-                    return isStartOfExpression() ? 1 : 0;
+                    return isStartOfExpression();
             }
         }
-        function isStartOfStatement() {
-            return (getStatementFlags() & 1) !== 0;
-        }
-        function isStartOfModuleElement() {
-            return (getStatementFlags() & 3) !== 0;
-        }
-        function nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine() {
+        function nextTokenIsIdentifierOrStartOfDestructuring() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() &&
-                (isIdentifier() || token === 14 || token === 18);
+            return isIdentifier() || token === 14 || token === 18;
         }
         function isLetDeclaration() {
-            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
+            return lookAhead(nextTokenIsIdentifierOrStartOfDestructuring);
         }
         function parseStatement() {
-            return parseModuleElementOfKind(1);
-        }
-        function parseModuleElement() {
-            return parseModuleElementOfKind(3);
-        }
-        function parseSourceElement() {
-            return parseModuleElementOfKind(3);
-        }
-        function parseModuleElementOfKind(flags) {
             switch (token) {
                 case 22:
                     return parseEmptyStatement();
                 case 14:
-                    return parseBlock(false, false);
+                    return parseBlock(false);
                 case 98:
                     return parseVariableStatement(scanner.getStartPos(), undefined, undefined);
                 case 104:
@@ -7781,9 +8075,9 @@ var ts;
                 case 82:
                     return parseForOrForInOrForOfStatement();
                 case 71:
-                    return parseBreakOrContinueStatement(190);
+                    return parseBreakOrContinueStatement(192);
                 case 66:
-                    return parseBreakOrContinueStatement(191);
+                    return parseBreakOrContinueStatement(193);
                 case 90:
                     return parseReturnStatement();
                 case 101:
@@ -7800,20 +8094,20 @@ var ts;
                     return parseDebuggerStatement();
                 case 52:
                     return parseDeclaration();
-                case 70:
+                case 103:
+                case 125:
+                case 118:
+                case 119:
                 case 115:
+                case 70:
                 case 77:
                 case 78:
                 case 85:
-                case 103:
-                case 117:
-                case 118:
                 case 106:
                 case 107:
                 case 108:
                 case 109:
-                case 124:
-                    if (getDeclarationFlags() & flags) {
+                    if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }
                     break;
@@ -7835,12 +8129,12 @@ var ts;
                     return parseClassDeclaration(fullStart, decorators, modifiers);
                 case 103:
                     return parseInterfaceDeclaration(fullStart, decorators, modifiers);
-                case 124:
+                case 125:
                     return parseTypeAliasDeclaration(fullStart, decorators, modifiers);
                 case 77:
                     return parseEnumDeclaration(fullStart, decorators, modifiers);
-                case 117:
                 case 118:
+                case 119:
                     return parseModuleDeclaration(fullStart, decorators, modifiers);
                 case 85:
                     return parseImportDeclarationOrImportEqualsDeclaration(fullStart, decorators, modifiers);
@@ -7850,14 +8144,18 @@ var ts;
                         parseExportAssignment(fullStart, decorators, modifiers) :
                         parseExportDeclaration(fullStart, decorators, modifiers);
                 default:
-                    if (decorators) {
-                        var node = createMissingNode(219, true, ts.Diagnostics.Declaration_expected);
+                    if (decorators || modifiers) {
+                        var node = createMissingNode(221, true, ts.Diagnostics.Declaration_expected);
                         node.pos = fullStart;
                         node.decorators = decorators;
                         setModifiers(node, modifiers);
                         return finishNode(node);
                     }
             }
+        }
+        function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token === 8);
         }
         function parseFunctionBlockOrSemicolon(isGenerator, diagnosticMessage) {
             if (token !== 14 && canParseSemicolon()) {
@@ -7868,16 +8166,16 @@ var ts;
         }
         function parseArrayBindingElement() {
             if (token === 23) {
-                return createNode(176);
+                return createNode(178);
             }
-            var node = createNode(153);
+            var node = createNode(155);
             node.dotDotDotToken = parseOptionalToken(21);
             node.name = parseIdentifierOrPattern();
             node.initializer = parseInitializer(false);
             return finishNode(node);
         }
         function parseObjectBindingElement() {
-            var node = createNode(153);
+            var node = createNode(155);
             var tokenIsIdentifier = isIdentifier();
             var propertyName = parsePropertyName();
             if (tokenIsIdentifier && token !== 51) {
@@ -7892,16 +8190,16 @@ var ts;
             return finishNode(node);
         }
         function parseObjectBindingPattern() {
-            var node = createNode(151);
+            var node = createNode(153);
             parseExpected(14);
-            node.elements = parseDelimitedList(10, parseObjectBindingElement);
+            node.elements = parseDelimitedList(9, parseObjectBindingElement);
             parseExpected(15);
             return finishNode(node);
         }
         function parseArrayBindingPattern() {
-            var node = createNode(152);
+            var node = createNode(154);
             parseExpected(18);
-            node.elements = parseDelimitedList(11, parseArrayBindingElement);
+            node.elements = parseDelimitedList(10, parseArrayBindingElement);
             parseExpected(19);
             return finishNode(node);
         }
@@ -7918,7 +8216,7 @@ var ts;
             return parseIdentifier();
         }
         function parseVariableDeclaration() {
-            var node = createNode(199);
+            var node = createNode(201);
             node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
             if (!isInOrOfKeyword(token)) {
@@ -7927,7 +8225,7 @@ var ts;
             return finishNode(node);
         }
         function parseVariableDeclarationList(inForStatementInitializer) {
-            var node = createNode(200);
+            var node = createNode(202);
             switch (token) {
                 case 98:
                     break;
@@ -7941,13 +8239,13 @@ var ts;
                     ts.Debug.fail();
             }
             nextToken();
-            if (token === 126 && lookAhead(canFollowContextualOfKeyword)) {
+            if (token === 127 && lookAhead(canFollowContextualOfKeyword)) {
                 node.declarations = createMissingList();
             }
             else {
                 var savedDisallowIn = inDisallowInContext();
                 setDisallowInContext(inForStatementInitializer);
-                node.declarations = parseDelimitedList(9, parseVariableDeclaration);
+                node.declarations = parseDelimitedList(8, parseVariableDeclaration);
                 setDisallowInContext(savedDisallowIn);
             }
             return finishNode(node);
@@ -7956,7 +8254,7 @@ var ts;
             return nextTokenIsIdentifier() && nextToken() === 17;
         }
         function parseVariableStatement(fullStart, decorators, modifiers) {
-            var node = createNode(181, fullStart);
+            var node = createNode(183, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             node.declarationList = parseVariableDeclarationList(false);
@@ -7964,7 +8262,7 @@ var ts;
             return finishNode(node);
         }
         function parseFunctionDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(201, fullStart);
+            var node = createNode(203, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(83);
@@ -7975,7 +8273,7 @@ var ts;
             return finishNode(node);
         }
         function parseConstructorDeclaration(pos, decorators, modifiers) {
-            var node = createNode(136, pos);
+            var node = createNode(137, pos);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(114);
@@ -7984,7 +8282,7 @@ var ts;
             return finishNode(node);
         }
         function parseMethodDeclaration(fullStart, decorators, modifiers, asteriskToken, name, questionToken, diagnosticMessage) {
-            var method = createNode(135, fullStart);
+            var method = createNode(136, fullStart);
             method.decorators = decorators;
             setModifiers(method, modifiers);
             method.asteriskToken = asteriskToken;
@@ -7995,7 +8293,7 @@ var ts;
             return finishNode(method);
         }
         function parsePropertyDeclaration(fullStart, decorators, modifiers, name, questionToken) {
-            var property = createNode(133, fullStart);
+            var property = createNode(134, fullStart);
             property.decorators = decorators;
             setModifiers(property, modifiers);
             property.name = name;
@@ -8064,7 +8362,7 @@ var ts;
                 return true;
             }
             if (idToken !== undefined) {
-                if (!ts.isKeyword(idToken) || idToken === 121 || idToken === 116) {
+                if (!ts.isKeyword(idToken) || idToken === 122 || idToken === 116) {
                     return true;
                 }
                 switch (token) {
@@ -8091,7 +8389,7 @@ var ts;
                     decorators = [];
                     decorators.pos = scanner.getStartPos();
                 }
-                var decorator = createNode(131, decoratorStart);
+                var decorator = createNode(132, decoratorStart);
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
                 decorators.push(finishNode(decorator));
             }
@@ -8124,7 +8422,7 @@ var ts;
         }
         function parseClassElement() {
             if (token === 22) {
-                var result = createNode(179);
+                var result = createNode(181);
                 nextToken();
                 return finishNode(result);
             }
@@ -8148,21 +8446,19 @@ var ts;
                 token === 18) {
                 return parsePropertyOrMethodDeclaration(fullStart, decorators, modifiers);
             }
-            if (decorators) {
-                var name_5 = createMissingNode(65, true, ts.Diagnostics.Declaration_expected);
-                return parsePropertyDeclaration(fullStart, decorators, modifiers, name_5, undefined);
+            if (decorators || modifiers) {
+                var name_6 = createMissingNode(65, true, ts.Diagnostics.Declaration_expected);
+                return parsePropertyDeclaration(fullStart, decorators, modifiers, name_6, undefined);
             }
             ts.Debug.fail("Should not have attempted to parse class member declaration.");
         }
         function parseClassExpression() {
-            return parseClassDeclarationOrExpression(scanner.getStartPos(), undefined, undefined, 175);
+            return parseClassDeclarationOrExpression(scanner.getStartPos(), undefined, undefined, 177);
         }
         function parseClassDeclaration(fullStart, decorators, modifiers) {
-            return parseClassDeclarationOrExpression(fullStart, decorators, modifiers, 202);
+            return parseClassDeclarationOrExpression(fullStart, decorators, modifiers, 204);
         }
         function parseClassDeclarationOrExpression(fullStart, decorators, modifiers, kind) {
-            var savedStrictModeContext = inStrictModeContext();
-            setStrictModeContext(true);
             var node = createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
@@ -8179,9 +8475,7 @@ var ts;
             else {
                 node.members = createMissingList();
             }
-            var finishedNode = finishNode(node);
-            setStrictModeContext(savedStrictModeContext);
-            return finishedNode;
+            return finishNode(node);
         }
         function parseHeritageClauses(isClassHeritageClause) {
             // ClassTail[Yield,GeneratorParameter] : See 14.5
@@ -8195,23 +8489,23 @@ var ts;
             return undefined;
         }
         function parseHeritageClausesWorker() {
-            return parseList(19, false, parseHeritageClause);
+            return parseList(18, parseHeritageClause);
         }
         function parseHeritageClause() {
             if (token === 79 || token === 102) {
-                var node = createNode(223);
+                var node = createNode(225);
                 node.token = token;
                 nextToken();
-                node.types = parseDelimitedList(8, parseExpressionWithTypeArguments);
+                node.types = parseDelimitedList(7, parseExpressionWithTypeArguments);
                 return finishNode(node);
             }
             return undefined;
         }
         function parseExpressionWithTypeArguments() {
-            var node = createNode(177);
+            var node = createNode(179);
             node.expression = parseLeftHandSideExpressionOrHigher();
             if (token === 24) {
-                node.typeArguments = parseBracketedList(17, parseType, 24, 25);
+                node.typeArguments = parseBracketedList(16, parseType, 24, 25);
             }
             return finishNode(node);
         }
@@ -8219,10 +8513,10 @@ var ts;
             return token === 79 || token === 102;
         }
         function parseClassMembers() {
-            return parseList(6, false, parseClassElement);
+            return parseList(5, parseClassElement);
         }
         function parseInterfaceDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(203, fullStart);
+            var node = createNode(205, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(103);
@@ -8233,30 +8527,31 @@ var ts;
             return finishNode(node);
         }
         function parseTypeAliasDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(204, fullStart);
+            var node = createNode(206, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            parseExpected(124);
+            parseExpected(125);
             node.name = parseIdentifier();
+            node.typeParameters = parseTypeParameters();
             parseExpected(53);
             node.type = parseType();
             parseSemicolon();
             return finishNode(node);
         }
         function parseEnumMember() {
-            var node = createNode(227, scanner.getStartPos());
+            var node = createNode(229, scanner.getStartPos());
             node.name = parsePropertyName();
             node.initializer = allowInAnd(parseNonParameterInitializer);
             return finishNode(node);
         }
         function parseEnumDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(205, fullStart);
+            var node = createNode(207, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(77);
             node.name = parseIdentifier();
             if (parseExpected(14)) {
-                node.members = parseDelimitedList(7, parseEnumMember);
+                node.members = parseDelimitedList(6, parseEnumMember);
                 parseExpected(15);
             }
             else {
@@ -8265,9 +8560,9 @@ var ts;
             return finishNode(node);
         }
         function parseModuleBlock() {
-            var node = createNode(207, scanner.getStartPos());
+            var node = createNode(209, scanner.getStartPos());
             if (parseExpected(14)) {
-                node.statements = parseList(1, false, parseModuleElement);
+                node.statements = parseList(1, parseStatement);
                 parseExpected(15);
             }
             else {
@@ -8276,7 +8571,7 @@ var ts;
             return finishNode(node);
         }
         function parseModuleOrNamespaceDeclaration(fullStart, decorators, modifiers, flags) {
-            var node = createNode(206, fullStart);
+            var node = createNode(208, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             node.flags |= flags;
@@ -8287,7 +8582,7 @@ var ts;
             return finishNode(node);
         }
         function parseAmbientExternalModuleDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(206, fullStart);
+            var node = createNode(208, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             node.name = parseLiteralNode(true);
@@ -8296,11 +8591,11 @@ var ts;
         }
         function parseModuleDeclaration(fullStart, decorators, modifiers) {
             var flags = modifiers ? modifiers.flags : 0;
-            if (parseOptional(118)) {
+            if (parseOptional(119)) {
                 flags |= 32768;
             }
             else {
-                parseExpected(117);
+                parseExpected(118);
                 if (token === 8) {
                     return parseAmbientExternalModuleDeclaration(fullStart, decorators, modifiers);
                 }
@@ -8308,7 +8603,7 @@ var ts;
             return parseModuleOrNamespaceDeclaration(fullStart, decorators, modifiers, flags);
         }
         function isExternalModuleReference() {
-            return token === 119 &&
+            return token === 120 &&
                 lookAhead(nextTokenIsOpenParen);
         }
         function nextTokenIsOpenParen() {
@@ -8317,7 +8612,7 @@ var ts;
         function nextTokenIsCommaOrFromKeyword() {
             nextToken();
             return token === 23 ||
-                token === 125;
+                token === 126;
         }
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart, decorators, modifiers) {
             parseExpected(85);
@@ -8325,8 +8620,8 @@ var ts;
             var identifier;
             if (isIdentifier()) {
                 identifier = parseIdentifier();
-                if (token !== 23 && token !== 125) {
-                    var importEqualsDeclaration = createNode(209, fullStart);
+                if (token !== 23 && token !== 126) {
+                    var importEqualsDeclaration = createNode(211, fullStart);
                     importEqualsDeclaration.decorators = decorators;
                     setModifiers(importEqualsDeclaration, modifiers);
                     importEqualsDeclaration.name = identifier;
@@ -8336,14 +8631,14 @@ var ts;
                     return finishNode(importEqualsDeclaration);
                 }
             }
-            var importDeclaration = createNode(210, fullStart);
+            var importDeclaration = createNode(212, fullStart);
             importDeclaration.decorators = decorators;
             setModifiers(importDeclaration, modifiers);
             if (identifier ||
                 token === 35 ||
                 token === 14) {
                 importDeclaration.importClause = parseImportClause(identifier, afterImportPos);
-                parseExpected(125);
+                parseExpected(126);
             }
             importDeclaration.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
@@ -8356,13 +8651,13 @@ var ts;
             //  NamedImports
             //  ImportedDefaultBinding, NameSpaceImport
             //  ImportedDefaultBinding, NamedImports
-            var importClause = createNode(211, fullStart);
+            var importClause = createNode(213, fullStart);
             if (identifier) {
                 importClause.name = identifier;
             }
             if (!importClause.name ||
                 parseOptional(23)) {
-                importClause.namedBindings = token === 35 ? parseNamespaceImport() : parseNamedImportsOrExports(213);
+                importClause.namedBindings = token === 35 ? parseNamespaceImport() : parseNamedImportsOrExports(215);
             }
             return finishNode(importClause);
         }
@@ -8372,8 +8667,8 @@ var ts;
                 : parseEntityName(false);
         }
         function parseExternalModuleReference() {
-            var node = createNode(220);
-            parseExpected(119);
+            var node = createNode(222);
+            parseExpected(120);
             parseExpected(16);
             node.expression = parseModuleSpecifier();
             parseExpected(17);
@@ -8387,7 +8682,7 @@ var ts;
             return result;
         }
         function parseNamespaceImport() {
-            var namespaceImport = createNode(212);
+            var namespaceImport = createNode(214);
             parseExpected(35);
             parseExpected(111);
             namespaceImport.name = parseIdentifier();
@@ -8395,14 +8690,14 @@ var ts;
         }
         function parseNamedImportsOrExports(kind) {
             var node = createNode(kind);
-            node.elements = parseBracketedList(20, kind === 213 ? parseImportSpecifier : parseExportSpecifier, 14, 15);
+            node.elements = parseBracketedList(19, kind === 215 ? parseImportSpecifier : parseExportSpecifier, 14, 15);
             return finishNode(node);
         }
         function parseExportSpecifier() {
-            return parseImportOrExportSpecifier(218);
+            return parseImportOrExportSpecifier(220);
         }
         function parseImportSpecifier() {
-            return parseImportOrExportSpecifier(214);
+            return parseImportOrExportSpecifier(216);
         }
         function parseImportOrExportSpecifier(kind) {
             var node = createNode(kind);
@@ -8421,22 +8716,22 @@ var ts;
             else {
                 node.name = identifierName;
             }
-            if (kind === 214 && checkIdentifierIsKeyword) {
+            if (kind === 216 && checkIdentifierIsKeyword) {
                 parseErrorAtPosition(checkIdentifierStart, checkIdentifierEnd - checkIdentifierStart, ts.Diagnostics.Identifier_expected);
             }
             return finishNode(node);
         }
         function parseExportDeclaration(fullStart, decorators, modifiers) {
-            var node = createNode(216, fullStart);
+            var node = createNode(218, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             if (parseOptional(35)) {
-                parseExpected(125);
+                parseExpected(126);
                 node.moduleSpecifier = parseModuleSpecifier();
             }
             else {
-                node.exportClause = parseNamedImportsOrExports(217);
-                if (parseOptional(125)) {
+                node.exportClause = parseNamedImportsOrExports(219);
+                if (parseOptional(126)) {
                     node.moduleSpecifier = parseModuleSpecifier();
                 }
             }
@@ -8444,7 +8739,7 @@ var ts;
             return finishNode(node);
         }
         function parseExportAssignment(fullStart, decorators, modifiers) {
-            var node = createNode(215, fullStart);
+            var node = createNode(217, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             if (parseOptional(53)) {
@@ -8509,15 +8804,15 @@ var ts;
             }
             sourceFile.referencedFiles = referencedFiles;
             sourceFile.amdDependencies = amdDependencies;
-            sourceFile.amdModuleName = amdModuleName;
+            sourceFile.moduleName = amdModuleName;
         }
         function setExternalModuleIndicator(sourceFile) {
             sourceFile.externalModuleIndicator = ts.forEach(sourceFile.statements, function (node) {
                 return node.flags & 1
-                    || node.kind === 209 && node.moduleReference.kind === 220
-                    || node.kind === 210
-                    || node.kind === 215
-                    || node.kind === 216
+                    || node.kind === 211 && node.moduleReference.kind === 222
+                    || node.kind === 212
+                    || node.kind === 217
+                    || node.kind === 218
                     ? node
                     : undefined;
             });
@@ -8552,7 +8847,7 @@ var ts;
             function parseJSDocTypeExpression(start, length) {
                 scanner.setText(sourceText, start, length);
                 token = nextToken();
-                var result = createNode(229);
+                var result = createNode(231);
                 parseExpected(14);
                 result.type = parseJSDocTopLevelType();
                 parseExpected(15);
@@ -8563,12 +8858,12 @@ var ts;
             function parseJSDocTopLevelType() {
                 var type = parseJSDocType();
                 if (token === 44) {
-                    var unionType = createNode(233, type.pos);
+                    var unionType = createNode(235, type.pos);
                     unionType.types = parseJSDocTypeList(type);
                     type = finishNode(unionType);
                 }
                 if (token === 53) {
-                    var optionalType = createNode(240, type.pos);
+                    var optionalType = createNode(242, type.pos);
                     nextToken();
                     optionalType.type = type;
                     type = finishNode(optionalType);
@@ -8579,20 +8874,20 @@ var ts;
                 var type = parseBasicTypeExpression();
                 while (true) {
                     if (token === 18) {
-                        var arrayType = createNode(232, type.pos);
+                        var arrayType = createNode(234, type.pos);
                         arrayType.elementType = type;
                         nextToken();
                         parseExpected(19);
                         type = finishNode(arrayType);
                     }
                     else if (token === 50) {
-                        var nullableType = createNode(235, type.pos);
+                        var nullableType = createNode(237, type.pos);
                         nullableType.type = type;
                         nextToken();
                         type = finishNode(nullableType);
                     }
                     else if (token === 46) {
-                        var nonNullableType = createNode(236, type.pos);
+                        var nonNullableType = createNode(238, type.pos);
                         nonNullableType.type = type;
                         nextToken();
                         type = finishNode(nonNullableType);
@@ -8626,40 +8921,40 @@ var ts;
                     case 93:
                         return parseJSDocThisType();
                     case 112:
-                    case 122:
-                    case 120:
-                    case 113:
                     case 123:
+                    case 121:
+                    case 113:
+                    case 124:
                     case 99:
                         return parseTokenNode();
                 }
                 return parseJSDocTypeReference();
             }
             function parseJSDocThisType() {
-                var result = createNode(244);
+                var result = createNode(246);
                 nextToken();
                 parseExpected(51);
                 result.type = parseJSDocType();
                 return finishNode(result);
             }
             function parseJSDocConstructorType() {
-                var result = createNode(243);
+                var result = createNode(245);
                 nextToken();
                 parseExpected(51);
                 result.type = parseJSDocType();
                 return finishNode(result);
             }
             function parseJSDocVariadicType() {
-                var result = createNode(242);
+                var result = createNode(244);
                 nextToken();
                 result.type = parseJSDocType();
                 return finishNode(result);
             }
             function parseJSDocFunctionType() {
-                var result = createNode(241);
+                var result = createNode(243);
                 nextToken();
                 parseExpected(16);
-                result.parameters = parseDelimitedList(21, parseJSDocParameter);
+                result.parameters = parseDelimitedList(20, parseJSDocParameter);
                 checkForTrailingComma(result.parameters);
                 parseExpected(17);
                 if (token === 51) {
@@ -8669,18 +8964,18 @@ var ts;
                 return finishNode(result);
             }
             function parseJSDocParameter() {
-                var parameter = createNode(130);
+                var parameter = createNode(131);
                 parameter.type = parseJSDocType();
                 return finishNode(parameter);
             }
             function parseJSDocOptionalType(type) {
-                var result = createNode(240, type.pos);
+                var result = createNode(242, type.pos);
                 nextToken();
                 result.type = type;
                 return finishNode(result);
             }
             function parseJSDocTypeReference() {
-                var result = createNode(239);
+                var result = createNode(241);
                 result.name = parseSimplePropertyName();
                 while (parseOptional(20)) {
                     if (token === 24) {
@@ -8695,7 +8990,7 @@ var ts;
             }
             function parseTypeArguments() {
                 nextToken();
-                var typeArguments = parseDelimitedList(22, parseJSDocType);
+                var typeArguments = parseDelimitedList(21, parseJSDocType);
                 checkForTrailingComma(typeArguments);
                 checkForEmptyTypeArgumentList(typeArguments);
                 parseExpected(25);
@@ -8709,21 +9004,21 @@ var ts;
                 }
             }
             function parseQualifiedName(left) {
-                var result = createNode(127, left.pos);
+                var result = createNode(128, left.pos);
                 result.left = left;
                 result.right = parseIdentifierName();
                 return finishNode(result);
             }
             function parseJSDocRecordType() {
-                var result = createNode(237);
+                var result = createNode(239);
                 nextToken();
-                result.members = parseDelimitedList(23, parseJSDocRecordMember);
+                result.members = parseDelimitedList(22, parseJSDocRecordMember);
                 checkForTrailingComma(result.members);
                 parseExpected(15);
                 return finishNode(result);
             }
             function parseJSDocRecordMember() {
-                var result = createNode(238);
+                var result = createNode(240);
                 result.name = parseSimplePropertyName();
                 if (token === 51) {
                     nextToken();
@@ -8732,15 +9027,15 @@ var ts;
                 return finishNode(result);
             }
             function parseJSDocNonNullableType() {
-                var result = createNode(236);
+                var result = createNode(238);
                 nextToken();
                 result.type = parseJSDocType();
                 return finishNode(result);
             }
             function parseJSDocTupleType() {
-                var result = createNode(234);
+                var result = createNode(236);
                 nextToken();
-                result.types = parseDelimitedList(24, parseJSDocType);
+                result.types = parseDelimitedList(23, parseJSDocType);
                 checkForTrailingComma(result.types);
                 parseExpected(19);
                 return finishNode(result);
@@ -8752,7 +9047,7 @@ var ts;
                 }
             }
             function parseJSDocUnionType() {
-                var result = createNode(233);
+                var result = createNode(235);
                 nextToken();
                 result.types = parseJSDocTypeList(parseJSDocType());
                 parseExpected(17);
@@ -8770,7 +9065,7 @@ var ts;
                 return types;
             }
             function parseJSDocAllType() {
-                var result = createNode(230);
+                var result = createNode(232);
                 nextToken();
                 return finishNode(result);
             }
@@ -8783,11 +9078,11 @@ var ts;
                     token === 25 ||
                     token === 53 ||
                     token === 44) {
-                    var result = createNode(231, pos);
+                    var result = createNode(233, pos);
                     return finishNode(result);
                 }
                 else {
-                    var result = createNode(235, pos);
+                    var result = createNode(237, pos);
                     result.type = parseJSDocType();
                     return finishNode(result);
                 }
@@ -8858,7 +9153,7 @@ var ts;
                     if (!tags) {
                         return undefined;
                     }
-                    var result = createNode(245, start);
+                    var result = createNode(247, start);
                     result.tags = tags;
                     return finishNode(result, end);
                 }
@@ -8896,7 +9191,7 @@ var ts;
                     return undefined;
                 }
                 function handleUnknownTag(atToken, tagName) {
-                    var result = createNode(246, atToken.pos);
+                    var result = createNode(248, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     return finishNode(result, pos);
@@ -8948,7 +9243,7 @@ var ts;
                     if (!typeExpression) {
                         typeExpression = tryParseTypeExpression();
                     }
-                    var result = createNode(247, atToken.pos);
+                    var result = createNode(249, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.preParameterName = preName;
@@ -8958,27 +9253,27 @@ var ts;
                     return finishNode(result, pos);
                 }
                 function handleReturnTag(atToken, tagName) {
-                    if (ts.forEach(tags, function (t) { return t.kind === 248; })) {
+                    if (ts.forEach(tags, function (t) { return t.kind === 250; })) {
                         parseErrorAtPosition(tagName.pos, pos - tagName.pos, ts.Diagnostics._0_tag_already_specified, tagName.text);
                     }
-                    var result = createNode(248, atToken.pos);
+                    var result = createNode(250, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
                     return finishNode(result, pos);
                 }
                 function handleTypeTag(atToken, tagName) {
-                    if (ts.forEach(tags, function (t) { return t.kind === 249; })) {
+                    if (ts.forEach(tags, function (t) { return t.kind === 251; })) {
                         parseErrorAtPosition(tagName.pos, pos - tagName.pos, ts.Diagnostics._0_tag_already_specified, tagName.text);
                     }
-                    var result = createNode(249, atToken.pos);
+                    var result = createNode(251, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
                     return finishNode(result, pos);
                 }
                 function handleTemplateTag(atToken, tagName) {
-                    if (ts.forEach(tags, function (t) { return t.kind === 250; })) {
+                    if (ts.forEach(tags, function (t) { return t.kind === 252; })) {
                         parseErrorAtPosition(tagName.pos, pos - tagName.pos, ts.Diagnostics._0_tag_already_specified, tagName.text);
                     }
                     var typeParameters = [];
@@ -8986,13 +9281,13 @@ var ts;
                     while (true) {
                         skipWhitespace();
                         var startPos = pos;
-                        var name_6 = scanIdentifier();
-                        if (!name_6) {
+                        var name_7 = scanIdentifier();
+                        if (!name_7) {
                             parseErrorAtPosition(startPos, 0, ts.Diagnostics.Identifier_expected);
                             return undefined;
                         }
-                        var typeParameter = createNode(129, name_6.pos);
-                        typeParameter.name = name_6;
+                        var typeParameter = createNode(130, name_7.pos);
+                        typeParameter.name = name_7;
                         finishNode(typeParameter, pos);
                         typeParameters.push(typeParameter);
                         skipWhitespace();
@@ -9002,7 +9297,7 @@ var ts;
                         pos++;
                     }
                     typeParameters.end = pos;
-                    var result = createNode(250, atToken.pos);
+                    var result = createNode(252, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeParameters = typeParameters;
@@ -9386,10 +9681,10 @@ var ts;
         var stringType = createIntrinsicType(2, "string");
         var numberType = createIntrinsicType(4, "number");
         var booleanType = createIntrinsicType(8, "boolean");
-        var esSymbolType = createIntrinsicType(1048576, "symbol");
+        var esSymbolType = createIntrinsicType(2097152, "symbol");
         var voidType = createIntrinsicType(16, "void");
-        var undefinedType = createIntrinsicType(32 | 262144, "undefined");
-        var nullType = createIntrinsicType(64 | 262144, "null");
+        var undefinedType = createIntrinsicType(32 | 524288, "undefined");
+        var nullType = createIntrinsicType(64 | 524288, "null");
         var unknownType = createIntrinsicType(1, "unknown");
         var circularType = createIntrinsicType(1, "__circular__");
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -9397,8 +9692,8 @@ var ts;
         emptyGenericType.instantiations = {};
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        var anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
-        var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
+        var anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
+        var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
         var globals = {};
         var globalESSymbolConstructorSymbol;
         var globalObjectType;
@@ -9446,9 +9741,14 @@ var ts;
             },
             "symbol": {
                 type: esSymbolType,
-                flags: 1048576
+                flags: 2097152
             }
         };
+        var subtypeRelation = {};
+        var assignableRelation = {};
+        var identityRelation = {};
+        initializeTypeChecker();
+        return checker;
         function getEmitResolver(sourceFile) {
             getDiagnostics(sourceFile);
             return emitResolver;
@@ -9588,10 +9888,10 @@ var ts;
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
         function getSourceFile(node) {
-            return ts.getAncestor(node, 228);
+            return ts.getAncestor(node, 230);
         }
         function isGlobalSourceFile(node) {
-            return node.kind === 228 && !ts.isExternalModule(node);
+            return node.kind === 230 && !ts.isExternalModule(node);
         }
         function getSymbol(symbols, name, meaning) {
             if (meaning && ts.hasProperty(symbols, name)) {
@@ -9639,34 +9939,37 @@ var ts;
                     }
                 }
                 switch (location.kind) {
-                    case 228:
+                    case 230:
                         if (!ts.isExternalModule(location))
                             break;
-                    case 206:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & 8914931)) {
-                            if (result.flags & meaning || !(result.flags & 8388608 && getDeclarationOfAliasSymbol(result).kind === 218)) {
-                                break loop;
+                    case 208:
+                        var moduleExports = getSymbolOfNode(location).exports;
+                        if (location.kind === 230 ||
+                            (location.kind === 208 && location.name.kind === 8)) {
+                            if (ts.hasProperty(moduleExports, name) &&
+                                moduleExports[name].flags === 8388608 &&
+                                ts.getDeclarationOfKind(moduleExports[name], 220)) {
+                                break;
                             }
-                            result = undefined;
-                        }
-                        else if (location.kind === 228 ||
-                            (location.kind === 206 && location.name.kind === 8)) {
-                            result = getSymbolOfNode(location).exports["default"];
+                            result = moduleExports["default"];
                             var localSymbol = ts.getLocalSymbolForExportDefault(result);
                             if (result && localSymbol && (result.flags & meaning) && localSymbol.name === name) {
                                 break loop;
                             }
                             result = undefined;
                         }
+                        if (result = getSymbol(moduleExports, name, meaning & 8914931)) {
+                            break loop;
+                        }
                         break;
-                    case 205:
+                    case 207:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & 8)) {
                             break loop;
                         }
                         break;
+                    case 134:
                     case 133:
-                    case 132:
-                        if (location.parent.kind === 202 && !(location.flags & 128)) {
+                        if (location.parent.kind === 204 && !(location.flags & 128)) {
                             var ctor = findConstructorDeclaration(location.parent);
                             if (ctor && ctor.locals) {
                                 if (getSymbol(ctor.locals, name, meaning & 107455)) {
@@ -9675,8 +9978,8 @@ var ts;
                             }
                         }
                         break;
-                    case 202:
-                    case 203:
+                    case 204:
+                    case 205:
                         if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & 793056)) {
                             if (lastLocation && lastLocation.flags & 128) {
                                 error(errorLocation, ts.Diagnostics.Static_members_cannot_reference_class_type_parameters);
@@ -9685,28 +9988,28 @@ var ts;
                             break loop;
                         }
                         break;
-                    case 128:
+                    case 129:
                         grandparent = location.parent.parent;
-                        if (grandparent.kind === 202 || grandparent.kind === 203) {
+                        if (grandparent.kind === 204 || grandparent.kind === 205) {
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & 793056)) {
                                 error(errorLocation, ts.Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
                             }
                         }
                         break;
-                    case 135:
-                    case 134:
                     case 136:
+                    case 135:
                     case 137:
                     case 138:
-                    case 201:
-                    case 164:
+                    case 139:
+                    case 203:
+                    case 166:
                         if (meaning & 3 && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
                         break;
-                    case 163:
+                    case 165:
                         if (meaning & 3 && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
@@ -9719,7 +10022,7 @@ var ts;
                             }
                         }
                         break;
-                    case 175:
+                    case 177:
                         if (meaning & 32) {
                             var className = location.name;
                             if (className && name === className.text) {
@@ -9728,8 +10031,8 @@ var ts;
                             }
                         }
                         break;
-                    case 131:
-                        if (location.parent && location.parent.kind === 130) {
+                    case 132:
+                        if (location.parent && location.parent.kind === 131) {
                             location = location.parent;
                         }
                         if (location.parent && ts.isClassElement(location.parent)) {
@@ -9767,14 +10070,14 @@ var ts;
             ts.Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
             var isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
             if (!isUsedBeforeDeclaration) {
-                var variableDeclaration = ts.getAncestor(declaration, 199);
+                var variableDeclaration = ts.getAncestor(declaration, 201);
                 var container = ts.getEnclosingBlockScopeContainer(variableDeclaration);
-                if (variableDeclaration.parent.parent.kind === 181 ||
-                    variableDeclaration.parent.parent.kind === 187) {
+                if (variableDeclaration.parent.parent.kind === 183 ||
+                    variableDeclaration.parent.parent.kind === 189) {
                     isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
                 }
-                else if (variableDeclaration.parent.parent.kind === 189 ||
-                    variableDeclaration.parent.parent.kind === 188) {
+                else if (variableDeclaration.parent.parent.kind === 191 ||
+                    variableDeclaration.parent.parent.kind === 190) {
                     var expression = variableDeclaration.parent.parent.expression;
                     isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
                 }
@@ -9796,10 +10099,10 @@ var ts;
         }
         function getAnyImportSyntax(node) {
             if (ts.isAliasSymbolDeclaration(node)) {
-                if (node.kind === 209) {
+                if (node.kind === 211) {
                     return node;
                 }
-                while (node && node.kind !== 210) {
+                while (node && node.kind !== 212) {
                     node = node.parent;
                 }
                 return node;
@@ -9809,7 +10112,7 @@ var ts;
             return ts.forEach(symbol.declarations, function (d) { return ts.isAliasSymbolDeclaration(d) ? d : undefined; });
         }
         function getTargetOfImportEqualsDeclaration(node) {
-            if (node.moduleReference.kind === 220) {
+            if (node.moduleReference.kind === 222) {
                 return resolveExternalModuleSymbol(resolveExternalModuleName(node, ts.getExternalModuleImportEqualsDeclarationExpression(node)));
             }
             return getSymbolOfPartOfRightHandSideOfImportEquals(node.moduleReference, node);
@@ -9871,15 +10174,15 @@ var ts;
             var moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier);
             var targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier);
             if (targetSymbol) {
-                var name_7 = specifier.propertyName || specifier.name;
-                if (name_7.text) {
-                    var symbolFromModule = getExportOfModule(targetSymbol, name_7.text);
-                    var symbolFromVariable = getPropertyOfVariable(targetSymbol, name_7.text);
+                var name_8 = specifier.propertyName || specifier.name;
+                if (name_8.text) {
+                    var symbolFromModule = getExportOfModule(targetSymbol, name_8.text);
+                    var symbolFromVariable = getPropertyOfVariable(targetSymbol, name_8.text);
                     var symbol = symbolFromModule && symbolFromVariable ?
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
-                        error(name_7, ts.Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), ts.declarationNameToString(name_7));
+                        error(name_8, ts.Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), ts.declarationNameToString(name_8));
                     }
                     return symbol;
                 }
@@ -9898,17 +10201,17 @@ var ts;
         }
         function getTargetOfAliasDeclaration(node) {
             switch (node.kind) {
-                case 209:
-                    return getTargetOfImportEqualsDeclaration(node);
                 case 211:
+                    return getTargetOfImportEqualsDeclaration(node);
+                case 213:
                     return getTargetOfImportClause(node);
-                case 212:
-                    return getTargetOfNamespaceImport(node);
                 case 214:
+                    return getTargetOfNamespaceImport(node);
+                case 216:
                     return getTargetOfImportSpecifier(node);
-                case 218:
+                case 220:
                     return getTargetOfExportSpecifier(node);
-                case 215:
+                case 217:
                     return getTargetOfExportAssignment(node);
             }
         }
@@ -9950,10 +10253,10 @@ var ts;
             if (!links.referenced) {
                 links.referenced = true;
                 var node = getDeclarationOfAliasSymbol(symbol);
-                if (node.kind === 215) {
+                if (node.kind === 217) {
                     checkExpressionCached(node.expression);
                 }
-                else if (node.kind === 218) {
+                else if (node.kind === 220) {
                     checkExpressionCached(node.propertyName || node.name);
                 }
                 else if (ts.isInternalModuleImportEqualsDeclaration(node)) {
@@ -9963,17 +10266,17 @@ var ts;
         }
         function getSymbolOfPartOfRightHandSideOfImportEquals(entityName, importDeclaration) {
             if (!importDeclaration) {
-                importDeclaration = ts.getAncestor(entityName, 209);
+                importDeclaration = ts.getAncestor(entityName, 211);
                 ts.Debug.assert(importDeclaration !== undefined);
             }
             if (entityName.kind === 65 && ts.isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = entityName.parent;
             }
-            if (entityName.kind === 65 || entityName.parent.kind === 127) {
+            if (entityName.kind === 65 || entityName.parent.kind === 128) {
                 return resolveEntityName(entityName, 1536);
             }
             else {
-                ts.Debug.assert(entityName.parent.kind === 209);
+                ts.Debug.assert(entityName.parent.kind === 211);
                 return resolveEntityName(entityName, 107455 | 793056 | 1536);
             }
         }
@@ -9992,9 +10295,9 @@ var ts;
                     return undefined;
                 }
             }
-            else if (name.kind === 127 || name.kind === 156) {
-                var left = name.kind === 127 ? name.left : name.expression;
-                var right = name.kind === 127 ? name.right : name.name;
+            else if (name.kind === 128 || name.kind === 158) {
+                var left = name.kind === 128 ? name.left : name.expression;
+                var right = name.kind === 128 ? name.right : name.name;
                 var namespace = resolveEntityName(left, 1536);
                 if (!namespace || namespace === unknownSymbol || ts.nodeIsMissing(right)) {
                     return undefined;
@@ -10139,7 +10442,7 @@ var ts;
             var members = node.members;
             for (var _i = 0; _i < members.length; _i++) {
                 var member = members[_i];
-                if (member.kind === 136 && ts.nodeIsPresent(member.body)) {
+                if (member.kind === 137 && ts.nodeIsPresent(member.body)) {
                     return member;
                 }
             }
@@ -10204,17 +10507,17 @@ var ts;
                     }
                 }
                 switch (location_1.kind) {
-                    case 228:
+                    case 230:
                         if (!ts.isExternalModule(location_1)) {
                             break;
                         }
-                    case 206:
+                    case 208:
                         if (result = callback(getSymbolOfNode(location_1).exports)) {
                             return result;
                         }
                         break;
-                    case 202:
-                    case 203:
+                    case 204:
+                    case 205:
                         if (result = callback(getSymbolOfNode(location_1).members)) {
                             return result;
                         }
@@ -10329,8 +10632,8 @@ var ts;
             }
         }
         function hasExternalModuleSymbol(declaration) {
-            return (declaration.kind === 206 && declaration.name.kind === 8) ||
-                (declaration.kind === 228 && ts.isExternalModule(declaration));
+            return (declaration.kind === 208 && declaration.name.kind === 8) ||
+                (declaration.kind === 230 && ts.isExternalModule(declaration));
         }
         function hasVisibleDeclarations(symbol) {
             var aliasesToMakeVisible;
@@ -10362,11 +10665,11 @@ var ts;
         }
         function isEntityNameVisible(entityName, enclosingDeclaration) {
             var meaning;
-            if (entityName.parent.kind === 145) {
+            if (entityName.parent.kind === 147) {
                 meaning = 107455 | 1048576;
             }
-            else if (entityName.kind === 127 || entityName.kind === 156 ||
-                entityName.parent.kind === 209) {
+            else if (entityName.kind === 128 || entityName.kind === 158 ||
+                entityName.parent.kind === 211) {
                 meaning = 1536;
             }
             else {
@@ -10396,6 +10699,13 @@ var ts;
             ts.releaseStringWriter(writer);
             return result;
         }
+        function signatureToString(signature, enclosingDeclaration, flags) {
+            var writer = ts.getSingleLineStringWriter();
+            getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
+            var result = writer.string();
+            ts.releaseStringWriter(writer);
+            return result;
+        }
         function typeToString(type, enclosingDeclaration, flags) {
             var writer = ts.getSingleLineStringWriter();
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
@@ -10410,10 +10720,10 @@ var ts;
         function getTypeAliasForTypeLiteral(type) {
             if (type.symbol && type.symbol.flags & 2048) {
                 var node = type.symbol.declarations[0].parent;
-                while (node.kind === 150) {
+                while (node.kind === 152) {
                     node = node.parent;
                 }
-                if (node.kind === 204) {
+                if (node.kind === 206) {
                     return getSymbolOfNode(node);
                 }
             }
@@ -10481,13 +10791,14 @@ var ts;
                 }
                 return appendParentTypeArgumentsAndSymbolName(symbol);
             }
-            function buildTypeDisplay(type, writer, enclosingDeclaration, globalFlags, typeStack) {
+            function buildTypeDisplay(type, writer, enclosingDeclaration, globalFlags, symbolStack) {
                 var globalFlagsToPass = globalFlags & 16;
                 return writeType(type, globalFlags);
                 function writeType(type, flags) {
-                    if (type.flags & 1048703) {
-                        writer.writeKeyword(!(globalFlags & 16) &&
-                            (type.flags & 1) ? "any" : type.intrinsicName);
+                    if (type.flags & 2097279) {
+                        writer.writeKeyword(!(globalFlags & 16) && isTypeAny(type)
+                            ? "any"
+                            : type.intrinsicName);
                     }
                     else if (type.flags & 4096) {
                         writeTypeReference(type, flags);
@@ -10584,42 +10895,46 @@ var ts;
                     }
                 }
                 function writeAnonymousType(type, flags) {
-                    if (type.symbol && type.symbol.flags & (32 | 384 | 512)) {
-                        writeTypeofSymbol(type, flags);
-                    }
-                    else if (shouldWriteTypeOfFunctionSymbol()) {
-                        writeTypeofSymbol(type, flags);
-                    }
-                    else if (typeStack && ts.contains(typeStack, type)) {
-                        var typeAlias = getTypeAliasForTypeLiteral(type);
-                        if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, 793056, 0, flags);
+                    var symbol = type.symbol;
+                    if (symbol) {
+                        if (symbol.flags & (32 | 384 | 512)) {
+                            writeTypeofSymbol(type, flags);
+                        }
+                        else if (shouldWriteTypeOfFunctionSymbol()) {
+                            writeTypeofSymbol(type, flags);
+                        }
+                        else if (ts.contains(symbolStack, symbol)) {
+                            var typeAlias = getTypeAliasForTypeLiteral(type);
+                            if (typeAlias) {
+                                buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, 793056, 0, flags);
+                            }
+                            else {
+                                writeKeyword(writer, 112);
+                            }
                         }
                         else {
-                            writeKeyword(writer, 112);
+                            if (!symbolStack) {
+                                symbolStack = [];
+                            }
+                            symbolStack.push(symbol);
+                            writeLiteralType(type, flags);
+                            symbolStack.pop();
                         }
                     }
                     else {
-                        if (!typeStack) {
-                            typeStack = [];
-                        }
-                        typeStack.push(type);
                         writeLiteralType(type, flags);
-                        typeStack.pop();
                     }
                     function shouldWriteTypeOfFunctionSymbol() {
-                        if (type.symbol) {
-                            var isStaticMethodSymbol = !!(type.symbol.flags & 8192 &&
-                                ts.forEach(type.symbol.declarations, function (declaration) { return declaration.flags & 128; }));
-                            var isNonLocalFunctionSymbol = !!(type.symbol.flags & 16) &&
-                                (type.symbol.parent ||
-                                    ts.forEach(type.symbol.declarations, function (declaration) {
-                                        return declaration.parent.kind === 228 || declaration.parent.kind === 207;
-                                    }));
-                            if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
-                                return !!(flags & 2) ||
-                                    (typeStack && ts.contains(typeStack, type));
-                            }
+                        var isStaticMethodSymbol = !!(symbol.flags & 8192 &&
+                            ts.forEach(symbol.declarations, function (declaration) { return declaration.flags & 128; }));
+                        var isNonLocalFunctionSymbol = !!(symbol.flags & 16) &&
+                            (symbol.parent ||
+                                ts.forEach(symbol.declarations, function (declaration) {
+                                    return declaration.parent.kind === 230 || declaration.parent.kind === 209;
+                                }));
+                        if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
+                            return !!(flags & 2) ||
+                                (ts.contains(symbolStack, symbol));
                         }
                     }
                 }
@@ -10648,7 +10963,7 @@ var ts;
                             if (flags & 64) {
                                 writePunctuation(writer, 16);
                             }
-                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | 8, typeStack);
+                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | 8, symbolStack);
                             if (flags & 64) {
                                 writePunctuation(writer, 17);
                             }
@@ -10660,7 +10975,7 @@ var ts;
                             }
                             writeKeyword(writer, 88);
                             writeSpace(writer);
-                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | 8, typeStack);
+                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | 8, symbolStack);
                             if (flags & 64) {
                                 writePunctuation(writer, 17);
                             }
@@ -10672,7 +10987,7 @@ var ts;
                     writer.increaseIndent();
                     for (var _i = 0, _a = resolved.callSignatures; _i < _a.length; _i++) {
                         var signature = _a[_i];
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, symbolStack);
                         writePunctuation(writer, 22);
                         writer.writeLine();
                     }
@@ -10680,7 +10995,7 @@ var ts;
                         var signature = _c[_b];
                         writeKeyword(writer, 88);
                         writeSpace(writer);
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, symbolStack);
                         writePunctuation(writer, 22);
                         writer.writeLine();
                     }
@@ -10689,7 +11004,7 @@ var ts;
                         writer.writeParameter(getIndexerParameterName(resolved, 0, "x"));
                         writePunctuation(writer, 51);
                         writeSpace(writer);
-                        writeKeyword(writer, 122);
+                        writeKeyword(writer, 123);
                         writePunctuation(writer, 19);
                         writePunctuation(writer, 51);
                         writeSpace(writer);
@@ -10702,7 +11017,7 @@ var ts;
                         writer.writeParameter(getIndexerParameterName(resolved, 1, "x"));
                         writePunctuation(writer, 51);
                         writeSpace(writer);
-                        writeKeyword(writer, 120);
+                        writeKeyword(writer, 121);
                         writePunctuation(writer, 19);
                         writePunctuation(writer, 51);
                         writeSpace(writer);
@@ -10721,7 +11036,7 @@ var ts;
                                 if (p.flags & 536870912) {
                                     writePunctuation(writer, 50);
                                 }
-                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, symbolStack);
                                 writePunctuation(writer, 22);
                                 writer.writeLine();
                             }
@@ -10745,20 +11060,20 @@ var ts;
             function buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaraiton, flags) {
                 var targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & 32 || targetSymbol.flags & 64) {
-                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
+                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaraiton, flags);
                 }
             }
-            function buildTypeParameterDisplay(tp, writer, enclosingDeclaration, flags, typeStack) {
+            function buildTypeParameterDisplay(tp, writer, enclosingDeclaration, flags, symbolStack) {
                 appendSymbolNameOnly(tp.symbol, writer);
                 var constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
                     writeSpace(writer);
                     writeKeyword(writer, 79);
                     writeSpace(writer);
-                    buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, typeStack);
+                    buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, symbolStack);
                 }
             }
-            function buildParameterDisplay(p, writer, enclosingDeclaration, flags, typeStack) {
+            function buildParameterDisplay(p, writer, enclosingDeclaration, flags, symbolStack) {
                 var parameterNode = p.valueDeclaration;
                 if (ts.isRestParameter(parameterNode)) {
                     writePunctuation(writer, 21);
@@ -10769,9 +11084,9 @@ var ts;
                 }
                 writePunctuation(writer, 51);
                 writeSpace(writer);
-                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, typeStack);
+                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, symbolStack);
             }
-            function buildDisplayForTypeParametersAndDelimiters(typeParameters, writer, enclosingDeclaration, flags, typeStack) {
+            function buildDisplayForTypeParametersAndDelimiters(typeParameters, writer, enclosingDeclaration, flags, symbolStack) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, 24);
                     for (var i = 0; i < typeParameters.length; i++) {
@@ -10779,12 +11094,12 @@ var ts;
                             writePunctuation(writer, 23);
                             writeSpace(writer);
                         }
-                        buildTypeParameterDisplay(typeParameters[i], writer, enclosingDeclaration, flags, typeStack);
+                        buildTypeParameterDisplay(typeParameters[i], writer, enclosingDeclaration, flags, symbolStack);
                     }
                     writePunctuation(writer, 25);
                 }
             }
-            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters, mapper, writer, enclosingDeclaration, flags, typeStack) {
+            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters, mapper, writer, enclosingDeclaration, flags, symbolStack) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, 24);
                     for (var i = 0; i < typeParameters.length; i++) {
@@ -10797,18 +11112,18 @@ var ts;
                     writePunctuation(writer, 25);
                 }
             }
-            function buildDisplayForParametersAndDelimiters(parameters, writer, enclosingDeclaration, flags, typeStack) {
+            function buildDisplayForParametersAndDelimiters(parameters, writer, enclosingDeclaration, flags, symbolStack) {
                 writePunctuation(writer, 16);
                 for (var i = 0; i < parameters.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, 23);
                         writeSpace(writer);
                     }
-                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, typeStack);
+                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, symbolStack);
                 }
                 writePunctuation(writer, 17);
             }
-            function buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, typeStack) {
+            function buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack) {
                 if (flags & 8) {
                     writeSpace(writer);
                     writePunctuation(writer, 32);
@@ -10817,17 +11132,17 @@ var ts;
                     writePunctuation(writer, 51);
                 }
                 writeSpace(writer);
-                buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, typeStack);
+                buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, symbolStack);
             }
-            function buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, typeStack) {
+            function buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, symbolStack) {
                 if (signature.target && (flags & 32)) {
                     buildDisplayForTypeArgumentsAndDelimiters(signature.target.typeParameters, signature.mapper, writer, enclosingDeclaration);
                 }
                 else {
-                    buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
+                    buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, symbolStack);
                 }
-                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, typeStack);
-                buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, typeStack);
+                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
+                buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
             return _displayBuilder || (_displayBuilder = {
                 symbolToString: symbolToString,
@@ -10847,12 +11162,12 @@ var ts;
         function isDeclarationVisible(node) {
             function getContainingExternalModule(node) {
                 for (; node; node = node.parent) {
-                    if (node.kind === 206) {
+                    if (node.kind === 208) {
                         if (node.name.kind === 8) {
                             return node;
                         }
                     }
-                    else if (node.kind === 228) {
+                    else if (node.kind === 230) {
                         return ts.isExternalModule(node) ? node : undefined;
                     }
                 }
@@ -10895,58 +11210,58 @@ var ts;
             }
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
-                    case 153:
+                    case 155:
                         return isDeclarationVisible(node.parent.parent);
-                    case 199:
+                    case 201:
                         if (ts.isBindingPattern(node.name) &&
                             !node.name.elements.length) {
                             return false;
                         }
-                    case 206:
-                    case 202:
-                    case 203:
+                    case 208:
                     case 204:
-                    case 201:
                     case 205:
-                    case 209:
+                    case 206:
+                    case 203:
+                    case 207:
+                    case 211:
                         var parent_4 = getDeclarationContainer(node);
                         if (!(ts.getCombinedNodeFlags(node) & 1) &&
-                            !(node.kind !== 209 && parent_4.kind !== 228 && ts.isInAmbientContext(parent_4))) {
+                            !(node.kind !== 211 && parent_4.kind !== 230 && ts.isInAmbientContext(parent_4))) {
                             return isGlobalSourceFile(parent_4);
                         }
                         return isDeclarationVisible(parent_4);
-                    case 133:
-                    case 132:
-                    case 137:
-                    case 138:
-                    case 135:
                     case 134:
+                    case 133:
+                    case 138:
+                    case 139:
+                    case 136:
+                    case 135:
                         if (node.flags & (32 | 64)) {
                             return false;
                         }
-                    case 136:
-                    case 140:
-                    case 139:
+                    case 137:
                     case 141:
-                    case 130:
-                    case 207:
-                    case 143:
-                    case 144:
-                    case 146:
+                    case 140:
                     case 142:
-                    case 147:
+                    case 131:
+                    case 209:
+                    case 145:
+                    case 146:
                     case 148:
+                    case 144:
                     case 149:
                     case 150:
+                    case 151:
+                    case 152:
                         return isDeclarationVisible(node.parent);
-                    case 211:
-                    case 212:
+                    case 213:
                     case 214:
+                    case 216:
                         return false;
-                    case 129:
-                    case 228:
+                    case 130:
+                    case 230:
                         return true;
-                    case 215:
+                    case 217:
                         return false;
                     default:
                         ts.Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
@@ -10962,10 +11277,10 @@ var ts;
         }
         function collectLinkedAliases(node) {
             var exportSymbol;
-            if (node.parent && node.parent.kind === 215) {
+            if (node.parent && node.parent.kind === 217) {
                 exportSymbol = resolveName(node.parent, node.text, 107455 | 793056 | 1536, ts.Diagnostics.Cannot_find_name_0, node);
             }
-            else if (node.parent.kind === 218) {
+            else if (node.parent.kind === 220) {
                 exportSymbol = getTargetOfExportSpecifier(node.parent);
             }
             var result = [];
@@ -11011,7 +11326,7 @@ var ts;
         }
         function getDeclarationContainer(node) {
             node = ts.getRootDeclaration(node);
-            return node.kind === 199 ? node.parent.parent.parent : node.parent;
+            return node.kind === 201 ? node.parent.parent.parent : node.parent;
         }
         function getTypeOfPrototypeProperty(prototype) {
             var classType = getDeclaredTypeOfSymbol(prototype.parent);
@@ -11021,33 +11336,36 @@ var ts;
             var prop = getPropertyOfType(type, name);
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
+        function isTypeAny(type) {
+            return type && (type.flags & 1) !== 0;
+        }
         function getTypeForBindingElement(declaration) {
             var pattern = declaration.parent;
             var parentType = getTypeForVariableLikeDeclaration(pattern.parent);
             if (parentType === unknownType) {
                 return unknownType;
             }
-            if (!parentType || parentType === anyType) {
+            if (!parentType || isTypeAny(parentType)) {
                 if (declaration.initializer) {
                     return checkExpressionCached(declaration.initializer);
                 }
                 return parentType;
             }
             var type;
-            if (pattern.kind === 151) {
-                var name_8 = declaration.propertyName || declaration.name;
-                type = getTypeOfPropertyOfType(parentType, name_8.text) ||
-                    isNumericLiteralName(name_8.text) && getIndexTypeOfType(parentType, 1) ||
+            if (pattern.kind === 153) {
+                var name_9 = declaration.propertyName || declaration.name;
+                type = getTypeOfPropertyOfType(parentType, name_9.text) ||
+                    isNumericLiteralName(name_9.text) && getIndexTypeOfType(parentType, 1) ||
                     getIndexTypeOfType(parentType, 0);
                 if (!type) {
-                    error(name_8, ts.Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), ts.declarationNameToString(name_8));
+                    error(name_9, ts.Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), ts.declarationNameToString(name_9));
                     return unknownType;
                 }
             }
             else {
                 var elementType = checkIteratedTypeOrElementType(parentType, pattern, false);
                 if (!declaration.dotDotDotToken) {
-                    if (elementType.flags & 1) {
+                    if (isTypeAny(elementType)) {
                         return elementType;
                     }
                     var propName = "" + ts.indexOf(pattern.elements, declaration);
@@ -11071,10 +11389,10 @@ var ts;
             return type;
         }
         function getTypeForVariableLikeDeclaration(declaration) {
-            if (declaration.parent.parent.kind === 188) {
+            if (declaration.parent.parent.kind === 190) {
                 return anyType;
             }
-            if (declaration.parent.parent.kind === 189) {
+            if (declaration.parent.parent.kind === 191) {
                 return checkRightHandSideOfForOf(declaration.parent.parent.expression) || anyType;
             }
             if (ts.isBindingPattern(declaration.parent)) {
@@ -11083,10 +11401,10 @@ var ts;
             if (declaration.type) {
                 return getTypeFromTypeNode(declaration.type);
             }
-            if (declaration.kind === 130) {
+            if (declaration.kind === 131) {
                 var func = declaration.parent;
-                if (func.kind === 138 && !ts.hasDynamicName(func)) {
-                    var getter = ts.getDeclarationOfKind(declaration.parent.symbol, 137);
+                if (func.kind === 139 && !ts.hasDynamicName(func)) {
+                    var getter = ts.getDeclarationOfKind(declaration.parent.symbol, 138);
                     if (getter) {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
                     }
@@ -11099,7 +11417,7 @@ var ts;
             if (declaration.initializer) {
                 return checkExpressionCached(declaration.initializer);
             }
-            if (declaration.kind === 226) {
+            if (declaration.kind === 228) {
                 return checkIdentifier(declaration.name);
             }
             return undefined;
@@ -11128,7 +11446,7 @@ var ts;
             var hasSpreadElement = false;
             var elementTypes = [];
             ts.forEach(pattern.elements, function (e) {
-                elementTypes.push(e.kind === 176 || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
+                elementTypes.push(e.kind === 178 || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
                 if (e.dotDotDotToken) {
                     hasSpreadElement = true;
                 }
@@ -11143,7 +11461,7 @@ var ts;
             return createTupleType(elementTypes);
         }
         function getTypeFromBindingPattern(pattern) {
-            return pattern.kind === 151
+            return pattern.kind === 153
                 ? getTypeFromObjectBindingPattern(pattern)
                 : getTypeFromArrayBindingPattern(pattern);
         }
@@ -11153,7 +11471,7 @@ var ts;
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
                 }
-                return declaration.kind !== 225 ? getWidenedType(type) : type;
+                return declaration.kind !== 227 ? getWidenedType(type) : type;
             }
             if (ts.isBindingPattern(declaration.name)) {
                 return getTypeFromBindingPattern(declaration.name);
@@ -11161,7 +11479,7 @@ var ts;
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
             if (reportErrors && compilerOptions.noImplicitAny) {
                 var root = ts.getRootDeclaration(declaration);
-                if (!isPrivateWithinAmbient(root) && !(root.kind === 130 && isPrivateWithinAmbient(root.parent))) {
+                if (!isPrivateWithinAmbient(root) && !(root.kind === 131 && isPrivateWithinAmbient(root.parent))) {
                     reportImplicitAnyError(declaration, type);
                 }
             }
@@ -11174,10 +11492,10 @@ var ts;
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
                 var declaration = symbol.valueDeclaration;
-                if (declaration.parent.kind === 224) {
+                if (declaration.parent.kind === 226) {
                     return links.type = anyType;
                 }
-                if (declaration.kind === 215) {
+                if (declaration.kind === 217) {
                     return links.type = checkExpression(declaration.expression);
                 }
                 if (!pushTypeResolution(symbol)) {
@@ -11192,7 +11510,7 @@ var ts;
                     else {
                         type = anyType;
                         if (compilerOptions.noImplicitAny) {
-                            error(symbol.valueDeclaration, ts.Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
+                            error(symbol.valueDeclaration, ts.Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
                         }
                     }
                 }
@@ -11205,7 +11523,7 @@ var ts;
         }
         function getAnnotatedAccessorType(accessor) {
             if (accessor) {
-                if (accessor.kind === 137) {
+                if (accessor.kind === 138) {
                     return accessor.type && getTypeFromTypeNode(accessor.type);
                 }
                 else {
@@ -11221,8 +11539,8 @@ var ts;
                 if (!pushTypeResolution(symbol)) {
                     return unknownType;
                 }
-                var getter = ts.getDeclarationOfKind(symbol, 137);
-                var setter = ts.getDeclarationOfKind(symbol, 138);
+                var getter = ts.getDeclarationOfKind(symbol, 138);
+                var setter = ts.getDeclarationOfKind(symbol, 139);
                 var type;
                 var getterReturnType = getAnnotatedAccessorType(getter);
                 if (getterReturnType) {
@@ -11248,7 +11566,7 @@ var ts;
                 if (!popTypeResolution()) {
                     type = anyType;
                     if (compilerOptions.noImplicitAny) {
-                        var getter_1 = ts.getDeclarationOfKind(symbol, 137);
+                        var getter_1 = ts.getDeclarationOfKind(symbol, 138);
                         error(getter_1, ts.Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
                 }
@@ -11337,9 +11655,9 @@ var ts;
                 if (!node) {
                     return typeParameters;
                 }
-                if (node.kind === 202 || node.kind === 201 ||
-                    node.kind === 163 || node.kind === 135 ||
-                    node.kind === 164) {
+                if (node.kind === 204 || node.kind === 203 ||
+                    node.kind === 165 || node.kind === 136 ||
+                    node.kind === 166) {
                     var declarations = node.typeParameters;
                     if (declarations) {
                         return appendTypeParameters(appendOuterTypeParameters(typeParameters, node), declarations);
@@ -11348,14 +11666,14 @@ var ts;
             }
         }
         function getOuterTypeParametersOfClassOrInterface(symbol) {
-            var kind = symbol.flags & 32 ? 202 : 203;
+            var kind = symbol.flags & 32 ? 204 : 205;
             return appendOuterTypeParameters(undefined, ts.getDeclarationOfKind(symbol, kind));
         }
-        function getLocalTypeParametersOfClassOrInterface(symbol) {
+        function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) {
             var result;
             for (var _i = 0, _a = symbol.declarations; _i < _a.length; _i++) {
                 var node = _a[_i];
-                if (node.kind === 203 || node.kind === 202) {
+                if (node.kind === 205 || node.kind === 204 || node.kind === 206) {
                     var declaration = node;
                     if (declaration.typeParameters) {
                         result = appendTypeParameters(result, declaration.typeParameters);
@@ -11365,56 +11683,109 @@ var ts;
             return result;
         }
         function getTypeParametersOfClassOrInterface(symbol) {
-            return ts.concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterface(symbol));
+            return ts.concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
+        }
+        function isConstructorType(type) {
+            return type.flags & 48128 && getSignaturesOfType(type, 1).length > 0;
+        }
+        function getBaseTypeNodeOfClass(type) {
+            return ts.getClassExtendsHeritageClauseElement(type.symbol.valueDeclaration);
+        }
+        function getConstructorsForTypeArguments(type, typeArgumentNodes) {
+            var typeArgCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
+            return ts.filter(getSignaturesOfType(type, 1), function (sig) { return (sig.typeParameters ? sig.typeParameters.length : 0) === typeArgCount; });
+        }
+        function getInstantiatedConstructorsForTypeArguments(type, typeArgumentNodes) {
+            var signatures = getConstructorsForTypeArguments(type, typeArgumentNodes);
+            if (typeArgumentNodes) {
+                var typeArguments = ts.map(typeArgumentNodes, getTypeFromTypeNode);
+                signatures = ts.map(signatures, function (sig) { return getSignatureInstantiation(sig, typeArguments); });
+            }
+            return signatures;
+        }
+        function getBaseConstructorTypeOfClass(type) {
+            if (!type.resolvedBaseConstructorType) {
+                var baseTypeNode = getBaseTypeNodeOfClass(type);
+                if (!baseTypeNode) {
+                    return type.resolvedBaseConstructorType = undefinedType;
+                }
+                if (!pushTypeResolution(type)) {
+                    return unknownType;
+                }
+                var baseConstructorType = checkExpression(baseTypeNode.expression);
+                if (baseConstructorType.flags & 48128) {
+                    resolveObjectOrUnionTypeMembers(baseConstructorType);
+                }
+                if (!popTypeResolution()) {
+                    error(type.symbol.valueDeclaration, ts.Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
+                    return type.resolvedBaseConstructorType = unknownType;
+                }
+                if (baseConstructorType !== unknownType && baseConstructorType !== nullType && !isConstructorType(baseConstructorType)) {
+                    error(baseTypeNode.expression, ts.Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
+                    return type.resolvedBaseConstructorType = unknownType;
+                }
+                type.resolvedBaseConstructorType = baseConstructorType;
+            }
+            return type.resolvedBaseConstructorType;
         }
         function getBaseTypes(type) {
-            var typeWithBaseTypes = type;
-            if (!typeWithBaseTypes.baseTypes) {
+            if (!type.resolvedBaseTypes) {
                 if (type.symbol.flags & 32) {
-                    resolveBaseTypesOfClass(typeWithBaseTypes);
+                    resolveBaseTypesOfClass(type);
                 }
                 else if (type.symbol.flags & 64) {
-                    resolveBaseTypesOfInterface(typeWithBaseTypes);
+                    resolveBaseTypesOfInterface(type);
                 }
                 else {
                     ts.Debug.fail("type must be class or interface");
                 }
             }
-            return typeWithBaseTypes.baseTypes;
+            return type.resolvedBaseTypes;
         }
         function resolveBaseTypesOfClass(type) {
-            type.baseTypes = [];
-            var declaration = ts.getDeclarationOfKind(type.symbol, 202);
-            var baseTypeNode = ts.getClassExtendsHeritageClauseElement(declaration);
-            if (baseTypeNode) {
-                var baseType = getTypeFromTypeNode(baseTypeNode);
-                if (baseType !== unknownType) {
-                    if (getTargetType(baseType).flags & 1024) {
-                        if (type !== baseType && !hasBaseType(baseType, type)) {
-                            type.baseTypes.push(baseType);
-                        }
-                        else {
-                            error(declaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1));
-                        }
-                    }
-                    else {
-                        error(baseTypeNode, ts.Diagnostics.A_class_may_only_extend_another_class);
-                    }
-                }
+            type.resolvedBaseTypes = emptyArray;
+            var baseContructorType = getBaseConstructorTypeOfClass(type);
+            if (!(baseContructorType.flags & 48128)) {
+                return;
             }
+            var baseTypeNode = getBaseTypeNodeOfClass(type);
+            var baseType;
+            if (baseContructorType.symbol && baseContructorType.symbol.flags & 32) {
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseContructorType.symbol);
+            }
+            else {
+                var constructors = getInstantiatedConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
+                if (!constructors.length) {
+                    error(baseTypeNode.expression, ts.Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
+                    return;
+                }
+                baseType = getReturnTypeOfSignature(constructors[0]);
+            }
+            if (baseType === unknownType) {
+                return;
+            }
+            if (!(getTargetType(baseType).flags & (1024 | 2048))) {
+                error(baseTypeNode.expression, ts.Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
+                return;
+            }
+            if (type === baseType || hasBaseType(baseType, type)) {
+                error(type.symbol.valueDeclaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1));
+                return;
+            }
+            type.resolvedBaseTypes = [baseType];
         }
         function resolveBaseTypesOfInterface(type) {
-            type.baseTypes = [];
+            type.resolvedBaseTypes = [];
             for (var _i = 0, _a = type.symbol.declarations; _i < _a.length; _i++) {
                 var declaration = _a[_i];
-                if (declaration.kind === 203 && ts.getInterfaceBaseTypeNodes(declaration)) {
+                if (declaration.kind === 205 && ts.getInterfaceBaseTypeNodes(declaration)) {
                     for (var _b = 0, _c = ts.getInterfaceBaseTypeNodes(declaration); _b < _c.length; _b++) {
                         var node = _c[_b];
                         var baseType = getTypeFromTypeNode(node);
                         if (baseType !== unknownType) {
                             if (getTargetType(baseType).flags & (1024 | 2048)) {
                                 if (type !== baseType && !hasBaseType(baseType, type)) {
-                                    type.baseTypes.push(baseType);
+                                    type.resolvedBaseTypes.push(baseType);
                                 }
                                 else {
                                     error(declaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1));
@@ -11434,7 +11805,7 @@ var ts;
                 var kind = symbol.flags & 32 ? 1024 : 2048;
                 var type = links.declaredType = createObjectType(kind, symbol);
                 var outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
-                var localTypeParameters = getLocalTypeParametersOfClassOrInterface(symbol);
+                var localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 if (outerTypeParameters || localTypeParameters) {
                     type.flags |= 4096;
                     type.typeParameters = ts.concatenate(outerTypeParameters, localTypeParameters);
@@ -11454,9 +11825,16 @@ var ts;
                 if (!pushTypeResolution(links)) {
                     return unknownType;
                 }
-                var declaration = ts.getDeclarationOfKind(symbol, 204);
+                var declaration = ts.getDeclarationOfKind(symbol, 206);
                 var type = getTypeFromTypeNode(declaration.type);
-                if (!popTypeResolution()) {
+                if (popTypeResolution()) {
+                    links.typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
+                    if (links.typeParameters) {
+                        links.instantiations = {};
+                        links.instantiations[getTypeListId(links.typeParameters)] = type;
+                    }
+                }
+                else {
                     type = unknownType;
                     error(declaration.name, ts.Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
@@ -11478,7 +11856,7 @@ var ts;
             if (!links.declaredType) {
                 var type = createType(512);
                 type.symbol = symbol;
-                if (!ts.getDeclarationOfKind(symbol, 129).constraint) {
+                if (!ts.getDeclarationOfKind(symbol, 130).constraint) {
                     type.constraint = noConstraintType;
                 }
                 links.declaredType = type;
@@ -11593,34 +11971,42 @@ var ts;
             });
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
-        function createSignature(declaration, typeParameters, parameters, resolvedReturnType, minArgumentCount, hasRestParameter, hasStringLiterals) {
+        function createSignature(declaration, typeParameters, parameters, resolvedReturnType, typePredicate, minArgumentCount, hasRestParameter, hasStringLiterals) {
             var sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
             sig.resolvedReturnType = resolvedReturnType;
+            sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
             sig.hasRestParameter = hasRestParameter;
             sig.hasStringLiterals = hasStringLiterals;
             return sig;
         }
         function cloneSignature(sig) {
-            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
+            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
         function getDefaultConstructSignatures(classType) {
-            var baseTypes = getBaseTypes(classType);
-            if (baseTypes.length) {
-                var baseType = baseTypes[0];
-                var baseSignatures = getSignaturesOfType(getTypeOfSymbol(baseType.symbol), 1);
-                return ts.map(baseSignatures, function (baseSignature) {
-                    var signature = baseType.flags & 4096 ?
-                        getSignatureInstantiation(baseSignature, baseType.typeArguments) : cloneSignature(baseSignature);
-                    signature.typeParameters = classType.localTypeParameters;
-                    signature.resolvedReturnType = classType;
-                    return signature;
-                });
+            if (!getBaseTypes(classType).length) {
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
             }
-            return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, 0, false, false)];
+            var baseConstructorType = getBaseConstructorTypeOfClass(classType);
+            var baseSignatures = getSignaturesOfType(baseConstructorType, 1);
+            var baseTypeNode = getBaseTypeNodeOfClass(classType);
+            var typeArguments = ts.map(baseTypeNode.typeArguments, getTypeFromTypeNode);
+            var typeArgCount = typeArguments ? typeArguments.length : 0;
+            var result = [];
+            for (var _i = 0; _i < baseSignatures.length; _i++) {
+                var baseSig = baseSignatures[_i];
+                var typeParamCount = baseSig.typeParameters ? baseSig.typeParameters.length : 0;
+                if (typeParamCount === typeArgCount) {
+                    var sig = typeParamCount ? getSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
+                    sig.typeParameters = classType.localTypeParameters;
+                    sig.resolvedReturnType = classType;
+                    result.push(sig);
+                }
+            }
+            return result;
         }
         function createTupleTypeMemberSymbols(memberTypes) {
             var members = {};
@@ -11719,10 +12105,10 @@ var ts;
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    var baseTypes = getBaseTypes(classType);
-                    if (baseTypes.length) {
+                    var baseConstructorType = getBaseConstructorTypeOfClass(classType);
+                    if (baseConstructorType.flags & 48128) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(baseTypes[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                     }
                 }
                 stringIndexType = undefined;
@@ -11802,7 +12188,7 @@ var ts;
             else if (type.flags & 8) {
                 type = globalBooleanType;
             }
-            else if (type.flags & 1048576) {
+            else if (type.flags & 2097152) {
                 type = globalESSymbolType;
             }
             return type;
@@ -11928,7 +12314,7 @@ var ts;
         function getSignatureFromDeclaration(declaration) {
             var links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                var classType = declaration.kind === 136 ? getDeclaredTypeOfClassOrInterface(declaration.parent.symbol) : undefined;
+                var classType = declaration.kind === 137 ? getDeclaredTypeOfClassOrInterface(declaration.parent.symbol) : undefined;
                 var typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 var parameters = [];
@@ -11950,22 +12336,31 @@ var ts;
                     minArgumentCount = declaration.parameters.length;
                 }
                 var returnType;
+                var typePredicate;
                 if (classType) {
                     returnType = classType;
                 }
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);
+                    if (declaration.type.kind === 143) {
+                        var typePredicateNode = declaration.type;
+                        typePredicate = {
+                            parameterName: typePredicateNode.parameterName ? typePredicateNode.parameterName.text : undefined,
+                            parameterIndex: typePredicateNode.parameterName ? getTypePredicateParameterIndex(declaration.parameters, typePredicateNode.parameterName) : undefined,
+                            type: getTypeFromTypeNode(typePredicateNode.type)
+                        };
+                    }
                 }
                 else {
-                    if (declaration.kind === 137 && !ts.hasDynamicName(declaration)) {
-                        var setter = ts.getDeclarationOfKind(declaration.symbol, 138);
+                    if (declaration.kind === 138 && !ts.hasDynamicName(declaration)) {
+                        var setter = ts.getDeclarationOfKind(declaration.symbol, 139);
                         returnType = getAnnotatedAccessorType(setter);
                     }
                     if (!returnType && ts.nodeIsMissing(declaration.body)) {
                         returnType = anyType;
                     }
                 }
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, minArgumentCount, ts.hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate, minArgumentCount, ts.hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -11976,19 +12371,19 @@ var ts;
             for (var i = 0, len = symbol.declarations.length; i < len; i++) {
                 var node = symbol.declarations[i];
                 switch (node.kind) {
-                    case 143:
-                    case 144:
-                    case 201:
-                    case 135:
-                    case 134:
+                    case 145:
+                    case 146:
+                    case 203:
                     case 136:
-                    case 139:
+                    case 135:
+                    case 137:
                     case 140:
                     case 141:
-                    case 137:
+                    case 142:
                     case 138:
-                    case 163:
-                    case 164:
+                    case 139:
+                    case 165:
+                    case 166:
                         if (i > 0 && node.body) {
                             var previous = symbol.declarations[i - 1];
                             if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
@@ -12058,8 +12453,8 @@ var ts;
         }
         function getOrCreateTypeFromSignature(signature) {
             if (!signature.isolatedSignatureType) {
-                var isConstructor = signature.declaration.kind === 136 || signature.declaration.kind === 140;
-                var type = createObjectType(32768 | 65536);
+                var isConstructor = signature.declaration.kind === 137 || signature.declaration.kind === 141;
+                var type = createObjectType(32768 | 131072);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
                 type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -12072,7 +12467,7 @@ var ts;
             return symbol.members["__index"];
         }
         function getIndexDeclarationOfSymbol(symbol, kind) {
-            var syntaxKind = kind === 1 ? 120 : 122;
+            var syntaxKind = kind === 1 ? 121 : 123;
             var indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 var len = indexSymbol.declarations.length;
@@ -12102,13 +12497,13 @@ var ts;
                     type.constraint = targetConstraint ? instantiateType(targetConstraint, type.mapper) : noConstraintType;
                 }
                 else {
-                    type.constraint = getTypeFromTypeNode(ts.getDeclarationOfKind(type.symbol, 129).constraint);
+                    type.constraint = getTypeFromTypeNode(ts.getDeclarationOfKind(type.symbol, 130).constraint);
                 }
             }
             return type.constraint === noConstraintType ? undefined : type.constraint;
         }
         function getParentSymbolOfTypeParameter(typeParameter) {
-            return getSymbolOfNode(ts.getDeclarationOfKind(typeParameter.symbol, 129).parent);
+            return getSymbolOfNode(ts.getDeclarationOfKind(typeParameter.symbol, 130).parent);
         }
         function getTypeListId(types) {
             switch (types.length) {
@@ -12133,7 +12528,7 @@ var ts;
                 var type = types[_i];
                 result |= type.flags;
             }
-            return result & 786432;
+            return result & 1572864;
         }
         function createTypeReference(target, typeArguments) {
             var id = getTypeListId(typeArguments);
@@ -12155,18 +12550,18 @@ var ts;
             while (!ts.forEach(typeParameterSymbol.declarations, function (d) { return d.parent === currentNode.parent; })) {
                 currentNode = currentNode.parent;
             }
-            links.isIllegalTypeReferenceInConstraint = currentNode.kind === 129;
+            links.isIllegalTypeReferenceInConstraint = currentNode.kind === 130;
             return links.isIllegalTypeReferenceInConstraint;
         }
         function checkTypeParameterHasIllegalReferencesInConstraint(typeParameter) {
             var typeParameterSymbol;
             function check(n) {
-                if (n.kind === 142 && n.typeName.kind === 65) {
+                if (n.kind === 144 && n.typeName.kind === 65) {
                     var links = getNodeLinks(n);
                     if (links.isIllegalTypeReferenceInConstraint === undefined) {
                         var symbol = resolveName(typeParameter, n.typeName.text, 793056, undefined, undefined);
                         if (symbol && (symbol.flags & 262144)) {
-                            links.isIllegalTypeReferenceInConstraint = ts.forEach(symbol.declarations, function (d) { return d.parent == typeParameter.parent; });
+                            links.isIllegalTypeReferenceInConstraint = ts.forEach(symbol.declarations, function (d) { return d.parent === typeParameter.parent; });
                         }
                     }
                     if (links.isIllegalTypeReferenceInConstraint) {
@@ -12180,55 +12575,71 @@ var ts;
                 check(typeParameter.constraint);
             }
         }
-        function getTypeFromTypeReferenceOrExpressionWithTypeArguments(node) {
-            var links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                var type;
-                if (node.kind !== 177 || ts.isSupportedExpressionWithTypeArguments(node)) {
-                    var typeNameOrExpression = node.kind === 142
-                        ? node.typeName
-                        : node.expression;
-                    var symbol = resolveEntityName(typeNameOrExpression, 793056);
-                    if (symbol) {
-                        if ((symbol.flags & 262144) && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
-                            type = unknownType;
-                        }
-                        else {
-                            type = createTypeReferenceIfGeneric(getDeclaredTypeOfSymbol(symbol), node, node.typeArguments);
-                        }
-                    }
+        function getTypeFromClassOrInterfaceReference(node, symbol) {
+            var type = getDeclaredTypeOfSymbol(symbol);
+            var typeParameters = type.localTypeParameters;
+            if (typeParameters) {
+                if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
+                    error(node, ts.Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, undefined, 1), typeParameters.length);
+                    return unknownType;
                 }
-                links.resolvedType = type || unknownType;
+                return createTypeReference(type, ts.concatenate(type.outerTypeParameters, ts.map(node.typeArguments, getTypeFromTypeNode)));
             }
-            return links.resolvedType;
-        }
-        function createTypeReferenceIfGeneric(type, node, typeArguments) {
-            if (type.flags & (1024 | 2048) && type.flags & 4096) {
-                var localTypeParameters = type.localTypeParameters;
-                var expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
-                var typeArgCount = typeArguments ? typeArguments.length : 0;
-                if (typeArgCount === expectedTypeArgCount) {
-                    if (typeArgCount) {
-                        return createTypeReference(type, ts.concatenate(type.outerTypeParameters, ts.map(typeArguments, getTypeFromTypeNode)));
-                    }
-                }
-                else {
-                    error(node, ts.Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, undefined, 1), expectedTypeArgCount);
-                    return undefined;
-                }
-            }
-            else {
-                if (typeArguments) {
-                    error(node, ts.Diagnostics.Type_0_is_not_generic, typeToString(type));
-                    return undefined;
-                }
+            if (node.typeArguments) {
+                error(node, ts.Diagnostics.Type_0_is_not_generic, typeToString(type));
+                return unknownType;
             }
             return type;
+        }
+        function getTypeFromTypeAliasReference(node, symbol) {
+            var type = getDeclaredTypeOfSymbol(symbol);
+            var links = getSymbolLinks(symbol);
+            var typeParameters = links.typeParameters;
+            if (typeParameters) {
+                if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
+                    error(node, ts.Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
+                    return unknownType;
+                }
+                var typeArguments = ts.map(node.typeArguments, getTypeFromTypeNode);
+                var id = getTypeListId(typeArguments);
+                return links.instantiations[id] || (links.instantiations[id] = instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
+            }
+            if (node.typeArguments) {
+                error(node, ts.Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
+                return unknownType;
+            }
+            return type;
+        }
+        function getTypeFromNonGenericTypeReference(node, symbol) {
+            if (symbol.flags & 262144 && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
+                return unknownType;
+            }
+            if (node.typeArguments) {
+                error(node, ts.Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
+                return unknownType;
+            }
+            return getDeclaredTypeOfSymbol(symbol);
+        }
+        function getTypeFromTypeReference(node) {
+            var links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                var typeNameOrExpression = node.kind === 144 ? node.typeName :
+                    ts.isSupportedExpressionWithTypeArguments(node) ? node.expression :
+                        undefined;
+                var symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, 793056) || unknownSymbol;
+                var type = symbol === unknownSymbol ? unknownType :
+                    symbol.flags & (32 | 64) ? getTypeFromClassOrInterfaceReference(node, symbol) :
+                        symbol.flags & 524288 ? getTypeFromTypeAliasReference(node, symbol) :
+                            getTypeFromNonGenericTypeReference(node, symbol);
+                links.resolvedSymbol = symbol;
+                links.resolvedType = type;
+            }
+            return links.resolvedType;
         }
         function getTypeFromTypeQueryNode(node) {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getWidenedType(checkExpressionOrQualifiedName(node.exprName));
+                links.resolvedType = getWidenedType(checkExpression(node.exprName));
             }
             return links.resolvedType;
         }
@@ -12238,9 +12649,9 @@ var ts;
                 for (var _i = 0; _i < declarations.length; _i++) {
                     var declaration = declarations[_i];
                     switch (declaration.kind) {
-                        case 202:
-                        case 203:
+                        case 204:
                         case 205:
+                        case 207:
                             return declaration;
                     }
                 }
@@ -12349,10 +12760,10 @@ var ts;
                 }
             }
         }
-        function containsAnyType(types) {
+        function containsTypeAny(types) {
             for (var _i = 0; _i < types.length; _i++) {
                 var type = types[_i];
-                if (type.flags & 1) {
+                if (isTypeAny(type)) {
                     return true;
                 }
             }
@@ -12374,7 +12785,7 @@ var ts;
             var sortedTypes = [];
             addTypesToSortedSet(sortedTypes, types);
             if (noSubtypeReduction) {
-                if (containsAnyType(sortedTypes)) {
+                if (containsTypeAny(sortedTypes)) {
                     return anyType;
                 }
                 removeAllButLast(sortedTypes, undefinedType);
@@ -12441,38 +12852,40 @@ var ts;
             switch (node.kind) {
                 case 112:
                     return anyType;
-                case 122:
+                case 123:
                     return stringType;
-                case 120:
+                case 121:
                     return numberType;
                 case 113:
                     return booleanType;
-                case 123:
+                case 124:
                     return esSymbolType;
                 case 99:
                     return voidType;
                 case 8:
                     return getTypeFromStringLiteral(node);
-                case 142:
-                    return getTypeFromTypeReferenceOrExpressionWithTypeArguments(node);
-                case 177:
-                    return getTypeFromTypeReferenceOrExpressionWithTypeArguments(node);
-                case 145:
-                    return getTypeFromTypeQueryNode(node);
-                case 147:
-                    return getTypeFromArrayTypeNode(node);
-                case 148:
-                    return getTypeFromTupleTypeNode(node);
-                case 149:
-                    return getTypeFromUnionTypeNode(node);
-                case 150:
-                    return getTypeFromTypeNode(node.type);
-                case 143:
                 case 144:
+                    return getTypeFromTypeReference(node);
+                case 143:
+                    return booleanType;
+                case 179:
+                    return getTypeFromTypeReference(node);
+                case 147:
+                    return getTypeFromTypeQueryNode(node);
+                case 149:
+                    return getTypeFromArrayTypeNode(node);
+                case 150:
+                    return getTypeFromTupleTypeNode(node);
+                case 151:
+                    return getTypeFromUnionTypeNode(node);
+                case 152:
+                    return getTypeFromTypeNode(node.type);
+                case 145:
                 case 146:
+                case 148:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 case 65:
-                case 127:
+                case 128:
                     var symbol = getSymbolInfo(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
                 default:
@@ -12562,11 +12975,19 @@ var ts;
         }
         function instantiateSignature(signature, mapper, eraseTypeParameters) {
             var freshTypeParameters;
+            var freshTypePredicate;
             if (signature.typeParameters && !eraseTypeParameters) {
                 freshTypeParameters = instantiateList(signature.typeParameters, mapper, instantiateTypeParameter);
                 mapper = combineTypeMappers(createTypeMapper(signature.typeParameters, freshTypeParameters), mapper);
             }
-            var result = createSignature(signature.declaration, freshTypeParameters, instantiateList(signature.parameters, mapper, instantiateSymbol), signature.resolvedReturnType ? instantiateType(signature.resolvedReturnType, mapper) : undefined, signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
+            if (signature.typePredicate) {
+                freshTypePredicate = {
+                    parameterName: signature.typePredicate.parameterName,
+                    parameterIndex: signature.typePredicate.parameterIndex,
+                    type: instantiateType(signature.typePredicate.type, mapper)
+                };
+            }
+            var result = createSignature(signature.declaration, freshTypeParameters, instantiateList(signature.parameters, mapper, instantiateSymbol), signature.resolvedReturnType ? instantiateType(signature.resolvedReturnType, mapper) : undefined, freshTypePredicate, signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
             result.target = signature;
             result.mapper = mapper;
             return result;
@@ -12588,16 +13009,7 @@ var ts;
             return result;
         }
         function instantiateAnonymousType(type, mapper) {
-            if (mapper.mappings) {
-                var cached = mapper.mappings[type.id];
-                if (cached) {
-                    return cached;
-                }
-            }
-            else {
-                mapper.mappings = {};
-            }
-            var result = createObjectType(32768, type.symbol);
+            var result = createObjectType(32768 | 65536, type.symbol);
             result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
             result.members = createSymbolTable(result.properties);
             result.callSignatures = instantiateList(getSignaturesOfType(type, 0), mapper, instantiateSignature);
@@ -12608,7 +13020,6 @@ var ts;
                 result.stringIndexType = instantiateType(stringIndexType, mapper);
             if (numberIndexType)
                 result.numberIndexType = instantiateType(numberIndexType, mapper);
-            mapper.mappings[type.id] = result;
             return result;
         }
         function instantiateType(type, mapper) {
@@ -12633,27 +13044,27 @@ var ts;
             return type;
         }
         function isContextSensitive(node) {
-            ts.Debug.assert(node.kind !== 135 || ts.isObjectLiteralMethod(node));
+            ts.Debug.assert(node.kind !== 136 || ts.isObjectLiteralMethod(node));
             switch (node.kind) {
-                case 163:
-                case 164:
+                case 165:
+                case 166:
                     return isContextSensitiveFunctionLikeDeclaration(node);
-                case 155:
+                case 157:
                     return ts.forEach(node.properties, isContextSensitive);
-                case 154:
+                case 156:
                     return ts.forEach(node.elements, isContextSensitive);
-                case 171:
+                case 173:
                     return isContextSensitive(node.whenTrue) ||
                         isContextSensitive(node.whenFalse);
-                case 170:
+                case 172:
                     return node.operatorToken.kind === 49 &&
                         (isContextSensitive(node.left) || isContextSensitive(node.right));
-                case 225:
+                case 227:
                     return isContextSensitive(node.initializer);
+                case 136:
                 case 135:
-                case 134:
                     return isContextSensitiveFunctionLikeDeclaration(node);
-                case 162:
+                case 164:
                     return isContextSensitive(node.expression);
             }
             return false;
@@ -12661,23 +13072,20 @@ var ts;
         function isContextSensitiveFunctionLikeDeclaration(node) {
             return !node.typeParameters && node.parameters.length && !ts.forEach(node.parameters, function (p) { return p.type; });
         }
-        function getTypeWithoutConstructors(type) {
+        function getTypeWithoutSignatures(type) {
             if (type.flags & 48128) {
                 var resolved = resolveObjectOrUnionTypeMembers(type);
                 if (resolved.constructSignatures.length) {
                     var result = createObjectType(32768, type.symbol);
                     result.members = resolved.members;
                     result.properties = resolved.properties;
-                    result.callSignatures = resolved.callSignatures;
+                    result.callSignatures = emptyArray;
                     result.constructSignatures = emptyArray;
                     type = result;
                 }
             }
             return type;
         }
-        var subtypeRelation = {};
-        var assignableRelation = {};
-        var identityRelation = {};
         function isTypeIdenticalTo(source, target) {
             return checkTypeRelatedTo(source, target, identityRelation, undefined);
         }
@@ -12735,7 +13143,7 @@ var ts;
                 if (source === target)
                     return -1;
                 if (relation !== identityRelation) {
-                    if (target.flags & 1)
+                    if (isTypeAny(target))
                         return -1;
                     if (source === undefinedType)
                         return -1;
@@ -12746,7 +13154,7 @@ var ts;
                     if (source.flags & 256 && target === stringType)
                         return -1;
                     if (relation === assignableRelation) {
-                        if (source.flags & 1)
+                        if (isTypeAny(source))
                             return -1;
                         if (source === numberType && target.flags & 128)
                             return -1;
@@ -12928,9 +13336,9 @@ var ts;
                 maybeStack[depth][id] = 1;
                 depth++;
                 var saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack))
+                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth))
                     expandingFlags |= 1;
-                if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack))
+                if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth))
                     expandingFlags |= 2;
                 var result;
                 if (expandingFlags === 3) {
@@ -12963,28 +13371,13 @@ var ts;
                 }
                 return result;
             }
-            function isDeeplyNestedGeneric(type, stack) {
-                if (type.flags & 4096 && depth >= 10) {
-                    var target_1 = type.target;
-                    var count = 0;
-                    for (var i = 0; i < depth; i++) {
-                        var t = stack[i];
-                        if (t.flags & 4096 && t.target === target_1) {
-                            count++;
-                            if (count >= 10)
-                                return true;
-                        }
-                    }
-                }
-                return false;
-            }
             function propertiesRelatedTo(source, target, reportErrors) {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
                 var result = -1;
                 var properties = getPropertiesOfObjectType(target);
-                var requireOptionalProperties = relation === subtypeRelation && !(source.flags & 131072);
+                var requireOptionalProperties = relation === subtypeRelation && !(source.flags & 262144);
                 for (var _i = 0; _i < properties.length; _i++) {
                     var targetProp = properties[_i];
                     var sourceProp = getPropertyOfType(source, targetProp.name);
@@ -13083,11 +13476,11 @@ var ts;
                 var saveErrorInfo = errorInfo;
                 outer: for (var _i = 0; _i < targetSignatures.length; _i++) {
                     var t = targetSignatures[_i];
-                    if (!t.hasStringLiterals || target.flags & 65536) {
+                    if (!t.hasStringLiterals || target.flags & 131072) {
                         var localErrors = reportErrors;
                         for (var _a = 0; _a < sourceSignatures.length; _a++) {
                             var s = sourceSignatures[_a];
-                            if (!s.hasStringLiterals || source.flags & 65536) {
+                            if (!s.hasStringLiterals || source.flags & 131072) {
                                 var related = signatureRelatedTo(s, t, localErrors);
                                 if (related) {
                                     result &= related;
@@ -13147,6 +13540,33 @@ var ts;
                         errorInfo = saveErrorInfo;
                     }
                     result &= related;
+                }
+                if (source.typePredicate && target.typePredicate) {
+                    var hasDifferentParameterIndex = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
+                    var hasDifferentTypes;
+                    if (hasDifferentParameterIndex ||
+                        (hasDifferentTypes = !isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type))) {
+                        if (reportErrors) {
+                            var sourceParamText = source.typePredicate.parameterName;
+                            var targetParamText = target.typePredicate.parameterName;
+                            var sourceTypeText = typeToString(source.typePredicate.type);
+                            var targetTypeText = typeToString(target.typePredicate.type);
+                            if (hasDifferentParameterIndex) {
+                                reportError(ts.Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceParamText, targetParamText);
+                            }
+                            else if (hasDifferentTypes) {
+                                reportError(ts.Diagnostics.Type_0_is_not_assignable_to_type_1, sourceTypeText, targetTypeText);
+                            }
+                            reportError(ts.Diagnostics.Type_predicate_0_is_not_assignable_to_1, sourceParamText + " is " + sourceTypeText, targetParamText + " is " + targetTypeText);
+                        }
+                        return 0;
+                    }
+                }
+                else if (!source.typePredicate && target.typePredicate) {
+                    if (reportErrors) {
+                        reportError(ts.Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
+                    }
+                    return 0;
                 }
                 var t = getReturnTypeOfSignature(target);
                 if (t === voidType)
@@ -13236,6 +13656,21 @@ var ts;
                 }
                 return 0;
             }
+        }
+        function isDeeplyNestedGeneric(type, stack, depth) {
+            if (type.flags & (4096 | 65536) && depth >= 5) {
+                var symbol = type.symbol;
+                var count = 0;
+                for (var i = 0; i < depth; i++) {
+                    var t = stack[i];
+                    if (t.flags & (4096 | 65536) && t.symbol === symbol) {
+                        count++;
+                        if (count >= 5)
+                            return true;
+                    }
+                }
+            }
+            return false;
         }
         function isPropertyIdenticalTo(sourceProp, targetProp) {
             return compareProperties(sourceProp, targetProp, compareTypes) !== 0;
@@ -13379,11 +13814,11 @@ var ts;
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
         }
         function getWidenedType(type) {
-            if (type.flags & 786432) {
+            if (type.flags & 1572864) {
                 if (type.flags & (32 | 64)) {
                     return anyType;
                 }
-                if (type.flags & 131072) {
+                if (type.flags & 262144) {
                     return getWidenedTypeOfObjectLiteral(type);
                 }
                 if (type.flags & 16384) {
@@ -13408,11 +13843,11 @@ var ts;
             if (isArrayType(type)) {
                 return reportWideningErrorsInType(type.typeArguments[0]);
             }
-            if (type.flags & 131072) {
+            if (type.flags & 262144) {
                 var errorReported = false;
                 ts.forEach(getPropertiesOfObjectType(type), function (p) {
                     var t = getTypeOfSymbol(p);
-                    if (t.flags & 262144) {
+                    if (t.flags & 524288) {
                         if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, ts.Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
@@ -13427,22 +13862,22 @@ var ts;
             var typeAsString = typeToString(getWidenedType(type));
             var diagnostic;
             switch (declaration.kind) {
+                case 134:
                 case 133:
-                case 132:
                     diagnostic = ts.Diagnostics.Member_0_implicitly_has_an_1_type;
                     break;
-                case 130:
+                case 131:
                     diagnostic = declaration.dotDotDotToken ?
                         ts.Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
                         ts.Diagnostics.Parameter_0_implicitly_has_an_1_type;
                     break;
-                case 201:
+                case 203:
+                case 136:
                 case 135:
-                case 134:
-                case 137:
                 case 138:
-                case 163:
-                case 164:
+                case 139:
+                case 165:
+                case 166:
                     if (!declaration.name) {
                         error(declaration, ts.Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
                         return;
@@ -13455,7 +13890,7 @@ var ts;
             error(declaration, diagnostic, ts.declarationNameToString(declaration.name), typeAsString);
         }
         function reportErrorsFromWidening(declaration, type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & 262144) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & 524288) {
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
                 }
@@ -13514,20 +13949,6 @@ var ts;
                 }
                 return false;
             }
-            function isWithinDepthLimit(type, stack) {
-                if (depth >= 5) {
-                    var target_2 = type.target;
-                    var count = 0;
-                    for (var i = 0; i < depth; i++) {
-                        var t = stack[i];
-                        if (t.flags & 4096 && t.target === target_2) {
-                            count++;
-                        }
-                    }
-                    return count < 5;
-                }
-                return true;
-            }
             function inferFromTypes(source, target) {
                 if (source === anyFunctionType) {
                     return;
@@ -13585,22 +14006,26 @@ var ts;
                 }
                 else if (source.flags & 48128 && (target.flags & (4096 | 8192) ||
                     (target.flags & 32768) && target.symbol && target.symbol.flags & (8192 | 2048))) {
-                    if (!isInProcess(source, target) && isWithinDepthLimit(source, sourceStack) && isWithinDepthLimit(target, targetStack)) {
-                        if (depth === 0) {
-                            sourceStack = [];
-                            targetStack = [];
-                        }
-                        sourceStack[depth] = source;
-                        targetStack[depth] = target;
-                        depth++;
-                        inferFromProperties(source, target);
-                        inferFromSignatures(source, target, 0);
-                        inferFromSignatures(source, target, 1);
-                        inferFromIndexTypes(source, target, 0, 0);
-                        inferFromIndexTypes(source, target, 1, 1);
-                        inferFromIndexTypes(source, target, 0, 1);
-                        depth--;
+                    if (isInProcess(source, target)) {
+                        return;
                     }
+                    if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                        return;
+                    }
+                    if (depth === 0) {
+                        sourceStack = [];
+                        targetStack = [];
+                    }
+                    sourceStack[depth] = source;
+                    targetStack[depth] = target;
+                    depth++;
+                    inferFromProperties(source, target);
+                    inferFromSignatures(source, target, 0);
+                    inferFromSignatures(source, target, 1);
+                    inferFromIndexTypes(source, target, 0, 0);
+                    inferFromIndexTypes(source, target, 1, 1);
+                    inferFromIndexTypes(source, target, 0, 1);
+                    depth--;
                 }
             }
             function inferFromProperties(source, target) {
@@ -13625,7 +14050,14 @@ var ts;
             }
             function inferFromSignature(source, target) {
                 forEachMatchingParameterType(source, target, inferFromTypes);
-                inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                if (source.typePredicate && target.typePredicate) {
+                    if (target.typePredicate.parameterIndex === source.typePredicate.parameterIndex) {
+                        inferFromTypes(source.typePredicate.type, target.typePredicate.type);
+                    }
+                }
+                else {
+                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                }
             }
             function inferFromIndexTypes(source, target, sourceKind, targetKind) {
                 var targetIndexType = getIndexTypeOfType(target, targetKind);
@@ -13685,10 +14117,10 @@ var ts;
         function isInTypeQuery(node) {
             while (node) {
                 switch (node.kind) {
-                    case 145:
+                    case 147:
                         return true;
                     case 65:
-                    case 127:
+                    case 128:
                         node = node.parent;
                         continue;
                     default:
@@ -13730,7 +14162,7 @@ var ts;
             function isAssignedInBinaryExpression(node) {
                 if (node.operatorToken.kind >= 53 && node.operatorToken.kind <= 64) {
                     var n = node.left;
-                    while (n.kind === 162) {
+                    while (n.kind === 164) {
                         n = n.expression;
                     }
                     if (n.kind === 65 && getResolvedSymbol(n) === symbol) {
@@ -13747,46 +14179,46 @@ var ts;
             }
             function isAssignedIn(node) {
                 switch (node.kind) {
-                    case 170:
+                    case 172:
                         return isAssignedInBinaryExpression(node);
-                    case 199:
-                    case 153:
-                        return isAssignedInVariableDeclaration(node);
-                    case 151:
-                    case 152:
-                    case 154:
+                    case 201:
                     case 155:
+                        return isAssignedInVariableDeclaration(node);
+                    case 153:
+                    case 154:
                     case 156:
                     case 157:
                     case 158:
                     case 159:
+                    case 160:
                     case 161:
-                    case 162:
-                    case 168:
-                    case 165:
-                    case 166:
+                    case 163:
+                    case 164:
+                    case 170:
                     case 167:
+                    case 168:
                     case 169:
                     case 171:
-                    case 174:
-                    case 180:
-                    case 181:
+                    case 173:
+                    case 176:
+                    case 182:
                     case 183:
-                    case 184:
                     case 185:
                     case 186:
                     case 187:
                     case 188:
                     case 189:
-                    case 192:
-                    case 193:
+                    case 190:
+                    case 191:
                     case 194:
-                    case 221:
-                    case 222:
                     case 195:
                     case 196:
-                    case 197:
+                    case 223:
                     case 224:
+                    case 197:
+                    case 198:
+                    case 199:
+                    case 226:
                         return ts.forEachChild(node, isAssignedIn);
                 }
                 return false;
@@ -13816,53 +14248,55 @@ var ts;
         }
         function getNarrowedTypeOfSymbol(symbol, node) {
             var type = getTypeOfSymbol(symbol);
-            if (node && symbol.flags & 3 && type.flags & (1 | 48128 | 16384 | 512)) {
-                loop: while (node.parent) {
-                    var child = node;
-                    node = node.parent;
-                    var narrowedType = type;
-                    switch (node.kind) {
-                        case 184:
-                            if (child !== node.expression) {
-                                narrowedType = narrowType(type, node.expression, child === node.thenStatement);
-                            }
-                            break;
-                        case 171:
-                            if (child !== node.condition) {
-                                narrowedType = narrowType(type, node.condition, child === node.whenTrue);
-                            }
-                            break;
-                        case 170:
-                            if (child === node.right) {
-                                if (node.operatorToken.kind === 48) {
-                                    narrowedType = narrowType(type, node.left, true);
+            if (node && symbol.flags & 3) {
+                if (isTypeAny(type) || type.flags & (48128 | 16384 | 512)) {
+                    loop: while (node.parent) {
+                        var child = node;
+                        node = node.parent;
+                        var narrowedType = type;
+                        switch (node.kind) {
+                            case 186:
+                                if (child !== node.expression) {
+                                    narrowedType = narrowType(type, node.expression, child === node.thenStatement);
                                 }
-                                else if (node.operatorToken.kind === 49) {
-                                    narrowedType = narrowType(type, node.left, false);
+                                break;
+                            case 173:
+                                if (child !== node.condition) {
+                                    narrowedType = narrowType(type, node.condition, child === node.whenTrue);
                                 }
-                            }
-                            break;
-                        case 228:
-                        case 206:
-                        case 201:
-                        case 135:
-                        case 134:
-                        case 137:
-                        case 138:
-                        case 136:
-                            break loop;
-                    }
-                    if (narrowedType !== type) {
-                        if (isVariableAssignedWithin(symbol, node)) {
-                            break;
+                                break;
+                            case 172:
+                                if (child === node.right) {
+                                    if (node.operatorToken.kind === 48) {
+                                        narrowedType = narrowType(type, node.left, true);
+                                    }
+                                    else if (node.operatorToken.kind === 49) {
+                                        narrowedType = narrowType(type, node.left, false);
+                                    }
+                                }
+                                break;
+                            case 230:
+                            case 208:
+                            case 203:
+                            case 136:
+                            case 135:
+                            case 138:
+                            case 139:
+                            case 137:
+                                break loop;
                         }
-                        type = narrowedType;
+                        if (narrowedType !== type) {
+                            if (isVariableAssignedWithin(symbol, node)) {
+                                break;
+                            }
+                            type = narrowedType;
+                        }
                     }
                 }
             }
             return type;
             function narrowTypeByEquality(type, expr, assumeTrue) {
-                if (expr.left.kind !== 166 || expr.right.kind !== 8) {
+                if (expr.left.kind !== 168 || expr.right.kind !== 8) {
                     return type;
                 }
                 var left = expr.left;
@@ -13876,7 +14310,7 @@ var ts;
                 }
                 if (assumeTrue) {
                     if (!typeInfo) {
-                        return removeTypesFromUnionType(type, 258 | 132 | 8 | 1048576, true, false);
+                        return removeTypesFromUnionType(type, 258 | 132 | 8 | 2097152, true, false);
                     }
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
                         return typeInfo.type;
@@ -13913,7 +14347,7 @@ var ts;
                 }
             }
             function narrowTypeByInstanceof(type, expr, assumeTrue) {
-                if (type.flags & 1 || !assumeTrue || expr.left.kind !== 65 || getResolvedSymbol(expr.left) !== symbol) {
+                if (isTypeAny(type) || !assumeTrue || expr.left.kind !== 65 || getResolvedSymbol(expr.left) !== symbol) {
                     return type;
                 }
                 var rightType = checkExpression(expr.right);
@@ -13924,7 +14358,7 @@ var ts;
                 var prototypeProperty = getPropertyOfType(rightType, "prototype");
                 if (prototypeProperty) {
                     var prototypePropertyType = getTypeOfSymbol(prototypeProperty);
-                    if (prototypePropertyType !== anyType) {
+                    if (!isTypeAny(prototypePropertyType)) {
                         targetType = prototypePropertyType;
                     }
                 }
@@ -13941,20 +14375,44 @@ var ts;
                     }
                 }
                 if (targetType) {
-                    if (isTypeSubtypeOf(targetType, type)) {
-                        return targetType;
+                    return getNarrowedType(type, targetType);
+                }
+                return type;
+            }
+            function getNarrowedType(originalType, narrowedTypeCandidate) {
+                if (isTypeSubtypeOf(narrowedTypeCandidate, originalType)) {
+                    return narrowedTypeCandidate;
+                }
+                if (originalType.flags & 16384) {
+                    return getUnionType(ts.filter(originalType.types, function (t) { return isTypeSubtypeOf(t, narrowedTypeCandidate); }));
+                }
+                return originalType;
+            }
+            function narrowTypeByTypePredicate(type, expr, assumeTrue) {
+                if (type.flags & 1) {
+                    return type;
+                }
+                var signature = getResolvedSignature(expr);
+                if (signature.typePredicate &&
+                    expr.arguments[signature.typePredicate.parameterIndex] &&
+                    getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
+                    if (!assumeTrue) {
+                        if (type.flags & 16384) {
+                            return getUnionType(ts.filter(type.types, function (t) { return !isTypeSubtypeOf(t, signature.typePredicate.type); }));
+                        }
+                        return type;
                     }
-                    if (type.flags & 16384) {
-                        return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, targetType); }));
-                    }
+                    return getNarrowedType(type, signature.typePredicate.type);
                 }
                 return type;
             }
             function narrowType(type, expr, assumeTrue) {
                 switch (expr.kind) {
-                    case 162:
+                    case 160:
+                        return narrowTypeByTypePredicate(type, expr, assumeTrue);
+                    case 164:
                         return narrowType(type, expr.expression, assumeTrue);
-                    case 170:
+                    case 172:
                         var operator = expr.operatorToken.kind;
                         if (operator === 30 || operator === 31) {
                             return narrowTypeByEquality(type, expr, assumeTrue);
@@ -13969,7 +14427,7 @@ var ts;
                             return narrowTypeByInstanceof(type, expr, assumeTrue);
                         }
                         break;
-                    case 168:
+                    case 170:
                         if (expr.operator === 46) {
                             return narrowType(type, expr.operand, !assumeTrue);
                         }
@@ -13980,7 +14438,7 @@ var ts;
         }
         function checkIdentifier(node) {
             var symbol = getResolvedSymbol(node);
-            if (symbol === argumentsSymbol && ts.getContainingFunction(node).kind === 164 && languageVersion < 2) {
+            if (symbol === argumentsSymbol && ts.getContainingFunction(node).kind === 166 && languageVersion < 2) {
                 error(node, ts.Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
             }
             if (symbol.flags & 8388608 && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
@@ -14004,15 +14462,15 @@ var ts;
         function checkBlockScopedBindingCapturedInLoop(node, symbol) {
             if (languageVersion >= 2 ||
                 (symbol.flags & 2) === 0 ||
-                symbol.valueDeclaration.parent.kind === 224) {
+                symbol.valueDeclaration.parent.kind === 226) {
                 return;
             }
             var container = symbol.valueDeclaration;
-            while (container.kind !== 200) {
+            while (container.kind !== 202) {
                 container = container.parent;
             }
             container = container.parent;
-            if (container.kind === 181) {
+            if (container.kind === 183) {
                 container = container.parent;
             }
             var inFunction = isInsideFunction(node.parent, container);
@@ -14029,9 +14487,9 @@ var ts;
             }
         }
         function captureLexicalThis(node, container) {
-            var classNode = container.parent && container.parent.kind === 202 ? container.parent : undefined;
+            var classNode = container.parent && container.parent.kind === 204 ? container.parent : undefined;
             getNodeLinks(node).flags |= 2;
-            if (container.kind === 133 || container.kind === 136) {
+            if (container.kind === 134 || container.kind === 137) {
                 getNodeLinks(classNode).flags |= 4;
             }
             else {
@@ -14041,36 +14499,36 @@ var ts;
         function checkThisExpression(node) {
             var container = ts.getThisContainer(node, true);
             var needToCaptureLexicalThis = false;
-            if (container.kind === 164) {
+            if (container.kind === 166) {
                 container = ts.getThisContainer(container, false);
                 needToCaptureLexicalThis = (languageVersion < 2);
             }
             switch (container.kind) {
-                case 206:
+                case 208:
                     error(node, ts.Diagnostics.this_cannot_be_referenced_in_a_module_or_namespace_body);
                     break;
-                case 205:
+                case 207:
                     error(node, ts.Diagnostics.this_cannot_be_referenced_in_current_location);
                     break;
-                case 136:
+                case 137:
                     if (isInConstructorArgumentInitializer(node, container)) {
                         error(node, ts.Diagnostics.this_cannot_be_referenced_in_constructor_arguments);
                     }
                     break;
+                case 134:
                 case 133:
-                case 132:
                     if (container.flags & 128) {
                         error(node, ts.Diagnostics.this_cannot_be_referenced_in_a_static_property_initializer);
                     }
                     break;
-                case 128:
+                case 129:
                     error(node, ts.Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
                     break;
             }
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-            var classNode = container.parent && container.parent.kind === 202 ? container.parent : undefined;
+            var classNode = container.parent && container.parent.kind === 204 ? container.parent : undefined;
             if (classNode) {
                 var symbol = getSymbolOfNode(classNode);
                 return container.flags & 128 ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
@@ -14079,23 +14537,21 @@ var ts;
         }
         function isInConstructorArgumentInitializer(node, constructorDecl) {
             for (var n = node; n && n !== constructorDecl; n = n.parent) {
-                if (n.kind === 130) {
+                if (n.kind === 131) {
                     return true;
                 }
             }
             return false;
         }
         function checkSuperExpression(node) {
-            var isCallExpression = node.parent.kind === 158 && node.parent.expression === node;
-            var enclosingClass = ts.getAncestor(node, 202);
-            var baseClass;
-            if (enclosingClass && ts.getClassExtendsHeritageClauseElement(enclosingClass)) {
-                var classType = getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
-                var baseTypes = getBaseTypes(classType);
-                baseClass = baseTypes.length && baseTypes[0];
-            }
-            if (!baseClass) {
-                error(node, ts.Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+            var isCallExpression = node.parent.kind === 160 && node.parent.expression === node;
+            var classDeclaration = ts.getAncestor(node, 204);
+            var classType = classDeclaration && getDeclaredTypeOfSymbol(getSymbolOfNode(classDeclaration));
+            var baseClassType = classType && getBaseTypes(classType)[0];
+            if (!baseClassType) {
+                if (!classDeclaration || !ts.getClassExtendsHeritageClauseElement(classDeclaration)) {
+                    error(node, ts.Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+                }
                 return unknownType;
             }
             var container = ts.getSuperContainer(node, true);
@@ -14103,31 +14559,31 @@ var ts;
                 var canUseSuperExpression = false;
                 var needToCaptureLexicalThis;
                 if (isCallExpression) {
-                    canUseSuperExpression = container.kind === 136;
+                    canUseSuperExpression = container.kind === 137;
                 }
                 else {
                     needToCaptureLexicalThis = false;
-                    while (container && container.kind === 164) {
+                    while (container && container.kind === 166) {
                         container = ts.getSuperContainer(container, true);
                         needToCaptureLexicalThis = languageVersion < 2;
                     }
-                    if (container && container.parent && container.parent.kind === 202) {
+                    if (container && container.parent && container.parent.kind === 204) {
                         if (container.flags & 128) {
                             canUseSuperExpression =
-                                container.kind === 135 ||
-                                    container.kind === 134 ||
-                                    container.kind === 137 ||
-                                    container.kind === 138;
+                                container.kind === 136 ||
+                                    container.kind === 135 ||
+                                    container.kind === 138 ||
+                                    container.kind === 139;
                         }
                         else {
                             canUseSuperExpression =
-                                container.kind === 135 ||
-                                    container.kind === 134 ||
-                                    container.kind === 137 ||
+                                container.kind === 136 ||
+                                    container.kind === 135 ||
                                     container.kind === 138 ||
+                                    container.kind === 139 ||
+                                    container.kind === 134 ||
                                     container.kind === 133 ||
-                                    container.kind === 132 ||
-                                    container.kind === 136;
+                                    container.kind === 137;
                         }
                     }
                 }
@@ -14135,13 +14591,13 @@ var ts;
                     var returnType;
                     if ((container.flags & 128) || isCallExpression) {
                         getNodeLinks(node).flags |= 32;
-                        returnType = getTypeOfSymbol(baseClass.symbol);
+                        returnType = getBaseConstructorTypeOfClass(classType);
                     }
                     else {
                         getNodeLinks(node).flags |= 16;
-                        returnType = baseClass;
+                        returnType = baseClassType;
                     }
-                    if (container.kind === 136 && isInConstructorArgumentInitializer(node, container)) {
+                    if (container.kind === 137 && isInConstructorArgumentInitializer(node, container)) {
                         error(node, ts.Diagnostics.super_cannot_be_referenced_in_constructor_arguments);
                         returnType = unknownType;
                     }
@@ -14151,7 +14607,7 @@ var ts;
                     return returnType;
                 }
             }
-            if (container && container.kind === 128) {
+            if (container && container.kind === 129) {
                 error(node, ts.Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
             }
             else if (isCallExpression) {
@@ -14189,7 +14645,7 @@ var ts;
                 if (declaration.type) {
                     return getTypeFromTypeNode(declaration.type);
                 }
-                if (declaration.kind === 130) {
+                if (declaration.kind === 131) {
                     var type = getContextuallyTypedParameterType(declaration);
                     if (type) {
                         return type;
@@ -14222,8 +14678,8 @@ var ts;
         }
         function getContextualReturnType(functionDecl) {
             if (functionDecl.type ||
-                functionDecl.kind === 136 ||
-                functionDecl.kind === 137 && getSetAccessorTypeAnnotationNode(ts.getDeclarationOfKind(functionDecl.symbol, 138))) {
+                functionDecl.kind === 137 ||
+                functionDecl.kind === 138 && getSetAccessorTypeAnnotationNode(ts.getDeclarationOfKind(functionDecl.symbol, 139))) {
                 return getReturnTypeOfSignature(getSignatureFromDeclaration(functionDecl));
             }
             var signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl);
@@ -14242,7 +14698,7 @@ var ts;
             return undefined;
         }
         function getContextualTypeForSubstitutionExpression(template, substitutionExpression) {
-            if (template.parent.kind === 160) {
+            if (template.parent.kind === 162) {
                 return getContextualTypeForArgument(template.parent, substitutionExpression);
             }
             return undefined;
@@ -14350,34 +14806,34 @@ var ts;
             }
             var parent = node.parent;
             switch (parent.kind) {
-                case 199:
-                case 130:
+                case 201:
+                case 131:
+                case 134:
                 case 133:
-                case 132:
-                case 153:
+                case 155:
                     return getContextualTypeForInitializerExpression(node);
-                case 164:
-                case 192:
+                case 166:
+                case 194:
                     return getContextualTypeForReturnExpression(node);
-                case 173:
+                case 175:
                     return getContextualTypeForYieldOperand(parent);
-                case 158:
-                case 159:
-                    return getContextualTypeForArgument(parent, node);
+                case 160:
                 case 161:
+                    return getContextualTypeForArgument(parent, node);
+                case 163:
                     return getTypeFromTypeNode(parent.type);
-                case 170:
+                case 172:
                     return getContextualTypeForBinaryOperand(node);
-                case 225:
+                case 227:
                     return getContextualTypeForObjectLiteralElement(parent);
-                case 154:
+                case 156:
                     return getContextualTypeForElementExpression(node);
-                case 171:
+                case 173:
                     return getContextualTypeForConditionalOperand(node);
-                case 178:
-                    ts.Debug.assert(parent.parent.kind === 172);
+                case 180:
+                    ts.Debug.assert(parent.parent.kind === 174);
                     return getContextualTypeForSubstitutionExpression(parent.parent, node);
-                case 162:
+                case 164:
                     return getContextualType(parent);
             }
             return undefined;
@@ -14392,7 +14848,7 @@ var ts;
             }
         }
         function isFunctionExpressionOrArrowFunction(node) {
-            return node.kind === 163 || node.kind === 164;
+            return node.kind === 165 || node.kind === 166;
         }
         function getContextualSignatureForFunctionLikeDeclaration(node) {
             return isFunctionExpressionOrArrowFunction(node) || ts.isObjectLiteralMethod(node)
@@ -14400,7 +14856,7 @@ var ts;
                 : undefined;
         }
         function getContextualSignature(node) {
-            ts.Debug.assert(node.kind !== 135 || ts.isObjectLiteralMethod(node));
+            ts.Debug.assert(node.kind !== 136 || ts.isObjectLiteralMethod(node));
             var type = ts.isObjectLiteralMethod(node)
                 ? getContextualTypeForObjectLiteralMethod(node)
                 : getContextualType(node);
@@ -14444,13 +14900,13 @@ var ts;
         }
         function isAssignmentTarget(node) {
             var parent = node.parent;
-            if (parent.kind === 170 && parent.operatorToken.kind === 53 && parent.left === node) {
+            if (parent.kind === 172 && parent.operatorToken.kind === 53 && parent.left === node) {
                 return true;
             }
-            if (parent.kind === 225) {
+            if (parent.kind === 227) {
                 return isAssignmentTarget(parent.parent);
             }
-            if (parent.kind === 154) {
+            if (parent.kind === 156) {
                 return isAssignmentTarget(parent);
             }
             return false;
@@ -14469,7 +14925,7 @@ var ts;
             var inDestructuringPattern = isAssignmentTarget(node);
             for (var _i = 0; _i < elements.length; _i++) {
                 var e = elements[_i];
-                if (inDestructuringPattern && e.kind === 174) {
+                if (inDestructuringPattern && e.kind === 176) {
                     var restArrayType = checkExpression(e.expression, contextualMapper);
                     var restElementType = getIndexTypeOfType(restArrayType, 1) ||
                         (languageVersion >= 2 ? getElementTypeOfIterable(restArrayType, undefined) : undefined);
@@ -14481,7 +14937,7 @@ var ts;
                     var type = checkExpression(e, contextualMapper);
                     elementTypes.push(type);
                 }
-                hasSpreadElement = hasSpreadElement || e.kind === 174;
+                hasSpreadElement = hasSpreadElement || e.kind === 176;
             }
             if (!hasSpreadElement) {
                 var contextualType = getContextualType(node);
@@ -14492,10 +14948,13 @@ var ts;
             return createArrayType(getUnionType(elementTypes));
         }
         function isNumericName(name) {
-            return name.kind === 128 ? isNumericComputedName(name) : isNumericLiteralName(name.text);
+            return name.kind === 129 ? isNumericComputedName(name) : isNumericLiteralName(name.text);
         }
         function isNumericComputedName(name) {
-            return allConstituentTypesHaveKind(checkComputedPropertyName(name), 1 | 132);
+            return isTypeAnyOrAllConstituentTypesHaveKind(checkComputedPropertyName(name), 132);
+        }
+        function isTypeAnyOrAllConstituentTypesHaveKind(type, kind) {
+            return isTypeAny(type) || allConstituentTypesHaveKind(type, kind);
         }
         function isNumericLiteralName(name) {
             return (+name).toString() === name;
@@ -14504,7 +14963,7 @@ var ts;
             var links = getNodeLinks(node.expression);
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
-                if (!allConstituentTypesHaveKind(links.resolvedType, 1 | 132 | 258 | 1048576)) {
+                if (!isTypeAnyOrAllConstituentTypesHaveKind(links.resolvedType, 132 | 258 | 2097152)) {
                     error(node, ts.Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else {
@@ -14522,18 +14981,18 @@ var ts;
             for (var _i = 0, _a = node.properties; _i < _a.length; _i++) {
                 var memberDecl = _a[_i];
                 var member = memberDecl.symbol;
-                if (memberDecl.kind === 225 ||
-                    memberDecl.kind === 226 ||
+                if (memberDecl.kind === 227 ||
+                    memberDecl.kind === 228 ||
                     ts.isObjectLiteralMethod(memberDecl)) {
                     var type = void 0;
-                    if (memberDecl.kind === 225) {
+                    if (memberDecl.kind === 227) {
                         type = checkPropertyAssignment(memberDecl, contextualMapper);
                     }
-                    else if (memberDecl.kind === 135) {
+                    else if (memberDecl.kind === 136) {
                         type = checkObjectLiteralMethod(memberDecl, contextualMapper);
                     }
                     else {
-                        ts.Debug.assert(memberDecl.kind === 226);
+                        ts.Debug.assert(memberDecl.kind === 228);
                         type = checkExpression(memberDecl.name, contextualMapper);
                     }
                     typeFlags |= type.flags;
@@ -14548,7 +15007,7 @@ var ts;
                     member = prop;
                 }
                 else {
-                    ts.Debug.assert(memberDecl.kind === 137 || memberDecl.kind === 138);
+                    ts.Debug.assert(memberDecl.kind === 138 || memberDecl.kind === 139);
                     checkAccessorDeclaration(memberDecl);
                 }
                 if (!ts.hasDynamicName(memberDecl)) {
@@ -14559,7 +15018,7 @@ var ts;
             var stringIndexType = getIndexType(0);
             var numberIndexType = getIndexType(1);
             var result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= 131072 | 524288 | (typeFlags & 262144);
+            result.flags |= 262144 | 1048576 | (typeFlags & 524288);
             return result;
             function getIndexType(kind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
@@ -14581,7 +15040,7 @@ var ts;
             }
         }
         function getDeclarationKindFromSymbol(s) {
-            return s.valueDeclaration ? s.valueDeclaration.kind : 133;
+            return s.valueDeclaration ? s.valueDeclaration.kind : 134;
         }
         function getDeclarationFlagsFromSymbol(s) {
             return s.valueDeclaration ? ts.getCombinedNodeFlags(s.valueDeclaration) : s.flags & 134217728 ? 16 | 128 : 0;
@@ -14591,7 +15050,7 @@ var ts;
             if (!(flags & (32 | 64))) {
                 return;
             }
-            var enclosingClassDeclaration = ts.getAncestor(node, 202);
+            var enclosingClassDeclaration = ts.getAncestor(node, 204);
             var enclosingClass = enclosingClassDeclaration ? getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
             var declaringClass = getDeclaredTypeOfSymbol(prop.parent);
             if (flags & 32) {
@@ -14621,43 +15080,41 @@ var ts;
             return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
         }
         function checkPropertyAccessExpressionOrQualifiedName(node, left, right) {
-            var type = checkExpressionOrQualifiedName(left);
-            if (type === unknownType)
+            var type = checkExpression(left);
+            if (isTypeAny(type)) {
                 return type;
-            if (type !== anyType) {
-                var apparentType = getApparentType(getWidenedType(type));
-                if (apparentType === unknownType) {
-                    return unknownType;
-                }
-                var prop = getPropertyOfType(apparentType, right.text);
-                if (!prop) {
-                    if (right.text) {
-                        error(right, ts.Diagnostics.Property_0_does_not_exist_on_type_1, ts.declarationNameToString(right), typeToString(type));
-                    }
-                    return unknownType;
-                }
-                getNodeLinks(node).resolvedSymbol = prop;
-                if (prop.parent && prop.parent.flags & 32) {
-                    if (left.kind === 91 && getDeclarationKindFromSymbol(prop) !== 135) {
-                        error(right, ts.Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                    }
-                    else {
-                        checkClassPropertyAccess(node, left, type, prop);
-                    }
-                }
-                return getTypeOfSymbol(prop);
             }
-            return anyType;
+            var apparentType = getApparentType(getWidenedType(type));
+            if (apparentType === unknownType) {
+                return unknownType;
+            }
+            var prop = getPropertyOfType(apparentType, right.text);
+            if (!prop) {
+                if (right.text) {
+                    error(right, ts.Diagnostics.Property_0_does_not_exist_on_type_1, ts.declarationNameToString(right), typeToString(type));
+                }
+                return unknownType;
+            }
+            getNodeLinks(node).resolvedSymbol = prop;
+            if (prop.parent && prop.parent.flags & 32) {
+                if (left.kind === 91 && getDeclarationKindFromSymbol(prop) !== 136) {
+                    error(right, ts.Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                }
+                else {
+                    checkClassPropertyAccess(node, left, type, prop);
+                }
+            }
+            return getTypeOfSymbol(prop);
         }
         function isValidPropertyAccess(node, propertyName) {
-            var left = node.kind === 156
+            var left = node.kind === 158
                 ? node.expression
                 : node.left;
-            var type = checkExpressionOrQualifiedName(left);
-            if (type !== unknownType && type !== anyType) {
+            var type = checkExpression(left);
+            if (type !== unknownType && !isTypeAny(type)) {
                 var prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & 32) {
-                    if (left.kind === 91 && getDeclarationKindFromSymbol(prop) !== 135) {
+                    if (left.kind === 91 && getDeclarationKindFromSymbol(prop) !== 136) {
                         return false;
                     }
                     else {
@@ -14672,7 +15129,7 @@ var ts;
         function checkIndexedAccess(node) {
             if (!node.argumentExpression) {
                 var sourceFile = getSourceFile(node);
-                if (node.parent.kind === 159 && node.parent.expression === node) {
+                if (node.parent.kind === 161 && node.parent.expression === node) {
                     var start = ts.skipTrivia(sourceFile.text, node.expression.end);
                     var end = node.end;
                     grammarErrorAtPos(sourceFile, start, end - start, ts.Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
@@ -14695,21 +15152,21 @@ var ts;
                 return unknownType;
             }
             if (node.argumentExpression) {
-                var name_9 = getPropertyNameForIndexedAccess(node.argumentExpression, indexType);
-                if (name_9 !== undefined) {
-                    var prop = getPropertyOfType(objectType, name_9);
+                var name_10 = getPropertyNameForIndexedAccess(node.argumentExpression, indexType);
+                if (name_10 !== undefined) {
+                    var prop = getPropertyOfType(objectType, name_10);
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
                         return getTypeOfSymbol(prop);
                     }
                     else if (isConstEnum) {
-                        error(node.argumentExpression, ts.Diagnostics.Property_0_does_not_exist_on_const_enum_1, name_9, symbolToString(objectType.symbol));
+                        error(node.argumentExpression, ts.Diagnostics.Property_0_does_not_exist_on_const_enum_1, name_10, symbolToString(objectType.symbol));
                         return unknownType;
                     }
                 }
             }
-            if (allConstituentTypesHaveKind(indexType, 1 | 258 | 132 | 1048576)) {
-                if (allConstituentTypesHaveKind(indexType, 1 | 132)) {
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, 258 | 132 | 2097152)) {
+                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, 132)) {
                     var numberIndexType = getIndexTypeOfType(objectType, 1);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -14719,7 +15176,7 @@ var ts;
                 if (stringIndexType) {
                     return stringIndexType;
                 }
-                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTypeAny(objectType)) {
                     error(node, ts.Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
                 return anyType;
@@ -14744,7 +15201,7 @@ var ts;
             if (!ts.isWellKnownSymbolSyntactically(expression)) {
                 return false;
             }
-            if ((expressionType.flags & 1048576) === 0) {
+            if ((expressionType.flags & 2097152) === 0) {
                 if (reportError) {
                     error(expression, ts.Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, ts.getTextOfNode(expression));
                 }
@@ -14768,7 +15225,7 @@ var ts;
             return true;
         }
         function resolveUntypedCall(node) {
-            if (node.kind === 160) {
+            if (node.kind === 162) {
                 checkExpression(node.template);
             }
             else {
@@ -14821,7 +15278,7 @@ var ts;
         }
         function getSpreadArgumentIndex(args) {
             for (var i = 0; i < args.length; i++) {
-                if (args[i].kind === 174) {
+                if (args[i].kind === 176) {
                     return i;
                 }
             }
@@ -14831,11 +15288,11 @@ var ts;
             var adjustedArgCount;
             var typeArguments;
             var callIsIncomplete;
-            if (node.kind === 160) {
+            if (node.kind === 162) {
                 var tagExpression = node;
                 adjustedArgCount = args.length;
                 typeArguments = undefined;
-                if (tagExpression.template.kind === 172) {
+                if (tagExpression.template.kind === 174) {
                     var templateExpression = tagExpression.template;
                     var lastSpan = ts.lastOrUndefined(templateExpression.templateSpans);
                     ts.Debug.assert(lastSpan !== undefined);
@@ -14850,7 +15307,7 @@ var ts;
             else {
                 var callExpression = node;
                 if (!callExpression.arguments) {
-                    ts.Debug.assert(callExpression.kind === 159);
+                    ts.Debug.assert(callExpression.kind === 161);
                     return signature.minArgumentCount === 0;
                 }
                 adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
@@ -14902,10 +15359,10 @@ var ts;
             }
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
-                if (arg.kind !== 176) {
+                if (arg.kind !== 178) {
                     var paramType = getTypeAtPosition(signature, i);
                     var argType = void 0;
-                    if (i === 0 && args[i].parent.kind === 160) {
+                    if (i === 0 && args[i].parent.kind === 162) {
                         argType = globalTemplateStringsArrayType;
                     }
                     else {
@@ -14945,9 +15402,9 @@ var ts;
         function checkApplicableSignature(node, args, signature, relation, excludeArgument, reportErrors) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
-                if (arg.kind !== 176) {
+                if (arg.kind !== 178) {
                     var paramType = getTypeAtPosition(signature, i);
-                    var argType = i === 0 && node.kind === 160
+                    var argType = i === 0 && node.kind === 162
                         ? globalTemplateStringsArrayType
                         : arg.kind === 8 && !reportErrors
                             ? getStringLiteralType(arg)
@@ -14961,10 +15418,10 @@ var ts;
         }
         function getEffectiveCallArguments(node) {
             var args;
-            if (node.kind === 160) {
+            if (node.kind === 162) {
                 var template = node.template;
                 args = [template];
-                if (template.kind === 172) {
+                if (template.kind === 174) {
                     ts.forEach(template.templateSpans, function (span) {
                         args.push(span.expression);
                     });
@@ -14975,21 +15432,11 @@ var ts;
             }
             return args;
         }
-        function getEffectiveTypeArguments(callExpression) {
-            if (callExpression.expression.kind === 91) {
-                var containingClass = ts.getAncestor(callExpression, 202);
-                var baseClassTypeNode = containingClass && ts.getClassExtendsHeritageClauseElement(containingClass);
-                return baseClassTypeNode && baseClassTypeNode.typeArguments;
-            }
-            else {
-                return callExpression.typeArguments;
-            }
-        }
         function resolveCall(node, signatures, candidatesOutArray) {
-            var isTaggedTemplate = node.kind === 160;
+            var isTaggedTemplate = node.kind === 162;
             var typeArguments;
             if (!isTaggedTemplate) {
-                typeArguments = getEffectiveTypeArguments(node);
+                typeArguments = node.typeArguments;
                 if (node.expression.kind !== 91) {
                     ts.forEach(typeArguments, checkSourceElement);
                 }
@@ -15030,8 +15477,8 @@ var ts;
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, undefined, true);
             }
             else if (candidateForTypeArgumentError) {
-                if (!isTaggedTemplate && node.typeArguments) {
-                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], true);
+                if (!isTaggedTemplate && typeArguments) {
+                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, [], true);
                 }
                 else {
                     ts.Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
@@ -15115,7 +15562,9 @@ var ts;
             if (node.expression.kind === 91) {
                 var superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
-                    return resolveCall(node, getSignaturesOfType(superType, 1), candidatesOutArray);
+                    var baseTypeNode = ts.getClassExtendsHeritageClauseElement(ts.getAncestor(node, 204));
+                    var baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
+                    return resolveCall(node, baseConstructors, candidatesOutArray);
                 }
                 return resolveUntypedCall(node);
             }
@@ -15126,8 +15575,8 @@ var ts;
             }
             var callSignatures = getSignaturesOfType(apparentType, 0);
             var constructSignatures = getSignaturesOfType(apparentType, 1);
-            if (funcType === anyType || (!callSignatures.length && !constructSignatures.length && !(funcType.flags & 16384) && isTypeAssignableTo(funcType, globalFunctionType))) {
-                if (node.typeArguments) {
+            if (isTypeAny(funcType) || (!callSignatures.length && !constructSignatures.length && !(funcType.flags & 16384) && isTypeAssignableTo(funcType, globalFunctionType))) {
+                if (funcType !== unknownType && node.typeArguments) {
                     error(node, ts.Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
@@ -15151,15 +15600,15 @@ var ts;
                 }
             }
             var expressionType = checkExpression(node.expression);
-            if (expressionType === anyType) {
+            expressionType = getApparentType(expressionType);
+            if (expressionType === unknownType) {
+                return resolveErrorCall(node);
+            }
+            if (isTypeAny(expressionType)) {
                 if (node.typeArguments) {
                     error(node, ts.Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
-            }
-            expressionType = getApparentType(expressionType);
-            if (expressionType === unknownType) {
-                return resolveErrorCall(node);
             }
             var constructSignatures = getSignaturesOfType(expressionType, 1);
             if (constructSignatures.length) {
@@ -15183,7 +15632,7 @@ var ts;
                 return resolveErrorCall(node);
             }
             var callSignatures = getSignaturesOfType(apparentType, 0);
-            if (tagType === anyType || (!callSignatures.length && !(tagType.flags & 16384) && isTypeAssignableTo(tagType, globalFunctionType))) {
+            if (isTypeAny(tagType) || (!callSignatures.length && !(tagType.flags & 16384) && isTypeAssignableTo(tagType, globalFunctionType))) {
                 return resolveUntypedCall(node);
             }
             if (!callSignatures.length) {
@@ -15196,13 +15645,13 @@ var ts;
             var links = getNodeLinks(node);
             if (!links.resolvedSignature || candidatesOutArray) {
                 links.resolvedSignature = anySignature;
-                if (node.kind === 158) {
+                if (node.kind === 160) {
                     links.resolvedSignature = resolveCallExpression(node, candidatesOutArray);
                 }
-                else if (node.kind === 159) {
+                else if (node.kind === 161) {
                     links.resolvedSignature = resolveNewExpression(node, candidatesOutArray);
                 }
-                else if (node.kind === 160) {
+                else if (node.kind === 162) {
                     links.resolvedSignature = resolveTaggedTemplateExpression(node, candidatesOutArray);
                 }
                 else {
@@ -15217,12 +15666,12 @@ var ts;
             if (node.expression.kind === 91) {
                 return voidType;
             }
-            if (node.kind === 159) {
+            if (node.kind === 161) {
                 var declaration = signature.declaration;
                 if (declaration &&
-                    declaration.kind !== 136 &&
-                    declaration.kind !== 140 &&
-                    declaration.kind !== 144) {
+                    declaration.kind !== 137 &&
+                    declaration.kind !== 141 &&
+                    declaration.kind !== 146) {
                     if (compilerOptions.noImplicitAny) {
                         error(node, ts.Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
@@ -15269,7 +15718,7 @@ var ts;
                 return unknownType;
             }
             var type;
-            if (func.body.kind !== 180) {
+            if (func.body.kind !== 182) {
                 type = checkExpressionCached(func.body, contextualMapper);
             }
             else {
@@ -15346,16 +15795,16 @@ var ts;
             });
         }
         function bodyContainsSingleThrowStatement(body) {
-            return (body.statements.length === 1) && (body.statements[0].kind === 196);
+            return (body.statements.length === 1) && (body.statements[0].kind === 198);
         }
         function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func, returnType) {
             if (!produceDiagnostics) {
                 return;
             }
-            if (returnType === voidType || returnType === anyType) {
+            if (returnType === voidType || isTypeAny(returnType)) {
                 return;
             }
-            if (ts.nodeIsMissing(func.body) || func.body.kind !== 180) {
+            if (ts.nodeIsMissing(func.body) || func.body.kind !== 182) {
                 return;
             }
             var bodyBlock = func.body;
@@ -15368,10 +15817,10 @@ var ts;
             error(func.type, ts.Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement);
         }
         function checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper) {
-            ts.Debug.assert(node.kind !== 135 || ts.isObjectLiteralMethod(node));
-            var hasGrammarError = checkGrammarDeclarationNameInStrictMode(node) || checkGrammarFunctionLikeDeclaration(node);
-            if (!hasGrammarError && node.kind === 163) {
-                checkGrammarFunctionName(node.name) || checkGrammarForGenerator(node);
+            ts.Debug.assert(node.kind !== 136 || ts.isObjectLiteralMethod(node));
+            var hasGrammarError = checkGrammarFunctionLikeDeclaration(node);
+            if (!hasGrammarError && node.kind === 165) {
+                checkGrammarForGenerator(node);
             }
             if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
@@ -15397,19 +15846,22 @@ var ts;
                     checkSignatureDeclaration(node);
                 }
             }
-            if (produceDiagnostics && node.kind !== 135 && node.kind !== 134) {
+            if (produceDiagnostics && node.kind !== 136 && node.kind !== 135) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
             }
             return type;
         }
         function checkFunctionExpressionOrObjectLiteralMethodBody(node) {
-            ts.Debug.assert(node.kind !== 135 || ts.isObjectLiteralMethod(node));
+            ts.Debug.assert(node.kind !== 136 || ts.isObjectLiteralMethod(node));
             if (node.type && !node.asteriskToken) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
             if (node.body) {
-                if (node.body.kind === 180) {
+                if (!node.type) {
+                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
+                if (node.body.kind === 182) {
                     checkSourceElement(node.body);
                 }
                 else {
@@ -15422,7 +15874,7 @@ var ts;
             }
         }
         function checkArithmeticOperandType(operand, type, diagnostic) {
-            if (!allConstituentTypesHaveKind(type, 1 | 132)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(type, 132)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -15439,13 +15891,13 @@ var ts;
                         var symbol = findSymbol(n);
                         return !symbol || symbol === unknownSymbol || symbol === argumentsSymbol || (symbol.flags & 3) !== 0;
                     }
-                    case 156: {
+                    case 158: {
                         var symbol = findSymbol(n);
                         return !symbol || symbol === unknownSymbol || (symbol.flags & ~8) !== 0;
                     }
-                    case 157:
+                    case 159:
                         return true;
-                    case 162:
+                    case 164:
                         return isReferenceOrErrorExpression(n.expression);
                     default:
                         return false;
@@ -15454,21 +15906,21 @@ var ts;
             function isConstVariableReference(n) {
                 switch (n.kind) {
                     case 65:
-                    case 156: {
+                    case 158: {
                         var symbol = findSymbol(n);
                         return symbol && (symbol.flags & 3) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & 8192) !== 0;
                     }
-                    case 157: {
+                    case 159: {
                         var index = n.argumentExpression;
                         var symbol = findSymbol(n.expression);
                         if (symbol && index && index.kind === 8) {
-                            var name_10 = index.text;
-                            var prop = getPropertyOfType(getTypeOfSymbol(symbol), name_10);
+                            var name_11 = index.text;
+                            var prop = getPropertyOfType(getTypeOfSymbol(symbol), name_11);
                             return prop && (prop.flags & 3) !== 0 && (getDeclarationFlagsFromSymbol(prop) & 8192) !== 0;
                         }
                         return false;
                     }
-                    case 162:
+                    case 164:
                         return isConstVariableReference(n.expression);
                     default:
                         return false;
@@ -15485,10 +15937,7 @@ var ts;
             return true;
         }
         function checkDeleteExpression(node) {
-            if (node.parserContextFlags & 1 && node.expression.kind === 65) {
-                grammarErrorOnNode(node.expression, ts.Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
-            }
-            var operandType = checkExpression(node.expression);
+            checkExpression(node.expression);
             return booleanType;
         }
         function checkTypeOfExpression(node) {
@@ -15500,15 +15949,12 @@ var ts;
             return undefinedType;
         }
         function checkPrefixUnaryExpression(node) {
-            if ((node.operator === 38 || node.operator === 39)) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.operand);
-            }
             var operandType = checkExpression(node.operand);
             switch (node.operator) {
                 case 33:
                 case 34:
                 case 47:
-                    if (someConstituentTypeHasKind(operandType, 1048576)) {
+                    if (someConstituentTypeHasKind(operandType, 2097152)) {
                         error(node.operand, ts.Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, ts.tokenToString(node.operator));
                     }
                     return numberType;
@@ -15525,7 +15971,6 @@ var ts;
             return unknownType;
         }
         function checkPostfixUnaryExpression(node) {
-            checkGrammarEvalOrArgumentsInStrictMode(node, node.operand);
             var operandType = checkExpression(node.operand);
             var ok = checkArithmeticOperandType(node.operand, operandType, ts.Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
@@ -15572,19 +16017,19 @@ var ts;
             return (symbol.flags & 128) !== 0;
         }
         function checkInstanceOfExpression(node, leftType, rightType) {
-            if (allConstituentTypesHaveKind(leftType, 1049086)) {
+            if (allConstituentTypesHaveKind(leftType, 2097662)) {
                 error(node.left, ts.Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
-            if (!(rightType.flags & 1 || isTypeSubtypeOf(rightType, globalFunctionType))) {
+            if (!(isTypeAny(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
                 error(node.right, ts.Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
         }
         function checkInExpression(node, leftType, rightType) {
-            if (!allConstituentTypesHaveKind(leftType, 1 | 258 | 132 | 1048576)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, 258 | 132 | 2097152)) {
                 error(node.left, ts.Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!allConstituentTypesHaveKind(rightType, 1 | 48128 | 512)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, 48128 | 512)) {
                 error(node.right, ts.Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -15593,17 +16038,18 @@ var ts;
             var properties = node.properties;
             for (var _i = 0; _i < properties.length; _i++) {
                 var p = properties[_i];
-                if (p.kind === 225 || p.kind === 226) {
-                    var name_11 = p.name;
-                    var type = sourceType.flags & 1 ? sourceType :
-                        getTypeOfPropertyOfType(sourceType, name_11.text) ||
-                            isNumericLiteralName(name_11.text) && getIndexTypeOfType(sourceType, 1) ||
+                if (p.kind === 227 || p.kind === 228) {
+                    var name_12 = p.name;
+                    var type = isTypeAny(sourceType)
+                        ? sourceType
+                        : getTypeOfPropertyOfType(sourceType, name_12.text) ||
+                            isNumericLiteralName(name_12.text) && getIndexTypeOfType(sourceType, 1) ||
                             getIndexTypeOfType(sourceType, 0);
                     if (type) {
-                        checkDestructuringAssignment(p.initializer || name_11, type);
+                        checkDestructuringAssignment(p.initializer || name_12, type);
                     }
                     else {
-                        error(name_11, ts.Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(sourceType), ts.declarationNameToString(name_11));
+                        error(name_12, ts.Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(sourceType), ts.declarationNameToString(name_12));
                     }
                 }
                 else {
@@ -15617,11 +16063,12 @@ var ts;
             var elements = node.elements;
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
-                if (e.kind !== 176) {
-                    if (e.kind !== 174) {
+                if (e.kind !== 178) {
+                    if (e.kind !== 176) {
                         var propName = "" + i;
-                        var type = sourceType.flags & 1 ? sourceType :
-                            isTupleLikeType(sourceType)
+                        var type = isTypeAny(sourceType)
+                            ? sourceType
+                            : isTupleLikeType(sourceType)
                                 ? getTypeOfPropertyOfType(sourceType, propName)
                                 : elementType;
                         if (type) {
@@ -15642,7 +16089,7 @@ var ts;
                         }
                         else {
                             var restExpression = e.expression;
-                            if (restExpression.kind === 170 && restExpression.operatorToken.kind === 53) {
+                            if (restExpression.kind === 172 && restExpression.operatorToken.kind === 53) {
                                 error(restExpression.operatorToken, ts.Diagnostics.A_rest_element_cannot_have_an_initializer);
                             }
                             else {
@@ -15655,14 +16102,14 @@ var ts;
             return sourceType;
         }
         function checkDestructuringAssignment(target, sourceType, contextualMapper) {
-            if (target.kind === 170 && target.operatorToken.kind === 53) {
+            if (target.kind === 172 && target.operatorToken.kind === 53) {
                 checkBinaryExpression(target, contextualMapper);
                 target = target.left;
             }
-            if (target.kind === 155) {
+            if (target.kind === 157) {
                 return checkObjectLiteralAssignment(target, sourceType, contextualMapper);
             }
-            if (target.kind === 154) {
+            if (target.kind === 156) {
                 return checkArrayLiteralAssignment(target, sourceType, contextualMapper);
             }
             return checkReferenceAssignment(target, sourceType, contextualMapper);
@@ -15675,11 +16122,8 @@ var ts;
             return sourceType;
         }
         function checkBinaryExpression(node, contextualMapper) {
-            if (ts.isLeftHandSideExpression(node.left) && ts.isAssignmentOperator(node.operatorToken.kind)) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.left);
-            }
             var operator = node.operatorToken.kind;
-            if (operator === 53 && (node.left.kind === 155 || node.left.kind === 154)) {
+            if (operator === 53 && (node.left.kind === 157 || node.left.kind === 156)) {
                 return checkDestructuringAssignment(node.left, checkExpression(node.right, contextualMapper), contextualMapper);
             }
             var leftType = checkExpression(node.left, contextualMapper);
@@ -15737,8 +16181,8 @@ var ts;
                         if (allConstituentTypesHaveKind(leftType, 258) || allConstituentTypesHaveKind(rightType, 258)) {
                             resultType = stringType;
                         }
-                        else if (leftType.flags & 1 || rightType.flags & 1) {
-                            resultType = anyType;
+                        else if (isTypeAny(leftType) || isTypeAny(rightType)) {
+                            resultType = leftType === unknownType || rightType === unknownType ? unknownType : anyType;
                         }
                         if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
                             return resultType;
@@ -15782,8 +16226,8 @@ var ts;
                     return rightType;
             }
             function checkForDisallowedESSymbolOperand(operator) {
-                var offendingSymbolOperand = someConstituentTypeHasKind(leftType, 1048576) ? node.left :
-                    someConstituentTypeHasKind(rightType, 1048576) ? node.right :
+                var offendingSymbolOperand = someConstituentTypeHasKind(leftType, 2097152) ? node.left :
+                    someConstituentTypeHasKind(rightType, 2097152) ? node.right :
                         undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, ts.Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, ts.tokenToString(operator));
@@ -15825,7 +16269,7 @@ var ts;
                 if (ts.isFunctionLike(parent) && current === parent.body) {
                     return false;
                 }
-                else if (current.kind === 202 || current.kind === 175) {
+                else if (current.kind === 204 || current.kind === 177) {
                     return true;
                 }
                 current = parent;
@@ -15886,14 +16330,14 @@ var ts;
             return links.resolvedType;
         }
         function checkPropertyAssignment(node, contextualMapper) {
-            if (node.name.kind === 128) {
+            if (node.name.kind === 129) {
                 checkComputedPropertyName(node.name);
             }
             return checkExpression(node.initializer, contextualMapper);
         }
         function checkObjectLiteralMethod(node, contextualMapper) {
             checkGrammarMethod(node);
-            if (node.name.kind === 128) {
+            if (node.name.kind === 129) {
                 checkComputedPropertyName(node.name);
             }
             var uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
@@ -15915,12 +16359,8 @@ var ts;
             return type;
         }
         function checkExpression(node, contextualMapper) {
-            checkGrammarIdentifierInStrictMode(node);
-            return checkExpressionOrQualifiedName(node, contextualMapper);
-        }
-        function checkExpressionOrQualifiedName(node, contextualMapper) {
             var type;
-            if (node.kind == 127) {
+            if (node.kind === 128) {
                 type = checkQualifiedName(node);
             }
             else {
@@ -15928,9 +16368,9 @@ var ts;
                 type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, contextualMapper);
             }
             if (isConstEnumObjectType(type)) {
-                var ok = (node.parent.kind === 156 && node.parent.expression === node) ||
-                    (node.parent.kind === 157 && node.parent.expression === node) ||
-                    ((node.kind === 65 || node.kind === 127) && isInRightSideOfImportOrExportAssignment(node));
+                var ok = (node.parent.kind === 158 && node.parent.expression === node) ||
+                    (node.parent.kind === 159 && node.parent.expression === node) ||
+                    ((node.kind === 65 || node.kind === 128) && isInRightSideOfImportOrExportAssignment(node));
                 if (!ok) {
                     error(node, ts.Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
                 }
@@ -15956,60 +16396,59 @@ var ts;
                     return booleanType;
                 case 7:
                     return checkNumericLiteral(node);
-                case 172:
+                case 174:
                     return checkTemplateExpression(node);
                 case 8:
                 case 10:
                     return stringType;
                 case 9:
                     return globalRegExpType;
-                case 154:
-                    return checkArrayLiteral(node, contextualMapper);
-                case 155:
-                    return checkObjectLiteral(node, contextualMapper);
                 case 156:
-                    return checkPropertyAccessExpression(node);
+                    return checkArrayLiteral(node, contextualMapper);
                 case 157:
-                    return checkIndexedAccess(node);
+                    return checkObjectLiteral(node, contextualMapper);
                 case 158:
+                    return checkPropertyAccessExpression(node);
                 case 159:
-                    return checkCallExpression(node);
+                    return checkIndexedAccess(node);
                 case 160:
-                    return checkTaggedTemplateExpression(node);
                 case 161:
-                    return checkTypeAssertion(node);
+                    return checkCallExpression(node);
                 case 162:
-                    return checkExpression(node.expression, contextualMapper);
-                case 175:
-                    return checkClassExpression(node);
+                    return checkTaggedTemplateExpression(node);
                 case 163:
+                    return checkTypeAssertion(node);
                 case 164:
-                    return checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
-                case 166:
-                    return checkTypeOfExpression(node);
+                    return checkExpression(node.expression, contextualMapper);
+                case 177:
+                    return checkClassExpression(node);
                 case 165:
-                    return checkDeleteExpression(node);
-                case 167:
-                    return checkVoidExpression(node);
+                case 166:
+                    return checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
                 case 168:
-                    return checkPrefixUnaryExpression(node);
+                    return checkTypeOfExpression(node);
+                case 167:
+                    return checkDeleteExpression(node);
                 case 169:
-                    return checkPostfixUnaryExpression(node);
+                    return checkVoidExpression(node);
                 case 170:
-                    return checkBinaryExpression(node, contextualMapper);
+                    return checkPrefixUnaryExpression(node);
                 case 171:
-                    return checkConditionalExpression(node, contextualMapper);
-                case 174:
-                    return checkSpreadElementExpression(node, contextualMapper);
-                case 176:
-                    return undefinedType;
+                    return checkPostfixUnaryExpression(node);
+                case 172:
+                    return checkBinaryExpression(node, contextualMapper);
                 case 173:
+                    return checkConditionalExpression(node, contextualMapper);
+                case 176:
+                    return checkSpreadElementExpression(node, contextualMapper);
+                case 178:
+                    return undefinedType;
+                case 175:
                     return checkYieldExpression(node);
             }
             return unknownType;
         }
         function checkTypeParameter(node) {
-            checkGrammarDeclarationNameInStrictMode(node);
             if (node.expression) {
                 grammarErrorOnFirstToken(node.expression, ts.Diagnostics.Type_expected);
             }
@@ -16024,14 +16463,12 @@ var ts;
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code
             // or if its FunctionBody is strict code(11.1.5).
-            // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
-            // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEvalOrArgumentsInStrictMode(node, node.name);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
             checkVariableLikeDeclaration(node);
             var func = ts.getContainingFunction(node);
             if (node.flags & 112) {
                 func = ts.getContainingFunction(node);
-                if (!(func.kind === 136 && ts.nodeIsPresent(func.body))) {
+                if (!(func.kind === 137 && ts.nodeIsPresent(func.body))) {
                     error(node, ts.Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
             }
@@ -16046,32 +16483,106 @@ var ts;
             if (!node.asteriskToken || !node.body) {
                 return false;
             }
-            return node.kind === 135 ||
-                node.kind === 201 ||
-                node.kind === 163;
+            return node.kind === 136 ||
+                node.kind === 203 ||
+                node.kind === 165;
+        }
+        function getTypePredicateParameterIndex(parameterList, parameter) {
+            if (parameterList) {
+                for (var i = 0; i < parameterList.length; i++) {
+                    var param = parameterList[i];
+                    if (param.name.kind === 65 &&
+                        param.name.text === parameter.text) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+        function isInLegalTypePredicatePosition(node) {
+            switch (node.parent.kind) {
+                case 166:
+                case 140:
+                case 203:
+                case 165:
+                case 145:
+                case 136:
+                case 135:
+                    return node === node.parent.type;
+            }
+            return false;
         }
         function checkSignatureDeclaration(node) {
-            if (node.kind === 141) {
+            if (node.kind === 142) {
                 checkGrammarIndexSignature(node);
             }
-            else if (node.kind === 143 || node.kind === 201 || node.kind === 144 ||
-                node.kind === 139 || node.kind === 136 ||
-                node.kind === 140) {
+            else if (node.kind === 145 || node.kind === 203 || node.kind === 146 ||
+                node.kind === 140 || node.kind === 137 ||
+                node.kind === 141) {
                 checkGrammarFunctionLikeDeclaration(node);
             }
             checkTypeParameters(node.typeParameters);
             ts.forEach(node.parameters, checkParameter);
             if (node.type) {
-                checkSourceElement(node.type);
+                if (node.type.kind === 143) {
+                    var typePredicate = getSignatureFromDeclaration(node).typePredicate;
+                    var typePredicateNode = node.type;
+                    if (isInLegalTypePredicatePosition(typePredicateNode)) {
+                        if (typePredicate.parameterIndex >= 0) {
+                            if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
+                                error(typePredicateNode.parameterName, ts.Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
+                            }
+                            else {
+                                checkTypeAssignableTo(typePredicate.type, getTypeAtLocation(node.parameters[typePredicate.parameterIndex]), typePredicateNode.type);
+                            }
+                        }
+                        else if (typePredicateNode.parameterName) {
+                            var hasReportedError = false;
+                            for (var _i = 0, _a = node.parameters; _i < _a.length; _i++) {
+                                var param = _a[_i];
+                                if (hasReportedError) {
+                                    break;
+                                }
+                                if (param.name.kind === 153 ||
+                                    param.name.kind === 154) {
+                                    (function checkBindingPattern(pattern) {
+                                        for (var _i = 0, _a = pattern.elements; _i < _a.length; _i++) {
+                                            var element = _a[_i];
+                                            if (element.name.kind === 65 &&
+                                                element.name.text === typePredicate.parameterName) {
+                                                error(typePredicateNode.parameterName, ts.Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern, typePredicate.parameterName);
+                                                hasReportedError = true;
+                                                break;
+                                            }
+                                            else if (element.name.kind === 154 ||
+                                                element.name.kind === 153) {
+                                                checkBindingPattern(element.name);
+                                            }
+                                        }
+                                    })(param.name);
+                                }
+                            }
+                            if (!hasReportedError) {
+                                error(typePredicateNode.parameterName, ts.Diagnostics.Cannot_find_parameter_0, typePredicate.parameterName);
+                            }
+                        }
+                    }
+                    else {
+                        error(typePredicateNode, ts.Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                    }
+                }
+                else {
+                    checkSourceElement(node.type);
+                }
             }
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
-                        case 140:
+                        case 141:
                             error(node, ts.Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
                             break;
-                        case 139:
+                        case 140:
                             error(node, ts.Diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
                             break;
                     }
@@ -16093,7 +16604,7 @@ var ts;
             checkSpecializedSignatureDeclaration(node);
         }
         function checkTypeForDuplicateIndexSignatures(node) {
-            if (node.kind === 203) {
+            if (node.kind === 205) {
                 var nodeSymbol = getSymbolOfNode(node);
                 if (nodeSymbol.declarations.length > 0 && nodeSymbol.declarations[0] !== node) {
                     return;
@@ -16108,7 +16619,7 @@ var ts;
                     var declaration = decl;
                     if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
                         switch (declaration.parameters[0].type.kind) {
-                            case 122:
+                            case 123:
                                 if (!seenStringIndexer) {
                                     seenStringIndexer = true;
                                 }
@@ -16116,7 +16627,7 @@ var ts;
                                     error(declaration, ts.Diagnostics.Duplicate_string_index_signature);
                                 }
                                 break;
-                            case 120:
+                            case 121:
                                 if (!seenNumericIndexer) {
                                     seenNumericIndexer = true;
                                 }
@@ -16153,17 +16664,17 @@ var ts;
                 return;
             }
             function isSuperCallExpression(n) {
-                return n.kind === 158 && n.expression.kind === 91;
+                return n.kind === 160 && n.expression.kind === 91;
             }
             function containsSuperCall(n) {
                 if (isSuperCallExpression(n)) {
                     return true;
                 }
                 switch (n.kind) {
-                    case 163:
-                    case 201:
-                    case 164:
-                    case 155: return false;
+                    case 165:
+                    case 203:
+                    case 166:
+                    case 157: return false;
                     default: return ts.forEachChild(n, containsSuperCall);
                 }
             }
@@ -16171,12 +16682,12 @@ var ts;
                 if (n.kind === 93) {
                     error(n, ts.Diagnostics.this_cannot_be_referenced_in_current_location);
                 }
-                else if (n.kind !== 163 && n.kind !== 201) {
+                else if (n.kind !== 165 && n.kind !== 203) {
                     ts.forEachChild(n, markThisReferencesAsErrors);
                 }
             }
             function isInstancePropertyWithInitializer(n) {
-                return n.kind === 133 &&
+                return n.kind === 134 &&
                     !(n.flags & 128) &&
                     !!n.initializer;
             }
@@ -16186,7 +16697,7 @@ var ts;
                         ts.forEach(node.parameters, function (p) { return p.flags & (16 | 32 | 64); });
                     if (superCallShouldBeFirst) {
                         var statements = node.body.statements;
-                        if (!statements.length || statements[0].kind !== 183 || !isSuperCallExpression(statements[0].expression)) {
+                        if (!statements.length || statements[0].kind !== 185 || !isSuperCallExpression(statements[0].expression)) {
                             error(node, ts.Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
                         }
                         else {
@@ -16202,13 +16713,13 @@ var ts;
         function checkAccessorDeclaration(node) {
             if (produceDiagnostics) {
                 checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
-                if (node.kind === 137) {
+                if (node.kind === 138) {
                     if (!ts.isInAmbientContext(node) && ts.nodeIsPresent(node.body) && !(bodyContainsAReturnStatement(node.body) || bodyContainsSingleThrowStatement(node.body))) {
                         error(node.name, ts.Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
                     }
                 }
                 if (!ts.hasDynamicName(node)) {
-                    var otherKind = node.kind === 137 ? 138 : 137;
+                    var otherKind = node.kind === 138 ? 139 : 138;
                     var otherAccessor = ts.getDeclarationOfKind(node.symbol, otherKind);
                     if (otherAccessor) {
                         if (((node.flags & 112) !== (otherAccessor.flags & 112))) {
@@ -16230,26 +16741,26 @@ var ts;
         function checkMissingDeclaration(node) {
             checkDecorators(node);
         }
+        function checkTypeArgumentConstraints(typeParameters, typeArguments) {
+            var result = true;
+            for (var i = 0; i < typeParameters.length; i++) {
+                var constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                if (constraint) {
+                    var typeArgument = typeArguments[i];
+                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                }
+            }
+            return result;
+        }
         function checkTypeReferenceNode(node) {
-            checkGrammarTypeReferenceInStrictMode(node.typeName);
-            return checkTypeReferenceOrExpressionWithTypeArguments(node);
-        }
-        function checkExpressionWithTypeArguments(node) {
-            checkGrammarExpressionWithTypeArgumentsInStrictMode(node.expression);
-            return checkTypeReferenceOrExpressionWithTypeArguments(node);
-        }
-        function checkTypeReferenceOrExpressionWithTypeArguments(node) {
             checkGrammarTypeArguments(node, node.typeArguments);
-            var type = getTypeFromTypeReferenceOrExpressionWithTypeArguments(node);
+            var type = getTypeFromTypeReference(node);
             if (type !== unknownType && node.typeArguments) {
-                var len = node.typeArguments.length;
-                for (var i = 0; i < len; i++) {
-                    checkSourceElement(node.typeArguments[i]);
-                    var constraint = getConstraintOfTypeParameter(type.target.typeParameters[i]);
-                    if (produceDiagnostics && constraint) {
-                        var typeArgument = type.typeArguments[i];
-                        checkTypeAssignableTo(typeArgument, constraint, node, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
-                    }
+                ts.forEach(node.typeArguments, checkSourceElement);
+                if (produceDiagnostics) {
+                    var symbol = getNodeLinks(node).resolvedSymbol;
+                    var typeParameters = symbol.flags & 524288 ? getSymbolLinks(symbol).typeParameters : type.target.localTypeParameters;
+                    checkTypeArgumentConstraints(typeParameters, node.typeArguments);
                 }
             }
         }
@@ -16293,9 +16804,9 @@ var ts;
                 return;
             }
             var signaturesToCheck;
-            if (!signatureDeclarationNode.name && signatureDeclarationNode.parent && signatureDeclarationNode.parent.kind === 203) {
-                ts.Debug.assert(signatureDeclarationNode.kind === 139 || signatureDeclarationNode.kind === 140);
-                var signatureKind = signatureDeclarationNode.kind === 139 ? 0 : 1;
+            if (!signatureDeclarationNode.name && signatureDeclarationNode.parent && signatureDeclarationNode.parent.kind === 205) {
+                ts.Debug.assert(signatureDeclarationNode.kind === 140 || signatureDeclarationNode.kind === 141);
+                var signatureKind = signatureDeclarationNode.kind === 140 ? 0 : 1;
                 var containingSymbol = getSymbolOfNode(signatureDeclarationNode.parent);
                 var containingType = getDeclaredTypeOfSymbol(containingSymbol);
                 signaturesToCheck = getSignaturesOfType(containingType, signatureKind);
@@ -16313,7 +16824,7 @@ var ts;
         }
         function getEffectiveDeclarationFlags(n, flagsToCheck) {
             var flags = ts.getCombinedNodeFlags(n);
-            if (n.parent.kind !== 203 && ts.isInAmbientContext(n)) {
+            if (n.parent.kind !== 205 && ts.isInAmbientContext(n)) {
                 if (!(flags & 2)) {
                     flags |= 1;
                 }
@@ -16386,7 +16897,7 @@ var ts;
                     if (subsequentNode.kind === node.kind) {
                         var errorNode_1 = subsequentNode.name || subsequentNode;
                         if (node.name && subsequentNode.name && node.name.text === subsequentNode.name.text) {
-                            ts.Debug.assert(node.kind === 135 || node.kind === 134);
+                            ts.Debug.assert(node.kind === 136 || node.kind === 135);
                             ts.Debug.assert((node.flags & 128) !== (subsequentNode.flags & 128));
                             var diagnostic = node.flags & 128 ? ts.Diagnostics.Function_overload_must_be_static : ts.Diagnostics.Function_overload_must_not_be_static;
                             error(errorNode_1, diagnostic);
@@ -16413,11 +16924,11 @@ var ts;
                 var current = declarations[_i];
                 var node = current;
                 var inAmbientContext = ts.isInAmbientContext(node);
-                var inAmbientContextOrInterface = node.parent.kind === 203 || node.parent.kind === 146 || inAmbientContext;
+                var inAmbientContextOrInterface = node.parent.kind === 205 || node.parent.kind === 148 || inAmbientContext;
                 if (inAmbientContextOrInterface) {
                     previousDeclaration = undefined;
                 }
-                if (node.kind === 201 || node.kind === 135 || node.kind === 134 || node.kind === 136) {
+                if (node.kind === 203 || node.kind === 136 || node.kind === 135 || node.kind === 137) {
                     var currentNodeFlags = getEffectiveDeclarationFlags(node, flagsToCheck);
                     someNodeFlags |= currentNodeFlags;
                     allNodeFlags &= currentNodeFlags;
@@ -16514,16 +17025,16 @@ var ts;
             }
             function getDeclarationSpaces(d) {
                 switch (d.kind) {
-                    case 203:
+                    case 205:
                         return 2097152;
-                    case 206:
+                    case 208:
                         return d.name.kind === 8 || ts.getModuleInstanceState(d) !== 0
                             ? 4194304 | 1048576
                             : 4194304;
-                    case 202:
-                    case 205:
+                    case 204:
+                    case 207:
                         return 2097152 | 1048576;
-                    case 209:
+                    case 211:
                         var result = 0;
                         var target = resolveAlias(getSymbolOfNode(d));
                         ts.forEach(target.declarations, function (d) { result |= getDeclarationSpaces(d); });
@@ -16537,54 +17048,54 @@ var ts;
             var expression = node.expression;
             var exprType = checkExpression(expression);
             switch (node.parent.kind) {
-                case 202:
+                case 204:
                     var classSymbol = getSymbolOfNode(node.parent);
                     var classConstructorType = getTypeOfSymbol(classSymbol);
                     var classDecoratorType = instantiateSingleCallFunctionType(getGlobalClassDecoratorType(), [classConstructorType]);
                     checkTypeAssignableTo(exprType, classDecoratorType, node);
                     break;
-                case 133:
+                case 134:
                     checkTypeAssignableTo(exprType, getGlobalPropertyDecoratorType(), node);
                     break;
-                case 135:
-                case 137:
+                case 136:
                 case 138:
+                case 139:
                     var methodType = getTypeOfNode(node.parent);
                     var methodDecoratorType = instantiateSingleCallFunctionType(getGlobalMethodDecoratorType(), [methodType]);
                     checkTypeAssignableTo(exprType, methodDecoratorType, node);
                     break;
-                case 130:
+                case 131:
                     checkTypeAssignableTo(exprType, getGlobalParameterDecoratorType(), node);
                     break;
             }
         }
         function checkTypeNodeAsExpression(node) {
-            if (node && node.kind === 142) {
+            if (node && node.kind === 144) {
                 var type = getTypeFromTypeNode(node);
                 var shouldCheckIfUnknownType = type === unknownType && compilerOptions.isolatedModules;
-                if (!type || (!shouldCheckIfUnknownType && type.flags & (1048703 | 132 | 258))) {
+                if (!type || (!shouldCheckIfUnknownType && type.flags & (2097279 | 132 | 258))) {
                     return;
                 }
                 if (shouldCheckIfUnknownType || type.symbol.valueDeclaration) {
-                    checkExpressionOrQualifiedName(node.typeName);
+                    checkExpression(node.typeName);
                 }
             }
         }
         function checkTypeAnnotationAsExpression(node) {
             switch (node.kind) {
-                case 133:
+                case 134:
                     checkTypeNodeAsExpression(node.type);
                     break;
-                case 130:
+                case 131:
                     checkTypeNodeAsExpression(node.type);
                     break;
-                case 135:
-                    checkTypeNodeAsExpression(node.type);
-                    break;
-                case 137:
+                case 136:
                     checkTypeNodeAsExpression(node.type);
                     break;
                 case 138:
+                    checkTypeNodeAsExpression(node.type);
+                    break;
+                case 139:
                     checkTypeNodeAsExpression(getSetAccessorTypeAnnotationNode(node));
                     break;
             }
@@ -16607,43 +17118,40 @@ var ts;
             }
             if (compilerOptions.emitDecoratorMetadata) {
                 switch (node.kind) {
-                    case 202:
+                    case 204:
                         var constructor = ts.getFirstConstructorWithBody(node);
                         if (constructor) {
                             checkParameterTypeAnnotationsAsExpressions(constructor);
                         }
                         break;
-                    case 135:
+                    case 136:
                         checkParameterTypeAnnotationsAsExpressions(node);
+                    case 139:
                     case 138:
-                    case 137:
-                    case 133:
-                    case 130:
+                    case 134:
+                    case 131:
                         checkTypeAnnotationAsExpression(node);
                         break;
                 }
             }
             emitDecorate = true;
-            if (node.kind === 130) {
+            if (node.kind === 131) {
                 emitParam = true;
             }
             ts.forEach(node.decorators, checkDecorator);
         }
         function checkFunctionDeclaration(node) {
             if (produceDiagnostics) {
-                checkFunctionLikeDeclaration(node) ||
-                    checkGrammarFunctionName(node.name) ||
-                    checkGrammarForGenerator(node);
+                checkFunctionLikeDeclaration(node) || checkGrammarForGenerator(node);
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
         }
         function checkFunctionLikeDeclaration(node) {
-            checkGrammarDeclarationNameInStrictMode(node);
             checkDecorators(node);
             checkSignatureDeclaration(node);
-            if (node.name && node.name.kind === 128) {
+            if (node.name && node.name.kind === 129) {
                 checkComputedPropertyName(node.name);
             }
             if (!ts.hasDynamicName(node)) {
@@ -16673,11 +17181,11 @@ var ts;
             }
         }
         function checkBlock(node) {
-            if (node.kind === 180) {
+            if (node.kind === 182) {
                 checkGrammarStatementInAmbientContext(node);
             }
             ts.forEach(node.statements, checkSourceElement);
-            if (ts.isFunctionBlock(node) || node.kind === 207) {
+            if (ts.isFunctionBlock(node) || node.kind === 209) {
                 checkFunctionExpressionBodies(node);
             }
         }
@@ -16695,19 +17203,19 @@ var ts;
             if (!(identifier && identifier.text === name)) {
                 return false;
             }
-            if (node.kind === 133 ||
-                node.kind === 132 ||
+            if (node.kind === 134 ||
+                node.kind === 133 ||
+                node.kind === 136 ||
                 node.kind === 135 ||
-                node.kind === 134 ||
-                node.kind === 137 ||
-                node.kind === 138) {
+                node.kind === 138 ||
+                node.kind === 139) {
                 return false;
             }
             if (ts.isInAmbientContext(node)) {
                 return false;
             }
             var root = ts.getRootDeclaration(node);
-            if (root.kind === 130 && ts.nodeIsMissing(root.parent.body)) {
+            if (root.kind === 131 && ts.nodeIsMissing(root.parent.body)) {
                 return false;
             }
             return true;
@@ -16737,7 +17245,7 @@ var ts;
             if (!needCollisionCheckForIdentifier(node, name, "_super")) {
                 return;
             }
-            var enclosingClass = ts.getAncestor(node, 202);
+            var enclosingClass = ts.getAncestor(node, 204);
             if (!enclosingClass || ts.isInAmbientContext(enclosingClass)) {
                 return;
             }
@@ -16755,11 +17263,11 @@ var ts;
             if (!needCollisionCheckForIdentifier(node, name, "require") && !needCollisionCheckForIdentifier(node, name, "exports")) {
                 return;
             }
-            if (node.kind === 206 && ts.getModuleInstanceState(node) !== 1) {
+            if (node.kind === 208 && ts.getModuleInstanceState(node) !== 1) {
                 return;
             }
             var parent = getDeclarationContainer(node);
-            if (parent.kind === 228 && ts.isExternalModule(parent)) {
+            if (parent.kind === 230 && ts.isExternalModule(parent)) {
                 error(name, ts.Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module, ts.declarationNameToString(name), ts.declarationNameToString(name));
             }
         }
@@ -16770,7 +17278,7 @@ var ts;
             if ((ts.getCombinedNodeFlags(node) & 12288) !== 0 || ts.isParameterDeclaration(node)) {
                 return;
             }
-            if (node.kind === 199 && !node.initializer) {
+            if (node.kind === 201 && !node.initializer) {
                 return;
             }
             var symbol = getSymbolOfNode(node);
@@ -16780,25 +17288,25 @@ var ts;
                     localDeclarationSymbol !== symbol &&
                     localDeclarationSymbol.flags & 2) {
                     if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & 12288) {
-                        var varDeclList = ts.getAncestor(localDeclarationSymbol.valueDeclaration, 200);
-                        var container = varDeclList.parent.kind === 181 && varDeclList.parent.parent
+                        var varDeclList = ts.getAncestor(localDeclarationSymbol.valueDeclaration, 202);
+                        var container = varDeclList.parent.kind === 183 && varDeclList.parent.parent
                             ? varDeclList.parent.parent
                             : undefined;
                         var namesShareScope = container &&
-                            (container.kind === 180 && ts.isFunctionLike(container.parent) ||
-                                container.kind === 207 ||
-                                container.kind === 206 ||
-                                container.kind === 228);
+                            (container.kind === 182 && ts.isFunctionLike(container.parent) ||
+                                container.kind === 209 ||
+                                container.kind === 208 ||
+                                container.kind === 230);
                         if (!namesShareScope) {
-                            var name_12 = symbolToString(localDeclarationSymbol);
-                            error(node, ts.Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name_12, name_12);
+                            var name_13 = symbolToString(localDeclarationSymbol);
+                            error(node, ts.Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name_13, name_13);
                         }
                     }
                 }
             }
         }
         function checkParameterInitializer(node) {
-            if (ts.getRootDeclaration(node).kind !== 130) {
+            if (ts.getRootDeclaration(node).kind !== 131) {
                 return;
             }
             var func = ts.getContainingFunction(node);
@@ -16807,7 +17315,7 @@ var ts;
                 if (n.kind === 65) {
                     var referencedSymbol = getNodeLinks(n).resolvedSymbol;
                     if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, 107455) === referencedSymbol) {
-                        if (referencedSymbol.valueDeclaration.kind === 130) {
+                        if (referencedSymbol.valueDeclaration.kind === 131) {
                             if (referencedSymbol.valueDeclaration === node) {
                                 error(n, ts.Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, ts.declarationNameToString(node.name));
                                 return;
@@ -16825,10 +17333,9 @@ var ts;
             }
         }
         function checkVariableLikeDeclaration(node) {
-            checkGrammarDeclarationNameInStrictMode(node);
             checkDecorators(node);
             checkSourceElement(node.type);
-            if (node.name.kind === 128) {
+            if (node.name.kind === 129) {
                 checkComputedPropertyName(node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
@@ -16837,7 +17344,7 @@ var ts;
             if (ts.isBindingPattern(node.name)) {
                 ts.forEach(node.name.elements, checkSourceElement);
             }
-            if (node.initializer && ts.getRootDeclaration(node).kind === 130 && ts.nodeIsMissing(ts.getContainingFunction(node).body)) {
+            if (node.initializer && ts.getRootDeclaration(node).kind === 131 && ts.nodeIsMissing(ts.getContainingFunction(node).body)) {
                 error(node, ts.Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 return;
             }
@@ -16865,9 +17372,9 @@ var ts;
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, undefined);
                 }
             }
-            if (node.kind !== 133 && node.kind !== 132) {
+            if (node.kind !== 134 && node.kind !== 133) {
                 checkExportsOnMergedDeclarations(node);
-                if (node.kind === 199 || node.kind === 153) {
+                if (node.kind === 201 || node.kind === 155) {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
                 checkCollisionWithCapturedSuperVariable(node, node.name);
@@ -16896,7 +17403,7 @@ var ts;
         }
         function inBlockOrObjectLiteralExpression(node) {
             while (node) {
-                if (node.kind === 180 || node.kind === 155) {
+                if (node.kind === 182 || node.kind === 157) {
                     return true;
                 }
                 node = node.parent;
@@ -16924,12 +17431,12 @@ var ts;
         }
         function checkForStatement(node) {
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.initializer && node.initializer.kind == 200) {
+                if (node.initializer && node.initializer.kind === 202) {
                     checkGrammarVariableDeclarationList(node.initializer);
                 }
             }
             if (node.initializer) {
-                if (node.initializer.kind === 200) {
+                if (node.initializer.kind === 202) {
                     ts.forEach(node.initializer.declarations, checkVariableDeclaration);
                 }
                 else {
@@ -16944,13 +17451,13 @@ var ts;
         }
         function checkForOfStatement(node) {
             checkGrammarForInOrForOfStatement(node);
-            if (node.initializer.kind === 200) {
+            if (node.initializer.kind === 202) {
                 checkForInOrForOfVariableDeclaration(node);
             }
             else {
                 var varExpr = node.initializer;
                 var iteratedType = checkRightHandSideOfForOf(node.expression);
-                if (varExpr.kind === 154 || varExpr.kind === 155) {
+                if (varExpr.kind === 156 || varExpr.kind === 157) {
                     checkDestructuringAssignment(varExpr, iteratedType || unknownType);
                 }
                 else {
@@ -16965,7 +17472,7 @@ var ts;
         }
         function checkForInStatement(node) {
             checkGrammarForInOrForOfStatement(node);
-            if (node.initializer.kind === 200) {
+            if (node.initializer.kind === 202) {
                 var variable = node.initializer.declarations[0];
                 if (variable && ts.isBindingPattern(variable.name)) {
                     error(variable.name, ts.Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
@@ -16975,10 +17482,10 @@ var ts;
             else {
                 var varExpr = node.initializer;
                 var leftType = checkExpression(varExpr);
-                if (varExpr.kind === 154 || varExpr.kind === 155) {
+                if (varExpr.kind === 156 || varExpr.kind === 157) {
                     error(varExpr, ts.Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-                else if (!allConstituentTypesHaveKind(leftType, 1 | 258)) {
+                else if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, 258)) {
                     error(varExpr, ts.Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -16986,7 +17493,7 @@ var ts;
                 }
             }
             var rightType = checkExpression(node.expression);
-            if (!allConstituentTypesHaveKind(rightType, 1 | 48128 | 512)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, 48128 | 512)) {
                 error(node.expression, ts.Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             checkSourceElement(node.statement);
@@ -17003,7 +17510,7 @@ var ts;
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, true);
         }
         function checkIteratedTypeOrElementType(inputType, errorNode, allowStringInput) {
-            if (inputType.flags & 1) {
+            if (isTypeAny(inputType)) {
                 return inputType;
             }
             if (languageVersion >= 2) {
@@ -17029,7 +17536,7 @@ var ts;
             return elementType || anyType;
         }
         function getElementTypeOfIterable(type, errorNode) {
-            if (type.flags & 1) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
             var typeAsIterable = type;
@@ -17039,7 +17546,7 @@ var ts;
                 }
                 else {
                     var iteratorFunction = getTypeOfPropertyOfType(type, ts.getPropertyNameForKnownSymbolName("iterator"));
-                    if (iteratorFunction && iteratorFunction.flags & 1) {
+                    if (isTypeAny(iteratorFunction)) {
                         return undefined;
                     }
                     var iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, 0) : emptyArray;
@@ -17055,7 +17562,7 @@ var ts;
             return typeAsIterable.iterableElementType;
         }
         function getElementTypeOfIterator(type, errorNode) {
-            if (type.flags & 1) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
             var typeAsIterator = type;
@@ -17065,7 +17572,7 @@ var ts;
                 }
                 else {
                     var iteratorNextFunction = getTypeOfPropertyOfType(type, "next");
-                    if (iteratorNextFunction && iteratorNextFunction.flags & 1) {
+                    if (isTypeAny(iteratorNextFunction)) {
                         return undefined;
                     }
                     var iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, 0) : emptyArray;
@@ -17076,7 +17583,7 @@ var ts;
                         return undefined;
                     }
                     var iteratorNextResult = getUnionType(ts.map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
-                    if (iteratorNextResult.flags & 1) {
+                    if (isTypeAny(iteratorNextResult)) {
                         return undefined;
                     }
                     var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
@@ -17092,7 +17599,7 @@ var ts;
             return typeAsIterator.iteratorElementType;
         }
         function getElementTypeOfIterableIterator(type) {
-            if (type.flags & 1) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
             if ((type.flags & 4096) && type.target === globalIterableIteratorType) {
@@ -17137,7 +17644,7 @@ var ts;
             checkGrammarStatementInAmbientContext(node) || checkGrammarBreakOrContinueStatement(node);
         }
         function isGetAccessorWithAnnotatatedSetAccessor(node) {
-            return !!(node.kind === 137 && getSetAccessorTypeAnnotationNode(ts.getDeclarationOfKind(node.symbol, 138)));
+            return !!(node.kind === 138 && getSetAccessorTypeAnnotationNode(ts.getDeclarationOfKind(node.symbol, 139)));
         }
         function checkReturnStatement(node) {
             if (!checkGrammarStatementInAmbientContext(node)) {
@@ -17149,31 +17656,28 @@ var ts;
             if (node.expression) {
                 var func = ts.getContainingFunction(node);
                 if (func) {
-                    var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
+                    var signature = getSignatureFromDeclaration(func);
+                    var returnType = getReturnTypeOfSignature(signature);
                     var exprType = checkExpressionCached(node.expression);
                     if (func.asteriskToken) {
                         return;
                     }
-                    if (func.kind === 138) {
+                    if (func.kind === 139) {
                         error(node.expression, ts.Diagnostics.Setters_cannot_return_a_value);
                     }
-                    else if (func.kind === 136) {
+                    else if (func.kind === 137) {
                         if (!isTypeAssignableTo(exprType, returnType)) {
                             error(node.expression, ts.Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }
-                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
+                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || signature.typePredicate) {
                         checkTypeAssignableTo(exprType, returnType, node.expression, undefined);
                     }
                 }
             }
         }
         function checkWithStatement(node) {
-            if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.parserContextFlags & 1) {
-                    grammarErrorOnFirstToken(node, ts.Diagnostics.with_statements_are_not_allowed_in_strict_mode);
-                }
-            }
+            checkGrammarStatementInAmbientContext(node);
             checkExpression(node.expression);
             error(node.expression, ts.Diagnostics.All_symbols_within_a_with_block_will_be_resolved_to_any);
         }
@@ -17183,7 +17687,7 @@ var ts;
             var hasDuplicateDefaultClause = false;
             var expressionType = checkExpression(node.expression);
             ts.forEach(node.caseBlock.clauses, function (clause) {
-                if (clause.kind === 222 && !hasDuplicateDefaultClause) {
+                if (clause.kind === 224 && !hasDuplicateDefaultClause) {
                     if (firstDefaultClause === undefined) {
                         firstDefaultClause = clause;
                     }
@@ -17195,7 +17699,7 @@ var ts;
                         hasDuplicateDefaultClause = true;
                     }
                 }
-                if (produceDiagnostics && clause.kind === 221) {
+                if (produceDiagnostics && clause.kind === 223) {
                     var caseClause = clause;
                     var caseType = checkExpression(caseClause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
@@ -17212,7 +17716,7 @@ var ts;
                     if (ts.isFunctionLike(current)) {
                         break;
                     }
-                    if (current.kind === 195 && current.label.text === node.label.text) {
+                    if (current.kind === 197 && current.label.text === node.label.text) {
                         var sourceFile = ts.getSourceFileOfNode(node);
                         grammarErrorOnNode(node.label, ts.Diagnostics.Duplicate_label_0, ts.getTextOfNodeFromSourceText(sourceFile.text, node.label));
                         break;
@@ -17256,7 +17760,6 @@ var ts;
                                 grammarErrorOnNode(localSymbol.valueDeclaration, ts.Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, identifierName);
                             }
                         }
-                        checkGrammarEvalOrArgumentsInStrictMode(node, catchClause.variableDeclaration.name);
                     }
                 }
                 checkBlock(catchClause.block);
@@ -17276,7 +17779,7 @@ var ts;
                     checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, 0);
                     checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, 1);
                 });
-                if (type.flags & 1024 && type.symbol.valueDeclaration.kind === 202) {
+                if (type.flags & 1024 && type.symbol.valueDeclaration.kind === 204) {
                     var classDeclaration = type.symbol.valueDeclaration;
                     for (var _i = 0, _a = classDeclaration.members; _i < _a.length; _i++) {
                         var member = _a[_i];
@@ -17307,7 +17810,7 @@ var ts;
                     return;
                 }
                 var errorNode;
-                if (prop.valueDeclaration.name.kind === 128 || prop.parent === containingType.symbol) {
+                if (prop.valueDeclaration.name.kind === 129 || prop.parent === containingType.symbol) {
                     errorNode = prop.valueDeclaration;
                 }
                 else if (indexDeclaration) {
@@ -17357,7 +17860,6 @@ var ts;
             return unknownType;
         }
         function checkClassDeclaration(node) {
-            checkGrammarDeclarationNameInStrictMode(node);
             if (!node.name && !(node.flags & 256)) {
                 grammarErrorOnFirstToken(node, ts.Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
@@ -17375,27 +17877,30 @@ var ts;
             var staticType = getTypeOfSymbol(symbol);
             var baseTypeNode = ts.getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                if (!ts.isSupportedExpressionWithTypeArguments(baseTypeNode)) {
-                    error(baseTypeNode.expression, ts.Diagnostics.Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses);
-                }
                 emitExtends = emitExtends || !ts.isInAmbientContext(node);
-                checkExpressionWithTypeArguments(baseTypeNode);
-            }
-            var baseTypes = getBaseTypes(type);
-            if (baseTypes.length) {
-                if (produceDiagnostics) {
+                var baseTypes = getBaseTypes(type);
+                if (baseTypes.length && produceDiagnostics) {
                     var baseType = baseTypes[0];
+                    var staticBaseType = getBaseConstructorTypeOfClass(type);
+                    if (baseTypeNode.typeArguments) {
+                        ts.forEach(baseTypeNode.typeArguments, checkSourceElement);
+                        for (var _i = 0, _a = getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments); _i < _a.length; _i++) {
+                            var constructor = _a[_i];
+                            if (!checkTypeArgumentConstraints(constructor.typeParameters, baseTypeNode.typeArguments)) {
+                                break;
+                            }
+                        }
+                    }
                     checkTypeAssignableTo(type, baseType, node.name || node, ts.Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                    var staticBaseType = getTypeOfSymbol(baseType.symbol);
-                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node, ts.Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
-                    if (baseType.symbol !== resolveEntityName(baseTypeNode.expression, 107455)) {
-                        error(baseTypeNode, ts.Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
+                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node, ts.Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    if (!(staticBaseType.symbol && staticBaseType.symbol.flags & 32)) {
+                        var constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments);
+                        if (ts.forEach(constructors, function (sig) { return getReturnTypeOfSignature(sig) !== baseType; })) {
+                            error(baseTypeNode.expression, ts.Diagnostics.Base_constructors_must_all_have_the_same_return_type);
+                        }
                     }
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
-            }
-            if (baseTypes.length || (baseTypeNode && compilerOptions.isolatedModules)) {
-                checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
             var implementedTypeNodes = ts.getClassImplementsHeritageClauseElements(node);
             if (implementedTypeNodes) {
@@ -17403,7 +17908,7 @@ var ts;
                     if (!ts.isSupportedExpressionWithTypeArguments(typeRefNode)) {
                         error(typeRefNode.expression, ts.Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
-                    checkExpressionWithTypeArguments(typeRefNode);
+                    checkTypeReferenceNode(typeRefNode);
                     if (produceDiagnostics) {
                         var t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
@@ -17485,7 +17990,7 @@ var ts;
             }
         }
         function isAccessor(kind) {
-            return kind === 137 || kind === 138;
+            return kind === 138 || kind === 139;
         }
         function areTypeParametersIdentical(list1, list2) {
             if (!list1 && !list2) {
@@ -17545,13 +18050,13 @@ var ts;
             return ok;
         }
         function checkInterfaceDeclaration(node) {
-            checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, ts.Diagnostics.Interface_name_cannot_be_0);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
-                var firstInterfaceDecl = ts.getDeclarationOfKind(symbol, 203);
+                var firstInterfaceDecl = ts.getDeclarationOfKind(symbol, 205);
                 if (symbol.declarations.length > 1) {
                     if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
                         error(node.name, ts.Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
@@ -17571,7 +18076,7 @@ var ts;
                 if (!ts.isSupportedExpressionWithTypeArguments(heritageElement)) {
                     error(heritageElement.expression, ts.Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
                 }
-                checkExpressionWithTypeArguments(heritageElement);
+                checkTypeReferenceNode(heritageElement);
             });
             ts.forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
@@ -17592,7 +18097,7 @@ var ts;
                 var ambient = ts.isInAmbientContext(node);
                 var enumIsConst = ts.isConst(node);
                 ts.forEach(node.members, function (member) {
-                    if (member.name.kind !== 128 && isNumericLiteralName(member.name.text)) {
+                    if (member.name.kind !== 129 && isNumericLiteralName(member.name.text)) {
                         error(member.name, ts.Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
@@ -17628,7 +18133,7 @@ var ts;
                 return evalConstant(initializer);
                 function evalConstant(e) {
                     switch (e.kind) {
-                        case 168:
+                        case 170:
                             var value = evalConstant(e.operand);
                             if (value === undefined) {
                                 return undefined;
@@ -17639,7 +18144,7 @@ var ts;
                                 case 47: return ~value;
                             }
                             return undefined;
-                        case 170:
+                        case 172:
                             var left = evalConstant(e.left);
                             if (left === undefined) {
                                 return undefined;
@@ -17664,11 +18169,11 @@ var ts;
                             return undefined;
                         case 7:
                             return +e.text;
-                        case 162:
+                        case 164:
                             return evalConstant(e.expression);
                         case 65:
-                        case 157:
-                        case 156:
+                        case 159:
+                        case 158:
                             var member = initializer.parent;
                             var currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
                             var enumType;
@@ -17679,7 +18184,7 @@ var ts;
                             }
                             else {
                                 var expression;
-                                if (e.kind === 157) {
+                                if (e.kind === 159) {
                                     if (e.argumentExpression === undefined ||
                                         e.argumentExpression.kind !== 8) {
                                         return undefined;
@@ -17696,7 +18201,7 @@ var ts;
                                     if (current.kind === 65) {
                                         break;
                                     }
-                                    else if (current.kind === 156) {
+                                    else if (current.kind === 158) {
                                         current = current.expression;
                                     }
                                     else {
@@ -17731,7 +18236,7 @@ var ts;
             if (!produceDiagnostics) {
                 return;
             }
-            checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
             checkTypeNameIsReserved(node.name, ts.Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
@@ -17753,7 +18258,7 @@ var ts;
                 }
                 var seenEnumMissingInitialInitializer = false;
                 ts.forEach(enumSymbol.declarations, function (declaration) {
-                    if (declaration.kind !== 205) {
+                    if (declaration.kind !== 207) {
                         return false;
                     }
                     var enumDeclaration = declaration;
@@ -17776,8 +18281,8 @@ var ts;
             var declarations = symbol.declarations;
             for (var _i = 0; _i < declarations.length; _i++) {
                 var declaration = declarations[_i];
-                if ((declaration.kind === 202 ||
-                    (declaration.kind === 201 && ts.nodeIsPresent(declaration.body))) &&
+                if ((declaration.kind === 204 ||
+                    (declaration.kind === 203 && ts.nodeIsPresent(declaration.body))) &&
                     !ts.isInAmbientContext(declaration)) {
                     return declaration;
                 }
@@ -17799,7 +18304,14 @@ var ts;
         }
         function checkModuleDeclaration(node) {
             if (produceDiagnostics) {
-                if (!checkGrammarDeclarationNameInStrictMode(node) && !checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
+                var isAmbientExternalModule = node.name.kind === 8;
+                var contextErrorMessage = isAmbientExternalModule
+                    ? ts.Diagnostics.An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file
+                    : ts.Diagnostics.A_namespace_declaration_is_only_allowed_in_a_namespace_or_module;
+                if (checkGrammarModuleElementContext(node, contextErrorMessage)) {
+                    return;
+                }
+                if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
                     if (!ts.isInAmbientContext(node) && node.name.kind === 8) {
                         grammarErrorOnNode(node.name, ts.Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
@@ -17821,13 +18333,13 @@ var ts;
                             error(node.name, ts.Diagnostics.A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
                         }
                     }
-                    var mergedClass = ts.getDeclarationOfKind(symbol, 202);
+                    var mergedClass = ts.getDeclarationOfKind(symbol, 204);
                     if (mergedClass &&
                         inSameLexicalScope(node, mergedClass)) {
                         getNodeLinks(node).flags |= 2048;
                     }
                 }
-                if (node.name.kind === 8) {
+                if (isAmbientExternalModule) {
                     if (!isGlobalSourceFile(node.parent)) {
                         error(node.name, ts.Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules);
                     }
@@ -17840,10 +18352,10 @@ var ts;
         }
         function getFirstIdentifier(node) {
             while (true) {
-                if (node.kind === 127) {
+                if (node.kind === 128) {
                     node = node.left;
                 }
-                else if (node.kind === 156) {
+                else if (node.kind === 158) {
                     node = node.expression;
                 }
                 else {
@@ -17859,9 +18371,9 @@ var ts;
                 error(moduleName, ts.Diagnostics.String_literal_expected);
                 return false;
             }
-            var inAmbientExternalModule = node.parent.kind === 207 && node.parent.parent.name.kind === 8;
-            if (node.parent.kind !== 228 && !inAmbientExternalModule) {
-                error(moduleName, node.kind === 216 ?
+            var inAmbientExternalModule = node.parent.kind === 209 && node.parent.parent.name.kind === 8;
+            if (node.parent.kind !== 230 && !inAmbientExternalModule) {
+                error(moduleName, node.kind === 218 ?
                     ts.Diagnostics.Export_declarations_are_not_permitted_in_a_namespace :
                     ts.Diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module);
                 return false;
@@ -17880,7 +18392,7 @@ var ts;
                     (symbol.flags & 793056 ? 793056 : 0) |
                     (symbol.flags & 1536 ? 1536 : 0);
                 if (target.flags & excludedMeanings) {
-                    var message = node.kind === 218 ?
+                    var message = node.kind === 220 ?
                         ts.Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
                         ts.Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                     error(node, message, symbolToString(symbol));
@@ -17893,7 +18405,10 @@ var ts;
             checkAliasSymbol(node);
         }
         function checkImportDeclaration(node) {
-            if (!checkGrammarImportDeclarationNameInStrictMode(node) && !checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & 499)) {
+            if (checkGrammarModuleElementContext(node, ts.Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
+                return;
+            }
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & 499)) {
                 grammarErrorOnFirstToken(node, ts.Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
             if (checkExternalImportOrExportDeclaration(node)) {
@@ -17903,7 +18418,7 @@ var ts;
                         checkImportBinding(importClause);
                     }
                     if (importClause.namedBindings) {
-                        if (importClause.namedBindings.kind === 212) {
+                        if (importClause.namedBindings.kind === 214) {
                             checkImportBinding(importClause.namedBindings);
                         }
                         else {
@@ -17914,7 +18429,10 @@ var ts;
             }
         }
         function checkImportEqualsDeclaration(node) {
-            checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node);
+            if (checkGrammarModuleElementContext(node, ts.Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
+                return;
+            }
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
             if (ts.isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
                 checkImportBinding(node);
                 if (node.flags & 1) {
@@ -17942,14 +18460,17 @@ var ts;
             }
         }
         function checkExportDeclaration(node) {
+            if (checkGrammarModuleElementContext(node, ts.Diagnostics.An_export_declaration_can_only_be_used_in_a_module)) {
+                return;
+            }
             if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & 499)) {
                 grammarErrorOnFirstToken(node, ts.Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
                 if (node.exportClause) {
                     ts.forEach(node.exportClause.elements, checkExportSpecifier);
-                    var inAmbientExternalModule = node.parent.kind === 207 && node.parent.parent.name.kind === 8;
-                    if (node.parent.kind !== 228 && !inAmbientExternalModule) {
+                    var inAmbientExternalModule = node.parent.kind === 209 && node.parent.parent.name.kind === 8;
+                    if (node.parent.kind !== 230 && !inAmbientExternalModule) {
                         error(node, ts.Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                     }
                 }
@@ -17961,6 +18482,11 @@ var ts;
                 }
             }
         }
+        function checkGrammarModuleElementContext(node, errorMessage) {
+            if (node.parent.kind !== 230 && node.parent.kind !== 209 && node.parent.kind !== 208) {
+                return grammarErrorOnFirstToken(node, errorMessage);
+            }
+        }
         function checkExportSpecifier(node) {
             checkAliasSymbol(node);
             if (!node.parent.parent.moduleSpecifier) {
@@ -17968,8 +18494,11 @@ var ts;
             }
         }
         function checkExportAssignment(node) {
-            var container = node.parent.kind === 228 ? node.parent : node.parent.parent;
-            if (container.kind === 206 && container.name.kind === 65) {
+            if (checkGrammarModuleElementContext(node, ts.Diagnostics.An_export_assignment_can_only_be_used_in_a_module)) {
+                return;
+            }
+            var container = node.parent.kind === 230 ? node.parent : node.parent.parent;
+            if (container.kind === 208 && container.name.kind === 65) {
                 error(node, ts.Diagnostics.An_export_assignment_cannot_be_used_in_a_namespace);
                 return;
             }
@@ -17993,10 +18522,10 @@ var ts;
             }
         }
         function getModuleStatements(node) {
-            if (node.kind === 228) {
+            if (node.kind === 230) {
                 return node.statements;
             }
-            if (node.kind === 206 && node.body.kind === 207) {
+            if (node.kind === 208 && node.body.kind === 209) {
                 return node.body.statements;
             }
             return emptyArray;
@@ -18021,170 +18550,175 @@ var ts;
                 links.exportsChecked = true;
             }
         }
+        function checkTypePredicate(node) {
+            if (!isInLegalTypePredicatePosition(node)) {
+                error(node, ts.Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+            }
+        }
         function checkSourceElement(node) {
             if (!node)
                 return;
             switch (node.kind) {
-                case 129:
-                    return checkTypeParameter(node);
                 case 130:
+                    return checkTypeParameter(node);
+                case 131:
                     return checkParameter(node);
+                case 134:
                 case 133:
-                case 132:
                     return checkPropertyDeclaration(node);
-                case 143:
-                case 144:
-                case 139:
+                case 145:
+                case 146:
                 case 140:
-                    return checkSignatureDeclaration(node);
                 case 141:
                     return checkSignatureDeclaration(node);
-                case 135:
-                case 134:
-                    return checkMethodDeclaration(node);
-                case 136:
-                    return checkConstructorDeclaration(node);
-                case 137:
-                case 138:
-                    return checkAccessorDeclaration(node);
                 case 142:
+                    return checkSignatureDeclaration(node);
+                case 136:
+                case 135:
+                    return checkMethodDeclaration(node);
+                case 137:
+                    return checkConstructorDeclaration(node);
+                case 138:
+                case 139:
+                    return checkAccessorDeclaration(node);
+                case 144:
                     return checkTypeReferenceNode(node);
-                case 145:
-                    return checkTypeQuery(node);
-                case 146:
-                    return checkTypeLiteral(node);
+                case 143:
+                    return checkTypePredicate(node);
                 case 147:
-                    return checkArrayType(node);
+                    return checkTypeQuery(node);
                 case 148:
-                    return checkTupleType(node);
+                    return checkTypeLiteral(node);
                 case 149:
-                    return checkUnionType(node);
+                    return checkArrayType(node);
                 case 150:
+                    return checkTupleType(node);
+                case 151:
+                    return checkUnionType(node);
+                case 152:
                     return checkSourceElement(node.type);
-                case 201:
-                    return checkFunctionDeclaration(node);
-                case 180:
-                case 207:
-                    return checkBlock(node);
-                case 181:
-                    return checkVariableStatement(node);
-                case 183:
-                    return checkExpressionStatement(node);
-                case 184:
-                    return checkIfStatement(node);
-                case 185:
-                    return checkDoStatement(node);
-                case 186:
-                    return checkWhileStatement(node);
-                case 187:
-                    return checkForStatement(node);
-                case 188:
-                    return checkForInStatement(node);
-                case 189:
-                    return checkForOfStatement(node);
-                case 190:
-                case 191:
-                    return checkBreakOrContinueStatement(node);
-                case 192:
-                    return checkReturnStatement(node);
-                case 193:
-                    return checkWithStatement(node);
-                case 194:
-                    return checkSwitchStatement(node);
-                case 195:
-                    return checkLabeledStatement(node);
-                case 196:
-                    return checkThrowStatement(node);
-                case 197:
-                    return checkTryStatement(node);
-                case 199:
-                    return checkVariableDeclaration(node);
-                case 153:
-                    return checkBindingElement(node);
-                case 202:
-                    return checkClassDeclaration(node);
                 case 203:
-                    return checkInterfaceDeclaration(node);
-                case 204:
-                    return checkTypeAliasDeclaration(node);
-                case 205:
-                    return checkEnumDeclaration(node);
-                case 206:
-                    return checkModuleDeclaration(node);
-                case 210:
-                    return checkImportDeclaration(node);
-                case 209:
-                    return checkImportEqualsDeclaration(node);
-                case 216:
-                    return checkExportDeclaration(node);
-                case 215:
-                    return checkExportAssignment(node);
+                    return checkFunctionDeclaration(node);
                 case 182:
-                    checkGrammarStatementInAmbientContext(node);
-                    return;
+                case 209:
+                    return checkBlock(node);
+                case 183:
+                    return checkVariableStatement(node);
+                case 185:
+                    return checkExpressionStatement(node);
+                case 186:
+                    return checkIfStatement(node);
+                case 187:
+                    return checkDoStatement(node);
+                case 188:
+                    return checkWhileStatement(node);
+                case 189:
+                    return checkForStatement(node);
+                case 190:
+                    return checkForInStatement(node);
+                case 191:
+                    return checkForOfStatement(node);
+                case 192:
+                case 193:
+                    return checkBreakOrContinueStatement(node);
+                case 194:
+                    return checkReturnStatement(node);
+                case 195:
+                    return checkWithStatement(node);
+                case 196:
+                    return checkSwitchStatement(node);
+                case 197:
+                    return checkLabeledStatement(node);
                 case 198:
+                    return checkThrowStatement(node);
+                case 199:
+                    return checkTryStatement(node);
+                case 201:
+                    return checkVariableDeclaration(node);
+                case 155:
+                    return checkBindingElement(node);
+                case 204:
+                    return checkClassDeclaration(node);
+                case 205:
+                    return checkInterfaceDeclaration(node);
+                case 206:
+                    return checkTypeAliasDeclaration(node);
+                case 207:
+                    return checkEnumDeclaration(node);
+                case 208:
+                    return checkModuleDeclaration(node);
+                case 212:
+                    return checkImportDeclaration(node);
+                case 211:
+                    return checkImportEqualsDeclaration(node);
+                case 218:
+                    return checkExportDeclaration(node);
+                case 217:
+                    return checkExportAssignment(node);
+                case 184:
                     checkGrammarStatementInAmbientContext(node);
                     return;
-                case 219:
+                case 200:
+                    checkGrammarStatementInAmbientContext(node);
+                    return;
+                case 221:
                     return checkMissingDeclaration(node);
             }
         }
         function checkFunctionExpressionBodies(node) {
             switch (node.kind) {
-                case 163:
-                case 164:
+                case 165:
+                case 166:
                     ts.forEach(node.parameters, checkFunctionExpressionBodies);
                     checkFunctionExpressionOrObjectLiteralMethodBody(node);
                     break;
+                case 136:
                 case 135:
-                case 134:
                     ts.forEach(node.decorators, checkFunctionExpressionBodies);
                     ts.forEach(node.parameters, checkFunctionExpressionBodies);
                     if (ts.isObjectLiteralMethod(node)) {
                         checkFunctionExpressionOrObjectLiteralMethodBody(node);
                     }
                     break;
-                case 136:
                 case 137:
                 case 138:
-                case 201:
+                case 139:
+                case 203:
                     ts.forEach(node.parameters, checkFunctionExpressionBodies);
                     break;
-                case 193:
+                case 195:
                     checkFunctionExpressionBodies(node.expression);
                     break;
-                case 131:
-                case 130:
-                case 133:
                 case 132:
-                case 151:
-                case 152:
+                case 131:
+                case 134:
+                case 133:
                 case 153:
                 case 154:
                 case 155:
-                case 225:
                 case 156:
                 case 157:
+                case 227:
                 case 158:
                 case 159:
                 case 160:
-                case 172:
-                case 178:
                 case 161:
                 case 162:
-                case 166:
-                case 167:
-                case 165:
-                case 168:
-                case 169:
-                case 170:
-                case 171:
                 case 174:
                 case 180:
-                case 207:
-                case 181:
+                case 163:
+                case 164:
+                case 168:
+                case 169:
+                case 167:
+                case 170:
+                case 171:
+                case 172:
+                case 173:
+                case 176:
+                case 182:
+                case 209:
                 case 183:
-                case 184:
                 case 185:
                 case 186:
                 case 187:
@@ -18193,21 +18727,23 @@ var ts;
                 case 190:
                 case 191:
                 case 192:
+                case 193:
                 case 194:
-                case 208:
-                case 221:
-                case 222:
-                case 195:
                 case 196:
-                case 197:
+                case 210:
+                case 223:
                 case 224:
+                case 197:
+                case 198:
                 case 199:
-                case 200:
+                case 226:
+                case 201:
                 case 202:
-                case 205:
-                case 227:
-                case 215:
-                case 228:
+                case 204:
+                case 207:
+                case 229:
+                case 217:
+                case 230:
                     ts.forEachChild(node, checkFunctionExpressionBodies);
                     break;
             }
@@ -18220,6 +18756,9 @@ var ts;
         function checkSourceFileWorker(node) {
             var links = getNodeLinks(node);
             if (!(links.flags & 1)) {
+                if (node.isDefaultLib && compilerOptions.skipDefaultLibCheck) {
+                    return;
+                }
                 checkGrammarSourceFile(node);
                 emitExtends = false;
                 emitDecorate = false;
@@ -18267,7 +18806,7 @@ var ts;
         function isInsideWithStatementBody(node) {
             if (node) {
                 while (node.parent) {
-                    if (node.parent.kind === 193 && node.parent.statement === node) {
+                    if (node.parent.kind === 195 && node.parent.statement === node) {
                         return true;
                     }
                     node = node.parent;
@@ -18289,23 +18828,23 @@ var ts;
                         copySymbols(location.locals, meaning);
                     }
                     switch (location.kind) {
-                        case 228:
+                        case 230:
                             if (!ts.isExternalModule(location)) {
                                 break;
                             }
-                        case 206:
+                        case 208:
                             copySymbols(getSymbolOfNode(location).exports, meaning & 8914931);
                             break;
-                        case 205:
+                        case 207:
                             copySymbols(getSymbolOfNode(location).exports, meaning & 8);
                             break;
-                        case 202:
-                        case 203:
+                        case 204:
+                        case 205:
                             if (!(memberFlags & 128)) {
                                 copySymbols(getSymbolOfNode(location).members, meaning & 793056);
                             }
                             break;
-                        case 163:
+                        case 165:
                             if (location.name) {
                                 copySymbol(location.symbol, meaning);
                             }
@@ -18341,22 +18880,22 @@ var ts;
                     copySymbols(location.locals, meaning);
                 }
                 switch (location.kind) {
-                    case 228:
+                    case 230:
                         if (!ts.isExternalModule(location))
                             break;
-                    case 206:
+                    case 208:
                         copySymbols(getSymbolOfNode(location).exports, meaning & 8914931);
                         break;
-                    case 205:
+                    case 207:
                         copySymbols(getSymbolOfNode(location).exports, meaning & 8);
                         break;
-                    case 202:
-                    case 203:
+                    case 204:
+                    case 205:
                         if (!(memberFlags & 128)) {
                             copySymbols(getSymbolOfNode(location).members, meaning & 793056);
                         }
                         break;
-                    case 163:
+                    case 165:
                         if (location.name) {
                             copySymbol(location.symbol, meaning);
                         }
@@ -18369,42 +18908,42 @@ var ts;
             return symbolsToArray(symbols);
         }
         function isTypeDeclarationName(name) {
-            return name.kind == 65 &&
+            return name.kind === 65 &&
                 isTypeDeclaration(name.parent) &&
                 name.parent.name === name;
         }
         function isTypeDeclaration(node) {
             switch (node.kind) {
-                case 129:
-                case 202:
-                case 203:
+                case 130:
                 case 204:
                 case 205:
+                case 206:
+                case 207:
                     return true;
             }
         }
         function isTypeReferenceIdentifier(entityName) {
             var node = entityName;
-            while (node.parent && node.parent.kind === 127) {
+            while (node.parent && node.parent.kind === 128) {
                 node = node.parent;
             }
-            return node.parent && node.parent.kind === 142;
+            return node.parent && node.parent.kind === 144;
         }
         function isHeritageClauseElementIdentifier(entityName) {
             var node = entityName;
-            while (node.parent && node.parent.kind === 156) {
+            while (node.parent && node.parent.kind === 158) {
                 node = node.parent;
             }
-            return node.parent && node.parent.kind === 177;
+            return node.parent && node.parent.kind === 179;
         }
         function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide) {
-            while (nodeOnRightSide.parent.kind === 127) {
+            while (nodeOnRightSide.parent.kind === 128) {
                 nodeOnRightSide = nodeOnRightSide.parent;
             }
-            if (nodeOnRightSide.parent.kind === 209) {
+            if (nodeOnRightSide.parent.kind === 211) {
                 return nodeOnRightSide.parent.moduleReference === nodeOnRightSide && nodeOnRightSide.parent;
             }
-            if (nodeOnRightSide.parent.kind === 215) {
+            if (nodeOnRightSide.parent.kind === 217) {
                 return nodeOnRightSide.parent.expression === nodeOnRightSide && nodeOnRightSide.parent;
             }
             return undefined;
@@ -18416,10 +18955,10 @@ var ts;
             if (ts.isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
             }
-            if (entityName.parent.kind === 215) {
+            if (entityName.parent.kind === 217) {
                 return resolveEntityName(entityName, 107455 | 793056 | 1536 | 8388608);
             }
-            if (entityName.kind !== 156) {
+            if (entityName.kind !== 158) {
                 if (isInRightSideOfImportOrExportAssignment(entityName)) {
                     return getSymbolOfPartOfRightHandSideOfImportEquals(entityName);
                 }
@@ -18428,7 +18967,7 @@ var ts;
                 entityName = entityName.parent;
             }
             if (isHeritageClauseElementIdentifier(entityName)) {
-                var meaning = entityName.parent.kind === 177 ? 793056 : 1536;
+                var meaning = entityName.parent.kind === 179 ? 793056 : 1536;
                 meaning |= 8388608;
                 return resolveEntityName(entityName, meaning);
             }
@@ -18440,14 +18979,14 @@ var ts;
                     var meaning = 107455 | 8388608;
                     return resolveEntityName(entityName, meaning);
                 }
-                else if (entityName.kind === 156) {
+                else if (entityName.kind === 158) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
                         checkPropertyAccessExpression(entityName);
                     }
                     return getNodeLinks(entityName).resolvedSymbol;
                 }
-                else if (entityName.kind === 127) {
+                else if (entityName.kind === 128) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
                         checkQualifiedName(entityName);
@@ -18456,7 +18995,7 @@ var ts;
                 }
             }
             else if (isTypeReferenceIdentifier(entityName)) {
-                var meaning = entityName.parent.kind === 142 ? 793056 : 1536;
+                var meaning = entityName.parent.kind === 144 ? 793056 : 1536;
                 meaning |= 8388608;
                 return resolveEntityName(entityName, meaning);
             }
@@ -18470,14 +19009,14 @@ var ts;
                 return getSymbolOfNode(node.parent);
             }
             if (node.kind === 65 && isInRightSideOfImportOrExportAssignment(node)) {
-                return node.parent.kind === 215
+                return node.parent.kind === 217
                     ? getSymbolOfEntityNameOrPropertyAccessExpression(node)
                     : getSymbolOfPartOfRightHandSideOfImportEquals(node);
             }
             switch (node.kind) {
                 case 65:
-                case 156:
-                case 127:
+                case 158:
+                case 128:
                     return getSymbolOfEntityNameOrPropertyAccessExpression(node);
                 case 93:
                 case 91:
@@ -18485,7 +19024,7 @@ var ts;
                     return type.symbol;
                 case 114:
                     var constructorDeclaration = node.parent;
-                    if (constructorDeclaration && constructorDeclaration.kind === 136) {
+                    if (constructorDeclaration && constructorDeclaration.kind === 137) {
                         return constructorDeclaration.parent.symbol;
                     }
                     return undefined;
@@ -18493,12 +19032,12 @@ var ts;
                     var moduleName;
                     if ((ts.isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
                         ts.getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
-                        ((node.parent.kind === 210 || node.parent.kind === 216) &&
+                        ((node.parent.kind === 212 || node.parent.kind === 218) &&
                             node.parent.moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, node);
                     }
                 case 7:
-                    if (node.parent.kind == 157 && node.parent.argumentExpression === node) {
+                    if (node.parent.kind === 159 && node.parent.argumentExpression === node) {
                         var objectType = checkExpression(node.parent.expression);
                         if (objectType === unknownType)
                             return undefined;
@@ -18512,7 +19051,7 @@ var ts;
             return undefined;
         }
         function getShorthandAssignmentValueSymbol(location) {
-            if (location && location.kind === 226) {
+            if (location && location.kind === 228) {
                 return resolveEntityName(location.name, 107455);
             }
             return undefined;
@@ -18526,6 +19065,9 @@ var ts;
             }
             if (ts.isExpression(node)) {
                 return getTypeOfExpression(node);
+            }
+            if (ts.isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
+                return getBaseTypes(getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
             }
             if (isTypeDeclaration(node)) {
                 var symbol = getSymbolOfNode(node);
@@ -18571,9 +19113,9 @@ var ts;
         function getRootSymbols(symbol) {
             if (symbol.flags & 268435456) {
                 var symbols = [];
-                var name_13 = symbol.name;
+                var name_14 = symbol.name;
                 ts.forEach(getSymbolLinks(symbol).unionType.types, function (t) {
-                    symbols.push(getPropertyOfType(t, name_13));
+                    symbols.push(getPropertyOfType(t, name_14));
                 });
                 return symbols;
             }
@@ -18585,81 +19127,81 @@ var ts;
             }
             return [symbol];
         }
-        function isExternalModuleSymbol(symbol) {
-            return symbol.flags & 512 && symbol.declarations.length === 1 && symbol.declarations[0].kind === 228;
-        }
-        function getAliasNameSubstitution(symbol, getGeneratedNameForNode) {
-            if (languageVersion >= 2) {
-                return undefined;
-            }
-            var node = getDeclarationOfAliasSymbol(symbol);
-            if (node) {
-                if (node.kind === 211) {
-                    var defaultKeyword;
-                    if (languageVersion === 0) {
-                        defaultKeyword = "[\"default\"]";
-                    }
-                    else {
-                        defaultKeyword = ".default";
-                    }
-                    return getGeneratedNameForNode(node.parent) + defaultKeyword;
-                }
-                if (node.kind === 214) {
-                    var moduleName = getGeneratedNameForNode(node.parent.parent.parent);
-                    var propertyName = node.propertyName || node.name;
-                    return moduleName + "." + ts.unescapeIdentifier(propertyName.text);
-                }
-            }
-        }
-        function getExportNameSubstitution(symbol, location, getGeneratedNameForNode) {
-            if (isExternalModuleSymbol(symbol.parent)) {
-                if (languageVersion >= 2 || compilerOptions.module === 4) {
-                    return undefined;
-                }
-                return "exports." + ts.unescapeIdentifier(symbol.name);
-            }
-            var node = location;
-            var containerSymbol = getParentOfSymbol(symbol);
-            while (node) {
-                if ((node.kind === 206 || node.kind === 205) && getSymbolOfNode(node) === containerSymbol) {
-                    return getGeneratedNameForNode(node) + "." + ts.unescapeIdentifier(symbol.name);
-                }
-                node = node.parent;
-            }
-        }
-        function getExpressionNameSubstitution(node, getGeneratedNameForNode) {
-            var symbol = getNodeLinks(node).resolvedSymbol || (ts.isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
+        function getReferencedExportContainer(node) {
+            var symbol = getReferencedValueSymbol(node);
             if (symbol) {
-                if (symbol.parent) {
-                    return getExportNameSubstitution(symbol, node.parent, getGeneratedNameForNode);
+                if (symbol.flags & 1048576) {
+                    var exportSymbol = getMergedSymbol(symbol.exportSymbol);
+                    if (exportSymbol.flags & 944) {
+                        return undefined;
+                    }
+                    symbol = exportSymbol;
                 }
-                var exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-                if (symbol !== exportSymbol && !(exportSymbol.flags & 944)) {
-                    return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
-                }
-                if (symbol.flags & 8388608) {
-                    return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
+                var parentSymbol = getParentOfSymbol(symbol);
+                if (parentSymbol) {
+                    if (parentSymbol.flags & 512 && parentSymbol.valueDeclaration.kind === 230) {
+                        return parentSymbol.valueDeclaration;
+                    }
+                    for (var n = node.parent; n; n = n.parent) {
+                        if ((n.kind === 208 || n.kind === 207) && getSymbolOfNode(n) === parentSymbol) {
+                            return n;
+                        }
+                    }
                 }
             }
+        }
+        function getReferencedImportDeclaration(node) {
+            var symbol = getReferencedValueSymbol(node);
+            return symbol && symbol.flags & 8388608 ? getDeclarationOfAliasSymbol(symbol) : undefined;
+        }
+        function isStatementWithLocals(node) {
+            switch (node.kind) {
+                case 182:
+                case 210:
+                case 189:
+                case 190:
+                case 191:
+                    return true;
+            }
+            return false;
+        }
+        function isNestedRedeclarationSymbol(symbol) {
+            if (symbol.flags & 418) {
+                var links = getSymbolLinks(symbol);
+                if (links.isNestedRedeclaration === undefined) {
+                    var container = ts.getEnclosingBlockScopeContainer(symbol.valueDeclaration);
+                    links.isNestedRedeclaration = isStatementWithLocals(container) &&
+                        !!resolveName(container.parent, symbol.name, 107455, undefined, undefined);
+                }
+                return links.isNestedRedeclaration;
+            }
+            return false;
+        }
+        function getReferencedNestedRedeclaration(node) {
+            var symbol = getReferencedValueSymbol(node);
+            return symbol && isNestedRedeclarationSymbol(symbol) ? symbol.valueDeclaration : undefined;
+        }
+        function isNestedRedeclaration(node) {
+            return isNestedRedeclarationSymbol(getSymbolOfNode(node));
         }
         function isValueAliasDeclaration(node) {
             switch (node.kind) {
-                case 209:
                 case 211:
-                case 212:
+                case 213:
                 case 214:
-                case 218:
-                    return isAliasResolvedToValue(getSymbolOfNode(node));
                 case 216:
+                case 220:
+                    return isAliasResolvedToValue(getSymbolOfNode(node));
+                case 218:
                     var exportClause = node.exportClause;
                     return exportClause && ts.forEach(exportClause.elements, isValueAliasDeclaration);
-                case 215:
+                case 217:
                     return node.expression && node.expression.kind === 65 ? isAliasResolvedToValue(getSymbolOfNode(node)) : true;
             }
             return false;
         }
         function isTopLevelValueImportEqualsWithEntityName(node) {
-            if (node.parent.kind !== 228 || !ts.isInternalModuleImportEqualsDeclaration(node)) {
+            if (node.parent.kind !== 230 || !ts.isInternalModuleImportEqualsDeclaration(node)) {
                 return false;
             }
             var isValue = isAliasResolvedToValue(getSymbolOfNode(node));
@@ -18704,7 +19246,7 @@ var ts;
             return getNodeLinks(node).enumMemberValue;
         }
         function getConstantValue(node) {
-            if (node.kind === 227) {
+            if (node.kind === 229) {
                 return getEnumMemberValue(node);
             }
             var symbol = getNodeLinks(node).resolvedSymbol;
@@ -18715,10 +19257,9 @@ var ts;
             }
             return undefined;
         }
-        function serializeEntityName(node, getGeneratedNameForNode, fallbackPath) {
+        function serializeEntityName(node, fallbackPath) {
             if (node.kind === 65) {
-                var substitution = getExpressionNameSubstitution(node, getGeneratedNameForNode);
-                var text = substitution || node.text;
+                var text = node.text;
                 if (fallbackPath) {
                     fallbackPath.push(text);
                 }
@@ -18727,14 +19268,14 @@ var ts;
                 }
             }
             else {
-                var left = serializeEntityName(node.left, getGeneratedNameForNode, fallbackPath);
-                var right = serializeEntityName(node.right, getGeneratedNameForNode, fallbackPath);
+                var left = serializeEntityName(node.left, fallbackPath);
+                var right = serializeEntityName(node.right, fallbackPath);
                 if (!fallbackPath) {
                     return left + "." + right;
                 }
             }
         }
-        function serializeTypeReferenceNode(node, getGeneratedNameForNode) {
+        function serializeTypeReferenceNode(node) {
             var type = getTypeFromTypeNode(node);
             if (type.flags & 16) {
                 return "void 0";
@@ -18751,47 +19292,47 @@ var ts;
             else if (type.flags & 8192) {
                 return "Array";
             }
-            else if (type.flags & 1048576) {
+            else if (type.flags & 2097152) {
                 return "Symbol";
             }
             else if (type === unknownType) {
                 var fallbackPath = [];
-                serializeEntityName(node.typeName, getGeneratedNameForNode, fallbackPath);
+                serializeEntityName(node.typeName, fallbackPath);
                 return fallbackPath;
             }
             else if (type.symbol && type.symbol.valueDeclaration) {
-                return serializeEntityName(node.typeName, getGeneratedNameForNode);
+                return serializeEntityName(node.typeName);
             }
             else if (typeHasCallOrConstructSignatures(type)) {
                 return "Function";
             }
             return "Object";
         }
-        function serializeTypeNode(node, getGeneratedNameForNode) {
+        function serializeTypeNode(node) {
             if (node) {
                 switch (node.kind) {
                     case 99:
                         return "void 0";
-                    case 150:
-                        return serializeTypeNode(node.type, getGeneratedNameForNode);
-                    case 143:
-                    case 144:
+                    case 152:
+                        return serializeTypeNode(node.type);
+                    case 145:
+                    case 146:
                         return "Function";
-                    case 147:
-                    case 148:
+                    case 149:
+                    case 150:
                         return "Array";
                     case 113:
                         return "Boolean";
-                    case 122:
+                    case 123:
                     case 8:
                         return "String";
-                    case 120:
+                    case 121:
                         return "Number";
-                    case 142:
-                        return serializeTypeReferenceNode(node, getGeneratedNameForNode);
-                    case 145:
-                    case 146:
-                    case 149:
+                    case 144:
+                        return serializeTypeReferenceNode(node);
+                    case 147:
+                    case 148:
+                    case 151:
                     case 112:
                         break;
                     default:
@@ -18801,23 +19342,23 @@ var ts;
             }
             return "Object";
         }
-        function serializeTypeOfNode(node, getGeneratedNameForNode) {
+        function serializeTypeOfNode(node) {
             switch (node.kind) {
-                case 202: return "Function";
-                case 133: return serializeTypeNode(node.type, getGeneratedNameForNode);
-                case 130: return serializeTypeNode(node.type, getGeneratedNameForNode);
-                case 137: return serializeTypeNode(node.type, getGeneratedNameForNode);
-                case 138: return serializeTypeNode(getSetAccessorTypeAnnotationNode(node), getGeneratedNameForNode);
+                case 204: return "Function";
+                case 134: return serializeTypeNode(node.type);
+                case 131: return serializeTypeNode(node.type);
+                case 138: return serializeTypeNode(node.type);
+                case 139: return serializeTypeNode(getSetAccessorTypeAnnotationNode(node));
             }
             if (ts.isFunctionLike(node)) {
                 return "Function";
             }
             return "void 0";
         }
-        function serializeParameterTypesOfNode(node, getGeneratedNameForNode) {
+        function serializeParameterTypesOfNode(node) {
             if (node) {
                 var valueDeclaration;
-                if (node.kind === 202) {
+                if (node.kind === 204) {
                     valueDeclaration = ts.getFirstConstructorWithBody(node);
                 }
                 else if (ts.isFunctionLike(node) && ts.nodeIsPresent(node.body)) {
@@ -18832,19 +19373,19 @@ var ts;
                         for (var i = 0; i < parameterCount; i++) {
                             if (parameters[i].dotDotDotToken) {
                                 var parameterType = parameters[i].type;
-                                if (parameterType.kind === 147) {
+                                if (parameterType.kind === 149) {
                                     parameterType = parameterType.elementType;
                                 }
-                                else if (parameterType.kind === 142 && parameterType.typeArguments && parameterType.typeArguments.length === 1) {
+                                else if (parameterType.kind === 144 && parameterType.typeArguments && parameterType.typeArguments.length === 1) {
                                     parameterType = parameterType.typeArguments[0];
                                 }
                                 else {
                                     parameterType = undefined;
                                 }
-                                result[i] = serializeTypeNode(parameterType, getGeneratedNameForNode);
+                                result[i] = serializeTypeNode(parameterType);
                             }
                             else {
-                                result[i] = serializeTypeOfNode(parameters[i], getGeneratedNameForNode);
+                                result[i] = serializeTypeOfNode(parameters[i]);
                             }
                         }
                         return result;
@@ -18853,9 +19394,9 @@ var ts;
             }
             return emptyArray;
         }
-        function serializeReturnTypeOfNode(node, getGeneratedNameForNode) {
+        function serializeReturnTypeOfNode(node) {
             if (node && ts.isFunctionLike(node)) {
-                return serializeTypeNode(node.type, getGeneratedNameForNode);
+                return serializeTypeNode(node.type);
             }
             return "void 0";
         }
@@ -18877,25 +19418,24 @@ var ts;
         function hasGlobalName(name) {
             return ts.hasProperty(globals, name);
         }
-        function resolvesToSomeValue(location, name) {
-            ts.Debug.assert(!ts.nodeIsSynthesized(location), "resolvesToSomeValue called with a synthesized location");
-            return !!resolveName(location, name, 107455, undefined, undefined);
+        function getReferencedValueSymbol(reference) {
+            return getNodeLinks(reference).resolvedSymbol ||
+                resolveName(reference, reference.text, 107455 | 1048576 | 8388608, undefined, undefined);
         }
         function getReferencedValueDeclaration(reference) {
             ts.Debug.assert(!ts.nodeIsSynthesized(reference));
-            var symbol = getNodeLinks(reference).resolvedSymbol ||
-                resolveName(reference, reference.text, 107455 | 8388608, undefined, undefined);
+            var symbol = getReferencedValueSymbol(reference);
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
         function getBlockScopedVariableId(n) {
             ts.Debug.assert(!ts.nodeIsSynthesized(n));
-            var isVariableDeclarationOrBindingElement = n.parent.kind === 153 || (n.parent.kind === 199 && n.parent.name === n);
+            var isVariableDeclarationOrBindingElement = n.parent.kind === 155 || (n.parent.kind === 201 && n.parent.name === n);
             var symbol = (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, 107455 | 8388608, undefined, undefined);
             var isLetOrConst = symbol &&
                 (symbol.flags & 2) &&
-                symbol.valueDeclaration.parent.kind !== 224;
+                symbol.valueDeclaration.parent.kind !== 226;
             if (isLetOrConst) {
                 getSymbolLinks(symbol);
                 return symbol.id;
@@ -18915,7 +19455,10 @@ var ts;
         }
         function createResolver() {
             return {
-                getExpressionNameSubstitution: getExpressionNameSubstitution,
+                getReferencedExportContainer: getReferencedExportContainer,
+                getReferencedImportDeclaration: getReferencedImportDeclaration,
+                getReferencedNestedRedeclaration: getReferencedNestedRedeclaration,
+                isNestedRedeclaration: isNestedRedeclaration,
                 isValueAliasDeclaration: isValueAliasDeclaration,
                 hasGlobalName: hasGlobalName,
                 isReferencedAliasDeclaration: isReferencedAliasDeclaration,
@@ -18929,7 +19472,6 @@ var ts;
                 isSymbolAccessible: isSymbolAccessible,
                 isEntityNameVisible: isEntityNameVisible,
                 getConstantValue: getConstantValue,
-                resolvesToSomeValue: resolvesToSomeValue,
                 collectLinkedAliases: collectLinkedAliases,
                 getBlockScopedVariableId: getBlockScopedVariableId,
                 getReferencedValueDeclaration: getReferencedValueDeclaration,
@@ -18980,105 +19522,6 @@ var ts;
             }
             anyArrayType = createArrayType(anyType);
         }
-        function isReservedWordInStrictMode(node) {
-            return (node.parserContextFlags & 1) &&
-                (102 <= node.originalKeywordKind && node.originalKeywordKind <= 110);
-        }
-        function reportStrictModeGrammarErrorInClassDeclaration(identifier, message, arg0, arg1, arg2) {
-            if (ts.getAncestor(identifier, 202) || ts.getAncestor(identifier, 175)) {
-                return grammarErrorOnNode(identifier, message, arg0);
-            }
-            return false;
-        }
-        function checkGrammarImportDeclarationNameInStrictMode(node) {
-            if (node.importClause) {
-                var impotClause = node.importClause;
-                if (impotClause.namedBindings) {
-                    var nameBindings = impotClause.namedBindings;
-                    if (nameBindings.kind === 212) {
-                        var name_14 = nameBindings.name;
-                        if (isReservedWordInStrictMode(name_14)) {
-                            var nameText = ts.declarationNameToString(name_14);
-                            return grammarErrorOnNode(name_14, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
-                        }
-                    }
-                    else if (nameBindings.kind === 213) {
-                        var reportError = false;
-                        for (var _i = 0, _a = nameBindings.elements; _i < _a.length; _i++) {
-                            var element = _a[_i];
-                            var name_15 = element.name;
-                            if (isReservedWordInStrictMode(name_15)) {
-                                var nameText = ts.declarationNameToString(name_15);
-                                reportError = reportError || grammarErrorOnNode(name_15, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
-                            }
-                        }
-                        return reportError;
-                    }
-                }
-            }
-            return false;
-        }
-        function checkGrammarDeclarationNameInStrictMode(node) {
-            var name = node.name;
-            if (name && name.kind === 65 && isReservedWordInStrictMode(name)) {
-                var nameText = ts.declarationNameToString(name);
-                switch (node.kind) {
-                    case 130:
-                    case 199:
-                    case 201:
-                    case 129:
-                    case 153:
-                    case 203:
-                    case 204:
-                    case 205:
-                        return checkGrammarIdentifierInStrictMode(name);
-                    case 202:
-                        return grammarErrorOnNode(name, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText);
-                    case 206:
-                        return grammarErrorOnNode(name, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
-                    case 209:
-                        return grammarErrorOnNode(name, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
-                }
-            }
-            return false;
-        }
-        function checkGrammarTypeReferenceInStrictMode(typeName) {
-            if (typeName.kind === 65) {
-                checkGrammarTypeNameInStrictMode(typeName);
-            }
-            else if (typeName.kind === 127) {
-                checkGrammarTypeNameInStrictMode(typeName.right);
-                checkGrammarTypeReferenceInStrictMode(typeName.left);
-            }
-        }
-        function checkGrammarExpressionWithTypeArgumentsInStrictMode(expression) {
-            if (expression && expression.kind === 65) {
-                return checkGrammarIdentifierInStrictMode(expression);
-            }
-            else if (expression && expression.kind === 156) {
-                checkGrammarExpressionWithTypeArgumentsInStrictMode(expression.expression);
-            }
-        }
-        function checkGrammarIdentifierInStrictMode(node, nameText) {
-            if (node && node.kind === 65 && isReservedWordInStrictMode(node)) {
-                if (!nameText) {
-                    nameText = ts.declarationNameToString(node);
-                }
-                var errorReport = reportStrictModeGrammarErrorInClassDeclaration(node, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
-                    grammarErrorOnNode(node, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
-                return errorReport;
-            }
-            return false;
-        }
-        function checkGrammarTypeNameInStrictMode(node) {
-            if (node && node.kind === 65 && isReservedWordInStrictMode(node)) {
-                var nameText = ts.declarationNameToString(node);
-                var errorReport = reportStrictModeGrammarErrorInClassDeclaration(node, ts.Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
-                    grammarErrorOnNode(node, ts.Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
-                return errorReport;
-            }
-            return false;
-        }
         function checkGrammarDecorators(node) {
             if (!node.decorators) {
                 return false;
@@ -19089,7 +19532,7 @@ var ts;
             else if (languageVersion < 1) {
                 return grammarErrorOnFirstToken(node, ts.Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
-            else if (node.kind === 137 || node.kind === 138) {
+            else if (node.kind === 138 || node.kind === 139) {
                 var accessors = ts.getAllAccessorDeclarations(node.parent.members, node);
                 if (accessors.firstAccessor.decorators && node === accessors.secondAccessor) {
                     return grammarErrorOnFirstToken(node, ts.Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
@@ -19099,33 +19542,33 @@ var ts;
         }
         function checkGrammarModifiers(node) {
             switch (node.kind) {
-                case 137:
                 case 138:
-                case 136:
-                case 133:
-                case 132:
-                case 135:
+                case 139:
+                case 137:
                 case 134:
-                case 141:
-                case 206:
-                case 210:
-                case 209:
-                case 216:
-                case 215:
-                case 130:
+                case 133:
+                case 136:
+                case 135:
+                case 142:
+                case 208:
+                case 212:
+                case 211:
+                case 218:
+                case 217:
+                case 131:
                     break;
-                case 202:
-                case 203:
-                case 181:
-                case 201:
                 case 204:
-                    if (node.modifiers && node.parent.kind !== 207 && node.parent.kind !== 228) {
+                case 205:
+                case 183:
+                case 203:
+                case 206:
+                    if (node.modifiers && node.parent.kind !== 209 && node.parent.kind !== 230) {
                         return grammarErrorOnFirstToken(node, ts.Diagnostics.Modifiers_cannot_appear_here);
                     }
                     break;
-                case 205:
+                case 207:
                     if (node.modifiers && (node.modifiers.length > 1 || node.modifiers[0].kind !== 70) &&
-                        node.parent.kind !== 207 && node.parent.kind !== 228) {
+                        node.parent.kind !== 209 && node.parent.kind !== 230) {
                         return grammarErrorOnFirstToken(node, ts.Diagnostics.Modifiers_cannot_appear_here);
                     }
                     break;
@@ -19161,7 +19604,7 @@ var ts;
                         else if (flags & 128) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
                         }
-                        else if (node.parent.kind === 207 || node.parent.kind === 228) {
+                        else if (node.parent.kind === 209 || node.parent.kind === 230) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
                         flags |= ts.modifierToFlag(modifier.kind);
@@ -19170,10 +19613,10 @@ var ts;
                         if (flags & 128) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_already_seen, "static");
                         }
-                        else if (node.parent.kind === 207 || node.parent.kind === 228) {
+                        else if (node.parent.kind === 209 || node.parent.kind === 230) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
                         }
-                        else if (node.kind === 130) {
+                        else if (node.kind === 131) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
                         }
                         flags |= 128;
@@ -19186,10 +19629,10 @@ var ts;
                         else if (flags & 2) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
                         }
-                        else if (node.parent.kind === 202) {
+                        else if (node.parent.kind === 204) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
-                        else if (node.kind === 130) {
+                        else if (node.kind === 131) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
                         }
                         flags |= 1;
@@ -19198,13 +19641,13 @@ var ts;
                         if (flags & 2) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_already_seen, "declare");
                         }
-                        else if (node.parent.kind === 202) {
+                        else if (node.parent.kind === 204) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
-                        else if (node.kind === 130) {
+                        else if (node.kind === 131) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
                         }
-                        else if (ts.isInAmbientContext(node.parent) && node.parent.kind === 207) {
+                        else if (ts.isInAmbientContext(node.parent) && node.parent.kind === 209) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
                         }
                         flags |= 2;
@@ -19212,7 +19655,7 @@ var ts;
                         break;
                 }
             }
-            if (node.kind === 136) {
+            if (node.kind === 137) {
                 if (flags & 128) {
                     return grammarErrorOnNode(lastStatic, ts.Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "static");
                 }
@@ -19223,10 +19666,10 @@ var ts;
                     return grammarErrorOnNode(lastPrivate, ts.Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
             }
-            else if ((node.kind === 210 || node.kind === 209) && flags & 2) {
+            else if ((node.kind === 212 || node.kind === 211) && flags & 2) {
                 return grammarErrorOnNode(lastDeclare, ts.Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
-            else if (node.kind === 130 && (flags & 112) && ts.isBindingPattern(node.name)) {
+            else if (node.kind === 131 && (flags & 112) && ts.isBindingPattern(node.name)) {
                 return grammarErrorOnNode(node, ts.Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
             }
         }
@@ -19289,7 +19732,7 @@ var ts;
                 checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
         }
         function checkGrammarArrowFunction(node, file) {
-            if (node.kind === 164) {
+            if (node.kind === 166) {
                 var arrowFunction = node;
                 var startLine = ts.getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.pos).line;
                 var endLine = ts.getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.end).line;
@@ -19324,7 +19767,7 @@ var ts;
             if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, ts.Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            if (parameter.type.kind !== 122 && parameter.type.kind !== 120) {
+            if (parameter.type.kind !== 123 && parameter.type.kind !== 121) {
                 return grammarErrorOnNode(parameter.name, ts.Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
             }
             if (!node.type) {
@@ -19356,7 +19799,7 @@ var ts;
                 var sourceFile = ts.getSourceFileOfNode(node);
                 for (var _i = 0; _i < arguments.length; _i++) {
                     var arg = arguments[_i];
-                    if (arg.kind === 176) {
+                    if (arg.kind === 178) {
                         return grammarErrorAtPos(sourceFile, arg.pos, 0, ts.Diagnostics.Argument_expression_expected);
                     }
                 }
@@ -19427,19 +19870,19 @@ var ts;
             return false;
         }
         function checkGrammarComputedPropertyName(node) {
-            if (node.kind !== 128) {
+            if (node.kind !== 129) {
                 return false;
             }
             var computedPropertyName = node;
-            if (computedPropertyName.expression.kind === 170 && computedPropertyName.expression.operatorToken.kind === 23) {
+            if (computedPropertyName.expression.kind === 172 && computedPropertyName.expression.operatorToken.kind === 23) {
                 return grammarErrorOnNode(computedPropertyName.expression, ts.Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
         function checkGrammarForGenerator(node) {
             if (node.asteriskToken) {
-                ts.Debug.assert(node.kind === 201 ||
-                    node.kind === 163 ||
-                    node.kind === 135);
+                ts.Debug.assert(node.kind === 203 ||
+                    node.kind === 165 ||
+                    node.kind === 136);
                 if (ts.isInAmbientContext(node)) {
                     return grammarErrorOnNode(node.asteriskToken, ts.Diagnostics.Generators_are_not_allowed_in_an_ambient_context);
                 }
@@ -19450,9 +19893,6 @@ var ts;
                     return grammarErrorOnNode(node.asteriskToken, ts.Diagnostics.Generators_are_only_available_when_targeting_ECMAScript_6_or_higher);
                 }
             }
-        }
-        function checkGrammarFunctionName(name) {
-            return checkGrammarEvalOrArgumentsInStrictMode(name, name);
         }
         function checkGrammarForInvalidQuestionMark(node, questionToken, message) {
             if (questionToken) {
@@ -19465,55 +19905,52 @@ var ts;
             var GetAccessor = 2;
             var SetAccesor = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
-            var inStrictMode = (node.parserContextFlags & 1) !== 0;
             for (var _i = 0, _a = node.properties; _i < _a.length; _i++) {
                 var prop = _a[_i];
-                var name_16 = prop.name;
-                if (prop.kind === 176 ||
-                    name_16.kind === 128) {
-                    checkGrammarComputedPropertyName(name_16);
+                var name_15 = prop.name;
+                if (prop.kind === 178 ||
+                    name_15.kind === 129) {
+                    checkGrammarComputedPropertyName(name_15);
                     continue;
                 }
                 var currentKind = void 0;
-                if (prop.kind === 225 || prop.kind === 226) {
+                if (prop.kind === 227 || prop.kind === 228) {
                     checkGrammarForInvalidQuestionMark(prop, prop.questionToken, ts.Diagnostics.An_object_member_cannot_be_declared_optional);
-                    if (name_16.kind === 7) {
-                        checkGrammarNumericLiteral(name_16);
+                    if (name_15.kind === 7) {
+                        checkGrammarNumericLiteral(name_15);
                     }
                     currentKind = Property;
                 }
-                else if (prop.kind === 135) {
+                else if (prop.kind === 136) {
                     currentKind = Property;
                 }
-                else if (prop.kind === 137) {
+                else if (prop.kind === 138) {
                     currentKind = GetAccessor;
                 }
-                else if (prop.kind === 138) {
+                else if (prop.kind === 139) {
                     currentKind = SetAccesor;
                 }
                 else {
                     ts.Debug.fail("Unexpected syntax kind:" + prop.kind);
                 }
-                if (!ts.hasProperty(seen, name_16.text)) {
-                    seen[name_16.text] = currentKind;
+                if (!ts.hasProperty(seen, name_15.text)) {
+                    seen[name_15.text] = currentKind;
                 }
                 else {
-                    var existingKind = seen[name_16.text];
+                    var existingKind = seen[name_15.text];
                     if (currentKind === Property && existingKind === Property) {
-                        if (inStrictMode) {
-                            grammarErrorOnNode(name_16, ts.Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
-                        }
+                        continue;
                     }
                     else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
                         if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
-                            seen[name_16.text] = currentKind | existingKind;
+                            seen[name_15.text] = currentKind | existingKind;
                         }
                         else {
-                            return grammarErrorOnNode(name_16, ts.Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                            return grammarErrorOnNode(name_15, ts.Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
                         }
                     }
                     else {
-                        return grammarErrorOnNode(name_16, ts.Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                        return grammarErrorOnNode(name_15, ts.Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
                 }
             }
@@ -19522,24 +19959,24 @@ var ts;
             if (checkGrammarStatementInAmbientContext(forInOrOfStatement)) {
                 return true;
             }
-            if (forInOrOfStatement.initializer.kind === 200) {
+            if (forInOrOfStatement.initializer.kind === 202) {
                 var variableList = forInOrOfStatement.initializer;
                 if (!checkGrammarVariableDeclarationList(variableList)) {
                     if (variableList.declarations.length > 1) {
-                        var diagnostic = forInOrOfStatement.kind === 188
+                        var diagnostic = forInOrOfStatement.kind === 190
                             ? ts.Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement
                             : ts.Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
                         return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
                     }
                     var firstDeclaration = variableList.declarations[0];
                     if (firstDeclaration.initializer) {
-                        var diagnostic = forInOrOfStatement.kind === 188
+                        var diagnostic = forInOrOfStatement.kind === 190
                             ? ts.Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer
                             : ts.Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
                         return grammarErrorOnNode(firstDeclaration.name, diagnostic);
                     }
                     if (firstDeclaration.type) {
-                        var diagnostic = forInOrOfStatement.kind === 188
+                        var diagnostic = forInOrOfStatement.kind === 190
                             ? ts.Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation
                             : ts.Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
                         return grammarErrorOnNode(firstDeclaration, diagnostic);
@@ -19562,10 +19999,10 @@ var ts;
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, ts.Diagnostics.An_accessor_cannot_have_type_parameters);
             }
-            else if (kind === 137 && accessor.parameters.length) {
+            else if (kind === 138 && accessor.parameters.length) {
                 return grammarErrorOnNode(accessor.name, ts.Diagnostics.A_get_accessor_cannot_have_parameters);
             }
-            else if (kind === 138) {
+            else if (kind === 139) {
                 if (accessor.type) {
                     return grammarErrorOnNode(accessor.name, ts.Diagnostics.A_set_accessor_cannot_have_a_return_type_annotation);
                 }
@@ -19590,7 +20027,7 @@ var ts;
             }
         }
         function checkGrammarForNonSymbolComputedProperty(node, message) {
-            if (node.kind === 128 && !ts.isWellKnownSymbolSyntactically(node.expression)) {
+            if (node.kind === 129 && !ts.isWellKnownSymbolSyntactically(node.expression)) {
                 return grammarErrorOnNode(node, message);
             }
         }
@@ -19600,7 +20037,7 @@ var ts;
                 checkGrammarForGenerator(node)) {
                 return true;
             }
-            if (node.parent.kind === 155) {
+            if (node.parent.kind === 157) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, ts.Diagnostics.A_class_member_cannot_be_declared_optional)) {
                     return true;
                 }
@@ -19608,7 +20045,7 @@ var ts;
                     return grammarErrorAtPos(getSourceFile(node), node.end - 1, ";".length, ts.Diagnostics._0_expected, "{");
                 }
             }
-            if (node.parent.kind === 202) {
+            if (node.parent.kind === 204) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, ts.Diagnostics.A_class_member_cannot_be_declared_optional)) {
                     return true;
                 }
@@ -19619,22 +20056,22 @@ var ts;
                     return checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_a_method_overload_must_directly_refer_to_a_built_in_symbol);
                 }
             }
-            else if (node.parent.kind === 203) {
+            else if (node.parent.kind === 205) {
                 return checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol);
             }
-            else if (node.parent.kind === 146) {
+            else if (node.parent.kind === 148) {
                 return checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol);
             }
         }
         function isIterationStatement(node, lookInLabeledStatements) {
             switch (node.kind) {
+                case 189:
+                case 190:
+                case 191:
                 case 187:
                 case 188:
-                case 189:
-                case 185:
-                case 186:
                     return true;
-                case 195:
+                case 197:
                     return lookInLabeledStatements && isIterationStatement(node.statement, lookInLabeledStatements);
             }
             return false;
@@ -19646,9 +20083,9 @@ var ts;
                     return grammarErrorOnNode(node, ts.Diagnostics.Jump_target_cannot_cross_function_boundary);
                 }
                 switch (current.kind) {
-                    case 195:
+                    case 197:
                         if (node.label && current.label.text === node.label.text) {
-                            var isMisplacedContinueLabel = node.kind === 190
+                            var isMisplacedContinueLabel = node.kind === 192
                                 && !isIterationStatement(current.statement, true);
                             if (isMisplacedContinueLabel) {
                                 return grammarErrorOnNode(node, ts.Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement);
@@ -19656,8 +20093,8 @@ var ts;
                             return false;
                         }
                         break;
-                    case 194:
-                        if (node.kind === 191 && !node.label) {
+                    case 196:
+                        if (node.kind === 193 && !node.label) {
                             return false;
                         }
                         break;
@@ -19670,13 +20107,13 @@ var ts;
                 current = current.parent;
             }
             if (node.label) {
-                var message = node.kind === 191
+                var message = node.kind === 193
                     ? ts.Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement
                     : ts.Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement;
                 return grammarErrorOnNode(node, message);
             }
             else {
-                var message = node.kind === 191
+                var message = node.kind === 193
                     ? ts.Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement
                     : ts.Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement;
                 return grammarErrorOnNode(node, message);
@@ -19688,17 +20125,16 @@ var ts;
                 if (node !== ts.lastOrUndefined(elements)) {
                     return grammarErrorOnNode(node, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
-                if (node.name.kind === 152 || node.name.kind === 151) {
+                if (node.name.kind === 154 || node.name.kind === 153) {
                     return grammarErrorOnNode(node.name, ts.Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
                 }
                 if (node.initializer) {
                     return grammarErrorAtPos(ts.getSourceFileOfNode(node), node.initializer.pos - 1, 1, ts.Diagnostics.A_rest_element_cannot_have_an_initializer);
                 }
             }
-            return checkGrammarEvalOrArgumentsInStrictMode(node, node.name);
         }
         function checkGrammarVariableDeclaration(node) {
-            if (node.parent.parent.kind !== 188 && node.parent.parent.kind !== 189) {
+            if (node.parent.parent.kind !== 190 && node.parent.parent.kind !== 191) {
                 if (ts.isInAmbientContext(node)) {
                     if (node.initializer) {
                         var equalsTokenLength = "=".length;
@@ -19715,8 +20151,7 @@ var ts;
                 }
             }
             var checkLetConstNames = languageVersion >= 2 && (ts.isLet(node) || ts.isConst(node));
-            return (checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name)) ||
-                checkGrammarEvalOrArgumentsInStrictMode(node, node.name);
+            return checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name);
         }
         function checkGrammarNameInLetOrConstDeclarations(name) {
             if (name.kind === 65) {
@@ -19728,7 +20163,7 @@ var ts;
                 var elements = name.elements;
                 for (var _i = 0; _i < elements.length; _i++) {
                     var element = elements[_i];
-                    if (element.kind !== 176) {
+                    if (element.kind !== 178) {
                         checkGrammarNameInLetOrConstDeclarations(element.name);
                     }
                 }
@@ -19745,15 +20180,15 @@ var ts;
         }
         function allowLetAndConstDeclarations(parent) {
             switch (parent.kind) {
-                case 184:
-                case 185:
                 case 186:
-                case 193:
                 case 187:
                 case 188:
-                case 189:
-                    return false;
                 case 195:
+                case 189:
+                case 190:
+                case 191:
+                    return false;
+                case 197:
                     return allowLetAndConstDeclarations(parent.parent);
             }
             return true;
@@ -19769,7 +20204,7 @@ var ts;
             }
         }
         function isIntegerLiteral(expression) {
-            if (expression.kind === 168) {
+            if (expression.kind === 170) {
                 var unaryExpression = expression;
                 if (unaryExpression.operator === 33 || unaryExpression.operator === 34) {
                     expression = unaryExpression.operand;
@@ -19788,7 +20223,7 @@ var ts;
                 var inAmbientContext = ts.isInAmbientContext(enumDecl);
                 for (var _i = 0, _a = enumDecl.members; _i < _a.length; _i++) {
                     var node = _a[_i];
-                    if (node.name.kind === 128) {
+                    if (node.name.kind === 129) {
                         hasError = grammarErrorOnNode(node.name, ts.Diagnostics.Computed_property_names_are_not_allowed_in_enums);
                     }
                     else if (inAmbientContext) {
@@ -19830,23 +20265,6 @@ var ts;
                 return true;
             }
         }
-        function checkGrammarEvalOrArgumentsInStrictMode(contextNode, name) {
-            if (name && name.kind === 65) {
-                var identifier = name;
-                if (contextNode && (contextNode.parserContextFlags & 1) && isEvalOrArgumentsIdentifier(identifier)) {
-                    var nameText = ts.declarationNameToString(identifier);
-                    var reportErrorInClassDeclaration = reportStrictModeGrammarErrorInClassDeclaration(identifier, ts.Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode, nameText);
-                    if (!reportErrorInClassDeclaration) {
-                        return grammarErrorOnNode(identifier, ts.Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
-                    }
-                    return reportErrorInClassDeclaration;
-                }
-            }
-        }
-        function isEvalOrArgumentsIdentifier(node) {
-            return node.kind === 65 &&
-                (node.text === "eval" || node.text === "arguments");
-        }
         function checkGrammarConstructorTypeParameters(node) {
             if (node.typeParameters) {
                 return grammarErrorAtPos(ts.getSourceFileOfNode(node), node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, ts.Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
@@ -19858,18 +20276,18 @@ var ts;
             }
         }
         function checkGrammarProperty(node) {
-            if (node.parent.kind === 202) {
+            if (node.parent.kind === 204) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, ts.Diagnostics.A_class_member_cannot_be_declared_optional) ||
                     checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
             }
-            else if (node.parent.kind === 203) {
+            else if (node.parent.kind === 205) {
                 if (checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
             }
-            else if (node.parent.kind === 146) {
+            else if (node.parent.kind === 148) {
                 if (checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
@@ -19879,11 +20297,11 @@ var ts;
             }
         }
         function checkGrammarTopLevelElementForRequiredDeclareModifier(node) {
-            if (node.kind === 203 ||
-                node.kind === 210 ||
-                node.kind === 209 ||
-                node.kind === 216 ||
-                node.kind === 215 ||
+            if (node.kind === 205 ||
+                node.kind === 212 ||
+                node.kind === 211 ||
+                node.kind === 218 ||
+                node.kind === 217 ||
                 (node.flags & 2) ||
                 (node.flags & (1 | 256))) {
                 return false;
@@ -19893,7 +20311,7 @@ var ts;
         function checkGrammarTopLevelElementsForRequiredDeclareModifier(file) {
             for (var _i = 0, _a = file.statements; _i < _a.length; _i++) {
                 var decl = _a[_i];
-                if (ts.isDeclaration(decl) || decl.kind === 181) {
+                if (ts.isDeclaration(decl) || decl.kind === 183) {
                     if (checkGrammarTopLevelElementForRequiredDeclareModifier(decl)) {
                         return true;
                     }
@@ -19912,7 +20330,7 @@ var ts;
                 if (!links.hasReportedStatementInAmbientContext && ts.isFunctionLike(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, ts.Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts);
                 }
-                if (node.parent.kind === 180 || node.parent.kind === 207 || node.parent.kind === 228) {
+                if (node.parent.kind === 182 || node.parent.kind === 209 || node.parent.kind === 230) {
                     var links_1 = getNodeLinks(node.parent);
                     if (!links_1.hasReportedStatementInAmbientContext) {
                         return links_1.hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, ts.Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
@@ -19923,13 +20341,8 @@ var ts;
             }
         }
         function checkGrammarNumericLiteral(node) {
-            if (node.flags & 16384) {
-                if (node.parserContextFlags & 1) {
-                    return grammarErrorOnNode(node, ts.Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
-                }
-                else if (languageVersion >= 1) {
-                    return grammarErrorOnNode(node, ts.Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
-                }
+            if (node.flags & 16384 && languageVersion >= 1) {
+                return grammarErrorOnNode(node, ts.Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
             }
         }
         function grammarErrorAfterFirstToken(node, message, arg0, arg1, arg2) {
@@ -19940,8 +20353,6 @@ var ts;
                 return true;
             }
         }
-        initializeTypeChecker();
-        return checker;
     }
     ts.createTypeChecker = createTypeChecker;
 })(ts || (ts = {}));
@@ -19993,7 +20404,7 @@ var ts;
                 var oldWriter = writer;
                 ts.forEach(moduleElementDeclarationEmitInfo, function (aliasEmitInfo) {
                     if (aliasEmitInfo.isVisible) {
-                        ts.Debug.assert(aliasEmitInfo.node.kind === 210);
+                        ts.Debug.assert(aliasEmitInfo.node.kind === 212);
                         createAndSetNewTextWriterWithSymbolWriter();
                         ts.Debug.assert(aliasEmitInfo.indent === 0);
                         writeImportDeclaration(aliasEmitInfo.node);
@@ -20066,10 +20477,10 @@ var ts;
             var oldWriter = writer;
             ts.forEach(nodes, function (declaration) {
                 var nodeToCheck;
-                if (declaration.kind === 199) {
+                if (declaration.kind === 201) {
                     nodeToCheck = declaration.parent.parent;
                 }
-                else if (declaration.kind === 213 || declaration.kind === 214 || declaration.kind === 211) {
+                else if (declaration.kind === 215 || declaration.kind === 216 || declaration.kind === 213) {
                     ts.Debug.fail("We should be getting ImportDeclaration instead to write");
                 }
                 else {
@@ -20080,7 +20491,7 @@ var ts;
                     moduleElementEmitInfo = ts.forEach(asynchronousSubModuleDeclarationEmitInfo, function (declEmitInfo) { return declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined; });
                 }
                 if (moduleElementEmitInfo) {
-                    if (moduleElementEmitInfo.node.kind === 210) {
+                    if (moduleElementEmitInfo.node.kind === 212) {
                         moduleElementEmitInfo.isVisible = true;
                     }
                     else {
@@ -20088,12 +20499,12 @@ var ts;
                         for (var declarationIndent = moduleElementEmitInfo.indent; declarationIndent; declarationIndent--) {
                             increaseIndent();
                         }
-                        if (nodeToCheck.kind === 206) {
+                        if (nodeToCheck.kind === 208) {
                             ts.Debug.assert(asynchronousSubModuleDeclarationEmitInfo === undefined);
                             asynchronousSubModuleDeclarationEmitInfo = [];
                         }
                         writeModuleElement(nodeToCheck);
-                        if (nodeToCheck.kind === 206) {
+                        if (nodeToCheck.kind === 208) {
                             moduleElementEmitInfo.subModuleElementDeclarationEmitInfo = asynchronousSubModuleDeclarationEmitInfo;
                             asynchronousSubModuleDeclarationEmitInfo = undefined;
                         }
@@ -20181,39 +20592,39 @@ var ts;
         function emitType(type) {
             switch (type.kind) {
                 case 112:
-                case 122:
-                case 120:
-                case 113:
                 case 123:
+                case 121:
+                case 113:
+                case 124:
                 case 99:
                 case 8:
                     return writeTextOfNode(currentSourceFile, type);
-                case 177:
+                case 179:
                     return emitExpressionWithTypeArguments(type);
-                case 142:
-                    return emitTypeReference(type);
-                case 145:
-                    return emitTypeQuery(type);
-                case 147:
-                    return emitArrayType(type);
-                case 148:
-                    return emitTupleType(type);
-                case 149:
-                    return emitUnionType(type);
-                case 150:
-                    return emitParenType(type);
-                case 143:
                 case 144:
-                    return emitSignatureDeclarationWithJsDocComments(type);
+                    return emitTypeReference(type);
+                case 147:
+                    return emitTypeQuery(type);
+                case 149:
+                    return emitArrayType(type);
+                case 150:
+                    return emitTupleType(type);
+                case 151:
+                    return emitUnionType(type);
+                case 152:
+                    return emitParenType(type);
+                case 145:
                 case 146:
+                    return emitSignatureDeclarationWithJsDocComments(type);
+                case 148:
                     return emitTypeLiteral(type);
                 case 65:
                     return emitEntityName(type);
-                case 127:
+                case 128:
                     return emitEntityName(type);
             }
             function emitEntityName(entityName) {
-                var visibilityResult = resolver.isEntityNameVisible(entityName, entityName.parent.kind === 209 ? entityName.parent : enclosingDeclaration);
+                var visibilityResult = resolver.isEntityNameVisible(entityName, entityName.parent.kind === 211 ? entityName.parent : enclosingDeclaration);
                 handleSymbolAccessibilityError(visibilityResult);
                 writeEntityName(entityName);
                 function writeEntityName(entityName) {
@@ -20221,8 +20632,8 @@ var ts;
                         writeTextOfNode(currentSourceFile, entityName);
                     }
                     else {
-                        var left = entityName.kind === 127 ? entityName.left : entityName.expression;
-                        var right = entityName.kind === 127 ? entityName.right : entityName.name;
+                        var left = entityName.kind === 128 ? entityName.left : entityName.expression;
+                        var right = entityName.kind === 128 ? entityName.right : entityName.name;
                         writeEntityName(left);
                         write(".");
                         writeTextOfNode(currentSourceFile, right);
@@ -20231,7 +20642,7 @@ var ts;
             }
             function emitExpressionWithTypeArguments(node) {
                 if (ts.isSupportedExpressionWithTypeArguments(node)) {
-                    ts.Debug.assert(node.expression.kind === 65 || node.expression.kind === 156);
+                    ts.Debug.assert(node.expression.kind === 65 || node.expression.kind === 158);
                     emitEntityName(node.expression);
                     if (node.typeArguments) {
                         write("<");
@@ -20292,9 +20703,9 @@ var ts;
             }
             var count = 0;
             while (true) {
-                var name_17 = baseName + "_" + (++count);
-                if (!ts.hasProperty(currentSourceFile.identifiers, name_17)) {
-                    return name_17;
+                var name_16 = baseName + "_" + (++count);
+                if (!ts.hasProperty(currentSourceFile.identifiers, name_16)) {
+                    return name_16;
                 }
             }
         }
@@ -20335,10 +20746,10 @@ var ts;
             if (isModuleElementVisible) {
                 writeModuleElement(node);
             }
-            else if (node.kind === 209 ||
-                (node.parent.kind === 228 && ts.isExternalModule(currentSourceFile))) {
+            else if (node.kind === 211 ||
+                (node.parent.kind === 230 && ts.isExternalModule(currentSourceFile))) {
                 var isVisible;
-                if (asynchronousSubModuleDeclarationEmitInfo && node.parent.kind !== 228) {
+                if (asynchronousSubModuleDeclarationEmitInfo && node.parent.kind !== 230) {
                     asynchronousSubModuleDeclarationEmitInfo.push({
                         node: node,
                         outputPos: writer.getTextPos(),
@@ -20347,7 +20758,7 @@ var ts;
                     });
                 }
                 else {
-                    if (node.kind === 210) {
+                    if (node.kind === 212) {
                         var importDeclaration = node;
                         if (importDeclaration.importClause) {
                             isVisible = (importDeclaration.importClause.name && resolver.isDeclarationVisible(importDeclaration.importClause)) ||
@@ -20365,23 +20776,23 @@ var ts;
         }
         function writeModuleElement(node) {
             switch (node.kind) {
-                case 201:
-                    return writeFunctionDeclaration(node);
-                case 181:
-                    return writeVariableStatement(node);
                 case 203:
-                    return writeInterfaceDeclaration(node);
-                case 202:
-                    return writeClassDeclaration(node);
-                case 204:
-                    return writeTypeAliasDeclaration(node);
+                    return writeFunctionDeclaration(node);
+                case 183:
+                    return writeVariableStatement(node);
                 case 205:
-                    return writeEnumDeclaration(node);
+                    return writeInterfaceDeclaration(node);
+                case 204:
+                    return writeClassDeclaration(node);
                 case 206:
+                    return writeTypeAliasDeclaration(node);
+                case 207:
+                    return writeEnumDeclaration(node);
+                case 208:
                     return writeModuleDeclaration(node);
-                case 209:
+                case 211:
                     return writeImportEqualsDeclaration(node);
-                case 210:
+                case 212:
                     return writeImportDeclaration(node);
                 default:
                     ts.Debug.fail("Unknown symbol kind");
@@ -20395,7 +20806,7 @@ var ts;
                 if (node.flags & 256) {
                     write("default ");
                 }
-                else if (node.kind !== 203) {
+                else if (node.kind !== 205) {
                     write("declare ");
                 }
             }
@@ -20439,7 +20850,7 @@ var ts;
         }
         function isVisibleNamedBinding(namedBindings) {
             if (namedBindings) {
-                if (namedBindings.kind === 212) {
+                if (namedBindings.kind === 214) {
                     return resolver.isDeclarationVisible(namedBindings);
                 }
                 else {
@@ -20465,7 +20876,7 @@ var ts;
                     if (currentWriterPos !== writer.getTextPos()) {
                         write(", ");
                     }
-                    if (node.importClause.namedBindings.kind === 212) {
+                    if (node.importClause.namedBindings.kind === 214) {
                         write("* as ");
                         writeTextOfNode(currentSourceFile, node.importClause.namedBindings.name);
                     }
@@ -20514,9 +20925,14 @@ var ts;
         function writeModuleDeclaration(node) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            write("module ");
+            if (node.flags & 32768) {
+                write("namespace ");
+            }
+            else {
+                write("module ");
+            }
             writeTextOfNode(currentSourceFile, node.name);
-            while (node.body.kind !== 207) {
+            while (node.body.kind !== 209) {
                 node = node.body;
                 write(".");
                 writeTextOfNode(currentSourceFile, node.name);
@@ -20577,7 +20993,7 @@ var ts;
             writeLine();
         }
         function isPrivateMethodTypeParameter(node) {
-            return node.parent.kind === 135 && (node.parent.flags & 32);
+            return node.parent.kind === 136 && (node.parent.flags & 32);
         }
         function emitTypeParameters(typeParameters) {
             function emitTypeParameter(node) {
@@ -20587,15 +21003,15 @@ var ts;
                 writeTextOfNode(currentSourceFile, node.name);
                 if (node.constraint && !isPrivateMethodTypeParameter(node)) {
                     write(" extends ");
-                    if (node.parent.kind === 143 ||
-                        node.parent.kind === 144 ||
-                        (node.parent.parent && node.parent.parent.kind === 146)) {
-                        ts.Debug.assert(node.parent.kind === 135 ||
-                            node.parent.kind === 134 ||
-                            node.parent.kind === 143 ||
-                            node.parent.kind === 144 ||
-                            node.parent.kind === 139 ||
-                            node.parent.kind === 140);
+                    if (node.parent.kind === 145 ||
+                        node.parent.kind === 146 ||
+                        (node.parent.parent && node.parent.parent.kind === 148)) {
+                        ts.Debug.assert(node.parent.kind === 136 ||
+                            node.parent.kind === 135 ||
+                            node.parent.kind === 145 ||
+                            node.parent.kind === 146 ||
+                            node.parent.kind === 140 ||
+                            node.parent.kind === 141);
                         emitType(node.constraint);
                     }
                     else {
@@ -20605,31 +21021,31 @@ var ts;
                 function getTypeParameterConstraintVisibilityError(symbolAccesibilityResult) {
                     var diagnosticMessage;
                     switch (node.parent.kind) {
-                        case 202:
+                        case 204:
                             diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1;
                             break;
-                        case 203:
+                        case 205:
                             diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
                             break;
-                        case 140:
+                        case 141:
                             diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
                             break;
-                        case 139:
+                        case 140:
                             diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
                             break;
+                        case 136:
                         case 135:
-                        case 134:
                             if (node.parent.flags & 128) {
                                 diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                             }
-                            else if (node.parent.parent.kind === 202) {
+                            else if (node.parent.parent.kind === 204) {
                                 diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
                             }
                             else {
                                 diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
                             }
                             break;
-                        case 201:
+                        case 203:
                             diagnosticMessage = ts.Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                             break;
                         default:
@@ -20659,7 +21075,7 @@ var ts;
                 }
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult) {
                     var diagnosticMessage;
-                    if (node.parent.parent.kind === 202) {
+                    if (node.parent.parent.kind === 204) {
                         diagnosticMessage = isImplementsList ?
                             ts.Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
                             ts.Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
@@ -20736,16 +21152,16 @@ var ts;
             writeLine();
         }
         function emitVariableDeclaration(node) {
-            if (node.kind !== 199 || resolver.isDeclarationVisible(node)) {
+            if (node.kind !== 201 || resolver.isDeclarationVisible(node)) {
                 if (ts.isBindingPattern(node.name)) {
                     emitBindingPattern(node.name);
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node.name);
-                    if ((node.kind === 133 || node.kind === 132) && ts.hasQuestionToken(node)) {
+                    if ((node.kind === 134 || node.kind === 133) && ts.hasQuestionToken(node)) {
                         write("?");
                     }
-                    if ((node.kind === 133 || node.kind === 132) && node.parent.kind === 146) {
+                    if ((node.kind === 134 || node.kind === 133) && node.parent.kind === 148) {
                         emitTypeOfVariableDeclarationFromTypeLiteral(node);
                     }
                     else if (!(node.flags & 32)) {
@@ -20754,14 +21170,14 @@ var ts;
                 }
             }
             function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult) {
-                if (node.kind === 199) {
+                if (node.kind === 201) {
                     return symbolAccesibilityResult.errorModuleName ?
                         symbolAccesibilityResult.accessibility === 2 ?
                             ts.Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                             ts.Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
                         ts.Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                 }
-                else if (node.kind === 133 || node.kind === 132) {
+                else if (node.kind === 134 || node.kind === 133) {
                     if (node.flags & 128) {
                         return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === 2 ?
@@ -20769,7 +21185,7 @@ var ts;
                                 ts.Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             ts.Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
-                    else if (node.parent.kind === 202) {
+                    else if (node.parent.kind === 204) {
                         return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === 2 ?
                                 ts.Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -20795,7 +21211,7 @@ var ts;
                 var elements = [];
                 for (var _i = 0, _a = bindingPattern.elements; _i < _a.length; _i++) {
                     var element = _a[_i];
-                    if (element.kind !== 176) {
+                    if (element.kind !== 178) {
                         elements.push(element);
                     }
                 }
@@ -20861,7 +21277,7 @@ var ts;
                     accessorWithTypeAnnotation = node;
                     var type = getTypeAnnotationFromAccessor(node);
                     if (!type) {
-                        var anotherAccessor = node.kind === 137 ? accessors.setAccessor : accessors.getAccessor;
+                        var anotherAccessor = node.kind === 138 ? accessors.setAccessor : accessors.getAccessor;
                         type = getTypeAnnotationFromAccessor(anotherAccessor);
                         if (type) {
                             accessorWithTypeAnnotation = anotherAccessor;
@@ -20874,7 +21290,7 @@ var ts;
             }
             function getTypeAnnotationFromAccessor(accessor) {
                 if (accessor) {
-                    return accessor.kind === 137
+                    return accessor.kind === 138
                         ? accessor.type
                         : accessor.parameters.length > 0
                             ? accessor.parameters[0].type
@@ -20883,7 +21299,7 @@ var ts;
             }
             function getAccessorDeclarationTypeVisibilityError(symbolAccesibilityResult) {
                 var diagnosticMessage;
-                if (accessorWithTypeAnnotation.kind === 138) {
+                if (accessorWithTypeAnnotation.kind === 139) {
                     if (accessorWithTypeAnnotation.parent.flags & 128) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             ts.Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
@@ -20929,17 +21345,17 @@ var ts;
             }
             if (!resolver.isImplementationOfOverload(node)) {
                 emitJsDocComments(node);
-                if (node.kind === 201) {
+                if (node.kind === 203) {
                     emitModuleElementDeclarationFlags(node);
                 }
-                else if (node.kind === 135) {
+                else if (node.kind === 136) {
                     emitClassMemberDeclarationFlags(node);
                 }
-                if (node.kind === 201) {
+                if (node.kind === 203) {
                     write("function ");
                     writeTextOfNode(currentSourceFile, node.name);
                 }
-                else if (node.kind === 136) {
+                else if (node.kind === 137) {
                     write("constructor");
                 }
                 else {
@@ -20956,11 +21372,11 @@ var ts;
             emitSignatureDeclaration(node);
         }
         function emitSignatureDeclaration(node) {
-            if (node.kind === 140 || node.kind === 144) {
+            if (node.kind === 141 || node.kind === 146) {
                 write("new ");
             }
             emitTypeParameters(node.typeParameters);
-            if (node.kind === 141) {
+            if (node.kind === 142) {
                 write("[");
             }
             else {
@@ -20969,20 +21385,20 @@ var ts;
             var prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitCommaList(node.parameters, emitParameterDeclaration);
-            if (node.kind === 141) {
+            if (node.kind === 142) {
                 write("]");
             }
             else {
                 write(")");
             }
-            var isFunctionTypeOrConstructorType = node.kind === 143 || node.kind === 144;
-            if (isFunctionTypeOrConstructorType || node.parent.kind === 146) {
+            var isFunctionTypeOrConstructorType = node.kind === 145 || node.kind === 146;
+            if (isFunctionTypeOrConstructorType || node.parent.kind === 148) {
                 if (node.type) {
                     write(isFunctionTypeOrConstructorType ? " => " : ": ");
                     emitType(node.type);
                 }
             }
-            else if (node.kind !== 136 && !(node.flags & 32)) {
+            else if (node.kind !== 137 && !(node.flags & 32)) {
                 writeReturnTypeAtSignature(node, getReturnTypeVisibilityError);
             }
             enclosingDeclaration = prevEnclosingDeclaration;
@@ -20993,23 +21409,23 @@ var ts;
             function getReturnTypeVisibilityError(symbolAccesibilityResult) {
                 var diagnosticMessage;
                 switch (node.kind) {
-                    case 140:
+                    case 141:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             ts.Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
                             ts.Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
-                    case 139:
+                    case 140:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             ts.Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
                             ts.Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
-                    case 141:
+                    case 142:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             ts.Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
                             ts.Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
+                    case 136:
                     case 135:
-                    case 134:
                         if (node.flags & 128) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === 2 ?
@@ -21017,7 +21433,7 @@ var ts;
                                     ts.Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
                                 ts.Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
                         }
-                        else if (node.parent.kind === 202) {
+                        else if (node.parent.kind === 204) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === 2 ?
                                     ts.Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
@@ -21030,7 +21446,7 @@ var ts;
                                 ts.Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
                         }
                         break;
-                    case 201:
+                    case 203:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === 2 ?
                                 ts.Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
@@ -21062,9 +21478,9 @@ var ts;
                 write("?");
             }
             decreaseIndent();
-            if (node.parent.kind === 143 ||
-                node.parent.kind === 144 ||
-                node.parent.parent.kind === 146) {
+            if (node.parent.kind === 145 ||
+                node.parent.kind === 146 ||
+                node.parent.parent.kind === 148) {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!(node.parent.flags & 32)) {
@@ -21080,22 +21496,22 @@ var ts;
             }
             function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult) {
                 switch (node.parent.kind) {
-                    case 136:
+                    case 137:
                         return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === 2 ?
                                 ts.Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                 ts.Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             ts.Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
-                    case 140:
+                    case 141:
                         return symbolAccesibilityResult.errorModuleName ?
                             ts.Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             ts.Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
-                    case 139:
+                    case 140:
                         return symbolAccesibilityResult.errorModuleName ?
                             ts.Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             ts.Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                    case 136:
                     case 135:
-                    case 134:
                         if (node.parent.flags & 128) {
                             return symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === 2 ?
@@ -21103,7 +21519,7 @@ var ts;
                                     ts.Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                                 ts.Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                         }
-                        else if (node.parent.parent.kind === 202) {
+                        else if (node.parent.parent.kind === 204) {
                             return symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === 2 ?
                                     ts.Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -21115,7 +21531,7 @@ var ts;
                                 ts.Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                                 ts.Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
                         }
-                    case 201:
+                    case 203:
                         return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === 2 ?
                                 ts.Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -21126,12 +21542,12 @@ var ts;
                 }
             }
             function emitBindingPattern(bindingPattern) {
-                if (bindingPattern.kind === 151) {
+                if (bindingPattern.kind === 153) {
                     write("{");
                     emitCommaList(bindingPattern.elements, emitBindingElement);
                     write("}");
                 }
-                else if (bindingPattern.kind === 152) {
+                else if (bindingPattern.kind === 154) {
                     write("[");
                     var elements = bindingPattern.elements;
                     emitCommaList(elements, emitBindingElement);
@@ -21150,10 +21566,10 @@ var ts;
                         typeName: bindingElement.name
                     } : undefined;
                 }
-                if (bindingElement.kind === 176) {
+                if (bindingElement.kind === 178) {
                     write(" ");
                 }
-                else if (bindingElement.kind === 153) {
+                else if (bindingElement.kind === 155) {
                     if (bindingElement.propertyName) {
                         writeTextOfNode(currentSourceFile, bindingElement.propertyName);
                         write(": ");
@@ -21176,39 +21592,39 @@ var ts;
         }
         function emitNode(node) {
             switch (node.kind) {
-                case 201:
-                case 206:
-                case 209:
                 case 203:
-                case 202:
-                case 204:
+                case 208:
+                case 211:
                 case 205:
+                case 204:
+                case 206:
+                case 207:
                     return emitModuleElement(node, isModuleElementVisible(node));
-                case 181:
+                case 183:
                     return emitModuleElement(node, isVariableStatementVisible(node));
-                case 210:
+                case 212:
                     return emitModuleElement(node, !node.importClause);
-                case 216:
+                case 218:
                     return emitExportDeclaration(node);
+                case 137:
                 case 136:
                 case 135:
-                case 134:
                     return writeFunctionDeclaration(node);
-                case 140:
-                case 139:
                 case 141:
+                case 140:
+                case 142:
                     return emitSignatureDeclarationWithJsDocComments(node);
-                case 137:
                 case 138:
+                case 139:
                     return emitAccessorDeclaration(node);
+                case 134:
                 case 133:
-                case 132:
                     return emitPropertyDeclaration(node);
-                case 227:
+                case 229:
                     return emitEnumMemberDeclaration(node);
-                case 215:
+                case 217:
                     return emitExportAssignment(node);
-                case 228:
+                case 230:
                     return emitSourceFile(node);
             }
         }
@@ -21254,7 +21670,7 @@ var ts;
     }
     ts.isExternalModuleOrDeclarationFile = isExternalModuleOrDeclarationFile;
     function emitFiles(resolver, host, targetSourceFile) {
-        var extendsHelper = "\nvar __extends = (this && this.__extends) || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
+        var extendsHelper = "\nvar __extends = (this && this.__extends) || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());\n};";
         var decorateHelper = "\nvar __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
         var metadataHelper = "\nvar __metadata = (this && this.__metadata) || function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
         var paramHelper = "\nvar __param = (this && this.__param) || function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
@@ -21318,7 +21734,6 @@ var ts;
             var exportFunctionForFile;
             var generatedNameSet = {};
             var nodeToGeneratedName = [];
-            var blockScopedVariableToGeneratedName;
             var computedPropertyNamesToGeneratedNames;
             var extendsEmitted = false;
             var decorateEmitted = false;
@@ -21378,9 +21793,9 @@ var ts;
                     var count = tempFlags & 268435455;
                     tempFlags++;
                     if (count !== 8 && count !== 13) {
-                        var name_18 = count < 26 ? "_" + String.fromCharCode(97 + count) : "_" + (count - 26);
-                        if (isUniqueName(name_18)) {
-                            return name_18;
+                        var name_17 = count < 26 ? "_" + String.fromCharCode(97 + count) : "_" + (count - 26);
+                        if (isUniqueName(name_17)) {
+                            return name_17;
                         }
                     }
                 }
@@ -21398,72 +21813,39 @@ var ts;
                     i++;
                 }
             }
-            function assignGeneratedName(node, name) {
-                nodeToGeneratedName[ts.getNodeId(node)] = ts.unescapeIdentifier(name);
-            }
-            function generateNameForFunctionOrClassDeclaration(node) {
-                if (!node.name) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
-            }
             function generateNameForModuleOrEnum(node) {
-                if (node.name.kind === 65) {
-                    var name_19 = node.name.text;
-                    assignGeneratedName(node, isUniqueLocalName(name_19, node) ? name_19 : makeUniqueName(name_19));
-                }
+                var name = node.name.text;
+                return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
             }
             function generateNameForImportOrExportDeclaration(node) {
                 var expr = ts.getExternalModuleName(node);
                 var baseName = expr.kind === 8 ?
                     ts.escapeIdentifier(ts.makeIdentifierFromModuleName(expr.text)) : "module";
-                assignGeneratedName(node, makeUniqueName(baseName));
+                return makeUniqueName(baseName);
             }
-            function generateNameForImportDeclaration(node) {
-                if (node.importClause) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-            function generateNameForExportDeclaration(node) {
-                if (node.moduleSpecifier) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-            function generateNameForExportAssignment(node) {
-                if (node.expression && node.expression.kind !== 65) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
+            function generateNameForExportDefault() {
+                return makeUniqueName("default");
             }
             function generateNameForNode(node) {
                 switch (node.kind) {
-                    case 201:
-                    case 202:
-                    case 175:
-                        generateNameForFunctionOrClassDeclaration(node);
-                        break;
-                    case 206:
-                        generateNameForModuleOrEnum(node);
-                        generateNameForNode(node.body);
-                        break;
-                    case 205:
-                        generateNameForModuleOrEnum(node);
-                        break;
-                    case 210:
-                        generateNameForImportDeclaration(node);
-                        break;
-                    case 216:
-                        generateNameForExportDeclaration(node);
-                        break;
-                    case 215:
-                        generateNameForExportAssignment(node);
-                        break;
+                    case 65:
+                        return makeUniqueName(node.text);
+                    case 208:
+                    case 207:
+                        return generateNameForModuleOrEnum(node);
+                    case 212:
+                    case 218:
+                        return generateNameForImportOrExportDeclaration(node);
+                    case 203:
+                    case 204:
+                    case 177:
+                    case 217:
+                        return generateNameForExportDefault();
                 }
             }
             function getGeneratedNameForNode(node) {
-                var nodeId = ts.getNodeId(node);
-                if (!nodeToGeneratedName[nodeId]) {
-                    generateNameForNode(node);
-                }
-                return nodeToGeneratedName[nodeId];
+                var id = ts.getNodeId(node);
+                return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = ts.unescapeIdentifier(generateNameForNode(node)));
             }
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir;
@@ -21487,7 +21869,7 @@ var ts;
                         return;
                     }
                     var prevEncodedEmittedColumn = lastEncodedSourceMapSpan.emittedColumn;
-                    if (lastEncodedSourceMapSpan.emittedLine == lastRecordedSourceMapSpan.emittedLine) {
+                    if (lastEncodedSourceMapSpan.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
                         if (sourceMapData.sourceMapMappings) {
                             sourceMapData.sourceMapMappings += ",";
                         }
@@ -21540,8 +21922,8 @@ var ts;
                     var emittedLine = writer.getLine();
                     var emittedColumn = writer.getColumn();
                     if (!lastRecordedSourceMapSpan ||
-                        lastRecordedSourceMapSpan.emittedLine != emittedLine ||
-                        lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
+                        lastRecordedSourceMapSpan.emittedLine !== emittedLine ||
+                        lastRecordedSourceMapSpan.emittedColumn !== emittedColumn ||
                         (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
                             (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
                                 (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
@@ -21595,8 +21977,8 @@ var ts;
                         if (scopeName) {
                             var parentIndex = getSourceMapNameIndex();
                             if (parentIndex !== -1) {
-                                var name_20 = node.name;
-                                if (!name_20 || name_20.kind !== 128) {
+                                var name_18 = node.name;
+                                if (!name_18 || name_18.kind !== 129) {
                                     scopeName = "." + scopeName;
                                 }
                                 scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
@@ -21613,19 +21995,19 @@ var ts;
                     if (scopeName) {
                         recordScopeNameStart(scopeName);
                     }
-                    else if (node.kind === 201 ||
-                        node.kind === 163 ||
+                    else if (node.kind === 203 ||
+                        node.kind === 165 ||
+                        node.kind === 136 ||
                         node.kind === 135 ||
-                        node.kind === 134 ||
-                        node.kind === 137 ||
                         node.kind === 138 ||
-                        node.kind === 206 ||
-                        node.kind === 202 ||
-                        node.kind === 205) {
+                        node.kind === 139 ||
+                        node.kind === 208 ||
+                        node.kind === 204 ||
+                        node.kind === 207) {
                         if (node.name) {
-                            var name_21 = node.name;
-                            scopeName = name_21.kind === 128
-                                ? ts.getTextOfNode(name_21)
+                            var name_19 = node.name;
+                            scopeName = name_19.kind === 129
+                                ? ts.getTextOfNode(name_19)
                                 : node.name.text;
                         }
                         recordScopeNameStart(scopeName);
@@ -21718,19 +22100,19 @@ var ts;
                 else {
                     sourceMapDir = ts.getDirectoryPath(ts.normalizePath(jsFilePath));
                 }
-                function emitNodeWithSourceMap(node, allowGeneratedIdentifiers) {
+                function emitNodeWithSourceMap(node) {
                     if (node) {
                         if (ts.nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node, false);
+                            return emitNodeWithoutSourceMap(node);
                         }
-                        if (node.kind != 228) {
+                        if (node.kind !== 230) {
                             recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
+                            emitNodeWithoutSourceMap(node);
                             recordEmitNodeEndSpan(node);
                         }
                         else {
                             recordNewSourceFileStart(node);
-                            emitNodeWithoutSourceMap(node, false);
+                            emitNodeWithoutSourceMap(node);
                         }
                     }
                 }
@@ -21968,10 +22350,10 @@ var ts;
                 emitParenthesizedIf(node.tag, needsParenthesisForPropertyAccessOrInvocation(node.tag));
                 write("(");
                 emit(tempVariable);
-                if (node.template.kind === 172) {
+                if (node.template.kind === 174) {
                     ts.forEach(node.template.templateSpans, function (templateSpan) {
                         write(", ");
-                        var needsParens = templateSpan.expression.kind === 170
+                        var needsParens = templateSpan.expression.kind === 172
                             && templateSpan.expression.operatorToken.kind === 23;
                         emitParenthesizedIf(templateSpan.expression, needsParens);
                     });
@@ -21995,7 +22377,7 @@ var ts;
                 }
                 for (var i = 0, n = node.templateSpans.length; i < n; i++) {
                     var templateSpan = node.templateSpans[i];
-                    var needsParens = templateSpan.expression.kind !== 162
+                    var needsParens = templateSpan.expression.kind !== 164
                         && comparePrecedenceToBinaryPlus(templateSpan.expression) !== 1;
                     if (i > 0 || headEmitted) {
                         write(" + ");
@@ -22028,11 +22410,11 @@ var ts;
                 }
                 function templateNeedsParens(template, parent) {
                     switch (parent.kind) {
-                        case 158:
-                        case 159:
-                            return parent.expression === template;
                         case 160:
+                        case 161:
+                            return parent.expression === template;
                         case 162:
+                        case 164:
                             return false;
                         default:
                             return comparePrecedenceToBinaryPlus(parent) !== -1;
@@ -22040,7 +22422,7 @@ var ts;
                 }
                 function comparePrecedenceToBinaryPlus(expression) {
                     switch (expression.kind) {
-                        case 170:
+                        case 172:
                             switch (expression.operatorToken.kind) {
                                 case 35:
                                 case 36:
@@ -22052,8 +22434,8 @@ var ts;
                                 default:
                                     return -1;
                             }
+                        case 175:
                         case 173:
-                        case 171:
                             return -1;
                         default:
                             return 1;
@@ -22065,11 +22447,11 @@ var ts;
                 emit(span.literal);
             }
             function emitExpressionForPropertyName(node) {
-                ts.Debug.assert(node.kind !== 153);
+                ts.Debug.assert(node.kind !== 155);
                 if (node.kind === 8) {
                     emitLiteral(node);
                 }
-                else if (node.kind === 128) {
+                else if (node.kind === 129) {
                     if (ts.nodeIsDecorated(node.parent)) {
                         if (!computedPropertyNamesToGeneratedNames) {
                             computedPropertyNamesToGeneratedNames = [];
@@ -22097,74 +22479,121 @@ var ts;
                     write("\"");
                 }
             }
-            function isNotExpressionIdentifier(node) {
+            function isExpressionIdentifier(node) {
                 var parent = node.parent;
                 switch (parent.kind) {
-                    case 130:
-                    case 199:
-                    case 153:
-                    case 133:
+                    case 156:
+                    case 172:
+                    case 160:
+                    case 223:
+                    case 129:
+                    case 173:
                     case 132:
-                    case 225:
-                    case 226:
+                    case 167:
+                    case 187:
+                    case 159:
+                    case 217:
+                    case 185:
+                    case 179:
+                    case 189:
+                    case 190:
+                    case 191:
+                    case 186:
+                    case 161:
+                    case 164:
+                    case 171:
+                    case 170:
+                    case 194:
+                    case 228:
+                    case 176:
+                    case 196:
+                    case 162:
+                    case 180:
+                    case 198:
+                    case 163:
+                    case 168:
+                    case 169:
+                    case 188:
+                    case 195:
+                    case 175:
+                        return true;
+                    case 155:
+                    case 229:
+                    case 131:
                     case 227:
-                    case 135:
                     case 134:
                     case 201:
-                    case 137:
-                    case 138:
-                    case 163:
-                    case 202:
-                    case 203:
-                    case 205:
-                    case 206:
-                    case 209:
+                        return parent.initializer === node;
+                    case 158:
+                        return parent.expression === node;
+                    case 166:
+                    case 165:
+                        return parent.body === node;
                     case 211:
-                    case 212:
-                        return parent.name === node;
-                    case 214:
-                    case 218:
-                        return parent.name === node || parent.propertyName === node;
-                    case 191:
-                    case 190:
-                    case 215:
-                        return false;
-                    case 195:
-                        return node.parent.label === node;
+                        return parent.moduleReference === node;
+                    case 128:
+                        return parent.left === node;
                 }
+                return false;
             }
             function emitExpressionIdentifier(node) {
-                var substitution = resolver.getExpressionNameSubstitution(node, getGeneratedNameForNode);
-                if (substitution) {
-                    write(substitution);
+                var container = resolver.getReferencedExportContainer(node);
+                if (container) {
+                    if (container.kind === 230) {
+                        if (languageVersion < 2 && compilerOptions.module !== 4) {
+                            write("exports.");
+                        }
+                    }
+                    else {
+                        write(getGeneratedNameForNode(container));
+                        write(".");
+                    }
                 }
-                else {
-                    writeTextOfNode(currentSourceFile, node);
-                }
-            }
-            function getGeneratedNameForIdentifier(node) {
-                if (ts.nodeIsSynthesized(node) || !blockScopedVariableToGeneratedName) {
-                    return undefined;
-                }
-                var variableId = resolver.getBlockScopedVariableId(node);
-                if (variableId === undefined) {
-                    return undefined;
-                }
-                return blockScopedVariableToGeneratedName[variableId];
-            }
-            function emitIdentifier(node, allowGeneratedIdentifiers) {
-                if (allowGeneratedIdentifiers) {
-                    var generatedName = getGeneratedNameForIdentifier(node);
-                    if (generatedName) {
-                        write(generatedName);
+                else if (languageVersion < 2) {
+                    var declaration = resolver.getReferencedImportDeclaration(node);
+                    if (declaration) {
+                        if (declaration.kind === 213) {
+                            write(getGeneratedNameForNode(declaration.parent));
+                            write(languageVersion === 0 ? '["default"]' : ".default");
+                            return;
+                        }
+                        else if (declaration.kind === 216) {
+                            write(getGeneratedNameForNode(declaration.parent.parent.parent));
+                            write(".");
+                            writeTextOfNode(currentSourceFile, declaration.propertyName || declaration.name);
+                            return;
+                        }
+                    }
+                    declaration = resolver.getReferencedNestedRedeclaration(node);
+                    if (declaration) {
+                        write(getGeneratedNameForNode(declaration.name));
                         return;
                     }
                 }
+                writeTextOfNode(currentSourceFile, node);
+            }
+            function isNameOfNestedRedeclaration(node) {
+                if (languageVersion < 2) {
+                    var parent_7 = node.parent;
+                    switch (parent_7.kind) {
+                        case 155:
+                        case 204:
+                        case 207:
+                        case 201:
+                            return parent_7.name === node && resolver.isNestedRedeclaration(parent_7);
+                    }
+                }
+                return false;
+            }
+            function emitIdentifier(node) {
                 if (!node.parent) {
                     write(node.text);
                 }
-                else if (!isNotExpressionIdentifier(node)) {
+                else if (isExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
+                }
+                else if (isNameOfNestedRedeclaration(node)) {
+                    write(getGeneratedNameForNode(node));
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node);
@@ -22206,7 +22635,7 @@ var ts;
             }
             function emitBindingElement(node) {
                 if (node.propertyName) {
-                    emit(node.propertyName, false);
+                    emit(node.propertyName);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -22237,11 +22666,11 @@ var ts;
             function needsParenthesisForPropertyAccessOrInvocation(node) {
                 switch (node.kind) {
                     case 65:
-                    case 154:
                     case 156:
-                    case 157:
                     case 158:
-                    case 162:
+                    case 159:
+                    case 160:
+                    case 164:
                         return false;
                 }
                 return true;
@@ -22258,17 +22687,17 @@ var ts;
                         write(", ");
                     }
                     var e = elements[pos];
-                    if (e.kind === 174) {
+                    if (e.kind === 176) {
                         e = e.expression;
                         emitParenthesizedIf(e, group === 0 && needsParenthesisForPropertyAccessOrInvocation(e));
                         pos++;
-                        if (pos === length && group === 0 && needsUniqueCopy && e.kind !== 154) {
+                        if (pos === length && group === 0 && needsUniqueCopy && e.kind !== 156) {
                             write(".slice()");
                         }
                     }
                     else {
                         var i = pos;
-                        while (i < length && elements[i].kind !== 174) {
+                        while (i < length && elements[i].kind !== 176) {
                             i++;
                         }
                         write("[");
@@ -22291,7 +22720,7 @@ var ts;
                 }
             }
             function isSpreadElementExpression(node) {
-                return node.kind === 174;
+                return node.kind === 176;
             }
             function emitArrayLiteral(node) {
                 var elements = node.elements;
@@ -22352,7 +22781,7 @@ var ts;
                     writeComma();
                     var property = properties[i];
                     emitStart(property);
-                    if (property.kind === 137 || property.kind === 138) {
+                    if (property.kind === 138 || property.kind === 139) {
                         var accessors = ts.getAllAccessorDeclarations(node.properties, property);
                         if (property !== accessors.firstAccessor) {
                             continue;
@@ -22403,13 +22832,13 @@ var ts;
                         emitMemberAccessForPropertyName(property.name);
                         emitEnd(property.name);
                         write(" = ");
-                        if (property.kind === 225) {
+                        if (property.kind === 227) {
                             emit(property.initializer);
                         }
-                        else if (property.kind === 226) {
+                        else if (property.kind === 228) {
                             emitExpressionIdentifier(property.name);
                         }
-                        else if (property.kind === 135) {
+                        else if (property.kind === 136) {
                             emitFunctionDeclaration(property);
                         }
                         else {
@@ -22441,7 +22870,7 @@ var ts;
                     var numProperties = properties.length;
                     var numInitialNonComputedProperties = numProperties;
                     for (var i = 0, n = properties.length; i < n; i++) {
-                        if (properties[i].name.kind === 128) {
+                        if (properties[i].name.kind === 129) {
                             numInitialNonComputedProperties = i;
                             break;
                         }
@@ -22455,30 +22884,35 @@ var ts;
                 emitObjectLiteralBody(node, properties.length);
             }
             function createBinaryExpression(left, operator, right, startsOnNewLine) {
-                var result = ts.createSynthesizedNode(170, startsOnNewLine);
+                var result = ts.createSynthesizedNode(172, startsOnNewLine);
                 result.operatorToken = ts.createSynthesizedNode(operator);
                 result.left = left;
                 result.right = right;
                 return result;
             }
             function createPropertyAccessExpression(expression, name) {
-                var result = ts.createSynthesizedNode(156);
+                var result = ts.createSynthesizedNode(158);
                 result.expression = parenthesizeForAccess(expression);
                 result.dotToken = ts.createSynthesizedNode(20);
                 result.name = name;
                 return result;
             }
             function createElementAccessExpression(expression, argumentExpression) {
-                var result = ts.createSynthesizedNode(157);
+                var result = ts.createSynthesizedNode(159);
                 result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
                 return result;
             }
             function parenthesizeForAccess(expr) {
-                if (ts.isLeftHandSideExpression(expr) && expr.kind !== 159 && expr.kind !== 7) {
+                while (expr.kind === 163) {
+                    expr = expr.expression;
+                }
+                if (ts.isLeftHandSideExpression(expr) &&
+                    expr.kind !== 161 &&
+                    expr.kind !== 7) {
                     return expr;
                 }
-                var node = ts.createSynthesizedNode(162);
+                var node = ts.createSynthesizedNode(164);
                 node.expression = expr;
                 return node;
             }
@@ -22491,32 +22925,26 @@ var ts;
                 if (languageVersion >= 2 && node.asteriskToken) {
                     write("*");
                 }
-                emit(node.name, false);
+                emit(node.name);
                 if (languageVersion < 2) {
                     write(": function ");
                 }
                 emitSignatureAndBody(node);
             }
             function emitPropertyAssignment(node) {
-                emit(node.name, false);
+                emit(node.name);
                 write(": ");
                 emit(node.initializer);
             }
+            function isNamespaceExportReference(node) {
+                var container = resolver.getReferencedExportContainer(node);
+                return container && container.kind !== 230;
+            }
             function emitShorthandPropertyAssignment(node) {
-                emit(node.name, false);
-                if (languageVersion < 2) {
+                writeTextOfNode(currentSourceFile, node.name);
+                if (languageVersion < 2 || isNamespaceExportReference(node.name)) {
                     write(": ");
-                    var generatedName = getGeneratedNameForIdentifier(node.name);
-                    if (generatedName) {
-                        write(generatedName);
-                    }
-                    else {
-                        emitExpressionIdentifier(node.name);
-                    }
-                }
-                else if (resolver.getExpressionNameSubstitution(node.name, getGeneratedNameForNode)) {
-                    write(": ");
-                    emitExpressionIdentifier(node.name);
+                    emit(node.name);
                 }
             }
             function tryEmitConstantValue(node) {
@@ -22527,7 +22955,7 @@ var ts;
                 if (constantValue !== undefined) {
                     write(constantValue.toString());
                     if (!compilerOptions.removeComments) {
-                        var propertyName = node.kind === 156 ? ts.declarationNameToString(node.name) : ts.getTextOfNode(node.argumentExpression);
+                        var propertyName = node.kind === 158 ? ts.declarationNameToString(node.name) : ts.getTextOfNode(node.argumentExpression);
                         write(" /* " + propertyName + " */");
                     }
                     return true;
@@ -22557,7 +22985,7 @@ var ts;
                 var indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 var indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name, false);
+                emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
             function emitQualifiedName(node) {
@@ -22575,10 +23003,10 @@ var ts;
                 write("]");
             }
             function hasSpreadElement(elements) {
-                return ts.forEach(elements, function (e) { return e.kind === 174; });
+                return ts.forEach(elements, function (e) { return e.kind === 176; });
             }
             function skipParentheses(node) {
-                while (node.kind === 162 || node.kind === 161) {
+                while (node.kind === 164 || node.kind === 163) {
                     node = node.expression;
                 }
                 return node;
@@ -22599,12 +23027,12 @@ var ts;
             function emitCallWithSpread(node) {
                 var target;
                 var expr = skipParentheses(node.expression);
-                if (expr.kind === 156) {
+                if (expr.kind === 158) {
                     target = emitCallTarget(expr.expression);
                     write(".");
                     emit(expr.name);
                 }
-                else if (expr.kind === 157) {
+                else if (expr.kind === 159) {
                     target = emitCallTarget(expr.expression);
                     write("[");
                     emit(expr.argumentExpression);
@@ -22645,7 +23073,7 @@ var ts;
                 }
                 else {
                     emit(node.expression);
-                    superCall = node.expression.kind === 156 && node.expression.expression.kind === 91;
+                    superCall = node.expression.kind === 158 && node.expression.expression.kind === 91;
                 }
                 if (superCall && languageVersion < 2) {
                     write(".call(");
@@ -22696,20 +23124,20 @@ var ts;
                 }
             }
             function emitParenExpression(node) {
-                if (!node.parent || node.parent.kind !== 164) {
-                    if (node.expression.kind === 161) {
+                if (!ts.nodeIsSynthesized(node) && node.parent.kind !== 166) {
+                    if (node.expression.kind === 163) {
                         var operand = node.expression.expression;
-                        while (operand.kind == 161) {
+                        while (operand.kind === 163) {
                             operand = operand.expression;
                         }
-                        if (operand.kind !== 168 &&
-                            operand.kind !== 167 &&
-                            operand.kind !== 166 &&
-                            operand.kind !== 165 &&
+                        if (operand.kind !== 170 &&
                             operand.kind !== 169 &&
-                            operand.kind !== 159 &&
-                            !(operand.kind === 158 && node.parent.kind === 159) &&
-                            !(operand.kind === 163 && node.parent.kind === 158)) {
+                            operand.kind !== 168 &&
+                            operand.kind !== 167 &&
+                            operand.kind !== 171 &&
+                            operand.kind !== 161 &&
+                            !(operand.kind === 160 && node.parent.kind === 161) &&
+                            !(operand.kind === 165 && node.parent.kind === 160)) {
                             emit(operand);
                             return;
                         }
@@ -22738,7 +23166,7 @@ var ts;
                 if (!isCurrentFileSystemExternalModule() || node.kind !== 65 || ts.nodeIsSynthesized(node)) {
                     return false;
                 }
-                var isVariableDeclarationOrBindingElement = node.parent && (node.parent.kind === 199 || node.parent.kind === 153);
+                var isVariableDeclarationOrBindingElement = node.parent && (node.parent.kind === 201 || node.parent.kind === 155);
                 var targetDeclaration = isVariableDeclarationOrBindingElement
                     ? node.parent
                     : resolver.getReferencedValueDeclaration(node);
@@ -22752,7 +23180,7 @@ var ts;
                     write("\", ");
                 }
                 write(ts.tokenToString(node.operator));
-                if (node.operand.kind === 168) {
+                if (node.operand.kind === 170) {
                     var operand = node.operand;
                     if (node.operator === 33 && (operand.operator === 33 || operand.operator === 38)) {
                         write(" ");
@@ -22795,10 +23223,10 @@ var ts;
                 }
                 var current = node;
                 while (current) {
-                    if (current.kind === 228) {
+                    if (current.kind === 230) {
                         return !isExported || ((ts.getCombinedNodeFlags(node) & 1) !== 0);
                     }
-                    else if (ts.isFunctionLike(current) || current.kind === 207) {
+                    else if (ts.isFunctionLike(current) || current.kind === 209) {
                         return false;
                     }
                     else {
@@ -22808,8 +23236,8 @@ var ts;
             }
             function emitBinaryExpression(node) {
                 if (languageVersion < 2 && node.operatorToken.kind === 53 &&
-                    (node.left.kind === 155 || node.left.kind === 154)) {
-                    emitDestructuring(node, node.parent.kind === 183);
+                    (node.left.kind === 157 || node.left.kind === 156)) {
+                    emitDestructuring(node, node.parent.kind === 185);
                 }
                 else {
                     var exportChanged = node.operatorToken.kind >= 53 &&
@@ -22856,7 +23284,7 @@ var ts;
                 }
             }
             function isSingleLineEmptyBlock(node) {
-                if (node && node.kind === 180) {
+                if (node && node.kind === 182) {
                     var block = node;
                     return block.statements.length === 0 && nodeEndIsOnSameLineAsNodeStart(block, block);
                 }
@@ -22871,12 +23299,12 @@ var ts;
                 emitToken(14, node.pos);
                 increaseIndent();
                 scopeEmitStart(node.parent);
-                if (node.kind === 207) {
-                    ts.Debug.assert(node.parent.kind === 206);
+                if (node.kind === 209) {
+                    ts.Debug.assert(node.parent.kind === 208);
                     emitCaptureThisForNodeIfNecessary(node.parent);
                 }
                 emitLines(node.statements);
-                if (node.kind === 207) {
+                if (node.kind === 209) {
                     emitTempDeclarations(true);
                 }
                 decreaseIndent();
@@ -22885,7 +23313,7 @@ var ts;
                 scopeEmitEnd();
             }
             function emitEmbeddedStatement(node) {
-                if (node.kind === 180) {
+                if (node.kind === 182) {
                     write(" ");
                     emit(node);
                 }
@@ -22897,7 +23325,7 @@ var ts;
                 }
             }
             function emitExpressionStatement(node) {
-                emitParenthesizedIf(node.expression, node.expression.kind === 164);
+                emitParenthesizedIf(node.expression, node.expression.kind === 166);
                 write(";");
             }
             function emitIfStatement(node) {
@@ -22910,7 +23338,7 @@ var ts;
                 if (node.elseStatement) {
                     writeLine();
                     emitToken(76, node.thenStatement.end);
-                    if (node.elseStatement.kind === 184) {
+                    if (node.elseStatement.kind === 186) {
                         write(" ");
                         emit(node.elseStatement);
                     }
@@ -22922,7 +23350,7 @@ var ts;
             function emitDoStatement(node) {
                 write("do");
                 emitEmbeddedStatement(node.statement);
-                if (node.statement.kind === 180) {
+                if (node.statement.kind === 182) {
                     write(" ");
                 }
                 else {
@@ -22991,7 +23419,7 @@ var ts;
                 var endPos = emitToken(82, node.pos);
                 write(" ");
                 endPos = emitToken(16, endPos);
-                if (node.initializer && node.initializer.kind === 200) {
+                if (node.initializer && node.initializer.kind === 202) {
                     var variableDeclarationList = node.initializer;
                     var startIsEmitted = tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
                     if (startIsEmitted) {
@@ -23012,13 +23440,13 @@ var ts;
                 emitEmbeddedStatement(node.statement);
             }
             function emitForInOrForOfStatement(node) {
-                if (languageVersion < 2 && node.kind === 189) {
+                if (languageVersion < 2 && node.kind === 191) {
                     return emitDownLevelForOfStatement(node);
                 }
                 var endPos = emitToken(82, node.pos);
                 write(" ");
                 endPos = emitToken(16, endPos);
-                if (node.initializer.kind === 200) {
+                if (node.initializer.kind === 202) {
                     var variableDeclarationList = node.initializer;
                     if (variableDeclarationList.declarations.length >= 1) {
                         tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
@@ -23028,7 +23456,7 @@ var ts;
                 else {
                     emit(node.initializer);
                 }
-                if (node.kind === 188) {
+                if (node.kind === 190) {
                     write(" in ");
                 }
                 else {
@@ -23096,7 +23524,7 @@ var ts;
                 increaseIndent();
                 var rhsIterationValue = createElementAccessExpression(rhsReference, counter);
                 emitStart(node.initializer);
-                if (node.initializer.kind === 200) {
+                if (node.initializer.kind === 202) {
                     write("var ");
                     var variableDeclarationList = node.initializer;
                     if (variableDeclarationList.declarations.length > 0) {
@@ -23118,7 +23546,7 @@ var ts;
                 }
                 else {
                     var assignmentExpression = createBinaryExpression(node.initializer, 53, rhsIterationValue, false);
-                    if (node.initializer.kind === 154 || node.initializer.kind === 155) {
+                    if (node.initializer.kind === 156 || node.initializer.kind === 157) {
                         emitDestructuring(assignmentExpression, true, undefined);
                     }
                     else {
@@ -23127,7 +23555,7 @@ var ts;
                 }
                 emitEnd(node.initializer);
                 write(";");
-                if (node.statement.kind === 180) {
+                if (node.statement.kind === 182) {
                     emitLines(node.statement.statements);
                 }
                 else {
@@ -23139,7 +23567,7 @@ var ts;
                 write("}");
             }
             function emitBreakOrContinueStatement(node) {
-                emitToken(node.kind === 191 ? 66 : 71, node.pos);
+                emitToken(node.kind === 193 ? 66 : 71, node.pos);
                 emitOptional(" ", node.label);
                 write(";");
             }
@@ -23184,7 +23612,7 @@ var ts;
                     ts.getLineOfLocalPosition(currentSourceFile, ts.skipTrivia(currentSourceFile.text, node2.pos));
             }
             function emitCaseOrDefaultClause(node) {
-                if (node.kind === 221) {
+                if (node.kind === 223) {
                     write("case ");
                     emit(node.expression);
                     write(":");
@@ -23239,7 +23667,7 @@ var ts;
             function getContainingModule(node) {
                 do {
                     node = node.parent;
-                } while (node && node.kind !== 206);
+                } while (node && node.kind !== 208);
                 return node;
             }
             function emitContainingModuleName(node) {
@@ -23264,7 +23692,7 @@ var ts;
             function createVoidZero() {
                 var zero = ts.createSynthesizedNode(7);
                 zero.text = "0";
-                var result = ts.createSynthesizedNode(167);
+                var result = ts.createSynthesizedNode(169);
                 result.expression = zero;
                 return result;
             }
@@ -23333,15 +23761,15 @@ var ts;
             function emitDestructuring(root, isAssignmentExpressionStatement, value) {
                 var emitCount = 0;
                 var canDefineTempVariablesInPlace = false;
-                if (root.kind === 199) {
+                if (root.kind === 201) {
                     var isExported = ts.getCombinedNodeFlags(root) & 1;
                     var isSourceLevelForSystemModuleKind = shouldHoistDeclarationInSystemJsModule(root);
                     canDefineTempVariablesInPlace = !isExported && !isSourceLevelForSystemModuleKind;
                 }
-                else if (root.kind === 130) {
+                else if (root.kind === 131) {
                     canDefineTempVariablesInPlace = true;
                 }
-                if (root.kind === 170) {
+                if (root.kind === 172) {
                     emitAssignmentExpression(root);
                 }
                 else {
@@ -23352,8 +23780,7 @@ var ts;
                     if (emitCount++) {
                         write(", ");
                     }
-                    renameNonTopLevelLetAndConst(name);
-                    var isVariableDeclarationOrBindingElement = name.parent && (name.parent.kind === 199 || name.parent.kind === 153);
+                    var isVariableDeclarationOrBindingElement = name.parent && (name.parent.kind === 201 || name.parent.kind === 155);
                     var exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
                     if (exportChanged) {
                         write(exportFunctionForFile + "(\"");
@@ -23385,14 +23812,14 @@ var ts;
                 }
                 function createDefaultValueCheck(value, defaultValue) {
                     value = ensureIdentifier(value);
-                    var equals = ts.createSynthesizedNode(170);
+                    var equals = ts.createSynthesizedNode(172);
                     equals.left = value;
                     equals.operatorToken = ts.createSynthesizedNode(30);
                     equals.right = createVoidZero();
                     return createConditionalExpression(equals, defaultValue, value);
                 }
                 function createConditionalExpression(condition, whenTrue, whenFalse) {
-                    var cond = ts.createSynthesizedNode(171);
+                    var cond = ts.createSynthesizedNode(173);
                     cond.condition = condition;
                     cond.questionToken = ts.createSynthesizedNode(50);
                     cond.whenTrue = whenTrue;
@@ -23406,13 +23833,15 @@ var ts;
                     return node;
                 }
                 function createPropertyAccessForDestructuringProperty(object, propName) {
-                    if (propName.kind !== 65) {
-                        return createElementAccessExpression(object, propName);
+                    var syntheticName = ts.createSynthesizedNode(propName.kind);
+                    syntheticName.text = propName.text;
+                    if (syntheticName.kind !== 65) {
+                        return createElementAccessExpression(object, syntheticName);
                     }
-                    return createPropertyAccessExpression(object, propName);
+                    return createPropertyAccessExpression(object, syntheticName);
                 }
                 function createSliceCall(value, sliceIndex) {
-                    var call = ts.createSynthesizedNode(158);
+                    var call = ts.createSynthesizedNode(160);
                     var sliceIdentifier = ts.createSynthesizedNode(65);
                     sliceIdentifier.text = "slice";
                     call.expression = createPropertyAccessExpression(value, sliceIdentifier);
@@ -23427,8 +23856,8 @@ var ts;
                     }
                     for (var _a = 0; _a < properties.length; _a++) {
                         var p = properties[_a];
-                        if (p.kind === 225 || p.kind === 226) {
-                            var propName = (p.name);
+                        if (p.kind === 227 || p.kind === 228) {
+                            var propName = p.name;
                             emitDestructuringAssignment(p.initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
@@ -23440,8 +23869,8 @@ var ts;
                     }
                     for (var i = 0; i < elements.length; i++) {
                         var e = elements[i];
-                        if (e.kind !== 176) {
-                            if (e.kind !== 174) {
+                        if (e.kind !== 178) {
+                            if (e.kind !== 176) {
                                 emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
                             }
                             else if (i === elements.length - 1) {
@@ -23451,14 +23880,14 @@ var ts;
                     }
                 }
                 function emitDestructuringAssignment(target, value) {
-                    if (target.kind === 170 && target.operatorToken.kind === 53) {
+                    if (target.kind === 172 && target.operatorToken.kind === 53) {
                         value = createDefaultValueCheck(value, target.right);
                         target = target.left;
                     }
-                    if (target.kind === 155) {
+                    if (target.kind === 157) {
                         emitObjectLiteralAssignment(target, value);
                     }
-                    else if (target.kind === 154) {
+                    else if (target.kind === 156) {
                         emitArrayLiteralAssignment(target, value);
                     }
                     else {
@@ -23472,14 +23901,14 @@ var ts;
                         emitDestructuringAssignment(target, value);
                     }
                     else {
-                        if (root.parent.kind !== 162) {
+                        if (root.parent.kind !== 164) {
                             write("(");
                         }
                         value = ensureIdentifier(value);
                         emitDestructuringAssignment(target, value);
                         write(", ");
                         emit(value);
-                        if (root.parent.kind !== 162) {
+                        if (root.parent.kind !== 164) {
                             write(")");
                         }
                     }
@@ -23499,11 +23928,11 @@ var ts;
                         }
                         for (var i = 0; i < elements.length; i++) {
                             var element = elements[i];
-                            if (pattern.kind === 151) {
+                            if (pattern.kind === 153) {
                                 var propName = element.propertyName || element.name;
                                 emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
                             }
-                            else if (element.kind !== 176) {
+                            else if (element.kind !== 178) {
                                 if (!element.dotDotDotToken) {
                                     emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
@@ -23529,14 +23958,13 @@ var ts;
                     }
                 }
                 else {
-                    renameNonTopLevelLetAndConst(node.name);
                     var initializer = node.initializer;
                     if (!initializer && languageVersion < 2) {
                         var isUninitializedLet = (resolver.getNodeCheckFlags(node) & 256) &&
                             (getCombinedFlagsForIdentifier(node.name) & 4096);
                         if (isUninitializedLet &&
-                            node.parent.parent.kind !== 188 &&
-                            node.parent.parent.kind !== 189) {
+                            node.parent.parent.kind !== 190 &&
+                            node.parent.parent.kind !== 191) {
                             initializer = createVoidZero();
                         }
                     }
@@ -23554,7 +23982,7 @@ var ts;
                 }
             }
             function emitExportVariableAssignments(node) {
-                if (node.kind === 176) {
+                if (node.kind === 178) {
                     return;
                 }
                 var name = node.name;
@@ -23566,48 +23994,15 @@ var ts;
                 }
             }
             function getCombinedFlagsForIdentifier(node) {
-                if (!node.parent || (node.parent.kind !== 199 && node.parent.kind !== 153)) {
+                if (!node.parent || (node.parent.kind !== 201 && node.parent.kind !== 155)) {
                     return 0;
                 }
                 return ts.getCombinedNodeFlags(node.parent);
             }
-            function renameNonTopLevelLetAndConst(node) {
-                if (languageVersion >= 2 ||
-                    ts.nodeIsSynthesized(node) ||
-                    node.kind !== 65 ||
-                    (node.parent.kind !== 199 && node.parent.kind !== 153)) {
-                    return;
-                }
-                var combinedFlags = getCombinedFlagsForIdentifier(node);
-                if (((combinedFlags & 12288) === 0) || combinedFlags & 1) {
-                    return;
-                }
-                var list = ts.getAncestor(node, 200);
-                if (list.parent.kind === 181) {
-                    var isSourceFileLevelBinding = list.parent.parent.kind === 228;
-                    var isModuleLevelBinding = list.parent.parent.kind === 207;
-                    var isFunctionLevelBinding = list.parent.parent.kind === 180 && ts.isFunctionLike(list.parent.parent.parent);
-                    if (isSourceFileLevelBinding || isModuleLevelBinding || isFunctionLevelBinding) {
-                        return;
-                    }
-                }
-                var blockScopeContainer = ts.getEnclosingBlockScopeContainer(node);
-                var parent = blockScopeContainer.kind === 228
-                    ? blockScopeContainer
-                    : blockScopeContainer.parent;
-                if (resolver.resolvesToSomeValue(parent, node.text)) {
-                    var variableId = resolver.getBlockScopedVariableId(node);
-                    if (!blockScopedVariableToGeneratedName) {
-                        blockScopedVariableToGeneratedName = [];
-                    }
-                    var generatedName = makeUniqueName(node.text);
-                    blockScopedVariableToGeneratedName[variableId] = generatedName;
-                }
-            }
             function isES6ExportedDeclaration(node) {
                 return !!(node.flags & 1) &&
                     languageVersion >= 2 &&
-                    node.parent.kind === 228;
+                    node.parent.kind === 230;
             }
             function emitVariableStatement(node) {
                 var startIsEmitted = false;
@@ -23652,12 +24047,12 @@ var ts;
             function emitParameter(node) {
                 if (languageVersion < 2) {
                     if (ts.isBindingPattern(node.name)) {
-                        var name_22 = createTempVariable(0);
+                        var name_20 = createTempVariable(0);
                         if (!tempParameters) {
                             tempParameters = [];
                         }
-                        tempParameters.push(name_22);
-                        emit(name_22);
+                        tempParameters.push(name_20);
+                        emit(name_20);
                     }
                     else {
                         emit(node.name);
@@ -23745,12 +24140,12 @@ var ts;
                 }
             }
             function emitAccessor(node) {
-                write(node.kind === 137 ? "get " : "set ");
-                emit(node.name, false);
+                write(node.kind === 138 ? "get " : "set ");
+                emit(node.name);
                 emitSignatureAndBody(node);
             }
             function shouldEmitAsArrowFunction(node) {
-                return node.kind === 164 && languageVersion >= 2;
+                return node.kind === 166 && languageVersion >= 2;
             }
             function emitDeclarationName(node) {
                 if (node.name) {
@@ -23761,10 +24156,10 @@ var ts;
                 }
             }
             function shouldEmitFunctionName(node) {
-                if (node.kind === 163) {
+                if (node.kind === 165) {
                     return !!node.name;
                 }
-                if (node.kind === 201) {
+                if (node.kind === 203) {
                     return !!node.name || languageVersion < 2;
                 }
             }
@@ -23772,7 +24167,7 @@ var ts;
                 if (ts.nodeIsMissing(node.body)) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
-                if (node.kind !== 135 && node.kind !== 134) {
+                if (node.kind !== 136 && node.kind !== 135) {
                     emitLeadingComments(node);
                 }
                 if (!shouldEmitAsArrowFunction(node)) {
@@ -23792,10 +24187,10 @@ var ts;
                     emitDeclarationName(node);
                 }
                 emitSignatureAndBody(node);
-                if (languageVersion < 2 && node.kind === 201 && node.parent === currentSourceFile && node.name) {
+                if (languageVersion < 2 && node.kind === 203 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
-                if (node.kind !== 135 && node.kind !== 134) {
+                if (node.kind !== 136 && node.kind !== 135) {
                     emitTrailingComments(node);
                 }
             }
@@ -23842,7 +24237,7 @@ var ts;
                 if (!node.body) {
                     write(" { }");
                 }
-                else if (node.body.kind === 180) {
+                else if (node.body.kind === 182) {
                     emitBlockFunctionBody(node, node.body);
                 }
                 else {
@@ -23867,10 +24262,10 @@ var ts;
                 }
                 write(" ");
                 var current = body;
-                while (current.kind === 161) {
+                while (current.kind === 163) {
                     current = current.expression;
                 }
-                emitParenthesizedIf(body, current.kind === 155);
+                emitParenthesizedIf(body, current.kind === 157);
             }
             function emitDownLevelExpressionFunctionBody(node, body) {
                 write(" {");
@@ -23942,9 +24337,9 @@ var ts;
             function findInitialSuperCall(ctor) {
                 if (ctor.body) {
                     var statement = ctor.body.statements[0];
-                    if (statement && statement.kind === 183) {
+                    if (statement && statement.kind === 185) {
                         var expr = statement.expression;
-                        if (expr && expr.kind === 158) {
+                        if (expr && expr.kind === 160) {
                             var func = expr.expression;
                             if (func && func.kind === 91) {
                                 return statement;
@@ -23975,7 +24370,7 @@ var ts;
                     emitNodeWithoutSourceMap(memberName);
                     write("]");
                 }
-                else if (memberName.kind === 128) {
+                else if (memberName.kind === 129) {
                     emitComputedPropertyName(memberName);
                 }
                 else {
@@ -23987,7 +24382,7 @@ var ts;
                 var properties = [];
                 for (var _a = 0, _b = node.members; _a < _b.length; _a++) {
                     var member = _b[_a];
-                    if (member.kind === 133 && isStatic === ((member.flags & 128) !== 0) && member.initializer) {
+                    if (member.kind === 134 && isStatic === ((member.flags & 128) !== 0) && member.initializer) {
                         properties.push(member);
                     }
                 }
@@ -24027,11 +24422,11 @@ var ts;
             }
             function emitMemberFunctionsForES5AndLower(node) {
                 ts.forEach(node.members, function (member) {
-                    if (member.kind === 179) {
+                    if (member.kind === 181) {
                         writeLine();
                         write(";");
                     }
-                    else if (member.kind === 135 || node.kind === 134) {
+                    else if (member.kind === 136 || node.kind === 135) {
                         if (!member.body) {
                             return emitOnlyPinnedOrTripleSlashComments(member);
                         }
@@ -24050,7 +24445,7 @@ var ts;
                         write(";");
                         emitTrailingComments(member);
                     }
-                    else if (member.kind === 137 || member.kind === 138) {
+                    else if (member.kind === 138 || member.kind === 139) {
                         var accessors = ts.getAllAccessorDeclarations(node.members, member);
                         if (member === accessors.firstAccessor) {
                             writeLine();
@@ -24100,22 +24495,22 @@ var ts;
             function emitMemberFunctionsForES6AndHigher(node) {
                 for (var _a = 0, _b = node.members; _a < _b.length; _a++) {
                     var member = _b[_a];
-                    if ((member.kind === 135 || node.kind === 134) && !member.body) {
+                    if ((member.kind === 136 || node.kind === 135) && !member.body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
-                    else if (member.kind === 135 ||
-                        member.kind === 137 ||
-                        member.kind === 138) {
+                    else if (member.kind === 136 ||
+                        member.kind === 138 ||
+                        member.kind === 139) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
                         if (member.flags & 128) {
                             write("static ");
                         }
-                        if (member.kind === 137) {
+                        if (member.kind === 138) {
                             write("get ");
                         }
-                        else if (member.kind === 138) {
+                        else if (member.kind === 139) {
                             write("set ");
                         }
                         if (member.asteriskToken) {
@@ -24126,7 +24521,7 @@ var ts;
                         emitEnd(member);
                         emitTrailingComments(member);
                     }
-                    else if (member.kind === 179) {
+                    else if (member.kind === 181) {
                         writeLine();
                         write(";");
                     }
@@ -24147,10 +24542,10 @@ var ts;
             function emitConstructorWorker(node, baseTypeElement) {
                 var hasInstancePropertyWithInitializer = false;
                 ts.forEach(node.members, function (member) {
-                    if (member.kind === 136 && !member.body) {
+                    if (member.kind === 137 && !member.body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
-                    if (member.kind === 133 && member.initializer && (member.flags & 128) === 0) {
+                    if (member.kind === 134 && member.initializer && (member.flags & 128) === 0) {
                         hasInstancePropertyWithInitializer = true;
                     }
                 });
@@ -24250,7 +24645,7 @@ var ts;
             }
             function emitClassLikeDeclarationForES6AndHigher(node) {
                 var thisNodeIsDecorated = ts.nodeIsDecorated(node);
-                if (node.kind === 202) {
+                if (node.kind === 204) {
                     if (thisNodeIsDecorated) {
                         if (isES6ExportedDeclaration(node) && !(node.flags & 256)) {
                             write("export ");
@@ -24267,7 +24662,7 @@ var ts;
                     }
                 }
                 var staticProperties = getInitializedProperties(node, true);
-                var isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === 175;
+                var isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === 177;
                 var tempVariable;
                 if (isClassExpressionWithStaticProperties) {
                     tempVariable = createAndRecordTempVariable(0);
@@ -24334,7 +24729,7 @@ var ts;
                 }
             }
             function emitClassLikeDeclarationBelowES6(node) {
-                if (node.kind === 202) {
+                if (node.kind === 204) {
                     if (!shouldHoistDeclarationInSystemJsModule(node)) {
                         write("var ");
                     }
@@ -24392,11 +24787,11 @@ var ts;
                     emit(baseTypeNode.expression);
                 }
                 write(")");
-                if (node.kind === 202) {
+                if (node.kind === 204) {
                     write(";");
                 }
                 emitEnd(node);
-                if (node.kind === 202) {
+                if (node.kind === 204) {
                     emitExportMemberAssignment(node);
                 }
                 if (languageVersion < 2 && node.parent === currentSourceFile && node.name) {
@@ -24470,13 +24865,13 @@ var ts;
                     }
                     else {
                         decorators = member.decorators;
-                        if (member.kind === 135) {
+                        if (member.kind === 136) {
                             functionLikeMember = member;
                         }
                     }
                     writeLine();
                     emitStart(member);
-                    if (member.kind !== 133) {
+                    if (member.kind !== 134) {
                         write("Object.defineProperty(");
                         emitStart(member.name);
                         emitClassMemberPrefix(node, member);
@@ -24506,7 +24901,7 @@ var ts;
                     write(", ");
                     emitExpressionForPropertyName(member.name);
                     emitEnd(member.name);
-                    if (member.kind !== 133) {
+                    if (member.kind !== 134) {
                         write(", Object.getOwnPropertyDescriptor(");
                         emitStart(member.name);
                         emitClassMemberPrefix(node, member);
@@ -24545,26 +24940,26 @@ var ts;
             }
             function shouldEmitTypeMetadata(node) {
                 switch (node.kind) {
-                    case 135:
-                    case 137:
+                    case 136:
                     case 138:
-                    case 133:
+                    case 139:
+                    case 134:
                         return true;
                 }
                 return false;
             }
             function shouldEmitReturnTypeMetadata(node) {
                 switch (node.kind) {
-                    case 135:
+                    case 136:
                         return true;
                 }
                 return false;
             }
             function shouldEmitParamTypesMetadata(node) {
                 switch (node.kind) {
-                    case 202:
-                    case 135:
-                    case 138:
+                    case 204:
+                    case 136:
+                    case 139:
                         return true;
                 }
                 return false;
@@ -24573,7 +24968,7 @@ var ts;
                 var argumentsWritten = 0;
                 if (compilerOptions.emitDecoratorMetadata) {
                     if (shouldEmitTypeMetadata(node)) {
-                        var serializedType = resolver.serializeTypeOfNode(node, getGeneratedNameForNode);
+                        var serializedType = resolver.serializeTypeOfNode(node);
                         if (serializedType) {
                             if (writeComma) {
                                 write(", ");
@@ -24586,7 +24981,7 @@ var ts;
                         }
                     }
                     if (shouldEmitParamTypesMetadata(node)) {
-                        var serializedTypes = resolver.serializeParameterTypesOfNode(node, getGeneratedNameForNode);
+                        var serializedTypes = resolver.serializeParameterTypesOfNode(node);
                         if (serializedTypes) {
                             if (writeComma || argumentsWritten) {
                                 write(", ");
@@ -24604,7 +24999,7 @@ var ts;
                         }
                     }
                     if (shouldEmitReturnTypeMetadata(node)) {
-                        var serializedType = resolver.serializeReturnTypeOfNode(node, getGeneratedNameForNode);
+                        var serializedType = resolver.serializeReturnTypeOfNode(node);
                         if (serializedType) {
                             if (writeComma || argumentsWritten) {
                                 write(", ");
@@ -24700,7 +25095,7 @@ var ts;
                         emitDeclarationName(node);
                         write("\", ");
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(node.name);
                 }
@@ -24734,7 +25129,7 @@ var ts;
                 }
             }
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration) {
-                if (moduleDeclaration.body.kind === 206) {
+                if (moduleDeclaration.body.kind === 208) {
                     var recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration.body);
                     return recursiveInnerModule || moduleDeclaration.body;
                 }
@@ -24769,7 +25164,7 @@ var ts;
                 write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
-                if (node.body.kind === 207) {
+                if (node.body.kind === 209) {
                     var saveTempFlags = tempFlags;
                     var saveTempVariables = tempVariables;
                     tempFlags = 0;
@@ -24808,7 +25203,7 @@ var ts;
                         emitDeclarationName(node);
                         write("\", ");
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(node.name);
                 }
@@ -24826,16 +25221,16 @@ var ts;
                 }
             }
             function getNamespaceDeclarationNode(node) {
-                if (node.kind === 209) {
+                if (node.kind === 211) {
                     return node;
                 }
                 var importClause = node.importClause;
-                if (importClause && importClause.namedBindings && importClause.namedBindings.kind === 212) {
+                if (importClause && importClause.namedBindings && importClause.namedBindings.kind === 214) {
                     return importClause.namedBindings;
                 }
             }
             function isDefaultImport(node) {
-                return node.kind === 210 && node.importClause && !!node.importClause.name;
+                return node.kind === 212 && node.importClause && !!node.importClause.name;
             }
             function emitExportImportAssignments(node) {
                 if (ts.isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
@@ -24862,7 +25257,7 @@ var ts;
                         if (shouldEmitNamedBindings) {
                             emitLeadingComments(node.importClause.namedBindings);
                             emitStart(node.importClause.namedBindings);
-                            if (node.importClause.namedBindings.kind === 212) {
+                            if (node.importClause.namedBindings.kind === 214) {
                                 write("* as ");
                                 emit(node.importClause.namedBindings.name);
                             }
@@ -24888,7 +25283,7 @@ var ts;
             }
             function emitExternalImportDeclaration(node) {
                 if (ts.contains(externalImports, node)) {
-                    var isExportedImport = node.kind === 209 && (node.flags & 1) !== 0;
+                    var isExportedImport = node.kind === 211 && (node.flags & 1) !== 0;
                     var namespaceDeclaration = getNamespaceDeclarationNode(node);
                     if (compilerOptions.module !== 2) {
                         emitLeadingComments(node);
@@ -24900,7 +25295,7 @@ var ts;
                             write(" = ");
                         }
                         else {
-                            var isNakedImport = 210 && !node.importClause;
+                            var isNakedImport = 212 && !node.importClause;
                             if (!isNakedImport) {
                                 write("var ");
                                 write(getGeneratedNameForNode(node));
@@ -25056,8 +25451,8 @@ var ts;
                         write("export default ");
                         var expression = node.expression;
                         emit(expression);
-                        if (expression.kind !== 201 &&
-                            expression.kind !== 202) {
+                        if (expression.kind !== 203 &&
+                            expression.kind !== 204) {
                             write(";");
                         }
                         emitEnd(node);
@@ -25093,18 +25488,18 @@ var ts;
                 for (var _a = 0, _b = sourceFile.statements; _a < _b.length; _a++) {
                     var node = _b[_a];
                     switch (node.kind) {
-                        case 210:
+                        case 212:
                             if (!node.importClause ||
                                 resolver.isReferencedAliasDeclaration(node.importClause, true)) {
                                 externalImports.push(node);
                             }
                             break;
-                        case 209:
-                            if (node.moduleReference.kind === 220 && resolver.isReferencedAliasDeclaration(node)) {
+                        case 211:
+                            if (node.moduleReference.kind === 222 && resolver.isReferencedAliasDeclaration(node)) {
                                 externalImports.push(node);
                             }
                             break;
-                        case 216:
+                        case 218:
                             if (node.moduleSpecifier) {
                                 if (!node.exportClause) {
                                     externalImports.push(node);
@@ -25117,12 +25512,12 @@ var ts;
                             else {
                                 for (var _c = 0, _d = node.exportClause.elements; _c < _d.length; _c++) {
                                     var specifier = _d[_c];
-                                    var name_23 = (specifier.propertyName || specifier.name).text;
-                                    (exportSpecifiers[name_23] || (exportSpecifiers[name_23] = [])).push(specifier);
+                                    var name_21 = (specifier.propertyName || specifier.name).text;
+                                    (exportSpecifiers[name_21] || (exportSpecifiers[name_21] = [])).push(specifier);
                                 }
                             }
                             break;
-                        case 215:
+                        case 217:
                             if (node.isExportEquals && !exportEquals) {
                                 exportEquals = node;
                             }
@@ -25142,13 +25537,16 @@ var ts;
                     write("}");
                 }
             }
-            function getLocalNameForExternalImport(importNode) {
-                var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                if (namespaceDeclaration && !isDefaultImport(importNode)) {
+            function getLocalNameForExternalImport(node) {
+                var namespaceDeclaration = getNamespaceDeclarationNode(node);
+                if (namespaceDeclaration && !isDefaultImport(node)) {
                     return ts.getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
                 }
-                else {
-                    return getGeneratedNameForNode(importNode);
+                if (node.kind === 212 && node.importClause) {
+                    return getGeneratedNameForNode(node);
+                }
+                if (node.kind === 218 && node.moduleSpecifier) {
+                    return getGeneratedNameForNode(node);
                 }
             }
             function getExternalModuleNameText(importNode) {
@@ -25166,8 +25564,8 @@ var ts;
                 var started = false;
                 for (var _a = 0; _a < externalImports.length; _a++) {
                     var importNode = externalImports[_a];
-                    var skipNode = importNode.kind === 216 ||
-                        (importNode.kind === 210 && !importNode.importClause);
+                    var skipNode = importNode.kind === 218 ||
+                        (importNode.kind === 212 && !importNode.importClause);
                     if (skipNode) {
                         continue;
                     }
@@ -25192,7 +25590,7 @@ var ts;
                     var hasExportDeclarationWithExportClause = false;
                     for (var _a = 0; _a < externalImports.length; _a++) {
                         var externalImport = externalImports[_a];
-                        if (externalImport.kind === 216 && externalImport.exportClause) {
+                        if (externalImport.kind === 218 && externalImport.exportClause) {
                             hasExportDeclarationWithExportClause = true;
                             break;
                         }
@@ -25221,7 +25619,7 @@ var ts;
                 }
                 for (var _d = 0; _d < externalImports.length; _d++) {
                     var externalImport = externalImports[_d];
-                    if (externalImport.kind !== 216) {
+                    if (externalImport.kind !== 218) {
                         continue;
                     }
                     var exportDecl = externalImport;
@@ -25291,11 +25689,11 @@ var ts;
                     var seen = {};
                     for (var i = 0; i < hoistedVars.length; ++i) {
                         var local = hoistedVars[i];
-                        var name_24 = local.kind === 65
+                        var name_22 = local.kind === 65
                             ? local
                             : local.name;
-                        if (name_24) {
-                            var text = ts.unescapeIdentifier(name_24.text);
+                        if (name_22) {
+                            var text = ts.unescapeIdentifier(name_22.text);
                             if (ts.hasProperty(seen, text)) {
                                 continue;
                             }
@@ -25306,7 +25704,7 @@ var ts;
                         if (i !== 0) {
                             write(", ");
                         }
-                        if (local.kind === 202 || local.kind === 206 || local.kind === 205) {
+                        if (local.kind === 204 || local.kind === 208 || local.kind === 207) {
                             emitDeclarationName(local);
                         }
                         else {
@@ -25340,21 +25738,21 @@ var ts;
                     if (node.flags & 2) {
                         return;
                     }
-                    if (node.kind === 201) {
+                    if (node.kind === 203) {
                         if (!hoistedFunctionDeclarations) {
                             hoistedFunctionDeclarations = [];
                         }
                         hoistedFunctionDeclarations.push(node);
                         return;
                     }
-                    if (node.kind === 202) {
+                    if (node.kind === 204) {
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }
                         hoistedVars.push(node);
                         return;
                     }
-                    if (node.kind === 205) {
+                    if (node.kind === 207) {
                         if (shouldEmitEnumDeclaration(node)) {
                             if (!hoistedVars) {
                                 hoistedVars = [];
@@ -25363,7 +25761,7 @@ var ts;
                         }
                         return;
                     }
-                    if (node.kind === 206) {
+                    if (node.kind === 208) {
                         if (shouldEmitModuleDeclaration(node)) {
                             if (!hoistedVars) {
                                 hoistedVars = [];
@@ -25372,17 +25770,17 @@ var ts;
                         }
                         return;
                     }
-                    if (node.kind === 199 || node.kind === 153) {
+                    if (node.kind === 201 || node.kind === 155) {
                         if (shouldHoistVariable(node, false)) {
-                            var name_25 = node.name;
-                            if (name_25.kind === 65) {
+                            var name_23 = node.name;
+                            if (name_23.kind === 65) {
                                 if (!hoistedVars) {
                                     hoistedVars = [];
                                 }
-                                hoistedVars.push(name_25);
+                                hoistedVars.push(name_23);
                             }
                             else {
-                                ts.forEachChild(name_25, visit);
+                                ts.forEachChild(name_23, visit);
                             }
                         }
                         return;
@@ -25401,7 +25799,7 @@ var ts;
                     return false;
                 }
                 return (ts.getCombinedNodeFlags(node) & 12288) === 0 ||
-                    ts.getEnclosingBlockScopeContainer(node).kind === 228;
+                    ts.getEnclosingBlockScopeContainer(node).kind === 230;
             }
             function isCurrentFileSystemExternalModule() {
                 return compilerOptions.module === 4 && ts.isExternalModule(currentSourceFile);
@@ -25418,10 +25816,10 @@ var ts;
                 emitSetters(exportStarFunction);
                 writeLine();
                 emitExecute(node, startIndex);
-                emitTempDeclarations(true);
                 decreaseIndent();
                 writeLine();
                 write("}");
+                emitTempDeclarations(true);
             }
             function emitSetters(exportStarFunction) {
                 write("setters:[");
@@ -25436,27 +25834,27 @@ var ts;
                     var parameterName = "_" + importVariableName;
                     write("function (" + parameterName + ") {");
                     switch (importNode.kind) {
-                        case 210:
+                        case 212:
                             if (!importNode.importClause) {
                                 break;
                             }
-                        case 209:
+                        case 211:
                             ts.Debug.assert(importVariableName !== "");
                             increaseIndent();
                             writeLine();
                             write(importVariableName + " = " + parameterName + ";");
                             writeLine();
-                            var defaultName = importNode.kind === 210
+                            var defaultName = importNode.kind === 212
                                 ? importNode.importClause.name
                                 : importNode.name;
                             if (defaultName) {
                                 emitExportMemberAssignments(defaultName);
                                 writeLine();
                             }
-                            if (importNode.kind === 210 &&
+                            if (importNode.kind === 212 &&
                                 importNode.importClause.namedBindings) {
                                 var namedBindings = importNode.importClause.namedBindings;
-                                if (namedBindings.kind === 212) {
+                                if (namedBindings.kind === 214) {
                                     emitExportMemberAssignments(namedBindings.name);
                                     writeLine();
                                 }
@@ -25470,7 +25868,7 @@ var ts;
                             }
                             decreaseIndent();
                             break;
-                        case 216:
+                        case 218:
                             ts.Debug.assert(importVariableName !== "");
                             increaseIndent();
                             if (importNode.exportClause) {
@@ -25504,10 +25902,10 @@ var ts;
                 for (var i = startIndex; i < node.statements.length; ++i) {
                     var statement = node.statements[i];
                     switch (statement.kind) {
-                        case 216:
-                        case 210:
-                        case 209:
-                        case 201:
+                        case 218:
+                        case 212:
+                        case 211:
+                        case 203:
                             continue;
                     }
                     writeLine();
@@ -25521,7 +25919,11 @@ var ts;
                 collectExternalModuleInfo(node);
                 ts.Debug.assert(!exportFunctionForFile);
                 exportFunctionForFile = makeUniqueName("exports");
-                write("System.register([");
+                write("System.register(");
+                if (node.moduleName) {
+                    write("\"" + node.moduleName + "\", ");
+                }
+                write("[");
                 for (var i = 0; i < externalImports.length; ++i) {
                     var text = getExternalModuleNameText(externalImports[i]);
                     if (i !== 0) {
@@ -25594,8 +25996,8 @@ var ts;
                 collectExternalModuleInfo(node);
                 writeLine();
                 write("define(");
-                if (node.amdModuleName) {
-                    write("\"" + node.amdModuleName + "\", ");
+                if (node.moduleName) {
+                    write("\"" + node.moduleName + "\", ");
                 }
                 emitAMDDependencies(node, true);
                 write(") {");
@@ -25724,7 +26126,7 @@ var ts;
                 }
                 emitLeadingComments(node.endOfFileToken);
             }
-            function emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers) {
+            function emitNodeWithoutSourceMap(node) {
                 if (!node) {
                     return;
                 }
@@ -25735,48 +26137,47 @@ var ts;
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
-                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                emitJavaScriptWorker(node);
                 if (emitComments) {
                     emitTrailingComments(node);
                 }
             }
             function shouldEmitLeadingAndTrailingComments(node) {
                 switch (node.kind) {
-                    case 203:
-                    case 201:
-                    case 210:
-                    case 209:
-                    case 204:
-                    case 215:
-                        return false;
-                    case 181:
-                        return shouldEmitLeadingAndTrailingCommentsForVariableStatement(node);
-                    case 206:
-                        return shouldEmitModuleDeclaration(node);
                     case 205:
+                    case 203:
+                    case 212:
+                    case 211:
+                    case 206:
+                    case 217:
+                        return false;
+                    case 183:
+                        return shouldEmitLeadingAndTrailingCommentsForVariableStatement(node);
+                    case 208:
+                        return shouldEmitModuleDeclaration(node);
+                    case 207:
                         return shouldEmitEnumDeclaration(node);
                 }
-                if (node.kind !== 180 &&
+                if (node.kind !== 182 &&
                     node.parent &&
-                    node.parent.kind === 164 &&
+                    node.parent.kind === 166 &&
                     node.parent.body === node &&
                     compilerOptions.target <= 1) {
                     return false;
                 }
                 return true;
             }
-            function emitJavaScriptWorker(node, allowGeneratedIdentifiers) {
-                if (allowGeneratedIdentifiers === void 0) { allowGeneratedIdentifiers = true; }
+            function emitJavaScriptWorker(node) {
                 switch (node.kind) {
                     case 65:
-                        return emitIdentifier(node, allowGeneratedIdentifiers);
-                    case 130:
+                        return emitIdentifier(node);
+                    case 131:
                         return emitParameter(node);
+                    case 136:
                     case 135:
-                    case 134:
                         return emitMethod(node);
-                    case 137:
                     case 138:
+                    case 139:
                         return emitAccessor(node);
                     case 93:
                         return emitThis(node);
@@ -25796,131 +26197,131 @@ var ts;
                     case 12:
                     case 13:
                         return emitLiteral(node);
-                    case 172:
-                        return emitTemplateExpression(node);
-                    case 178:
-                        return emitTemplateSpan(node);
-                    case 127:
-                        return emitQualifiedName(node);
-                    case 151:
-                        return emitObjectBindingPattern(node);
-                    case 152:
-                        return emitArrayBindingPattern(node);
-                    case 153:
-                        return emitBindingElement(node);
-                    case 154:
-                        return emitArrayLiteral(node);
-                    case 155:
-                        return emitObjectLiteral(node);
-                    case 225:
-                        return emitPropertyAssignment(node);
-                    case 226:
-                        return emitShorthandPropertyAssignment(node);
-                    case 128:
-                        return emitComputedPropertyName(node);
-                    case 156:
-                        return emitPropertyAccess(node);
-                    case 157:
-                        return emitIndexedAccess(node);
-                    case 158:
-                        return emitCallExpression(node);
-                    case 159:
-                        return emitNewExpression(node);
-                    case 160:
-                        return emitTaggedTemplateExpression(node);
-                    case 161:
-                        return emit(node.expression);
-                    case 162:
-                        return emitParenExpression(node);
-                    case 201:
-                    case 163:
-                    case 164:
-                        return emitFunctionDeclaration(node);
-                    case 165:
-                        return emitDeleteExpression(node);
-                    case 166:
-                        return emitTypeOfExpression(node);
-                    case 167:
-                        return emitVoidExpression(node);
-                    case 168:
-                        return emitPrefixUnaryExpression(node);
-                    case 169:
-                        return emitPostfixUnaryExpression(node);
-                    case 170:
-                        return emitBinaryExpression(node);
-                    case 171:
-                        return emitConditionalExpression(node);
                     case 174:
-                        return emitSpreadElementExpression(node);
-                    case 173:
-                        return emitYieldExpression(node);
-                    case 176:
-                        return;
+                        return emitTemplateExpression(node);
                     case 180:
-                    case 207:
-                        return emitBlock(node);
-                    case 181:
-                        return emitVariableStatement(node);
-                    case 182:
-                        return write(";");
-                    case 183:
-                        return emitExpressionStatement(node);
-                    case 184:
-                        return emitIfStatement(node);
-                    case 185:
-                        return emitDoStatement(node);
-                    case 186:
-                        return emitWhileStatement(node);
-                    case 187:
-                        return emitForStatement(node);
-                    case 189:
-                    case 188:
-                        return emitForInOrForOfStatement(node);
-                    case 190:
-                    case 191:
-                        return emitBreakOrContinueStatement(node);
-                    case 192:
-                        return emitReturnStatement(node);
-                    case 193:
-                        return emitWithStatement(node);
-                    case 194:
-                        return emitSwitchStatement(node);
-                    case 221:
-                    case 222:
-                        return emitCaseOrDefaultClause(node);
-                    case 195:
-                        return emitLabelledStatement(node);
-                    case 196:
-                        return emitThrowStatement(node);
-                    case 197:
-                        return emitTryStatement(node);
-                    case 224:
-                        return emitCatchClause(node);
-                    case 198:
-                        return emitDebuggerStatement(node);
-                    case 199:
-                        return emitVariableDeclaration(node);
-                    case 175:
-                        return emitClassExpression(node);
-                    case 202:
-                        return emitClassDeclaration(node);
-                    case 203:
-                        return emitInterfaceDeclaration(node);
-                    case 205:
-                        return emitEnumDeclaration(node);
+                        return emitTemplateSpan(node);
+                    case 128:
+                        return emitQualifiedName(node);
+                    case 153:
+                        return emitObjectBindingPattern(node);
+                    case 154:
+                        return emitArrayBindingPattern(node);
+                    case 155:
+                        return emitBindingElement(node);
+                    case 156:
+                        return emitArrayLiteral(node);
+                    case 157:
+                        return emitObjectLiteral(node);
                     case 227:
-                        return emitEnumMember(node);
-                    case 206:
-                        return emitModuleDeclaration(node);
-                    case 210:
-                        return emitImportDeclaration(node);
-                    case 209:
-                        return emitImportEqualsDeclaration(node);
-                    case 216:
-                        return emitExportDeclaration(node);
-                    case 215:
-                        return emitExportAssignment(node);
+                        return emitPropertyAssignment(node);
                     case 228:
+                        return emitShorthandPropertyAssignment(node);
+                    case 129:
+                        return emitComputedPropertyName(node);
+                    case 158:
+                        return emitPropertyAccess(node);
+                    case 159:
+                        return emitIndexedAccess(node);
+                    case 160:
+                        return emitCallExpression(node);
+                    case 161:
+                        return emitNewExpression(node);
+                    case 162:
+                        return emitTaggedTemplateExpression(node);
+                    case 163:
+                        return emit(node.expression);
+                    case 164:
+                        return emitParenExpression(node);
+                    case 203:
+                    case 165:
+                    case 166:
+                        return emitFunctionDeclaration(node);
+                    case 167:
+                        return emitDeleteExpression(node);
+                    case 168:
+                        return emitTypeOfExpression(node);
+                    case 169:
+                        return emitVoidExpression(node);
+                    case 170:
+                        return emitPrefixUnaryExpression(node);
+                    case 171:
+                        return emitPostfixUnaryExpression(node);
+                    case 172:
+                        return emitBinaryExpression(node);
+                    case 173:
+                        return emitConditionalExpression(node);
+                    case 176:
+                        return emitSpreadElementExpression(node);
+                    case 175:
+                        return emitYieldExpression(node);
+                    case 178:
+                        return;
+                    case 182:
+                    case 209:
+                        return emitBlock(node);
+                    case 183:
+                        return emitVariableStatement(node);
+                    case 184:
+                        return write(";");
+                    case 185:
+                        return emitExpressionStatement(node);
+                    case 186:
+                        return emitIfStatement(node);
+                    case 187:
+                        return emitDoStatement(node);
+                    case 188:
+                        return emitWhileStatement(node);
+                    case 189:
+                        return emitForStatement(node);
+                    case 191:
+                    case 190:
+                        return emitForInOrForOfStatement(node);
+                    case 192:
+                    case 193:
+                        return emitBreakOrContinueStatement(node);
+                    case 194:
+                        return emitReturnStatement(node);
+                    case 195:
+                        return emitWithStatement(node);
+                    case 196:
+                        return emitSwitchStatement(node);
+                    case 223:
+                    case 224:
+                        return emitCaseOrDefaultClause(node);
+                    case 197:
+                        return emitLabelledStatement(node);
+                    case 198:
+                        return emitThrowStatement(node);
+                    case 199:
+                        return emitTryStatement(node);
+                    case 226:
+                        return emitCatchClause(node);
+                    case 200:
+                        return emitDebuggerStatement(node);
+                    case 201:
+                        return emitVariableDeclaration(node);
+                    case 177:
+                        return emitClassExpression(node);
+                    case 204:
+                        return emitClassDeclaration(node);
+                    case 205:
+                        return emitInterfaceDeclaration(node);
+                    case 207:
+                        return emitEnumDeclaration(node);
+                    case 229:
+                        return emitEnumMember(node);
+                    case 208:
+                        return emitModuleDeclaration(node);
+                    case 212:
+                        return emitImportDeclaration(node);
+                    case 211:
+                        return emitImportEqualsDeclaration(node);
+                    case 218:
+                        return emitExportDeclaration(node);
+                    case 217:
+                        return emitExportAssignment(node);
+                    case 230:
                         return emitSourceFileNode(node);
                 }
             }
@@ -25948,7 +26349,7 @@ var ts;
             }
             function getLeadingCommentsToEmit(node) {
                 if (node.parent) {
-                    if (node.parent.kind === 228 || node.pos !== node.parent.pos) {
+                    if (node.parent.kind === 230 || node.pos !== node.parent.pos) {
                         if (hasDetachedComments(node.pos)) {
                             return getLeadingCommentsWithoutDetachedComments();
                         }
@@ -25960,7 +26361,7 @@ var ts;
             }
             function getTrailingCommentsToEmit(node) {
                 if (node.parent) {
-                    if (node.parent.kind === 228 || node.end !== node.parent.end) {
+                    if (node.parent.kind === 230 || node.end !== node.parent.end) {
                         return ts.getTrailingCommentRanges(currentSourceFile.text, node.end);
                     }
                 }
@@ -26055,8 +26456,6 @@ var ts;
     ts.ioReadTime = 0;
     ts.ioWriteTime = 0;
     ts.version = "1.5.3";
-    var carriageReturnLineFeed = "\r\n";
-    var lineFeed = "\n";
     function findConfigFile(searchPath) {
         var fileName = "tsconfig.json";
         while (true) {
@@ -26127,9 +26526,7 @@ var ts;
                 }
             }
         }
-        var newLine = options.newLine === 0 ? carriageReturnLineFeed :
-            options.newLine === 1 ? lineFeed :
-                ts.sys.newLine;
+        var newLine = ts.getNewLineCharacter(options);
         return {
             getSourceFile: getSourceFile,
             getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), ts.getDefaultLibFileName(options)); },
@@ -26142,7 +26539,7 @@ var ts;
     }
     ts.createCompilerHost = createCompilerHost;
     function getPreEmitDiagnostics(program, sourceFile) {
-        var diagnostics = program.getSyntacticDiagnostics(sourceFile).concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics(sourceFile));
+        var diagnostics = program.getOptionsDiagnostics().concat(program.getSyntacticDiagnostics(sourceFile), program.getGlobalDiagnostics(), program.getSemanticDiagnostics(sourceFile));
         if (program.getCompilerOptions().declaration) {
             diagnostics.concat(program.getDeclarationDiagnostics(sourceFile));
         }
@@ -26175,16 +26572,17 @@ var ts;
     function createProgram(rootNames, options, host) {
         var program;
         var files = [];
-        var filesByName = {};
         var diagnostics = ts.createDiagnosticCollection();
-        var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory;
         var diagnosticsProducingTypeChecker;
         var noDiagnosticsTypeChecker;
+        var classifiableNames;
+        var skipDefaultLib = options.noLib;
         var start = new Date().getTime();
         host = host || createCompilerHost(options);
+        var filesByName = ts.createFileMap(function (fileName) { return host.getCanonicalFileName(fileName); });
         ts.forEach(rootNames, function (name) { return processRootFile(name, false); });
-        if (!seenNoDefaultLib) {
+        if (!skipDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
@@ -26194,10 +26592,12 @@ var ts;
             getSourceFiles: function () { return files; },
             getCompilerOptions: function () { return options; },
             getSyntacticDiagnostics: getSyntacticDiagnostics,
+            getOptionsDiagnostics: getOptionsDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
             getSemanticDiagnostics: getSemanticDiagnostics,
             getDeclarationDiagnostics: getDeclarationDiagnostics,
             getTypeChecker: getTypeChecker,
+            getClassifiableNames: getClassifiableNames,
             getDiagnosticsProducingTypeChecker: getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: function () { return commonSourceDirectory; },
             emit: emit,
@@ -26208,6 +26608,17 @@ var ts;
             getTypeCount: function () { return getDiagnosticsProducingTypeChecker().getTypeCount(); }
         };
         return program;
+        function getClassifiableNames() {
+            if (!classifiableNames) {
+                getTypeChecker();
+                classifiableNames = {};
+                for (var _i = 0; _i < files.length; _i++) {
+                    var sourceFile = files[_i];
+                    ts.copyMap(sourceFile.classifiableNames, classifiableNames);
+                }
+            }
+            return classifiableNames;
+        }
         function getEmitHost(writeFileCallback) {
             return {
                 getCanonicalFileName: function (fileName) { return host.getCanonicalFileName(fileName); },
@@ -26237,8 +26648,7 @@ var ts;
             return emitResult;
         }
         function getSourceFile(fileName) {
-            fileName = host.getCanonicalFileName(ts.normalizeSlashes(fileName));
-            return ts.hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
+            return filesByName.get(fileName);
         }
         function getDiagnosticsHelper(sourceFile, getDiagnostics) {
             if (sourceFile) {
@@ -26277,11 +26687,14 @@ var ts;
                 return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
             }
         }
-        function getGlobalDiagnostics() {
-            var typeChecker = getDiagnosticsProducingTypeChecker();
+        function getOptionsDiagnostics() {
             var allDiagnostics = [];
-            ts.addRange(allDiagnostics, typeChecker.getGlobalDiagnostics());
             ts.addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+            return ts.sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+        function getGlobalDiagnostics() {
+            var allDiagnostics = [];
+            ts.addRange(allDiagnostics, getDiagnosticsProducingTypeChecker().getGlobalDiagnostics());
             return ts.sortAndDeduplicateDiagnostics(allDiagnostics);
         }
         function hasExtension(fileName) {
@@ -26315,14 +26728,17 @@ var ts;
                 }
             }
             else {
-                if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
-                    diagnostic = ts.Diagnostics.File_0_not_found;
-                    diagnosticArgument = [fileName];
-                }
-                else if (!ts.forEach(ts.supportedExtensions, function (extension) { return findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd); })) {
-                    diagnostic = ts.Diagnostics.File_0_not_found;
-                    fileName += ".ts";
-                    diagnosticArgument = [fileName];
+                var nonTsFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                if (!nonTsFile) {
+                    if (options.allowNonTsExtensions) {
+                        diagnostic = ts.Diagnostics.File_0_not_found;
+                        diagnosticArgument = [fileName];
+                    }
+                    else if (!ts.forEach(ts.supportedExtensions, function (extension) { return findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd); })) {
+                        diagnostic = ts.Diagnostics.File_0_not_found;
+                        fileName += ".ts";
+                        diagnosticArgument = [fileName];
+                    }
                 }
             }
             if (diagnostic) {
@@ -26336,16 +26752,16 @@ var ts;
         }
         function findSourceFile(fileName, isDefaultLib, refFile, refStart, refLength) {
             var canonicalName = host.getCanonicalFileName(ts.normalizeSlashes(fileName));
-            if (ts.hasProperty(filesByName, canonicalName)) {
+            if (filesByName.contains(canonicalName)) {
                 return getSourceFileFromCache(fileName, canonicalName, false);
             }
             else {
                 var normalizedAbsolutePath = ts.getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
                 var canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
-                if (ts.hasProperty(filesByName, canonicalAbsolutePath)) {
+                if (filesByName.contains(canonicalAbsolutePath)) {
                     return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, true);
                 }
-                var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, function (hostErrorMessage) {
+                var file = host.getSourceFile(fileName, options.target, function (hostErrorMessage) {
                     if (refFile) {
                         diagnostics.add(ts.createFileDiagnostic(refFile, refStart, refLength, ts.Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
@@ -26353,15 +26769,17 @@ var ts;
                         diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
+                filesByName.set(canonicalName, file);
                 if (file) {
-                    seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
-                    filesByName[canonicalAbsolutePath] = file;
+                    skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
+                    filesByName.set(canonicalAbsolutePath, file);
                     if (!options.noResolve) {
                         var basePath = ts.getDirectoryPath(fileName);
                         processReferencedFiles(file, basePath);
                         processImportedModules(file, basePath);
                     }
                     if (isDefaultLib) {
+                        file.isDefaultLib = true;
                         files.unshift(file);
                     }
                     else {
@@ -26371,7 +26789,7 @@ var ts;
                 return file;
             }
             function getSourceFileFromCache(fileName, canonicalName, useAbsolutePath) {
-                var file = filesByName[canonicalName];
+                var file = filesByName.get(canonicalName);
                 if (file && host.useCaseSensitiveFileNames()) {
                     var sourceFileName = useAbsolutePath ? ts.getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
@@ -26389,7 +26807,7 @@ var ts;
         }
         function processImportedModules(file, basePath) {
             ts.forEach(file.statements, function (node) {
-                if (node.kind === 210 || node.kind === 209 || node.kind === 216) {
+                if (node.kind === 212 || node.kind === 211 || node.kind === 218) {
                     var moduleNameExpr = ts.getExternalModuleName(node);
                     if (moduleNameExpr && moduleNameExpr.kind === 8) {
                         var moduleNameText = moduleNameExpr.text;
@@ -26410,7 +26828,7 @@ var ts;
                         }
                     }
                 }
-                else if (node.kind === 206 && node.name.kind === 8 && (node.flags & 2 || ts.isDeclarationFile(file))) {
+                else if (node.kind === 208 && node.name.kind === 8 && (node.flags & 2 || ts.isDeclarationFile(file))) {
                     ts.forEachChild(node.body, function (node) {
                         if (ts.isExternalModuleImportEqualsDeclaration(node) &&
                             ts.getExternalModuleImportEqualsDeclarationExpression(node).kind === 8) {
@@ -26669,8 +27087,13 @@ var ts;
             type: "boolean"
         },
         {
+            name: "skipDefaultLibCheck",
+            type: "boolean"
+        },
+        {
             name: "out",
             type: "string",
+            isFilePath: true,
             description: ts.Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: ts.Diagnostics.FILE
         },
@@ -26889,7 +27312,7 @@ var ts;
         var errors = [];
         return {
             options: getCompilerOptions(),
-            fileNames: getFiles(),
+            fileNames: getFileNames(),
             errors: errors
         };
         function getCompilerOptions() {
@@ -26933,23 +27356,24 @@ var ts;
             }
             return options;
         }
-        function getFiles() {
-            var files = [];
+        function getFileNames() {
+            var fileNames = [];
             if (ts.hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
-                    var files = ts.map(json["files"], function (s) { return ts.combinePaths(basePath, s); });
+                    fileNames = ts.map(json["files"], function (s) { return ts.combinePaths(basePath, s); });
                 }
             }
             else {
-                var sysFiles = host.readDirectory(basePath, ".ts");
+                var exclude = json["exclude"] instanceof Array ? ts.map(json["exclude"], ts.normalizeSlashes) : undefined;
+                var sysFiles = host.readDirectory(basePath, ".ts", exclude);
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!ts.fileExtensionIs(name, ".d.ts") || !ts.contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        files.push(name);
+                        fileNames.push(name);
                     }
                 }
             }
-            return files;
+            return fileNames;
         }
     }
     ts.parseConfigFile = parseConfigFile;

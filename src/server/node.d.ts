@@ -584,9 +584,9 @@ declare module NodeJS {
         export interface Response extends Message {
             request_seq: number;
             success: boolean;
-            /** Contains error message if success == false. */
+            /** Contains error message if success === false. */
             message?: string;
-            /** Contains message body if success == true. */
+            /** Contains message body if success === true. */
             body?: any;
         }
 

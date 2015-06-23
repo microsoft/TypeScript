@@ -110,6 +110,7 @@ class ProjectRunner extends RunnerBase {
                 else if (url.indexOf(diskProjectPath) === 0) {
                     // Replace the disk specific path into the project root path
                     url = url.substr(diskProjectPath.length);
+                    // TODO: should be '!=='?
                     if (url.charCodeAt(0) != ts.CharacterCodes.slash) {
                         url = "/" + url;
                     }
@@ -240,7 +241,7 @@ class ProjectRunner extends RunnerBase {
                 if (Harness.Compiler.isJS(fileName)) {
                     // Make sure if there is URl we have it cleaned up
                     var indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
-                    if (indexOfSourceMapUrl != -1) {
+                    if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
                 }
@@ -323,9 +324,8 @@ class ProjectRunner extends RunnerBase {
                 sourceFile => {
                     return { unitName: sourceFile.fileName, content: sourceFile.text };
                 });
-            var diagnostics = ts.map(compilerResult.errors, error => Harness.Compiler.getMinimalDiagnostic(error));
 
-            return Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
+            return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }
 
         var name = 'Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName;

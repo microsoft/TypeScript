@@ -11,7 +11,7 @@ class C<T> {
 class D<T> extends C<string> {
 >D : D<T>
 >T : T
->C : C<T>
+>C : C<string>
 
     y: T;
 >y : T
