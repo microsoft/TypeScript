@@ -3142,30 +3142,41 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             return;
                         }
 
-                        let paramName = parameter.name;
+                        let { name: paramName, initializer } = parameter;
                         if (isBindingPattern(paramName)) {
-                            // In cases where a binding patternm is simply '[]' or '{}',
-                            // we don't want to emit anything.
-                            if (paramName.elements.length > 0) {
+                            // In cases where a binding pattern is simply '[]' or '{}',
+                            // we usually don't want to emit a var declaration; however, in the presence
+                            // of an initializer, we must emit that expression to preserve side effects.
+                            let hasBindingElements = paramName.elements.length > 0;
+                            if (hasBindingElements || initializer) {
                                 writeLine();
                                 write("var ");
-                                emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+
+                                if (hasBindingElements) {
+                                    emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                                }
+                                else {
+                                    emit(tempParameters[tempIndex]);
+                                    write(" = ");
+                                    emit(initializer);
+                                }
+
                                 write(";");
                                 tempIndex++;
                             }
                         }
-                        else if (parameter.initializer) {
+                        else if (initializer) {
                             writeLine();
                             emitStart(parameter);
                             write("if (");
-                            emitNodeWithoutSourceMap(parameter.name);
+                            emitNodeWithoutSourceMap(paramName);
                             write(" === void 0)");
                             emitEnd(parameter);
                             write(" { ");
                             emitStart(parameter);
-                            emitNodeWithoutSourceMap(parameter.name);
+                            emitNodeWithoutSourceMap(paramName);
                             write(" = ");
-                            emitNodeWithoutSourceMap(parameter.initializer);
+                            emitNodeWithoutSourceMap(initializer);
                             emitEnd(parameter);
                             write("; }");
                         }
