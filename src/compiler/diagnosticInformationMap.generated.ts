@@ -395,7 +395,7 @@ namespace ts {
         Base_constructors_must_all_have_the_same_return_type: { code: 2510, category: DiagnosticCategory.Error, key: "Base constructors must all have the same return type." },
         Cannot_create_an_instance_of_the_abstract_class_0: { code: 2511, category: DiagnosticCategory.Error, key: "Cannot create an instance of the abstract class '{0}'." },
         Overload_signatures_must_all_be_abstract_or_not_abstract: { code: 2512, category: DiagnosticCategory.Error, key: "Overload signatures must all be `abstract` or not `abstract." },
-        Abstract_method_0_1_cannot_be_called_via_super_expression: { code: 2513, category: DiagnosticCategory.Error, key: "Abstract method '{0}.{1}' cannot be called via super expression." },
+        Abstract_method_0_1_cannot_be_accessed_via_super_expression: { code: 2513, category: DiagnosticCategory.Error, key: "Abstract method '{0}.{1}' cannot be accessed via super expression." },
         Classes_containing_abstract_functions_must_be_marked_abstract: { code: 2514, category: DiagnosticCategory.Error, key: "Classes containing abstract functions must be marked abstract." },
         Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2: { code: 2515, category: DiagnosticCategory.Error, key: "Non-abstract class '{0}' does not implement inherited abstract member '{1}.{2}'." },
         All_declarations_of_an_abstract_method_must_be_consecutive: { code: 2516, category: DiagnosticCategory.Error, key: "All declarations of an abstract method must be consecutive." },
