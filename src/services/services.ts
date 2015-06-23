@@ -2985,8 +2985,8 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
-                if (containingObjectLiteral) {
+                let containingObjectLiteral = <ObjectLiteralExpression>getContainingObjectLiteralOrBindingPatternIfApplicableForCompletion(contextToken);
+                if (containingObjectLiteral && containingObjectLiteral.kind === SyntaxKind.ObjectLiteralExpression) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
@@ -3187,7 +3187,7 @@ namespace ts {
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(contextToken: Node): ObjectLiteralExpression {
+            function getContainingObjectLiteralOrBindingPatternIfApplicableForCompletion(contextToken: Node): ObjectLiteralExpression | BindingPattern {
                 // The locations in an object literal expression that
                 // are applicable for completion are property name definition locations.
                 if (contextToken) {
@@ -3195,8 +3195,8 @@ namespace ts {
                         case SyntaxKind.OpenBraceToken:  // let x = { |
                         case SyntaxKind.CommaToken:      // let x = { a: 0, |
                             let parent = contextToken.parent;
-                            if (parent && parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                                return <ObjectLiteralExpression>parent;
+                            if (parent && (parent.kind === SyntaxKind.ObjectLiteralExpression || parent.kind === SyntaxKind.ObjectBindingPattern)) {
+                                return <ObjectLiteralExpression | BindingPattern>parent;
                             }
                             break;
                     }
