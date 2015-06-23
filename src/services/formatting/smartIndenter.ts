@@ -26,7 +26,7 @@ namespace ts.formatting {
                 precedingToken.kind === SyntaxKind.TemplateHead ||
                 precedingToken.kind === SyntaxKind.TemplateMiddle ||
                 precedingToken.kind === SyntaxKind.TemplateTail;
-            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position &&  precedingToken.end > position) {
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
                 return 0;
             }
 
@@ -65,6 +65,10 @@ namespace ts.formatting {
                 let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
+                }
+                actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
+                if (actualIndentation !== Value.Unknown) {
+                    return actualIndentation + options.IndentSize;
                 }
 
                 previous = current;
@@ -119,6 +123,10 @@ namespace ts.formatting {
                 if (useActualIndentation) {
                     // try to fetch actual indentation for current node from source text
                     let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    if (actualIndentation !== Value.Unknown) {
+                        return actualIndentation + indentationDelta;
+                    }
+                    actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -284,6 +292,41 @@ namespace ts.formatting {
             function getActualIndentationFromList(list: Node[]): number {
                 let index = indexOf(list, node);
                 return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
+            }
+        }
+
+        function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
+            // actual indentation should not be used when:
+            // - node is close parenthesis - this is the end of the expression
+            // - node is property access expression
+            if (node.kind !== SyntaxKind.CloseParenToken &&
+                node.kind !== SyntaxKind.PropertyAccessExpression &&
+                node.parent && (
+                node.parent.kind === SyntaxKind.CallExpression ||
+                node.parent.kind === SyntaxKind.NewExpression)) {
+
+                let parentExpression = (<CallExpression | NewExpression>node.parent).expression;
+                let startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>parentExpression);
+
+                if (parentExpression === startingExpression) {
+                    return Value.Unknown;
+                }
+
+                let parentExpressionEnd = sourceFile.getLineAndCharacterOfPosition(parentExpression.end);
+                let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
+
+                if (parentExpressionEnd.line === startingExpressionEnd.line) {
+                    return Value.Unknown;
+                }
+
+                return findColumnForFirstNonWhitespaceCharacterInLine(parentExpressionEnd, sourceFile, options);
+            }
+            return Value.Unknown;
+            
+            function getStartingExpression(expression: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
+                while (expression.expression)
+                    expression = <PropertyAccessExpression | CallExpression | ElementAccessExpression>expression.expression;
+                return expression;
             }
         }
 
