@@ -42395,6 +42395,9 @@ var ts;
                 }
             }
             function classifyToken(token) {
+                if (ts.nodeIsMissing(token)) {
+                    return;
+                }
                 var tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
                 var tokenWidth = token.end - tokenStart;
                 ts.Debug.assert(tokenWidth >= 0);
