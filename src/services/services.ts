@@ -3187,15 +3187,14 @@ namespace ts {
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
-                // The locations in an object literal expression that are applicable for completion are property name definition locations.
-
-                if (previousToken) {
-                    let parent = previousToken.parent;
-
-                    switch (previousToken.kind) {
+            function getContainingObjectLiteralApplicableForCompletion(contextToken: Node): ObjectLiteralExpression {
+                // The locations in an object literal expression that
+                // are applicable for completion are property name definition locations.
+                if (contextToken) {
+                    switch (contextToken.kind) {
                         case SyntaxKind.OpenBraceToken:  // let x = { |
                         case SyntaxKind.CommaToken:      // let x = { a: 0, |
+                            let parent = contextToken.parent;
                             if (parent && parent.kind === SyntaxKind.ObjectLiteralExpression) {
                                 return <ObjectLiteralExpression>parent;
                             }
