@@ -1,7 +1,7 @@
 /// <reference path="checker.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     interface ModuleElementDeclarationEmitInfo {
         node: Node;
         outputPos: number;
@@ -709,7 +709,12 @@ module ts {
         function writeModuleDeclaration(node: ModuleDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            write("module ");
+            if (node.flags & NodeFlags.Namespace) {
+                write("namespace ");
+            }
+            else {
+                write("module ");
+            }
             writeTextOfNode(currentSourceFile, node.name);
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;

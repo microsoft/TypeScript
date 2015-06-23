@@ -1,5 +1,6 @@
 // @target:es5
 // @module:commonjs
+// @experimentaldecorators: true
 // @filename: a.ts
 
 // from #3108

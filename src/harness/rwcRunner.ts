@@ -1,6 +1,5 @@
 /// <reference path='harness.ts'/>
 /// <reference path='runnerbase.ts' />
-/// <reference path='syntacticCleaner.ts' />
 /// <reference path='loggedIO.ts' />
 /// <reference path='..\compiler\commandLineParser.ts'/>
 
@@ -75,7 +74,7 @@ module RWC {
                     });
 
                     // Add files to compilation
-                    for(let fileRead of ioLog.filesRead) {
+                    for (let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
                         var resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
                         var inInputList = ts.forEach(inputFiles, inputFile => inputFile.unitName === resolvedPath);
@@ -107,14 +106,14 @@ module RWC {
                     opts.options.noLib = true;
 
                     // Emit the results
-                    compilerOptions = harnessCompiler.compileFiles(inputFiles, otherFiles, compileResult => {
-                        compilerResult = compileResult;
-                        },
+                    compilerOptions = harnessCompiler.compileFiles(
+                        inputFiles,
+                        otherFiles,
+                        newCompilerResults => { compilerResult = newCompilerResults; },
                         /*settingsCallback*/ undefined, opts.options,
-                        // Since all Rwc json file specified current directory in its json file, we need to pass this information to compilerHost
-                        // so that when the host is asked for current directory, it should give the value from json rather than from process
-                        currentDirectory,
-                        /*assertInvariants:*/ false);
+                        // Since each RWC json file specifies its current directory in its json file, we need
+                        // to pass this information in explicitly instead of acquiring it from the process.
+                        currentDirectory);
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
@@ -132,7 +131,7 @@ module RWC {
 
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
-                    return Harness.Compiler.collateOutputs(compilerResult.files, s => SyntacticCleaner.clean(s));
+                    return Harness.Compiler.collateOutputs(compilerResult.files);
                 }, false, baselineOpts);
             });
 

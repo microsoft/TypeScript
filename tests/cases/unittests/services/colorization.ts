@@ -66,7 +66,6 @@ describe('Colorization', function () {
 
     describe("test getClassifications", function () {
         it("Returns correct token classes", function () {
-            debugger;
             testLexicalClassification("var x: string = \"foo\"; //Hello",
                 ts.EndOfLineState.None,
                 keyword("var"),
@@ -138,7 +137,6 @@ describe('Colorization', function () {
         });
 
         it("correctly classifies the continuing line of a multi-line string ending in one backslash", function () {
-            debugger;
             testLexicalClassification("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),

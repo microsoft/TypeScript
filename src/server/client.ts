@@ -1,6 +1,6 @@
 /// <reference path="session.ts" />
  
-module ts.server {
+namespace ts.server {
 
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
@@ -171,6 +171,21 @@ module ts.server {
                 documentation: [{ kind: "text", text: response.body.documentation }]
             };
         }
+
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
+            var args: protocol.ProjectInfoRequestArgs = {
+                file: fileName,
+                needFileNameList: needFileNameList
+            };
+
+            var request = this.processRequest<protocol.ProjectInfoRequest>(CommandNames.ProjectInfo, args);
+            var response = this.processResponse<protocol.ProjectInfoResponse>(request);
+
+            return {
+                configFileName: response.body.configFileName,
+                fileNameList: response.body.fileNameList
+            };
+        }
         
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
@@ -204,7 +219,7 @@ module ts.server {
 
             var request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             var response = this.processResponse<protocol.CompletionDetailsResponse>(request);
-            Debug.assert(response.body.length == 1, "Unexpected length of completion details response body.");
+            Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
             return response.body[0];
         }
 
@@ -414,8 +429,8 @@ module ts.server {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.fileName !== fileName ||
                 this.lastRenameEntry.position !== position ||
-                this.lastRenameEntry.findInStrings != findInStrings ||
-                this.lastRenameEntry.findInComments != findInComments) {
+                this.lastRenameEntry.findInStrings !== findInStrings ||
+                this.lastRenameEntry.findInComments !== findInComments) {
                 this.getRenameInfo(fileName, position, findInStrings, findInComments);
             }
 

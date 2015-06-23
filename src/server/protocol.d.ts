@@ -1,7 +1,7 @@
 /** 
   * Declaration module describing the TypeScript Server protocol 
   */
-declare module ts.server.protocol {
+declare namespace ts.server.protocol {
     /** 
       * A TypeScript Server message 
       */
@@ -67,12 +67,12 @@ declare module ts.server.protocol {
         command: string;
 
         /** 
-          * Contains error message if success == false. 
+          * Contains error message if success === false. 
           */
         message?: string;
 
         /**
-          * Contains message body if success == true.
+          * Contains message body if success === true.
           */
         body?: any;
     }
@@ -85,6 +85,45 @@ declare module ts.server.protocol {
           * The file for the request (absolute pathname required).
           */
         file: string;
+    }
+
+    /** 
+      * Arguments for ProjectInfoRequest request.
+      */
+    export interface ProjectInfoRequestArgs extends FileRequestArgs {
+        /**
+          * Indicate if the file name list of the project is needed
+          */
+        needFileNameList: boolean;
+    }
+
+    /**
+      * A request to get the project information of the current file
+      */
+    export interface ProjectInfoRequest extends Request {
+        arguments: ProjectInfoRequestArgs
+    }
+
+    /** 
+      * Response message body for "projectInfo" request
+      */
+    export interface ProjectInfo {
+        /**
+          * For configured project, this is the normalized path of the 'tsconfig.json' file
+          * For inferred project, this is undefined
+          */
+        configFileName: string;
+        /**
+          * The list of normalized file name in the project, including 'lib.d.ts'
+          */
+        fileNameList?: string[];
+    }
+
+    /** 
+      * Response message for "projectInfo" request
+      */
+    export interface ProjectInfoResponse extends Response {
+        body?: ProjectInfo;
     }
 
     /**

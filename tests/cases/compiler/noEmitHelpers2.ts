@@ -1,4 +1,5 @@
 // @noemithelpers: true
+// @experimentaldecorators: true
 // @emitdecoratormetadata: true
 // @target: es5
 

@@ -12,7 +12,6 @@ interface RegExp { }
 interface IArguments { }
 
 //// [b.ts]
-/// <reference path="a.ts" />
 declare function dec(t, k, d);
 
 class C {
@@ -32,7 +31,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
 };
-/// <reference path="a.ts" />
 var C = (function () {
     function C() {
     }

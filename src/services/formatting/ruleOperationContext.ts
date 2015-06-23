@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
 
     export class RuleOperationContext {
         private customContextChecks: { (context: FormattingContext): boolean; }[];
@@ -14,7 +14,7 @@ module ts.formatting {
 
 
         public IsAny(): boolean {
-            return this == RuleOperationContext.Any;
+            return this === RuleOperationContext.Any;
         }
 
         public  InContext(context: FormattingContext): boolean {
