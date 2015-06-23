@@ -78,6 +78,40 @@ namespace ts {
         return node.end - node.pos;
     }
 
+    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer: (a: T, b: T) => boolean): boolean {
+        if (!arr1 || !arr2) {
+            return arr1 === arr2;
+        }
+
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < arr1.length; ++i) {
+            if (!comparer(arr1[i], arr2[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }    
+   
+    export function hasResolvedModuleName(sourceFile: SourceFile, moduleName: LiteralExpression): boolean {
+        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleName.text);
+    }
+
+    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleName: LiteralExpression): string {
+        return sourceFile.resolvedModules && sourceFile.resolvedModules[moduleName.text];
+    }
+
+    export function setResolvedModuleName(sourceFile: SourceFile, moduleName: LiteralExpression, resolvedFileName: string): void {
+        if (!sourceFile.resolvedModules) {
+            sourceFile.resolvedModules = {};
+        }
+
+        sourceFile.resolvedModules[moduleName.text] = resolvedFileName;
+    }
+
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
