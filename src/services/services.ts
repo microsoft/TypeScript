@@ -6304,6 +6304,10 @@ namespace ts {
             }
 
             function classifyToken(token: Node): void {
+                if (nodeIsMissing(token)) {
+                    return;
+                }
+
                 let tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
 
                 let tokenWidth = token.end - tokenStart;
