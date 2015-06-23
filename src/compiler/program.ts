@@ -613,6 +613,8 @@ namespace ts {
 
                 if (existingResolutions && hasProperty(existingResolutions, moduleNameExpr.text)) {
                     let fileName = existingResolutions[moduleNameExpr.text];
+                    // use existing resolution
+                    setResolvedModuleName(file, moduleNameExpr, fileName);
                     if (fileName) {
                         findModuleSourceFile(fileName, moduleNameExpr);
                     }
