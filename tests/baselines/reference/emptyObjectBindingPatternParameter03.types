@@ -5,7 +5,7 @@ function f({}, a) {
 >f : ({}: {}, a: any) => void
 >a : any
 
-	var x, y, z;
+    var x, y, z;
 >x : any
 >y : any
 >z : any
