@@ -6707,7 +6707,7 @@ namespace ts {
                     // Get the declaring the class instance type for the error message.
                     declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
-                    error(errorNode, Diagnostics.Abstract_method_0_1_cannot_be_called_via_super_expression, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Abstract_method_0_1_cannot_be_called_via_super_expression, typeToString(declaringClass), symbolToString(prop));
                     return false;
                 }
             }
