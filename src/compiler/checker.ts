@@ -6769,9 +6769,20 @@ module ts {
             let argCount = getEffectiveArgumentCount(node, args, signature);
             for (let i = 0; i < argCount; i++) {
                 let arg = getEffectiveArgument(node, args, i);
-                if (!arg || arg.kind !== SyntaxKind.OmittedExpression) {
+                // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
+                if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
                     let paramType = getTypeAtPosition(signature, i);
-                    let argType = getEffectiveArgumentType(node, i, arg, paramType, excludeArgument, inferenceMapper, /*reportErrors*/ false);
+                    let argType = getEffectiveArgumentType(node, i, arg);
+
+                    // If the effective argument type is 'undefined', there is no synthetic type 
+                    // for the argument. In that case, we should check the argument.
+                    if (argType === undefined) {
+                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                        // context sensitive function expressions as wildcards
+                        let mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                        argType = checkExpressionWithContextualType(arg, paramType, mapper);
+                    }
+
                     inferTypes(context, argType, paramType);
                 }
             }
@@ -6830,10 +6841,19 @@ module ts {
             let argCount = getEffectiveArgumentCount(node, args, signature);
             for (let i = 0; i < argCount; i++) {
                 let arg = getEffectiveArgument(node, args, i);
-                if (!arg || arg.kind !== SyntaxKind.OmittedExpression) {
+                // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
+                if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
                     // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
                     let paramType = getTypeAtPosition(signature, i);
-                    let argType = getEffectiveArgumentType(node, i, arg, paramType, excludeArgument, /*inferenceMapper*/ undefined, reportErrors);
+                    let argType = getEffectiveArgumentType(node, i, arg);
+                    
+                    // If the effective argument type is 'undefined', there is no synthetic type 
+                    // for the argument. In that case, we should check the argument.
+                    if (argType === undefined) {
+                        argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
+                            ? getStringLiteralType(<StringLiteral>arg)
+                            : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    }
 
                     // Use argument expression as error location when reporting errors
                     let errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
@@ -7126,7 +7146,7 @@ module ts {
         /**
           * Gets the effective argument type for an argument in a call expression.
           */
-        function getEffectiveArgumentType(node: CallLikeExpression, argIndex: number, arg: Expression, paramType: Type, excludeArgument: boolean[], inferenceMapper: TypeMapper, reportErrors: boolean): Type {
+        function getEffectiveArgumentType(node: CallLikeExpression, argIndex: number, arg: Expression): Type {
             // Decorators provide special arguments, a tagged template expression provides 
             // a special first argument, and string literals get string literal types
             // unless we're reporting errors
@@ -7136,20 +7156,10 @@ module ts {
             else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
                 return globalTemplateStringsArrayType;
             }
-            else if (!inferenceMapper && !reportErrors && arg.kind === SyntaxKind.StringLiteral) {
-                return getStringLiteralType(<StringLiteral>arg);
-            }
-            else {
-                let mapper: TypeMapper;
-                if (inferenceMapper) {
-                    mapper = excludeArgument && excludeArgument[argIndex] !== undefined ? identityMapper : inferenceMapper; 
-                }
-                else {
-                    mapper = excludeArgument && excludeArgument[argIndex] ? identityMapper : undefined;
-                }
 
-                return checkExpressionWithContextualType(arg, paramType, mapper);
-            }
+            // This is not a synthetic argument, so we return 'undefined'
+            // to signal that the caller needs to check the argument.            
+            return undefined;
         }
         
         /**
