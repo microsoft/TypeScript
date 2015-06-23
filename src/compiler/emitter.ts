@@ -5571,7 +5571,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 decreaseIndent();
                 writeLine();
                 write("}"); // return
-                emitTempDeclarations(/*newLine*/ true)
+                emitTempDeclarations(/*newLine*/ true);
             }
 
             function emitSetters(exportStarFunction: string) {

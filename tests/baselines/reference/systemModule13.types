@@ -1,0 +1,32 @@
+=== tests/cases/compiler/systemModule13.ts ===
+
+export let [x,y,z] = [1, 2, 3];
+>x : number
+>y : number
+>z : number
+>[1, 2, 3] : [number, number, number]
+>1 : number
+>2 : number
+>3 : number
+
+export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
+>a : any
+>z0 : boolean
+>b : any
+>c : any
+>z1 : string
+>{a: true, b: {c: "123"}} : { a: boolean; b: { c: string; }; }
+>a : boolean
+>true : boolean
+>b : { c: string; }
+>{c: "123"} : { c: string; }
+>c : string
+>"123" : string
+
+for ([x] of [[1]]) {}
+>[x] : number[]
+>x : number
+>[[1]] : number[][]
+>[1] : number[]
+>1 : number
+

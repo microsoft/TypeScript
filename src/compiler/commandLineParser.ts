@@ -120,6 +120,7 @@ namespace ts {
         {
             name: "out",
             type: "string",
+            isFilePath: true,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
         },
