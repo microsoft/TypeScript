@@ -1,7 +1,8 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(14,26): error TS2513: Abstract method 'foo.B' cannot be called via super expression.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(14,26): error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(14,41): error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts (1 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts (2 errors) ====
     
     class A {
         foo() { return 1; }
@@ -15,9 +16,11 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     class C extends B {
         foo() { return 2; }
-        qux() { return super.foo(); } // error, super is abstract
+        qux() { return super.foo() || super.foo; } // 2 errors, foo is abstract
                              ~~~
-!!! error TS2513: Abstract method 'foo.B' cannot be called via super expression.
+!!! error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
+                                            ~~~
+!!! error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
         norf() { return super.bar(); }
     }
     

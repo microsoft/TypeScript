@@ -4,7 +4,7 @@ class A {
 }
 
 abstract class B {
-    foo(): number { return bar(); }
+    foo(): number { return this.bar(); }
     abstract bar() : number;
 }
 
@@ -43,8 +43,8 @@ abstract class G {
     y : number;
     abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
 
-    abstract nom() boolean;
-    nom(x : number) boolean; // error -- use of modifier abstract must match on all overloads.
+    abstract nom(): boolean;
+    nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
 }
 
 class H { // error -- not declared abstract
@@ -65,7 +65,7 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function () { return bar(); };
+    B.prototype.foo = function () { return this.bar(); };
     return B;
 })();
 new B; // error
@@ -112,8 +112,6 @@ var F = (function (_super) {
 var G = (function () {
     function G() {
     }
-    G.prototype.nom = ;
-    G.prototype.nom = ;
     return G;
 })();
 var H = (function () {

@@ -12,7 +12,7 @@ abstract class B extends A {
 
 class C extends B {
     foo() { return 2; }
-    qux() { return super.foo(); } // error, super is abstract
+    qux() { return super.foo() || super.foo; } // 2 errors, foo is abstract
     norf() { return super.bar(); }
 }
 
@@ -54,7 +54,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     C.prototype.foo = function () { return 2; };
-    C.prototype.qux = function () { return _super.prototype.foo.call(this); }; // error, super is abstract
+    C.prototype.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
     C.prototype.norf = function () { return _super.prototype.bar.call(this); };
     return C;
 })(B);

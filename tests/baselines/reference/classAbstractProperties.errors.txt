@@ -2,10 +2,11 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(3,12): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(4,15): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(5,13): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(10,13): error TS1237: 'private' modifier cannot be used with 'abstract' modifier.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(7,5): error TS1236: 'abstract' modifier can only appear on a class or method declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(12,13): error TS1237: 'private' modifier cannot be used with 'abstract' modifier.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts (5 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts (6 errors) ====
     abstract class A {
         abstract x : number;
         ~~~~~~~~
@@ -18,6 +19,10 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
 !!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
         private abstract w : number;
                 ~~~~~~~~
+!!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
+        
+        abstract m: () => void; 
+        ~~~~~~~~
 !!! error TS1236: 'abstract' modifier can only appear on a class or method declaration.
         
         abstract foo_x() : number;
