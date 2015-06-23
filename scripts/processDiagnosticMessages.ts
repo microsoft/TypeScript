@@ -143,7 +143,7 @@ module NameGenerator {
             }
 
             while (true) {
-                var newName = name + "@" + suffix;
+                var newName = name + "$$" + suffix;
                 suffix++;
 
                 // Check if we've synthesized a unique name, and if so
