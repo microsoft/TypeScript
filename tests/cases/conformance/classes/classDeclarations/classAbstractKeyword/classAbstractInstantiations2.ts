@@ -3,7 +3,7 @@ class A {
 }
 
 abstract class B {
-    foo(): number { return bar(); }
+    foo(): number { return this.bar(); }
     abstract bar() : number;
 }
 
@@ -42,8 +42,8 @@ abstract class G {
     y : number;
     abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
 
-    abstract nom() boolean;
-    nom(x : number) boolean; // error -- use of modifier abstract must match on all overloads.
+    abstract nom(): boolean;
+    nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
 }
 
 class H { // error -- not declared abstract

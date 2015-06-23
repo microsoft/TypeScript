@@ -6701,10 +6701,12 @@ namespace ts {
                     return false;
                 }
 
-                // In a super call, the methods cannot be accessed if the method is abstract.
-                // Note that a member cannot be private and abstract -- this is checked elsewhere.
                 if (flags & NodeFlags.Abstract) {
-                    // Get the declaring the class instance type for the error message.
+                    // A method cannot be accessed in a super call if the method is abstract.
+                    // This error could mask a private property access error. But, a member 
+                    // cannot simultaneously be private and abstract, so this will trigger an
+                    // additional error elsewhere.
+
                     declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
                     error(errorNode, Diagnostics.Abstract_method_0_1_cannot_be_accessed_via_super_expression, typeToString(declaringClass), symbolToString(prop));
@@ -9145,7 +9147,7 @@ namespace ts {
             error(signatureDeclarationNode, Diagnostics.Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature);
         }
 
-        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags) : NodeFlags {
+        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
             if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
                 if (!(flags & NodeFlags.Ambient)) {
@@ -9192,7 +9194,7 @@ namespace ts {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & NodeFlags.Abstract) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract, "abstract");
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract);
                         }
                     });
                 }
@@ -10732,7 +10734,7 @@ namespace ts {
 
             // Classes containing abstract methods must be marked abstract
             if (!(node.flags & NodeFlags.Abstract) && forEach(node.members, element => element.flags & NodeFlags.Abstract)) {
-                error(node, Diagnostics.Classes_containing_abstract_functions_must_be_marked_abstract);
+                error(node, Diagnostics.Classes_containing_abstract_methods_must_be_marked_abstract);
             }
 
             if (produceDiagnostics) {
@@ -10785,8 +10787,8 @@ namespace ts {
 
                     // It is an error to inherit an abstract member without implementing it or being declared abstract.
                     if ((baseDeclarationFlags & NodeFlags.Abstract) && !(derivedClassDecl.flags & NodeFlags.Abstract)) {
-                        error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_2,
-                            typeToString(type), typeToString(baseType), symbolToString(baseProperty));
+                        error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                            typeToString(type), symbolToString(baseProperty), typeToString(baseType));
                     }
                 } 
                 else { 
@@ -12821,7 +12823,11 @@ namespace ts {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
                         else if (flags & NodeFlags.Abstract) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
+                            if (modifier.kind === SyntaxKind.PrivateKeyword) { 
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract")}
+                            else {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
+                            }
                         }
                         flags |= modifierToFlag(modifier.kind);
                         break;

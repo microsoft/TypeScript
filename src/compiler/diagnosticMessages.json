@@ -1571,11 +1571,11 @@
         "category": "Error",
         "code": 2513
     },
-    "Classes containing abstract functions must be marked abstract.": {
+    "Classes containing abstract methods must be marked abstract.": {
         "category": "Error",
         "code": 2514
     },
-    "Non-abstract class '{0}' does not implement inherited abstract member '{1}.{2}'.": {
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515
     },
