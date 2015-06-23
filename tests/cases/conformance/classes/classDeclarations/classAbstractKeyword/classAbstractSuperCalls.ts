@@ -11,7 +11,7 @@ abstract class B extends A {
 
 class C extends B {
     foo() { return 2; }
-    qux() { return super.foo(); } // error, super is abstract
+    qux() { return super.foo() || super.foo; } // 2 errors, foo is abstract
     norf() { return super.bar(); }
 }
 

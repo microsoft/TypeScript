@@ -1,4 +1,0 @@
-class abstract {
-
-    abstract(): void { }
-}
