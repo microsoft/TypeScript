@@ -690,3 +690,9 @@ task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function
     });
     ex.run();
 }, { async: true });
+
+desc("Updates the sublime plugin's tsserver");
+task("update-sublime", [serverFile], function() {
+    jake.cpR(serverFile, "../TypeScript-Sublime-Plugin/tsserver/");
+    jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
+});
