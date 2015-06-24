@@ -2985,21 +2985,32 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let containingObjectLiteral = <ObjectLiteralExpression>getContainingObjectLiteralOrBindingPatternIfApplicableForCompletion(contextToken);
-                if (containingObjectLiteral && containingObjectLiteral.kind === SyntaxKind.ObjectLiteralExpression) {
+                let objectLikeContainer = getContainingObjectLiteralOrBindingPatternIfApplicableForCompletion(contextToken);
+                if (objectLikeContainer) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
 
-                    let contextualType = typeChecker.getContextualType(containingObjectLiteral);
-                    if (!contextualType) {
+                    let typeForObject: Type;
+                    let existingMembers: Declaration[];
+
+                    if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                        typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                        existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
+                    }
+                    else {
+                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                        existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                    }
+
+                    if (!typeForObject) {
                         return false;
                     }
 
-                    let contextualTypeMembers = typeChecker.getPropertiesOfType(contextualType);
-                    if (contextualTypeMembers && contextualTypeMembers.length > 0) {
+                    let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                    if (typeMembers && typeMembers.length > 0) {
                         // Add filtered items to the completion list
-                        symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
+                        symbols = filterContextualMembersList(typeMembers, existingMembers);
                     }
                 }
                 else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
@@ -3235,8 +3246,7 @@ namespace ts {
                                 containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
                                 containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                                containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
-                                containingNodeKind === SyntaxKind.ObjectBindingPattern;                     // function func({ x, y|
+                                containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
                                                                                                           
                         case SyntaxKind.DotToken:
                             return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
@@ -3254,8 +3264,7 @@ namespace ts {
                         case SyntaxKind.OpenBraceToken:
                             return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
-                                containingNodeKind === SyntaxKind.TypeLiteral ||                            // let x : { |
-                                containingNodeKind === SyntaxKind.ObjectBindingPattern;                     // function func({ x|
+                                containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&

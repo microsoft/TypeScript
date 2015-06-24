@@ -11993,7 +11993,7 @@ namespace ts {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
 
-                // Intentional fall-through
+                // fall through
                 case SyntaxKind.NumericLiteral:
                     // index access
                     if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
@@ -12058,6 +12058,10 @@ namespace ts {
             if (isDeclarationName(node)) {
                 let symbol = getSymbolInfo(node);
                 return symbol && getTypeOfSymbol(symbol);
+            }
+
+            if (isBindingPattern(node)) {
+                return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent);
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
