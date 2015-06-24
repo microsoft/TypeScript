@@ -5949,9 +5949,8 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
 
-            let classNode = isClassLike(container.parent) ? container.parent : undefined;
-            if (classNode) {
-                let symbol = getSymbolOfNode(classNode);
+            if (isClassLike(container.parent)) {
+                let symbol = getSymbolOfNode(container.parent);
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
