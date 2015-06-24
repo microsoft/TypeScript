@@ -11926,7 +11926,7 @@ namespace ts {
             }
 
             if (entityName.parent.kind === SyntaxKind.TypePredicate) {
-                return resolveEntityName(<Identifier>entityName, /* meanings */ SymbolFlags.FunctionScopedVariable);
+                return resolveEntityName(<Identifier>entityName, /*meaning*/ SymbolFlags.FunctionScopedVariable);
             }
 
             // Do we want to return undefined here?
