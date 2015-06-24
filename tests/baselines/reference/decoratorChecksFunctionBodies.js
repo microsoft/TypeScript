@@ -5,7 +5,7 @@ function func(s: string): void {
 }
 
 class A {
-    @(x => {
+    @((x, p) => {
         var a = 3;
         func(a);
         return x; 
@@ -34,7 +34,7 @@ var A = (function () {
     };
     Object.defineProperty(A.prototype, "m",
         __decorate([
-            (function (x) {
+            (function (x, p) {
                 var a = 3;
                 func(a);
                 return x;

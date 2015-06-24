@@ -797,7 +797,7 @@ namespace ts {
         template: LiteralExpression | TemplateExpression;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
@@ -1891,7 +1891,7 @@ namespace ts {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-    
+
     export interface LineAndCharacter {
         line: number;
         /*

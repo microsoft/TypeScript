@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/decorators/class/decoratedClassFromExternalModule.ts] ////
 
 //// [decorated.ts]
-function decorate() { }
+function decorate(target: any) { }
 
 @decorate
 export default class Decorated { }
@@ -18,7 +18,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
 };
-function decorate() { }
+function decorate(target) { }
 let Decorated = class {
 };
 Decorated = __decorate([

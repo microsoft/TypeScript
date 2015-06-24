@@ -103,7 +103,7 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-});
+}).concat(servicesSources);
 
 var languageServiceLibrarySources = [
     "editorServices.ts",
