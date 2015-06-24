@@ -163,9 +163,13 @@ namespace ts {
 
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
         
-        let structureIsReused = oldProgram && host.hasChanges && tryReuseStructureFromOldProgram();
-
-        if (!structureIsReused) {
+        // if old program was provided by has different target module kind - assume that it cannot be reused
+        // different module kind can lead to different way of resolving modules
+        if (oldProgram && oldProgram.getCompilerOptions().module !== options.module) {
+            oldProgram = undefined;
+        }
+        
+        if (!tryReuseStructureFromOldProgram()) {
             forEach(rootNames, name => processRootFile(name, false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
@@ -218,9 +222,15 @@ namespace ts {
         }
 
         function tryReuseStructureFromOldProgram(): boolean {
+            if (!host.hasChanges) {
+                // host does not support method 'hasChanges'
+                return false;
+            }
             if (!oldProgram) {
                 return false;
             }
+            
+            Debug.assert(!oldProgram.structureIsReused);
 
             // there is an old program, check if we can reuse its structure
             let oldRootNames = oldProgram.getRootFileNames();
@@ -258,6 +268,8 @@ namespace ts {
                         // imports has changed
                         return false;
                     }
+                    // pass the cache of module resolutions from the old source file
+                    newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                 }
                 else {
                     // file has no changes - use it as is
@@ -275,6 +287,8 @@ namespace ts {
             
             files = newSourceFiles;
             
+            oldProgram.structureIsReused = true;
+                
             return true;
         }
 
@@ -576,14 +590,26 @@ namespace ts {
         
         function processImportedModules(file: SourceFile, basePath: string) {            
             collectExternalModuleReferences(file);            
-            if (file.imports.length) {
-                let allImportsInTheCache = true;
-                // check that all imports are contained in resolved modules cache
-                // if at least one of imports in not in the cache - cache needs to be reinitialized
-                for (let moduleName of file.imports) {
-                    if (!hasResolvedModuleName(file, moduleName)) {
-                        allImportsInTheCache = false;
-                        break;
+            if (file.imports.length) {               
+                let allImportsInTheCache = false;
+
+                // try to grab existing module resolutions from the old source file
+                let oldSourceFile: SourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
+                if (oldSourceFile) {
+                    file.resolvedModules = oldSourceFile.resolvedModules;
+                
+                    // check that all imports are contained in resolved modules cache
+                    // if at least one of imports in not in the cache - cache needs to be reinitialized
+                    checkImports: {
+                        if (file.resolvedModules) {
+                            for (let moduleName of file.imports) {
+                                if (!hasResolvedModuleName(file, moduleName)) {
+                                    break checkImports;
+                                }
+                            }
+
+                            allImportsInTheCache = true;
+                        }
                     }
                 }
                 

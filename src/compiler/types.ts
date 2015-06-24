@@ -1244,6 +1244,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ structureIsReused?: boolean;
     }
 
     export interface SourceMapSpan {
