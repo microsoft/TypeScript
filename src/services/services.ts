@@ -2985,7 +2985,7 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let objectLikeContainer = getContainingObjectLiteralOrBindingPatternIfApplicableForCompletion(contextToken);
+                let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
                 if (objectLikeContainer) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -3198,9 +3198,11 @@ namespace ts {
                 return false;
             }
 
-            function getContainingObjectLiteralOrBindingPatternIfApplicableForCompletion(contextToken: Node): ObjectLiteralExpression | BindingPattern {
-                // The locations in an object literal expression that
-                // are applicable for completion are property name definition locations.
+            /**
+             * Returns the immediate owning object literal or binding pattern of a context token,
+             * on the condition that one exists and that the context implies completion should be given.
+             */
+            function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | BindingPattern {
                 if (contextToken) {
                     switch (contextToken.kind) {
                         case SyntaxKind.OpenBraceToken:  // let x = { |
