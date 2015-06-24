@@ -752,8 +752,8 @@ namespace ts {
             return (<TaggedTemplateExpression>node).tag;
         }
         
-        // Will either be a CallExpression or NewExpression.
-        return (<CallExpression>node).expression;
+        // Will either be a CallExpression, NewExpression, or Decorator.
+        return (<CallExpression | Decorator>node).expression;
     }
 
     export function nodeCanBeDecorated(node: Node): boolean {
