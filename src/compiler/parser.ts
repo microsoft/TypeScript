@@ -1830,20 +1830,30 @@ namespace ts {
             }
 
             let tokenPos = scanner.getTokenPos();
+            let nextCharCode: number;
+
             nextToken();
             finishNode(node);
 
-            // Octal literals are not allowed in strict mode or ES5
-            // Note that theoretically the following condition would hold true literals like 009,
-            // which is not octal.But because of how the scanner separates the tokens, we would
-            // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
-            // We also do not need to check for negatives because any prefix operator would be part of a
-            // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
-                && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
-                && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
-
-                node.flags |= NodeFlags.OctalLiteral;
+            if (node.kind === SyntaxKind.NumericLiteral) {
+                // Octal literals are not allowed in strict mode or ES5
+                // Note that theoretically the following condition would hold true literals like 009,
+                // which is not octal.But because of how the scanner separates the tokens, we would
+                // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
+                // We also do not need to check for negatives because any prefix operator would be part of a
+                // parent unary expression.
+                if (sourceText.charCodeAt(tokenPos) === CharacterCodes._0 && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
+                    node.flags |= NodeFlags.OctalLiteral;
+                }
+                else if (token === SyntaxKind.Identifier && sourceText.charCodeAt(node.end-1) === CharacterCodes.dot) {
+                    nextCharCode = sourceText.charCodeAt(node.end);
+                    if (!isWhiteSpace(nextCharCode) && !isLineBreak(nextCharCode)) {
+                        // If we see 23.Identifier, go back 1 char to scan .Identifier 
+                        node.end = node.end - 1;
+                        scanner.setTextPos(node.end);
+                        nextToken()
+                    }
+                }
             }
 
             return node;
