@@ -1957,7 +1957,6 @@ namespace ts {
     function getExpandedCharCodes(input: string): number[] {
         let output: number[] = [];
         let length = input.length;
-        let leadSurrogate: number = undefined;
 
         for (let i = 0; i < length; i++) {
             let charCode = input.charCodeAt(i);

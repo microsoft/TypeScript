@@ -3518,7 +3518,6 @@ namespace ts {
             let syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             let indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
-                let len = indexSymbol.declarations.length;
                 for (let decl of indexSymbol.declarations) {
                     let node = <SignatureDeclaration>decl;
                     if (node.parameters.length === 1) {
@@ -8374,12 +8373,12 @@ namespace ts {
         }
 
         function checkTypeOfExpression(node: TypeOfExpression): Type {
-            let operandType = checkExpression(node.expression);
+            checkExpression(node.expression);
             return stringType;
         }
 
         function checkVoidExpression(node: VoidExpression): Type {
-            let operandType = checkExpression(node.expression);
+            checkExpression(node.expression);
             return undefinedType;
         }
 
@@ -12380,7 +12379,6 @@ namespace ts {
 
                 case SyntaxKind.StringLiteral:
                     // External module name in an import declaration
-                    let moduleName: Expression;
                     if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
                         getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                         ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) &&

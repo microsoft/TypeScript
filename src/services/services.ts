@@ -95,7 +95,6 @@ namespace ts {
 
     export module ScriptSnapshot {
         class StringScriptSnapshot implements IScriptSnapshot {
-            private _lineStartPositions: number[] = undefined;
 
             constructor(private text: string) {
             }
@@ -2910,7 +2909,6 @@ namespace ts {
             }
 
             let location = getTouchingPropertyName(sourceFile, position);
-            var target = program.getCompilerOptions().target;
 
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
