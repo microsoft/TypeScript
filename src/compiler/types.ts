@@ -1861,6 +1861,7 @@ namespace ts {
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
+        emitModuleDependencies?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
