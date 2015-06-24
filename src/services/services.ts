@@ -3576,7 +3576,7 @@ namespace ts {
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
 
             if (flags & SymbolFlags.Property) {
-                if (flags & SymbolFlags.UnionProperty) {
+                if (flags & SymbolFlags.SyntheticProperty) {
                     // If union property is result of union of non method (property/accessors/variables), it is labeled as property
                     let unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                         let rootSymbolFlags = rootSymbol.getFlags();
@@ -5078,7 +5078,7 @@ namespace ts {
 
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
                 // if symbol correspond to the union property - bail out
-                if (symbol.parent || (symbol.flags & SymbolFlags.UnionProperty)) {
+                if (symbol.parent || (symbol.flags & SymbolFlags.SyntheticProperty)) {
                     return undefined;
                 }
 
