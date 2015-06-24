@@ -5634,6 +5634,7 @@ namespace ts {
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
             let result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)
+            
             return result;
         }
 
