@@ -33,9 +33,11 @@
         "mocha": "latest",
         "chai": "latest",
         "browserify": "latest",
-        "istanbul": "latest"
+        "istanbul": "latest",
+        "coveralls": "^2.11.2",
+        "mocha-lcov-reporter": "0.0.2"
     },
     "scripts": {
-        "test": "jake runtests"
+        "test": "jake generate-code-coverage"
     }
 }

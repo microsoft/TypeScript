@@ -25,6 +25,7 @@
 /// <reference path='runnerbase.ts'/>
 
 var Buffer: BufferConstructor = require('buffer').Buffer;
+var typescript = require('./typescriptServices');
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
@@ -708,25 +709,7 @@ module Harness {
 module Harness {
     var tcServicesFileName = "typescriptServices.js";
 
-    export var libFolder: string;
-    switch (Utils.getExecutionEnvironment()) {
-        case Utils.ExecutionEnvironment.CScript:
-            libFolder = "built/local/";
-            tcServicesFileName = "built/local/typescriptServices.js";
-            break;
-        case Utils.ExecutionEnvironment.Node:
-            libFolder = "built/local/";
-            tcServicesFileName = "built/local/typescriptServices.js";
-            break;
-        case Utils.ExecutionEnvironment.Browser:
-            libFolder = "built/local/";
-            tcServicesFileName = "built/local/typescriptServices.js";
-            break;
-        default:
-            throw new Error('Unknown context');
-    }
-    export var tcServicesFile = IO.readFile(tcServicesFileName);
-
+    export var libFolder = "built/local/";
     export interface SourceMapEmitterCallback {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
     }
@@ -1735,6 +1718,3 @@ module Harness {
 
     if (Error) (<any>Error).stackTraceLimit = 1;
 }
-
-// TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval
-eval(Harness.tcServicesFile);
