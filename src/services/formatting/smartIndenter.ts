@@ -298,35 +298,49 @@ namespace ts.formatting {
         function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
             // actual indentation should not be used when:
             // - node is close parenthesis - this is the end of the expression
-            // - node is property access expression
-            if (node.kind !== SyntaxKind.CloseParenToken &&
-                node.kind !== SyntaxKind.PropertyAccessExpression &&
-                node.parent && (
+            if (node.kind === SyntaxKind.CloseParenToken) {
+                return Value.Unknown;
+            }
+
+            if (node.parent && (
                 node.parent.kind === SyntaxKind.CallExpression ||
-                node.parent.kind === SyntaxKind.NewExpression)) {
+                node.parent.kind === SyntaxKind.NewExpression) &&
+                (<CallExpression>node.parent).expression !== node) {
 
-                let parentExpression = (<CallExpression | NewExpression>node.parent).expression;
-                let startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>parentExpression);
+                let fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
+                let startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>fullCallOrNewExpression);
 
-                if (parentExpression === startingExpression) {
+                if (fullCallOrNewExpression === startingExpression) {
                     return Value.Unknown;
                 }
 
-                let parentExpressionEnd = sourceFile.getLineAndCharacterOfPosition(parentExpression.end);
+                let fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(fullCallOrNewExpression.end);
                 let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
 
-                if (parentExpressionEnd.line === startingExpressionEnd.line) {
+                if (fullCallOrNewExpressionEnd.line === startingExpressionEnd.line) {
                     return Value.Unknown;
                 }
 
-                return findColumnForFirstNonWhitespaceCharacterInLine(parentExpressionEnd, sourceFile, options);
+                return findColumnForFirstNonWhitespaceCharacterInLine(fullCallOrNewExpressionEnd, sourceFile, options);
             }
+
             return Value.Unknown;
             
-            function getStartingExpression(expression: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
-                while (expression.expression)
-                    expression = <PropertyAccessExpression | CallExpression | ElementAccessExpression>expression.expression;
-                return expression;
+            function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
+                while (true) {
+                    switch (node.kind) {
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                        case SyntaxKind.PropertyAccessExpression:
+                        case SyntaxKind.ElementAccessExpression:
+
+                            node = <PropertyAccessExpression | CallExpression | ElementAccessExpression | PropertyAccessExpression>node.expression;
+                            break;
+                        default:
+                            return node;
+                    }
+                }
+                return node;
             }
         }
 
