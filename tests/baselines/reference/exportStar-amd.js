@@ -36,6 +36,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [t2.js]
 define(["require", "exports"], function (require, exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = "hello";
     function foo() { }
     exports.foo = foo;

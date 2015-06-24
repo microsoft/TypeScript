@@ -2687,6 +2687,22 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return result;
             }
 
+            function emitEs6ExportDefaultCompat() {
+                if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
+                    if (!hasProperty(currentSourceFile.identifiers, "___esModule")) {
+                        if (languageVersion >= ScriptTarget.ES5) {
+                            // default value of configurable, enumerable, writable are `false`. 
+                            write("Object.defineProperty(exports, \"__esModule\", { value: true });");
+                            writeLine();
+                        }
+                        else {
+                            write("exports.__esModule = true;");
+                            writeLine();
+                        }
+                    }
+                }
+            }
+
             function emitExportMemberAssignment(node: FunctionLikeDeclaration | ClassDeclaration) {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
@@ -2709,25 +2725,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                     else {
                         if (node.flags & NodeFlags.Default) {
-                            if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
-                                if (languageVersion >= ScriptTarget.ES5) {
-                                    write("Object.defineProperty(exports, \"__esModule\", {");
-                                    writeLine();
-                                    increaseIndent();
-                                    // default value of configurable, enumerable, writable are `false`. 
-                                    write("value: true");
-                                    writeLine();
-                                    decreaseIndent();
-                                    write("};");
-                                    writeLine();
-                                } else {
-                                    write("exports.__esModule = true;");
-                                    writeLine();
-                                }
-                            }
+                            emitEs6ExportDefaultCompat();
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("exports[\"default\"]");
-                            } else {
+                            }
+                            else {
                                 write("exports.default");
                             }
                         }
@@ -4883,6 +4885,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             write(")");
                         }
                         else {
+                            emitEs6ExportDefaultCompat();
                             emitContainingModuleName(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("[\"default\"] = ");

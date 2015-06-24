@@ -1,4 +1,4 @@
-//// [es5-commonjs.ts]
+//// [es5-commonjs4.ts]
 
 export default class A
 {
@@ -12,9 +12,10 @@ export default class A
         return 42;
     }
 }
+export var __esModule = 1;
 
 
-//// [es5-commonjs.js]
+//// [es5-commonjs4.js]
 var A = (function () {
     function A() {
     }
@@ -23,5 +24,5 @@ var A = (function () {
     };
     return A;
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = A;
+exports.__esModule = 1;

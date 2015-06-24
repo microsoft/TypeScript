@@ -13,9 +13,7 @@ var before = func();
 function func() {
     return func;
 }
-Object.defineProperty(exports, "__esModule", {
-    value: true
-};
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = func;
 var after = func();
 
