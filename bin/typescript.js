@@ -1950,6 +1950,12 @@ var ts;
         An_export_declaration_can_only_be_used_in_a_module: { code: 1233, category: ts.DiagnosticCategory.Error, key: "An export declaration can only be used in a module." },
         An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file: { code: 1234, category: ts.DiagnosticCategory.Error, key: "An ambient module declaration is only allowed at the top level in a file." },
         A_namespace_declaration_is_only_allowed_in_a_namespace_or_module: { code: 1235, category: ts.DiagnosticCategory.Error, key: "A namespace declaration is only allowed in a namespace or module." },
+        The_return_type_of_a_property_decorator_function_must_be_either_void_or_any: { code: 1236, category: ts.DiagnosticCategory.Error, key: "The return type of a property decorator function must be either 'void' or 'any'." },
+        The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any: { code: 1237, category: ts.DiagnosticCategory.Error, key: "The return type of a parameter decorator function must be either 'void' or 'any'." },
+        Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression: { code: 1238, category: ts.DiagnosticCategory.Error, key: "Unable to resolve signature of class decorator when called as an expression." },
+        Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression: { code: 1239, category: ts.DiagnosticCategory.Error, key: "Unable to resolve signature of parameter decorator when called as an expression." },
+        Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression: { code: 1240, category: ts.DiagnosticCategory.Error, key: "Unable to resolve signature of property decorator when called as an expression." },
+        Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression: { code: 1241, category: ts.DiagnosticCategory.Error, key: "Unable to resolve signature of method decorator when called as an expression." },
         Duplicate_identifier_0: { code: 2300, category: ts.DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: ts.DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: ts.DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -2325,9 +2331,7 @@ var ts;
         property_declarations_can_only_be_used_in_a_ts_file: { code: 8014, category: ts.DiagnosticCategory.Error, key: "'property declarations' can only be used in a .ts file." },
         enum_declarations_can_only_be_used_in_a_ts_file: { code: 8015, category: ts.DiagnosticCategory.Error, key: "'enum declarations' can only be used in a .ts file." },
         type_assertion_expressions_can_only_be_used_in_a_ts_file: { code: 8016, category: ts.DiagnosticCategory.Error, key: "'type assertion expressions' can only be used in a .ts file." },
-        decorators_can_only_be_used_in_a_ts_file: { code: 8017, category: ts.DiagnosticCategory.Error, key: "'decorators' can only be used in a .ts file." },
-        Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses: { code: 9002, category: ts.DiagnosticCategory.Error, key: "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses." },
-        class_expressions_are_not_currently_supported: { code: 9003, category: ts.DiagnosticCategory.Error, key: "'class' expressions are not currently supported." }
+        decorators_can_only_be_used_in_a_ts_file: { code: 8017, category: ts.DiagnosticCategory.Error, key: "'decorators' can only be used in a .ts file." }
     };
 })(ts || (ts = {}));
 /// <reference path="core.ts"/>
@@ -4284,7 +4288,7 @@ var ts;
         function getStrictModeIdentifierMessage(node) {
             // Provide specialized messages to help the user understand why we think they're in 
             // strict mode.
-            if (ts.getAncestor(node, 204 /* ClassDeclaration */) || ts.getAncestor(node, 177 /* ClassExpression */)) {
+            if (ts.getContainingClass(node)) {
                 return ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
             }
             if (file.externalModuleIndicator) {
@@ -4333,7 +4337,7 @@ var ts;
         function getStrictModeEvalOrArgumentsMessage(node) {
             // Provide specialized messages to help the user understand why we think they're in 
             // strict mode.
-            if (ts.getAncestor(node, 204 /* ClassDeclaration */) || ts.getAncestor(node, 177 /* ClassExpression */)) {
+            if (ts.getContainingClass(node)) {
                 return ts.Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
             }
             if (file.externalModuleIndicator) {
@@ -4641,7 +4645,7 @@ var ts;
             // containing class.
             if (node.flags & 112 /* AccessibilityModifier */ &&
                 node.parent.kind === 137 /* Constructor */ &&
-                (node.parent.parent.kind === 204 /* ClassDeclaration */ || node.parent.parent.kind === 177 /* ClassExpression */)) {
+                ts.isClassLike(node.parent.parent)) {
                 var classDeclaration = node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, 4 /* Property */, 107455 /* PropertyExcludes */);
             }
@@ -5136,6 +5140,7 @@ var ts;
                 case 208 /* ModuleDeclaration */:
                 case 206 /* TypeAliasDeclaration */:
                 case 204 /* ClassDeclaration */:
+                case 177 /* ClassExpression */:
                     // These are not allowed inside a generator now, but eventually they may be allowed
                     // as local types. Regardless, any yield statements contained within them should be
                     // skipped in this traversal.
@@ -5177,20 +5182,11 @@ var ts;
     }
     ts.isVariableLike = isVariableLike;
     function isAccessor(node) {
-        if (node) {
-            switch (node.kind) {
-                case 138 /* GetAccessor */:
-                case 139 /* SetAccessor */:
-                    return true;
-            }
-        }
-        return false;
+        return node && (node.kind === 138 /* GetAccessor */ || node.kind === 139 /* SetAccessor */);
     }
     ts.isAccessor = isAccessor;
     function isClassLike(node) {
-        if (node) {
-            return node.kind === 204 /* ClassDeclaration */ || node.kind === 177 /* ClassExpression */;
-        }
+        return node && (node.kind === 204 /* ClassDeclaration */ || node.kind === 177 /* ClassExpression */);
     }
     ts.isClassLike = isClassLike;
     function isFunctionLike(node) {
@@ -5232,6 +5228,15 @@ var ts;
         }
     }
     ts.getContainingFunction = getContainingFunction;
+    function getContainingClass(node) {
+        while (true) {
+            node = node.parent;
+            if (!node || isClassLike(node)) {
+                return node;
+            }
+        }
+    }
+    ts.getContainingClass = getContainingClass;
     function getThisContainer(node, includeArrowFunctions) {
         while (true) {
             node = node.parent;
@@ -5244,7 +5249,7 @@ var ts;
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (node.parent.parent.kind === 204 /* ClassDeclaration */) {
+                    if (isClassLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -5300,7 +5305,7 @@ var ts;
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (node.parent.parent.kind === 204 /* ClassDeclaration */) {
+                    if (isClassLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -5345,7 +5350,7 @@ var ts;
         if (node.kind === 162 /* TaggedTemplateExpression */) {
             return node.tag;
         }
-        // Will either be a CallExpression or NewExpression.
+        // Will either be a CallExpression, NewExpression, or Decorator.
         return node.expression;
     }
     ts.getInvokedExpression = getInvokedExpression;
@@ -5658,6 +5663,7 @@ var ts;
             case 166 /* ArrowFunction */:
             case 155 /* BindingElement */:
             case 204 /* ClassDeclaration */:
+            case 177 /* ClassExpression */:
             case 137 /* Constructor */:
             case 207 /* EnumDeclaration */:
             case 229 /* EnumMember */:
@@ -6429,7 +6435,7 @@ var ts;
     function isExpressionWithTypeArgumentsInClassExtendsClause(node) {
         return node.kind === 179 /* ExpressionWithTypeArguments */ &&
             node.parent.token === 79 /* ExtendsKeyword */ &&
-            node.parent.parent.kind === 204 /* ClassDeclaration */;
+            isClassLike(node.parent.parent);
     }
     ts.isExpressionWithTypeArgumentsInClassExtendsClause = isExpressionWithTypeArgumentsInClassExtendsClause;
     // Returns false if this heritage clause element's expression contains something unsupported
@@ -12210,10 +12216,7 @@ var ts;
         var globalIteratorType;
         var globalIterableIteratorType;
         var anyArrayType;
-        var getGlobalClassDecoratorType;
-        var getGlobalParameterDecoratorType;
-        var getGlobalPropertyDecoratorType;
-        var getGlobalMethodDecoratorType;
+        var getGlobalTypedPropertyDescriptorType;
         var tupleTypes = {};
         var unionTypes = {};
         var stringLiteralTypes = {};
@@ -12499,7 +12502,7 @@ var ts;
                         // local variables of the constructor. This effectively means that entities from outer scopes
                         // by the same name as a constructor parameter or local variable are inaccessible
                         // in initializer expressions for instance member variables.
-                        if (location.parent.kind === 204 /* ClassDeclaration */ && !(location.flags & 128 /* Static */)) {
+                        if (ts.isClassLike(location.parent) && !(location.flags & 128 /* Static */)) {
                             var ctor = findConstructorDeclaration(location.parent);
                             if (ctor && ctor.locals) {
                                 if (getSymbol(ctor.locals, name, meaning & 107455 /* Value */)) {
@@ -12510,6 +12513,7 @@ var ts;
                         }
                         break;
                     case 204 /* ClassDeclaration */:
+                    case 177 /* ClassExpression */:
                     case 205 /* InterfaceDeclaration */:
                         if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & 793056 /* Type */)) {
                             if (lastLocation && lastLocation.flags & 128 /* Static */) {
@@ -12520,6 +12524,13 @@ var ts;
                                 return undefined;
                             }
                             break loop;
+                        }
+                        if (location.kind === 177 /* ClassExpression */ && meaning & 32 /* Class */) {
+                            var className = location.name;
+                            if (className && name === className.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     // It is not legal to reference a class's own type parameters from a computed property name that
@@ -12532,7 +12543,7 @@ var ts;
                     //
                     case 129 /* ComputedPropertyName */:
                         grandparent = location.parent.parent;
-                        if (grandparent.kind === 204 /* ClassDeclaration */ || grandparent.kind === 205 /* InterfaceDeclaration */) {
+                        if (ts.isClassLike(grandparent) || grandparent.kind === 205 /* InterfaceDeclaration */) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & 793056 /* Type */)) {
                                 error(errorLocation, ts.Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
@@ -12560,15 +12571,6 @@ var ts;
                         if (meaning & 16 /* Function */) {
                             var functionName = location.name;
                             if (functionName && name === functionName.text) {
-                                result = location.symbol;
-                                break loop;
-                            }
-                        }
-                        break;
-                    case 177 /* ClassExpression */:
-                        if (meaning & 32 /* Class */) {
-                            var className = location.name;
-                            if (className && name === className.text) {
                                 result = location.symbol;
                                 break loop;
                             }
@@ -13407,19 +13409,28 @@ var ts;
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         var _displayBuilder;
         function getSymbolDisplayBuilder() {
+            function getNameOfSymbol(symbol) {
+                if (symbol.declarations && symbol.declarations.length) {
+                    var declaration = symbol.declarations[0];
+                    if (declaration.name) {
+                        return ts.declarationNameToString(declaration.name);
+                    }
+                    switch (declaration.kind) {
+                        case 177 /* ClassExpression */:
+                            return "(Anonymous class)";
+                        case 165 /* FunctionExpression */:
+                        case 166 /* ArrowFunction */:
+                            return "(Anonymous function)";
+                    }
+                }
+                return symbol.name;
+            }
             /**
              * Writes only the name of the symbol out to the writer. Uses the original source text
              * for the name of the symbol if it is available to match how the user inputted the name.
              */
             function appendSymbolNameOnly(symbol, writer) {
-                if (symbol.declarations && symbol.declarations.length > 0) {
-                    var declaration = symbol.declarations[0];
-                    if (declaration.name) {
-                        writer.writeSymbol(ts.declarationNameToString(declaration.name), symbol);
-                        return;
-                    }
-                }
-                writer.writeSymbol(symbol.name, symbol);
+                writer.writeSymbol(getNameOfSymbol(symbol), symbol);
             }
             /**
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
@@ -14488,9 +14499,9 @@ var ts;
                 if (!node) {
                     return typeParameters;
                 }
-                if (node.kind === 204 /* ClassDeclaration */ || node.kind === 203 /* FunctionDeclaration */ ||
-                    node.kind === 165 /* FunctionExpression */ || node.kind === 136 /* MethodDeclaration */ ||
-                    node.kind === 166 /* ArrowFunction */) {
+                if (node.kind === 204 /* ClassDeclaration */ || node.kind === 177 /* ClassExpression */ ||
+                    node.kind === 203 /* FunctionDeclaration */ || node.kind === 165 /* FunctionExpression */ ||
+                    node.kind === 136 /* MethodDeclaration */ || node.kind === 166 /* ArrowFunction */) {
                     var declarations = node.typeParameters;
                     if (declarations) {
                         return appendTypeParameters(appendOuterTypeParameters(typeParameters, node), declarations);
@@ -14500,8 +14511,8 @@ var ts;
         }
         // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
         function getOuterTypeParametersOfClassOrInterface(symbol) {
-            var kind = symbol.flags & 32 /* Class */ ? 204 /* ClassDeclaration */ : 205 /* InterfaceDeclaration */;
-            return appendOuterTypeParameters(undefined, ts.getDeclarationOfKind(symbol, kind));
+            var declaration = symbol.flags & 32 /* Class */ ? symbol.valueDeclaration : ts.getDeclarationOfKind(symbol, 205 /* InterfaceDeclaration */);
+            return appendOuterTypeParameters(undefined, declaration);
         }
         // The local type parameters are the combined set of type parameters from all declarations of the class,
         // interface, or type alias.
@@ -14509,7 +14520,8 @@ var ts;
             var result;
             for (var _i = 0, _a = symbol.declarations; _i < _a.length; _i++) {
                 var node = _a[_i];
-                if (node.kind === 205 /* InterfaceDeclaration */ || node.kind === 204 /* ClassDeclaration */ || node.kind === 206 /* TypeAliasDeclaration */) {
+                if (node.kind === 205 /* InterfaceDeclaration */ || node.kind === 204 /* ClassDeclaration */ ||
+                    node.kind === 177 /* ClassExpression */ || node.kind === 206 /* TypeAliasDeclaration */) {
                     var declaration = node;
                     if (declaration.typeParameters) {
                         result = appendTypeParameters(result, declaration.typeParameters);
@@ -15605,6 +15617,15 @@ var ts;
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
         /**
+          * Creates a TypeReference for a generic `TypedPropertyDescriptor<T>`.
+          */
+        function createTypedPropertyDescriptorType(propertyType) {
+            var globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
+            return globalTypedPropertyDescriptorType !== emptyObjectType
+                ? createTypeReference(globalTypedPropertyDescriptorType, [propertyType])
+                : emptyObjectType;
+        }
+        /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
         function createTypeFromGenericGlobalType(genericGlobalType, elementType) {
@@ -16042,8 +16063,8 @@ var ts;
         function checkTypeSubtypeOf(source, target, errorNode, headMessage, containingMessageChain) {
             return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
-        function checkTypeAssignableTo(source, target, errorNode, headMessage) {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
+        function checkTypeAssignableTo(source, target, errorNode, headMessage, containingMessageChain) {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
         function isSignatureAssignableTo(source, target) {
             var sourceType = getOrCreateTypeFromSignature(source);
@@ -17582,9 +17603,9 @@ var ts;
             }
         }
         function captureLexicalThis(node, container) {
-            var classNode = container.parent && container.parent.kind === 204 /* ClassDeclaration */ ? container.parent : undefined;
             getNodeLinks(node).flags |= 2 /* LexicalThis */;
             if (container.kind === 134 /* PropertyDeclaration */ || container.kind === 137 /* Constructor */) {
+                var classNode = container.parent;
                 getNodeLinks(classNode).flags |= 4 /* CaptureThis */;
             }
             else {
@@ -17629,9 +17650,8 @@ var ts;
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-            var classNode = container.parent && container.parent.kind === 204 /* ClassDeclaration */ ? container.parent : undefined;
-            if (classNode) {
-                var symbol = getSymbolOfNode(classNode);
+            if (ts.isClassLike(container.parent)) {
+                var symbol = getSymbolOfNode(container.parent);
                 return container.flags & 128 /* Static */ ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
@@ -17646,7 +17666,7 @@ var ts;
         }
         function checkSuperExpression(node) {
             var isCallExpression = node.parent.kind === 160 /* CallExpression */ && node.parent.expression === node;
-            var classDeclaration = ts.getAncestor(node, 204 /* ClassDeclaration */);
+            var classDeclaration = ts.getContainingClass(node);
             var classType = classDeclaration && getDeclaredTypeOfSymbol(getSymbolOfNode(classDeclaration));
             var baseClassType = classType && getBaseTypes(classType)[0];
             if (!baseClassType) {
@@ -17676,7 +17696,7 @@ var ts;
                         needToCaptureLexicalThis = languageVersion < 2 /* ES6 */;
                     }
                     // topmost container must be something that is directly nested in the class declaration
-                    if (container && container.parent && container.parent.kind === 204 /* ClassDeclaration */) {
+                    if (container && ts.isClassLike(container.parent)) {
                         if (container.flags & 128 /* Static */) {
                             canUseSuperExpression =
                                 container.kind === 136 /* MethodDeclaration */ ||
@@ -18276,7 +18296,7 @@ var ts;
             }
             // Property is known to be private or protected at this point
             // Get the declaring and enclosing class instance types
-            var enclosingClassDeclaration = ts.getAncestor(node, 204 /* ClassDeclaration */);
+            var enclosingClassDeclaration = ts.getContainingClass(node);
             var enclosingClass = enclosingClassDeclaration ? getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
             var declaringClass = getDeclaredTypeOfSymbol(prop.parent);
             // Private property is accessible if declaring and enclosing class are the same
@@ -18502,7 +18522,7 @@ var ts;
             if (node.kind === 162 /* TaggedTemplateExpression */) {
                 checkExpression(node.template);
             }
-            else {
+            else if (node.kind !== 132 /* Decorator */) {
                 ts.forEach(node.arguments, function (argument) {
                     checkExpression(argument);
                 });
@@ -18567,7 +18587,8 @@ var ts;
         }
         function getSpreadArgumentIndex(args) {
             for (var i = 0; i < args.length; i++) {
-                if (args[i].kind === 176 /* SpreadElementExpression */) {
+                var arg = args[i];
+                if (arg && arg.kind === 176 /* SpreadElementExpression */) {
                     return i;
                 }
             }
@@ -18577,6 +18598,8 @@ var ts;
             var adjustedArgCount; // Apparent number of arguments we will have in this call
             var typeArguments; // Type arguments (undefined if none)
             var callIsIncomplete; // In incomplete call we want to be lenient when we have too few arguments
+            var isDecorator;
+            var spreadArgIndex = -1;
             if (node.kind === 162 /* TaggedTemplateExpression */) {
                 var tagExpression = node;
                 // Even if the call is incomplete, we'll have a missing expression as our last argument,
@@ -18600,6 +18623,11 @@ var ts;
                     callIsIncomplete = !!templateLiteral.isUnterminated;
                 }
             }
+            else if (node.kind === 132 /* Decorator */) {
+                isDecorator = true;
+                typeArguments = undefined;
+                adjustedArgCount = getEffectiveArgumentCount(node, undefined, signature);
+            }
             else {
                 var callExpression = node;
                 if (!callExpression.arguments) {
@@ -18612,6 +18640,7 @@ var ts;
                 // If we are missing the close paren, the call is incomplete.
                 callIsIncomplete = callExpression.arguments.end === callExpression.end;
                 typeArguments = callExpression.typeArguments;
+                spreadArgIndex = getSpreadArgumentIndex(args);
             }
             // If the user supplied type arguments, but the number of type arguments does not match
             // the declared number of type parameters, the call has an incorrect arity.
@@ -18622,7 +18651,6 @@ var ts;
             }
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
-            var spreadArgIndex = getSpreadArgumentIndex(args);
             if (spreadArgIndex >= 0) {
                 return signature.hasRestParameter && spreadArgIndex >= signature.parameters.length - 1;
             }
@@ -18654,7 +18682,7 @@ var ts;
             });
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
-        function inferTypeArguments(signature, args, excludeArgument, context) {
+        function inferTypeArguments(node, signature, args, excludeArgument, context) {
             var typeParameters = signature.typeParameters;
             var inferenceMapper = createInferenceMapper(context);
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
@@ -18679,15 +18707,16 @@ var ts;
             }
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
-            for (var i = 0; i < args.length; i++) {
-                var arg = args[i];
-                if (arg.kind !== 178 /* OmittedExpression */) {
+            var argCount = getEffectiveArgumentCount(node, args, signature);
+            for (var i = 0; i < argCount; i++) {
+                var arg = getEffectiveArgument(node, args, i);
+                // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
+                if (arg === undefined || arg.kind !== 178 /* OmittedExpression */) {
                     var paramType = getTypeAtPosition(signature, i);
-                    var argType = void 0;
-                    if (i === 0 && args[i].parent.kind === 162 /* TaggedTemplateExpression */) {
-                        argType = globalTemplateStringsArrayType;
-                    }
-                    else {
+                    var argType = getEffectiveArgumentType(node, i, arg);
+                    // If the effective argument type is 'undefined', there is no synthetic type 
+                    // for the argument. In that case, we should check the argument.
+                    if (argType === undefined) {
                         // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                         // context sensitive function expressions as wildcards
                         var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
@@ -18699,8 +18728,10 @@ var ts;
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
             // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
             // as we construct types for contextually typed parameters)
+            // Decorators will not have `excludeArgument`, as their arguments cannot be contextually typed.
+            // Tagged template expressions will always have `undefined` for `excludeArgument[0]`.
             if (excludeArgument) {
-                for (var i = 0; i < args.length; i++) {
+                for (var i = 0; i < argCount; i++) {
                     // No need to check for omitted args and template expressions, their exlusion value is always undefined
                     if (excludeArgument[i] === false) {
                         var arg = args[i];
@@ -18711,7 +18742,7 @@ var ts;
             }
             getInferredTypes(context);
         }
-        function checkTypeArguments(signature, typeArguments, typeArgumentResultTypes, reportErrors) {
+        function checkTypeArguments(signature, typeArguments, typeArgumentResultTypes, reportErrors, headMessage) {
             var typeParameters = signature.typeParameters;
             var typeArgumentsAreAssignable = true;
             for (var i = 0; i < typeParameters.length; i++) {
@@ -18722,27 +18753,38 @@ var ts;
                 if (typeArgumentsAreAssignable /* so far */) {
                     var constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
-                        typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined, ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                        var errorInfo = void 0;
+                        var typeArgumentHeadMessage = ts.Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
+                        if (reportErrors && headMessage) {
+                            errorInfo = ts.chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
+                            typeArgumentHeadMessage = headMessage;
+                        }
+                        typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined, typeArgumentHeadMessage, errorInfo);
                     }
                 }
             }
             return typeArgumentsAreAssignable;
         }
         function checkApplicableSignature(node, args, signature, relation, excludeArgument, reportErrors) {
-            for (var i = 0; i < args.length; i++) {
-                var arg = args[i];
-                if (arg.kind !== 178 /* OmittedExpression */) {
+            var argCount = getEffectiveArgumentCount(node, args, signature);
+            for (var i = 0; i < argCount; i++) {
+                var arg = getEffectiveArgument(node, args, i);
+                // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
+                if (arg === undefined || arg.kind !== 178 /* OmittedExpression */) {
                     // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
                     var paramType = getTypeAtPosition(signature, i);
-                    // A tagged template expression provides a special first argument, and string literals get string literal types
-                    // unless we're reporting errors
-                    var argType = i === 0 && node.kind === 162 /* TaggedTemplateExpression */
-                        ? globalTemplateStringsArrayType
-                        : arg.kind === 8 /* StringLiteral */ && !reportErrors
+                    var argType = getEffectiveArgumentType(node, i, arg);
+                    // If the effective argument type is 'undefined', there is no synthetic type 
+                    // for the argument. In that case, we should check the argument.
+                    if (argType === undefined) {
+                        argType = arg.kind === 8 /* StringLiteral */ && !reportErrors
                             ? getStringLiteralType(arg)
                             : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    }
                     // Use argument expression as error location when reporting errors
-                    if (!checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined, ts.Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1)) {
+                    var errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
+                    var headMessage = ts.Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
+                    if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage)) {
                         return false;
                     }
                 }
@@ -18754,28 +18796,276 @@ var ts;
          *
          * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
          * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
-         *    expressions, where the first element of the list is the template for error reporting purposes.
+         *    expressions, where the first element of the list is `undefined`.
+         * If 'node' is a Decorator, the argument list will be `undefined`, and its arguments and types
+         *    will be supplied from calls to `getEffectiveArgumentCount` and `getEffectiveArgumentType`.
          */
         function getEffectiveCallArguments(node) {
             var args;
             if (node.kind === 162 /* TaggedTemplateExpression */) {
                 var template = node.template;
-                args = [template];
+                args = [undefined];
                 if (template.kind === 174 /* TemplateExpression */) {
                     ts.forEach(template.templateSpans, function (span) {
                         args.push(span.expression);
                     });
                 }
             }
+            else if (node.kind === 132 /* Decorator */) {
+                // For a decorator, we return undefined as we will determine
+                // the number and types of arguments for a decorator using
+                // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
+                return undefined;
+            }
             else {
                 args = node.arguments || emptyArray;
             }
             return args;
         }
-        function resolveCall(node, signatures, candidatesOutArray) {
+        /**
+          * Returns the effective argument count for a node that works like a function invocation.
+          * If 'node' is a Decorator, the number of arguments is derived from the decoration
+          *    target and the signature:
+          *    If 'node.target' is a class declaration or class expression, the effective argument
+          *       count is 1.
+          *    If 'node.target' is a parameter declaration, the effective argument count is 3.
+          *    If 'node.target' is a property declaration, the effective argument count is 2.
+          *    If 'node.target' is a method or accessor declaration, the effective argument count
+          *       is 3, although it can be 2 if the signature only accepts two arguments, allowing
+          *       us to match a property decorator.
+          * Otherwise, the argument count is the length of the 'args' array.
+          */
+        function getEffectiveArgumentCount(node, args, signature) {
+            if (node.kind === 132 /* Decorator */) {
+                switch (node.parent.kind) {
+                    case 204 /* ClassDeclaration */:
+                    case 177 /* ClassExpression */:
+                        // A class decorator will have one argument (see `ClassDecorator` in core.d.ts)
+                        return 1;
+                    case 134 /* PropertyDeclaration */:
+                        // A property declaration decorator will have two arguments (see 
+                        // `PropertyDecorator` in core.d.ts)
+                        return 2;
+                    case 136 /* MethodDeclaration */:
+                    case 138 /* GetAccessor */:
+                    case 139 /* SetAccessor */:
+                        // A method or accessor declaration decorator will have two or three arguments (see
+                        // `PropertyDecorator` and `MethodDecorator` in core.d.ts)
+                        // If the method decorator signature only accepts a target and a key, we will only  
+                        // type check those arguments.
+                        return signature.parameters.length >= 3 ? 3 : 2;
+                    case 131 /* Parameter */:
+                        // A parameter declaration decorator will have three arguments (see 
+                        // `ParameterDecorator` in core.d.ts)
+                        return 3;
+                }
+            }
+            else {
+                return args.length;
+            }
+        }
+        /**
+          * Returns the effective type of the first argument to a decorator.
+          * If 'node' is a class declaration or class expression, the effective argument type
+          *    is the type of the static side of the class.
+          * If 'node' is a parameter declaration, the effective argument type is either the type
+          *    of the static or instance side of the class for the parameter's parent method,
+          *    depending on whether the method is declared static.
+          *    For a constructor, the type is always the type of the static side of the class.
+          * If 'node' is a property, method, or accessor declaration, the effective argument
+          *    type is the type of the static or instance side of the parent class for class
+          *    element, depending on whether the element is declared static.
+          */
+        function getEffectiveDecoratorFirstArgumentType(node) {
+            // The first argument to a decorator is its `target`.
+            switch (node.kind) {
+                case 204 /* ClassDeclaration */:
+                case 177 /* ClassExpression */:
+                    // For a class decorator, the `target` is the type of the class (e.g. the 
+                    // "static" or "constructor" side of the class)
+                    var classSymbol = getSymbolOfNode(node);
+                    return getTypeOfSymbol(classSymbol);
+                case 131 /* Parameter */:
+                    // For a parameter decorator, the `target` is the parent type of the 
+                    // parameter's containing method. 
+                    node = node.parent;
+                    if (node.kind === 137 /* Constructor */) {
+                        var classSymbol_1 = getSymbolOfNode(node);
+                        return getTypeOfSymbol(classSymbol_1);
+                    }
+                // fall-through
+                case 134 /* PropertyDeclaration */:
+                case 136 /* MethodDeclaration */:
+                case 138 /* GetAccessor */:
+                case 139 /* SetAccessor */:
+                    // For a property or method decorator, the `target` is the
+                    // "static"-side type of the parent of the member if the member is
+                    // declared "static"; otherwise, it is the "instance"-side type of the 
+                    // parent of the member.
+                    return getParentTypeOfClassElement(node);
+                default:
+                    ts.Debug.fail("Unsupported decorator target.");
+                    return unknownType;
+            }
+        }
+        /**
+          * Returns the effective type for the second argument to a decorator.
+          * If 'node' is a parameter, its effective argument type is one of the following:
+          *    If 'node.parent' is a constructor, the effective argument type is 'any', as we
+          *       will emit `undefined`.
+          *    If 'node.parent' is a member with an identifier, numeric, or string literal name,
+          *       the effective argument type will be a string literal type for the member name.
+          *    If 'node.parent' is a computed property name, the effective argument type will
+          *       either be a symbol type or the string type.
+          * If 'node' is a member with an identifier, numeric, or string literal name, the
+          *    effective argument type will be a string literal type for the member name.
+          * If 'node' is a computed property name, the effective argument type will either
+          *    be a symbol type or the string type.
+          * A class decorator does not have a second argument type.
+          */
+        function getEffectiveDecoratorSecondArgumentType(node) {
+            // The second argument to a decorator is its `propertyKey`
+            switch (node.kind) {
+                case 204 /* ClassDeclaration */:
+                    ts.Debug.fail("Class decorators should not have a second synthetic argument.");
+                    return unknownType;
+                case 131 /* Parameter */:
+                    node = node.parent;
+                    if (node.kind === 137 /* Constructor */) {
+                        // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
+                        return anyType;
+                    }
+                // For a non-constructor parameter decorator, the `propertyKey` will be either
+                // a string or a symbol, based on the name of the parameter's containing method.
+                // fall-through
+                case 134 /* PropertyDeclaration */:
+                case 136 /* MethodDeclaration */:
+                case 138 /* GetAccessor */:
+                case 139 /* SetAccessor */:
+                    // The `propertyKey` for a property or method decorator will be a
+                    // string literal type if the member name is an identifier, number, or string; 
+                    // otherwise, if the member name is a computed property name it will
+                    // be either string or symbol.
+                    var element = node;
+                    switch (element.name.kind) {
+                        case 65 /* Identifier */:
+                        case 7 /* NumericLiteral */:
+                        case 8 /* StringLiteral */:
+                            return getStringLiteralType(element.name);
+                        case 129 /* ComputedPropertyName */:
+                            var nameType = checkComputedPropertyName(element.name);
+                            if (allConstituentTypesHaveKind(nameType, 2097152 /* ESSymbol */)) {
+                                return nameType;
+                            }
+                            else {
+                                return stringType;
+                            }
+                        default:
+                            ts.Debug.fail("Unsupported property name.");
+                            return unknownType;
+                    }
+                default:
+                    ts.Debug.fail("Unsupported decorator target.");
+                    return unknownType;
+            }
+        }
+        /**
+          * Returns the effective argument type for the third argument to a decorator.
+          * If 'node' is a parameter, the effective argument type is the number type.
+          * If 'node' is a method or accessor, the effective argument type is a
+          *    `TypedPropertyDescriptor<T>` instantiated with the type of the member.
+          * Class and property decorators do not have a third effective argument.
+          */
+        function getEffectiveDecoratorThirdArgumentType(node) {
+            // The third argument to a decorator is either its `descriptor` for a method decorator
+            // or its `parameterIndex` for a paramter decorator
+            switch (node.kind) {
+                case 204 /* ClassDeclaration */:
+                    ts.Debug.fail("Class decorators should not have a third synthetic argument.");
+                    return unknownType;
+                case 131 /* Parameter */:
+                    // The `parameterIndex` for a parameter decorator is always a number
+                    return numberType;
+                case 134 /* PropertyDeclaration */:
+                    ts.Debug.fail("Property decorators should not have a third synthetic argument.");
+                    return unknownType;
+                case 136 /* MethodDeclaration */:
+                case 138 /* GetAccessor */:
+                case 139 /* SetAccessor */:
+                    // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
+                    // for the type of the member.
+                    var propertyType = getTypeOfNode(node);
+                    return createTypedPropertyDescriptorType(propertyType);
+                default:
+                    ts.Debug.fail("Unsupported decorator target.");
+                    return unknownType;
+            }
+        }
+        /**
+          * Returns the effective argument type for the provided argument to a decorator.
+          */
+        function getEffectiveDecoratorArgumentType(node, argIndex) {
+            if (argIndex === 0) {
+                return getEffectiveDecoratorFirstArgumentType(node.parent);
+            }
+            else if (argIndex === 1) {
+                return getEffectiveDecoratorSecondArgumentType(node.parent);
+            }
+            else if (argIndex === 2) {
+                return getEffectiveDecoratorThirdArgumentType(node.parent);
+            }
+            ts.Debug.fail("Decorators should not have a fourth synthetic argument.");
+            return unknownType;
+        }
+        /**
+          * Gets the effective argument type for an argument in a call expression.
+          */
+        function getEffectiveArgumentType(node, argIndex, arg) {
+            // Decorators provide special arguments, a tagged template expression provides 
+            // a special first argument, and string literals get string literal types
+            // unless we're reporting errors
+            if (node.kind === 132 /* Decorator */) {
+                return getEffectiveDecoratorArgumentType(node, argIndex);
+            }
+            else if (argIndex === 0 && node.kind === 162 /* TaggedTemplateExpression */) {
+                return globalTemplateStringsArrayType;
+            }
+            // This is not a synthetic argument, so we return 'undefined'
+            // to signal that the caller needs to check the argument.            
+            return undefined;
+        }
+        /**
+          * Gets the effective argument expression for an argument in a call expression.
+          */
+        function getEffectiveArgument(node, args, argIndex) {
+            // For a decorator or the first argument of a tagged template expression we return undefined.
+            if (node.kind === 132 /* Decorator */ ||
+                (argIndex === 0 && node.kind === 162 /* TaggedTemplateExpression */)) {
+                return undefined;
+            }
+            return args[argIndex];
+        }
+        /**
+          * Gets the error node to use when reporting errors for an effective argument.
+          */
+        function getEffectiveArgumentErrorNode(node, argIndex, arg) {
+            if (node.kind === 132 /* Decorator */) {
+                // For a decorator, we use the expression of the decorator for error reporting.
+                return node.expression;
+            }
+            else if (argIndex === 0 && node.kind === 162 /* TaggedTemplateExpression */) {
+                // For a the first argument of a tagged template expression, we use the template of the tag for error reporting.
+                return node.template;
+            }
+            else {
+                return arg;
+            }
+        }
+        function resolveCall(node, signatures, candidatesOutArray, headMessage) {
             var isTaggedTemplate = node.kind === 162 /* TaggedTemplateExpression */;
+            var isDecorator = node.kind === 132 /* Decorator */;
             var typeArguments;
-            if (!isTaggedTemplate) {
+            if (!isTaggedTemplate && !isDecorator) {
                 typeArguments = node.typeArguments;
                 // We already perform checking on the type arguments on the class declaration itself.
                 if (node.expression.kind !== 91 /* SuperKeyword */) {
@@ -18786,7 +19076,7 @@ var ts;
             // reorderCandidates fills up the candidates array directly
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
-                error(node, ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                reportError(ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
             }
             var args = getEffectiveCallArguments(node);
@@ -18801,13 +19091,20 @@ var ts;
             //
             // For a tagged template, then the first argument be 'undefined' if necessary
             // because it represents a TemplateStringsArray.
+            //
+            // For a decorator, no arguments are susceptible to contextual typing due to the fact 
+            // decorators are applied to a declaration by the emitter, and not to an expression.
             var excludeArgument;
-            for (var i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
-                if (isContextSensitive(args[i])) {
-                    if (!excludeArgument) {
-                        excludeArgument = new Array(args.length);
+            if (!isDecorator) {
+                // We do not need to call `getEffectiveArgumentCount` here as it only
+                // applies when calculating the number of arguments for a decorator.
+                for (var i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
+                    if (isContextSensitive(args[i])) {
+                        if (!excludeArgument) {
+                            excludeArgument = new Array(args.length);
+                        }
+                        excludeArgument[i] = true;
                     }
-                    excludeArgument[i] = true;
                 }
             }
             // The following variables are captured and modified by calls to chooseOverload.
@@ -18871,19 +19168,22 @@ var ts;
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, undefined, true);
             }
             else if (candidateForTypeArgumentError) {
-                if (!isTaggedTemplate && typeArguments) {
-                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, [], true);
+                if (!isTaggedTemplate && !isDecorator && typeArguments) {
+                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], true, headMessage);
                 }
                 else {
                     ts.Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
                     var failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
                     var inferenceCandidates = getInferenceCandidates(resultOfFailedInference, resultOfFailedInference.failedTypeParameterIndex);
                     var diagnosticChainHead = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly, typeToString(failedTypeParameter));
+                    if (headMessage) {
+                        diagnosticChainHead = ts.chainDiagnosticMessages(diagnosticChainHead, headMessage);
+                    }
                     reportNoCommonSupertypeError(inferenceCandidates, node.expression || node.tag, diagnosticChainHead);
                 }
             }
             else {
-                error(node, ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                reportError(ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
             }
             // No signature was applicable. We have already reported the errors for the invalid signature.
             // If this is a type resolution session, e.g. Language Service, try to get better information that anySignature.
@@ -18899,6 +19199,14 @@ var ts;
                 }
             }
             return resolveErrorCall(node);
+            function reportError(message, arg0, arg1, arg2) {
+                var errorInfo;
+                errorInfo = ts.chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
+                if (headMessage) {
+                    errorInfo = ts.chainDiagnosticMessages(errorInfo, headMessage);
+                }
+                diagnostics.add(ts.createDiagnosticForNodeFromMessageChain(node, errorInfo));
+            }
             function chooseOverload(candidates, relation) {
                 for (var _i = 0; _i < candidates.length; _i++) {
                     var originalCandidate = candidates[_i];
@@ -18919,7 +19227,7 @@ var ts;
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, false);
                             }
                             else {
-                                inferTypeArguments(candidate, args, excludeArgument, inferenceContext);
+                                inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                                 typeArgumentTypes = inferenceContext.inferredTypes;
                             }
@@ -18968,7 +19276,7 @@ var ts;
                 if (superType !== unknownType) {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.
-                    var baseTypeNode = ts.getClassExtendsHeritageClauseElement(ts.getAncestor(node, 204 /* ClassDeclaration */));
+                    var baseTypeNode = ts.getClassExtendsHeritageClauseElement(ts.getContainingClass(node));
                     var baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
                     return resolveCall(node, baseConstructors, candidatesOutArray);
                 }
@@ -19082,6 +19390,47 @@ var ts;
             }
             return resolveCall(node, callSignatures, candidatesOutArray);
         }
+        /**
+          * Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
+          */
+        function getDiagnosticHeadMessageForDecoratorResolution(node) {
+            switch (node.parent.kind) {
+                case 204 /* ClassDeclaration */:
+                case 177 /* ClassExpression */:
+                    return ts.Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
+                case 131 /* Parameter */:
+                    return ts.Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression;
+                case 134 /* PropertyDeclaration */:
+                    return ts.Diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression;
+                case 136 /* MethodDeclaration */:
+                case 138 /* GetAccessor */:
+                case 139 /* SetAccessor */:
+                    return ts.Diagnostics.Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression;
+            }
+        }
+        /**
+          * Resolves a decorator as if it were a call expression.
+          */
+        function resolveDecorator(node, candidatesOutArray) {
+            var funcType = checkExpression(node.expression);
+            var apparentType = getApparentType(funcType);
+            if (apparentType === unknownType) {
+                return resolveErrorCall(node);
+            }
+            var callSignatures = getSignaturesOfType(apparentType, 0 /* Call */);
+            if (funcType === anyType || (!callSignatures.length && !(funcType.flags & 16384 /* Union */) && isTypeAssignableTo(funcType, globalFunctionType))) {
+                return resolveUntypedCall(node);
+            }
+            var headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
+            if (!callSignatures.length) {
+                var errorInfo;
+                errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature);
+                errorInfo = ts.chainDiagnosticMessages(errorInfo, headMessage);
+                diagnostics.add(ts.createDiagnosticForNodeFromMessageChain(node, errorInfo));
+                return resolveErrorCall(node);
+            }
+            return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
+        }
         // candidatesOutArray is passed by signature help in the language service, and collectCandidates
         // must fill it up with the appropriate candidate signatures
         function getResolvedSignature(node, candidatesOutArray) {
@@ -19100,6 +19449,9 @@ var ts;
                 }
                 else if (node.kind === 162 /* TaggedTemplateExpression */) {
                     links.resolvedSignature = resolveTaggedTemplateExpression(node, candidatesOutArray);
+                }
+                else if (node.kind === 132 /* Decorator */) {
+                    links.resolvedSignature = resolveDecorator(node, candidatesOutArray);
                 }
                 else {
                     ts.Debug.fail("Branch in 'getResolvedSignature' should be unreachable.");
@@ -19343,7 +19695,7 @@ var ts;
                     if (node.type) {
                         checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined);
                     }
-                    checkFunctionExpressionBodies(node.body);
+                    checkFunctionAndClassExpressionBodies(node.body);
                 }
             }
         }
@@ -19807,7 +20159,7 @@ var ts;
                 if (ts.isFunctionLike(parent) && current === parent.body) {
                     return false;
                 }
-                else if (current.kind === 204 /* ClassDeclaration */ || current.kind === 177 /* ClassExpression */) {
+                else if (ts.isClassLike(current)) {
                     return true;
                 }
                 current = parent;
@@ -20707,29 +21059,37 @@ var ts;
         }
         /** Check a decorator */
         function checkDecorator(node) {
-            var expression = node.expression;
-            var exprType = checkExpression(expression);
+            var signature = getResolvedSignature(node);
+            var returnType = getReturnTypeOfSignature(signature);
+            if (returnType.flags & 1 /* Any */) {
+                return;
+            }
+            var expectedReturnType;
+            var headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
+            var errorInfo;
             switch (node.parent.kind) {
                 case 204 /* ClassDeclaration */:
                     var classSymbol = getSymbolOfNode(node.parent);
                     var classConstructorType = getTypeOfSymbol(classSymbol);
-                    var classDecoratorType = instantiateSingleCallFunctionType(getGlobalClassDecoratorType(), [classConstructorType]);
-                    checkTypeAssignableTo(exprType, classDecoratorType, node);
+                    expectedReturnType = getUnionType([classConstructorType, voidType]);
+                    break;
+                case 131 /* Parameter */:
+                    expectedReturnType = voidType;
+                    errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
                     break;
                 case 134 /* PropertyDeclaration */:
-                    checkTypeAssignableTo(exprType, getGlobalPropertyDecoratorType(), node);
+                    expectedReturnType = voidType;
+                    errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.The_return_type_of_a_property_decorator_function_must_be_either_void_or_any);
                     break;
                 case 136 /* MethodDeclaration */:
                 case 138 /* GetAccessor */:
                 case 139 /* SetAccessor */:
                     var methodType = getTypeOfNode(node.parent);
-                    var methodDecoratorType = instantiateSingleCallFunctionType(getGlobalMethodDecoratorType(), [methodType]);
-                    checkTypeAssignableTo(exprType, methodDecoratorType, node);
-                    break;
-                case 131 /* Parameter */:
-                    checkTypeAssignableTo(exprType, getGlobalParameterDecoratorType(), node);
+                    var descriptorType = createTypedPropertyDescriptorType(methodType);
+                    expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
             }
+            checkTypeAssignableTo(returnType, expectedReturnType, node, headMessage, errorInfo);
         }
         /** Checks a type reference node as an expression. */
         function checkTypeNodeAsExpression(node) {
@@ -20880,7 +21240,7 @@ var ts;
             }
             ts.forEach(node.statements, checkSourceElement);
             if (ts.isFunctionBlock(node) || node.kind === 209 /* ModuleBlock */) {
-                checkFunctionExpressionBodies(node);
+                checkFunctionAndClassExpressionBodies(node);
             }
         }
         function checkCollisionWithArgumentsInGeneratedCode(node) {
@@ -20945,7 +21305,7 @@ var ts;
                 return;
             }
             // bubble up and find containing type
-            var enclosingClass = ts.getAncestor(node, 204 /* ClassDeclaration */);
+            var enclosingClass = ts.getContainingClass(node);
             // if containing type was not found or it is ambient - exit (no codegen)
             if (!enclosingClass || ts.isInAmbientContext(enclosingClass)) {
                 return;
@@ -21650,7 +22010,7 @@ var ts;
                     checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, 0 /* String */);
                     checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, 1 /* Number */);
                 });
-                if (type.flags & 1024 /* Class */ && type.symbol.valueDeclaration.kind === 204 /* ClassDeclaration */) {
+                if (type.flags & 1024 /* Class */ && ts.isClassLike(type.symbol.valueDeclaration)) {
                     var classDeclaration = type.symbol.valueDeclaration;
                     for (var _i = 0, _a = classDeclaration.members; _i < _a.length; _i++) {
                         var member = _a[_i];
@@ -21739,15 +22099,17 @@ var ts;
             }
         }
         function checkClassExpression(node) {
-            grammarErrorOnNode(node, ts.Diagnostics.class_expressions_are_not_currently_supported);
-            ts.forEach(node.members, checkSourceElement);
-            return unknownType;
+            checkClassLikeDeclaration(node);
+            return getTypeOfSymbol(getSymbolOfNode(node));
         }
         function checkClassDeclaration(node) {
-            // Grammar checking
             if (!node.name && !(node.flags & 256 /* Default */)) {
                 grammarErrorOnFirstToken(node, ts.Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
+            checkClassLikeDeclaration(node);
+            ts.forEach(node.members, checkSourceElement);
+        }
+        function checkClassLikeDeclaration(node) {
             checkGrammarClassDeclarationHeritageClauses(node);
             checkDecorators(node);
             if (node.name) {
@@ -21812,7 +22174,6 @@ var ts;
                     }
                 });
             }
-            ts.forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
@@ -22608,8 +22969,8 @@ var ts;
                     return checkMissingDeclaration(node);
             }
         }
-        // Function expression bodies are checked after all statements in the enclosing body. This is to ensure
-        // constructs like the following are permitted:
+        // Function and class expression bodies are checked after all statements in the enclosing body. This is
+        // to ensure constructs like the following are permitted:
         //     let foo = function () {
         //        let s = foo();
         //        return "hello";
@@ -22617,17 +22978,20 @@ var ts;
         // Here, performing a full type check of the body of the function expression whilst in the process of
         // determining the type of foo would cause foo to be given type any because of the recursive reference.
         // Delaying the type check of the body ensures foo has been assigned a type.
-        function checkFunctionExpressionBodies(node) {
+        function checkFunctionAndClassExpressionBodies(node) {
             switch (node.kind) {
                 case 165 /* FunctionExpression */:
                 case 166 /* ArrowFunction */:
-                    ts.forEach(node.parameters, checkFunctionExpressionBodies);
+                    ts.forEach(node.parameters, checkFunctionAndClassExpressionBodies);
                     checkFunctionExpressionOrObjectLiteralMethodBody(node);
+                    break;
+                case 177 /* ClassExpression */:
+                    ts.forEach(node.members, checkSourceElement);
                     break;
                 case 136 /* MethodDeclaration */:
                 case 135 /* MethodSignature */:
-                    ts.forEach(node.decorators, checkFunctionExpressionBodies);
-                    ts.forEach(node.parameters, checkFunctionExpressionBodies);
+                    ts.forEach(node.decorators, checkFunctionAndClassExpressionBodies);
+                    ts.forEach(node.parameters, checkFunctionAndClassExpressionBodies);
                     if (ts.isObjectLiteralMethod(node)) {
                         checkFunctionExpressionOrObjectLiteralMethodBody(node);
                     }
@@ -22636,10 +23000,10 @@ var ts;
                 case 138 /* GetAccessor */:
                 case 139 /* SetAccessor */:
                 case 203 /* FunctionDeclaration */:
-                    ts.forEach(node.parameters, checkFunctionExpressionBodies);
+                    ts.forEach(node.parameters, checkFunctionAndClassExpressionBodies);
                     break;
                 case 195 /* WithStatement */:
-                    checkFunctionExpressionBodies(node.expression);
+                    checkFunctionAndClassExpressionBodies(node.expression);
                     break;
                 case 132 /* Decorator */:
                 case 131 /* Parameter */:
@@ -22696,7 +23060,7 @@ var ts;
                 case 229 /* EnumMember */:
                 case 217 /* ExportAssignment */:
                 case 230 /* SourceFile */:
-                    ts.forEachChild(node, checkFunctionExpressionBodies);
+                    ts.forEachChild(node, checkFunctionAndClassExpressionBodies);
                     break;
             }
         }
@@ -22721,7 +23085,7 @@ var ts;
                 emitParam = false;
                 potentialThisCollisions.length = 0;
                 ts.forEach(node.statements, checkSourceElement);
-                checkFunctionExpressionBodies(node);
+                checkFunctionAndClassExpressionBodies(node);
                 if (ts.isExternalModule(node)) {
                     checkExternalModuleExports(node);
                 }
@@ -22796,6 +23160,11 @@ var ts;
                         case 207 /* EnumDeclaration */:
                             copySymbols(getSymbolOfNode(location).exports, meaning & 8 /* EnumMember */);
                             break;
+                        case 177 /* ClassExpression */:
+                            if (location.name) {
+                                copySymbol(location.symbol, meaning);
+                            }
+                        // Fall through
                         case 204 /* ClassDeclaration */:
                         case 205 /* InterfaceDeclaration */:
                             if (!(memberFlags & 128 /* Static */)) {
@@ -22831,41 +23200,6 @@ var ts;
                     }
                 }
             }
-            if (isInsideWithStatementBody(location)) {
-                // We cannot answer semantic questions within a with block, do not proceed any further
-                return [];
-            }
-            while (location) {
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    copySymbols(location.locals, meaning);
-                }
-                switch (location.kind) {
-                    case 230 /* SourceFile */:
-                        if (!ts.isExternalModule(location))
-                            break;
-                    case 208 /* ModuleDeclaration */:
-                        copySymbols(getSymbolOfNode(location).exports, meaning & 8914931 /* ModuleMember */);
-                        break;
-                    case 207 /* EnumDeclaration */:
-                        copySymbols(getSymbolOfNode(location).exports, meaning & 8 /* EnumMember */);
-                        break;
-                    case 204 /* ClassDeclaration */:
-                    case 205 /* InterfaceDeclaration */:
-                        if (!(memberFlags & 128 /* Static */)) {
-                            copySymbols(getSymbolOfNode(location).members, meaning & 793056 /* Type */);
-                        }
-                        break;
-                    case 165 /* FunctionExpression */:
-                        if (location.name) {
-                            copySymbol(location.symbol, meaning);
-                        }
-                        break;
-                }
-                memberFlags = location.flags;
-                location = location.parent;
-            }
-            copySymbols(globals, meaning);
-            return symbolsToArray(symbols);
         }
         function isTypeDeclarationName(name) {
             return name.kind === 65 /* Identifier */ &&
@@ -22966,6 +23300,9 @@ var ts;
                 // return the alias symbol.
                 meaning |= 8388608 /* Alias */;
                 return resolveEntityName(entityName, meaning);
+            }
+            if (entityName.parent.kind === 143 /* TypePredicate */) {
+                return resolveEntityName(entityName, 1 /* FunctionScopedVariable */);
             }
             // Do we want to return undefined here?
             return undefined;
@@ -23080,6 +23417,16 @@ var ts;
                 expr = expr.parent;
             }
             return checkExpression(expr);
+        }
+        /**
+          * Gets either the static or instance type of a class element, based on
+          * whether the element is declared as "static".
+          */
+        function getParentTypeOfClassElement(node) {
+            var classSymbol = getSymbolOfNode(node.parent);
+            return node.flags & 128 /* Static */
+                ? getTypeOfSymbol(classSymbol)
+                : getDeclaredTypeOfSymbol(classSymbol);
         }
         // Return the list of properties of the given type, augmented with properties from Function
         // if the type has call or construct signatures
@@ -23566,10 +23913,7 @@ var ts;
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            getGlobalClassDecoratorType = ts.memoize(function () { return getGlobalType("ClassDecorator"); });
-            getGlobalPropertyDecoratorType = ts.memoize(function () { return getGlobalType("PropertyDecorator"); });
-            getGlobalMethodDecoratorType = ts.memoize(function () { return getGlobalType("MethodDecorator"); });
-            getGlobalParameterDecoratorType = ts.memoize(function () { return getGlobalType("ParameterDecorator"); });
+            getGlobalTypedPropertyDescriptorType = ts.memoize(function () { return getGlobalType("TypedPropertyDescriptor", 1); });
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
             if (languageVersion >= 2 /* ES6 */) {
@@ -24132,7 +24476,7 @@ var ts;
                     return grammarErrorAtPos(getSourceFile(node), node.end - 1, ";".length, ts.Diagnostics._0_expected, "{");
                 }
             }
-            if (node.parent.kind === 204 /* ClassDeclaration */) {
+            if (ts.isClassLike(node.parent)) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, ts.Diagnostics.A_class_member_cannot_be_declared_optional)) {
                     return true;
                 }
@@ -24390,7 +24734,7 @@ var ts;
             }
         }
         function checkGrammarProperty(node) {
-            if (node.parent.kind === 204 /* ClassDeclaration */) {
+            if (ts.isClassLike(node.parent)) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, ts.Diagnostics.A_class_member_cannot_be_declared_optional) ||
                     checkGrammarForNonSymbolComputedProperty(node.name, ts.Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
@@ -26121,6 +26465,9 @@ var ts;
             function generateNameForExportDefault() {
                 return makeUniqueName("default");
             }
+            function generateNameForClassExpression() {
+                return makeUniqueName("class");
+            }
             function generateNameForNode(node) {
                 switch (node.kind) {
                     case 65 /* Identifier */:
@@ -26133,9 +26480,10 @@ var ts;
                         return generateNameForImportOrExportDeclaration(node);
                     case 203 /* FunctionDeclaration */:
                     case 204 /* ClassDeclaration */:
-                    case 177 /* ClassExpression */:
                     case 217 /* ExportAssignment */:
                         return generateNameForExportDefault();
+                    case 177 /* ClassExpression */:
+                        return generateNameForClassExpression();
                 }
             }
             function getGeneratedNameForNode(node) {
@@ -37159,6 +37507,10 @@ var ts;
                     if (actualIndentation !== -1 /* Unknown */) {
                         return actualIndentation;
                     }
+                    actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
+                    if (actualIndentation !== -1 /* Unknown */) {
+                        return actualIndentation + options.IndentSize;
+                    }
                     previous = current;
                     current = current.parent;
                 }
@@ -37198,6 +37550,10 @@ var ts;
                     if (useActualIndentation) {
                         // try to fetch actual indentation for current node from source text
                         var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                        if (actualIndentation !== -1 /* Unknown */) {
+                            return actualIndentation + indentationDelta;
+                        }
+                        actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                         if (actualIndentation !== -1 /* Unknown */) {
                             return actualIndentation + indentationDelta;
                         }
@@ -37336,6 +37692,44 @@ var ts;
                 function getActualIndentationFromList(list) {
                     var index = ts.indexOf(list, node);
                     return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : -1 /* Unknown */;
+                }
+            }
+            function getLineIndentationWhenExpressionIsInMultiLine(node, sourceFile, options) {
+                // actual indentation should not be used when:
+                // - node is close parenthesis - this is the end of the expression
+                if (node.kind === 17 /* CloseParenToken */) {
+                    return -1 /* Unknown */;
+                }
+                if (node.parent && (node.parent.kind === 160 /* CallExpression */ ||
+                    node.parent.kind === 161 /* NewExpression */) &&
+                    node.parent.expression !== node) {
+                    var fullCallOrNewExpression = node.parent.expression;
+                    var startingExpression = getStartingExpression(fullCallOrNewExpression);
+                    if (fullCallOrNewExpression === startingExpression) {
+                        return -1 /* Unknown */;
+                    }
+                    var fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(fullCallOrNewExpression.end);
+                    var startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
+                    if (fullCallOrNewExpressionEnd.line === startingExpressionEnd.line) {
+                        return -1 /* Unknown */;
+                    }
+                    return findColumnForFirstNonWhitespaceCharacterInLine(fullCallOrNewExpressionEnd, sourceFile, options);
+                }
+                return -1 /* Unknown */;
+                function getStartingExpression(node) {
+                    while (true) {
+                        switch (node.kind) {
+                            case 160 /* CallExpression */:
+                            case 161 /* NewExpression */:
+                            case 158 /* PropertyAccessExpression */:
+                            case 159 /* ElementAccessExpression */:
+                                node = node.expression;
+                                break;
+                            default:
+                                return node;
+                        }
+                    }
+                    return node;
                 }
             }
             function deriveActualIndentationFromList(list, index, sourceFile, options) {
