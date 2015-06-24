@@ -660,8 +660,7 @@ module FourSlash {
                 }
                 errorMsg += "]\n";
 
-                Harness.IO.log(errorMsg);
-                this.raiseError("Member list is not empty at Caret");
+                this.raiseError("Member list is not empty at Caret: " + errorMsg);
 
             }
         }
