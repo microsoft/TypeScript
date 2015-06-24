@@ -737,7 +737,6 @@ namespace ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
-        invalidDotExpression?: LeftHandSideExpression; // 1.toString() we attach the node but never emit it
     }
 
     export interface TemplateExpression extends PrimaryExpression {

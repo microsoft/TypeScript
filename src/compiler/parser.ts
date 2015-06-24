@@ -100,8 +100,6 @@ namespace ts {
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
                     visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
-            case SyntaxKind.NumericLiteral:
-                return visitNode(cbNode, (<LiteralExpression>node).invalidDotExpression);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
@@ -1847,20 +1845,13 @@ namespace ts {
                 if (sourceText.charCodeAt(tokenPos) === CharacterCodes._0 && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
                     node.flags |= NodeFlags.OctalLiteral;
                 }
-                else if (token === SyntaxKind.DotToken) {
-                    // Issue #2632 Keep space for  3 .toString()
-                    if (isWhiteSpace(sourceText.charCodeAt(node.end))) {
-						node.end++;
-                        scanner.setTextPos(node.end + 1);
-                    }
-                }
                 else if (token === SyntaxKind.Identifier && sourceText.charCodeAt(node.end-1) === CharacterCodes.dot) {
                     nextCharCode = sourceText.charCodeAt(node.end);
                     if (!isWhiteSpace(nextCharCode) && !isLineBreak(nextCharCode)) {
-                        // Eat up an invalid expression following '1.' e.g. 1.something()
-                        node.invalidDotExpression = parseLeftHandSideExpressionOrHigher();
-                        parseErrorAtPosition(node.end, node.invalidDotExpression.end - node.end, Diagnostics.Numeric_literal_0_cannot_be_followed_by_an_expression, "'" + sourceText.substring(tokenPos, node.end) + "'");
-                        node.end = node.invalidDotExpression.end;
+                        // If we see 23.Identifier, go back 1 char to scan .Identifier 
+                        node.end = node.end - 1;
+                        scanner.setTextPos(node.end);
+                        nextToken()
                     }
                 }
             }

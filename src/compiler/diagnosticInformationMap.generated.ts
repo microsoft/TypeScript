@@ -569,6 +569,5 @@ namespace ts {
         decorators_can_only_be_used_in_a_ts_file: { code: 8017, category: DiagnosticCategory.Error, key: "'decorators' can only be used in a .ts file." },
         Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses: { code: 9002, category: DiagnosticCategory.Error, key: "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses." },
         class_expressions_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "'class' expressions are not currently supported." },
-        Numeric_literal_0_cannot_be_followed_by_an_expression: { code: 9004, category: DiagnosticCategory.Error, key: "Numeric literal {0} cannot be followed by an expression." },
     };
 }
