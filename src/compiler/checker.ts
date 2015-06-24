@@ -6830,6 +6830,7 @@ namespace ts {
                     nameTable[prop.name] = true;
                 }
             }
+            return type;
         }
 
         /// Returns the type JSX.IntrinsicElements. May return `unknownType` if that type is not present.
@@ -7101,24 +7102,28 @@ namespace ts {
             // Process this array in right-to-left order so we know which
             // attributes (mostly from spreads) are being overwritten and
             // thus should have their types ignored
+            let sawSpreadedAny = false;
             for (let i = node.attributes.length - 1; i >= 0; i--) {
                 if (node.attributes[i].kind === SyntaxKind.JsxAttribute) {
                     checkJsxAttribute(<JsxAttribute>(node.attributes[i]), targetAttributesType, nameTable);
                 }
                 else {
                     Debug.assert(node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
-                    checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
+                    let spreadType = checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
+                    if(isTypeAny(spreadType)) {
+                        sawSpreadedAny = true;
+                    }
                 }
             }
 
-            // Check that all required properties have been provided
-            if (targetAttributesType) {
+            // Check that all required properties have been provided. If an 'any'
+            // was spreaded in, though, assume that it provided all required properties
+            if (targetAttributesType && !sawSpreadedAny) {
                 let targetProperties = getPropertiesOfType(targetAttributesType);
                 for (let i = 0; i < targetProperties.length; i++) {
                     if (!(targetProperties[i].flags & SymbolFlags.Optional) &&
                         nameTable[targetProperties[i].name] === undefined) {
 
-                        console.log('oops?');
                         error(node, Diagnostics.Property_0_is_missing_in_type_1, targetProperties[i].name, typeToString(targetAttributesType));
                     }
                 }
