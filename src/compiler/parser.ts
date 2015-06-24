@@ -984,29 +984,29 @@ namespace ts {
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
         // with magic property names like '__proto__'. The 'identifiers' object is used to share a single string instance for
         // each identifier in order to reduce memory consumption.
-        function createIdentifier(isIdentifier: boolean, diagnosticMessage?: DiagnosticMessage): Identifier {
+        function createIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
             identifierCount++;
-            if (isIdentifier) {
-                let node = <Identifier>createNode(SyntaxKind.Identifier);
-
-                // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
-                if (token !== SyntaxKind.Identifier) {
-                    node.originalKeywordKind = token;
-                }
-                node.text = internIdentifier(scanner.getTokenValue());
-                nextToken();
-                return finishNode(node);
+            let node = <Identifier>createNode(SyntaxKind.Identifier);
+            // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
+            if (token !== SyntaxKind.Identifier) {
+                node.originalKeywordKind = token;
             }
+            node.text = internIdentifier(scanner.getTokenValue());
+            nextToken();
+            return finishNode(node);
+        }
 
+        function createMissingIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
+            identifierCount++;
             return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
-            return createIdentifier(isIdentifier(), diagnosticMessage);
+            return isIdentifier() ? createIdentifier(diagnosticMessage) : createMissingIdentifier(diagnosticMessage);
         }
 
         function parseIdentifierName(): Identifier {
-            return createIdentifier(isIdentifierOrKeyword());
+            return isIdentifierOrKeyword() ? createIdentifier() : createMissingIdentifier();
         }
 
         function isLiteralPropertyName(): boolean {
