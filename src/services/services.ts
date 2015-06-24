@@ -3363,20 +3363,31 @@ namespace ts {
 
                 let existingMemberNames: Map<boolean> = {};
                 for (let m of existingMembers) {
+                    // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
                         m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
                         m.kind !== SyntaxKind.BindingElement) {
-                        // Ignore omitted expressions for missing members
                         continue;
                     }
 
+                    // If this is the current item we are editing right now, do not filter it out
                     if (m.getStart() <= position && position <= m.getEnd()) {
-                        // If this is the current item we are editing right now, do not filter it out
                         continue;
                     }
 
-                    // TODO(jfreeman): Account for computed property name
-                    existingMemberNames[(<Identifier>m.name).text] = true;
+                    let existingName: string;
+
+                    if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
+                        existingName = (<BindingElement>m).propertyName.text;
+                    }
+                    else {
+                        // TODO(jfreeman): Account for computed property name
+                        // NOTE: if one only performs this step when m.name is an identifier,
+                        // things like '__proto__' are not filtered out.
+                        existingName = (<Identifier>m.name).text;
+                    }
+
+                    existingMemberNames[existingName] = true;
                 }
 
                 let filteredMembers: Symbol[] = [];
