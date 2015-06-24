@@ -1783,7 +1783,21 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                 emit(node.expression);
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
-                write(".");
+                
+                // 1 .toString is a valid property access, emit a space after the literal 
+                let shouldEmitSpace: boolean;
+                if (!indentedBeforeDot && node.expression.kind === SyntaxKind.NumericLiteral) {
+                    let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
+                    shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                }
+
+                if (shouldEmitSpace) {
+                    write(" ."); 
+                }
+                else {
+                    write(".");
+                }
+
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
