@@ -3010,7 +3010,7 @@ namespace ts {
                     let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
                     if (typeMembers && typeMembers.length > 0) {
                         // Add filtered items to the completion list
-                        symbols = filterContextualMembersList(typeMembers, existingMembers);
+                        symbols = filterObjectMembersList(typeMembers, existingMembers);
                     }
                 }
                 else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
@@ -3356,26 +3356,28 @@ namespace ts {
                 return filter(exports, e => !lookUp(exisingImports, e.name));
             }
 
-            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+            function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
                 }
 
                 let existingMemberNames: Map<boolean> = {};
-                forEach(existingMembers, m => {
-                    if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
-                        // Ignore omitted expressions for missing members in the object literal
-                        return;
+                for (let m of existingMembers) {
+                    if (m.kind !== SyntaxKind.PropertyAssignment &&
+                        m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
+                        m.kind !== SyntaxKind.BindingElement) {
+                        // Ignore omitted expressions for missing members
+                        continue;
                     }
 
                     if (m.getStart() <= position && position <= m.getEnd()) {
                         // If this is the current item we are editing right now, do not filter it out
-                        return;
+                        continue;
                     }
 
                     // TODO(jfreeman): Account for computed property name
                     existingMemberNames[(<Identifier>m.name).text] = true;
-                });
+                }
 
                 let filteredMembers: Symbol[] = [];
                 forEach(contextualMemberSymbols, s => {
