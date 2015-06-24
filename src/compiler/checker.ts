@@ -11925,6 +11925,10 @@ namespace ts {
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
 
+            if (entityName.parent.kind === SyntaxKind.TypePredicate) {
+                return resolveEntityName(<Identifier>entityName, /* meanings */ SymbolFlags.Variable);
+            }
+
             // Do we want to return undefined here?
             return undefined;
         }
