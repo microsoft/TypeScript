@@ -12182,8 +12182,12 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
-                            if ((<FunctionExpression>location).name) {
-                                copySymbol(location.symbol, meaning);
+                            let name = (<FunctionExpression>location).name;
+                            if (name) {
+                                let symbol = location.symbol;
+                                if (symbol.flags & meaning && !hasProperty(symbols, name.text)) {
+                                    symbols[name.text] = symbol;
+                                }
                             }
                             break;
                     }

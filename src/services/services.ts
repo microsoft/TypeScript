@@ -2807,6 +2807,22 @@ namespace ts {
                     }
                 }
 
+                // Special case for function expression because despite sometimes having a name, the binder
+                // binds them to a symbol with the name "__function". However, for completion entry, we want
+                // to display its declared name rather than "__function".
+                //      var x = function foo () {
+                //          fo$  <- completion list should contain local name "foo"
+                //      }
+                //      foo$ <- completion list should not contain "foo"
+                if (displayName === "__function") {
+                    displayName = symbol.declarations[0].name.getText();
+
+                    // At this point, we expect that all completion list entries have declared name including function expression
+                    // because when we gather all relevant symbols, we check that the function expression must have declared name
+                    // before adding the symbol into our symbols table. (see: getSymbolsInScope)
+                    Debug.assert(displayName !== undefined,"Expected this function expression to have declared name");
+                }
+
                 let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
