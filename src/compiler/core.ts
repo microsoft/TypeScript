@@ -59,6 +59,11 @@ namespace ts {
 
     export interface StringSet extends Map<any> { }
 
+    /**
+     * Iterates through 'array' by index and performs the callback on each element of array 
+     * until the callback returns a truthy value, then returns that value. 
+     * If no such value is found, the callback is applied to each element of array.
+     */
     export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {

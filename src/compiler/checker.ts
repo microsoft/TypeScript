@@ -10730,11 +10730,21 @@ namespace ts {
                 });
             }
 
-            forEach(node.members, checkSourceElement);
+            // forEach(node.members, checkSourceElement);
 
-            // Classes containing abstract methods must be marked abstract
-            if (!(node.flags & NodeFlags.Abstract) && forEach(node.members, element => element.flags & NodeFlags.Abstract)) {
-                error(node, Diagnostics.Classes_containing_abstract_methods_must_be_marked_abstract);
+            if(node.flags & NodeFlags.Abstract) {
+                forEach(node.members, checkSourceElement);
+            } 
+            else {
+                forEach(node.members, element => {
+                    checkSourceElement(element);
+
+                    // Classes containing abstract methods must be marked abstract
+                    if (element.flags & NodeFlags.Abstract) {
+                        error(node, Diagnostics.Classes_containing_abstract_methods_must_be_marked_abstract);
+                    }
+                    return undefined;
+                });
             }
 
             if (produceDiagnostics) {
