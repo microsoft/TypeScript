@@ -582,37 +582,12 @@ namespace ts {
         function processImportedModules(file: SourceFile, basePath: string) {            
             collectExternalModuleReferences(file);            
             if (file.imports.length) {               
-                let allImportsInTheCache = false;
-
-                // try to grab existing module resolutions from the old source file
-                let oldSourceFile: SourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
-                if (oldSourceFile) {
-                    file.resolvedModules = oldSourceFile.resolvedModules;
-                
-                    // check that all imports are contained in resolved modules cache
-                    // if at least one of imports in not in the cache - cache needs to be reinitialized
-                    checkImports: {
-                        if (file.resolvedModules) {
-                            for (let moduleName of file.imports) {
-                                if (!hasResolvedModuleName(file, moduleName.text)) {
-                                    break checkImports;
-                                }
-                            }
-
-                            allImportsInTheCache = true;
-                        }
-                    }
+                file.resolvedModules = {};
+                let oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
+                for (let moduleName of file.imports) {
+                    resolveModule(moduleName, oldSourceFile && oldSourceFile.resolvedModules);
                 }
                 
-                if (!allImportsInTheCache) {
-                    // initialize resolvedModules with empty map
-                    // old module resolutions still can be used to avoid actual file system probing
-                    let resolvedModules = file.resolvedModules;
-                    file.resolvedModules = {};
-                    for (let moduleName of file.imports) {
-                        resolveModule(moduleName, resolvedModules);
-                    }
-                }
             }
             else {
                 // no imports - drop cached module resolutions
