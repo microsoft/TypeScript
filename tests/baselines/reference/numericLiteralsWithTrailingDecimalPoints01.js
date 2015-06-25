@@ -1,4 +1,4 @@
-//// [numLit.ts]
+//// [numericLiteralsWithTrailingDecimalPoints01.ts]
 1..toString();
 1.0.toString();
 1.toString();
@@ -18,7 +18,7 @@ var test8 = new Number(4).toString();
 var test9 = 3. + 3.
 
 
-//// [numLit.js]
+//// [numericLiteralsWithTrailingDecimalPoints01.js]
 1..toString();
 1.0.toString();
 1.;
