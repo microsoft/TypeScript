@@ -7,7 +7,7 @@
 // Preserve whitespace where important for JS compatibility
 var i: number = 1;
 var test1 = i.toString();  
-var test2 = 2.toString(); // emitted as 2 .toString()
+var test2 = 2.toString();
 var test3 = 3 .toString();
 var test4 = 3    .toString();
 var test5 = 3	.toString(); 
@@ -27,7 +27,7 @@ toString();
 // Preserve whitespace where important for JS compatibility
 var i = 1;
 var test1 = i.toString();
-var test2 = 2., toString = (); // emitted as 2 .toString()
+var test2 = 2., toString = ();
 var test3 = 3 .toString();
 var test4 = 3 .toString();
 var test5 = 3 .toString();
