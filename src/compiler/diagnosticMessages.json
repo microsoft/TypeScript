@@ -751,21 +751,45 @@
         "category": "Error",
         "code": 1235
     },
-    "'abstract' modifier can only appear on a class or method declaration.": {
+    "The return type of a property decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1236
     },
-    "'{0}' modifier cannot be used with '{1}' modifier.": {
+    "The return type of a parameter decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1237
     },
-    "Abstract methods can only appear within an abstract class.": {
+    "Unable to resolve signature of class decorator when called as an expression.": {
         "category": "Error",
         "code": 1238
     },
-    "Method '{0}' cannot have an implementation because it is marked abstract.": {
+    "Unable to resolve signature of parameter decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1239
+    },
+    "Unable to resolve signature of property decorator when called as an expression.": {
         "category": "Error",
         "code": 1240
+    },
+    "Unable to resolve signature of method decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1241
+    },
+        "'abstract' modifier can only appear on a class or method declaration.": {
+        "category": "Error",
+        "code": 1242
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1243
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1244
+    },
+    "Method '{0}' cannot have an implementation because it is marked abstract.": {
+        "category": "Error",
+        "code": 1245
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2300,14 +2324,5 @@
     "'decorators' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8017
-    },
-
-    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
-        "category": "Error",
-        "code": 9002
-    },
-    "'class' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9003
     }
 }

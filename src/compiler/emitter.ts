@@ -264,6 +264,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return makeUniqueName("default");
             }
 
+            function generateNameForClassExpression() {
+                return makeUniqueName("class");
+            }
+
             function generateNameForNode(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -276,9 +280,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.ExportAssignment:
                         return generateNameForExportDefault();
+                    case SyntaxKind.ClassExpression:
+                        return generateNameForClassExpression();
                 }
             }
 
@@ -1778,7 +1783,21 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                 emit(node.expression);
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
-                write(".");
+                
+                // 1 .toString is a valid property access, emit a space after the literal 
+                let shouldEmitSpace: boolean;
+                if (!indentedBeforeDot && node.expression.kind === SyntaxKind.NumericLiteral) {
+                    let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
+                    shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                }
+
+                if (shouldEmitSpace) {
+                    write(" ."); 
+                }
+                else {
+                    write(".");
+                }
+
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
@@ -3135,33 +3154,49 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6) {
                     let tempIndex = 0;
-                    forEach(node.parameters, p => {
+                    forEach(node.parameters, parameter => {
                         // A rest parameter cannot have a binding pattern or an initializer,
                         // so let's just ignore it.
-                        if (p.dotDotDotToken) {
+                        if (parameter.dotDotDotToken) {
                             return;
                         }
 
-                        if (isBindingPattern(p.name)) {
-                            writeLine();
-                            write("var ");
-                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
-                            write(";");
-                            tempIndex++;
+                        let { name: paramName, initializer } = parameter;
+                        if (isBindingPattern(paramName)) {
+                            // In cases where a binding pattern is simply '[]' or '{}',
+                            // we usually don't want to emit a var declaration; however, in the presence
+                            // of an initializer, we must emit that expression to preserve side effects.
+                            let hasBindingElements = paramName.elements.length > 0;
+                            if (hasBindingElements || initializer) {
+                                writeLine();
+                                write("var ");
+
+                                if (hasBindingElements) {
+                                    emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                                }
+                                else {
+                                    emit(tempParameters[tempIndex]);
+                                    write(" = ");
+                                    emit(initializer);
+                                }
+
+                                write(";");
+                                tempIndex++;
+                            }
                         }
-                        else if (p.initializer) {
+                        else if (initializer) {
                             writeLine();
-                            emitStart(p);
+                            emitStart(parameter);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitNodeWithoutSourceMap(paramName);
                             write(" === void 0)");
-                            emitEnd(p);
+                            emitEnd(parameter);
                             write(" { ");
-                            emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitStart(parameter);
+                            emitNodeWithoutSourceMap(paramName);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
-                            emitEnd(p);
+                            emitNodeWithoutSourceMap(initializer);
+                            emitEnd(parameter);
                             write("; }");
                         }
                     });

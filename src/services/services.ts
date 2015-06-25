@@ -95,7 +95,6 @@ namespace ts {
 
     export module ScriptSnapshot {
         class StringScriptSnapshot implements IScriptSnapshot {
-            private _lineStartPositions: number[] = undefined;
 
             constructor(private text: string) {
             }
@@ -2912,7 +2911,6 @@ namespace ts {
             }
 
             let location = getTouchingPropertyName(sourceFile, position);
-            var target = program.getCompilerOptions().target;
 
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
@@ -2987,21 +2985,32 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
-                if (containingObjectLiteral) {
+                let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
+                if (objectLikeContainer) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
 
-                    let contextualType = typeChecker.getContextualType(containingObjectLiteral);
-                    if (!contextualType) {
+                    let typeForObject: Type;
+                    let existingMembers: Declaration[];
+
+                    if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                        typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                        existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
+                    }
+                    else {
+                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                        existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                    }
+
+                    if (!typeForObject) {
                         return false;
                     }
 
-                    let contextualTypeMembers = typeChecker.getPropertiesOfType(contextualType);
-                    if (contextualTypeMembers && contextualTypeMembers.length > 0) {
+                    let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                    if (typeMembers && typeMembers.length > 0) {
                         // Add filtered items to the completion list
-                        symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
+                        symbols = filterObjectMembersList(typeMembers, existingMembers);
                     }
                 }
                 else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
@@ -3189,17 +3198,18 @@ namespace ts {
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
-                // The locations in an object literal expression that are applicable for completion are property name definition locations.
-
-                if (previousToken) {
-                    let parent = previousToken.parent;
-
-                    switch (previousToken.kind) {
+            /**
+             * Returns the immediate owning object literal or binding pattern of a context token,
+             * on the condition that one exists and that the context implies completion should be given.
+             */
+            function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | BindingPattern {
+                if (contextToken) {
+                    switch (contextToken.kind) {
                         case SyntaxKind.OpenBraceToken:  // let x = { |
                         case SyntaxKind.CommaToken:      // let x = { a: 0, |
-                            if (parent && parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                                return <ObjectLiteralExpression>parent;
+                            let parent = contextToken.parent;
+                            if (parent && (parent.kind === SyntaxKind.ObjectLiteralExpression || parent.kind === SyntaxKind.ObjectBindingPattern)) {
+                                return <ObjectLiteralExpression | BindingPattern>parent;
                             }
                             break;
                     }
@@ -3238,8 +3248,7 @@ namespace ts {
                                 containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
                                 containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                                containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
-                                containingNodeKind === SyntaxKind.ObjectBindingPattern;                     // function func({ x, y|
+                                containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
                                                                                                           
                         case SyntaxKind.DotToken:
                             return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
@@ -3257,8 +3266,7 @@ namespace ts {
                         case SyntaxKind.OpenBraceToken:
                             return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
-                                containingNodeKind === SyntaxKind.TypeLiteral ||                            // let x : { |
-                                containingNodeKind === SyntaxKind.ObjectBindingPattern;                     // function func({ x|
+                                containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
@@ -3350,26 +3358,39 @@ namespace ts {
                 return filter(exports, e => !lookUp(exisingImports, e.name));
             }
 
-            function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+            function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
                 }
 
                 let existingMemberNames: Map<boolean> = {};
-                forEach(existingMembers, m => {
-                    if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
-                        // Ignore omitted expressions for missing members in the object literal
-                        return;
+                for (let m of existingMembers) {
+                    // Ignore omitted expressions for missing members
+                    if (m.kind !== SyntaxKind.PropertyAssignment &&
+                        m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
+                        m.kind !== SyntaxKind.BindingElement) {
+                        continue;
                     }
 
+                    // If this is the current item we are editing right now, do not filter it out
                     if (m.getStart() <= position && position <= m.getEnd()) {
-                        // If this is the current item we are editing right now, do not filter it out
-                        return;
+                        continue;
                     }
 
-                    // TODO(jfreeman): Account for computed property name
-                    existingMemberNames[(<Identifier>m.name).text] = true;
-                });
+                    let existingName: string;
+
+                    if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
+                        existingName = (<BindingElement>m).propertyName.text;
+                    }
+                    else {
+                        // TODO(jfreeman): Account for computed property name
+                        // NOTE: if one only performs this step when m.name is an identifier,
+                        // things like '__proto__' are not filtered out.
+                        existingName = (<Identifier>m.name).text;
+                    }
+
+                    existingMemberNames[existingName] = true;
+                }
 
                 let filteredMembers: Symbol[] = [];
                 forEach(contextualMemberSymbols, s => {

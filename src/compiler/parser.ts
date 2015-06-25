@@ -5365,7 +5365,6 @@ namespace ts {
                     let atToken = createNode(SyntaxKind.AtToken, pos - 1);
                     atToken.end = pos;
 
-                    let startPos = pos;
                     let tagName = scanIdentifier();
                     if (!tagName) {
                         return;

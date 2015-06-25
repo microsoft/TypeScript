@@ -9,7 +9,7 @@ export var test = 'abc';
 import { test } from './a';
 
 function filter(handler: any) {
-    return function (target: any) {
+    return function (target: any, propertyKey: string) {
         // ...
     };
 }
@@ -35,7 +35,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var a_1 = require('./a');
 function filter(handler) {
-    return function (target) {
+    return function (target, propertyKey) {
         // ...
     };
 }

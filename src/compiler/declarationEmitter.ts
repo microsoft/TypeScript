@@ -40,7 +40,6 @@ namespace ts {
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
-        let languageVersion = compilerOptions.target || ScriptTarget.ES3;
 
         let write: (s: string) => void;
         let writeLine: () => void;
