@@ -2075,7 +2075,6 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        hasChanges?(oldFile: SourceFile): boolean;
     }
 
     export interface TextSpan {

@@ -78,7 +78,7 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer: (a: T, b: T) => boolean): boolean {
+    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
         if (!arr1 || !arr2) {
             return arr1 === arr2;
         }
@@ -88,7 +88,8 @@ namespace ts {
         }
 
         for (let i = 0; i < arr1.length; ++i) {
-            if (!comparer(arr1[i], arr2[i])) {
+            let equals = comparer ? comparer(arr1[i], arr2[i]) : arr1[i] === arr2[i];
+            if (!equals) {
                 return false;
             }
         }
@@ -96,20 +97,20 @@ namespace ts {
         return true;
     }    
    
-    export function hasResolvedModuleName(sourceFile: SourceFile, moduleName: LiteralExpression): boolean {
-        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleName.text);
+    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
 
-    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleName: LiteralExpression): string {
-        return sourceFile.resolvedModules && sourceFile.resolvedModules[moduleName.text];
+    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
+        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText]: undefined;
     }
 
-    export function setResolvedModuleName(sourceFile: SourceFile, moduleName: LiteralExpression, resolvedFileName: string): void {
+    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = {};
         }
 
-        sourceFile.resolvedModules[moduleName.text] = resolvedFileName;
+        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.

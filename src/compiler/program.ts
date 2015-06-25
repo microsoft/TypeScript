@@ -163,10 +163,14 @@ namespace ts {
 
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
         
-        // if old program was provided by has different target module kind - assume that it cannot be reused
-        // different module kind can lead to different way of resolving modules
-        if (oldProgram && oldProgram.getCompilerOptions().module !== options.module) {
-            oldProgram = undefined;
+        if (oldProgram) {
+            let oldOptions = oldProgram.getCompilerOptions();
+            if ((oldOptions.module !== options.module) || 
+                (oldOptions.noResolve !== options.noResolve) || 
+                (oldOptions.target !== options.target) || 
+                (oldOptions.noLib !== options.noLib)) {
+                oldProgram = undefined;
+            }
         }
         
         if (!tryReuseStructureFromOldProgram()) {
@@ -222,10 +226,6 @@ namespace ts {
         }
 
         function tryReuseStructureFromOldProgram(): boolean {
-            if (!host.hasChanges) {
-                // host does not support method 'hasChanges'
-                return false;
-            }
             if (!oldProgram) {
                 return false;
             }
@@ -234,28 +234,19 @@ namespace ts {
 
             // there is an old program, check if we can reuse its structure
             let oldRootNames = oldProgram.getRootFileNames();
-            if (rootNames.length !== oldRootNames.length) {
-                // different amount of root names - structure cannot be reused
+            if (!arrayIsEqualTo(oldRootNames, rootNames)) {
                 return false;
-            }
-            
-            for (let i = 0; i < rootNames.length; i++) {
-                if (oldRootNames[i] !== rootNames[i]) {
-                    // different order of root names - structure cannot be reused
-                    return false;
-                }
             }
             
             // check if program source files has changed in the way that can affect structure of the program
             let newSourceFiles: SourceFile[] = [];
             for (let oldSourceFile of oldProgram.getSourceFiles()) {
-                let newSourceFile: SourceFile;
-                if (host.hasChanges(oldSourceFile)) {
-                    newSourceFile = host.getSourceFile(oldSourceFile.fileName, options.target);
-                    if (!newSourceFile) {
-                        return false;
-                    }
-                    
+                let newSourceFile = host.getSourceFile(oldSourceFile.fileName, options.target);
+                if (!newSourceFile) {
+                    return false;
+                }
+
+                if (oldSourceFile !== newSourceFile) {
                     // check tripleslash references
                     if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                         // tripleslash references has changed
@@ -420,7 +411,7 @@ namespace ts {
         }
         
         function moduleNameIsEqualTo(a: LiteralExpression, b: LiteralExpression): boolean {
-            return a.text ===b.text;
+            return a.text === b.text;
         }
         
         function collectExternalModuleReferences(file: SourceFile): void {
@@ -603,7 +594,7 @@ namespace ts {
                     checkImports: {
                         if (file.resolvedModules) {
                             for (let moduleName of file.imports) {
-                                if (!hasResolvedModuleName(file, moduleName)) {
+                                if (!hasResolvedModuleName(file, moduleName.text)) {
                                     break checkImports;
                                 }
                             }
@@ -640,7 +631,7 @@ namespace ts {
                 if (existingResolutions && hasProperty(existingResolutions, moduleNameExpr.text)) {
                     let fileName = existingResolutions[moduleNameExpr.text];
                     // use existing resolution
-                    setResolvedModuleName(file, moduleNameExpr, fileName);
+                    setResolvedModuleName(file, moduleNameExpr.text, fileName);
                     if (fileName) {
                         findModuleSourceFile(fileName, moduleNameExpr);
                     }
@@ -651,7 +642,7 @@ namespace ts {
                     searchName = normalizePath(combinePaths(searchPath, moduleNameExpr.text));
                     let referencedSourceFile = forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr));
                     if (referencedSourceFile) {
-                        setResolvedModuleName(file, moduleNameExpr, referencedSourceFile.fileName);
+                        setResolvedModuleName(file, moduleNameExpr.text, referencedSourceFile.fileName);
                         return;
                     }
 
@@ -662,7 +653,7 @@ namespace ts {
                     searchPath = parentPath;
                 }
                 // mark reference as non-resolved
-                setResolvedModuleName(file, moduleNameExpr, undefined);
+                setResolvedModuleName(file, moduleNameExpr.text, undefined);
             }
         }
 

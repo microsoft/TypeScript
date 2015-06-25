@@ -1898,7 +1898,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
+            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -2472,8 +2472,6 @@ namespace ts {
             let newSettings = hostCache.compilationSettings();
             let changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
-            let reusableOldProgram = changesInCompilationSettingsAffectSyntax ? undefined : program;
-            
             // Now create a new compiler
             let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
@@ -2484,8 +2482,7 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory(),
-                hasChanges: oldFile => oldFile.version !== hostCache.getVersion(oldFile.fileName)
-            }, reusableOldProgram);
+            }, program);
 
             // Release any files we have acquired in the old program but are 
             // not part of the new program.
