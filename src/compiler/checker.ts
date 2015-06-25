@@ -12362,7 +12362,8 @@ namespace ts {
                         node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
                         node === (<BindingElement>node.parent).propertyName) {
                     let typeOfPattern = getTypeAtLocation(node.parent.parent);
-                    let propertyDeclaration = getPropertyOfType(typeOfPattern, (<Identifier>node).text);
+                    let propertyDeclaration = typeOfPattern && getPropertyOfType(typeOfPattern, (<Identifier>node).text);
+
                     if (propertyDeclaration) {
                         return propertyDeclaration;
                     }
