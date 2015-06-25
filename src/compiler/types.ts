@@ -960,7 +960,7 @@ namespace ts {
     }
 
     export interface ModuleBlock extends Node, Statement {
-        statements: NodeArray<Statement>
+        statements: NodeArray<Statement>;
     }
 
     export interface ImportEqualsDeclaration extends Declaration, Statement {
@@ -1076,7 +1076,7 @@ namespace ts {
 
     export interface JSDocTypeReference extends JSDocType {
         name: EntityName;
-        typeArguments: NodeArray<JSDocType>
+        typeArguments: NodeArray<JSDocType>;
     }
 
     export interface JSDocOptionalType extends JSDocType {
@@ -1101,8 +1101,8 @@ namespace ts {
     }
 
     export interface JSDocRecordMember extends PropertyDeclaration {
-        name: Identifier | LiteralExpression,
-        type?: JSDocType
+        name: Identifier | LiteralExpression;
+        type?: JSDocType;
     }
 
     export interface JSDocComment extends Node {
@@ -1239,15 +1239,15 @@ namespace ts {
 
     export interface SourceMapSpan {
         /** Line number in the .js file. */
-        emittedLine: number; 
+        emittedLine: number;
         /** Column number in the .js file. */
-        emittedColumn: number;  
+        emittedColumn: number;
         /** Line number in the .ts file. */
-        sourceLine: number; 
+        sourceLine: number;
         /** Column number in the .ts file. */
-        sourceColumn: number; 
+        sourceColumn: number;
         /** Optional name (index into names array) associated with this span. */
-        nameIndex?: number; 
+        nameIndex?: number;
         /** .ts file (index into sources array) associated with this span */
         sourceIndex: number;
     }
@@ -1398,7 +1398,7 @@ namespace ts {
         NotAccessible,
         CannotBeNamed
     }
-    
+
     export interface TypePredicate {
         parameterName: string;
         parameterIndex: number;
@@ -1418,7 +1418,7 @@ namespace ts {
 
     /* @internal */
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
-        errorModuleName?: string // If the symbol is not visible from module, module's name
+        errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
 
     /* @internal */
@@ -1549,7 +1549,7 @@ namespace ts {
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
@@ -1564,14 +1564,14 @@ namespace ts {
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
     export interface SymbolTable {
         [index: string]: Symbol;
     }
 
-    /* @internal */ 
+    /* @internal */
     export const enum NodeCheckFlags {
         TypeChecked                 = 0x00000001,  // Node has been type checked
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
@@ -1589,7 +1589,7 @@ namespace ts {
         LexicalModuleMergesWithClass = 0x00000800,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
@@ -1632,14 +1632,14 @@ namespace ts {
         ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
         ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
 
-        /* @internal */ 
+        /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
-        /* @internal */ 
+        /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
-        /* @internal */ 
+        /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
@@ -1650,7 +1650,7 @@ namespace ts {
         symbol?: Symbol;                // Symbol associated with type (if any)
     }
 
-    /* @internal */ 
+    /* @internal */
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type

@@ -3,9 +3,9 @@
 /* @internal */
 namespace ts {
     export interface ReferencePathMatchResult {
-        fileReference?: FileReference
-        diagnosticMessage?: DiagnosticMessage
-        isNoDefaultLib?: boolean
+        fileReference?: FileReference;
+        diagnosticMessage?: DiagnosticMessage;
+        isNoDefaultLib?: boolean;
     }
 
     export interface SynthesizedNode extends Node {
@@ -70,7 +70,7 @@ namespace ts {
     }
 
     export function releaseStringWriter(writer: StringSymbolWriter) {
-        writer.clear()
+        writer.clear();
         stringWriters.push(writer);
     }
 
@@ -81,7 +81,7 @@ namespace ts {
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
-        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0
+        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0;
     }
 
     function aggregateChildData(node: Node): void {
@@ -166,7 +166,7 @@ namespace ts {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
@@ -406,7 +406,7 @@ namespace ts {
         }
     }
 
-    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
+    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
 
     export function isTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -751,7 +751,7 @@ namespace ts {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
-        
+
         // Will either be a CallExpression, NewExpression, or Decorator.
         return (<CallExpression | Decorator>node).expression;
     }
@@ -929,7 +929,7 @@ namespace ts {
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
-        let moduleState = getModuleInstanceState(node)
+        let moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
@@ -1281,7 +1281,7 @@ namespace ts {
             if (isNoDefaultLibRegEx.exec(comment)) {
                 return {
                     isNoDefaultLib: true
-                }
+                };
             }
             else {
                 let matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
@@ -1391,7 +1391,7 @@ namespace ts {
         }
         return node;
     }
-        
+
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
@@ -1493,7 +1493,7 @@ namespace ts {
             }
         }
     }
-    
+
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
     // the language service. These characters should be escaped when printing, and if any characters are added,
@@ -2036,7 +2036,7 @@ namespace ts {
             return lineFeed;
         }
         else if (sys) {
-            return sys.newLine
+            return sys.newLine;
         }
         return carriageReturnLineFeed;
     }
@@ -2048,11 +2048,11 @@ namespace ts {
     }
 
     export function textSpanEnd(span: TextSpan) {
-        return span.start + span.length
+        return span.start + span.length;
     }
 
     export function textSpanIsEmpty(span: TextSpan) {
-        return span.length === 0
+        return span.length === 0;
     }
 
     export function textSpanContainsPosition(span: TextSpan, position: number) {
@@ -2080,7 +2080,7 @@ namespace ts {
     }
 
     export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
+        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start;
     }
 
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {

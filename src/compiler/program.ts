@@ -35,7 +35,7 @@ namespace ts {
             // otherwise use toLowerCase as a canonical form.
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
-        
+
         // returned by CScript sys environment
         let unsupportedFileEncodingErrorCode = -2147024809;
 
@@ -458,7 +458,7 @@ namespace ts {
                         let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
                         if (moduleNameText) {
                             let searchPath = basePath;
-                            let searchName: string; 
+                            let searchName: string;
                             while (true) {
                                 searchName = normalizePath(combinePaths(searchPath, moduleNameText));
                                 if (forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr))) {
@@ -669,7 +669,7 @@ namespace ts {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
                 }
             }
-            
+
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalDecorators_must_also_be_specified_when_option_emitDecoratorMetadata_is_specified));

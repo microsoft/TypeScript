@@ -267,7 +267,7 @@ namespace ts {
         return textToToken[s];
     }
 
-    /* @internal */ 
+    /* @internal */
     export function computeLineStarts(text: string): number[] {
         let result: number[] = new Array();
         let pos = 0;
@@ -299,18 +299,18 @@ namespace ts {
         return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
-    /* @internal */ 
+    /* @internal */
     export function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number {
         Debug.assert(line >= 0 && line < lineStarts.length);
         return lineStarts[line] + character;
     }
 
-    /* @internal */ 
+    /* @internal */
     export function getLineStarts(sourceFile: SourceFile): number[] {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
-    /* @internal */ 
+    /* @internal */
     export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
@@ -371,7 +371,7 @@ namespace ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
     }
 
-    /* @internal */ 
+    /* @internal */
     export function isOctalDigit(ch: number): boolean {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
@@ -398,7 +398,7 @@ namespace ts {
         }
     }
 
-    /* @internal */ 
+    /* @internal */
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
         // Keep in sync with couldStartTrivia
         while (true) {
@@ -622,7 +622,7 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    /* @internal */ 
+    /* @internal */
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
@@ -631,16 +631,16 @@ namespace ts {
                                   start?: number,
                                   length?: number): Scanner {
         // Current position (end position of text of current token)
-        let pos: number;       
+        let pos: number;
 
         // end of text
-        let end: number;       
+        let end: number;
 
         // Start position of whitespace before current token
-        let startPos: number;  
+        let startPos: number;
 
         // Start position of text of current token
-        let tokenPos: number;  
+        let tokenPos: number;
 
         let token: SyntaxKind;
         let tokenValue: string;
@@ -722,7 +722,7 @@ namespace ts {
             }
             return +(text.substring(start, pos));
         }
-        
+
         /**
          * Scans the given number of hexadecimal digits in the text,
          * returning -1 if the given number is unavailable.
@@ -730,7 +730,7 @@ namespace ts {
         function scanExactNumberOfHexDigits(count: number): number {
             return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false);
         }
-        
+
         /**
          * Scans as many hexadecimal digits as are available in the text,
          * returning -1 if the given number of digits was unavailable.
@@ -808,7 +808,7 @@ namespace ts {
 
             pos++;
             let start = pos;
-            let contents = ""
+            let contents = "";
             let resultingToken: SyntaxKind;
 
             while (true) {
@@ -903,13 +903,13 @@ namespace ts {
                         pos++;
                         return scanExtendedUnicodeEscape();
                     }
-                    
+
                     // '\uDDDD'
-                    return scanHexadecimalEscape(/*numDigits*/ 4)
-                    
+                    return scanHexadecimalEscape(/*numDigits*/ 4);
+
                 case CharacterCodes.x:
                     // '\xDD'
-                    return scanHexadecimalEscape(/*numDigits*/ 2)
+                    return scanHexadecimalEscape(/*numDigits*/ 2);
 
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
@@ -921,31 +921,31 @@ namespace ts {
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
-                    return ""
+                    return "";
                 default:
                     return String.fromCharCode(ch);
             }
         }
-        
+
         function scanHexadecimalEscape(numDigits: number): string {
             let escapedValue = scanExactNumberOfHexDigits(numDigits);
-            
+
             if (escapedValue >= 0) {
                 return String.fromCharCode(escapedValue);
             }
             else {
                 error(Diagnostics.Hexadecimal_digit_expected);
-                return ""
+                return "";
             }
         }
-        
+
         function scanExtendedUnicodeEscape(): string {
             let escapedValue = scanMinimumNumberOfHexDigits(1);
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
             if (escapedValue < 0) {
-                error(Diagnostics.Hexadecimal_digit_expected)
+                error(Diagnostics.Hexadecimal_digit_expected);
                 isInvalidExtendedEscape = true;
             }
             else if (escapedValue > 0x10FFFF) {
@@ -972,18 +972,18 @@ namespace ts {
 
             return utf16EncodeAsString(escapedValue);
         }
-        
+
         // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
         function utf16EncodeAsString(codePoint: number): string {
             Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
-            
+
             if (codePoint <= 65535) {
                 return String.fromCharCode(codePoint);
             }
-            
+
             let codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
             let codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
-            
+
             return String.fromCharCode(codeUnit1, codeUnit2);
         }
 
@@ -1045,7 +1045,7 @@ namespace ts {
             let value = 0;
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
-            let numberOfDigits = 0;  
+            let numberOfDigits = 0;
             while (true) {
                 let ch = text.charCodeAt(pos);
                 let valueOfCh = ch - CharacterCodes._0;
@@ -1119,7 +1119,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue()
+                        return token = scanTemplateAndSetTokenValue();
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -1428,14 +1428,14 @@ namespace ts {
                     // regex.  Report error and return what we have so far.
                     if (p >= end) {
                         tokenIsUnterminated = true;
-                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        error(Diagnostics.Unterminated_regular_expression_literal);
                         break;
                     }
 
                     let ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
                         tokenIsUnterminated = true;
-                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        error(Diagnostics.Unterminated_regular_expression_literal);
                         break;
                     }
 

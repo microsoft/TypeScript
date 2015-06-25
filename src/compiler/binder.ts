@@ -96,7 +96,7 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
-        let classifiableNames: Map<string> = {}; 
+        let classifiableNames: Map<string> = {};
 
         if (!file.locals) {
             bind(file);
@@ -202,10 +202,10 @@ namespace ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
-                
+
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;   
-                } 
+                    classifiableNames[name] = name;
+                }
 
                 if (symbol.flags & excludes) {
                     if (node.name) {
@@ -286,7 +286,7 @@ namespace ts {
 
             // This node will now be set as the parent of all of its children as we recurse into them.
             parent = node;
-            
+
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
@@ -335,7 +335,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                     return ContainerFlags.IsContainer;
-                    
+
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -807,7 +807,7 @@ namespace ts {
                 }
             }
         }
-        
+
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
         function isUseStrictPrologueDirective(node: ExpressionStatement): boolean {
             let nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
@@ -988,7 +988,7 @@ namespace ts {
 
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
             if (inStrictMode) {
-                checkStrictModeEvalOrArguments(node, node.name)
+                checkStrictModeEvalOrArguments(node, node.name);
             }
 
             if (!isBindingPattern(node.name)) {

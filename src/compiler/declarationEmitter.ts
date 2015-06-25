@@ -188,7 +188,7 @@ namespace ts {
                 if (!moduleElementEmitInfo && asynchronousSubModuleDeclarationEmitInfo) {
                     moduleElementEmitInfo = forEach(asynchronousSubModuleDeclarationEmitInfo, declEmitInfo => declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined);
                 }
-                                
+
                 // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
                 // then we don't need to write it at this point. We will write it when we actually see its declaration
                 // Eg.
@@ -755,7 +755,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isConst(node)) {
-                write("const ")
+                write("const ");
             }
             write("enum ");
             writeTextOfNode(currentSourceFile, node.name);
@@ -1330,7 +1330,7 @@ namespace ts {
 
                 return {
                     diagnosticMessage,
-                    errorNode: <Node>node.name || node,
+                    errorNode: <Node>node.name || node
                 };
             }
         }
@@ -1504,7 +1504,7 @@ namespace ts {
                         }
                     }
                 }
-            } 
+            }
         }
 
         function emitNode(node: Node) {
@@ -1564,7 +1564,7 @@ namespace ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-    
+
     /* @internal */
     export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
