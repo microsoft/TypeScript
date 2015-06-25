@@ -6,7 +6,7 @@
 ////}
 ////
 ////var foo: I;
-////var { /*use*/property1: prop1 } = foo;
+////var { /**/property1: prop1 } = foo;
 
 goTo.marker();
 verify.quickInfoIs("(property) I.property1: number");
