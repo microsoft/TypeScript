@@ -3800,7 +3800,7 @@ namespace ts {
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
             var namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             var typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
-            return (typeSymbol && getDeclaredTypeOfSymbol(typeSymbol)) || unknownType;
+            return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -6712,7 +6712,7 @@ namespace ts {
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
-            return jsxElementType;
+            return jsxElementType || anyType;
         }
 
         function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
@@ -6755,7 +6755,7 @@ namespace ts {
                 }
             }
 
-            return jsxElementType;
+            return jsxElementType || anyType;
         }
 
         /**
@@ -7087,8 +7087,10 @@ namespace ts {
                 error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
-            if (jsxElementType === unknownType) {
-                error(errorNode, Diagnostics.The_global_type_JSX_Element_must_exist_when_using_JSX);
+            if (jsxElementType === undefined) {
+                if(compilerOptions.noImplicitAny) {
+                    error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
+                }
             }
         }
 

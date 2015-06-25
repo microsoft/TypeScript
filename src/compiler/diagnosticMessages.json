@@ -1554,7 +1554,7 @@
         "category": "Error",
         "code": 2601
     },
-    "The global type 'JSX.Element' must exist when using JSX.": {
+    "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
         "category": "Error",
         "code": 2602
     },

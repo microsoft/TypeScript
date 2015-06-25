@@ -391,7 +391,7 @@ namespace ts {
         Base_constructors_must_all_have_the_same_return_type: { code: 2510, category: DiagnosticCategory.Error, key: "Base constructors must all have the same return type." },
         JSX_element_attributes_type_0_must_be_an_object_type: { code: 2600, category: DiagnosticCategory.Error, key: "JSX element attributes type '{0}' must be an object type." },
         The_return_type_of_a_JSX_element_constructor_must_return_an_object_type: { code: 2601, category: DiagnosticCategory.Error, key: "The return type of a JSX element constructor must return an object type." },
-        The_global_type_JSX_Element_must_exist_when_using_JSX: { code: 2602, category: DiagnosticCategory.Error, key: "The global type 'JSX.Element' must exist when using JSX." },
+        JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist: { code: 2602, category: DiagnosticCategory.Error, key: "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist." },
         Property_0_in_type_1_is_not_assignable_to_type_2: { code: 2603, category: DiagnosticCategory.Error, key: "Property '{0}' in type '{1}' is not assignable to type '{2}'" },
         JSX_element_type_0_does_not_have_any_construct_or_call_signatures: { code: 2604, category: DiagnosticCategory.Error, key: "JSX element type '{0}' does not have any construct or call signatures." },
         JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements: { code: 2605, category: DiagnosticCategory.Error, key: "JSX element type '{0}' is not a constructor function for JSX elements." },
