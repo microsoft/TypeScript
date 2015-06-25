@@ -4553,6 +4553,9 @@ namespace ts {
                                 result &= stringIndexTypesRelatedTo(source, target, reportErrors);
                                 if (result) {
                                     result &= numberIndexTypesRelatedTo(source, target, reportErrors);
+                                        // if(relation == subtypeRelation && result) {
+                                        //     result &= abstractnessRelatedTo(source, target, reportErrors);
+                                        // }
                                 }
                             }
                         }
@@ -4572,6 +4575,17 @@ namespace ts {
                     relation[id] = reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed;
                 }
                 return result;
+            }
+
+            function abstractnessRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+                if ( source.symbol && target.symbol && getDeclarationFlagsFromSymbol(source.symbol) & NodeFlags.Abstract &&
+                    !(getDeclarationFlagsFromSymbol(target.symbol) & NodeFlags.Abstract)) {
+                    if (reportErrors) {
+                        reportError(Diagnostics.Constructor_objects_of_abstract_type_cannot_be_assigned_to_constructor_objects_of_non_abstract_type);
+                    }
+                    return Ternary.False;
+                }
+                return Ternary.True;
             }
 
             function propertiesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {

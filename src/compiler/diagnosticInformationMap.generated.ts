@@ -399,6 +399,7 @@ namespace ts {
         Classes_containing_abstract_methods_must_be_marked_abstract: { code: 2514, category: DiagnosticCategory.Error, key: "Classes containing abstract methods must be marked abstract." },
         Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2: { code: 2515, category: DiagnosticCategory.Error, key: "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'." },
         All_declarations_of_an_abstract_method_must_be_consecutive: { code: 2516, category: DiagnosticCategory.Error, key: "All declarations of an abstract method must be consecutive." },
+        Constructor_objects_of_abstract_type_cannot_be_assigned_to_constructor_objects_of_non_abstract_type: { code: 2517, category: DiagnosticCategory.Error, key: "Constructor objects of abstract type cannot be assigned to constructor objects of non-abstract type" },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
