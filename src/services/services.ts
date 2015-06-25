@@ -1424,7 +1424,7 @@ namespace ts {
         // class X {}
         export const classElement = "class";
 
-        // class X {}
+        // var y = class X {}
         export const localClassElement = "local class";
 
         // interface Y {}
@@ -1580,7 +1580,7 @@ namespace ts {
         return "";
     }
 
-    function isLocalVariableOrFunctionExpressionOrClassExpression(symbol: Symbol) {
+    function isLocalVariableOrFunctionExpression(symbol: Symbol) {
         if (symbol.parent) {
             return false; // This is exported symbol
         }
@@ -1590,12 +1590,6 @@ namespace ts {
             if (declaration.kind === SyntaxKind.FunctionExpression) {
                 return true;
             }
-
-            // Class expressions are local
-            if (declaration.kind === SyntaxKind.ClassExpression) {
-                return true;
-            }
-
 
             if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
                 return false;
@@ -3556,7 +3550,7 @@ namespace ts {
         function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
-            if (flags & SymbolFlags.Class) return isLocalVariableOrFunctionExpressionOrClassExpression(symbol) ?
+            if (flags & SymbolFlags.Class) return ts.forEach(symbol.declarations, d => d.kind === SyntaxKind.ClassExpression) ?
                 ScriptElementKind.localClassElement : ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
@@ -3593,9 +3587,9 @@ namespace ts {
                 else if (forEach(symbol.declarations, isLet)) {
                     return ScriptElementKind.letElement;
                 }
-                return isLocalVariableOrFunctionExpressionOrClassExpression(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
+                return isLocalVariableOrFunctionExpression(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
-            if (flags & SymbolFlags.Function) return isLocalVariableOrFunctionExpressionOrClassExpression(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
+            if (flags & SymbolFlags.Function) return isLocalVariableOrFunctionExpression(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
