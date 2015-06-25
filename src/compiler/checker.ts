@@ -11756,7 +11756,8 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
-                            let name = (<FunctionExpression>location).name;
+                        case SyntaxKind.ClassExpression:
+                            let name = (<ClassExpression|FunctionExpression>location).name;
                             if (name) {
                                 let symbol = location.symbol;
                                 if (symbol.flags & meaning && !hasProperty(symbols, name.text)) {

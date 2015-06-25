@@ -1424,6 +1424,9 @@ namespace ts {
         // class X {}
         export const classElement = "class";
 
+        // class X {}
+        export const localClassElement = "local class";
+
         // interface Y {}
         export const interfaceElement = "interface";
 
@@ -1577,7 +1580,7 @@ namespace ts {
         return "";
     }
 
-    function isLocalVariableOrFunction(symbol: Symbol) {
+    function isLocalVariableOrFunctionExpressionOrClassExpression(symbol: Symbol) {
         if (symbol.parent) {
             return false; // This is exported symbol
         }
@@ -1587,6 +1590,12 @@ namespace ts {
             if (declaration.kind === SyntaxKind.FunctionExpression) {
                 return true;
             }
+
+            // Class expressions are local
+            if (declaration.kind === SyntaxKind.ClassExpression) {
+                return true;
+            }
+
 
             if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
                 return false;
@@ -2808,20 +2817,20 @@ namespace ts {
                     }
                 }
 
-                // Special case for function expression because despite sometimes having a name, the binder
-                // binds them to a symbol with the name "__function". However, for completion entry, we want
-                // to display its declared name rather than "__function".
+                // Special case for function expression and class expression because despite sometimes having a name, the binder
+                // binds them to a symbol with the name "__function" and "__class" respectively. However, for completion entry, we want
+                // to display its declared name rather than "__function" and "__class".
                 //      var x = function foo () {
                 //          fo$  <- completion list should contain local name "foo"
                 //      }
                 //      foo$ <- completion list should not contain "foo"
-                if (displayName === "__function") {
+                if (displayName === "__function" || displayName === "__class") {
                     displayName = symbol.declarations[0].name.getText();
 
                     // At this point, we expect that all completion list entries have declared name including function expression
                     // because when we gather all relevant symbols, we check that the function expression must have declared name
                     // before adding the symbol into our symbols table. (see: getSymbolsInScope)
-                    Debug.assert(displayName !== undefined,"Expected this function expression to have declared name");
+                    Debug.assert(displayName !== undefined,"Expected this function expression or class expression to have declared name");
                 }
 
                 let firstCharCode = displayName.charCodeAt(0);
@@ -3547,7 +3556,8 @@ namespace ts {
         function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
-            if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
+            if (flags & SymbolFlags.Class) return isLocalVariableOrFunctionExpressionOrClassExpression(symbol) ?
+                ScriptElementKind.localClassElement : ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
@@ -3583,9 +3593,9 @@ namespace ts {
                 else if (forEach(symbol.declarations, isLet)) {
                     return ScriptElementKind.letElement;
                 }
-                return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
+                return isLocalVariableOrFunctionExpressionOrClassExpression(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
-            if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
+            if (flags & SymbolFlags.Function) return isLocalVariableOrFunctionExpressionOrClassExpression(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
             if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
@@ -3756,7 +3766,16 @@ namespace ts {
                 }
             }
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
-                displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                // Special case for class expression because we would like the entry detail to indicate that
+                // the class name is local to the class body (similar to function expression)
+                //      (local class) class <className>
+                if (symbol.getName() === "__class") {
+                    pushTypePart(ScriptElementKind.localClassElement);
+                }
+                else {
+                    // Class declaration has name which is not local.
+                    displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                }
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
