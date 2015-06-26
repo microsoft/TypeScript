@@ -1539,8 +1539,8 @@ namespace ts {
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
                     }
-                    else if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                        writeUnionOrIntersectionType(<UnionType>type, flags);
+                    else if (type.flags & TypeFlags.UnionOrIntersection) {
+                        writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
                         writeAnonymousType(<ObjectType>type, flags);
@@ -3143,7 +3143,7 @@ namespace ts {
                     resolveUnionTypeMembers(<UnionType>type);
                 }
                 else if (type.flags & TypeFlags.Intersection) {
-                    resolveIntersectionTypeMembers(<UnionType>type);
+                    resolveIntersectionTypeMembers(<IntersectionType>type);
                 }
                 else {
                     resolveTypeReferenceMembers(<TypeReference>type);
@@ -3299,7 +3299,7 @@ namespace ts {
                 return getPropertyOfObjectType(globalObjectType, name);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                return getPropertyOfUnionOrIntersectionType(<UnionType>type, name);
+                return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
             }
             return undefined;
         }
@@ -3864,26 +3864,23 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToSortedSet(sortedSet: Type[], type: Type, typeKind: TypeFlags) {
+        function addTypeToSet(typeSet: Type[], type: Type, typeKind: TypeFlags) {
             if (type.flags & typeKind) {
-                addTypesToSortedSet(sortedSet, (<UnionOrIntersectionType>type).types, typeKind);
+                addTypesToSet(typeSet, (<UnionOrIntersectionType>type).types, typeKind);
             }
-            else {
-                let i = 0;
-                let id = type.id;
-                while (i < sortedSet.length && sortedSet[i].id < id) {
-                    i++;
-                }
-                if (i === sortedSet.length || sortedSet[i].id !== id) {
-                    sortedSet.splice(i, 0, type);
-                }
+            else if (!contains(typeSet, type)) {
+                typeSet.push(type);
             }
         }
 
-        function addTypesToSortedSet(sortedTypes: Type[], types: Type[], typeKind: TypeFlags) {
+        function addTypesToSet(typeSet: Type[], types: Type[], typeKind: TypeFlags) {
             for (let type of types) {
-                addTypeToSortedSet(sortedTypes, type, typeKind);
+                addTypeToSet(typeSet, type, typeKind);
             }
+        }
+
+        function compareTypeIds(type1: Type, type2: Type): number {
+            return type1.id - type2.id;
         }
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
@@ -3932,26 +3929,27 @@ namespace ts {
             if (types.length === 0) {
                 return emptyObjectType;
             }
-            let sortedTypes: Type[] = [];
-            addTypesToSortedSet(sortedTypes, types, TypeFlags.Union);
+            let typeSet: Type[] = [];
+            addTypesToSet(typeSet, types, TypeFlags.Union);
+            typeSet.sort(compareTypeIds);
             if (noSubtypeReduction) {
-                if (containsTypeAny(sortedTypes)) {
+                if (containsTypeAny(typeSet)) {
                     return anyType;
                 }
-                removeAllButLast(sortedTypes, undefinedType);
-                removeAllButLast(sortedTypes, nullType);
+                removeAllButLast(typeSet, undefinedType);
+                removeAllButLast(typeSet, nullType);
             }
             else {
-                removeSubtypes(sortedTypes);
+                removeSubtypes(typeSet);
             }
-            if (sortedTypes.length === 1) {
-                return sortedTypes[0];
+            if (typeSet.length === 1) {
+                return typeSet[0];
             }
-            let id = getTypeListId(sortedTypes);
+            let id = getTypeListId(typeSet);
             let type = unionTypes[id];
             if (!type) {
-                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(sortedTypes));
-                type.types = sortedTypes;
+                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(typeSet));
+                type.types = typeSet;
                 type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
@@ -3986,20 +3984,22 @@ namespace ts {
         // We do not perform supertype reduction on intersection types. Intersection types are created only by the &
         // type operator and we can't reduce those because we want to support recursive intersection types. For example,
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
+        // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
+        // for intersections of types with signatues can be deterministic.
         function getIntersectionType(types: Type[]): Type {
-            let sortedTypes: Type[] = [];
-            addTypesToSortedSet(sortedTypes, types, TypeFlags.Intersection);
-            if (containsTypeAny(sortedTypes)) {
+            let typeSet: Type[] = [];
+            addTypesToSet(typeSet, types, TypeFlags.Intersection);
+            if (containsTypeAny(typeSet)) {
                 return anyType;
             }
-            if (sortedTypes.length === 1) {
-                return sortedTypes[0];
+            if (typeSet.length === 1) {
+                return typeSet[0];
             }
-            let id = getTypeListId(sortedTypes);
+            let id = getTypeListId(typeSet);
             let type = intersectionTypes[id];
             if (!type) {
-                type = intersectionTypes[id] = <IntersectionType>createObjectType(TypeFlags.Intersection | getWideningFlagsOfTypes(sortedTypes));
-                type.types = sortedTypes;
+                type = intersectionTypes[id] = <IntersectionType>createObjectType(TypeFlags.Intersection | getWideningFlagsOfTypes(typeSet));
+                type.types = typeSet;
             }
             return type;
         }
@@ -8128,7 +8128,7 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                let types = (<UnionType>type).types;
+                let types = (<UnionOrIntersectionType>type).types;
                 for (let current of types) {
                     if (current.flags & kind) {
                         return true;
@@ -8145,7 +8145,7 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                let types = (<UnionType>type).types;
+                let types = (<UnionOrIntersectionType>type).types;
                 for (let current of types) {
                     if (!(current.flags & kind)) {
                         return false;
