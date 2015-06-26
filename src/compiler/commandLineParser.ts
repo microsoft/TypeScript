@@ -320,8 +320,9 @@ namespace ts {
       * @param fileName The path to the config file
       */
     export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
+        let text = '';
         try {
-            let text = sys.readFile(fileName);
+            text = sys.readFile(fileName);
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };

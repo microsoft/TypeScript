@@ -5647,8 +5647,9 @@ namespace ts {
             return;
 
             function visitNode(node: IncrementalNode) {
+                let text = '';
                 if (aggressiveChecks && shouldCheckNode(node)) {
-                    let text = oldText.substring(node.pos, node.end);
+                    text = oldText.substring(node.pos, node.end);
                 }
 
                 // Ditch any existing LS children we may have created.  This way we can avoid

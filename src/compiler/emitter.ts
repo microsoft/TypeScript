@@ -3783,7 +3783,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
                     if (baseTypeElement) {
-                        let superCall = findInitialSuperCall(ctor);
+                        var superCall = findInitialSuperCall(ctor);
                         if (superCall) {
                             writeLine();
                             emit(superCall);
