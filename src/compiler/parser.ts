@@ -2709,7 +2709,7 @@ namespace ts {
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
-            var lastToken = token;
+            let lastToken = token;
             arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody()
@@ -4421,7 +4421,7 @@ namespace ts {
         }
 
         function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
-            var node = <ClassLikeDeclaration>createNode(kind, fullStart);
+            let node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
@@ -4957,15 +4957,15 @@ namespace ts {
             }
 
             function parseJSDocTopLevelType(): JSDocType {
-                var type = parseJSDocType();
+                let type = parseJSDocType();
                 if (token === SyntaxKind.BarToken) {
-                    var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
+                    let unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
                     unionType.types = parseJSDocTypeList(type);
                     type = finishNode(unionType);
                 }
 
                 if (token === SyntaxKind.EqualsToken) {
-                    var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                    let optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
                     nextToken();
                     optionalType.type = type;
                     type = finishNode(optionalType);
@@ -5648,7 +5648,7 @@ namespace ts {
 
             function visitNode(node: IncrementalNode) {
                 if (aggressiveChecks && shouldCheckNode(node)) {
-                    var text = oldText.substring(node.pos, node.end);
+                    let text = oldText.substring(node.pos, node.end);
                 }
 
                 // Ditch any existing LS children we may have created.  This way we can avoid

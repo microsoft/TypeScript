@@ -82,7 +82,7 @@ namespace ts {
 
     function reportDiagnostic(diagnostic: Diagnostic) {
         var output = "";
-        
+
         if (diagnostic.file) {
             var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 

@@ -1409,7 +1409,7 @@ namespace ts {
     }
 
     export function createSynthesizedNodeArray(): NodeArray<any> {
-        var array = <NodeArray<any>>[];
+        let array = <NodeArray<any>>[];
         array.pos = -1;
         array.end = -1;
         return array;
@@ -1994,7 +1994,7 @@ namespace ts {
      * Converts a string to a base-64 encoded ASCII string.
      */
     export function convertToBase64(input: string): string {
-        var result = "";
+        let result = "";
         let charCodes = getExpandedCharCodes(input);
         let i = 0;
         let length = charCodes.length;

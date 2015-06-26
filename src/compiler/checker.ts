@@ -282,7 +282,7 @@ namespace ts {
 
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
-            var id = getSymbolId(symbol);
+            let id = getSymbolId(symbol);
             return symbolLinks[id] || (symbolLinks[id] = {});
         }
 
@@ -630,7 +630,7 @@ namespace ts {
         }
 
         function getTargetOfNamespaceImport(node: NamespaceImport): Symbol {
-            var moduleSpecifier = (<ImportDeclaration>node.parent.parent).moduleSpecifier;
+            let moduleSpecifier = (<ImportDeclaration>node.parent.parent).moduleSpecifier;
             return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier);
         }
 
@@ -685,7 +685,7 @@ namespace ts {
 
         function getPropertyOfVariable(symbol: Symbol, name: string): Symbol {
             if (symbol.flags & SymbolFlags.Variable) {
-                var typeAnnotation = (<VariableDeclaration>symbol.valueDeclaration).type;
+                let typeAnnotation = (<VariableDeclaration>symbol.valueDeclaration).type;
                 if (typeAnnotation) {
                     return resolveSymbol(getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name));
                 }
@@ -1305,7 +1305,7 @@ namespace ts {
                     // Mark the unexported alias as visible if its parent is visible
                     // because these kind of aliases can be used to name types in declaration file
 
-                    var anyImportSyntax = getAnyImportSyntax(declaration);
+                    let anyImportSyntax = getAnyImportSyntax(declaration);
                     if (anyImportSyntax &&
                         !(anyImportSyntax.flags & NodeFlags.Export) && // import clause without export
                         isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
@@ -2086,14 +2086,14 @@ namespace ts {
         }
 
         function collectLinkedAliases(node: Identifier): Node[] {
-            var exportSymbol: Symbol;
+            let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
                 exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
                 exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
             }
-            var result: Node[] = [];
+            let result: Node[] = [];
             if (exportSymbol) {
                 buildVisibleNodeList(exportSymbol.declarations);
             }
@@ -2102,16 +2102,16 @@ namespace ts {
             function buildVisibleNodeList(declarations: Declaration[]) {
                 forEach(declarations, declaration => {
                     getNodeLinks(declaration).isVisible = true;
-                    var resultNode = getAnyImportSyntax(declaration) || declaration;
+                    let resultNode = getAnyImportSyntax(declaration) || declaration;
                     if (!contains(result, resultNode)) {
                         result.push(resultNode);
                     }
 
                     if (isInternalModuleImportEqualsDeclaration(declaration)) {
                         // Add the referenced top container visible
-                        var internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
-                        var firstIdentifier = getFirstIdentifier(internalModuleReference);
-                        var importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
+                        let internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
+                        let firstIdentifier = getFirstIdentifier(internalModuleReference);
+                        let importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
                             Diagnostics.Cannot_find_name_0, firstIdentifier);
                         buildVisibleNodeList(importSymbol.declarations);
                     }
@@ -2606,7 +2606,7 @@ namespace ts {
 
         // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
         function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
-            var declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+            let declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
             return appendOuterTypeParameters(undefined, declaration);
         }
 
@@ -9908,7 +9908,7 @@ namespace ts {
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        var constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
+                        let constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
                             checkParameterTypeAnnotationsAsExpressions(constructor);
                         }
@@ -10159,7 +10159,7 @@ namespace ts {
                 return;
             }
 
-            var symbol = getSymbolOfNode(node);
+            let symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
                 let localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
                 if (localDeclarationSymbol &&
@@ -11404,7 +11404,7 @@ namespace ts {
                                 }
 
                                 // expression part in ElementAccess\PropertyAccess should be either identifier or dottedName
-                                var current = expression;
+                                let current = expression;
                                 while (current) {
                                     if (current.kind === SyntaxKind.Identifier) {
                                         break;
@@ -12614,7 +12614,7 @@ namespace ts {
                 return false;
             }
 
-            var isValue = isAliasResolvedToValue(getSymbolOfNode(node));
+            let isValue = isAliasResolvedToValue(getSymbolOfNode(node));
             return isValue && node.moduleReference && !nodeIsMissing(node.moduleReference);
         }
 
@@ -12698,7 +12698,7 @@ namespace ts {
                 // here has no effect anyway as an identifier in a type name is not an expression.
                 // var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
                 // var text = substitution || (<Identifier>node).text;
-                var text = (<Identifier>node).text;
+                let text = (<Identifier>node).text;
                 if (fallbackPath) {
                     fallbackPath.push(text);
                 }
@@ -12707,8 +12707,8 @@ namespace ts {
                 }
             }
             else {
-                var left = serializeEntityName((<QualifiedName>node).left, fallbackPath);
-                var right = serializeEntityName((<QualifiedName>node).right, fallbackPath);
+                let left = serializeEntityName((<QualifiedName>node).left, fallbackPath);
+                let right = serializeEntityName((<QualifiedName>node).right, fallbackPath);
                 if (!fallbackPath) {
                     return left + "." + right;
                 }
@@ -12748,7 +12748,7 @@ namespace ts {
                 return "Symbol";
             }
             else if (type === unknownType) {
-                var fallbackPath: string[] = [];
+                let fallbackPath: string[] = [];
                 serializeEntityName(node.typeName, fallbackPath);
                 return fallbackPath;
             }
@@ -12843,7 +12843,7 @@ namespace ts {
             // 
             // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
             if (node) {
-                var valueDeclaration: FunctionLikeDeclaration;
+                let valueDeclaration: FunctionLikeDeclaration;
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
                 }
@@ -12851,14 +12851,14 @@ namespace ts {
                     valueDeclaration = <FunctionLikeDeclaration>node;
                 }
                 if (valueDeclaration) {
-                    var result: (string | string[])[];
-                    var parameters = valueDeclaration.parameters;
-                    var parameterCount = parameters.length;
+                    let result: (string | string[])[];
+                    let parameters = valueDeclaration.parameters;
+                    let parameterCount = parameters.length;
                     if (parameterCount > 0) {
                         result = new Array<string>(parameterCount);
-                        for (var i = 0; i < parameterCount; i++) {
+                        for (let i = 0; i < parameterCount; i++) {
                             if (parameters[i].dotDotDotToken) {
-                                var parameterType = parameters[i].type;
+                                let parameterType = parameters[i].type;
                                 if (parameterType.kind === SyntaxKind.ArrayType) {
                                     parameterType = (<ArrayTypeNode>parameterType).elementType;
                                 }
@@ -12905,7 +12905,7 @@ namespace ts {
         }
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
-            var type = getTypeOfExpression(expr);
+            let type = getTypeOfExpression(expr);
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 

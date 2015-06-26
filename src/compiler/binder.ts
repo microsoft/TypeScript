@@ -474,7 +474,7 @@ namespace ts {
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
-            var body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
+            let body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
             if (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock) {
                 for (let stat of (<Block>body).statements) {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
@@ -750,7 +750,7 @@ namespace ts {
         function bind(node: Node) {
             node.parent = parent;
 
-            var savedInStrictMode = inStrictMode;
+            let savedInStrictMode = inStrictMode;
             if (!savedInStrictMode) {
                 updateStrictMode(node);
             }
