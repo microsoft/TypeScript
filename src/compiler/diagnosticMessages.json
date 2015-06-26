@@ -2156,7 +2156,7 @@
         "category": "Error",
         "code": 6062
     },
-    "Specifies how to transform JSX syntax during compilation.": {
+    "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
     },

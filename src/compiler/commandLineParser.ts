@@ -45,7 +45,7 @@ namespace ts {
                 "react": JsxEmit.React
             },
             paramType: Diagnostics.KIND,
-            description: Diagnostics.Specifies_how_to_transform_JSX_syntax_during_compilation,
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
             error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {

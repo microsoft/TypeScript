@@ -541,7 +541,7 @@ namespace ts {
         Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix: { code: 6060, category: DiagnosticCategory.Message, key: "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix)." },
         NEWLINE: { code: 6061, category: DiagnosticCategory.Message, key: "NEWLINE" },
         Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6062, category: DiagnosticCategory.Error, key: "Argument for '--newLine' option must be 'CRLF' or 'LF'." },
-        Specifies_how_to_transform_JSX_syntax_during_compilation: { code: 6080, category: DiagnosticCategory.Message, key: "Specifies how to transform JSX syntax during compilation." },
+        Specify_JSX_code_generation_Colon_preserve_or_react: { code: 6080, category: DiagnosticCategory.Message, key: "Specify JSX code generation: 'preserve' or 'react'" },
         Argument_for_jsx_must_be_preserve_or_react: { code: 6081, category: DiagnosticCategory.Message, key: "Argument for '--jsx' must be 'preserve' or 'react'." },
         Option_experimentalDecorators_must_also_be_specified_when_option_emitDecoratorMetadata_is_specified: { code: 6064, category: DiagnosticCategory.Error, key: "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified." },
         Enables_experimental_support_for_ES7_decorators: { code: 6065, category: DiagnosticCategory.Message, key: "Enables experimental support for ES7 decorators." },
