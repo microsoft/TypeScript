@@ -600,7 +600,7 @@ declare module "typescript" {
         tag: LeftHandSideExpression;
         template: LiteralExpression | TemplateExpression;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
     interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
         expression: UnaryExpression;

@@ -191,6 +191,12 @@ namespace ts {
         An_export_declaration_can_only_be_used_in_a_module: { code: 1233, category: DiagnosticCategory.Error, key: "An export declaration can only be used in a module." },
         An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file: { code: 1234, category: DiagnosticCategory.Error, key: "An ambient module declaration is only allowed at the top level in a file." },
         A_namespace_declaration_is_only_allowed_in_a_namespace_or_module: { code: 1235, category: DiagnosticCategory.Error, key: "A namespace declaration is only allowed in a namespace or module." },
+        The_return_type_of_a_property_decorator_function_must_be_either_void_or_any: { code: 1236, category: DiagnosticCategory.Error, key: "The return type of a property decorator function must be either 'void' or 'any'." },
+        The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any: { code: 1237, category: DiagnosticCategory.Error, key: "The return type of a parameter decorator function must be either 'void' or 'any'." },
+        Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression: { code: 1238, category: DiagnosticCategory.Error, key: "Unable to resolve signature of class decorator when called as an expression." },
+        Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression: { code: 1239, category: DiagnosticCategory.Error, key: "Unable to resolve signature of parameter decorator when called as an expression." },
+        Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression: { code: 1240, category: DiagnosticCategory.Error, key: "Unable to resolve signature of property decorator when called as an expression." },
+        Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression: { code: 1241, category: DiagnosticCategory.Error, key: "Unable to resolve signature of method decorator when called as an expression." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -567,7 +573,5 @@ namespace ts {
         enum_declarations_can_only_be_used_in_a_ts_file: { code: 8015, category: DiagnosticCategory.Error, key: "'enum declarations' can only be used in a .ts file." },
         type_assertion_expressions_can_only_be_used_in_a_ts_file: { code: 8016, category: DiagnosticCategory.Error, key: "'type assertion expressions' can only be used in a .ts file." },
         decorators_can_only_be_used_in_a_ts_file: { code: 8017, category: DiagnosticCategory.Error, key: "'decorators' can only be used in a .ts file." },
-        Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses: { code: 9002, category: DiagnosticCategory.Error, key: "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses." },
-        class_expressions_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "'class' expressions are not currently supported." },
     };
 }

@@ -12,8 +12,9 @@ function filter(handler: any) {
 >filter : Symbol(filter, Decl(b.ts, 0, 27))
 >handler : Symbol(handler, Decl(b.ts, 2, 16))
 
-    return function (target: any) {
+    return function (target: any, propertyKey: string) {
 >target : Symbol(target, Decl(b.ts, 3, 21))
+>propertyKey : Symbol(propertyKey, Decl(b.ts, 3, 33))
 
         // ...
     };

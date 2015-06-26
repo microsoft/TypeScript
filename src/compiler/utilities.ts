@@ -542,6 +542,7 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                     // These are not allowed inside a generator now, but eventually they may be allowed
                     // as local types. Regardless, any yield statements contained within them should be
                     // skipped in this traversal.
@@ -579,26 +580,15 @@ namespace ts {
                     return true;
             }
         }
-
         return false;
     }
 
     export function isAccessor(node: Node): boolean {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return true;
-            }
-        }
-
-        return false;
+        return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
     export function isClassLike(node: Node): boolean {
-        if (node) {
-            return node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression;
-        }
+        return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
     export function isFunctionLike(node: Node): boolean {
@@ -620,7 +610,6 @@ namespace ts {
                     return true;
             }
         }
-
         return false;
     }
 
@@ -641,6 +630,15 @@ namespace ts {
         }
     }
 
+    export function getContainingClass(node: Node): ClassLikeDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isClassLike(node)) {
+                return <ClassLikeDeclaration>node;
+            }
+        }
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
             node = node.parent;
@@ -653,7 +651,7 @@ namespace ts {
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (isClassLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -708,7 +706,7 @@ namespace ts {
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (isClassLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -754,8 +752,8 @@ namespace ts {
             return (<TaggedTemplateExpression>node).tag;
         }
         
-        // Will either be a CallExpression or NewExpression.
-        return (<CallExpression>node).expression;
+        // Will either be a CallExpression, NewExpression, or Decorator.
+        return (<CallExpression | Decorator>node).expression;
     }
 
     export function nodeCanBeDecorated(node: Node): boolean {
@@ -1067,7 +1065,7 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    export function isBindingPattern(node: Node) {
+    export function isBindingPattern(node: Node): node is BindingPattern {
         return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
@@ -1087,6 +1085,7 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.Constructor:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
@@ -1235,7 +1234,7 @@ namespace ts {
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
-    export function getClassImplementsHeritageClauseElements(node: ClassDeclaration) {
+    export function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
@@ -1917,7 +1916,7 @@ namespace ts {
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
-            node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+            isClassLike(node.parent.parent);
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
@@ -1958,7 +1957,6 @@ namespace ts {
     function getExpandedCharCodes(input: string): number[] {
         let output: number[] = [];
         let length = input.length;
-        let leadSurrogate: number = undefined;
 
         for (let i = 0; i < length; i++) {
             let charCode = input.charCodeAt(i);

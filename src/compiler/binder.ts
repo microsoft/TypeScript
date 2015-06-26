@@ -630,7 +630,7 @@ namespace ts {
         function getStrictModeIdentifierMessage(node: Node) {
             // Provide specialized messages to help the user understand why we think they're in 
             // strict mode.
-            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+            if (getContainingClass(node)) {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
             }
 
@@ -688,7 +688,7 @@ namespace ts {
         function getStrictModeEvalOrArgumentsMessage(node: Node) {
             // Provide specialized messages to help the user understand why we think they're in 
             // strict mode.
-            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+            if (getContainingClass(node)) {
                 return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
             }
 
@@ -1031,7 +1031,7 @@ namespace ts {
             // containing class.
             if (node.flags & NodeFlags.AccessibilityModifier &&
                 node.parent.kind === SyntaxKind.Constructor &&
-                (node.parent.parent.kind === SyntaxKind.ClassDeclaration || node.parent.parent.kind === SyntaxKind.ClassExpression)) {
+                isClassLike(node.parent.parent)) {
 
                 let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
