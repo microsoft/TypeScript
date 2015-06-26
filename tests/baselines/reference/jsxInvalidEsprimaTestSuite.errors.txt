@@ -65,12 +65,13 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,10): error TS2304:
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,28): error TS1005: '>' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,29): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,7): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,7): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002: Expected corresponding JSX closing tag for 'a'.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (70 errors) ====
+==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (71 errors) ====
     declare var React: any;
     
     </>;
@@ -238,8 +239,10 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
          ~
 !!! error TS1005: '{' expected.
     <a b=<}>;
+         ~
+!!! error TS1005: '{' expected.
           ~
-!!! error TS1003: Identifier expected.
+!!! error TS1109: Expression expected.
     <a>}</a>;
     <a .../*hai*/asdf/>;
        ~~~

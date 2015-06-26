@@ -877,8 +877,6 @@ namespace ts {
 
     export interface JsxText extends Node {
         _jsxTextExpressionBrand: any;
-        /// Used by the emitter to avoid recomputation
-        formattedReactText?: string;
     }
 
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;

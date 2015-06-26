@@ -1113,20 +1113,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier|QualifiedName) {
-                    if (name.kind === SyntaxKind.Identifier) {
-                        var ch = (<Identifier>name).text.charAt(0);
-                        if (ch.toUpperCase() === ch) {
-                            emit(name);
-                        }
-                        else {
-                            write('"');
-                            emit(name);
-                            write('"');
-                        }
-                        return ch.toUpperCase() !== ch;
+                    if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
+                        write('"');
+                        emit(name);
+                        write('"');
                     }
                     else {
-                        Debug.assert(name.kind === SyntaxKind.QualifiedName);
                         emit(name);
                     }
                 }
@@ -1234,12 +1226,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             }
 
                             // Don't emit empty strings
-                            if (children[i].kind === SyntaxKind.JsxText && !shouldEmitJsxText(<JsxText>children[i])) {
-                                continue;
+                            if (children[i].kind === SyntaxKind.JsxText) {
+                                let text = getTextToEmit(<JsxText>children[i]);
+                                if(text !== undefined) {
+                                    write(', "');
+                                    write(text);
+                                    write('"');
+                                }
+                            }
+                            else {
+                                write(', ');
+                                emit(children[i]);
                             }
 
-                            write(', ');
-                            emit(children[i]);
                         }
                     }
 
@@ -5895,12 +5894,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function trimReactWhitespace(node: JsxText): string {
-                // Could be empty string, do not use !node.formattedReactText
-                if (node.formattedReactText !== undefined) {
-                    return node.formattedReactText;
-                }
-
-                let lines: string[] = [];
+                let result: string = undefined;
                 let text = getTextOfNode(node);
                 let firstNonWhitespace = 0;
                 let lastNonWhitespace = -1;
@@ -5910,9 +5904,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 // on the same line as the closing tag. See examples in tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
                 for (let i = 0; i < text.length; i++) {
                     let c = text.charCodeAt(i);
-                    if (c === CharacterCodes.lineFeed || c === CharacterCodes.carriageReturn) {
+                    if (isLineBreak(c)) {
                         if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
-                            lines.push(text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
+                            let part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
+                            result = (result ? result + '" + \' \' + "' : '') + part;
                         }
                         firstNonWhitespace = -1;
                     }
@@ -5924,19 +5919,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
                 if (firstNonWhitespace !== -1) {
-                    lines.push(text.substr(firstNonWhitespace));
+                    let part = text.substr(firstNonWhitespace);
+                    result = (result ? result + '" + \' \' + "' : '') + part;
                 }
 
-                return node.formattedReactText = lines.join('" + \' \' + "');
+                return result;
             }
 
-            function shouldEmitJsxText(node: JsxText) {
+            function getTextToEmit(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
-                        return trimReactWhitespace(node).length > 0;
+                        let text = trimReactWhitespace(node);
+                        if (text.length === 0) {
+                            return undefined;
+                        }
+                        else {
+                            return text;
+                        }
                     case JsxEmit.Preserve:
                     default:
-                        return true;
+                        return getTextOfNode(node, true);
                 }
             }
 

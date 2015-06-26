@@ -1535,6 +1535,11 @@ namespace ts {
         }
     }
 
+    export function isIntrinsicJsxName(name: string) {
+        let ch = name.substr(0, 1);
+        return ch.toLowerCase() === ch;
+    }
+
     function get16BitUnicodeEscapeSequence(charCode: number): string {
         let hexCharCode = charCode.toString(16).toUpperCase();
         let paddedHexCode = ("0000" + hexCharCode).slice(-4);

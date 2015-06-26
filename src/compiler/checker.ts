@@ -165,7 +165,7 @@ namespace ts {
             }
         };
 
-        let JsxNames = {
+        const JsxNames = {
             JSX: "JSX",
             IntrinsicElements: "IntrinsicElements",
             ElementClass: "ElementClass",
@@ -5578,6 +5578,7 @@ namespace ts {
                     case SyntaxKind.JsxAttribute:
                     case SyntaxKind.JsxSpreadAttribute:
                     case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxExpression:
                         return forEachChild(node, isAssignedIn);
                 }
                 return false;
@@ -6774,8 +6775,7 @@ namespace ts {
                 return false;
             }
             else {
-                let firstChar = (<Identifier>tagName).text.charAt(0);
-                return firstChar.toLowerCase() === firstChar;
+                return isIntrinsicJsxName((<Identifier>tagName).text);
             }
         }
 
@@ -6836,10 +6836,7 @@ namespace ts {
         /// Returns the type JSX.IntrinsicElements. May return `unknownType` if that type is not present.
         function getJsxIntrinsicElementsType() {
             if (!jsxIntrinsicElementsType) {
-                let jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, undefined);
-                let intrinsicsSymbol = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.IntrinsicElements, SymbolFlags.Type);
-                let intrinsicsType = intrinsicsSymbol && getDeclaredTypeOfSymbol(intrinsicsSymbol);
-                jsxIntrinsicElementsType = intrinsicsType || unknownType;
+                jsxIntrinsicElementsType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.IntrinsicElements) || unknownType;
             }
             return jsxIntrinsicElementsType;
         }
@@ -6977,18 +6974,23 @@ namespace ts {
             let attribProperties = attribPropType && getPropertiesOfType(attribPropType);
 
             if (attribProperties) {
+                // Element Attributes has zero properties, so the element attributes type will be the class instance type
                 if (attribProperties.length === 0) {
                     return '';
                 }
+                // Element Attributes has one property, so the element attributes type will be the type of the corresponding
+                // property of the class instance type
                 else if (attribProperties.length === 1) {
                     return attribProperties[0].name;
                 }
+                // More than one property on ElementAttributesProperty is an error
                 else {
                     error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
                     return undefined;
                 }
             }
             else {
+                // No interface exists, so the element attributes type will be an implicit any
                 return undefined;
             }
         }
@@ -7044,7 +7046,7 @@ namespace ts {
                     return links.resolvedJsxType = getIndexTypeOfSymbol(sym, IndexKind.String);
                 }
                 else {
-                    // Resolution failed
+                    // Resolution failed, so we don't know
                     return links.resolvedJsxType = anyType;
                 }
             }
@@ -7063,16 +7065,12 @@ namespace ts {
             return prop || unknownSymbol;
         }
 
+        let jsxElementClassType: Type = undefined;
         function getJsxGlobalElementClassType(): Type {
-            let jsxNS = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            if (jsxNS) {
-                let sym = getSymbol(jsxNS.exports, JsxNames.ElementClass, SymbolFlags.Type);
-                let elemClassType = sym && getDeclaredTypeOfSymbol(sym);
-                return elemClassType;
+            if(!jsxElementClassType) {
+                jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
             }
-            else {
-                return undefined;
-            }
+            return jsxElementClassType;
         }
 
         /// Returns all the properties of the Jsx.IntrinsicElements interface
@@ -7137,8 +7135,7 @@ namespace ts {
                 return checkExpression(node.expression);
             }
             else {
-                /// <Foo enabled /> is shorthand for <Foo enabled={true} />
-                return booleanType;
+                return unknownType;
             }
         }
 

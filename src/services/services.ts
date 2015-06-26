@@ -2934,7 +2934,7 @@ namespace ts {
                 getTypeScriptMemberSymbols();
             }
             else if (isRightOfOpenTag) {
-                let tagSymbols = typeChecker.getJsxIntrinsicTagNames();;
+                let tagSymbols = typeChecker.getJsxIntrinsicTagNames();
                 if (tryGetGlobalSymbols()) {
                     symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
                 }

@@ -657,7 +657,7 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = fileExtensionIs(sourceFile.fileName, ".tsx") ? LanguageVariant.JSX : LanguageVariant.Standard;
+            sourceFile.languageVariant = isTsx(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
 
             return sourceFile;
         }
@@ -1298,7 +1298,6 @@ namespace ts {
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.JsxAttributes:
-                    // REMOVE -> // For error recovery, include } here (otherwise an over-braced {expr}} will close the surrounding statement block and mess up the entire file).
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken;
                 case ParsingContext.JsxChildren:
                     return token === SyntaxKind.LessThanToken && lookAhead(nextTokenIsSlash);
@@ -3377,9 +3376,6 @@ namespace ts {
             node.name = parseIdentifierName();
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 switch (token) {
-                    case SyntaxKind.LessThanToken:
-                        node.initializer = parseJsxElementOrSelfClosingElement();
-                        break;
                     case SyntaxKind.StringLiteral:
                         node.initializer = parseLiteralNode();
                         break;
