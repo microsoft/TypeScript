@@ -2817,6 +2817,7 @@ namespace ts {
                 //          fo$  <- completion list should contain local name "foo"
                 //      }
                 //      foo$ <- completion list should not contain "foo"
+                // TODO (yuisu): Use getDeclaredName instead once the functions is rewritten
                 if (displayName === "__function" || displayName === "__class") {
                     displayName = symbol.declarations[0].name.getText();
 
