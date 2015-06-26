@@ -1423,6 +1423,9 @@ namespace ts {
         // class X {}
         export const classElement = "class";
 
+        // var x = class X {}
+        export const localClassElement = "local class";
+
         // interface Y {}
         export const interfaceElement = "interface";
 
@@ -2807,14 +2810,14 @@ namespace ts {
                     }
                 }
 
-                // Special case for function expression because despite sometimes having a name, the binder
-                // binds them to a symbol with the name "__function". However, for completion entry, we want
-                // to display its declared name rather than "__function".
+                // Special case for function expression and class expression because despite sometimes having a name, the binder
+                // binds them to a symbol with the name "__function" and "__class" respectively. However, for completion entry, we want
+                // to display its declared name rather than "__function" and "__class".
                 //      var x = function foo () {
                 //          fo$  <- completion list should contain local name "foo"
                 //      }
                 //      foo$ <- completion list should not contain "foo"
-                if (displayName === "__function") {
+                if (displayName === "__function" || displayName === "__class") {
                     displayName = symbol.declarations[0].name.getText();
 
                     // At this point, we expect that all completion list entries have declared name including function expression
@@ -3568,7 +3571,8 @@ namespace ts {
         function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
-            if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
+            if (flags & SymbolFlags.Class) return symbol.declarations[0].kind === SyntaxKind.ClassExpression ?
+                ScriptElementKind.localClassElement : ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
@@ -3777,7 +3781,16 @@ namespace ts {
                 }
             }
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
-                displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                // Special case for class expressions because we would like to indicate that
+                // the class name is local to the class body (similar to function expression)
+                //      (local class) class <className>
+                if (symbol.getName() === "__class") {
+                    pushTypePart(ScriptElementKind.localClassElement);
+                }
+                else {
+                    // Class declaration has name which is not local.
+                    displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                }
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);

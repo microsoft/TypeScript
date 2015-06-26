@@ -12170,11 +12170,6 @@ namespace ts {
                         case SyntaxKind.EnumDeclaration:
                             copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember);
                             break;
-                        case SyntaxKind.ClassExpression:
-                            if ((<ClassExpression>location).name) {
-                                copySymbol(location.symbol, meaning);
-                            }
-                            // Fall through
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             if (!(memberFlags & NodeFlags.Static)) {
@@ -12182,7 +12177,8 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
-                            let name = (<FunctionExpression>location).name;
+                        case SyntaxKind.ClassExpression:
+                            let name = (<FunctionExpression|ClassExpression>location).name;
                             if (name) {
                                 let symbol = location.symbol;
                                 if (symbol.flags & meaning && !hasProperty(symbols, name.text)) {
