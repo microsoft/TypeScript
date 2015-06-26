@@ -3160,8 +3160,8 @@ namespace ts {
             return emptyArray;
         }
 
-        // If the given type is an object type and that type has a property by the given name, return
-        // the symbol for that property. Otherwise return undefined.
+        // If the given type is an object type and that type has a property by the given name,
+        // return the symbol for that property.Otherwise return undefined.
         function getPropertyOfObjectType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.ObjectType) {
                 let resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -4464,7 +4464,7 @@ namespace ts {
                 let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
                 // identity relation does not use apparent type
                 let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+                if (sourceOrApparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                     if (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
@@ -4595,7 +4595,7 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
@@ -4670,7 +4670,7 @@ namespace ts {
                 return result;
             }
 
-            function propertiesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+            function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
@@ -4753,7 +4753,10 @@ namespace ts {
                 return result;
             }
 
-            function propertiesIdenticalTo(source: ObjectType, target: ObjectType): Ternary {
+            function propertiesIdenticalTo(source: Type, target: Type): Ternary {
+                if (!(source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType)) {
+                    return Ternary.False;
+                }
                 let sourceProperties = getPropertiesOfObjectType(source);
                 let targetProperties = getPropertiesOfObjectType(target);
                 if (sourceProperties.length !== targetProperties.length) {
@@ -4774,7 +4777,7 @@ namespace ts {
                 return result;
             }
 
-            function signaturesRelatedTo(source: ObjectType, target: ObjectType, kind: SignatureKind, reportErrors: boolean): Ternary {
+            function signaturesRelatedTo(source: Type, target: Type, kind: SignatureKind, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return signaturesIdenticalTo(source, target, kind);
                 }
@@ -4900,7 +4903,7 @@ namespace ts {
                 return result & isRelatedTo(s, t, reportErrors);
             }
 
-            function signaturesIdenticalTo(source: ObjectType, target: ObjectType, kind: SignatureKind): Ternary {
+            function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
                 let sourceSignatures = getSignaturesOfType(source, kind);
                 let targetSignatures = getSignaturesOfType(target, kind);
                 if (sourceSignatures.length !== targetSignatures.length) {
@@ -4917,7 +4920,7 @@ namespace ts {
                 return result;
             }
 
-            function stringIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+            function stringIndexTypesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
@@ -4942,7 +4945,7 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function numberIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+            function numberIndexTypesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
@@ -4975,7 +4978,7 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function indexTypesIdenticalTo(indexKind: IndexKind, source: ObjectType, target: ObjectType): Ternary {
+            function indexTypesIdenticalTo(indexKind: IndexKind, source: Type, target: Type): Ternary {
                 let targetType = getIndexTypeOfType(target, indexKind);
                 let sourceType = getIndexTypeOfType(source, indexKind);
                 if (!sourceType && !targetType) {
@@ -6335,7 +6338,7 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: string) {
             return applyToContextualType(type, t => {
-                let prop = getPropertyOfObjectType(t, name);
+                let prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
             });
         }
