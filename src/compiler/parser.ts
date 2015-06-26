@@ -2850,8 +2850,8 @@ namespace ts {
                 if (sourceFile.languageVariant === LanguageVariant.JSX) {
                     let isArrowFunctionInJsx = lookAhead(() => {
                         let third = nextToken();
-                        let fourth = nextToken();
                         if (third === SyntaxKind.ExtendsKeyword) {
+                            let fourth = nextToken();
                             switch (fourth) {
                                 case SyntaxKind.EqualsToken:
                                 case SyntaxKind.GreaterThanToken:
