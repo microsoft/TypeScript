@@ -67,22 +67,6 @@
         "category": "Error",
         "code": 1023
     },
-    "A class or interface declaration can only have one 'extends' clause.": {
-        "category": "Error",
-        "code": 1024
-    },
-    "An 'extends' clause must precede an 'implements' clause.": {
-        "category": "Error",
-        "code": 1025
-    },
-    "A class can only extend a single class.": {
-        "category": "Error",
-        "code": 1026
-    },
-    "A class declaration can only have one 'implements' clause.": {
-        "category": "Error",
-        "code": 1027
-    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -98,10 +82,6 @@
     "'{0}' modifier cannot appear on a class element.": {
         "category": "Error",
         "code": 1031
-    },
-    "An interface declaration cannot have an 'implements' clause.": {
-        "category": "Error",
-        "code": 1032
     },
     "'super' must be followed by an argument list or member access.": {
         "category": "Error",
@@ -126,10 +106,6 @@
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
-    },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
-        "category": "Error",
-        "code": 1045
     },
     "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
         "category": "Error",
@@ -363,10 +339,6 @@
         "category": "Error",
         "code": 1132
     },
-    "Type reference expected.": {
-        "category": "Error",
-        "code": 1133
-    },
     "Variable declaration expected.": {
         "category": "Error",
         "code": 1134
@@ -431,18 +403,6 @@
         "category": "Error",
         "code": 1150
     },
-    "'var', 'let' or 'const' expected.": {
-        "category": "Error",
-        "code": 1152
-    },
-    "'let' declarations are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1153
-    },
-    "'const' declarations are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1154
-    },
     "'const' declarations must be initialized": {
         "category": "Error",
         "code": 1155
@@ -482,10 +442,6 @@
     "A computed property name in a class property declaration must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1166
-    },
-    "Computed property names are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1167
     },
     "A computed property name in a method overload must directly refer to a built-in symbol.": {
         "category": "Error",
@@ -546,10 +502,6 @@
     "A destructuring declaration must have an initializer.": {
         "category": "Error",
         "code": 1182
-    },
-    "Destructuring declarations are not allowed in ambient contexts.": {
-        "category": "Error",
-        "code": 1183
     },
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
@@ -753,6 +705,31 @@
     },
 
 
+    "The return type of a property decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1236
+    },
+    "The return type of a parameter decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1237
+    },
+    "Unable to resolve signature of class decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1238
+    },
+    "Unable to resolve signature of parameter decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1239
+    },
+    "Unable to resolve signature of property decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1240
+    },
+    "Unable to resolve signature of method decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1241
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -784,10 +761,6 @@
     "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
-    },
-    "A module cannot have more than one export assignment.": {
-        "category": "Error",
-        "code": 2308
     },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
@@ -2131,10 +2104,6 @@
     "Do not emit declarations for code that has an '@internal' annotation.": {
         "category": "Message",
         "code": 6056
-    },
-    "Preserve new-lines when emitting code.": {
-        "category": "Message",
-        "code": 6057
     },
     "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",

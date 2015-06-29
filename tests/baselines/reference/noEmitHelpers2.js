@@ -1,6 +1,6 @@
 //// [noEmitHelpers2.ts]
 
-function decorator() { }
+declare var decorator: any;
 
 @decorator
 class A {
@@ -9,7 +9,6 @@ class A {
 }
 
 //// [noEmitHelpers2.js]
-function decorator() { }
 var A = (function () {
     function A(a, b) {
     }

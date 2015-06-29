@@ -821,7 +821,7 @@ namespace ts {
         template: LiteralExpression | TemplateExpression;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
 
     export interface AsExpression extends Expression {
         expression: Expression;
@@ -1971,7 +1971,7 @@ namespace ts {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-	
+
     export interface LineAndCharacter {
         line: number;
         /*

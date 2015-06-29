@@ -337,7 +337,6 @@ namespace ts {
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let start: number;
             let length: number;
-            let extensions: string;
             let diagnosticArgument: string[];
             if (refEnd !== undefined && refPos !== undefined) {
                 start = refPos;

@@ -25,15 +25,18 @@ class C extends A {
 declare function isA(p1: any): p1 is A;
 >isA : Symbol(isA, Decl(typeGuardFunction.ts, 11, 1))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 13, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 13, 21))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
 
 declare function isB(p1: any): p1 is B;
 >isB : Symbol(isB, Decl(typeGuardFunction.ts, 13, 39))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 14, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 14, 21))
 >B : Symbol(B, Decl(typeGuardFunction.ts, 3, 1))
 
 declare function isC(p1: any): p1 is C;
 >isC : Symbol(isC, Decl(typeGuardFunction.ts, 14, 39))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 15, 21))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 15, 21))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 
@@ -98,6 +101,7 @@ interface I1 {
     (p1: A): p1 is C;
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 41, 5))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 41, 5))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 }
 
@@ -107,6 +111,7 @@ declare function isC_multipleParams(p1, p2): p1 is C;
 >isC_multipleParams : Symbol(isC_multipleParams, Decl(typeGuardFunction.ts, 42, 1))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 46, 36))
 >p2 : Symbol(p2, Decl(typeGuardFunction.ts, 46, 39))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 46, 36))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 
 if (isC_multipleParams(a, 0)) {
@@ -127,6 +132,7 @@ var obj: {
 >func1 : Symbol(func1, Decl(typeGuardFunction.ts, 52, 10))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 53, 10))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 53, 10))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 }
 class D {
@@ -136,6 +142,7 @@ class D {
 >method1 : Symbol(method1, Decl(typeGuardFunction.ts, 55, 9))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 56, 12))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 56, 12))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 
         return true;
@@ -147,6 +154,7 @@ let f1 = (p1: A): p1 is C => false;
 >f1 : Symbol(f1, Decl(typeGuardFunction.ts, 62, 3))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 62, 10))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 62, 10))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 
 // Function type
@@ -155,6 +163,7 @@ declare function f2(p1: (p1: A) => p1 is C);
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 65, 20))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 65, 25))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 65, 25))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 
 // Function expressions
@@ -162,6 +171,7 @@ f2(function(p1: A): p1 is C {
 >f2 : Symbol(f2, Decl(typeGuardFunction.ts, 62, 35))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 68, 12))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunction.ts, 68, 12))
 >C : Symbol(C, Decl(typeGuardFunction.ts, 7, 1))
 
     return true;
@@ -181,6 +191,7 @@ acceptingBoolean(isA(a));
 declare function acceptingTypeGuardFunction(p1: (item) => item is A);
 >acceptingTypeGuardFunction : Symbol(acceptingTypeGuardFunction, Decl(typeGuardFunction.ts, 74, 25))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 77, 44))
+>item : Symbol(item, Decl(typeGuardFunction.ts, 77, 49))
 >item : Symbol(item, Decl(typeGuardFunction.ts, 77, 49))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
 
