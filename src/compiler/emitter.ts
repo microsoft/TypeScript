@@ -71,7 +71,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, host.getSourceFiles().some(shouldEmitJsx) ? ".jsx" : ".js");
+                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, forEach(host.getSourceFiles(), shouldEmitJsx) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
@@ -1170,7 +1170,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         // Either emit one big object literal (no spread attribs), or
                         // a call to React.__spread
                         let attrs = openingNode.attributes;
-                        if (attrs.some(attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
+                        if (forEach(attrs, attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
                             write("React.__spread(");
 
                             let haveOpenedObjectLiteral = false;
