@@ -2867,7 +2867,7 @@ namespace ts {
                     });
 
                     if (isArrowFunctionInJsx) {
-                        return Tristate.Unknown;
+                        return Tristate.True;
                     }
                     
                     return Tristate.False;
