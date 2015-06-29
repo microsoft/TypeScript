@@ -4965,7 +4965,8 @@ namespace ts {
             // Compute the meaning from the location and the symbol it references
             let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
-            // Get the text to search for, we need to normalize it as external module names will have quotes
+            // Get the text to search for.
+            // Note: if this is an external module symbol, the name doesn't include quotes.
             let declaredName = getDeclaredName(typeChecker, symbol, node);
 
             // Try to get the smallest valid scope that we can limit our search to;
@@ -5019,7 +5020,7 @@ namespace ts {
                 });
             }
 
-            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]) {
+            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
                 // If this is an export or import specifier it could have been renamed using the 'as' syntax.
                 // If so we want to search for whatever under the cursor.
                 if (isImportOrExportSpecifierName(location)) {
@@ -5036,8 +5037,10 @@ namespace ts {
 
             /**
              * Determines the smallest scope in which a symbol may have named references.
+             * Note that not every construct has been accounted for. This function can
+             * probably be improved.
              *
-             * Returns undefined if the scope cannot be determined, often implying that
+             * @returns undefined if the scope cannot be determined, implying that
              * a reference to a symbol can occur anywhere.
              */
             function getSymbolScope(symbol: Symbol): Node {

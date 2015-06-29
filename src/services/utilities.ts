@@ -653,7 +653,7 @@ namespace ts {
         });
     }
 
-    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node) {
+    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
         if (isImportOrExportSpecifierName(location)) {
