@@ -403,6 +403,12 @@ namespace ts {
         FailedAndReported = 3
     }
 
+    /* @internal */
+    export const enum RelationComparisonFlags {
+        None = 0,
+        ExtendingClass = 0x00000001
+    }
+
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
