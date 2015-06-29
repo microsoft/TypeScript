@@ -1,0 +1,146 @@
+=== tests/cases/conformance/jsx/tsxReactEmit1.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxReactEmit1.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(tsxReactEmit1.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(tsxReactEmit1.tsx, 3, 3))
+	}
+}
+
+var p;
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+
+var selfClosed1 = <div />;
+>selfClosed1 : Symbol(selfClosed1, Decl(tsxReactEmit1.tsx, 8, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+
+var selfClosed2 = <div x="1" />;
+>selfClosed2 : Symbol(selfClosed2, Decl(tsxReactEmit1.tsx, 9, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>x : Symbol(unknown)
+
+var selfClosed3 = <div x='1' />;
+>selfClosed3 : Symbol(selfClosed3, Decl(tsxReactEmit1.tsx, 10, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>x : Symbol(unknown)
+
+var selfClosed4 = <div x="1" y='0' />;
+>selfClosed4 : Symbol(selfClosed4, Decl(tsxReactEmit1.tsx, 11, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>x : Symbol(unknown)
+>y : Symbol(unknown)
+
+var selfClosed5 = <div x={0} y='0' />;
+>selfClosed5 : Symbol(selfClosed5, Decl(tsxReactEmit1.tsx, 12, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>x : Symbol(unknown)
+>y : Symbol(unknown)
+
+var selfClosed6 = <div x={"1"} y='0' />;
+>selfClosed6 : Symbol(selfClosed6, Decl(tsxReactEmit1.tsx, 13, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>x : Symbol(unknown)
+>y : Symbol(unknown)
+
+var selfClosed7 = <div x={p} y='p' b />;
+>selfClosed7 : Symbol(selfClosed7, Decl(tsxReactEmit1.tsx, 14, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>x : Symbol(unknown)
+>y : Symbol(unknown)
+>b : Symbol(unknown)
+
+var openClosed1 = <div></div>;
+>openClosed1 : Symbol(openClosed1, Decl(tsxReactEmit1.tsx, 16, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+
+var openClosed2 = <div n='m'>foo</div>;
+>openClosed2 : Symbol(openClosed2, Decl(tsxReactEmit1.tsx, 17, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>n : Symbol(unknown)
+
+var openClosed3 = <div n='m'>{p}</div>;
+>openClosed3 : Symbol(openClosed3, Decl(tsxReactEmit1.tsx, 18, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>n : Symbol(unknown)
+
+var openClosed4 = <div n='m'>{p < p}</div>;
+>openClosed4 : Symbol(openClosed4, Decl(tsxReactEmit1.tsx, 19, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>n : Symbol(unknown)
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+
+var openClosed5 = <div n='m' b>{p > p}</div>;
+>openClosed5 : Symbol(openClosed5, Decl(tsxReactEmit1.tsx, 20, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>n : Symbol(unknown)
+>b : Symbol(unknown)
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+
+class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 20, 45))
+
+	f() {
+>f : Symbol(f, Decl(tsxReactEmit1.tsx, 22, 17))
+
+		var rewrites1 = <div>{() => this}</div>;
+>rewrites1 : Symbol(rewrites1, Decl(tsxReactEmit1.tsx, 24, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>this : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 20, 45))
+
+		var rewrites2 = <div>{[p, ...p, p]}</div>;
+>rewrites2 : Symbol(rewrites2, Decl(tsxReactEmit1.tsx, 25, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+
+		var rewrites3 = <div>{{p}}</div>;
+>rewrites3 : Symbol(rewrites3, Decl(tsxReactEmit1.tsx, 26, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 26, 25))
+
+		var rewrites4 = <div a={() => this}></div>;
+>rewrites4 : Symbol(rewrites4, Decl(tsxReactEmit1.tsx, 28, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>a : Symbol(unknown)
+>this : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 20, 45))
+
+		var rewrites5 = <div a={[p, ...p, p]}></div>;
+>rewrites5 : Symbol(rewrites5, Decl(tsxReactEmit1.tsx, 29, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>a : Symbol(unknown)
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 7, 3))
+
+		var rewrites6 = <div a={{p}}></div>;
+>rewrites6 : Symbol(rewrites6, Decl(tsxReactEmit1.tsx, 30, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>a : Symbol(unknown)
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 30, 27))
+	}
+}
+
+var whitespace1 = <div>      </div>;
+>whitespace1 : Symbol(whitespace1, Decl(tsxReactEmit1.tsx, 34, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+
+var whitespace2 = <div>  {p}    </div>;
+>whitespace2 : Symbol(whitespace2, Decl(tsxReactEmit1.tsx, 35, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+
+var whitespace3 = <div>  
+>whitespace3 : Symbol(whitespace3, Decl(tsxReactEmit1.tsx, 36, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+
+      {p}    
+      </div>;
+

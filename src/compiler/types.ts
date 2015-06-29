@@ -48,6 +48,7 @@ namespace ts {
         SemicolonToken,
         CommaToken,
         LessThanToken,
+        LessThanSlashToken,
         GreaterThanToken,
         LessThanEqualsToken,
         GreaterThanEqualsToken,
@@ -217,6 +218,8 @@ namespace ts {
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
+        AsExpression,
+
         // Misc
         TemplateSpan,
         SemicolonClassElement,
@@ -264,6 +267,16 @@ namespace ts {
 
         // Module references
         ExternalModuleReference,
+
+        //JSX
+        JsxElement,
+        JsxSelfClosingElement,
+        JsxOpeningElement,
+        JsxText,
+        JsxClosingElement,
+        JsxAttribute,
+        JsxSpreadAttribute,
+        JsxExpression,
 
         // Clauses
         CaseClause,
@@ -395,6 +408,17 @@ namespace ts {
         // Used to know if we've computed data from children and cached it in this node.
         HasAggregatedChildData = 1 << 8
     }
+
+    export const enum JsxFlags {
+        None = 0,
+        IntrinsicNamedElement = 1 << 0,
+        IntrinsicIndexedElement = 1 << 1,
+        ClassElement = 1 << 2,
+        UnknownElement = 1 << 3,
+
+        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement
+    }
+
 
     /* @internal */
     export const enum RelationComparisonResult {
@@ -799,10 +823,63 @@ namespace ts {
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
 
+    export interface AsExpression extends Expression {
+        expression: Expression;
+        type: TypeNode;
+    }
+
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
         expression: UnaryExpression;
     }
+
+    export type AssertionExpression = TypeAssertion | AsExpression;
+
+    /// A JSX expression of the form <TagName attrs>...</TagName>
+    export interface JsxElement extends PrimaryExpression {
+        openingElement: JsxOpeningElement;
+        children: NodeArray<JsxChild>;
+        closingElement: JsxClosingElement;
+    }
+
+    /// The opening element of a <Tag>...</Tag> JsxElement
+    export interface JsxOpeningElement extends Expression {
+        _openingElementBrand?: any;
+        tagName: EntityName;
+        attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
+    }
+
+    /// A JSX expression of the form <TagName attrs />
+    export interface JsxSelfClosingElement extends PrimaryExpression, JsxOpeningElement {
+        _selfClosingElementBrand?: any;
+    }
+
+    /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
+    export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+
+    export interface JsxAttribute extends Node {
+        name: Identifier;
+        /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
+        initializer?: Expression;
+    }
+
+    export interface JsxSpreadAttribute extends Node {
+        expression: Expression;
+    }
+
+    export interface JsxClosingElement extends Node {
+        tagName: EntityName;
+    }
+
+    export interface JsxExpression extends Expression {
+        expression?: Expression;
+    }
+
+    export interface JsxText extends Node {
+        _jsxTextExpressionBrand: any;
+    }
+
+    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
     export interface Statement extends Node {
         _statementBrand: any;
@@ -1144,6 +1221,7 @@ namespace ts {
         amdDependencies: {path: string; name: string}[];
         moduleName: string;
         referencedFiles: FileReference[];
+        languageVariant: LanguageVariant;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1322,6 +1400,9 @@ namespace ts {
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+
+        getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
+        getJsxIntrinsicTagNames(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1603,6 +1684,8 @@ namespace ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
+        jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
+        resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
     }
 
     export const enum TypeFlags {
@@ -1834,6 +1917,7 @@ namespace ts {
         help?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
+        jsx?: JsxEmit;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1877,6 +1961,12 @@ namespace ts {
         System = 4,
     }
 
+    export const enum JsxEmit {
+        None = 0,
+        Preserve = 1,
+        React = 2
+    }
+
     export const enum NewLineKind {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
@@ -1895,6 +1985,11 @@ namespace ts {
         ES5 = 1,
         ES6 = 2,
         Latest = ES6,
+    }
+
+    export const enum LanguageVariant {
+        Standard,
+        JSX
     }
 
     export interface ParsedCommandLine {
