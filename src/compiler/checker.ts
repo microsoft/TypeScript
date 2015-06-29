@@ -7119,10 +7119,10 @@ namespace ts {
 
             if (getNodeLinks(node).jsxFlags & JsxFlags.ClassElement) {
                 if (node.tagName.kind === SyntaxKind.Identifier) {
-                   checkIdentifier(<Identifier>node.tagName);
+                    checkIdentifier(<Identifier>node.tagName);
                 }
                 else {
-                   checkQualifiedName(<QualifiedName>node.tagName);
+                    checkQualifiedName(<QualifiedName>node.tagName);
                 }
             }
 
