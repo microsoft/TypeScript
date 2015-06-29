@@ -1800,7 +1800,7 @@ namespace ts {
         let outputText: string;
 
         // Create a compilerHost object to allow the compiler to read and write files
-        var compilerHost: CompilerHost = {
+        let compilerHost: CompilerHost = {
             getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
@@ -1813,7 +1813,7 @@ namespace ts {
             getNewLine: () => newLine
         };
 
-        var program = createProgram([inputFileName], options, compilerHost);
+        let program = createProgram([inputFileName], options, compilerHost);
 
         addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
@@ -3104,7 +3104,7 @@ namespace ts {
              * accurately aggregate locals from the closest containing scope.
              */
             function getScopeNode(initialToken: Node, position: number, sourceFile: SourceFile) {
-                var scope = initialToken;
+                let scope = initialToken;
                 while (scope && !positionBelongsToNode(scope, position, sourceFile)) {
                     scope = scope.parent;
                 }
@@ -3505,10 +3505,10 @@ namespace ts {
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
                 let start = new Date().getTime();
-                var entries: CompletionEntry[] = [];
+                let entries: CompletionEntry[] = [];
 
                 if (symbols) {
-                    var nameToSymbol: Map<Symbol> = {};
+                    let nameToSymbol: Map<Symbol> = {};
                     for (let symbol of symbols) {
                         let entry = createCompletionEntry(symbol, location);
                         if (entry) {
@@ -3542,13 +3542,13 @@ namespace ts {
                 let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
 
                 if (symbol) {
-                    let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
+                    let { displayParts, documentation, symbolKind } = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
                     return {
                         name: entryName,
-                        kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
                         kindModifiers: getSymbolModifiers(symbol),
-                        displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
-                        documentation: displayPartsDocumentationsAndSymbolKind.documentation
+                        kind: symbolKind,
+                        displayParts,
+                        documentation
                     };
                 }
             }
@@ -4233,7 +4233,7 @@ namespace ts {
             }
 
             if (type.flags & TypeFlags.Union) {
-                var result: DefinitionInfo[] = [];
+                let result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
                         addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(t.symbol, node));
@@ -4333,7 +4333,7 @@ namespace ts {
             function getSyntacticDocumentHighlights(node: Node): DocumentHighlights[] {
                 let fileName = sourceFile.fileName;
 
-                var highlightSpans = getHighlightSpans(node);
+                let highlightSpans = getHighlightSpans(node);
                 if (!highlightSpans || highlightSpans.length === 0) {
                     return undefined;
                 }
@@ -4911,17 +4911,17 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            var referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            let referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
             return convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            let referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
             return convertReferences(referencedSymbols);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[]{
-            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            let referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
 
             // Only include referenced symbols that have a valid definition.
             return filter(referencedSymbols, rs => !!rs.definition);
@@ -5220,7 +5220,7 @@ namespace ts {
                     }
                 });
 
-                var definition: DefinitionInfo = {
+                let definition: DefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
@@ -5316,10 +5316,10 @@ namespace ts {
                         if (referenceSymbol) {
                             let referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             let shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            var relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+                            let relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
 
                             if (relatedSymbol) {
-                                var referencedSymbol = getReferencedSymbol(relatedSymbol);
+                                let referencedSymbol = getReferencedSymbol(relatedSymbol);
                                 referencedSymbol.references.push(getReferenceEntryFromNode(referenceLocation));
                             }
                             /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
@@ -5329,7 +5329,7 @@ namespace ts {
                              * position of property accessing, the referenceEntry of such position will be handled in the first case.
                              */
                             else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
-                                var referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
+                                let referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
                                 referencedSymbol.references.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
                         }
@@ -5339,8 +5339,8 @@ namespace ts {
                 return;
 
                 function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
-                    var symbolId = getSymbolId(symbol);
-                    var index = symbolToIndex[symbolId];
+                    let symbolId = getSymbolId(symbol);
+                    let index = symbolToIndex[symbolId];
                     if (index === undefined) {
                         index = result.length;
                         symbolToIndex[symbolId] = index;
@@ -5427,7 +5427,7 @@ namespace ts {
                     }
                 });
 
-                var definition = getDefinition(searchSpaceNode.symbol);
+                let definition = getDefinition(searchSpaceNode.symbol);
                 return [{ definition, references }];
             }
 
@@ -5622,7 +5622,7 @@ namespace ts {
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
                 if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
-                    var aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
+                    let aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
                     if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
                         return aliasedSymbol;
                     }
@@ -6938,7 +6938,7 @@ namespace ts {
         }
 
         function convertClassifications(classifications: Classifications, text: string): ClassificationResult {
-            var entries: ClassificationInfo[] = [];
+            let entries: ClassificationInfo[] = [];
             let dense = classifications.spans;
             let lastEnd = 0;
 
