@@ -2,17 +2,19 @@
 
 /* @internal */
 namespace ts {
-    // Ternary values are defined such that
-    // x & y is False if either x or y is False.
-    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-    // x & y is True if both x and y are True.
-    // x | y is False if both x and y are False.
-    // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-    // x | y is True if either x or y is True.
+    /**
+     * Ternary values are defined such that
+     * x & y is False if either x or y is False.
+     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+     * x & y is True if both x and y are True.
+     * x | y is False if both x and y are False.
+     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+     * x | y is True if either x or y is True.
+     */
     export const enum Ternary {
         False = 0,
         Maybe = 1,
-        True  = -1
+        True = -1
     }
 
     export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
