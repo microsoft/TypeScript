@@ -1,10 +1,10 @@
-tests/cases/compiler/numLit.ts(3,3): error TS1005: ';' expected.
-tests/cases/compiler/numLit.ts(9,15): error TS1005: ',' expected.
-tests/cases/compiler/numLit.ts(9,23): error TS1005: '=' expected.
-tests/cases/compiler/numLit.ts(9,24): error TS1109: Expression expected.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(3,3): error TS1005: ';' expected.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,15): error TS1005: ',' expected.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,23): error TS1005: '=' expected.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,24): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/numLit.ts (4 errors) ====
+==== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts (4 errors) ====
     1..toString();
     1.0.toString();
     1.toString();
@@ -15,7 +15,7 @@ tests/cases/compiler/numLit.ts(9,24): error TS1109: Expression expected.
     // Preserve whitespace where important for JS compatibility
     var i: number = 1;
     var test1 = i.toString();  
-    var test2 = 2.toString(); // emitted as 2 .toString()
+    var test2 = 2.toString();
                   ~~~~~~~~
 !!! error TS1005: ',' expected.
                           ~
