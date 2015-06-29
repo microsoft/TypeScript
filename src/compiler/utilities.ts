@@ -169,13 +169,13 @@ namespace ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
     }
 
-    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
+    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
         let text = sourceFile.text;
-        return text.substring(skipTrivia(text, node.pos), node.end);
+        return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -186,8 +186,8 @@ namespace ts {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getTextOfNode(node: Node): string {
-        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
+    export function getTextOfNode(node: Node, includeTrivia = false): string {
+        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -274,7 +274,7 @@ namespace ts {
     }
 
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text, /*onError:*/ undefined, pos);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
         return createTextSpanFromBounds(start, scanner.getTextPos());
@@ -848,6 +848,7 @@ namespace ts {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
@@ -864,6 +865,8 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
@@ -910,7 +913,8 @@ namespace ts {
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
-                        return node === (<TypeAssertion>parent).expression;
+                    case SyntaxKind.AsExpression:
+                        return node === (<AssertionExpression>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
@@ -1530,6 +1534,11 @@ namespace ts {
         }
     }
 
+    export function isIntrinsicJsxName(name: string) {
+        let ch = name.substr(0, 1);
+        return ch.toLowerCase() === ch;
+    }
+
     function get16BitUnicodeEscapeSequence(charCode: number): string {
         let hexCharCode = charCode.toString(16).toUpperCase();
         let paddedHexCode = ("0000" + hexCharCode).slice(-4);
@@ -1885,6 +1894,8 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:
@@ -1948,6 +1959,10 @@ namespace ts {
 
     export function isJavaScript(fileName: string) {
         return fileExtensionIs(fileName, ".js");
+    }
+
+    export function isTsx(fileName: string) {
+        return fileExtensionIs(fileName, ".tsx");
     }
 
     /**

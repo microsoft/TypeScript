@@ -1,0 +1,92 @@
+=== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxEsprimaFbTestSuite.tsx, 0, 11))
+
+declare var 日本語;
+>日本語 : Symbol(日本語, Decl(jsxEsprimaFbTestSuite.tsx, 1, 11))
+
+declare var AbC_def;
+>AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))
+
+declare var LeftRight;
+>LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
+
+declare var x;
+>x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
+
+declare var a;
+>a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
+
+declare var props;
+>props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
+
+<a />;
+
+//<n:a n:v />; Namespace unsuported
+
+//<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
+
+<a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
+>b : Symbol(unknown)
+>c : Symbol(unknown)
+>d : Symbol(unknown)
+>e : Symbol(unknown)
+>f : Symbol(unknown)
+>g : Symbol(unknown)
+>h : Symbol(unknown)
+
+<a b="&notanentity;" />;
+>b : Symbol(unknown)
+
+<a
+/>;
+
+<日本語></日本語>;
+
+<AbC_def
+>AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))
+
+  test="&#x0026;&#38;">
+>test : Symbol(unknown)
+
+bar
+baz
+</AbC_def>;
+
+<a b={x ? <c /> : <d />} />;
+>b : Symbol(unknown)
+>x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
+
+<a>{}</a>;
+
+<a>{/* this is a comment */}</a>;
+
+<div>@test content</div>;
+
+<div><br />7x invalid-js-identifier</div>;
+
+<LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
+>LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
+>left : Symbol(unknown)
+>right : Symbol(unknown)
+
+<a.b></a.b>;
+>b : Symbol(unknown)
+
+<a.b.c></a.b.c>;
+>c : Symbol(unknown)
+
+(<div />) < x;
+>x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
+
+<div {...props} />;
+
+<div {...props} post="attribute" />;
+>post : Symbol(unknown)
+
+<div pre="leading" pre2="attribute" {...props}></div>;
+>pre : Symbol(unknown)
+>pre2 : Symbol(unknown)
+
+<a>    </a>;
+
