@@ -1,0 +1,24 @@
+{
+    "rules": {
+        "class-name": true,
+        "comment-format": [true,
+            "check-space"
+        ],
+        "curly": true,
+        "indent": true,
+        "no-trailing-comman": true,
+        "no-trailing-whitespace": true,
+        "no-unreachable": true,
+        "no-unused-variable": true,
+        "no-use-before-declare": true,
+        "no-var-keyword": true,
+        "quotemark": true,
+        "semicolon": true,
+        "whitespace": [true,
+            "check-branch",
+            "check-operator",
+            "check-separator",
+            "check-type"
+        ]
+  }
+}

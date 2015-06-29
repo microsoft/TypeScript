@@ -11,12 +11,12 @@ namespace ts {
     export const version = "1.5.3";
 
     export function findConfigFile(searchPath: string): string {
-        var fileName = "tsconfig.json";
+        let fileName = "tsconfig.json";
         while (true) {
             if (sys.fileExists(fileName)) {
                 return fileName;
             }
-            var parentPath = getDirectoryPath(searchPath);
+            let parentPath = getDirectoryPath(searchPath);
             if (parentPath === searchPath) {
                 break;
             }
@@ -35,7 +35,7 @@ namespace ts {
             // otherwise use toLowerCase as a canonical form.
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
-        
+
         // returned by CScript sys environment
         let unsupportedFileEncodingErrorCode = -2147024809;
 
@@ -79,7 +79,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                var start = new Date().getTime();
+                let start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
                 sys.writeFile(fileName, data, writeByteOrderMark);
                 ioWriteTime += new Date().getTime() - start;
@@ -309,7 +309,7 @@ namespace ts {
             if (!isDeclarationFile(sourceFile)) {
                 let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
                 // Don't actually write any files since we're just getting diagnostics.
-                var writeFile: WriteFileCallback = () => { };
+                let writeFile: WriteFileCallback = () => { };
                 return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
             }
         }
@@ -358,7 +358,7 @@ namespace ts {
                 }
             }
             else {
-                var nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
@@ -458,7 +458,7 @@ namespace ts {
                         let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
                         if (moduleNameText) {
                             let searchPath = basePath;
-                            let searchName: string; 
+                            let searchName: string;
                             while (true) {
                                 searchName = normalizePath(combinePaths(searchPath, moduleNameText));
                                 if (forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr))) {
@@ -669,7 +669,7 @@ namespace ts {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
                 }
             }
-            
+
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalDecorators_must_also_be_specified_when_option_emitDecoratorMetadata_is_specified));

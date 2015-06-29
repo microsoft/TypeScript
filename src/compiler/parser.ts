@@ -385,7 +385,7 @@ namespace ts {
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
     }
-    
+
     /* @internal */
     export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
         return Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
@@ -1790,7 +1790,7 @@ namespace ts {
             do {
                 templateSpans.push(parseTemplateSpan());
             }
-            while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle)
+            while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle);
 
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
@@ -1805,7 +1805,7 @@ namespace ts {
             let literal: LiteralExpression;
 
             if (token === SyntaxKind.CloseBraceToken) {
-                reScanTemplateToken()
+                reScanTemplateToken();
                 literal = parseLiteralNode();
             }
             else {
@@ -2126,7 +2126,7 @@ namespace ts {
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
-            return finishNode(node)
+            return finishNode(node);
         }
 
         function parsePropertyOrMethodSignature(): Declaration {
@@ -2709,7 +2709,7 @@ namespace ts {
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
-            var lastToken = token;
+            let lastToken = token;
             arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody()
@@ -4209,7 +4209,7 @@ namespace ts {
         function parsePropertyOrMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassElement {
             let asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             let name = parsePropertyName();
-            
+
             // Note: this is not legal as per the grammar.  But we allow it in the parser and
             // report an error in the grammar checker.
             let questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
@@ -4421,7 +4421,7 @@ namespace ts {
         }
 
         function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
-            var node = <ClassLikeDeclaration>createNode(kind, fullStart);
+            let node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
@@ -4651,7 +4651,7 @@ namespace ts {
         }
 
         function parseImportClause(identifier: Identifier, fullStart: number) {
-            //ImportClause:
+            // ImportClause:
             //  ImportedDefaultBinding
             //  NameSpaceImport
             //  NamedImports
@@ -4942,7 +4942,7 @@ namespace ts {
             /* @internal */
             export function parseJSDocTypeExpression(start: number, length: number): JSDocTypeExpression {
                 scanner.setText(sourceText, start, length);
-        
+
                 // Prime the first token for us to start processing.
                 token = nextToken();
 
@@ -4957,15 +4957,15 @@ namespace ts {
             }
 
             function parseJSDocTopLevelType(): JSDocType {
-                var type = parseJSDocType();
+                let type = parseJSDocType();
                 if (token === SyntaxKind.BarToken) {
-                    var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
+                    let unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
                     unionType.types = parseJSDocTypeList(type);
                     type = finishNode(unionType);
                 }
 
                 if (token === SyntaxKind.EqualsToken) {
-                    var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                    let optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
                     nextToken();
                     optionalType.type = type;
                     type = finishNode(optionalType);
@@ -5279,7 +5279,7 @@ namespace ts {
 
                 let tags: NodeArray<JSDocTag>;
                 let pos: number;
-                
+
                 // NOTE(cyrusn): This is essentially a handwritten scanner for JSDocComments. I 
                 // considered using an actual Scanner, but this would complicate things.  The 
                 // scanner would need to know it was in a Doc Comment.  Otherwise, it would then
@@ -5302,7 +5302,7 @@ namespace ts {
 
                             if (ch === CharacterCodes.at && canParseTag) {
                                 parseTag();
-                        
+
                                 // Once we parse out a tag, we cannot keep parsing out tags on this line.
                                 canParseTag = false;
                                 continue;
@@ -5568,7 +5568,7 @@ namespace ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true);
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -5632,7 +5632,7 @@ namespace ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            let result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)
+            let result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true);
 
             return result;
         }
@@ -5647,8 +5647,9 @@ namespace ts {
             return;
 
             function visitNode(node: IncrementalNode) {
+                let text = '';
                 if (aggressiveChecks && shouldCheckNode(node)) {
-                    var text = oldText.substring(node.pos, node.end);
+                    text = oldText.substring(node.pos, node.end);
                 }
 
                 // Ditch any existing LS children we may have created.  This way we can avoid
@@ -5998,17 +5999,17 @@ namespace ts {
 
         interface IncrementalElement extends TextRange {
             parent?: Node;
-            intersectsChange: boolean
+            intersectsChange: boolean;
             length?: number;
             _children: Node[];
         }
 
         export interface IncrementalNode extends Node, IncrementalElement {
-            hasBeenIncrementallyParsed: boolean
+            hasBeenIncrementallyParsed: boolean;
         }
 
         interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
-            length: number
+            length: number;
         }
 
         // Allows finding nodes in the source file at a certain position in an efficient manner.

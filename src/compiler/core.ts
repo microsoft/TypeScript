@@ -23,7 +23,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap
-        }
+        };
 
         function set(fileName: string, value: T) {
             files[normalizeKey(fileName)] = value;
@@ -163,7 +163,7 @@ namespace ts {
                 to.push(v);
             }
         }
-    } 
+    }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
         while (pos < end) {
@@ -365,7 +365,7 @@ namespace ts {
         }
 
         let text = getLocaleSpecificMessage(message.key);
-        
+
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
         }
@@ -535,7 +535,7 @@ namespace ts {
                 else {
                     // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
                     // e.g. "path//file.ts".  Drop these before re-joining the parts.
-                    if(part) {
+                    if (part) {
                         normalized.push(part);
                     }
                 }
@@ -767,7 +767,7 @@ namespace ts {
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature
-    }
+    };
 
     export const enum AssertionLevel {
         None = 0,
