@@ -1,0 +1,35 @@
+tests/cases/conformance/jsx/button.tsx(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+
+
+==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+    
+    declare module 'react' {
+    	class Component<T, U> { }
+    }
+    
+==== tests/cases/conformance/jsx/app.tsx (0 errors) ====
+    import * as React from 'react';
+    
+    // Should see var button_1 = require('./button') here
+    import { Button } from './button';
+    
+    export class App extends React.Component<any, any> {
+    
+        render() {
+            return <Button />;
+        }
+    
+    }
+    
+==== tests/cases/conformance/jsx/button.tsx (1 errors) ====
+    import * as React from 'react';
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+    
+    export class Button extends React.Component<any, any> {
+    
+        render() {
+            return <button>Some button</button>;
+        }
+    
+    }

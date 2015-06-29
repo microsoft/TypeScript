@@ -7117,6 +7117,15 @@ namespace ts {
 
             let targetAttributesType = getJsxElementAttributesType(node);
 
+            if(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement) {
+                if(node.tagName.kind === SyntaxKind.Identifier) {
+                   checkIdentifier(<Identifier>node.tagName);
+                }
+                else {
+                   checkQualifiedName(<QualifiedName>node.tagName);
+                }
+            }
+
             let nameTable: Map<boolean> = {};
             // Process this array in right-to-left order so we know which
             // attributes (mostly from spreads) are being overwritten and
