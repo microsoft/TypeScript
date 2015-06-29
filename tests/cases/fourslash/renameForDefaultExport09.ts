@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @Filename: foo.ts
 ////function /**/[|f|]() {
 ////    return 100;
 ////}

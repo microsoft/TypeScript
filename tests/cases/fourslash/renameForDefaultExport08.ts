@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @Filename: foo.ts
 ////export default function DefaultExportedFunction() {
 ////    return /**/[|DefaultExportedFunction|]
 ////}
@@ -12,4 +13,4 @@
 ////var y = DefaultExportedFunction();
 
 goTo.marker();
-verify.renameInfoSucceeded("DefaultExportedFunction");
+verify.renameInfoSucceeded("DefaultExportedFunction", '"tests/cases/fourslash/foo".DefaultExportedFunction');

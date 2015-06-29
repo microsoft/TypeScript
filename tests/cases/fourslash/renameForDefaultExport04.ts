@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @Filename: foo.ts
 ////export default class /**/[|DefaultExportedClass|] {
 ////}
 /////*
@@ -11,4 +12,4 @@
 ////var y = new DefaultExportedClass;
 
 goTo.marker();
-verify.renameInfoSucceeded("DefaultExportedClass");
+verify.renameInfoSucceeded("DefaultExportedClass", '"tests/cases/fourslash/foo".DefaultExportedClass');
