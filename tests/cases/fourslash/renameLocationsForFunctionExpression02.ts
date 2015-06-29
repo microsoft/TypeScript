@@ -1,7 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
+////function f() {
+////    
+////}
 ////var x = function [|f|](g: any, h: any) {
-////    [|f|]([|f|], g);
+////
+////    let helper = function f(): any { f(); }
+////
+////    let foo = () => [|f|]([|f|], g);
 ////}
 
 let ranges = test.ranges()
