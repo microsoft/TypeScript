@@ -4291,11 +4291,11 @@ namespace ts {
         // TYPE CHECKING
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
-            return checkTypeRelatedTo(source, target, identityRelation, /*context*/ undefined, /*errorNode*/ undefined);
+            return checkTypeRelatedTo(source, target, identityRelation, RelationComparisonFlags.None, /*errorNode*/ undefined);
         }
 
         function compareTypes(source: Type, target: Type): Ternary {
-            return checkTypeRelatedTo(source, target, identityRelation, /*context*/ undefined, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
+            return checkTypeRelatedTo(source, target, identityRelation, RelationComparisonFlags.None, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
@@ -4303,15 +4303,15 @@ namespace ts {
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
-            return checkTypeAssignableTo(source, target, /*context*/ undefined, /*errorNode*/ undefined);
+            return checkTypeAssignableTo(source, target, RelationComparisonFlags.None, /*errorNode*/ undefined);
         }
 
         function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
-            return checkTypeRelatedTo(source, target, subtypeRelation, /*context*/ undefined, errorNode, headMessage, containingMessageChain);
+            return checkTypeRelatedTo(source, target, subtypeRelation, RelationComparisonFlags.None, errorNode, headMessage, containingMessageChain);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, context?: SyntaxKind, errorNode?: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, /*context*/ context, errorNode, headMessage, containingMessageChain);
+        function checkTypeAssignableTo(source: Type, target: Type, relationFlags: RelationComparisonFlags, errorNode?: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, relationFlags, errorNode, headMessage, containingMessageChain);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
@@ -4326,8 +4326,10 @@ namespace ts {
          * @param target The right-hand-side of the relation.
          * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', or 'subTypeRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
-         * @param The context in which the checking occurs. Currently used only for distinguishing extending classes from 
-         * other assignability relations.
+         * @param relationFlags Additional information affecting whether the relation holds. Currently used only for distinguishing 
+         * between a type comparison when extending classes from other comparisons of the constructor types.
+         * 
+         * Caution: checks triggered by these flags should NOT affect the result re
          * @param errorNode The node upon which all errors will be reported, if defined.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
@@ -4337,7 +4339,7 @@ namespace ts {
             source: Type,
             target: Type,
             relation: Map<RelationComparisonResult>,
-            context?: SyntaxKind,
+            relationFlags: RelationComparisonFlags,
             errorNode?: Node,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain
@@ -6858,7 +6860,7 @@ namespace ts {
             }
 
             if (correspondingPropType) {
-                checkTypeAssignableTo(exprType, correspondingPropType, /*context */ undefined, node);
+                checkTypeAssignableTo(exprType, correspondingPropType, RelationComparisonFlags.None, node);
             }
 
             nameTable[node.name.text] = true;
@@ -6875,7 +6877,7 @@ namespace ts {
                     let targetPropSym = getPropertyOfType(elementAttributesType, prop.name);
                     if (targetPropSym) {
                         let msg = chainDiagnosticMessages(undefined, Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property, prop.name);
-                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), /*context */ undefined, node, undefined, msg);
+                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), RelationComparisonFlags.None, node, undefined, msg);
                     }
 
                     nameTable[prop.name] = true;
@@ -7003,7 +7005,7 @@ namespace ts {
             // Issue an error if this return type isn't assignable to JSX.ElementClass
             let elemClassType = getJsxGlobalElementClassType();
             if (elemClassType) {
-                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, /*context */ undefined, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
+                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, RelationComparisonFlags.None, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
             return returnType;
@@ -7767,7 +7769,7 @@ namespace ts {
                         typeArgumentsAreAssignable = checkTypeAssignableTo(
                             typeArgument, 
                             constraint, 
-                            /*context */ undefined, 
+                            RelationComparisonFlags.None, 
                             reportErrors ? typeArgNode : undefined,
                             typeArgumentHeadMessage, 
                             errorInfo);
@@ -7799,7 +7801,7 @@ namespace ts {
                     // Use argument expression as error location when reporting errors
                     let errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
                     let headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-                    if (!checkTypeRelatedTo(argType, paramType, relation, /*context */ undefined, errorNode, headMessage)) {
+                    if (!checkTypeRelatedTo(argType, paramType, relation, RelationComparisonFlags.None, errorNode, headMessage)) {
                         return false;
                     }
                 }
@@ -8608,7 +8610,7 @@ namespace ts {
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, /*context */ undefined, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    checkTypeAssignableTo(exprType, targetType, RelationComparisonFlags.None, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -8841,7 +8843,7 @@ namespace ts {
                 else {
                     let exprType = checkExpression(<Expression>node.body);
                     if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), /*context */ undefined, node.body, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), RelationComparisonFlags.None, node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionAndClassExpressionBodies(node.body);
                 }
@@ -9149,7 +9151,7 @@ namespace ts {
         function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             let targetType = checkExpression(target, contextualMapper);
             if (checkReferenceExpression(target, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant)) {
-                checkTypeAssignableTo(sourceType, targetType, /*context */ undefined, target, /*headMessage*/ undefined);
+                checkTypeAssignableTo(sourceType, targetType, RelationComparisonFlags.None, target, /*headMessage*/ undefined);
             }
             return sourceType;
         }
@@ -9324,7 +9326,7 @@ namespace ts {
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, /*context */ undefined, node.left, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftType, RelationComparisonFlags.None, node.left, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -9375,10 +9377,10 @@ namespace ts {
                     if (func.type) {
                         let signatureElementType = getElementTypeOfIterableIterator(getTypeFromTypeNode(func.type)) || anyType;
                         if (nodeIsYieldStar) {
-                            checkTypeAssignableTo(expressionElementType, signatureElementType, /*context */ undefined, node.expression, /*headMessage*/ undefined);
+                            checkTypeAssignableTo(expressionElementType, signatureElementType, RelationComparisonFlags.None, node.expression, /*headMessage*/ undefined);
                         }
                         else {
-                            checkTypeAssignableTo(expressionType, signatureElementType, /*context */ undefined, node.expression, /*headMessage*/ undefined);
+                            checkTypeAssignableTo(expressionType, signatureElementType, RelationComparisonFlags.None, node.expression, /*headMessage*/ undefined);
                         }
                     }
                 }
@@ -9695,7 +9697,7 @@ namespace ts {
                             else {
                                 checkTypeAssignableTo(typePredicate.type,
                                     getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
-                                    /*context */ undefined, typePredicateNode.type);
+                                    RelationComparisonFlags.None, typePredicateNode.type);
                             }
                         }
                         else if (typePredicateNode.parameterName) {
@@ -9773,7 +9775,7 @@ namespace ts {
                             //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
                             //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
                             //
-                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, /*context */ undefined, node.type);
+                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, RelationComparisonFlags.None, node.type);
                         }
                     }
                 }
@@ -9975,7 +9977,7 @@ namespace ts {
                 let constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     let typeArgument = typeArguments[i];
-                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, /*context */ undefined, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, RelationComparisonFlags.None, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
             return result;
@@ -10429,7 +10431,7 @@ namespace ts {
             checkTypeAssignableTo(
                 returnType, 
                 expectedReturnType, 
-                /*context */ undefined,
+                RelationComparisonFlags.None,
                 node, 
                 headMessage, 
                 errorInfo);
@@ -10851,7 +10853,7 @@ namespace ts {
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), /*context */ undefined, node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), RelationComparisonFlags.None, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
                 return;
@@ -10861,7 +10863,7 @@ namespace ts {
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), type, /*context */ undefined, node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), type, RelationComparisonFlags.None, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
             }
@@ -10873,7 +10875,7 @@ namespace ts {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, /*context */ undefined, node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, RelationComparisonFlags.None, node, /*headMessage*/ undefined);
                 }
             }
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
@@ -10925,7 +10927,7 @@ namespace ts {
 
         function checkExpressionStatement(node: ExpressionStatement) {
             // Grammar checking
-            checkGrammarStatementInAmbientContext(node)
+            checkGrammarStatementInAmbientContext(node);
 
             checkExpression(node.expression);
         }
@@ -11009,7 +11011,7 @@ namespace ts {
                     // because we accessed properties from anyType, or it may have led to an error inside
                     // getElementTypeOfIterable.
                     if (iteratedType) {
-                        checkTypeAssignableTo(iteratedType, leftType, /*context */ undefined, varExpr, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(iteratedType, leftType, RelationComparisonFlags.None, varExpr, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -11109,7 +11111,7 @@ namespace ts {
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
             if (errorNode && elementType) {
-                checkTypeAssignableTo(iterable, createIterableType(elementType), /*context */ undefined, errorNode);
+                checkTypeAssignableTo(iterable, createIterableType(elementType), RelationComparisonFlags.None, errorNode);
             }
 
             return elementType || anyType;
@@ -11353,7 +11355,7 @@ namespace ts {
                         }
                     }
                     else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || signature.typePredicate) {
-                        checkTypeAssignableTo(exprType, returnType, /*context */ undefined, node.expression, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(exprType, returnType, RelationComparisonFlags.None, node.expression, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -11396,7 +11398,7 @@ namespace ts {
                     let caseType = checkExpression(caseClause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, /*context */ undefined, caseClause.expression, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, RelationComparisonFlags.None, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
@@ -11647,8 +11649,8 @@ namespace ts {
                             }
                         }
                     }
-                    checkTypeAssignableTo(type, baseType, SyntaxKind.ExtendsKeyword, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), SyntaxKind.ExtendsKeyword, node.name || node,
+                    checkTypeAssignableTo(type, baseType, RelationComparisonFlags.None, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), RelationComparisonFlags.ExtendingClass, node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
@@ -11677,7 +11679,7 @@ namespace ts {
                         if (t !== unknownType) {
                             let declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                checkTypeAssignableTo(type, t, /*context */ undefined, node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(type, t, RelationComparisonFlags.None, node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -11876,7 +11878,7 @@ namespace ts {
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         forEach(getBaseTypes(type), baseType => {
-                            checkTypeAssignableTo(type, baseType, /*context */ undefined, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(type, baseType, RelationComparisonFlags.None, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
                     }
@@ -11929,7 +11931,7 @@ namespace ts {
                                 // If it is a constant value (not undefined), it is syntactically constrained to be a number.
                                 // Also, we do not need to check this for ambients because there is already
                                 // a syntax error if it is not a constant.
-                                checkTypeAssignableTo(checkExpression(initializer), enumType, /*context */ undefined, initializer, /*headMessage*/ undefined);
+                                checkTypeAssignableTo(checkExpression(initializer), enumType, RelationComparisonFlags.None, initializer, /*headMessage*/ undefined);
                             }
                         }
                         else if (enumIsConst) {
