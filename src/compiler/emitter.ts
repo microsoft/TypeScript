@@ -1140,80 +1140,80 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 /// Emit an name/value pair for an attribute (e.g. "x: 3")
                 function emitJsxAttribute(node: JsxAttribute) {
                     emitAttributeName(node.name);
-                    write(': ');
+                    write(": ");
                     if (node.initializer) {
                         emit(node.initializer);
                     }
                     else {
-                        write('true');
+                        write("true");
                     }
                 }
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     // Call React.createElement(tag, ...
                     emitLeadingComments(openingNode);
-                    write('React.createElement(');
+                    write("React.createElement(");
                     emitTagName(openingNode.tagName);
-                    write(', ');
+                    write(", ");
 
                     // Attribute list
                     if (openingNode.attributes.length === 0) {
-                        // When there are no attributes, React wants 'null'
-                        write('null');
+                        // When there are no attributes, React wants "null"
+                        write("null");
                     }
                     else {
                         // Either emit one big object literal (no spread attribs), or
                         // a call to React.__spread
                         let attrs = openingNode.attributes;
                         if (attrs.some(attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
-                            write('React.__spread(');
+                            write("React.__spread(");
 
                             let haveOpenedObjectLiteral = false;
                             for (let i = 0; i < attrs.length; i++) {
                                 if (attrs[i].kind === SyntaxKind.JsxSpreadAttribute) {
                                     // If this is the first argument, we need to emit a {} as the first argument
                                     if (i === 0) {
-                                        write('{}, ');
+                                        write("{}, ");
                                     }
 
                                     if (haveOpenedObjectLiteral) {
-                                        write('}');
+                                        write("}");
                                         haveOpenedObjectLiteral = false;
                                     }
                                     if (i > 0) {
-                                        write(', ');
+                                        write(", ");
                                     }
                                     emit((<JsxSpreadAttribute>attrs[i]).expression);
                                 }
                                 else {
                                     Debug.assert(attrs[i].kind === SyntaxKind.JsxAttribute);
                                     if (haveOpenedObjectLiteral) {
-                                        write(', ');
+                                        write(", ");
                                     }
                                     else {
                                         haveOpenedObjectLiteral = true;
                                         if (i > 0) {
-                                            write(', ');
+                                            write(", ");
                                         }
-                                        write('{');
+                                        write("{");
                                     }
                                     emitJsxAttribute(<JsxAttribute>attrs[i]);
                                 }
                             }
-                            if (haveOpenedObjectLiteral) write('}');
+                            if (haveOpenedObjectLiteral) write("}");
 
-                            write(')'); // closing paren to React.__spread(
+                            write(")"); // closing paren to React.__spread(
                         }
                         else {
                             // One object literal with all the attributes in them
-                            write('{');
+                            write("{");
                             for (var i = 0; i < attrs.length; i++) {
                                 if (i > 0) {
-                                    write(', ');
+                                    write(", ");
                                 }
                                 emitJsxAttribute(<JsxAttribute>attrs[i]);
                             }
-                            write('}');
+                            write("}");
                         }
                     }
 
@@ -1235,7 +1235,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                                 }
                             }
                             else {
-                                write(', ');
+                                write(", ");
                                 emit(children[i]);
                             }
 
@@ -1243,7 +1243,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
 
                     // Closing paren
-                    write(')'); // closes 'React.createElement('
+                    write(")"); // closes "React.createElement("
                     emitTrailingComments(openingNode);
                 }
 
@@ -1259,20 +1259,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emit(node.name);
-                    write('=');
+                    write("=");
                     emit(node.initializer);
                 }
 
                 function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
-                    write('{...');
+                    write("{...");
                     emit(node.expression);
-                    write('}');
+                    write("}");
                 }
 
                 function emitAttributes(attribs: NodeArray<JsxAttribute|JsxSpreadAttribute>) {
                     for (let i = 0, n = attribs.length; i < n; i++) {
                         if (i > 0) {
-                            write(' ');
+                            write(" ");
                         }
 
                         if (attribs[i].kind === SyntaxKind.JsxSpreadAttribute) {
@@ -1286,26 +1286,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
 
                 function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement|JsxSelfClosingElement) {
-                    write('<');
+                    write("<");
                     emit(node.tagName);
                     if (node.attributes.length > 0 || (node.kind === SyntaxKind.JsxSelfClosingElement)) {
-                        write(' ');
+                        write(" ");
                     }
 
                     emitAttributes(node.attributes);
 
                     if (node.kind === SyntaxKind.JsxSelfClosingElement) {
-                        write('/>');
+                        write("/>");
                     }
                     else {
-                        write('>');
+                        write(">");
                     }
                 }
 
                 function emitJsxClosingElement(node: JsxClosingElement) {
-                    write('</');
+                    write("</");
                     emit(node.tagName);
-                    write('>');
+                    write(">");
                 }
 
                 function emitJsxElement(node: JsxElement) {

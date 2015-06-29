@@ -6764,7 +6764,7 @@ namespace ts {
          */
         function isUnhyphenatedJsxName(name: string) {
             // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
-            return name.indexOf('-') < 0;
+            return name.indexOf("-") < 0;
         }
 
         /**
@@ -6961,7 +6961,7 @@ namespace ts {
         /// e.g. "props" for React.d.ts,
         /// or 'undefined' if ElementAttributesPropery doesn't exist (which means all
         ///     non-intrinsic elements' attributes type is 'any'),
-        /// or '' if it has 0 properties (which means all
+        /// or '' if it has 0 properties (which means every
         ///     non-instrinsic elements' attributes type is the element instance type)
         function getJsxElementPropertiesName() {
             // JSX
@@ -6976,7 +6976,7 @@ namespace ts {
             if (attribProperties) {
                 // Element Attributes has zero properties, so the element attributes type will be the class instance type
                 if (attribProperties.length === 0) {
-                    return '';
+                    return "";
                 }
                 // Element Attributes has one property, so the element attributes type will be the type of the corresponding
                 // property of the class instance type
@@ -7016,7 +7016,7 @@ namespace ts {
                         // There is no type ElementAttributesProperty, return 'any'
                         return links.resolvedJsxType = anyType;
                     }
-                    else if (propsName === '') {
+                    else if (propsName === "") {
                         // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
                         return links.resolvedJsxType = elemInstanceType;
                     }
