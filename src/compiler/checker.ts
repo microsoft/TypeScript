@@ -6843,7 +6843,7 @@ namespace ts {
             }
 
             if (correspondingPropType) {
-                checkTypeAssignableTo(exprType, correspondingPropType, node);
+                checkTypeAssignableTo(exprType, correspondingPropType, RelationComparisonFlags.None, node);
             }
 
             nameTable[node.name.text] = true;
@@ -6860,7 +6860,7 @@ namespace ts {
                     let targetPropSym = getPropertyOfType(elementAttributesType, prop.name);
                     if (targetPropSym) {
                         let msg = chainDiagnosticMessages(undefined, Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property, prop.name);
-                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), node, undefined, msg);
+                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), RelationComparisonFlags.None, node, undefined, msg);
                     }
 
                     nameTable[prop.name] = true;
@@ -6988,7 +6988,7 @@ namespace ts {
             // Issue an error if this return type isn't assignable to JSX.ElementClass
             let elemClassType = getJsxGlobalElementClassType();
             if (elemClassType) {
-                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
+                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, RelationComparisonFlags.None, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
             return returnType;
