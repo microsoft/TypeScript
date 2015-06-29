@@ -4329,7 +4329,7 @@ namespace ts {
          * @param relationFlags Additional information affecting whether the relation holds. Currently used only for distinguishing 
          * between a type comparison when extending classes from other comparisons of the constructor types.
          * 
-         * Caution: checks triggered by these flags should NOT affect the result re
+         * Caution: checks triggered by these flags should NOT affect the result cached.
          * @param errorNode The node upon which all errors will be reported, if defined.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
@@ -4388,6 +4388,7 @@ namespace ts {
             // Ternary.False if they are not related.
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
+                let relationFlagCheckResult: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
                 if (relation !== identityRelation) {
