@@ -1027,9 +1027,11 @@ namespace ts {
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        
+        getDependencies(fileName: string): DependencyInfo;
 
         getEmitOutput(fileName: string): EmitOutput;
-
+        
         getProgram(): Program;
 
         getSourceFile(fileName: string): SourceFile;
@@ -1267,11 +1269,20 @@ namespace ts {
         autoCollapse: boolean;
     }
 
+    export interface DependencyInfo {
+        /** The file name of the dependency information */
+        fileName: string;
+        /** The compile time dependencies of a file */
+        compileTime: string[];
+        /** The runtime dependencies of a file */
+        runtime: string[];
+    }
+    
     export interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
     }
-
+    
     export const enum OutputFileType {
         JavaScript,
         SourceMap,
@@ -5762,6 +5773,62 @@ namespace ts {
             return forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
         }
 
+        function getDependencies(fileName: string): DependencyInfo {
+            synchronizeHostData();
+            
+            let sourceFile = getValidSourceFile(fileName);
+            if (!sourceFile) {
+                return undefined;
+            }
+            
+            let resolver = program.getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+            
+            let runtime: string[] = [];  
+            let compileTime: string[] = [];  
+            for (let node of sourceFile.amdDependencies) {  
+                runtime.push(node.path);  
+            }  
+            
+            function getModuleNameText(node: ImportDeclaration | ImportEqualsDeclaration |  ExportDeclaration): string {
+                let moduleName = getExternalModuleName(node);
+                return (<LiteralExpression>moduleName).text;                
+            }
+            
+            for (let node of sourceFile.statements) {
+                switch (node.kind) {  
+                    case SyntaxKind.ImportDeclaration:
+                        let importDeclaration = <ImportDeclaration>node;
+                        if (!importDeclaration.importClause || resolver.isReferencedAliasDeclaration(importDeclaration.importClause, /*checkChildren*/ true)) {
+                            runtime.push(getModuleNameText(importDeclaration));
+                        } else {
+                            compileTime.push(getModuleNameText(importDeclaration));
+                        }
+                        break;  
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        let importEqualsDeclaration = <ImportEqualsDeclaration>node;
+                        if (importEqualsDeclaration.moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(importEqualsDeclaration)) {
+                            runtime.push(getModuleNameText(importEqualsDeclaration));
+                        } else {
+                            compileTime.push(getModuleNameText(importEqualsDeclaration));
+                        }
+                        break;  
+                    case SyntaxKind.ExportDeclaration:  
+                        let exportDeclaration = <ExportDeclaration>node;  
+                        if (exportDeclaration.moduleSpecifier && (!exportDeclaration.exportClause || resolver.isValueAliasDeclaration(exportDeclaration))) {
+                            // export * as mod from 'mod' && export {x , y } from 'mod' 
+                            runtime.push(getModuleNameText(exportDeclaration)); 
+                        }
+                        // export { x, y } does neither generate a runtime nor a compile time dependency 
+                        break;  
+                }  
+            }
+            return {
+                fileName: sourceFile.fileName,
+                compileTime: compileTime,
+                runtime: runtime
+            } 
+        }
+ 
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
@@ -5783,7 +5850,7 @@ namespace ts {
                 emitSkipped: emitOutput.emitSkipped
             };
         }
-
+        
         function getMeaningFromDeclaration(node: Node): SemanticMeaning {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
@@ -6810,6 +6877,7 @@ namespace ts {
             getFormattingEditsForRange,
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
+            getDependencies,
             getEmitOutput,
             getSourceFile,
             getProgram
