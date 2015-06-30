@@ -3190,9 +3190,11 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getPropertiesOfUnionType(<UnionType>type) : getPropertiesOfObjectType(type);
         }
 
-        // For a type parameter, return the base constraint of the type parameter. For the string, number,
-        // boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
-        // type itself. Note that the apparent type of a union type is the union type itself.
+        /**
+         * For a type parameter, return the base constraint of the type parameter. For the string, number,
+         * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
+         * type itself. Note that the apparent type of a union type is the union type itself.
+         */
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.Union) {
                 type = getReducedTypeOfUnionType(<UnionType>type);
@@ -8403,7 +8405,10 @@ namespace ts {
             }
 
             // If the expression is of abstract type, then it cannot be instantiated.
-            let valueDecl = expressionType.symbol && expressionType.symbol.valueDeclaration;
+            // Note, only class declarations can be declared abstract.
+            // In the case of a merged class-module or class-interface declaration,
+            // only the class declaration node will have the Abstract flag set.
+            let valueDecl = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
             }
@@ -10253,7 +10258,8 @@ namespace ts {
             }
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body && !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) ) {
+            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body && 
+                !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) ) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
@@ -11699,6 +11705,9 @@ namespace ts {
                 Debug.assert(!!derived, "derived should point to something, even if it is the base class' declaration.");
 
                 if (derived) {
+                    // In order to resolve whether the inherited method was overriden in the base class or not,
+                    // we compare the Symbols obtained. Since getTargetSymbol returns the symbol on the *uninstantiated*
+                    // type declaration, derived and base resolve to the same symbol even in the case of generic classes.
                     if (derived === base) { 
                         // derived class inherits base without override/redeclaration
 
