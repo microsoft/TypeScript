@@ -11703,10 +11703,12 @@ namespace ts {
                         // derived class inherits base without override/redeclaration
 
                         let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
-                        Debug.assert(derivedClassDecl !== undefined);
+                        // Debug.assert(derivedClassDecl !== undefined);
 
                         // It is an error to inherit an abstract member without implementing it or being declared abstract.
-                        if ((baseDeclarationFlags & NodeFlags.Abstract) && !(derivedClassDecl.flags & NodeFlags.Abstract)) {
+                        // If there is no declaration for the derived class (as in the case of class expressions), 
+                        // then the class cannot be declared abstract. 
+                        if ( baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
                             error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
                                 typeToString(type), symbolToString(baseProperty), typeToString(baseType));
                         }
