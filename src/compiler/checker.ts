@@ -4615,9 +4615,6 @@ namespace ts {
                                 result &= stringIndexTypesRelatedTo(source, target, reportErrors);
                                 if (result) {
                                     result &= numberIndexTypesRelatedTo(source, target, reportErrors);
-                                        // if(relation == subtypeRelation && result) {
-                                        //     result &= abstractnessRelatedTo(source, target, reportErrors);
-                                        // }
                                 }
                             }
                         }
@@ -4637,17 +4634,6 @@ namespace ts {
                     relation[id] = reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed;
                 }
                 return result;
-            }
-
-            function abstractnessRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
-                if ( source.symbol && target.symbol && getDeclarationFlagsFromSymbol(source.symbol) & NodeFlags.Abstract &&
-                    !(getDeclarationFlagsFromSymbol(target.symbol) & NodeFlags.Abstract)) {
-                    if (reportErrors) {
-                        reportError(Diagnostics.Constructor_objects_of_abstract_type_cannot_be_assigned_to_constructor_objects_of_non_abstract_type);
-                    }
-                    return Ternary.False;
-                }
-                return Ternary.True;
             }
 
             function propertiesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
@@ -7320,7 +7306,6 @@ namespace ts {
                 return unknownType;
             }
 
-            // TODO: Why is this line here?
             getNodeLinks(node).resolvedSymbol = prop;
 
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
@@ -11609,16 +11594,18 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
 
-            forEach(node.members, node.flags & NodeFlags.Abstract ?
-                checkSourceElement :
-                element => {
-                    checkSourceElement(element);
+            forEach(node.members, checkSourceElement);
 
-                    // Classes containing abstract methods must be marked abstract
-                    if (element.flags & NodeFlags.Abstract) {
-                        error(node, Diagnostics.Classes_containing_abstract_methods_must_be_marked_abstract);
-                    }
-                });
+            // forEach(node.members, node.flags & NodeFlags.Abstract ?
+            //     checkSourceElement :
+            //     element => {
+            //         checkSourceElement(element);
+            
+            //         // Classes containing abstract methods must be marked abstract
+            //         if (element.flags & NodeFlags.Abstract) {
+            //             error(node, Diagnostics.Classes_containing_abstract_methods_must_be_marked_abstract);
+            //         }
+            //     });
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -11732,57 +11719,59 @@ namespace ts {
 
                 Debug.assert(!!derived, "derived should point to something, even if it is the base class' declaration.");
 
-                if (derived === base) { 
-                    // derived class inherits base without override/redeclaration
+                if (derived) {
+                    if (derived === base) { 
+                        // derived class inherits base without override/redeclaration
 
-                    let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
-                    Debug.assert(derivedClassDecl !== undefined);
+                        let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+                        Debug.assert(derivedClassDecl !== undefined);
 
-                    // It is an error to inherit an abstract member without implementing it or being declared abstract.
-                    if ((baseDeclarationFlags & NodeFlags.Abstract) && !(derivedClassDecl.flags & NodeFlags.Abstract)) {
-                        error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
-                            typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                        // It is an error to inherit an abstract member without implementing it or being declared abstract.
+                        if ((baseDeclarationFlags & NodeFlags.Abstract) && !(derivedClassDecl.flags & NodeFlags.Abstract)) {
+                            error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                                typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                        }
                     }
-                } 
-                else { 
-                    // derived overrides base.
-                    let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
-                    if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
-                        // either base or derived property is private - not override, skip it
-                        continue;
-                    }
+                    else { 
+                        // derived overrides base.
+                        let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
+                        if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
+                            // either base or derived property is private - not override, skip it
+                            continue;
+                        }
 
-                    if ((baseDeclarationFlags & NodeFlags.Static) !== (derivedDeclarationFlags & NodeFlags.Static)) {
-                        // value of 'static' is not the same for properties - not override, skip it
-                        continue;
-                    }
+                        if ((baseDeclarationFlags & NodeFlags.Static) !== (derivedDeclarationFlags & NodeFlags.Static)) {
+                            // value of 'static' is not the same for properties - not override, skip it
+                            continue;
+                        }
 
-                    if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
-                        // method is overridden with method or property/accessor is overridden with property/accessor - correct case
-                        continue;
-                    }
+                        if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
+                            // method is overridden with method or property/accessor is overridden with property/accessor - correct case
+                            continue;
+                        }
 
-                    let errorMessage: DiagnosticMessage;
-                    if (base.flags & SymbolFlags.Method) {
-                        if (derived.flags & SymbolFlags.Accessor) {
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+                        let errorMessage: DiagnosticMessage;
+                        if (base.flags & SymbolFlags.Method) {
+                            if (derived.flags & SymbolFlags.Accessor) {
+                                errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+                            }
+                            else {
+                                Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
+                                errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
+                            }
+                        }
+                        else if (base.flags & SymbolFlags.Property) {
+                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
                         else {
-                            Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
+                            Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
+                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
-                    }
-                    else if (base.flags & SymbolFlags.Property) {
-                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
-                        errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
-                    }
-                    else {
-                        Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
-                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
-                        errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
-                    }
 
-                    error(derived.valueDeclaration.name, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                        error(derived.valueDeclaration.name, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                    }
                 }
             }
         }
@@ -13854,13 +13843,14 @@ namespace ts {
                             if (!(node.parent.kind === SyntaxKind.ClassDeclaration && node.parent.flags & NodeFlags.Abstract)) {
                                 return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
                             }
+                            if (flags & NodeFlags.Static) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                            }
+                            if (flags & NodeFlags.Private) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
+                            }
                         }
-                        if (flags & NodeFlags.Static) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
-                        }
-                        if (flags & NodeFlags.Private) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
-                        }
+
                         flags |= NodeFlags.Abstract;
                         break;
                 }

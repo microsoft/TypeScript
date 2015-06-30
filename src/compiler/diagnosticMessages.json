@@ -1535,7 +1535,7 @@
         "category": "Error",
         "code": 2511
     },
-    "Overload signatures must all be `abstract` or not `abstract.": {
+    "Overload signatures must all be abstract or not abstract.": {
         "category": "Error",
         "code": 2512
     },

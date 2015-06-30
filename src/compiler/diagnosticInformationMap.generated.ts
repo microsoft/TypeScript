@@ -387,7 +387,7 @@ namespace ts {
         Base_constructor_return_type_0_is_not_a_class_or_interface_type: { code: 2509, category: DiagnosticCategory.Error, key: "Base constructor return type '{0}' is not a class or interface type." },
         Base_constructors_must_all_have_the_same_return_type: { code: 2510, category: DiagnosticCategory.Error, key: "Base constructors must all have the same return type." },
         Cannot_create_an_instance_of_the_abstract_class_0: { code: 2511, category: DiagnosticCategory.Error, key: "Cannot create an instance of the abstract class '{0}'." },
-        Overload_signatures_must_all_be_abstract_or_not_abstract: { code: 2512, category: DiagnosticCategory.Error, key: "Overload signatures must all be `abstract` or not `abstract." },
+        Overload_signatures_must_all_be_abstract_or_not_abstract: { code: 2512, category: DiagnosticCategory.Error, key: "Overload signatures must all be abstract or not abstract." },
         Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression: { code: 2513, category: DiagnosticCategory.Error, key: "Abstract method '{0}' in class '{1}' cannot be accessed via super expression." },
         Classes_containing_abstract_methods_must_be_marked_abstract: { code: 2514, category: DiagnosticCategory.Error, key: "Classes containing abstract methods must be marked abstract." },
         Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2: { code: 2515, category: DiagnosticCategory.Error, key: "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'." },
