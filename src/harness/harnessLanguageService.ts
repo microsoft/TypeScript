@@ -384,6 +384,9 @@ module Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
+        getDependencies(fileName: string): ts.DependencyInfo {
+            return unwrapJSONCallResult(this.shim.getDependencies(fileName));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }

@@ -197,6 +197,8 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        getDependencies(fileName: string): string;
+        
         getEmitOutput(fileName: string): string;
     }
 
@@ -798,6 +800,16 @@ namespace ts {
                     var items = this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
                     return items;
                 });
+        }
+        
+        public getDependencies(fileName: string): string  {
+            return this.forwardJSONCall(
+                "getDependencies('" + fileName + "')",
+                () => {
+                    var dependencies = this.languageService.getDependencies(fileName);
+                    return dependencies;
+                }
+            )
         }
 
         /// Emit
