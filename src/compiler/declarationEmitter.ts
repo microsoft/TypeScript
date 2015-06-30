@@ -63,6 +63,16 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencePathsOutput = "";
 
+        interface NodeLinks {
+            visibleChildren?: Node[];
+        }
+
+        let nodeLinks: NodeLinks[] = [];
+        function getNodeLinks(node: Node): NodeLinks {
+            let nodeId = getNodeId(node);
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
+        }
+
         if (root) {
             // Emitting just a single file, so emit references in this file only
             if (!compilerOptions.noResolve) {
@@ -452,7 +462,8 @@ namespace ts {
         function emitSourceFile(node: SourceFile) {
             currentSourceFile = node;
             enclosingDeclaration = node;
-            emitLines(node.statements);
+//            emitLines(node.statements);
+            emitSourceFileDeclarations(node);
         }
 
         // Return a temp variable name to be used in `export default` statements.
@@ -742,7 +753,8 @@ namespace ts {
             write(" {");
             writeLine();
             increaseIndent();
-            emitLines((<ModuleBlock>node.body).statements);
+            //emitLines((<ModuleBlock>node.body).statements);
+            writeChildDeclarations(node);
             decreaseIndent();
             write("}");
             writeLine();
@@ -779,7 +791,8 @@ namespace ts {
             write(" {");
             writeLine();
             increaseIndent();
-            emitLines(node.members);
+            //emitLines(node.members);
+            writeChildDeclarations(node);
             decreaseIndent();
             write("}");
             writeLine();
@@ -947,7 +960,8 @@ namespace ts {
             writeLine();
             increaseIndent();
             emitParameterProperties(getFirstConstructorWithBody(node));
-            emitLines(node.members);
+            //emitLines(node.members);
+            writeChildDeclarations(node);
             decreaseIndent();
             write("}");
             writeLine();
@@ -966,7 +980,8 @@ namespace ts {
             write(" {");
             writeLine();
             increaseIndent();
-            emitLines(node.members);
+            //emitLines(node.members);
+            writeChildDeclarations(node);
             decreaseIndent();
             write("}");
             writeLine();
@@ -1583,6 +1598,106 @@ namespace ts {
             /*isAbsolutePathAnUrl*/ false);
 
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+        }
+
+        function walkTypes(node: Node): void {
+
+        }
+
+        function isDeclarationVisible(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportDeclaration:
+                    // TODO: filter on @internal
+                    return true;
+
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    // TODO: handel ambient context
+                    return (node.flags & NodeFlags.Export) !== 0;
+            }
+
+            return false;
+        }
+
+        function forEachTopLevelDeclaration(node: Node, action: (node: Node) => void): void {
+            switch (node.kind) {
+                case SyntaxKind.SourceFile:
+                    forEach((<SourceFile>node).statements, action);
+                    break;
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    forEach((<InterfaceDeclaration|EnumDeclaration|ClassDeclaration>node).members, action);
+                    break;
+                case SyntaxKind.ModuleDeclaration:
+                    if ((<ModuleDeclaration>node).body.kind === SyntaxKind.ModuleBlock) {
+                        forEach((<ModuleBlock>(<ModuleDeclaration>node).body).statements, action);
+                    }
+                    else {
+                        action((<ModuleDeclaration>node).body);
+                    }
+                    break;
+            }
+        }
+
+        function collectChildDeclarations(node: Node): void {
+            let links = getNodeLinks(node);
+            forEachTopLevelDeclaration(node, child => {
+                if (!isDeclarationVisible(child)) {
+                    return;
+                }
+
+                if (!links.visibleChildren) {
+                    links.visibleChildren = [];
+                }
+                links.visibleChildren.push(child);
+
+                // if there are any types we need to write later on
+                // make sure to visit them and collect their declarations
+                walkTypes(child);
+
+                // visit nested declarations
+                switch (child.kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        collectChildDeclarations(child);
+                        break;
+                }
+            });
+        }
+
+        function writeChildDeclarations(node: Node): void {
+            forEach(getNodeLinks(node).visibleChildren, emitNode);
+        }
+
+        function emitSourceFileDeclarations(sourceFile: SourceFile): void {
+            // Collect all visible declarations
+            collectChildDeclarations(sourceFile);
+
+            // write the declarations
+            writeChildDeclarations(sourceFile);
         }
     }
 
