@@ -5408,11 +5408,11 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
-                else if (target.flags & TypeFlags.Union) {
-                    let targetTypes = (<UnionType>target).types;
+                else if (target.flags & TypeFlags.UnionOrIntersection) {
+                    let targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeParameterCount = 0;
                     let typeParameter: TypeParameter;
-                    // First infer to each type in union that isn't a type parameter
+                    // First infer to each type in union or intersection that isn't a type parameter
                     for (let t of targetTypes) {
                         if (t.flags & TypeFlags.TypeParameter && contains(context.typeParameters, t)) {
                             typeParameter = <TypeParameter>t;
@@ -5422,8 +5422,9 @@ namespace ts {
                             inferFromTypes(source, t);
                         }
                     }
-                    // If union contains a single naked type parameter, make a secondary inference to that type parameter
-                    if (typeParameterCount === 1) {
+                    // Next, if target is a union type containing a single naked type parameter, make a
+                    // secondary inference to that type parameter
+                    if (target.flags & TypeFlags.Union && typeParameterCount === 1) {
                         inferiority++;
                         inferFromTypes(source, typeParameter);
                         inferiority--;
