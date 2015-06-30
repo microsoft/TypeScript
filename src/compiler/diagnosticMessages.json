@@ -727,7 +727,7 @@
         "category": "Error",
         "code": 1241
     },
-        "'abstract' modifier can only appear on a class or method declaration.": {
+    "'abstract' modifier can only appear on a class or method declaration.": {
         "category": "Error",
         "code": 1242
     },

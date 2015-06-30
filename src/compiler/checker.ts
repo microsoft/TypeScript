@@ -2221,8 +2221,8 @@ namespace ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 type = getTypeOfPropertyOfType(parentType, name.text) ||
-                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                    getIndexTypeOfType(parentType, IndexKind.String);
+                isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
@@ -3822,8 +3822,8 @@ namespace ts {
           */
         function createTypedPropertyDescriptorType(propertyType: Type): Type {
             let globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyObjectType 
-                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType]) 
+            return globalTypedPropertyDescriptorType !== emptyObjectType
+                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType])
                 : emptyObjectType;
         }
         
@@ -4291,27 +4291,27 @@ namespace ts {
         // TYPE CHECKING
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
-            return checkTypeRelatedTo(source, target, identityRelation, RelationComparisonFlags.None, /*errorNode*/ undefined);
+            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
         }
 
         function compareTypes(source: Type, target: Type): Ternary {
-            return checkTypeRelatedTo(source, target, identityRelation, RelationComparisonFlags.None, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
+            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
-            return checkTypeSubtypeOf(source, target, /*context*/ undefined, /*errorNode*/ undefined);
+            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
-            return checkTypeAssignableTo(source, target, RelationComparisonFlags.None, /*errorNode*/ undefined);
+            return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
         function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
-            return checkTypeRelatedTo(source, target, subtypeRelation, RelationComparisonFlags.None, errorNode, headMessage, containingMessageChain);
+            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, relationFlags: RelationComparisonFlags, errorNode?: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, relationFlags, errorNode, headMessage, containingMessageChain);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
@@ -4326,24 +4326,17 @@ namespace ts {
          * @param target The right-hand-side of the relation.
          * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', or 'subTypeRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
-         * @param relationFlags Additional information affecting whether the relation holds. Currently used only for distinguishing 
-         * between a type comparison when extending classes from other comparisons of the constructor types.
-         * 
-         * Caution: checks triggered by these flags should NOT affect the result cached.
          * @param errorNode The node upon which all errors will be reported, if defined.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
-
          */
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
             relation: Map<RelationComparisonResult>,
-            relationFlags: RelationComparisonFlags,
-            errorNode?: Node,
+            errorNode: Node,
             headMessage?: DiagnosticMessage,
-            containingMessageChain?: DiagnosticMessageChain
-            ): boolean {
+            containingMessageChain?: DiagnosticMessageChain): boolean {
 
             let errorInfo: DiagnosticMessageChain;
             let sourceStack: ObjectType[];
@@ -4388,7 +4381,6 @@ namespace ts {
             // Ternary.False if they are not related.
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
-                let relationFlagCheckResult: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
                 if (relation !== identityRelation) {
@@ -6089,20 +6081,20 @@ namespace ts {
                     if (container && isClassLike(container.parent)) {
                         if (container.flags & NodeFlags.Static) {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor;
                         }
                         else {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor ||
-                                container.kind === SyntaxKind.PropertyDeclaration ||
-                                container.kind === SyntaxKind.PropertySignature ||
-                                container.kind === SyntaxKind.Constructor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor ||
+                            container.kind === SyntaxKind.PropertyDeclaration ||
+                            container.kind === SyntaxKind.PropertySignature ||
+                            container.kind === SyntaxKind.Constructor;
                         }
                     }
                 }
@@ -6779,7 +6771,7 @@ namespace ts {
             checkJsxOpeningLikeElement(node.openingElement);
 
             // Check children
-            for(let child of node.children) {
+            for (let child of node.children) {
                 switch (child.kind) {
                     case SyntaxKind.JsxExpression:
                         checkJsxExpression(<JsxExpression>child);
@@ -6830,7 +6822,7 @@ namespace ts {
             else if (elementAttributesType && !isTypeAny(elementAttributesType)) {
                 let correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
                 correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
-                    // If there's no corresponding property with this name, error
+                // If there's no corresponding property with this name, error
                 if (!correspondingPropType && isUnhyphenatedJsxName(node.name.text)) {
                     error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
                     return unknownType;
@@ -6847,7 +6839,7 @@ namespace ts {
             }
 
             if (correspondingPropType) {
-                checkTypeAssignableTo(exprType, correspondingPropType, RelationComparisonFlags.None, node);
+                checkTypeAssignableTo(exprType, correspondingPropType, node);
             }
 
             nameTable[node.name.text] = true;
@@ -6857,14 +6849,14 @@ namespace ts {
         function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
             let type = checkExpression(node.expression);
             let props = getPropertiesOfType(type);
-            for(let prop of props) {
+            for (let prop of props) {
                 // Is there a corresponding property in the element attributes type? Skip checking of properties
                 // that have already been assigned to, as these are not actually pushed into the resulting type
                 if (!nameTable[prop.name]) {
                     let targetPropSym = getPropertyOfType(elementAttributesType, prop.name);
                     if (targetPropSym) {
                         let msg = chainDiagnosticMessages(undefined, Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property, prop.name);
-                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), RelationComparisonFlags.None, node, undefined, msg);
+                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), node, undefined, msg);
                     }
 
                     nameTable[prop.name] = true;
@@ -6937,7 +6929,7 @@ namespace ts {
                 else {
                     valueSymbol = checkQualifiedName(<QualifiedName>node.tagName).symbol;
                 }
-                
+
                 if (valueSymbol !== unknownSymbol) {
                     links.jsxFlags |= JsxFlags.ClassElement;
                 }
@@ -6992,7 +6984,7 @@ namespace ts {
             // Issue an error if this return type isn't assignable to JSX.ElementClass
             let elemClassType = getJsxGlobalElementClassType();
             if (elemClassType) {
-                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, RelationComparisonFlags.None, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
+                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
             return returnType;
@@ -7107,7 +7099,7 @@ namespace ts {
 
         let jsxElementClassType: Type = undefined;
         function getJsxGlobalElementClassType(): Type {
-            if(!jsxElementClassType) {
+            if (!jsxElementClassType) {
                 jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
             }
             return jsxElementClassType;
@@ -7126,7 +7118,7 @@ namespace ts {
             }
 
             if (jsxElementType === undefined) {
-                if(compilerOptions.noImplicitAny) {
+                if (compilerOptions.noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
@@ -7150,7 +7142,7 @@ namespace ts {
                 else {
                     Debug.assert(node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
                     let spreadType = checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
-                    if(isTypeAny(spreadType)) {
+                    if (isTypeAny(spreadType)) {
                         sawSpreadedAny = true;
                     }
                 }
@@ -7305,7 +7297,7 @@ namespace ts {
                 }
                 return unknownType;
             }
-
+            
             getNodeLinks(node).resolvedSymbol = prop;
 
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
@@ -7570,7 +7562,7 @@ namespace ts {
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
             let isDecorator: boolean;
             let spreadArgIndex = -1;
-            
+
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 let tagExpression = <TaggedTemplateExpression>node;
 
@@ -7751,18 +7743,17 @@ namespace ts {
                             errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
                             typeArgumentHeadMessage = headMessage;
                         }
-                        
+
                         typeArgumentsAreAssignable = checkTypeAssignableTo(
-                            typeArgument, 
-                            constraint, 
-                            RelationComparisonFlags.None, 
+                            typeArgument,
+                            constraint,
                             reportErrors ? typeArgNode : undefined,
-                            typeArgumentHeadMessage, 
+                            typeArgumentHeadMessage,
                             errorInfo);
                     }
                 }
             }
-            
+
             return typeArgumentsAreAssignable;
         }
 
@@ -7787,12 +7778,12 @@ namespace ts {
                     // Use argument expression as error location when reporting errors
                     let errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
                     let headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-                    if (!checkTypeRelatedTo(argType, paramType, relation, RelationComparisonFlags.None, errorNode, headMessage)) {
+                    if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage)) {
                         return false;
                     }
                 }
             }
-            
+
             return true;
         }
 
@@ -7898,7 +7889,7 @@ namespace ts {
                     // "static" or "constructor" side of the class)
                     let classSymbol = getSymbolOfNode(node);
                     return getTypeOfSymbol(classSymbol);
-                
+
                 case SyntaxKind.Parameter:
                     // For a parameter decorator, the `target` is the parent type of the 
                     // parameter's containing method. 
@@ -7908,7 +7899,7 @@ namespace ts {
                         return getTypeOfSymbol(classSymbol);
                     }
                     
-                    // fall-through
+                // fall-through
                     
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -7919,7 +7910,7 @@ namespace ts {
                     // declared "static"; otherwise, it is the "instance"-side type of the 
                     // parent of the member.
                     return getParentTypeOfClassElement(<ClassElement>node);
-                    
+
                 default:
                     Debug.fail("Unsupported decorator target.");
                     return unknownType;
@@ -7947,7 +7938,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     Debug.fail("Class decorators should not have a second synthetic argument.");
                     return unknownType;
-                    
+
                 case SyntaxKind.Parameter:
                     node = node.parent;
                     if (node.kind === SyntaxKind.Constructor) {
@@ -7955,10 +7946,10 @@ namespace ts {
                         return anyType;
                     }
                     
-                    // For a non-constructor parameter decorator, the `propertyKey` will be either
-                    // a string or a symbol, based on the name of the parameter's containing method.
+                // For a non-constructor parameter decorator, the `propertyKey` will be either
+                // a string or a symbol, based on the name of the parameter's containing method.
                     
-                    // fall-through
+                // fall-through
                     
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -7974,7 +7965,7 @@ namespace ts {
                         case SyntaxKind.NumericLiteral:
                         case SyntaxKind.StringLiteral:
                             return getStringLiteralType(<StringLiteral>element.name);
-                            
+
                         case SyntaxKind.ComputedPropertyName:
                             let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
                             if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
@@ -7983,13 +7974,13 @@ namespace ts {
                             else {
                                 return stringType;
                             }
-                            
+
                         default:
                             Debug.fail("Unsupported property name.");
                             return unknownType;
                     }
 
-                    
+
                 default:
                     Debug.fail("Unsupported decorator target.");
                     return unknownType;
@@ -8026,7 +8017,7 @@ namespace ts {
                     // for the type of the member.
                     let propertyType = getTypeOfNode(node);
                     return createTypedPropertyDescriptorType(propertyType);
-                    
+
                 default:
                     Debug.fail("Unsupported decorator target.");
                     return unknownType;
@@ -8079,7 +8070,7 @@ namespace ts {
                 (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
                 return undefined;
             }
-            
+
             return args[argIndex];
         }
 
@@ -8099,7 +8090,7 @@ namespace ts {
                 return arg;
             }
         }
-        
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             let isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             let isDecorator = node.kind === SyntaxKind.Decorator;
@@ -8227,7 +8218,7 @@ namespace ts {
                     let diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
-                        
+
                     if (headMessage) {
                         diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, headMessage);
                     }
@@ -8253,7 +8244,7 @@ namespace ts {
             }
 
             return resolveErrorCall(node);
-            
+
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 let errorInfo: DiagnosticMessageChain;
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
@@ -8484,13 +8475,13 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     return Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
-                
+
                 case SyntaxKind.Parameter:
                     return Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression;
-                    
+
                 case SyntaxKind.PropertyDeclaration:
                     return Diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression;
-                    
+
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -8507,12 +8498,12 @@ namespace ts {
             if (apparentType === unknownType) {
                 return resolveErrorCall(node);
             }
-            
+
             let callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
             if (funcType === anyType || (!callSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
                 return resolveUntypedCall(node);
             }
-            
+
             let headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
                 let errorInfo: DiagnosticMessageChain;
@@ -8521,7 +8512,7 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
                 return resolveErrorCall(node);
             }
-            
+
             return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
         }
 
@@ -8596,7 +8587,7 @@ namespace ts {
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, RelationComparisonFlags.None, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -8763,6 +8754,7 @@ namespace ts {
 
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+
             // Grammar checking
             let hasGrammarError = checkGrammarFunctionLikeDeclaration(node);
             if (!hasGrammarError && node.kind === SyntaxKind.FunctionExpression) {
@@ -8829,7 +8821,7 @@ namespace ts {
                 else {
                     let exprType = checkExpression(<Expression>node.body);
                     if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), RelationComparisonFlags.None, node.body, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionAndClassExpressionBodies(node.body);
                 }
@@ -9057,8 +9049,8 @@ namespace ts {
                     let type = isTypeAny(sourceType)
                         ? sourceType
                         : getTypeOfPropertyOfType(sourceType, name.text) ||
-                            isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
-                            getIndexTypeOfType(sourceType, IndexKind.String);
+                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
                     }
@@ -9137,7 +9129,7 @@ namespace ts {
         function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             let targetType = checkExpression(target, contextualMapper);
             if (checkReferenceExpression(target, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant)) {
-                checkTypeAssignableTo(sourceType, targetType, RelationComparisonFlags.None, target, /*headMessage*/ undefined);
+                checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
             }
             return sourceType;
         }
@@ -9312,7 +9304,7 @@ namespace ts {
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, RelationComparisonFlags.None, node.left, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftType, node.left, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -9363,10 +9355,10 @@ namespace ts {
                     if (func.type) {
                         let signatureElementType = getElementTypeOfIterableIterator(getTypeFromTypeNode(func.type)) || anyType;
                         if (nodeIsYieldStar) {
-                            checkTypeAssignableTo(expressionElementType, signatureElementType, RelationComparisonFlags.None, node.expression, /*headMessage*/ undefined);
+                            checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
                         }
                         else {
-                            checkTypeAssignableTo(expressionType, signatureElementType, RelationComparisonFlags.None, node.expression, /*headMessage*/ undefined);
+                            checkTypeAssignableTo(expressionType, signatureElementType, node.expression, /*headMessage*/ undefined);
                         }
                     }
                 }
@@ -9683,7 +9675,7 @@ namespace ts {
                             else {
                                 checkTypeAssignableTo(typePredicate.type,
                                     getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
-                                    RelationComparisonFlags.None, typePredicateNode.type);
+                                    typePredicateNode.type);
                             }
                         }
                         else if (typePredicateNode.parameterName) {
@@ -9761,7 +9753,7 @@ namespace ts {
                             //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
                             //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
                             //
-                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, RelationComparisonFlags.None, node.type);
+                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
                         }
                     }
                 }
@@ -9963,7 +9955,7 @@ namespace ts {
                 let constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     let typeArgument = typeArguments[i];
-                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, RelationComparisonFlags.None, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
             return result;
@@ -10179,7 +10171,7 @@ namespace ts {
                     // the node in question is abstract.
                     if (node.flags & NodeFlags.Abstract) {
                         error(errorNode, Diagnostics.All_declarations_of_an_abstract_method_must_be_consecutive);
-                    } 
+                    }
                     else {
                         error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
                     }
@@ -10379,8 +10371,8 @@ namespace ts {
             if (returnType.flags & TypeFlags.Any) {
                 return;
             }
-            
-            let expectedReturnType: Type; 
+
+            let expectedReturnType: Type;
             let headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             let errorInfo: DiagnosticMessageChain;
             switch (node.parent.kind) {
@@ -10397,7 +10389,7 @@ namespace ts {
                         Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
 
                     break;
-                    
+
                 case SyntaxKind.PropertyDeclaration:
                     expectedReturnType = voidType;
                     errorInfo = chainDiagnosticMessages(
@@ -10413,13 +10405,12 @@ namespace ts {
                     expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
             }
-            
+
             checkTypeAssignableTo(
-                returnType, 
-                expectedReturnType, 
-                RelationComparisonFlags.None,
-                node, 
-                headMessage, 
+                returnType,
+                expectedReturnType,
+                node,
+                headMessage,
                 errorInfo);
         }
         
@@ -10839,7 +10830,7 @@ namespace ts {
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), RelationComparisonFlags.None, node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
                 return;
@@ -10849,7 +10840,7 @@ namespace ts {
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), type, RelationComparisonFlags.None, node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
             }
@@ -10861,7 +10852,7 @@ namespace ts {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, RelationComparisonFlags.None, node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
                 }
             }
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
@@ -10997,7 +10988,7 @@ namespace ts {
                     // because we accessed properties from anyType, or it may have led to an error inside
                     // getElementTypeOfIterable.
                     if (iteratedType) {
-                        checkTypeAssignableTo(iteratedType, leftType, RelationComparisonFlags.None, varExpr, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -11097,7 +11088,7 @@ namespace ts {
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
             if (errorNode && elementType) {
-                checkTypeAssignableTo(iterable, createIterableType(elementType), RelationComparisonFlags.None, errorNode);
+                checkTypeAssignableTo(iterable, createIterableType(elementType), errorNode);
             }
 
             return elementType || anyType;
@@ -11341,7 +11332,7 @@ namespace ts {
                         }
                     }
                     else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || signature.typePredicate) {
-                        checkTypeAssignableTo(exprType, returnType, RelationComparisonFlags.None, node.expression, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -11384,7 +11375,7 @@ namespace ts {
                     let caseType = checkExpression(caseClause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, RelationComparisonFlags.None, caseClause.expression, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
@@ -11593,19 +11584,7 @@ namespace ts {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
             checkClassLikeDeclaration(node);
-
             forEach(node.members, checkSourceElement);
-
-            // forEach(node.members, node.flags & NodeFlags.Abstract ?
-            //     checkSourceElement :
-            //     element => {
-            //         checkSourceElement(element);
-            
-            //         // Classes containing abstract methods must be marked abstract
-            //         if (element.flags & NodeFlags.Abstract) {
-            //             error(node, Diagnostics.Classes_containing_abstract_methods_must_be_marked_abstract);
-            //         }
-            //     });
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -11637,8 +11616,8 @@ namespace ts {
                             }
                         }
                     }
-                    checkTypeAssignableTo(type, baseType, RelationComparisonFlags.None, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), RelationComparisonFlags.ExtendingClass, node.name || node,
+                    checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
@@ -11667,7 +11646,7 @@ namespace ts {
                         if (t !== unknownType) {
                             let declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                checkTypeAssignableTo(type, t, RelationComparisonFlags.None, node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(type, t, node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -11868,7 +11847,7 @@ namespace ts {
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         forEach(getBaseTypes(type), baseType => {
-                            checkTypeAssignableTo(type, baseType, RelationComparisonFlags.None, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
                     }
@@ -11921,7 +11900,7 @@ namespace ts {
                                 // If it is a constant value (not undefined), it is syntactically constrained to be a number.
                                 // Also, we do not need to check this for ambients because there is already
                                 // a syntax error if it is not a constant.
-                                checkTypeAssignableTo(checkExpression(initializer), enumType, RelationComparisonFlags.None, initializer, /*headMessage*/ undefined);
+                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                             }
                         }
                         else if (enumIsConst) {
@@ -12794,7 +12773,7 @@ namespace ts {
                             if ((<ClassExpression>location).name) {
                                 copySymbol(location.symbol, meaning);
                             }
-                            // Fall through
+                        // Fall through
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             if (!(memberFlags & NodeFlags.Static)) {
@@ -13106,7 +13085,7 @@ namespace ts {
           */
         function getParentTypeOfClassElement(node: ClassElement) {
             let classSymbol = getSymbolOfNode(node.parent);
-            return node.flags & NodeFlags.Static 
+            return node.flags & NodeFlags.Static
                 ? getTypeOfSymbol(classSymbol)
                 : getDeclaredTypeOfSymbol(classSymbol);
         }
@@ -13200,7 +13179,7 @@ namespace ts {
                 if (links.isNestedRedeclaration === undefined) {
                     let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
                     links.isNestedRedeclaration = isStatementWithLocals(container) &&
-                        !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                    !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 }
                 return links.isNestedRedeclaration;
             }

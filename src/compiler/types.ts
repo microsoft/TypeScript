@@ -357,7 +357,7 @@ namespace ts {
         Private =           0x00000020,  // Property/Method
         Protected =         0x00000040,  // Property/Method
         Static =            0x00000080,  // Property/Method
-        Abstract =          0x00000100,
+        Abstract =          0x00000100,  // Class/Method/Constructor
         Default =           0x00000200,  // Function/Class (export default declaration)
         MultiLine =         0x00000400,  // Multi-line array or object literal
         Synthetic =         0x00000800,  // Synthetic node (for full fidelity)
@@ -427,12 +427,6 @@ namespace ts {
         Succeeded = 1, // Should be truthy
         Failed = 2,
         FailedAndReported = 3
-    }
-
-    /* @internal */
-    export const enum RelationComparisonFlags {
-        None = 0,
-        ExtendingClass = 0x00000001
     }
 
     export interface Node extends TextRange {
