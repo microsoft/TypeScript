@@ -5,9 +5,9 @@ import foo = require('importUsedInExtendsList1_require');
 
 class Sub extends foo.Super { }
 >Sub : Sub
->foo.Super : any
+>foo.Super : foo.Super
 >foo : typeof foo
->Super : foo.Super
+>Super : typeof foo.Super
 
 var s: Sub;
 >s : Sub

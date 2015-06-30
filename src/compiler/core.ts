@@ -1,7 +1,7 @@
 /// <reference path="types.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     // Ternary values are defined such that
     // x & y is False if either x or y is False.
     // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
@@ -13,6 +13,42 @@ module ts {
         False = 0,
         Maybe = 1,
         True  = -1
+    }
+
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+        let files: Map<T> = {};
+        return {
+            get,
+            set,
+            contains,
+            remove,
+            forEachValue: forEachValueInMap
+        }
+
+        function set(fileName: string, value: T) {
+            files[normalizeKey(fileName)] = value;
+        }
+
+        function get(fileName: string) {
+            return files[normalizeKey(fileName)];
+        }
+
+        function contains(fileName: string) {
+            return hasProperty(files, normalizeKey(fileName));
+        }
+
+        function remove (fileName: string) {
+            let key = normalizeKey(fileName);
+            delete files[key];
+        }
+
+        function forEachValueInMap(f: (value: T) => void) {
+            forEachValue(files, f);
+        }
+
+        function normalizeKey(key: string) {
+            return getCanonicalFileName(normalizeSlashes(key));
+        }
     }
 
     export const enum Comparison {
@@ -536,7 +572,7 @@ module ts {
     export function getNormalizedPathComponents(path: string, currentDirectory: string) {
         path = normalizeSlashes(path);
         let rootLength = getRootLength(path);
-        if (rootLength == 0) {
+        if (rootLength === 0) {
             // If the path is not rooted it is relative to current directory
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
@@ -666,9 +702,9 @@ module ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".d.ts"];
+    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js"];
+    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {

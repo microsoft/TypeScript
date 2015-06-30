@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(3,16): error TS2334: 'this' cannot be referenced in a static property initializer.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(22,15): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(28,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS2507: Type 'any' is not a constructor function type.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(44,9): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(45,9): error TS2332: 'this' cannot be referenced in current location.
 
@@ -52,7 +52,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(45,9): 
     
     class ErrClass3 extends this {
                             ~~~~
-!!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+!!! error TS2507: Type 'any' is not a constructor function type.
     
     }
     

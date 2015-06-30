@@ -1,7 +1,6 @@
 /// <reference path='harness.ts' />
 /// <reference path='runnerbase.ts' />
 /// <reference path='typeWriter.ts' />
-/// <reference path='syntacticCleaner.ts' />
 
 const enum CompilerTestType {
     Conformance,
@@ -18,7 +17,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public options: string;
 
-    constructor(public testType?: CompilerTestType) {
+    constructor(public testType: CompilerTestType) {
         super();
         this.errors = true;
         this.emit = true;
@@ -150,7 +149,7 @@ class CompilerBaselineRunner extends RunnerBase {
             // check errors
             it('Correct errors for ' + fileName, () => {
                 if (this.errors) {
-                    Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
+                    Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.tsx?$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
@@ -160,7 +159,7 @@ class CompilerBaselineRunner extends RunnerBase {
             // Source maps?
             it('Correct sourcemap content for ' + fileName, () => {
                 if (options.sourceMap || options.inlineSourceMap) {
-                    Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.ts$/, '.sourcemap.txt'), () => {
+                    Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.tsx?$/, '.sourcemap.txt'), () => {
                         var record = result.getSourceMapRecord();
                         if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
@@ -171,7 +170,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-
             it('Correct JS output for ' + fileName, () => {
                 if (!ts.fileExtensionIs(lastUnit.name, '.d.ts') && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
@@ -179,7 +177,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
 
                     // check js output
-                    Harness.Baseline.runBaseline('Correct JS output for ' + fileName, justName.replace(/\.ts/, '.js'), () => {
+                    Harness.Baseline.runBaseline('Correct JS output for ' + fileName, justName.replace(/\.tsx?/, '.js'), () => {
                         var tsCode = '';
                         var tsSources = otherFiles.concat(toBeCompiled);
                         if (tsSources.length > 1) {
@@ -195,8 +193,6 @@ class CompilerBaselineRunner extends RunnerBase {
                             jsCode += '//// [' + Harness.Path.getFileName(result.files[i].fileName) + ']\r\n';
                             jsCode += getByteOrderMarkText(result.files[i]);
                             jsCode += result.files[i].code;
-                            // Re-enable this if we want to do another comparison of old vs new compiler baselines
-                            // jsCode += SyntacticCleaner.clean(result.files[i].code);
                         }
 
                         if (result.declFilesCode.length > 0) {
@@ -239,7 +235,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         throw new Error('Number of sourcemap files should be same as js files.');
                     }
 
-                    Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.ts/, '.js.map'), () => {
+                    Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.tsx?/, '.js.map'), () => {
                         if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
                             // Baselining isn't required here because there is no output.
@@ -324,11 +320,11 @@ class CompilerBaselineRunner extends RunnerBase {
                         let pullExtension = isSymbolBaseLine ? '.symbols.pull' : '.types.pull';
 
                         if (fullBaseLine !== pullBaseLine) {
-                            Harness.Baseline.runBaseline('Correct full information for ' + fileName, justName.replace(/\.ts/, fullExtension), () => fullBaseLine);
-                            Harness.Baseline.runBaseline('Correct pull information for ' + fileName, justName.replace(/\.ts/, pullExtension), () => pullBaseLine);
+                            Harness.Baseline.runBaseline('Correct full information for ' + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                            Harness.Baseline.runBaseline('Correct pull information for ' + fileName, justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
                         }
                         else {
-                            Harness.Baseline.runBaseline('Correct information for ' + fileName, justName.replace(/\.ts/, fullExtension), () => fullBaseLine);
+                            Harness.Baseline.runBaseline('Correct information for ' + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
                         }
                     }
 
@@ -395,7 +391,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
         // this will set up a series of describe/it blocks to run between the setup and cleanup phases
         if (this.tests.length === 0) {
-            var testFiles = this.enumerateFiles(this.basePath, /\.ts$/, { recursive: true });
+            var testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
             testFiles.forEach(fn => {
                 fn = fn.replace(/\\/g, "/");
                 this.checkTestCodeOutput(fn);

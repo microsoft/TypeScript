@@ -7,10 +7,9 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(8,9): error TS2304: Cannot find name 'K'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(11,16): error TS2304: Cannot find name 'E'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(14,16): error TS2304: Cannot find name 'F'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(14,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (10 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (9 errors) ====
     class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
                     ~
 !!! error TS2304: Cannot find name 'A'.
@@ -43,8 +42,6 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
     function f2(): F<X<T>, Y<Z<T>>> {
                    ~
 !!! error TS2304: Cannot find name 'F'.
-                   ~~~~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     }
     
     

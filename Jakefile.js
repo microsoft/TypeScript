@@ -103,7 +103,15 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-});
+}).concat(servicesSources);
+
+var languageServiceLibrarySources = [
+    "editorServices.ts",
+    "protocol.d.ts",
+    "session.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+}).concat(servicesSources);
 
 var harnessSources = [
     "harness.ts",
@@ -129,7 +137,8 @@ var harnessSources = [
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
     "versionCache.ts",
-    "convertToBase64.ts"
+    "convertToBase64.ts",
+    "transpile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -148,7 +157,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -360,13 +369,27 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-                definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
+                definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
             });
 
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+
+var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
+compileFile(
+    lsslFile, 
+    languageServiceLibrarySources, 
+    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    /*prefixes*/ [copyright], 
+    /*useBuiltCompiler*/ true, 
+    /*noOutFile*/ false, 
+    /*generateDeclarations*/ true);
+
+// Local target to build the language service server library
+desc("Builds language service server library");
+task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
@@ -504,9 +527,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, testConfigFile) {
+function writeTestConfigFile(tests, light, testConfigFile) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
+    var testConfigContents = JSON.stringify({ test: [tests], light: light });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -522,13 +545,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
     host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -571,12 +595,13 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
     port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     tests = tests ? tests : '';

@@ -3,7 +3,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
 
-module ts {
+namespace ts {
     /* @internal */
     export var optionDeclarations: CommandLineOption[] = [
         {
@@ -37,6 +37,16 @@ module ts {
         {
             name: "inlineSources",
             type: "boolean",
+        },
+        {
+            name: "jsx",
+            type: {
+                "preserve": JsxEmit.Preserve,
+                "react": JsxEmit.React
+            },
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
+            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {
             name: "listFiles",
@@ -104,8 +114,13 @@ module ts {
             type: "boolean",
         },
         {
+            name: "skipDefaultLibCheck",
+            type: "boolean",
+        },
+        {
             name: "out",
             type: "string",
+            isFilePath: true,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
         },
@@ -349,7 +364,7 @@ module ts {
 
         return {
             options: getCompilerOptions(),
-            fileNames: getFiles(),
+            fileNames: getFileNames(),
             errors
         };
 
@@ -395,23 +410,35 @@ module ts {
             return options;
         }
 
-        function getFiles(): string[] {
-            var files: string[] = [];
+        function getFileNames(): string[] {
+            let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
-                    var files = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                    fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
             }
             else {
-                var sysFiles = host.readDirectory(basePath, ".ts");
-                for (var i = 0; i < sysFiles.length; i++) {
-                    var name = sysFiles[i];
-                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        files.push(name);
+                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                for (let i = 0; i < sysFiles.length; i++) {
+                    let name = sysFiles[i];
+                    if (fileExtensionIs(name, ".d.ts")) {
+                        let baseName = name.substr(0, name.length - ".d.ts".length);
+                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
+                            fileNames.push(name);
+                        }
+                    }
+                    else if (fileExtensionIs(name, ".ts")) {
+                        if (!contains(sysFiles, name + "x")) {
+                            fileNames.push(name)
+                        }
+                    }
+                    else {
+                        fileNames.push(name);
                     }
                 }
             }
-            return files;
+            return fileNames;
         }
     }
 }

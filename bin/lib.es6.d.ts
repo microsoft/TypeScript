@@ -1165,7 +1165,7 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): boolean;
+    isArray(arg: any): arg is Array<any>;
     prototype: Array<any>;
 }
 
@@ -1880,6 +1880,7 @@ interface Map<K, V> {
 }
 
 interface MapConstructor {
+    new (): Map<any, any>;
     new <K, V>(): Map<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
     prototype: Map<any, any>;
@@ -1896,6 +1897,7 @@ interface WeakMap<K, V> {
 }
 
 interface WeakMapConstructor {
+    new (): WeakMap<any, any>;
     new <K, V>(): WeakMap<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
     prototype: WeakMap<any, any>;
@@ -1917,6 +1919,7 @@ interface Set<T> {
 }
 
 interface SetConstructor {
+    new (): Set<any>;
     new <T>(): Set<T>;
     new <T>(iterable: Iterable<T>): Set<T>;
     prototype: Set<any>;
@@ -1932,6 +1935,7 @@ interface WeakSet<T> {
 }
 
 interface WeakSetConstructor {
+    new (): WeakSet<any>;
     new <T>(): WeakSet<T>;
     new <T>(iterable: Iterable<T>): WeakSet<T>;
     prototype: WeakSet<any>;
@@ -4909,6 +4913,11 @@ declare module Intl {
         currency?: string;
         currencyDisplay?: string;
         useGrouping?: boolean;
+        minimumintegerDigits?: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
+        minimumSignificantDigits?: number;
+        maximumSignificantDigits?: number;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -4971,7 +4980,7 @@ declare module Intl {
     }
 
     interface DateTimeFormat {
-        format(date: number): string;
+        format(date?: Date | number): string;
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
@@ -12713,10 +12722,10 @@ declare var MediaQueryList: {
 interface MediaSource extends EventTarget {
     activeSourceBuffers: SourceBufferList;
     duration: number;
-    readyState: string;
+    readyState: number;
     sourceBuffers: SourceBufferList;
     addSourceBuffer(type: string): SourceBuffer;
-    endOfStream(error?: string): void;
+    endOfStream(error?: number): void;
     removeSourceBuffer(sourceBuffer: SourceBuffer): void;
 }
 
@@ -13445,7 +13454,7 @@ declare var PopStateEvent: {
 
 interface Position {
     coords: Coordinates;
-    timestamp: Date;
+    timestamp: number;
 }
 
 declare var Position: {
@@ -16126,9 +16135,17 @@ interface WebGLRenderingContext {
     stencilMaskSeparate(face: number, mask: number): void;
     stencilOp(fail: number, zfail: number, zpass: number): void;
     stencilOpSeparate(face: number, fail: number, zfail: number, zpass: number): void;
+    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels: ArrayBufferView): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, image: HTMLImageElement): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, canvas: HTMLCanvasElement): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, video: HTMLVideoElement): void;
     texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels: ImageData): void;
     texParameterf(target: number, pname: number, param: number): void;
     texParameteri(target: number, pname: number, param: number): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, image: HTMLImageElement): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, canvas: HTMLCanvasElement): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, video: HTMLVideoElement): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageData): void;
     uniform1f(location: WebGLUniformLocation, x: number): void;
     uniform1fv(location: WebGLUniformLocation, v: any): void;
@@ -17368,10 +17385,11 @@ interface DocumentEvent {
     createEvent(eventInterface:"AriaRequestEvent"): AriaRequestEvent;
     createEvent(eventInterface:"AudioProcessingEvent"): AudioProcessingEvent;
     createEvent(eventInterface:"BeforeUnloadEvent"): BeforeUnloadEvent;
+    createEvent(eventInterface:"ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface:"CloseEvent"): CloseEvent;
     createEvent(eventInterface:"CommandEvent"): CommandEvent;
     createEvent(eventInterface:"CompositionEvent"): CompositionEvent;
-    createEvent(eventInterface: "CustomEvent"): CustomEvent;
+    createEvent(eventInterface:"CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface:"DeviceOrientationEvent"): DeviceOrientationEvent;
     createEvent(eventInterface:"DragEvent"): DragEvent;
@@ -17394,8 +17412,6 @@ interface DocumentEvent {
     createEvent(eventInterface:"MouseEvent"): MouseEvent;
     createEvent(eventInterface:"MouseEvents"): MouseEvent;
     createEvent(eventInterface:"MouseWheelEvent"): MouseWheelEvent;
-    createEvent(eventInterface:"MSGestureEvent"): MSGestureEvent;
-    createEvent(eventInterface:"MSPointerEvent"): MSPointerEvent;
     createEvent(eventInterface:"MutationEvent"): MutationEvent;
     createEvent(eventInterface:"MutationEvents"): MutationEvent;
     createEvent(eventInterface:"NavigationCompletedEvent"): NavigationCompletedEvent;
@@ -18008,6 +18024,17 @@ declare function addEventListener(type: "volumechange", listener: (ev: Event) =>
 declare function addEventListener(type: "waiting", listener: (ev: Event) => any, useCapture?: boolean): void;
 declare function addEventListener(type: "wheel", listener: (ev: WheelEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+interface DOMTokenList {
+    [Symbol.iterator](): IterableIterator<string>;
+}
+
+interface NodeList {
+    [Symbol.iterator](): IterableIterator<Node>
+}
+
+interface NodeListOf<TNode extends Node> {
+    [Symbol.iterator](): IterableIterator<TNode>
+}
 /////////////////////////////
 /// WorkerGlobalScope APIs 
 /////////////////////////////

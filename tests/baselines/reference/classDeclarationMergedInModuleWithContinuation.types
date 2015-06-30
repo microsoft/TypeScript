@@ -19,8 +19,8 @@ module M {
 
     export class O extends M.N {
 >O : O
->M.N : any
+>M.N : N
 >M : typeof M
->N : N
+>N : typeof N
     }
 }
