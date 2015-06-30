@@ -39,6 +39,16 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "jsx",
+            type: {
+                "preserve": JsxEmit.Preserve,
+                "react": JsxEmit.React
+            },
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
+            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },
@@ -110,6 +120,7 @@ namespace ts {
         {
             name: "out",
             type: "string",
+            isFilePath: true,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
         },
@@ -400,18 +411,29 @@ namespace ts {
         }
 
         function getFileNames(): string[] {
-            var fileNames: string[] = [];
+            let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
             }
             else {
-                var exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                var sysFiles = host.readDirectory(basePath, ".ts", exclude);
-                for (var i = 0; i < sysFiles.length; i++) {
-                    var name = sysFiles[i];
-                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
+                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                for (let i = 0; i < sysFiles.length; i++) {
+                    let name = sysFiles[i];
+                    if (fileExtensionIs(name, ".d.ts")) {
+                        let baseName = name.substr(0, name.length - ".d.ts".length);
+                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
+                            fileNames.push(name);
+                        }
+                    }
+                    else if (fileExtensionIs(name, ".ts")) {
+                        if (!contains(sysFiles, name + "x")) {
+                            fileNames.push(name)
+                        }
+                    }
+                    else {
                         fileNames.push(name);
                     }
                 }

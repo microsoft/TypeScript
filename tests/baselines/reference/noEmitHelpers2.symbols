@@ -1,17 +1,17 @@
 === tests/cases/compiler/noEmitHelpers2.ts ===
 
-function decorator() { }
->decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 0, 0))
+declare var decorator: any;
+>decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 1, 11))
 
 @decorator
->decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 0, 0))
+>decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 1, 11))
 
 class A {
->A : Symbol(A, Decl(noEmitHelpers2.ts, 1, 24))
+>A : Symbol(A, Decl(noEmitHelpers2.ts, 1, 27))
 
     constructor(a: number, @decorator b: string) {
 >a : Symbol(a, Decl(noEmitHelpers2.ts, 5, 16))
->decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 0, 0))
+>decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 1, 11))
 >b : Symbol(b, Decl(noEmitHelpers2.ts, 5, 26))
     }
 }
