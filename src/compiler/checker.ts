@@ -7088,7 +7088,7 @@ namespace ts {
 
         let jsxElementClassType: Type = undefined;
         function getJsxGlobalElementClassType(): Type {
-            if(!jsxElementClassType) {
+            if (!jsxElementClassType) {
                 jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
             }
             return jsxElementClassType;
@@ -7107,7 +7107,7 @@ namespace ts {
             }
 
             if (jsxElementType === undefined) {
-                if(compilerOptions.noImplicitAny) {
+                if (compilerOptions.noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
@@ -7118,6 +7118,15 @@ namespace ts {
             checkJsxPreconditions(node);
 
             let targetAttributesType = getJsxElementAttributesType(node);
+
+            if (getNodeLinks(node).jsxFlags & JsxFlags.ClassElement) {
+                if (node.tagName.kind === SyntaxKind.Identifier) {
+                    checkIdentifier(<Identifier>node.tagName);
+                }
+                else {
+                    checkQualifiedName(<QualifiedName>node.tagName);
+                }
+            }
 
             let nameTable: Map<boolean> = {};
             // Process this array in right-to-left order so we know which
@@ -7131,7 +7140,7 @@ namespace ts {
                 else {
                     Debug.assert(node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
                     let spreadType = checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
-                    if(isTypeAny(spreadType)) {
+                    if (isTypeAny(spreadType)) {
                         sawSpreadedAny = true;
                     }
                 }
@@ -12336,7 +12345,7 @@ namespace ts {
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
-            if(!isInLegalTypePredicatePosition(node)) {
+            if (!isInLegalTypePredicatePosition(node)) {
                 error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
             }
         }
