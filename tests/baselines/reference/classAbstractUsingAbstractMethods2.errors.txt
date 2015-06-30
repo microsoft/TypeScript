@@ -1,16 +1,13 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(1,7): error TS2514: Classes containing abstract methods must be marked abstract.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(2,5): error TS1238: Abstract methods can only appear within an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(2,5): error TS1244: Abstract methods can only appear within an abstract class.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(5,7): error TS2515: Non-abstract class 'B' does not implement inherited abstract member 'foo' from class 'A'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(21,7): error TS2515: Non-abstract class 'BB' does not implement inherited abstract member 'foo' from class 'AA'.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts (4 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts (3 errors) ====
     class A {
-          ~
-!!! error TS2514: Classes containing abstract methods must be marked abstract.
         abstract foo();
         ~~~~~~~~
-!!! error TS1238: Abstract methods can only appear within an abstract class.
+!!! error TS1244: Abstract methods can only appear within an abstract class.
     }
     
     class B extends A  {}
