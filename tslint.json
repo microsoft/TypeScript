@@ -6,7 +6,10 @@
         ],
         "curly": true,
         "indent": true,
-        "no-trailing-comman": true,
+        "one-line": [true,
+            "check-open-brace"
+        ],
+        "no-empty": true,
         "no-trailing-whitespace": true,
         "no-unreachable": true,
         "no-unused-variable": true,
