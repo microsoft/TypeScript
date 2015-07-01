@@ -3910,23 +3910,21 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToSet(typeSet: Type[], type: Type, typeKind: TypeFlags) {
-            if (type.flags & typeKind) {
-                addTypesToSet(typeSet, (<UnionOrIntersectionType>type).types, typeKind);
+        function addTypeToSet(typeSet: Type[], type: Type, typeSetKind: TypeFlags) {
+            if (type.flags & typeSetKind) {
+                addTypesToSet(typeSet, (<UnionOrIntersectionType>type).types, typeSetKind);
             }
             else if (!contains(typeSet, type)) {
                 typeSet.push(type);
             }
         }
 
-        function addTypesToSet(typeSet: Type[], types: Type[], typeKind: TypeFlags) {
+        // Add the given types to the given type set. Order is preserved, duplicates are removed,
+        // and nested types of the given kind are flattened into the set.
+        function addTypesToSet(typeSet: Type[], types: Type[], typeSetKind: TypeFlags) {
             for (let type of types) {
-                addTypeToSet(typeSet, type, typeKind);
+                addTypeToSet(typeSet, type, typeSetKind);
             }
-        }
-
-        function compareTypeIds(type1: Type, type2: Type): number {
-            return type1.id - type2.id;
         }
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
@@ -3965,6 +3963,10 @@ namespace ts {
                     types.splice(i, 1);
                 }
             }
+        }
+
+        function compareTypeIds(type1: Type, type2: Type): number {
+            return type1.id - type2.id;
         }
 
         // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
@@ -4031,8 +4033,11 @@ namespace ts {
         // type operator and we can't reduce those because we want to support recursive intersection types. For example,
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
-        // for intersections of types with signatues can be deterministic.
+        // for intersections of types with signatures can be deterministic.
         function getIntersectionType(types: Type[]): Type {
+            if (types.length === 0) {
+                return emptyObjectType;
+            }
             let typeSet: Type[] = [];
             addTypesToSet(typeSet, types, TypeFlags.Intersection);
             if (containsTypeAny(typeSet)) {
@@ -4469,6 +4474,7 @@ namespace ts {
                     }
                 }
                 else if (relation !== identityRelation) {
+                    // Note that the "each" checks must precede the "some" checks to produce the correct results
                     if (source.flags & TypeFlags.Union) {
                         if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
                             return result;
@@ -4480,6 +4486,9 @@ namespace ts {
                         }
                     }
                     else {
+                        // A check of the form A | B = C & D can be satisfied either by having C be related to A | B,
+                        // D be related to A | B, C & D be related to A, or C & D be related to B. Thus, we need to
+                        // check both sides here.
                         if (source.flags & TypeFlags.Intersection) {
                             // If target is a union type the following check will report errors so we suppress them here
                             if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
@@ -4508,8 +4517,11 @@ namespace ts {
                 // it may hold in a structural comparison.
                 // Report structural errors only if we haven't reported any errors yet
                 let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                // identity relation does not use apparent type
+                // Identity relation does not use apparent type
                 let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
+                // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
+                // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
+                // relates to X. Thus, we include intersection types on the source side here.
                 if (sourceOrApparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                     if (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
                         errorInfo = saveErrorInfo;
@@ -5423,7 +5435,9 @@ namespace ts {
                         }
                     }
                     // Next, if target is a union type containing a single naked type parameter, make a
-                    // secondary inference to that type parameter
+                    // secondary inference to that type parameter. We don't do this for intersection types
+                    // because in a target type like Foo & T we don't know how which parts of the source type
+                    // should be matched by Foo and which should be inferred to T.
                     if (target.flags & TypeFlags.Union && typeParameterCount === 1) {
                         inferiority++;
                         inferFromTypes(source, typeParameter);
