@@ -106,7 +106,7 @@ namespace ts {
         let globals: SymbolTable = {};
 
         let globalESSymbolConstructorSymbol: Symbol;
-        
+
         let getGlobalPromiseConstructorSymbol: () => Symbol;
 
         let globalObjectType: ObjectType;
@@ -137,7 +137,7 @@ namespace ts {
         let getInstantiatedGlobalPromiseLikeType: () => ObjectType;
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
-        
+
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let stringLiteralTypes: Map<StringLiteralType> = {};
@@ -146,7 +146,7 @@ namespace ts {
         let emitParam = false;
         let emitAwaiter = false;
         let emitGenerator = false;
-        
+
         let resolutionTargets: Object[] = [];
         let resolutionResults: boolean[] = [];
 
@@ -3747,12 +3747,12 @@ namespace ts {
                 // We only support expressions that are simple qualified names. For other expressions this produces undefined.
                 let typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
                     isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
-                    undefined;
+                        undefined;
                 let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
                 let type = symbol === unknownSymbol ? unknownType :
                     symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                    symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                    getTypeFromNonGenericTypeReference(node, symbol);
+                        symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
+                            getTypeFromNonGenericTypeReference(node, symbol);
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
@@ -3817,7 +3817,7 @@ namespace ts {
         function getGlobalType(name: string, arity = 0): ObjectType {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
         }
-        
+
         function tryGetGlobalType(name: string, arity = 0): ObjectType {
             return getTypeOfGlobalSymbol(getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined), arity);
         }
@@ -4036,7 +4036,7 @@ namespace ts {
             }
             return links.resolvedType;
         }
-        
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -5928,7 +5928,7 @@ namespace ts {
                         error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
                     }
                 }
-                
+
                 if (node.parserContextFlags & ParserContextFlags.Await) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                     getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
@@ -7244,7 +7244,8 @@ namespace ts {
             let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);;
 
             if (left.kind === SyntaxKind.SuperKeyword) {
-                let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ? (<PropertyAccessExpression>node).name :
+                let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
+                    (<PropertyAccessExpression>node).name :
                     (<QualifiedName>node).right;
 
                 // TS 1.0 spec (April 2014): 4.8.2
@@ -7343,7 +7344,7 @@ namespace ts {
                 }
                 return unknownType;
             }
-            
+
             getNodeLinks(node).resolvedSymbol = prop;
 
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
@@ -8661,7 +8662,7 @@ namespace ts {
                 links.type = instantiateType(getTypeOfSymbol(lastOrUndefined(context.parameters)), mapper);
             }
         }
-        
+
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
             let globalPromiseType = getGlobalPromiseType();
@@ -8670,7 +8671,7 @@ namespace ts {
                 promisedType = getAwaitedType(promisedType);
                 return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
             }
-            
+
             return emptyObjectType;
         }
 
@@ -8679,11 +8680,11 @@ namespace ts {
             if (!func.body) {
                 return unknownType;
             }
-            
+
             let isAsync = isAsyncFunctionLike(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(<Expression>func.body, contextualMapper); 
+                type = checkExpressionCached(<Expression>func.body, contextualMapper);
                 if (isAsync) {
                     // From within an async function you can return either a non-promise value or a promise. Any 
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
@@ -8716,13 +8717,13 @@ namespace ts {
                                 error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
                                 return unknownType;
                             }
-                            
+
                             return promiseType;
                         }
                         else {
                             return voidType;
                         }
-                    }	
+                    }
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
                 // Otherwise we require the yield/return expressions to have a best common supertype.
@@ -8745,7 +8746,7 @@ namespace ts {
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
-            
+
             let widenedType = getWidenedType(type);
             if (isAsync) {
                 // From within an async function you can return either a non-promise value or a promise. Any 
@@ -8756,8 +8757,8 @@ namespace ts {
                     error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
                     return unknownType;
                 }
-                
-                return promiseType; 
+
+                return promiseType;
             }
             else {
                 return widenedType;
@@ -8792,13 +8793,13 @@ namespace ts {
             forEachReturnStatement(body, returnStatement => {
                 let expr = returnStatement.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, contextualMapper); 
+                    let type = checkExpressionCached(expr, contextualMapper);
                     if (isAsync) {
                         // From within an async function you can return either a non-promise value or a promise. Any 
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
                         // return type of the body should be unwrapped to its awaited type, which should be wrapped in 
                         // the native Promise<T> type by the caller.
-                        type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member); 
+                        type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                     }
 
                     if (!contains(aggregatedTypes, type)) {
@@ -8870,12 +8871,12 @@ namespace ts {
             if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
-            
+
             let isAsync = isAsyncFunctionLike(node);
             if (isAsync) {
                 emitAwaiter = true;
             }
-            
+
             let links = getNodeLinks(node);
             let type = getTypeOfSymbol(node.symbol);
             // Check if function expression is contextually typed and assign parameter types if so
@@ -8912,7 +8913,7 @@ namespace ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            
+
             let isAsync = isAsyncFunctionLike(node);
             if (isAsync) {
                 emitAwaiter = true;
@@ -8923,7 +8924,7 @@ namespace ts {
             if (returnType && isAsync) {
                 promisedType = checkAsyncFunctionReturnType(node);
             }
-            
+
             if (returnType && !node.asteriskToken) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
             }
@@ -8957,7 +8958,7 @@ namespace ts {
                             checkTypeAssignableTo(exprType, returnType, node.body);
                         }
                     }
-                    
+
                     checkFunctionAndClassExpressionBodies(node.body);
                 }
             }
@@ -9079,7 +9080,7 @@ namespace ts {
             let operandType = checkExpression(node.expression);
             return checkAwaitedType(operandType, node);
         }
-        
+
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             let operandType = checkExpression(node.operand);
             switch (node.operator) {
@@ -9552,7 +9553,7 @@ namespace ts {
             node.contextualType = saveContextualType;
             return result;
         }
-        
+
         function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -9980,7 +9981,7 @@ namespace ts {
             
             // Abstract methods cannot have an implementation.
             // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
-            if(node.flags & NodeFlags.Abstract && node.body) {
+            if (node.flags & NodeFlags.Abstract && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
         }
@@ -10412,8 +10413,8 @@ namespace ts {
             }
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body && 
-                !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) ) {
+            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
+                !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract)) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
@@ -10530,13 +10531,13 @@ namespace ts {
                     if (!message) {
                         message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
                     }
-                    
+
                     error(location, message);
                 }
-                
+
                 return unknownType;
             }
-            
+
             return type;
         }
 
@@ -10559,11 +10560,11 @@ namespace ts {
             if (promise.flags & TypeFlags.Any) {
                 return undefined;
             }
-            
+
             if ((promise.flags & TypeFlags.Reference) && (<GenericType>promise).target === tryGetGlobalPromiseType()) {
                 return (<GenericType>promise).typeArguments[0];
             }
-            
+
             let globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
             if (globalPromiseLikeType === emptyObjectType || !isTypeAssignableTo(promise, globalPromiseLikeType)) {
                 return undefined;
@@ -10573,26 +10574,26 @@ namespace ts {
             if (thenFunction && (thenFunction.flags & TypeFlags.Any)) {
                 return undefined;
             }
-            
+
             let thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
             if (thenSignatures.length === 0) {
                 return undefined;
             }
-            
+
             let onfulfilledParameterType = getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature));
             if (onfulfilledParameterType.flags & TypeFlags.Any) {
                 return undefined;
             }
-            
+
             let onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
             if (onfulfilledParameterSignatures.length === 0) {
                 return undefined;
             }
-            
+
             let valueParameterType = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature));
             return valueParameterType;
         }
-        
+
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
             return getTypeAtPosition(signature, 0);
         }
@@ -10607,17 +10608,17 @@ namespace ts {
         function getAwaitedType(type: Type) {
             return checkAwaitedType(type, /*location*/ undefined, /*message*/ undefined);
         }
-        
+
         function checkAwaitedType(type: Type, location?: Node, message?: DiagnosticMessage) {
             return checkAwaitedTypeWorker(type);
-            
+
             function checkAwaitedTypeWorker(type: Type): Type {
                 if (type.flags & TypeFlags.Union) {
                     let types: Type[] = [];
                     for (let constituentType of (<UnionType>type).types) {
                         types.push(checkAwaitedTypeWorker(constituentType));
                     }
-                    
+
                     return getUnionType(types);
                 }
                 else {
@@ -10677,11 +10678,11 @@ namespace ts {
                             //
                             if (location) {
                                 error(
-                                    location, 
-                                    Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method, 
+                                    location,
+                                    Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method,
                                     symbolToString(type.symbol));
                             }
-                            
+
                             return unknownType;
                         }
                         
@@ -10690,7 +10691,7 @@ namespace ts {
                         awaitedTypeStack.push(type.id);
                         let awaitedType = checkAwaitedTypeWorker(promisedType);
                         awaitedTypeStack.pop();
-                        return awaitedType;                
+                        return awaitedType;
                     }
                 }
             }
@@ -10750,7 +10751,7 @@ namespace ts {
                 // type as a value. As such, we will just return unknownType;
                 return unknownType;
             }
-            
+
             let promiseConstructor = getMergedSymbol(promiseType.symbol);
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
                 error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
@@ -10942,7 +10943,7 @@ namespace ts {
                 if (!compilerOptions.experimentalAsyncFunctions) {
                     error(node, Diagnostics.Experimental_support_for_async_functions_is_a_feature_that_is_subject_to_change_in_a_future_release_Specify_experimentalAsyncFunctions_to_remove_this_warning);
                 }
-                
+
                 emitAwaiter = true;
             } 
 
@@ -10984,7 +10985,7 @@ namespace ts {
                 if (isAsync) {
                     promisedType = checkAsyncFunctionReturnType(node);
                 }
-                
+
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
             }
 
@@ -11317,7 +11318,7 @@ namespace ts {
                 if (inBlockOrObjectLiteralExpression(node)) {
                     if (isAsyncFunctionLike(node)) {
                         if (node.modifiers.length > 1) {
-                            return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here); 
+                            return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
                         }
                     }
                     else {
@@ -11335,7 +11336,7 @@ namespace ts {
 
                 node = node.parent;
             }
-            
+
             return false;
         }
 
@@ -12160,7 +12161,7 @@ namespace ts {
                         // It is an error to inherit an abstract member without implementing it or being declared abstract.
                         // If there is no declaration for the derived class (as in the case of class expressions), 
                         // then the class cannot be declared abstract. 
-                        if ( baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
+                        if (baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
                             error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
                                 typeToString(type), symbolToString(baseProperty), typeToString(baseType));
                         }
@@ -13142,7 +13143,7 @@ namespace ts {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
                 }
-                
+
                 if (emitExtends) {
                     links.flags |= NodeCheckFlags.EmitExtends;
                 }
@@ -13154,11 +13155,11 @@ namespace ts {
                 if (emitParam) {
                     links.flags |= NodeCheckFlags.EmitParam;
                 }
-                
+
                 if (emitAwaiter) {
                     links.flags |= NodeCheckFlags.EmitAwaiter;
                 }
-                
+
                 if (emitGenerator || (emitAwaiter && languageVersion < ScriptTarget.ES6)) {
                     links.flags |= NodeCheckFlags.EmitGenerator;
                 }
@@ -13454,7 +13455,7 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    // Fall through
+                // Fall through
 
                 case SyntaxKind.NumericLiteral:
                     // index access
@@ -14129,21 +14130,21 @@ namespace ts {
 
             anyArrayType = createArrayType(anyType);
         }
-        
+
         function createInstantiatedPromiseLikeType(): ObjectType {
             let promiseLikeType = getGlobalPromiseLikeType();
             if (promiseLikeType !== emptyObjectType) {
                 return createTypeReference(<GenericType>promiseLikeType, [anyType]);
             }
-            
+
             return emptyObjectType;
         }
-        
+
         function createThenableType() {
             // build the thenable type that is used to verify against a non-promise "thenable" operand to `await`.
             let thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
             getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
-            
+
             let thenableType = <ResolvedType>createObjectType(TypeFlags.Anonymous);
             thenableType.properties = [thenPropertySymbol];
             thenableType.members = createSymbolTable(thenableType.properties);
