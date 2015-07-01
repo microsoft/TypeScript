@@ -6,6 +6,16 @@ namespace ts {
         fileWatcher: FileWatcher;
     }
 
+    const reportDiagnostic = sys.writesToTty && sys.writesToTty() ?
+            reportDiagnosticWithColorAndContext :
+            reportDiagnosticSimply;
+
+    function reportDiagnostics(diagnostics: Diagnostic[]): void {
+        for (let diagnostic of diagnostics) {
+            reportDiagnostic(diagnostic);
+        }
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -80,7 +90,7 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnostic(diagnostic: Diagnostic): void {
+    function reportDiagnosticSimply(diagnostic: Diagnostic): void {
         let output = "";
         
         if (diagnostic.file) {
@@ -145,10 +155,6 @@ namespace ts {
         sys.write(output);
     }
 
-    const diagnosticReporter = sys.writesToTty && sys.writesToTty() ?
-            reportDiagnosticWithColorAndContext :
-            reportDiagnostic;
-
     /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
     function splitContentByNewlines(content: string) {
         // Split up the input file by line
@@ -209,7 +215,7 @@ namespace ts {
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
+                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
@@ -218,12 +224,12 @@ namespace ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            forEach(commandLine.errors, diagnosticReporter);
+            reportDiagnostics(commandLine.errors);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
         }
 
@@ -235,12 +241,12 @@ namespace ts {
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
@@ -258,7 +264,7 @@ namespace ts {
         // Firefox has Object.prototype.watch
         if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
             if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
@@ -276,14 +282,14 @@ namespace ts {
 
                     let result = readConfigFile(configFileName);
                     if (result.error) {
-                        reportDiagnostic(result.error);
+                        reportDiagnosticSimply(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
 
                     let configObject = result.config;
                     let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
-                        forEach(configParseResult.errors, diagnosticReporter);
+                        reportDiagnostics(configParseResult.errors);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     rootFileNames = configParseResult.fileNames;
@@ -305,7 +311,7 @@ namespace ts {
             }
 
             setCachedProgram(compileResult.program);
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
@@ -367,7 +373,7 @@ namespace ts {
 
         function recompile() {
             timerHandle = undefined;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
     }
@@ -420,17 +426,17 @@ namespace ts {
         function compileProgram(): ExitStatus {
             // First get any syntactic errors. 
             var diagnostics = program.getSyntacticDiagnostics();
-            forEach(diagnostics, diagnosticReporter);
+            reportDiagnostics(diagnostics);
 
             // If we didn't have any syntactic errors, then also try getting the global and 
             // semantic errors.
             if (diagnostics.length === 0) {
                 var diagnostics = program.getGlobalDiagnostics();
-                forEach(diagnostics, diagnosticReporter);
+                reportDiagnostics(diagnostics);
 
                 if (diagnostics.length === 0) {
                     var diagnostics = program.getSemanticDiagnostics();
-                    forEach(diagnostics, diagnosticReporter);
+                    reportDiagnostics(diagnostics);
                 }
             }
 
@@ -443,7 +449,7 @@ namespace ts {
 
             // Otherwise, emit and report any errors we ran into.
             var emitOutput = program.emit();
-            forEach(emitOutput.diagnostics, diagnosticReporter);
+            reportDiagnostics(emitOutput.diagnostics);
 
             // If the emitter didn't emit anything, then pass that value along.
             if (emitOutput.emitSkipped) {
