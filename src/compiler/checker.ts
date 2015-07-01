@@ -7244,7 +7244,8 @@ namespace ts {
             let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);;
 
             if (left.kind === SyntaxKind.SuperKeyword) {
-                let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ? (<PropertyAccessExpression>node).name :
+                let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
+                    (<PropertyAccessExpression>node).name :
                     (<QualifiedName>node).right;
 
                 // TS 1.0 spec (April 2014): 4.8.2
