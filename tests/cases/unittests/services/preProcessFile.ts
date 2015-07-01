@@ -25,8 +25,8 @@ describe('PreProcessFile:', function () {
             var resultImportedFile = resultImportedFiles[i];
             var expectedImportedFile = expectedImportedFiles[i];
 
-            assert.equal(resultImportedFile.filename, expectedImportedFile.filename, "Imported file path does not match expected. Expected: " + expectedImportedFile.filename + ". Actual: " + resultImportedFile.filename + ".");
-            
+            assert.equal(resultImportedFile.fileName, expectedImportedFile.fileName, "Imported file path does not match expected. Expected: " + expectedImportedFile.fileName + ". Actual: " + resultImportedFile.fileName + ".");
+
             assert.equal(resultImportedFile.pos, expectedImportedFile.pos, "Imported file position does not match expected. Expected: " + expectedImportedFile.pos + ". Actual: " + resultImportedFile.pos + ".");
 
             assert.equal(resultImportedFile.end, expectedImportedFile.end, "Imported file length does not match expected. Expected: " + expectedImportedFile.end + ". Actual: " + resultImportedFile.end + ".");
@@ -36,8 +36,8 @@ describe('PreProcessFile:', function () {
             var resultReferencedFile = resultReferencedFiles[i];
             var expectedReferencedFile = expectedReferencedFiles[i];
 
-            assert.equal(resultReferencedFile.filename, expectedReferencedFile.filename, "Referenced file path does not match expected. Expected: " + expectedReferencedFile.filename + ". Actual: " + resultReferencedFile.filename + ".");
-            
+            assert.equal(resultReferencedFile.fileName, expectedReferencedFile.fileName, "Referenced file path does not match expected. Expected: " + expectedReferencedFile.fileName + ". Actual: " + resultReferencedFile.fileName + ".");
+
             assert.equal(resultReferencedFile.pos, expectedReferencedFile.pos, "Referenced file position does not match expected. Expected: " + expectedReferencedFile.pos + ". Actual: " + resultReferencedFile.pos + ".");
 
             assert.equal(resultReferencedFile.end, expectedReferencedFile.end, "Referenced file length does not match expected. Expected: " + expectedReferencedFile.end + ". Actual: " + resultReferencedFile.end + ".");
@@ -47,8 +47,8 @@ describe('PreProcessFile:', function () {
         it("Correctly return referenced files from triple slash", function () {
             test("///<reference path = \"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "///<reference path=\"refFile3.ts\" />" + "\n" + "///<reference path= \"..\\refFile4d.ts\" />", true,
                 {
-                    referencedFiles: [{ filename: "refFile1.ts", pos: 0, end: 37 }, { filename: "refFile2.ts", pos: 38, end: 73 },
-                        { filename: "refFile3.ts", pos: 74, end: 109 }, { filename: "..\\refFile4d.ts", pos: 110, end: 150 }],
+                    referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 37 }, { fileName: "refFile2.ts", pos: 38, end: 73 },
+                        { fileName: "refFile3.ts", pos: 74, end: 109 }, { fileName: "..\\refFile4d.ts", pos: 110, end: 150 }],
                     importedFiles: <ts.FileReference[]>[],
                     isLibFile: false
                 });
@@ -67,8 +67,8 @@ describe('PreProcessFile:', function () {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");", true,
                 {
                     referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: [{ filename: "r1.ts", pos: 20, end: 25 }, { filename: "r2.ts", pos: 49, end: 54 }, { filename: "r3.ts", pos: 78, end: 83 },
-                        { filename: "r4.ts", pos: 106, end: 111 }, { filename: "r5.ts", pos: 138, end: 143 }],
+                    importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
+                        { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
                     isLibFile: false
                 });
         }),
@@ -86,7 +86,7 @@ describe('PreProcessFile:', function () {
             test("import i1 require(\"r1.ts\"); import = require(\"r2.ts\") import i3= require(\"r3.ts\"); import i5", true,
                 {
                     referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: [{ filename: "r3.ts", pos: 73, end: 78 }],
+                    importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
                     isLibFile: false
                 });
         }),
@@ -94,8 +94,8 @@ describe('PreProcessFile:', function () {
         it("Correctly return referenced files and import files", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");", true,
                 {
-                    referencedFiles: [{ filename: "refFile1.ts", pos: 0, end: 35 }, { filename: "refFile2.ts", pos: 36, end: 71 }],
-                    importedFiles: [{ filename: "r1.ts", pos: 92, end: 97 }, { filename: "r2.ts", pos: 121, end: 126 }],
+                    referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }, { fileName: "refFile2.ts", pos: 36, end: 71 }],
+                    importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],
                     isLibFile: false
                 });
         }),
@@ -103,8 +103,50 @@ describe('PreProcessFile:', function () {
         it("Correctly return referenced files and import files even with some invalid syntax", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path \"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import = require(\"r2.ts\"); import i2 = require(\"r3.ts\");", true,
                 {
-                    referencedFiles: [{ filename: "refFile1.ts", pos: 0, end: 35 }],
-                    importedFiles: [{ filename: "r1.ts", pos: 91, end: 96 }, { filename: "r3.ts", pos: 148, end: 153 }],
+                    referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }],
+                    importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
+                    isLibFile: false
+                })
+        });
+
+        it("Correctly return ES6 imports", function () {
+            test("import * as ns from \"m1\";" + "\n" +
+                "import def, * as ns from \"m2\";" + "\n" +
+                "import def from \"m3\";" + "\n" +
+                "import {a} from \"m4\";" + "\n" +
+                "import {a as A} from \"m5\";" + "\n" +
+                "import {a as A, b, c as C} from \"m6\";" + "\n" +
+                "import def , {a, b, c as C} from \"m7\";" + "\n",
+                true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "m1", pos: 20, end: 22 },
+                        { fileName: "m2", pos: 51, end: 53 },
+                        { fileName: "m3", pos: 73, end: 75 },
+                        { fileName: "m4", pos: 95, end: 97 },
+                        { fileName: "m5", pos: 122, end: 124 },
+                        { fileName: "m6", pos: 160, end: 162 },
+                        { fileName: "m7", pos: 199, end: 201 }
+                    ],
+                    isLibFile: false
+                })
+        });
+
+        it("Correctly return ES6 exports", function () {
+            test("export * from \"m1\";" + "\n" +
+                "export {a} from \"m2\";" + "\n" +
+                "export {a as A} from \"m3\";" + "\n" +
+                "export {a as A, b, c as C} from \"m4\";" + "\n",
+                true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "m1", pos: 14, end: 16 },
+                        { fileName: "m2", pos: 36, end: 38 },
+                        { fileName: "m3", pos: 63, end: 65 },
+                        { fileName: "m4", pos: 101, end: 103 },
+                    ],
                     isLibFile: false
                 })
         });

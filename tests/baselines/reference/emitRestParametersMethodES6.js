@@ -15,21 +15,15 @@ class D {
 
 
 //// [emitRestParametersMethodES6.js]
-var C = (function () {
-    function C(name, ...rest) {
+class C {
+    constructor(name, ...rest) {
     }
-    C.prototype.bar = function (...rest) {
-    };
-    C.prototype.foo = function (x, ...rest) {
-    };
-    return C;
-})();
-var D = (function () {
-    function D(...rest) {
+    bar(...rest) { }
+    foo(x, ...rest) { }
+}
+class D {
+    constructor(...rest) {
     }
-    D.prototype.bar = function (...rest) {
-    };
-    D.prototype.foo = function (x, ...rest) {
-    };
-    return D;
-})();
+    bar(...rest) { }
+    foo(x, ...rest) { }
+}

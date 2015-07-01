@@ -1,5 +1,6 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(32,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '(y: string) => string' is not a valid type argument because it is not a supertype of candidate '(a: string) => boolean'.
+    Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,11): error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '(n: Object) => number' is not a valid type argument because it is not a supertype of candidate 'number'.
 
@@ -40,6 +41,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
               ~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '(y: string) => string' is not a valid type argument because it is not a supertype of candidate '(a: string) => boolean'.
+!!! error TS2453:     Type 'boolean' is not assignable to type 'string'.
     var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error
               ~~~~
 !!! error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.

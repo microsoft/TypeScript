@@ -15,12 +15,21 @@
 ////var /*11*/i = /*12*/h;
 /////*13*/h(10);
 /////*14*/h("hello");
-
 var marker = 0;
-function verifyVar(name: string, isLocal: boolean, typeDisplay: ts.SymbolDisplayPart[], optionalNameDisplay?: ts.SymbolDisplayPart[], optionalKindModifiers?: string) {
+function verifyVar(name: string, typeDisplay: ts.SymbolDisplayPart[], optionalNameDisplay?: ts.SymbolDisplayPart[], optionalKindModifiers?: string) {
     marker++;
     goTo.marker(marker.toString());
-    var kind = isLocal ? "local var" : "var";
+    var kind = "var";
+    verify.verifyQuickInfoDisplayParts(kind, optionalKindModifiers || "", { start: test.markerByName(marker.toString()).position, length: name.length },
+        [{ text: "var", kind: "keyword" },
+            { text: " ", kind: "space" }].concat(optionalNameDisplay || [{ text: name, kind: "localName" }]).concat(
+            { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }).concat(typeDisplay),
+        []);
+}
+function verifyLocalVar(name: string, typeDisplay: ts.SymbolDisplayPart[], optionalNameDisplay?: ts.SymbolDisplayPart[], optionalKindModifiers?: string) {
+    marker++;
+    goTo.marker(marker.toString());
+    var kind = "local var";
     verify.verifyQuickInfoDisplayParts(kind, optionalKindModifiers || "", { start: test.markerByName(marker.toString()).position, length: name.length },
         [{ text: "(", kind: "punctuation" }, { text: kind, kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" }].concat(optionalNameDisplay || [{ text: name, kind: "localName" }]).concat(
@@ -28,20 +37,21 @@ function verifyVar(name: string, isLocal: boolean, typeDisplay: ts.SymbolDisplay
         []);
 }
 
+
 var numberTypeDisplay: ts.SymbolDisplayPart[] = [{ text: "number", kind: "keyword" }];
 
-verifyVar("a", /*isLocal*/false, numberTypeDisplay);
-verifyVar("b", /*isLocal*/true, numberTypeDisplay);
-verifyVar("a", /*isLocal*/false, numberTypeDisplay);
-verifyVar("c", /*isLocal*/false, numberTypeDisplay);
-verifyVar("d", /*isLocal*/false, numberTypeDisplay, [{ text: "m", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "d", kind: "localName" }], "export");
+verifyVar("a", numberTypeDisplay);
+verifyLocalVar("b", numberTypeDisplay);
+verifyVar("a", numberTypeDisplay);
+verifyVar("c", numberTypeDisplay);
+verifyVar("d", numberTypeDisplay, [{ text: "m", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "d", kind: "localName" }], "export");
 
 var functionTypeReturningNumber: ts.SymbolDisplayPart[] = [{ text: "(", kind: "punctuation" }, { text: ")", kind: "punctuation" },
     { text: " ", kind: "space" }, { text: "=>", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "number", kind: "keyword" }];
-verifyVar("f", /*isLocal*/ false, functionTypeReturningNumber);
-verifyVar("g", /*isLocal*/ false, functionTypeReturningNumber);
-verifyVar("f", /*isLocal*/ false, functionTypeReturningNumber);
-verifyVar("f", /*isLocal*/ false, functionTypeReturningNumber);
+verifyVar("f", functionTypeReturningNumber);
+verifyVar("g", functionTypeReturningNumber);
+verifyVar("f", functionTypeReturningNumber);
+verifyVar("f", functionTypeReturningNumber);
 
 
 function getFunctionType(parametertype: string, returnType: string, isArrow?: boolean): ts.SymbolDisplayPart[] {
@@ -64,13 +74,13 @@ var typeLiteralWithOverloadCall: ts.SymbolDisplayPart[] = [{ text: "{", kind: "p
     { text: "    ", kind: "space" }).concat(getFunctionType("number", "string")).concat(
     { text: ";", kind: "punctuation" }, { text: "\n", kind: "lineBreak" }, { text: "}", kind: "punctuation" });
 
-verifyVar("h", /*isLocal*/ false, typeLiteralWithOverloadCall);
-verifyVar("i", /*isLocal*/ false, typeLiteralWithOverloadCall);
-verifyVar("h", /*isLocal*/ false, typeLiteralWithOverloadCall);
+verifyVar("h", typeLiteralWithOverloadCall);
+verifyVar("i", typeLiteralWithOverloadCall);
+verifyVar("h", typeLiteralWithOverloadCall);
 
 var overloadDisplay: ts.SymbolDisplayPart[] = [{ text: " ", kind: "space" }, { text: "(", kind: "punctuation" },
     { text: "+", kind: "operator" }, { text: "1", kind: "numericLiteral" },
     { text: " ", kind: "space" }, { text: "overload", kind: "text" }, { text: ")", kind: "punctuation" }];
 
-verifyVar("h", /*isLocal*/ false, getFunctionType("number", "string", /*isArrow*/true).concat(overloadDisplay));
-verifyVar("h", /*isLocal*/ false, getFunctionType("string", "number", /*isArrow*/true).concat(overloadDisplay));
+verifyVar("h", getFunctionType("number", "string", /*isArrow*/true).concat(overloadDisplay));
+verifyVar("h", getFunctionType("string", "number", /*isArrow*/true).concat(overloadDisplay));

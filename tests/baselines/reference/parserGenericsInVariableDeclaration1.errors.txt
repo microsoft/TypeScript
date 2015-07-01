@@ -8,22 +8,22 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInVariableDecl
 
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInVariableDeclaration1.ts (6 errors) ====
     var v : Foo<T> = 1;
-            ~~~~~~
+            ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     var v : Foo<T>= 1;
-            ~~~~~~
+            ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     
     var v : Foo<Bar<T>> = 1;
-            ~~~~~~~~~~~
+            ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     var v : Foo<Bar<T>>= 1;
-            ~~~~~~~~~~~
+            ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     
     var v : Foo<Bar<Quux<T>>> = 1;
-            ~~~~~~~~~~~~~~~~~
+            ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     var v : Foo<Bar<Quux<T>>>= 1;
-            ~~~~~~~~~~~~~~~~~
+            ~~~
 !!! error TS2304: Cannot find name 'Foo'.

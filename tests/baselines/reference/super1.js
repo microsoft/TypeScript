@@ -67,11 +67,10 @@ module Base4 {
 
 
 //// [super1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // Case 1
 var Base1 = (function () {
@@ -166,7 +165,7 @@ var Base4;
         function Sub4E() {
         }
         Sub4E.prototype.x = function () {
-            return super.x.call(this);
+            return _super.x.call(this);
         };
         return Sub4E;
     })();

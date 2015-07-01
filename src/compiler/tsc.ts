@@ -1,9 +1,7 @@
 /// <reference path="program.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
-module ts {
-    var version = "1.4.0.0";
-
+namespace ts {
     export interface SourceFile {
         fileWatcher: FileWatcher;
     }
@@ -72,27 +70,27 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += file.getLineAndCharacterFromPosition(file.end).line;
+            count += getLineStarts(file).length;
         });
         return count;
     }
 
     function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
-        var diagnostic: Diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return diagnostic.messageText;
+        var diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        return <string>diagnostic.messageText;
     }
 
     function reportDiagnostic(diagnostic: Diagnostic) {
         var output = "";
         
         if (diagnostic.file) {
-            var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
+            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
-            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
 
         sys.write(output);
     }
@@ -134,29 +132,12 @@ module ts {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
 
-    function findConfigFile(): string {
-        var searchPath = normalizePath(sys.getCurrentDirectory());
-        var filename = "tsconfig.json";
-        while (true) {
-            if (sys.fileExists(filename)) {
-                return filename;
-            }
-            var parentPath = getDirectoryPath(searchPath);
-            if (parentPath === searchPath) {
-                break;
-            }
-            searchPath = parentPath;
-            filename = "../" + filename;
-        }
-        return undefined;
-    }
-
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
-        var configFilename: string;                 // Configuration file name (if any)
+        var configFileName: string;                 // Configuration file name (if any)
         var configFileWatcher: FileWatcher;         // Configuration file watcher
         var cachedProgram: Program;                 // Program cached from last compilation
-        var rootFilenames: string[];                // Root filenames for compilation
+        var rootFileNames: string[];                // Root fileNames for compilation
         var compilerOptions: CompilerOptions;       // Compiler options for compilation
         var compilerHost: CompilerHost;             // Compiler host
         var hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
@@ -165,7 +146,7 @@ module ts {
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
@@ -174,48 +155,50 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(EmitReturnStatus.Succeeded);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.help) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.Succeeded);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            configFilename = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
-            if (commandLine.filenames.length !== 0) {
+            configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
+            if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
-        else if (commandLine.filenames.length === 0 && isJSONSupported()) {
-            configFilename = findConfigFile();
+        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+            var searchPath = normalizePath(sys.getCurrentDirectory());
+            configFileName = findConfigFile(searchPath);
         }
 
-        if (commandLine.filenames.length === 0 && !configFilename) {
+        if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.Success);
         }
 
-        if (commandLine.options.watch) {
+        // Firefox has Object.prototype.watch
+        if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            if (configFilename) {
-                configFileWatcher = sys.watchFile(configFilename, configFileChanged);
+            if (configFileName) {
+                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
             }
         }
 
@@ -225,22 +208,25 @@ module ts {
         function performCompilation() {
 
             if (!cachedProgram) {
-                if (configFilename) {
-                    var configObject = readConfigFile(configFilename);
-                    if (!configObject) {
-                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFilename));
-                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                if (configFileName) {
+
+                    let result = readConfigFile(configFileName);
+                    if (result.error) {
+                        reportDiagnostic(result.error);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
-                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFilename));
+
+                    let configObject = result.config;
+                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
-                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
-                    rootFilenames = configParseResult.filenames;
+                    rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
                 else {
-                    rootFilenames = commandLine.filenames;
+                    rootFileNames = commandLine.fileNames;
                     compilerOptions = commandLine.options;
                 }
                 compilerHost = createCompilerHost(compilerOptions);
@@ -248,9 +234,9 @@ module ts {
                 compilerHost.getSourceFile = getSourceFile;
             }
 
-            var compileResult = compile(rootFilenames, compilerOptions, compilerHost);
+            let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
-            if (!commandLine.options.watch) {
+            if (!compilerOptions.watch) {
                 return sys.exit(compileResult.exitStatus);
             }
 
@@ -258,20 +244,20 @@ module ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function getSourceFile(filename: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
             // Return existing SourceFile object if one is available
             if (cachedProgram) {
-                var sourceFile = cachedProgram.getSourceFile(filename);
+                var sourceFile = cachedProgram.getSourceFile(fileName);
                 // A modified source file has no watcher and should not be reused
                 if (sourceFile && sourceFile.fileWatcher) {
                     return sourceFile;
                 }
             }
             // Use default host function
-            var sourceFile = hostGetSourceFile(filename, languageVersion, onError);
-            if (sourceFile && commandLine.options.watch) {
+            var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
+            if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.filename, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
             }
             return sourceFile;
         }
@@ -294,6 +280,7 @@ module ts {
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
         function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             startTimer();
         }
@@ -321,45 +308,20 @@ module ts {
         }
     }
 
-    function compile(filenames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        var parseStart = new Date().getTime();
-        var program = createProgram(filenames, compilerOptions, compilerHost);
+    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
+        ioReadTime = 0;
+        ioWriteTime = 0;
+        programTime = 0;
+        bindTime = 0;
+        checkTime = 0;
+        emitTime = 0;
 
-        var bindStart = new Date().getTime();
-        var errors: Diagnostic[] = program.getDiagnostics();
-        var exitStatus: EmitReturnStatus;
-
-        if (errors.length) {
-            var checkStart = bindStart;
-            var emitStart = bindStart;
-            var reportStart = bindStart;
-            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-        }
-        else {
-            var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
-            var checkStart = new Date().getTime();
-            errors = checker.getDiagnostics();
-            if (program.isEmitBlocked()) {
-                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-            }
-            else if (compilerOptions.noEmit) {
-                exitStatus = EmitReturnStatus.Succeeded;
-            }
-            else {
-                var emitStart = new Date().getTime();
-                var emitOutput = program.emitFiles();
-                var emitErrors = emitOutput.diagnostics;
-                exitStatus = emitOutput.emitResultStatus;
-                var reportStart = new Date().getTime();
-                errors = concatenate(errors, emitErrors);
-            }
-        }
-
-        reportDiagnostics(errors);
+        var program = createProgram(fileNames, compilerOptions, compilerHost);
+        var exitStatus = compileProgram();
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
-                sys.write(file.filename + sys.newLine);
+                sys.write(file.fileName + sys.newLine);
             });
         }
 
@@ -367,25 +329,75 @@ module ts {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
-            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportCountStatistic("Nodes", program.getNodeCount());
+            reportCountStatistic("Identifiers", program.getIdentifierCount());
+            reportCountStatistic("Symbols", program.getSymbolCount());
+            reportCountStatistic("Types", program.getTypeCount());
+
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
-            reportTimeStatistic("Parse time", bindStart - parseStart);
-            reportTimeStatistic("Bind time", checkStart - bindStart);
-            reportTimeStatistic("Check time", emitStart - checkStart);
-            reportTimeStatistic("Emit time", reportStart - emitStart);
-            reportTimeStatistic("Total time", reportStart - parseStart);
+
+            // Individual component times.
+            // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
+            // I/O read time and processing time for triple-slash references and module imports, and the reported
+            // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
+            reportTimeStatistic("I/O read", ioReadTime);
+            reportTimeStatistic("I/O write", ioWriteTime);
+            reportTimeStatistic("Parse time", programTime);
+            reportTimeStatistic("Bind time", bindTime);
+            reportTimeStatistic("Check time", checkTime);
+            reportTimeStatistic("Emit time", emitTime);
+            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
 
         return { program, exitStatus };
+
+        function compileProgram(): ExitStatus {
+            // First get any syntactic errors. 
+            var diagnostics = program.getSyntacticDiagnostics();
+            reportDiagnostics(diagnostics);
+
+            // If we didn't have any syntactic errors, then also try getting the global and 
+            // semantic errors.
+            if (diagnostics.length === 0) {
+                var diagnostics = program.getGlobalDiagnostics();
+                reportDiagnostics(diagnostics);
+
+                if (diagnostics.length === 0) {
+                    var diagnostics = program.getSemanticDiagnostics();
+                    reportDiagnostics(diagnostics);
+                }
+            }
+
+            // If the user doesn't want us to emit, then we're done at this point.
+            if (compilerOptions.noEmit) {
+                return diagnostics.length
+                    ? ExitStatus.DiagnosticsPresent_OutputsSkipped
+                    : ExitStatus.Success;
+            }
+
+            // Otherwise, emit and report any errors we ran into.
+            var emitOutput = program.emit();
+            reportDiagnostics(emitOutput.diagnostics);
+
+            // If the emitter didn't emit anything, then pass that value along.
+            if (emitOutput.emitSkipped) {
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            }
+
+            // The emitter emitted something, inform the caller if that happened in the presence
+            // of diagnostics or not.
+            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+                return ExitStatus.DiagnosticsPresent_OutputsGenerated;
+            }
+
+            return ExitStatus.Success;
+        }
     }
 
     function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+        sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
     function printHelp() {
@@ -413,7 +425,7 @@ module ts {
         output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        var optsList = optionDeclarations.slice();
+        var optsList = filter(optionDeclarations.slice(), v => !v.experimental);
         optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,

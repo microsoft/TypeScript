@@ -111,6 +111,7 @@ module Editor {
             for (i = 0; !(entry.isHead); i++) {
 >i = 0 : number
 >i : number
+>0 : number
 >!(entry.isHead) : boolean
 >(entry.isHead) : boolean
 >entry.isHead : boolean
@@ -163,6 +164,7 @@ module Editor {
             }
             else {
                 return null;
+>null : null
             }
         }
 
@@ -177,6 +179,7 @@ module Editor {
 >entry.isHead : boolean
 >entry : List<T>
 >isHead : boolean
+>false : boolean
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
@@ -238,6 +241,7 @@ module Editor {
 >entry.isHead : boolean
 >entry : List<T>
 >isHead : boolean
+>false : boolean
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
@@ -288,6 +292,7 @@ module Editor {
 >isHead : boolean
 
                 return null;
+>null : null
             }
             else {
                 return this.listFactory.RemoveEntry(this.next);
@@ -316,6 +321,7 @@ module Editor {
 >entry.isHead : boolean
 >entry : List<T>
 >isHead : boolean
+>false : boolean
 
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
@@ -495,6 +501,8 @@ module Editor {
 >new List<T>(true, null) : List<T>
 >List : typeof List
 >T : T
+>true : boolean
+>null : null
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
@@ -529,6 +537,7 @@ module Editor {
 >new List<T>(false, data) : List<T>
 >List : typeof List
 >T : T
+>false : boolean
 >data : T
 
             entry.prev = entry;
@@ -561,8 +570,10 @@ module Editor {
             if (entry == null) {
 >entry == null : boolean
 >entry : List<T>
+>null : null
 
                 return null;
+>null : null
             }
             else if (entry.isHead) {
 >entry.isHead : boolean
@@ -571,6 +582,7 @@ module Editor {
 
             // Can't remove the head of a list!
                 return null;
+>null : null
             }
             else {
                 entry.next.prev = entry.prev;

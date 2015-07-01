@@ -7,9 +7,11 @@ var x: any;
 x = 1;
 >x = 1 : number
 >x : any
+>1 : number
 
 var a = 2;
 >a : number
+>2 : number
 
 x = a;
 >x = a : number
@@ -19,9 +21,11 @@ x = a;
 x = true;
 >x = true : boolean
 >x : any
+>true : boolean
 
 var b = true;
 >b : boolean
+>true : boolean
 
 x = b;
 >x = b : boolean
@@ -31,9 +35,11 @@ x = b;
 x = "";
 >x = "" : string
 >x : any
+>"" : string
 
 var c = "";
 >c : string
+>"" : string
 
 x = c;
 >x = c : string
@@ -136,6 +142,7 @@ x = { f() { return 1; } }
 >x : any
 >{ f() { return 1; } } : { f(): number; }
 >f : () => number
+>1 : number
 
 x = { f<T>(x: T) { return x; } }
 >x = { f<T>(x: T) { return x; } } : { f<T>(x: T): T; }

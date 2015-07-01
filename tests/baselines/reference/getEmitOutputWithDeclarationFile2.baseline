@@ -1,7 +1,7 @@
-EmitOutputStatus : Succeeded
+EmitSkipped: false
 
-EmitOutputStatus : Succeeded
-Filename : tests/cases/fourslash/inputFile2.js
+EmitSkipped: false
+FileName : tests/cases/fourslash/inputFile2.js
 var Foo = (function () {
     function Foo() {
     }
@@ -9,7 +9,7 @@ var Foo = (function () {
 })();
 exports.Foo = Foo;
 
-EmitOutputStatus : Succeeded
-Filename : tests/cases/fourslash/inputFile3.js
+EmitSkipped: false
+FileName : tests/cases/fourslash/inputFile3.js
 var x = "hello";
 

@@ -51,11 +51,10 @@ class C4 {
 }
 
 //// [declarationEmit_protectedMembers.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // Class with protected members
 var C1 = (function () {
@@ -65,11 +64,8 @@ var C1 = (function () {
         return this.x;
     };
     Object.defineProperty(C1.prototype, "accessor", {
-        get: function () {
-            return 0;
-        },
-        set: function (a) {
-        },
+        get: function () { return 0; },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -77,15 +73,12 @@ var C1 = (function () {
         return this.sx;
     };
     Object.defineProperty(C1, "staticSetter", {
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C1, "staticGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -118,9 +111,7 @@ var C3 = (function (_super) {
         return _super.sf.call(this);
     };
     Object.defineProperty(C3, "staticGetter", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         enumerable: true,
         configurable: true
     });

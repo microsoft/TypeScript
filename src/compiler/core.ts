@@ -1,7 +1,7 @@
 /// <reference path="types.ts"/>
 
-module ts {
-
+/* @internal */
+namespace ts {
     // Ternary values are defined such that
     // x & y is False if either x or y is False.
     // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
@@ -15,6 +15,42 @@ module ts {
         True  = -1
     }
 
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+        let files: Map<T> = {};
+        return {
+            get,
+            set,
+            contains,
+            remove,
+            forEachValue: forEachValueInMap
+        }
+
+        function set(fileName: string, value: T) {
+            files[normalizeKey(fileName)] = value;
+        }
+
+        function get(fileName: string) {
+            return files[normalizeKey(fileName)];
+        }
+
+        function contains(fileName: string) {
+            return hasProperty(files, normalizeKey(fileName));
+        }
+
+        function remove (fileName: string) {
+            let key = normalizeKey(fileName);
+            delete files[key];
+        }
+
+        function forEachValueInMap(f: (value: T) => void) {
+            forEachValue(files, f);
+        }
+
+        function normalizeKey(key: string) {
+            return getCanonicalFileName(normalizeSlashes(key));
+        }
+    }
+
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
@@ -25,8 +61,8 @@ module ts {
 
     export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
-                var result = callback(array[i], i);
+            for (let i = 0, len = array.length; i < len; i++) {
+                let result = callback(array[i], i);
                 if (result) {
                     return result;
                 }
@@ -37,8 +73,8 @@ module ts {
 
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
-                if (array[i] === value) {
+            for (let v of array) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -48,7 +84,7 @@ module ts {
 
     export function indexOf<T>(array: T[], value: T): number {
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
+            for (let i = 0, len = array.length; i < len; i++) {
                 if (array[i] === value) {
                     return i;
                 }
@@ -58,10 +94,10 @@ module ts {
     }
 
     export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
-        var count = 0;
+        let count = 0;
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
-                if (predicate(array[i])) {
+            for (let v of array) {
+                if (predicate(v)) {
                     count++;
                 }
             }
@@ -69,11 +105,11 @@ module ts {
         return count;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[]{
+        let result: T[];
         if (array) {
-            var result: T[] = [];
-            for (var i = 0, len = array.length; i < len; i++) {
-                var item = array[i];
+            result = [];
+            for (let item of array) {
                 if (f(item)) {
                     result.push(item);
                 }
@@ -82,11 +118,12 @@ module ts {
         return result;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
+    export function map<T, U>(array: T[], f: (x: T) => U): U[]{
+        let result: U[];
         if (array) {
-            var result: U[] = [];
-            for (var i = 0, len = array.length; i < len; i++) {
-                result.push(f(array[i]));
+            result = [];
+            for (let v of array) {
+                result.push(f(v));
             }
         }
         return result;
@@ -99,23 +136,43 @@ module ts {
         return array1.concat(array2);
     }
 
-    export function deduplicate<T>(array: T[]): T[] {
+    export function deduplicate<T>(array: T[]): T[]{
+        let result: T[];
         if (array) {
-            var result: T[] = [];
-            for (var i = 0, len = array.length; i < len; i++) {
-                var item = array[i];
-                if (!contains(result, item)) result.push(item);
+            result = [];
+            for (let item of array) {
+                if (!contains(result, item)) {
+                    result.push(item);
+                }
             }
         }
         return result;
     }
 
     export function sum(array: any[], prop: string): number {
-        var result = 0;
-        for (var i = 0; i < array.length; i++) {
-            result += array[i][prop];
+        let result = 0;
+        for (let v of array) {
+            result += v[prop];
         }
         return result;
+    }
+
+    export function addRange<T>(to: T[], from: T[]): void {
+        if (to && from) {
+            for (let v of from) {
+                to.push(v);
+            }
+        }
+    } 
+
+    export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
+        while (pos < end) {
+            if (array1[pos] !== array2[pos]) {
+                return false;
+            }
+            pos++;
+        }
+        return true;
     }
 
     /**
@@ -130,12 +187,12 @@ module ts {
     }
 
     export function binarySearch(array: number[], value: number): number {
-        var low = 0;
-        var high = array.length - 1;
+        let low = 0;
+        let high = array.length - 1;
 
         while (low <= high) {
-            var middle = low + ((high - low) >> 1);
-            var midValue = array[middle];
+            let middle = low + ((high - low) >> 1);
+            let midValue = array[middle];
 
             if (midValue === value) {
                 return middle;
@@ -151,7 +208,40 @@ module ts {
         return ~low;
     }
 
-    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var count = array.length;
+            if (count > 0) {
+                var pos = 0;
+                var result = arguments.length <= 2 ? array[pos++] : initial;
+                while (pos < count) {
+                    result = f(<U>result, array[pos++]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }
+
+    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var pos = array.length - 1;
+            if (pos >= 0) {
+                var result = arguments.length <= 2 ? array[pos--] : initial;
+                while (pos >= 0) {
+                    result = f(<U>result, array[pos--]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }
+
+    let hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function hasProperty<T>(map: Map<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
@@ -162,7 +252,7 @@ module ts {
     }
 
     export function isEmpty<T>(map: Map<T>) {
-        for (var id in map) {
+        for (let id in map) {
             if (hasProperty(map, id)) {
                 return false;
             }
@@ -171,19 +261,19 @@ module ts {
     }
 
     export function clone<T>(object: T): T {
-        var result: any = {};
-        for (var id in object) {
+        let result: any = {};
+        for (let id in object) {
             result[id] = (<any>object)[id];
         }
         return <T>result;
     }
 
     export function extend<T>(first: Map<T>, second: Map<T>): Map<T> {
-        var result: Map<T> = {};
-        for (var id in first) {
+        let result: Map<T> = {};
+        for (let id in first) {
             result[id] = first[id];
         }
-        for (var id in second) {
+        for (let id in second) {
             if (!hasProperty(result, id)) {
                 result[id] = second[id];
             }
@@ -192,16 +282,16 @@ module ts {
     }
 
     export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
-        var result: U;
-        for (var id in map) {
+        let result: U;
+        for (let id in map) {
             if (result = callback(map[id])) break;
         }
         return result;
     }
 
     export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
-        var result: U;
-        for (var id in map) {
+        let result: U;
+        for (let id in map) {
             if (result = callback(id)) break;
         }
         return result;
@@ -211,18 +301,8 @@ module ts {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function mapToArray<T>(map: Map<T>): T[] {
-        var result: T[] = [];
-
-        for (var id in map) {
-            result.push(map[id]);
-        }
-
-        return result;
-    }
-
     export function copyMap<T>(source: Map<T>, target: Map<T>): void {
-        for (var p in source) {
+        for (let p in source) {
             target[p] = source[p];
         }
     }
@@ -238,7 +318,7 @@ module ts {
      * index in the array will be the one associated with the produced key.
      */
     export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        var result: Map<T> = {};
+        let result: Map<T> = {};
 
         forEach(array, value => {
             result[makeKey(value)] = value;
@@ -247,13 +327,24 @@ module ts {
         return result;
     }
 
+    export function memoize<T>(callback: () => T): () => T {
+        let value: T;
+        return () => {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+
     function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
         return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
     }
 
-    export var localizedDiagnosticMessages: Map<string> = undefined;
+    export let localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: string) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
@@ -263,10 +354,17 @@ module ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+        let end = start + length;
+
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
 
-        var text = getLocaleSpecificMessage(message.key);
+        if (file) {
+            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
+            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+        }
+
+        let text = getLocaleSpecificMessage(message.key);
         
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
@@ -280,13 +378,12 @@ module ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            isEarly: message.isEarly
         };
     }
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
-        var text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message.key);
 
         if (arguments.length > 1) {
             text = formatStringFromArgs(text, arguments, 1);
@@ -299,14 +396,13 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code,
-            isEarly: message.isEarly
+            code: message.code
         };
     }
 
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
-        var text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message.key);
 
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
@@ -327,38 +423,6 @@ module ts {
         return headChain;
     }
 
-    export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
-        Debug.assert(start >= 0, "start must be non-negative, is " + start);
-        Debug.assert(length >= 0, "length must be non-negative, is " + length);
-
-        var code = diagnosticChain.code;
-        var category = diagnosticChain.category;
-        var messageText = "";
-
-        var indent = 0;
-        while (diagnosticChain) {
-            if (indent) {
-                messageText += newLine;
-                
-                for (var i = 0; i < indent; i++) {
-                    messageText += "  ";
-                }
-            }
-            messageText += diagnosticChain.messageText;
-            indent++;
-            diagnosticChain = diagnosticChain.next;
-        }
-
-        return {
-            file,
-            start,
-            length,
-            code,
-            category,
-            messageText
-        };
-    }
-
     export function compareValues<T>(a: T, b: T): Comparison {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
@@ -366,17 +430,45 @@ module ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
-    function getDiagnosticFilename(diagnostic: Diagnostic): string {
-        return diagnostic.file ? diagnostic.file.filename : undefined;
+    function getDiagnosticFileName(diagnostic: Diagnostic): string {
+        return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
 
-    export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): number {
-        return compareValues(getDiagnosticFilename(d1), getDiagnosticFilename(d2)) ||
+    export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
+        return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
-            compareValues(d1.messageText, d2.messageText) ||
-            0;
+            compareMessageText(d1.messageText, d2.messageText) ||
+            Comparison.EqualTo;
+    }
+
+    function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
+        while (text1 && text2) {
+            // We still have both chains.
+            let string1 = typeof text1 === "string" ? text1 : text1.messageText;
+            let string2 = typeof text2 === "string" ? text2 : text2.messageText;
+
+            let res = compareValues(string1, string2);
+            if (res) {
+                return res;
+            }
+
+            text1 = typeof text1 === "string" ? undefined : text1.next;
+            text2 = typeof text2 === "string" ? undefined : text2.next;
+        }
+
+        if (!text1 && !text2) {
+            // if the chains are done, then these messages are the same.
+            return Comparison.EqualTo;
+        }
+
+        // We still have one chain remaining.  The shorter chain should come first.
+        return text1 ? Comparison.GreaterThan : Comparison.LessThan;
+    }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[]{
+        return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
     }
 
     export function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
@@ -384,11 +476,11 @@ module ts {
             return diagnostics;
         }
 
-        var newDiagnostics = [diagnostics[0]];
-        var previousDiagnostic = diagnostics[0];
-        for (var i = 1; i < diagnostics.length; i++) {
-            var currentDiagnostic = diagnostics[i];
-            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
+        let newDiagnostics = [diagnostics[0]];
+        let previousDiagnostic = diagnostics[0];
+        for (let i = 1; i < diagnostics.length; i++) {
+            let currentDiagnostic = diagnostics[i];
+            let isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
             if (!isDupe) {
                 newDiagnostics.push(currentDiagnostic);
                 previousDiagnostic = currentDiagnostic;
@@ -402,13 +494,13 @@ module ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/")
+    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
-            var p1 = path.indexOf("/", 2);
+            let p1 = path.indexOf("/", 2);
             if (p1 < 0) return 2;
-            var p2 = path.indexOf("/", p1 + 1);
+            let p2 = path.indexOf("/", p1 + 1);
             if (p2 < 0) return p1 + 1;
             return p2 + 1;
         }
@@ -416,21 +508,36 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
+        // if <host> is omitted then it is assumed that host value is 'localhost',
+        // however slash after the omitted <host> is not removed.
+        // file:///folder1/file1 - this is a correct URI
+        // file://folder2/file2 - this is an incorrect URI
+        if (path.lastIndexOf("file:///", 0) === 0) {
+            return "file:///".length;
+        }
+        let idx = path.indexOf('://');
+        if (idx !== -1) {
+            return idx + "://".length;
+        }
         return 0;
     }
 
-    export var directorySeparator = "/";
+    export let directorySeparator = "/";
     function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
-        var parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
-        var normalized: string[] = [];
-        for (var i = 0; i < parts.length; i++) {
-            var part = parts[i];
+        let parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
+        let normalized: string[] = [];
+        for (let part of parts) {
             if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
                 }
                 else {
-                    normalized.push(part);
+                    // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
+                    // e.g. "path//file.ts".  Drop these before re-joining the parts.
+                    if(part) {
+                        normalized.push(part);
+                    }
                 }
             }
         }
@@ -439,9 +546,9 @@ module ts {
     }
 
     export function normalizePath(path: string): string {
-        var path = normalizeSlashes(path);
-        var rootLength = getRootLength(path);
-        var normalized = getNormalizedParts(path, rootLength);
+        path = normalizeSlashes(path);
+        let rootLength = getRootLength(path);
+        let normalized = getNormalizedParts(path, rootLength);
         return path.substr(0, rootLength) + normalized.join(directorySeparator);
     }
 
@@ -458,14 +565,14 @@ module ts {
     }
 
     function normalizedPathComponents(path: string, rootLength: number) {
-        var normalizedParts = getNormalizedParts(path, rootLength);
+        let normalizedParts = getNormalizedParts(path, rootLength);
         return [path.substr(0, rootLength)].concat(normalizedParts);
     }
 
     export function getNormalizedPathComponents(path: string, currentDirectory: string) {
-        var path = normalizeSlashes(path);
-        var rootLength = getRootLength(path);
-        if (rootLength == 0) {
+        path = normalizeSlashes(path);
+        let rootLength = getRootLength(path);
+        if (rootLength === 0) {
             // If the path is not rooted it is relative to current directory
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
@@ -474,8 +581,8 @@ module ts {
         return normalizedPathComponents(path, rootLength);
     }
 
-    export function getNormalizedAbsolutePath(filename: string, currentDirectory: string) {
-        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
+    export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
 
     export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
@@ -489,9 +596,9 @@ module ts {
         // In this example the root is:  http://www.website.com/ 
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
-        var urlLength = url.length;
+        let urlLength = url.length;
         // Initial root length is http:// part
-        var rootLength = url.indexOf("://") + "://".length;
+        let rootLength = url.indexOf("://") + "://".length;
         while (rootLength < urlLength) {
             // Consume all immediate slashes in the protocol 
             // eg.initial rootlength is just file:// but it needs to consume another "/" in file:///
@@ -510,7 +617,7 @@ module ts {
         }
 
         // Find the index of "/" after website.com so the root can be http://www.website.com/ (from existing http://)
-        var indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
+        let indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
             // Found the "/" after the website.com so the root is length of http://www.website.com/ 
             // and get components afetr the root normally like any other folder components
@@ -536,9 +643,9 @@ module ts {
     }
 
     export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
-        var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
-        var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
-        if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
+        let pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
+        let directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
+        if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
@@ -553,8 +660,8 @@ module ts {
 
         // Get the relative path
         if (joinStartIndex) {
-            var relativePath = "";
-            var relativePathComponents = pathComponents.slice(joinStartIndex, pathComponents.length);
+            let relativePath = "";
+            let relativePathComponents = pathComponents.slice(joinStartIndex, pathComponents.length);
             for (; joinStartIndex < directoryComponents.length; joinStartIndex++) {
                 if (directoryComponents[joinStartIndex] !== "") {
                     relativePath = relativePath + ".." + directorySeparator;
@@ -565,7 +672,7 @@ module ts {
         }
 
         // Cant find the relative path, get the absolute path
-        var absolutePath = getNormalizedPathFromPathComponents(pathComponents);
+        let absolutePath = getNormalizedPathFromPathComponents(pathComponents);
         if (isAbsolutePathAnUrl && isRootedDiskPath(absolutePath)) {
             absolutePath = "file:///" + absolutePath;
         }
@@ -573,8 +680,8 @@ module ts {
         return absolutePath;
     }
 
-    export function getBaseFilename(path: string) {
-        var i = path.lastIndexOf(directorySeparator);
+    export function getBaseFileName(path: string) {
+        let i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
 
@@ -587,28 +694,29 @@ module ts {
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
-        var pathLen = path.length;
-        var extLen = extension.length;
+        let pathLen = path.length;
+        let extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
-    var supportedExtensions = [".d.ts", ".ts", ".js"];
+    /**
+     *  List of supported extensions in order of file resolution precedence.
+     */
+    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
 
+    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
-        for (var i = 0; i < supportedExtensions.length; i++) {
-            var ext = supportedExtensions[i];
-
+        for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
             }
         }
-
         return path;
     }
 
-    var backslashOrDoubleQuote = /[\"\\]/g;
-    var escapedCharsRegExp = /[\0-\19\t\v\f\b\0\r\n\u2028\u2029\u0085]/g;
-    var escapedCharsMap: Map<string> = {
+    let backslashOrDoubleQuote = /[\"\\]/g;
+    let escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    let escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -622,29 +730,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    /**
-     * Based heavily on the abstract 'Quote' operation from ECMA-262 (24.3.2.2),
-     * but augmented for a few select characters.
-     * Note that this doesn't actually wrap the input in double quotes.
-     */
-    export function escapeString(s: string): string {
-        // Prioritize '"' and '\'
-        s = backslashOrDoubleQuote.test(s) ? s.replace(backslashOrDoubleQuote, getReplacement) : s;
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
-
-        return s;
-
-        function getReplacement(c: string) {
-            return escapedCharsMap[c] || unicodeEscape(c);
-        }
-
-        function unicodeEscape(c: string): string {
-            var hexCharCode = c.charCodeAt(0).toString(16);
-            var paddedHexCode = ("0000" + hexCharCode).slice(-4);
-            return "\\u" + paddedHexCode;
-        }
-    }
 
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
@@ -666,7 +751,7 @@ module ts {
     function Signature(checker: TypeChecker) {
     }
 
-    export var objectAllocator: ObjectAllocator = {
+    export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: kind => {
             function Node() {
             }
@@ -692,7 +777,7 @@ module ts {
     }
 
     export module Debug {
-        var currentAssertionLevel = AssertionLevel.None;
+        let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -700,7 +785,7 @@ module ts {
 
         export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
             if (!expression) {
-                var verboseDebugString = "";
+                let verboseDebugString = "";
                 if (verboseDebugInfo) {
                     verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }

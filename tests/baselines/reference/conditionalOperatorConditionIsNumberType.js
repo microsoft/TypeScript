@@ -91,9 +91,7 @@ condNumber ? exprString1 : exprBoolean1; // Union
 1000000000000 ? exprIsObject1 : exprIsObject2;
 10000 ? exprString1 : exprBoolean1; // Union
 //Cond is a number type expression
-function foo() {
-    return 1;
-}
+function foo() { return 1; }
 ;
 var array = [1, 2, 3];
 1 * 0 ? exprAny1 : exprAny2;

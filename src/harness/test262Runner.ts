@@ -1,9 +1,8 @@
 /// <reference path='harness.ts' />
 /// <reference path='runnerbase.ts' />
-/// <reference path='syntacticCleaner.ts' />
 
 class Test262BaselineRunner extends RunnerBase {
-    private static basePath = 'tests/cases/test262';
+    private static basePath = 'internal/cases/test262';
     private static helpersFilePath = 'tests/cases/test262-harness/helpers.d.ts';
     private static helperFile = {
         unitName: Test262BaselineRunner.helpersFilePath,
@@ -15,7 +14,10 @@ class Test262BaselineRunner extends RunnerBase {
         target: ts.ScriptTarget.Latest,
         module: ts.ModuleKind.CommonJS
     };
-    private static baselineOptions: Harness.Baseline.BaselineOptions = { Subfolder: 'test262' };
+    private static baselineOptions: Harness.Baseline.BaselineOptions = {
+        Subfolder: 'test262',
+        Baselinefolder: 'internal/baselines'
+    };
 
     private static getTestFilePath(filename: string): string {
         return Test262BaselineRunner.basePath + "/" + filename;
@@ -62,7 +64,7 @@ class Test262BaselineRunner extends RunnerBase {
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', testState.filename + '.output.js', () => {
                     var files = testState.compilerResult.files.filter(f=> f.fileName !== Test262BaselineRunner.helpersFilePath);
-                    return Harness.Compiler.collateOutputs(files, s => SyntacticCleaner.clean(s));
+                    return Harness.Compiler.collateOutputs(files);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
 

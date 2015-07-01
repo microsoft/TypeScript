@@ -1,0 +1,102 @@
+=== tests/cases/conformance/es6/modules/t1.ts ===
+
+var v = 1;
+>v : number
+>1 : number
+
+function f() { }
+>f : () => void
+
+class C {
+>C : C
+}
+interface I {
+>I : I
+}
+enum E {
+>E : E
+
+    A, B, C
+>A : E
+>B : E
+>C : E
+}
+const enum D {
+>D : D
+
+    A, B, C
+>A : D
+>B : D
+>C : D
+}
+module M {
+>M : typeof M
+
+    export var x;
+>x : any
+}
+module N {
+>N : any
+
+    export interface I {
+>I : I
+    }
+}
+type T = number;
+>T : number
+
+import a = M.x;
+>a : any
+>M : typeof M
+>x : any
+
+export { v, f, C, I, E, D, M, N, T, a };
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
+
+=== tests/cases/conformance/es6/modules/t2.ts ===
+export { v, f, C, I, E, D, M, N, T, a } from "./t1";
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
+
+=== tests/cases/conformance/es6/modules/t3.ts ===
+import { v, f, C, I, E, D, M, N, T, a } from "./t1";
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
+
+export { v, f, C, I, E, D, M, N, T, a };
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
+

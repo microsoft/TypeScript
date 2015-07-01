@@ -14,8 +14,7 @@ f2({ toString: (s: string) => s })
 f2({ value: '', toString: (s) => s.uhhh }) 
 
 //// [objectLiteralFunctionArgContextualTyping2.js]
-function f2(args) {
-}
+function f2(args) { }
 f2({ hello: 1 });
 f2({ value: '' });
 f2({ value: '', what: 1 });

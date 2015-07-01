@@ -164,19 +164,19 @@ interface ObjectConstructor {
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes. 
       */
-    seal(o: any): any;
+    seal<T>(o: T): T;
 
     /**
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze(o: any): any;
+    freeze<T>(o: T): T;
 
     /**
       * Prevents the addition of new properties to an object.
       * @param o Object to make non-extensible. 
       */
-    preventExtensions(o: any): any;
+    preventExtensions<T>(o: T): T;
 
     /**
       * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
@@ -410,6 +410,9 @@ interface String {
       */
     substr(from: number, length?: number): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): string;
+
     [index: number]: string;
 }
 
@@ -462,6 +465,9 @@ interface Number {
       * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
       */
     toPrecision(precision?: number): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): number;
 }
 
 interface NumberConstructor {
@@ -540,7 +546,7 @@ interface Math {
       */
     atan(x: number): number;
     /**
-      * Returns the angle (in radians) from the X axis to a point (y,x).
+      * Returns the angle (in radians) from the X axis to a point.
       * @param y A numeric expression representing the cartesian y-coordinate.
       * @param x A numeric expression representing the cartesian x-coordinate.
       */
@@ -817,7 +823,7 @@ interface RegExp {
       */
     test(string: string): boolean;
 
-    /** Returns a copy of the text of the regular expression pattern. Read-only. The rgExp argument is a Regular expression object. It can be a variable name or a literal. */
+    /** Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal. */
     source: string;
 
     /** Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only. */
@@ -1144,8 +1150,22 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): boolean;
+    isArray(arg: any): arg is Array<any>;
     prototype: Array<any>;
 }
 
 declare var Array: ArrayConstructor;
+
+interface TypedPropertyDescriptor<T> {
+    enumerable?: boolean;
+    configurable?: boolean;
+    writable?: boolean;
+    value?: T;
+    get?: () => T;
+    set?: (value: T) => void;
+}
+
+declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
+declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
+declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
+declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;

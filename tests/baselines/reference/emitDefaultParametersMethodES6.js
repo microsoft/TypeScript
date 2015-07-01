@@ -17,26 +17,19 @@ class E {
 }
 
 //// [emitDefaultParametersMethodES6.js]
-var C = (function () {
-    function C(t, z, x, y = "hello") {
+class C {
+    constructor(t, z, x, y = "hello") {
     }
-    C.prototype.foo = function (x, t = false) {
-    };
-    C.prototype.foo1 = function (x, t = false, ...rest) {
-    };
-    C.prototype.bar = function (t = false) {
-    };
-    C.prototype.boo = function (t = false, ...rest) {
-    };
-    return C;
-})();
-var D = (function () {
-    function D(y = "hello") {
+    foo(x, t = false) { }
+    foo1(x, t = false, ...rest) { }
+    bar(t = false) { }
+    boo(t = false, ...rest) { }
+}
+class D {
+    constructor(y = "hello") {
     }
-    return D;
-})();
-var E = (function () {
-    function E(y = "hello", ...rest) {
+}
+class E {
+    constructor(y = "hello", ...rest) {
     }
-    return E;
-})();
+}

@@ -25,10 +25,8 @@ f1.bar2();
 var Foo = (function () {
     function Foo(x) {
     }
-    Foo.prototype.bar1 = function () {
-    };
-    Foo.prototype.bar2 = function () {
-    };
+    Foo.prototype.bar1 = function () { };
+    Foo.prototype.bar2 = function () { };
     return Foo;
 })();
 var f1 = new Foo("hey");

@@ -11,8 +11,7 @@ module foo {
 }
 
 //// [assignmentToFunction.js]
-function fn() {
-}
+function fn() { }
 fn = function () { return 3; };
 var foo;
 (function (foo) {

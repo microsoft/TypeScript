@@ -19,9 +19,7 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    __test2__.obj = function f(a) {
-        return a;
-    };
+    __test2__.obj = function f(a) { return a; };
     ;
     __test2__.__val__obj = __test2__.obj;
 })(__test2__ || (__test2__ = {}));

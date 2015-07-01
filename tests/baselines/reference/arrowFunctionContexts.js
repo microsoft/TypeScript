@@ -97,12 +97,12 @@ var asserted2: any;
 
 
 //// [arrowFunctionContexts.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+// Arrow function used in with statement
 with (window) {
     var p = function () { return this; };
 }
@@ -142,6 +142,7 @@ var M;
 // Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
 (function (M2) {
+    // Arrow function used in with statement
     with (window) {
         var p = function () { return this; };
     }
@@ -182,14 +183,10 @@ var M2;
 // <Identifier>(ParamList) => { ... } is a generic arrow function
 var generic1 = function (n) { return [n]; };
 var generic1; // Incorrect error, Bug 829597
-var generic2 = function (n) {
-    return [n];
-};
+var generic2 = function (n) { return [n]; };
 var generic2;
 // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 var asserted1 = (function (n) { return [n]; });
 var asserted1;
-var asserted2 = (function (n) {
-    return n;
-});
+var asserted2 = (function (n) { return n; });
 var asserted2;

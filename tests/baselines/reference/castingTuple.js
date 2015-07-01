@@ -33,11 +33,10 @@ t4[2] = 10;
 
 
 //// [castingTuple.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
@@ -90,7 +89,7 @@ var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;
 var eleFromCDA1 = classCDATuple[2]; // A
 var eleFromCDA2 = classCDATuple[5]; // C | D | A
-var t10 = [0 /* one */, 0 /* one */];
+var t10 = [E1.one, E2.one];
 var t11 = t10;
 var array1 = emptyObjTuple;
 var unionTuple = [new C(), "foo"];

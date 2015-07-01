@@ -29,6 +29,7 @@ export function fooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
 }
 
 export function fooWithOverloads(a: string): string;
@@ -88,6 +89,7 @@ function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
 }
 
 function nonExportedFooWithOverloads(a: string): string;
@@ -136,6 +138,7 @@ function globalfooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
 }
 function globalfooWithOverloads(a: string): string;
 >globalfooWithOverloads : { (a: string): string; (a: number): number; }

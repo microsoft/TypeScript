@@ -4,9 +4,7 @@ class foo { public bar: { (): number; (i: number): number; } = function() { retu
 //// [contextualTyping15.js]
 var foo = (function () {
     function foo() {
-        this.bar = function () {
-            return 1;
-        };
+        this.bar = function () { return 1; };
     }
     return foo;
 })();

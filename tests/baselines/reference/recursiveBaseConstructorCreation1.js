@@ -7,17 +7,15 @@ var x = new C2(); // Valid
 
 
 //// [recursiveBaseConstructorCreation1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.func = function (param) {
-    };
+    C1.prototype.func = function (param) { };
     return C1;
 })();
 var C2 = (function (_super) {

@@ -18,7 +18,8 @@
 /////* /*inComment5*/
 ////var v11 = '';
 ////  // /*inComment6*/
-////
+////var v12 = '';
+////type htm/*inTypeAlias*/
 ///
 //////  /*inComment7*/
 ////foo;

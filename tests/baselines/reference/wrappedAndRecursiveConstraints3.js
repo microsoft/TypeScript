@@ -30,6 +30,6 @@ var C = (function () {
 })();
 var c = new C({ length: 2 });
 var r = c.foo({ length: 3, charAt: function (x) {
-    '';
-} });
+        '';
+    } });
 var r2 = r('');

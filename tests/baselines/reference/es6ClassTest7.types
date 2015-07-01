@@ -9,7 +9,8 @@ declare module M {
 
 class Bar extends M.Foo {
 >Bar : Bar
->M : unknown
->Foo : M.Foo
+>M.Foo : M.Foo
+>M : typeof M
+>Foo : typeof M.Foo
 }
 

@@ -5,6 +5,4 @@ function foo():{a:any;} { return {a:1} }
 
 
 //// [functionOverloads14.js]
-function foo() {
-    return { a: 1 };
-}
+function foo() { return { a: 1 }; }

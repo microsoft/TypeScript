@@ -3,7 +3,6 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(5,16): error TS1131: Property or signature expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(5,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'number', but here has type 'any'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(5,25): error TS1128: Declaration or statement expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(6,53): error TS1005: ';' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(6,79): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ id: string; name: number; }'.
   Types of property 'id' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -12,7 +11,7 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     Type 'number' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts (7 errors) ====
+==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts (6 errors) ====
     var id: number = 10000;
     var name: string = "my name";
     
@@ -28,8 +27,6 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
                             ~
 !!! error TS1128: Declaration or statement expected.
     function foo(name: string, id: number): { id: string, name: number } { return { name, id }; }  // error
-                                                        ~
-!!! error TS1005: ';' expected.
                                                                                   ~~~~~~~~~~~~
 !!! error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ id: string; name: number; }'.
 !!! error TS2322:   Types of property 'id' are incompatible.

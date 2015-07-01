@@ -14,9 +14,10 @@ string.foo("abc");
 >string.foo : (s: string) => any
 >string : typeof string
 >foo : (s: string) => any
+>"abc" : string
 
 var x: string.X;
 >x : string.X
->string : unknown
+>string : any
 >X : string.X
 

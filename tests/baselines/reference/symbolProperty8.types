@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty8.ts ===
+interface I {
+>I : I
+
+    [Symbol.unscopables]: number;
+>Symbol.unscopables : symbol
+>Symbol : SymbolConstructor
+>unscopables : symbol
+
+    [Symbol.toPrimitive]();
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+}

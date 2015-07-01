@@ -22,8 +22,7 @@ var X;
     (function (Y) {
         var base;
         (function (base) {
-            function f() {
-            }
+            function f() { }
             base.f = f;
             var C = (function () {
                 function C() {
@@ -33,7 +32,6 @@ var X;
             base.C = C;
             var M;
             (function (M) {
-                M.v;
             })(M = base.M || (base.M = {}));
             (function (E) {
             })(base.E || (base.E = {}));

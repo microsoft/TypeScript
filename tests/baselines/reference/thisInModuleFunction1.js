@@ -8,10 +8,10 @@ var z = bar.bar();
 
 //// [thisInModuleFunction1.js]
 var bar;
-(function (_bar) {
+(function (bar_1) {
     function bar() {
         return this;
     }
-    _bar.bar = bar;
+    bar_1.bar = bar;
 })(bar || (bar = {}));
 var z = bar.bar();

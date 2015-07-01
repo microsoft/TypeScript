@@ -1,0 +1,13 @@
+tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/conformance/decorators/class/decoratorOnClass8.ts (1 errors) ====
+    declare function dec(): (target: Function, paramIndex: number) => void;
+    
+    @dec()
+    ~~~~~~
+!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   Supplied parameters do not match any signature of call target.
+    class C {
+    }

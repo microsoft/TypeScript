@@ -1,7 +1,9 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments.ts(18,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '{ x: number; y?: number; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; z?: number; }'.
+    Property 'y' is missing in type '{ x: number; z?: number; }'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments.ts(19,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '{ x: number; z?: number; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y?: number; }'.
+    Property 'z' is missing in type '{ x: number; y?: number; }'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments.ts (2 errors) ====
@@ -26,10 +28,12 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
              ~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '{ x: number; y?: number; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; z?: number; }'.
+!!! error TS2453:     Property 'y' is missing in type '{ x: number; z?: number; }'.
     var r5 = foo((x: typeof b) => b, (x: typeof a) => a); // typeof b => typeof b
              ~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '{ x: number; z?: number; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y?: number; }'.
+!!! error TS2453:     Property 'z' is missing in type '{ x: number; y?: number; }'.
     
     function other<T>(x: T) {
         var r6 = foo((a: T) => a, (b: T) => b); // T => T

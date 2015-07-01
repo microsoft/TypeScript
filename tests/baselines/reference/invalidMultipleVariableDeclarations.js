@@ -54,11 +54,10 @@ var m: typeof M;
 var m = M.A;
 
 //// [invalidMultipleVariableDeclarations.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C = (function () {
     function C() {
@@ -77,9 +76,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -88,9 +85,7 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 // all of these are errors

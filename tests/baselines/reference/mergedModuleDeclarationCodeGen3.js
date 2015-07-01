@@ -13,20 +13,19 @@ var my;
 (function (my) {
     var data;
     (function (data) {
-        function buz() {
-        }
+        function buz() { }
         data.buz = buz;
     })(data = my.data || (my.data = {}));
 })(my || (my = {}));
 var my;
-(function (_my) {
+(function (my_1) {
     var data;
-    (function (_data) {
+    (function (data_1) {
         var foo;
-        (function (_foo) {
+        (function (foo_1) {
             function data(my, foo) {
-                _data.buz();
+                data_1.buz();
             }
-        })(foo = _data.foo || (_data.foo = {}));
-    })(data = _my.data || (_my.data = {}));
+        })(foo = data_1.foo || (data_1.foo = {}));
+    })(data = my_1.data || (my_1.data = {}));
 })(my || (my = {}));

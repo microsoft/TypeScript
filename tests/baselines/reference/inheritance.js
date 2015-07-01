@@ -35,11 +35,10 @@ class Baad extends Good {
 
 
 //// [inheritance.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var B1 = (function () {
     function B1() {
@@ -79,13 +78,9 @@ var ND = (function (_super) {
 })(N);
 var Good = (function () {
     function Good() {
-        this.f = function () {
-            return 0;
-        };
+        this.f = function () { return 0; };
     }
-    Good.prototype.g = function () {
-        return 0;
-    };
+    Good.prototype.g = function () { return 0; };
     return Good;
 })();
 var Baad = (function (_super) {
@@ -93,11 +88,7 @@ var Baad = (function (_super) {
     function Baad() {
         _super.apply(this, arguments);
     }
-    Baad.prototype.f = function () {
-        return 0;
-    };
-    Baad.prototype.g = function (n) {
-        return 0;
-    };
+    Baad.prototype.f = function () { return 0; };
+    Baad.prototype.g = function (n) { return 0; };
     return Baad;
 })(Good);

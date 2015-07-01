@@ -13,5 +13,5 @@ var Foo = (function () {
     return Foo;
 })();
 switch (0) {
-    case Foo: break;
+    case Foo: break; // Error expected
 }

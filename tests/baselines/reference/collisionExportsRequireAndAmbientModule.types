@@ -11,10 +11,11 @@ export declare module require {
 }
 export function foo(): require.I {
 >foo : () => require.I
->require : unknown
+>require : any
 >I : require.I
 
     return null;
+>null : null
 }
 export declare module exports {
 >exports : typeof exports
@@ -28,10 +29,11 @@ export declare module exports {
 }
 export function foo2(): exports.I {
 >foo2 : () => exports.I
->exports : unknown
+>exports : any
 >I : exports.I
 
     return null;
+>null : null
 }
 declare module m1 {
 >m1 : typeof m1
@@ -82,6 +84,7 @@ module m2 {
     }
     var a = 10;
 >a : number
+>10 : number
 }
 
 === tests/cases/compiler/collisionExportsRequireAndAmbientModule_globalFile.ts ===
@@ -155,5 +158,6 @@ module m4 {
 
     var a = 10;
 >a : number
+>10 : number
 }
 

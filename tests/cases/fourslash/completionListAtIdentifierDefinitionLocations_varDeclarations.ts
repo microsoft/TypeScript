@@ -11,7 +11,6 @@
 
 ////var a2, a/*varName4*/
 
-debugger;
 test.markers().forEach((m) => {
     goTo.position(m.position, m.fileName);
     verify.completionListIsEmpty();

@@ -7,6 +7,7 @@ function f1(_i: number, ...restParameters) { //_i is error
 
     var _i = 10; // no error
 >_i : number
+>10 : number
 }
 function f1NoError(_i: number) { // no error
 >f1NoError : (_i: number) => void
@@ -14,6 +15,7 @@ function f1NoError(_i: number) { // no error
 
     var _i = 10; // no error
 >_i : number
+>10 : number
 }
 
 declare function f2(_i: number, ...restParameters); // no error - no code gen
@@ -31,12 +33,14 @@ function f3(...restParameters) {
 
     var _i = 10; // no error
 >_i : number
+>10 : number
 }
 function f3NoError() {
 >f3NoError : () => void
 
     var _i = 10; // no error
 >_i : number
+>10 : number
 }
 
 function f4(_i: number, ...rest); // no codegen no error

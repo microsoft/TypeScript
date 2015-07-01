@@ -28,6 +28,4 @@ function foo() {
     series2.map(seriesExtent);
     return null;
 }
-var keyExtent2 = series.data.map(function (d) {
-    return d;
-});
+var keyExtent2 = series.data.map(function (d) { return d; });

@@ -54,8 +54,7 @@ var M;
     M.x = 1;
 })(M || (M = {}));
 x = M;
-x = { f: function () {
-} };
+x = { f: function () { } };
 function f(a) {
     x = a;
 }
@@ -65,4 +64,4 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 x = E;
-x = 0 /* A */;
+x = E.A;

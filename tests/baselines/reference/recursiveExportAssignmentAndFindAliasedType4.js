@@ -14,8 +14,7 @@ import ClassB = require("recursiveExportAssignmentAndFindAliasedType4_moduleB");
 export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleC.js]
-define(["require", "exports", "recursiveExportAssignmentAndFindAliasedType4_moduleC"], function (require, exports, self) {
-    return self;
+define(["require", "exports"], function (require, exports) {
 });
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleB.js]
 define(["require", "exports"], function (require, exports) {
@@ -28,5 +27,4 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleA.js]
 define(["require", "exports"], function (require, exports) {
-    exports.b; // This should result in type ClassB
 });

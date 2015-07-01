@@ -8,5 +8,7 @@
         "lib.d.ts",
         "main.ts"
     ],
-    "emittedFiles": []
+    "emittedFiles": [
+        "main.js"
+    ]
 }

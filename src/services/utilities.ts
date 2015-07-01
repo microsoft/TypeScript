@@ -1,25 +1,25 @@
 // These utilities are common to multiple language service features.
-module ts {
+/* @internal */
+namespace ts {
     export interface ListItemInfo {
         listItemIndex: number;
         list: Node;
     }
 
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 1);
-        var lineStarts = sourceFile.getLineStarts();
+        Debug.assert(line >= 0);
+        let lineStarts = sourceFile.getLineStarts();
         
-        // lines returned by SourceFile.getLineAndCharacterForPosition are 1-based
-        var lineIndex = line - 1;
-        if (lineIndex === lineStarts.length - 1) {
+        let lineIndex = line;
+        if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
             return sourceFile.text.length - 1;
         }
         else {
             // current line start
-            var start = lineStarts[lineIndex];
+            let start = lineStarts[lineIndex];
             // take the start position of the next line -1 = it should be some line break
-            var pos = lineStarts[lineIndex + 1] - 1;
+            let pos = lineStarts[lineIndex + 1] - 1;
             Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
             // walk backwards skipping line breaks, stop the the beginning of current line.
             // i.e:
@@ -32,15 +32,10 @@ module ts {
         }
     }
 
-    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 1);
-        return sourceFile.getLineStarts()[line - 1];
-    }
-
-    export function getStartLinePositionForPosition(position: number, sourceFile: SourceFile): number {
-        var lineStarts = sourceFile.getLineStarts();
-        var line = sourceFile.getLineAndCharacterFromPosition(position).line;
-        return lineStarts[line - 1];
+    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
+        let lineStarts = sourceFile.getLineStarts();
+        let line = sourceFile.getLineAndCharacterOfPosition(position).line;
+        return lineStarts[line];
     }
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
@@ -60,13 +55,164 @@ module ts {
     }
 
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
-        var start = Math.max(start1, start2);
-        var end = Math.min(end1, end2);
+        let start = Math.max(start1, start2);
+        let end = Math.min(end1, end2);
         return start < end;
     }
 
+    export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+    }
+
+    export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+        if (nodeIsMissing(n)) {
+            return false;
+        }
+
+        switch (n.kind) {
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.Block:
+            case SyntaxKind.ModuleBlock:
+            case SyntaxKind.CaseBlock:
+                return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
+            case SyntaxKind.CatchClause:
+                return isCompletedNode((<CatchClause>n).block, sourceFile);
+            case SyntaxKind.NewExpression:
+                if (!(<NewExpression>n).arguments) {
+                    return true;
+                }
+            // fall through
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.ParenthesizedType:
+                return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
+
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return isCompletedNode((<SignatureDeclaration>n).type, sourceFile);
+
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ArrowFunction:
+                if ((<FunctionLikeDeclaration>n).body) {
+                    return isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
+                }
+
+                if ((<FunctionLikeDeclaration>n).type) {
+                    return isCompletedNode((<FunctionLikeDeclaration>n).type, sourceFile);
+                }
+
+                // Even though type parameters can be unclosed, we can get away with
+                // having at least a closing paren.
+                return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
+
+            case SyntaxKind.ModuleDeclaration:
+                return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
+
+            case SyntaxKind.IfStatement:
+                if ((<IfStatement>n).elseStatement) {
+                    return isCompletedNode((<IfStatement>n).elseStatement, sourceFile);
+                }
+                return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
+
+            case SyntaxKind.ExpressionStatement:
+                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
+
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.ComputedPropertyName:
+            case SyntaxKind.TupleType:
+                return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
+
+            case SyntaxKind.IndexSignature:
+                if ((<IndexSignatureDeclaration>n).type) {
+                    return isCompletedNode((<IndexSignatureDeclaration>n).type, sourceFile);
+                }
+
+                return hasChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
+
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicitly always consider them non-completed
+                return false;
+
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.WhileStatement:
+                return isCompletedNode((<IterationStatement>n).statement, sourceFile);
+            case SyntaxKind.DoStatement:
+                // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
+                let hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
+                if (hasWhileKeyword) {
+                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
+                }
+                return isCompletedNode((<DoStatement>n).statement, sourceFile);
+
+            case SyntaxKind.TypeQuery:
+                return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
+
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.YieldExpression:
+            case SyntaxKind.SpreadElementExpression:
+                let unaryWordExpression = (<TypeOfExpression|DeleteExpression|VoidExpression|YieldExpression|SpreadElementExpression>n);
+                return isCompletedNode(unaryWordExpression.expression, sourceFile);
+
+            case SyntaxKind.TaggedTemplateExpression:
+                return isCompletedNode((<TaggedTemplateExpression>n).template, sourceFile);
+            case SyntaxKind.TemplateExpression:
+                let lastSpan = lastOrUndefined((<TemplateExpression>n).templateSpans);
+                return isCompletedNode(lastSpan, sourceFile);
+            case SyntaxKind.TemplateSpan:
+                return nodeIsPresent((<TemplateSpan>n).literal);
+
+            case SyntaxKind.PrefixUnaryExpression:
+                return isCompletedNode((<PrefixUnaryExpression>n).operand, sourceFile);
+            case SyntaxKind.BinaryExpression:
+                return isCompletedNode((<BinaryExpression>n).right, sourceFile);
+            case SyntaxKind.ConditionalExpression:
+                return isCompletedNode((<ConditionalExpression>n).whenFalse, sourceFile);
+
+            default:
+                return true;
+        }
+    }
+
+    /*
+     * Checks if node ends with 'expectedLastToken'.
+     * If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
+     */
+    function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
+        let children = n.getChildren(sourceFile);
+        if (children.length) {
+            let last = lastOrUndefined(children);
+            if (last.kind === expectedLastToken) {
+                return true;
+            }
+            else if (last.kind === SyntaxKind.SemicolonToken && children.length !== 1) {
+                return children[children.length - 2].kind === expectedLastToken;
+            }
+        }
+        return false;
+    }
+
     export function findListItemInfo(node: Node): ListItemInfo {
-        var list = findContainingList(node);
+        let list = findContainingList(node);
 
         // It is possible at this point for syntaxList to be undefined, either if
         // node.parent had no list child, or if none of its list children contained
@@ -76,13 +222,17 @@ module ts {
             return undefined;
         }
 
-        var children = list.getChildren();
-        var listItemIndex = indexOf(children, node);
+        let children = list.getChildren();
+        let listItemIndex = indexOf(children, node);
 
         return {
             listItemIndex,
             list
         };
+    }
+
+    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean {
+        return !!findChildOfKind(n, kind, sourceFile);
     }
 
     export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
@@ -94,13 +244,15 @@ module ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        var syntaxList = forEach(node.parent.getChildren(), c => {
+        let syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
             if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
                 return c;
             }
         });
 
+        // Either we didn't find an appropriate list, or the list must contain us.
+        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node)); 
         return syntaxList;
     }
 
@@ -130,7 +282,7 @@ module ts {
 
     /** Get the token whose text contains the position */
     function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
-        var current: Node = sourceFile;
+        let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
                 // exit early
@@ -138,17 +290,17 @@ module ts {
             }
 
             // find the child that contains 'position'
-            for (var i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                var child = current.getChildAt(i);
-                var start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
+            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
+                let child = current.getChildAt(i);
+                let start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
                 if (start <= position) {
-                    var end = child.getEnd();
+                    let end = child.getEnd();
                     if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
                         current = child;
                         continue outer;
                     }
                     else if (includeItemAtEndPosition && end === position) {
-                        var previousToken = findPrecedingToken(position, sourceFile, child);
+                        let previousToken = findPrecedingToken(position, sourceFile, child);
                         if (previousToken && includeItemAtEndPosition(previousToken)) {
                             return previousToken;
                         }
@@ -170,7 +322,7 @@ module ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        var tokenAtPosition = getTokenAtPosition(file, position);
+        let tokenAtPosition = getTokenAtPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -187,10 +339,9 @@ module ts {
                 return n;
             }
 
-            var children = n.getChildren();
-            for (var i = 0, len = children.length; i < len; ++i) {
-                var child = children[i];
-                var shouldDiveInChildNode =
+            let children = n.getChildren();
+            for (let child of children) {
+                let shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.pos <= previousToken.pos && child.end > previousToken.end) ||
                     // previous token ends exactly at the beginning of child
@@ -213,8 +364,8 @@ module ts {
                 return n;
             }
 
-            var children = n.getChildren();
-            var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+            let children = n.getChildren();
+            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
             return candidate && findRightmostToken(candidate);
 
         }
@@ -224,14 +375,14 @@ module ts {
                 return n;
             }
 
-            var children = n.getChildren();
-            for (var i = 0, len = children.length; i < len; ++i) {
-                var child = children[i];
+            let children = n.getChildren();
+            for (let i = 0, len = children.length; i < len; i++) {
+                let child = children[i];
                 if (nodeHasTokens(child)) {
                     if (position <= child.end) {
                         if (child.getStart(sourceFile) >= position) {
                             // actual start of the node is past the position - previous token should be at the end of previous child
-                            var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
                             return candidate && findRightmostToken(candidate)
                         }
                         else {
@@ -249,14 +400,14 @@ module ts {
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
-                var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
                 return candidate && findRightmostToken(candidate);
             }
         }
 
         /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
         function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
-            for (var i = exclusiveStartPosition - 1; i >= 0; --i) {
+            for (let i = exclusiveStartPosition - 1; i >= 0; --i) {
                 if (nodeHasTokens(children[i])) {
                     return children[i];
                 }
@@ -271,8 +422,8 @@ module ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        var flags = getCombinedNodeFlags(node);
-        var result: string[] = [];
+        let flags = getCombinedNodeFlags(node);
+        let result: string[] = [];
 
         if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
@@ -289,7 +440,7 @@ module ts {
             return (<CallExpression>node).typeArguments;
         }
 
-        if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+        if (isFunctionLike(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
             return (<FunctionLikeDeclaration>node).typeParameters;
         }
 
@@ -300,7 +451,7 @@ module ts {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 
-    function isWord(kind: SyntaxKind): boolean {
+    export function isWord(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.Identifier || isKeyword(kind);
     }
 
@@ -321,8 +472,19 @@ module ts {
             && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
     }
 
+    export function isAccessibilityModifier(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+                return true;
+        }
+
+        return false;
+    }
+
     export function compareDataObjects(dst: any, src: any): boolean {
-        for (var e in dst) {
+        for (let e in dst) {
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
                     return false;
@@ -339,16 +501,17 @@ module ts {
 }
 
 // Display-part writer helpers
-module ts {
+/* @internal */
+namespace ts {
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
 
-    var displayPartWriter = getDisplayPartWriter();
+    let displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-        var displayParts: SymbolDisplayPart[];
-        var lineStart: boolean;
-        var indent: number;
+        let displayParts: SymbolDisplayPart[];
+        let lineStart: boolean;
+        let indent: number;
 
         resetWriter();
         return {
@@ -369,7 +532,7 @@ module ts {
 
         function writeIndent() {
             if (lineStart) {
-                var indentString = getIndentString(indent);
+                let indentString = getIndentString(indent);
                 if (indentString) {
                     displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
                 }
@@ -403,7 +566,7 @@ module ts {
         return displayPart(text, displayPartKind(symbol), symbol);
 
         function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
-            var flags = symbol.flags;
+            let flags = symbol.flags;
 
             if (flags & SymbolFlags.Variable) {
                 return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
@@ -420,7 +583,7 @@ module ts {
             else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
-            else if (flags & SymbolFlags.Import) { return SymbolDisplayPartKind.aliasName; }
+            else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
 
 
             return SymbolDisplayPartKind.text;
@@ -450,6 +613,13 @@ module ts {
         return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
     }
 
+    export function textOrKeywordPart(text: string) {
+        var kind = stringToToken(text);
+        return kind === undefined
+            ? textPart(text)
+            : keywordPart(kind);
+    }
+
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
     }
@@ -460,7 +630,7 @@ module ts {
 
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         writeDisplayParts(displayPartWriter);
-        var result = displayPartWriter.displayParts();
+        let result = displayPartWriter.displayParts();
         displayPartWriter.clear();
         return result;
     }
@@ -481,5 +651,35 @@ module ts {
         return mapToDisplayParts(writer => {
             typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });
+    }
+
+    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
+        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+        // If so we want to search for whatever is under the cursor.
+        if (isImportOrExportSpecifierName(location)) {
+            return location.getText();
+        }
+
+        // Try to get the local symbol if we're dealing with an 'export default'
+        // since that symbol has the "true" name.
+        let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+
+        let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
+
+        return stripQuotes(name);
+    }
+
+    export function isImportOrExportSpecifierName(location: Node): boolean {
+        return location.parent &&
+            (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
+            (<ImportOrExportSpecifier>location.parent).propertyName === location;
+    }
+
+    export function stripQuotes(name: string) {
+        let length = name.length;
+        if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
+            return name.substring(1, length - 1);
+        };
+        return name;
     }
 }

@@ -144,9 +144,7 @@ var Foo1 = (function () {
 })();
 function f1(_this) {
     var _this = this;
-    (function (x) {
-        console.log(_this.x);
-    });
+    (function (x) { console.log(_this.x); });
 }
 var Foo3 = (function () {
     function Foo3(_this) {
@@ -167,7 +165,5 @@ var Foo3 = (function () {
 })();
 function f3(_this) {
     var _this = this;
-    (function (x) {
-        console.log(_this.x);
-    });
+    (function (x) { console.log(_this.x); });
 }

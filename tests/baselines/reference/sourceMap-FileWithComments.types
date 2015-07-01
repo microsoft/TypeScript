@@ -50,11 +50,14 @@ module Shapes {
 >origin : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
+>0 : number
+>0 : number
     }
 
     // Variable comment after class
     var a = 10;
 >a : number
+>10 : number
 
     export function foo() {
 >foo : () => void
@@ -65,6 +68,7 @@ module Shapes {
     */
     var b = 10;
 >b : number
+>10 : number
 }
 
 /** Local Variable */
@@ -75,6 +79,8 @@ var p: IPoint = new Shapes.Point(3, 4);
 >Shapes.Point : typeof Shapes.Point
 >Shapes : typeof Shapes
 >Point : typeof Shapes.Point
+>3 : number
+>4 : number
 
 var dist = p.getDist();
 >dist : number

@@ -1,21 +1,7 @@
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
 ///<reference path='references.ts' />
 
-module ts.formatting {
+/* @internal */
+namespace ts.formatting {
     export class RulesMap {
         public map: RulesBucket[];
         public mapRowLength: number;
@@ -26,7 +12,7 @@ module ts.formatting {
         }
 
         static create(rules: Rule[]): RulesMap {
-            var result = new RulesMap();
+            let result = new RulesMap();
             result.Initialize(rules);
             return result;
         }
@@ -36,7 +22,7 @@ module ts.formatting {
             this.map = <any> new Array(this.mapRowLength * this.mapRowLength);//new Array<RulesBucket>(this.mapRowLength * this.mapRowLength);
 
             // This array is used only during construction of the rulesbucket in the map
-            var rulesBucketConstructionStateList: RulesBucketConstructionState[] = <any> new Array(this.map.length);//new Array<RulesBucketConstructionState>(this.map.length);
+            let rulesBucketConstructionStateList: RulesBucketConstructionState[] = <any> new Array(this.map.length);//new Array<RulesBucketConstructionState>(this.map.length);
 
             this.FillRules(rules, rulesBucketConstructionStateList);
             return this.map;
@@ -49,21 +35,21 @@ module ts.formatting {
         }
 
         private GetRuleBucketIndex(row: number, column: number): number {
-            var rulesBucketIndex = (row * this.mapRowLength) + column;
+            let rulesBucketIndex = (row * this.mapRowLength) + column;
             //Debug.Assert(rulesBucketIndex < this.map.Length, "Trying to access an index outside the array.");
             return rulesBucketIndex;
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            var specificRule = rule.Descriptor.LeftTokenRange != Shared.TokenRange.Any &&
-                               rule.Descriptor.RightTokenRange != Shared.TokenRange.Any;
+            let specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
+                               rule.Descriptor.RightTokenRange !== Shared.TokenRange.Any;
 
             rule.Descriptor.LeftTokenRange.GetTokens().forEach((left) => {
                 rule.Descriptor.RightTokenRange.GetTokens().forEach((right) => {
-                    var rulesBucketIndex = this.GetRuleBucketIndex(left, right);
+                    let rulesBucketIndex = this.GetRuleBucketIndex(left, right);
 
-                    var rulesBucket = this.map[rulesBucketIndex];
-                    if (rulesBucket == undefined) {
+                    let rulesBucket = this.map[rulesBucketIndex];
+                    if (rulesBucket === undefined) {
                         rulesBucket = this.map[rulesBucketIndex] = new RulesBucket();
                     }
 
@@ -73,21 +59,21 @@ module ts.formatting {
         }
 
         public GetRule(context: FormattingContext): Rule {
-            var bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
-            var bucket = this.map[bucketIndex];
+            let bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
+            let bucket = this.map[bucketIndex];
             if (bucket != null) {
-                for (var i = 0, len = bucket.Rules().length; i < len; i++) {
-                    var rule = bucket.Rules()[i];
-                    if (rule.Operation.Context.InContext(context))
+                for (let rule of bucket.Rules()) {
+                    if (rule.Operation.Context.InContext(context)) {
                         return rule;
+                    }
                 }
             }
             return null;
         }
     }
 
-    var MaskBitSize = 5;
-    var Mask = 0x1f;
+    let MaskBitSize = 5;
+    let Mask = 0x1f;
 
     export enum RulesPosition {
         IgnoreRulesSpecific = 0,
@@ -121,10 +107,10 @@ module ts.formatting {
         }
 
         public GetInsertionIndex(maskPosition: RulesPosition): number {
-            var index = 0;
+            let index = 0;
 
-            var pos = 0;
-            var indexBitmap = this.rulesInsertionIndexBitmap;
+            let pos = 0;
+            let indexBitmap = this.rulesInsertionIndexBitmap;
 
             while (pos <= maskPosition) {
                 index += (indexBitmap & Mask);
@@ -136,11 +122,11 @@ module ts.formatting {
         }
 
         public IncreaseInsertionIndex(maskPosition: RulesPosition): void {
-            var value = (this.rulesInsertionIndexBitmap >> maskPosition) & Mask;
+            let value = (this.rulesInsertionIndexBitmap >> maskPosition) & Mask;
             value++;
-            Debug.assert((value & Mask) == value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+            Debug.assert((value & Mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
 
-            var temp = this.rulesInsertionIndexBitmap & ~(Mask << maskPosition);
+            let temp = this.rulesInsertionIndexBitmap & ~(Mask << maskPosition);
             temp |= value << maskPosition;
 
             this.rulesInsertionIndexBitmap = temp;
@@ -159,9 +145,9 @@ module ts.formatting {
         }
 
         public AddRule(rule: Rule, specificTokens: boolean, constructionState: RulesBucketConstructionState[], rulesBucketIndex: number): void {
-            var position: RulesPosition;
+            let position: RulesPosition;
 
-            if (rule.Operation.Action == RuleAction.Ignore) {
+            if (rule.Operation.Action === RuleAction.Ignore) {
                 position = specificTokens ?
                     RulesPosition.IgnoreRulesSpecific :
                     RulesPosition.IgnoreRulesAny;
@@ -177,11 +163,11 @@ module ts.formatting {
                     RulesPosition.NoContextRulesAny;
             }
 
-            var state = constructionState[rulesBucketIndex];
+            let state = constructionState[rulesBucketIndex];
             if (state === undefined) {
                 state = constructionState[rulesBucketIndex] = new RulesBucketConstructionState();
             }
-            var index = state.GetInsertionIndex(position);
+            let index = state.GetInsertionIndex(position);
             this.rules.splice(index, 0, rule);
             state.IncreaseInsertionIndex(position);
         }

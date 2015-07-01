@@ -1,10 +1,11 @@
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,1): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1129: Statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: '=' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1109: Expression expected.
@@ -40,8 +41,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(205,28): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,29): error TS2304: Cannot find name 'yield'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,36): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(223,23): error TS2304: Cannot find name 'bool'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(227,13): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(234,14): error TS1005: '{' expected.
@@ -84,7 +83,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (84 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (83 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -96,8 +95,10 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
     }
     
     import fs = module("fs");
-    ~~~~~~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS2304: Cannot find name 'module'.
+                ~~~~~~
+!!! error TS2503: Cannot find namespace 'module'.
                       ~
 !!! error TS1005: ';' expected.
     
@@ -128,7 +129,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
     
                      case  = bfs.STATEMENTS(4);
                      ~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
                              ~~~
 !!! error TS2304: Cannot find name 'bfs'.
                     if (retValue != 0) {
@@ -390,10 +391,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
              case  d = () => {  yield  0; };
              ~~~~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-                                ~~~~~
-!!! error TS2304: Cannot find name 'yield'.
-                                       ~
-!!! error TS1005: ';' expected.
             public get Property() { return 0; }
             public Member() {
                 return 0;

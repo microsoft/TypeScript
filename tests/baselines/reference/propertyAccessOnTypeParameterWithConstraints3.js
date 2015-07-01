@@ -58,18 +58,15 @@ var r4 = b.foo(new B()); // valid call to an invalid function
 
 //// [propertyAccessOnTypeParameterWithConstraints3.js]
 // generic types should behave as if they have properties of their constraint type
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () {
-        return '';
-    };
+    A.prototype.foo = function () { return ''; };
     return A;
 })();
 var B = (function (_super) {

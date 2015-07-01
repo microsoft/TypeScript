@@ -23,5 +23,4 @@ goTo.marker('2');
 edit.deleteAtCaret(7);
 
 goTo.marker('4');
-diagnostics.validateTypesAtPositions(43);
 

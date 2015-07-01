@@ -1,8 +1,9 @@
 /// <reference path="formatting.ts"/>
 /// <reference path="..\..\compiler\scanner.ts"/>
 
-module ts.formatting {
-    var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
+/* @internal */
+namespace ts.formatting {
+    let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
     export interface FormattingScanner {
         advance(): void;
@@ -24,13 +25,13 @@ module ts.formatting {
         scanner.setText(sourceFile.text);
         scanner.setTextPos(startPos);
 
-        var wasNewLine: boolean = true;
-        var leadingTrivia: TextRangeWithKind[];
-        var trailingTrivia: TextRangeWithKind[];
+        let wasNewLine: boolean = true;
+        let leadingTrivia: TextRangeWithKind[];
+        let trailingTrivia: TextRangeWithKind[];
         
-        var savedPos: number;
-        var lastScanAction: ScanAction;
-        var lastTokenInfo: TokenInfo;
+        let savedPos: number;
+        let lastScanAction: ScanAction;
+        let lastTokenInfo: TokenInfo;
 
         return {
             advance: advance,
@@ -45,12 +46,12 @@ module ts.formatting {
 
         function advance(): void {
             lastTokenInfo = undefined;
-            var isStarted = scanner.getStartPos() !== startPos;
+            let isStarted = scanner.getStartPos() !== startPos;
 
             if (isStarted) {
                 if (trailingTrivia) {
                     Debug.assert(trailingTrivia.length !== 0);
-                    wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+                    wasNewLine = lastOrUndefined(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
                 }
                 else {
                     wasNewLine = false;
@@ -64,19 +65,19 @@ module ts.formatting {
                 scanner.scan();
             }
 
-            var t: SyntaxKind;
-            var pos = scanner.getStartPos();
+            let t: SyntaxKind;
+            let pos = scanner.getStartPos();
             
             // Read leading trivia and token
             while (pos < endPos) {
-                var t = scanner.getToken();
+                let t = scanner.getToken();
                 if (!isTrivia(t)) {
                     break;
                 }
 
                 // consume leading trivia
                 scanner.scan();
-                var item = {
+                let item = {
                     pos: pos,
                     end: scanner.getStartPos(),
                     kind: t
@@ -93,17 +94,16 @@ module ts.formatting {
             savedPos = scanner.getStartPos();
         }
 
-        function shouldRescanGreaterThanToken(container: Node): boolean {
-            if (container.kind !== SyntaxKind.BinaryExpression) {
-                return false;
-            }
-            switch ((<BinaryExpression>container).operator) {
-                case SyntaxKind.GreaterThanEqualsToken:
-                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                case SyntaxKind.GreaterThanGreaterThanToken:
-                    return true;
+        function shouldRescanGreaterThanToken(node: Node): boolean {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.GreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanToken:
+                        return true;
+                }
             }
 
             return false;
@@ -134,7 +134,7 @@ module ts.formatting {
 
             // normally scanner returns the smallest available token
             // check the kind of context node to determine if scanner should have more greedy behavior and consume more text.
-            var expectedScanAction = 
+            let expectedScanAction = 
                 shouldRescanGreaterThanToken(n)
                 ? ScanAction.RescanGreaterThanToken
                 : shouldRescanSlashToken(n) 
@@ -160,11 +160,11 @@ module ts.formatting {
                 scanner.scan();
             }
 
-            var currentToken = scanner.getToken();
+            let currentToken = scanner.getToken();
 
             if (expectedScanAction === ScanAction.RescanGreaterThanToken && currentToken === SyntaxKind.GreaterThanToken) {
                 currentToken = scanner.reScanGreaterToken();
-                Debug.assert((<BinaryExpression>n).operator === currentToken);
+                Debug.assert(n.kind === currentToken);
                 lastScanAction = ScanAction.RescanGreaterThanToken;
             }
             else if (expectedScanAction === ScanAction.RescanSlashToken && startsWithSlashToken(currentToken)) {
@@ -180,7 +180,7 @@ module ts.formatting {
                 lastScanAction = ScanAction.Scan;
             }
 
-            var token: TextRangeWithKind = {
+            let token: TextRangeWithKind = {
                 pos: scanner.getStartPos(),
                 end: scanner.getTextPos(),
                 kind: currentToken
@@ -195,7 +195,7 @@ module ts.formatting {
                 if (!isTrivia(currentToken)) {
                     break;
                 }
-                var trivia = {
+                let trivia = {
                     pos: scanner.getStartPos(),
                     end: scanner.getTextPos(),
                     kind: currentToken
@@ -224,8 +224,8 @@ module ts.formatting {
         }
 
         function isOnToken(): boolean {
-            var current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
-            var startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            let current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
+            let startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 

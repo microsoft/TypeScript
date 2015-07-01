@@ -22,7 +22,7 @@
 /////*1*/val;
 
 goTo.marker('1');
-verify.quickInfoIs("(var) val: string");
+verify.quickInfoIs("var val: string");
 
 // TypeCheck
 verify.numberOfErrorsInCurrentFile(1);

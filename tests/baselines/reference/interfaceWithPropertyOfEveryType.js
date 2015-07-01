@@ -48,8 +48,7 @@ var C = (function () {
     }
     return C;
 })();
-function f1() {
-}
+function f1() { }
 var M;
 (function (M) {
     M.y = 1;
@@ -73,5 +72,5 @@ var a = {
     l: f1,
     m: M,
     n: {},
-    o: 0 /* A */
+    o: E.A
 };

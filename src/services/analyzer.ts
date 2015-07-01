@@ -1,6 +1,6 @@
-/// <reference no-default-lib="true"/>
+/// <no-default-lib/>
 
-/// <reference path="..\..\bin\lib.core.d.ts"/>
+/// <reference path="..\..\built\local\lib.core.d.ts"/>
 /// <reference path="analyzerEnv.ts"/>
 /// <reference path="..\compiler\types.ts"/>
 /// <reference path="..\compiler\core.ts"/>
@@ -56,23 +56,22 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
 
 
     var program = log("createProgram", () => createProgram(files));
-    var fileNames = ts.map(program.getSourceFiles(), f => f.filename);
+    var fileNames = ts.map(program.getSourceFiles(), f => f.fileName);
     var scriptSnapshots: ts.Map<ts.IScriptSnapshot> = {};
 
-    var checker = log("getTypeChecker", () => program.getTypeChecker(/*fullTypeCheckMode*/ false));
+    var checker = log("getTypeChecker", () => program.getTypeChecker());
 
     ts.forEach(program.getSourceFiles(), f => {
-        scriptSnapshots[f.filename] = ts.ScriptSnapshot.fromString(f.text);
+        scriptSnapshots[f.fileName] = ts.ScriptSnapshot.fromString(f.text);
     });
 
     var host: ts.LanguageServiceHost = {
         getCancellationToken: () => ts.CancellationTokenObject.None,
         getCompilationSettings: () => { return {}; },
-        getDefaultLibFilename: () => libFileName,
+        getDefaultLibFileName: () => libFileName,
         getCurrentDirectory: () => ".",
         getLocalizedDiagnosticMessages: () => undefined,
         getScriptFileNames: () => fileNames,
-        getScriptIsOpen: _ => sourceFileIsOpen,
         getScriptVersion: _ => sourceFileVersion,
         getScriptSnapshot: name => scriptSnapshots[name],
         log: (s) => { },
@@ -81,9 +80,9 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     };
 
     var documentRegistry: ts.DocumentRegistry = {
-        acquireDocument: (name, settings, snapshot, version, isOpen) => program.getSourceFile(name),
-        releaseDocument: (name, settings) => { },
-        updateDocument: (file, name, settings, snapshot, version, isOpen, changeRange) => file
+        acquireDocument: (fileName, settings, snapshot, version) => program.getSourceFile(fileName),
+        releaseDocument: (fileName, settings) => { },
+        updateDocument: (fileName, settings, snapshot, version) => program.getSourceFile(fileName)
     };
     var ls = ts.createLanguageService(host, documentRegistry);
 
@@ -92,25 +91,25 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     for (var i = 0, len = sourceFiles.length; i < len; ++i) {
         var f = sourceFiles[i];
         var fileSpan = ts.createTextSpan(0, f.text.length);
-        var result = log("getClassifications '" + f.filename + "'", () => {
-            var syntacticClassifications = ls.getSyntacticClassifications(f.filename, fileSpan);
+        var result = log("getClassifications '" + f.fileName + "'", () => {
+            var syntacticClassifications = ls.getSyntacticClassifications(f.fileName, fileSpan);
             var convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
 
-            var semanticClassifications = ls.getSemanticClassifications(f.filename, fileSpan);
+            var semanticClassifications = ls.getSemanticClassifications(f.fileName, fileSpan);
             var convertedSemantic = convertClassifications(semanticClassifications, f, /*addHyperlinks*/ false);
 
             return {
-                fileName: f.filename,
+                fileName: f.fileName,
                 syntacticClassifications: convertedSyntactic,
                 semanticClassifications: convertedSemantic,
-                fileSymbolId: makeSymbolId(f.filename, 0)
+                fileSymbolId: makeSymbolId(f.fileName, 0)
             };
         });
 
         var json = JSON.stringify(result);
         var path = ts.combinePaths(outputFolder, i + ".json");
         ts.sys.writeFile(path, json, /*writeByteOrderMark*/ false);
-        processedFiles.push({ fileName: f.filename, index: i });
+        processedFiles.push({ fileName: f.fileName, index: i });
     }
     return processedFiles;
 
@@ -277,17 +276,17 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                             definitionKind = getDeclarationName(declaration);
                             fullName = getQualifiedName(declaration);
                             if (declaration.name) {
-                                definitionSymbolId = makeSymbolId(f.filename, declaration.name.getStart());
+                                definitionSymbolId = makeSymbolId(f.fileName, declaration.name.getStart());
                             }
                             else {
-                                definitionSymbolId = makeSymbolId(f.filename, declaration.getStart());
+                                definitionSymbolId = makeSymbolId(f.fileName, declaration.getStart());
                             }
                         }
                         else if (token.kind === ts.SyntaxKind.Identifier && token.parent && token.parent.kind === ts.SyntaxKind.LabeledStatement) {
                             // label
                             definitionKind = "label";
                             fullName = ts.declarationNameToString(<ts.Identifier>token);
-                            definitionSymbolId = makeSymbolId(f.filename, token.getStart());
+                            definitionSymbolId = makeSymbolId(f.fileName, token.getStart());
                         }
                         else  {
                             hyperlinks = addHyperlinksForDefinition(start, hyperlinks);
@@ -312,7 +311,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     }
 
     function addHyperlinksForDefinition(start: number, hyperlinks: Hyperlink[]): Hyperlink[] {
-        var defs = ls.getDefinitionAtPosition(f.filename, start);
+        var defs = ls.getDefinitionAtPosition(f.fileName, start);
         if (defs) {
             ts.forEach(defs, d => {
                 if (!hyperlinks) {
@@ -358,7 +357,6 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                     var text = ts.sys.readFile(filename);
                     var sourceFile = ts.createSourceFile(filename, text, languageVersion);
                     sourceFile.version = sourceFileVersion;
-                    sourceFile.isOpen = sourceFileIsOpen;
                     return sourceFile;
                 }
             },
@@ -366,7 +364,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
             getCanonicalFileName: (filename) => ts.sys.useCaseSensitiveFileNames ? filename : filename.toLowerCase(),
             useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
             getNewLine: () => "\r\n",
-            getDefaultLibFilename: (): string => {
+            getDefaultLibFileName: (): string => {
                 return libFileName;
             },
             writeFile: (filename, data, writeByteOrderMark) => {

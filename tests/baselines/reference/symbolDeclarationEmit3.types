@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit3.ts ===
+class C {
+>C : C
+
+    [Symbol.toPrimitive](x: number);
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>x : number
+
+    [Symbol.toPrimitive](x: string);
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>x : string
+
+    [Symbol.toPrimitive](x: any) { }
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>x : any
+}

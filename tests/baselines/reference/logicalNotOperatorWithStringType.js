@@ -48,20 +48,15 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 // ! operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
-function foo() {
-    return "abc";
-}
+function foo() { return "abc"; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return "";
-    };
+    A.foo = function () { return ""; };
     return A;
 })();
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // string type var
@@ -70,9 +65,7 @@ var ResultIsBoolean2 = !STRING1;
 // string type literal
 var ResultIsBoolean3 = !"";
 var ResultIsBoolean4 = !{ x: "", y: "" };
-var ResultIsBoolean5 = !{ x: "", y: function (s) {
-    return s;
-} };
+var ResultIsBoolean5 = !{ x: "", y: function (s) { return s; } };
 // string type expressions
 var ResultIsBoolean6 = !objA.a;
 var ResultIsBoolean7 = !M.n;

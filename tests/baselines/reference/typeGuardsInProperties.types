@@ -37,6 +37,7 @@ class C1 {
 >this.pp1 : string | number
 >this : C1
 >pp1 : string | number
+>"string" : string
 >this.pp1 : string | number
 >this : C1
 >pp1 : string | number
@@ -50,6 +51,7 @@ class C1 {
 >this.pp2 : string | number
 >this : C1
 >pp2 : string | number
+>"string" : string
 >this.pp2 : string | number
 >this : C1
 >pp2 : string | number
@@ -63,6 +65,7 @@ class C1 {
 >this.pp3 : string | number
 >this : C1
 >pp3 : string | number
+>"string" : string
 >this.pp3 : string | number
 >this : C1
 >pp3 : string | number
@@ -81,6 +84,7 @@ strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 >c1.pp2 : string | number
 >c1 : C1
 >pp2 : string | number
+>"string" : string
 >c1.pp2 : string | number
 >c1 : C1
 >pp2 : string | number
@@ -94,6 +98,7 @@ strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
 >c1.pp3 : string | number
 >c1 : C1
 >pp3 : string | number
+>"string" : string
 >c1.pp3 : string | number
 >c1 : C1
 >pp3 : string | number
@@ -114,6 +119,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >obj1.x : string | number
 >obj1 : { x: string | number; }
 >x : string | number
+>"string" : string
 >obj1.x : string | number
 >obj1 : { x: string | number; }
 >x : string | number

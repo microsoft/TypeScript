@@ -2,6 +2,7 @@
 // test
 var f = ''
 >f : string
+>'' : string
 
 // test #2
 module foo {
@@ -12,6 +13,6 @@ module foo {
 }
 // test #3
 module empty {
->empty : unknown
+>empty : any
 }
 // test #4

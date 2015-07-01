@@ -1,5 +1,5 @@
 tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts(7,11): error TS2320: Interface 'Hello' cannot simultaneously extend types 'Bar' and 'Foo'.
-  Named properties 'f' of types 'Bar' and 'Foo' are not identical.
+  Named property 'f' of types 'Bar' and 'Foo' are not identical.
 
 
 ==== tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts (1 errors) ====
@@ -12,6 +12,6 @@ tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts(7,11): error TS2
     interface Hello extends Bar, Foo {
               ~~~~~
 !!! error TS2320: Interface 'Hello' cannot simultaneously extend types 'Bar' and 'Foo'.
-!!! error TS2320:   Named properties 'f' of types 'Bar' and 'Foo' are not identical.
+!!! error TS2320:   Named property 'f' of types 'Bar' and 'Foo' are not identical.
     }
     

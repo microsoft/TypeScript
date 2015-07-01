@@ -16,26 +16,29 @@ export module C {
 >T : T
 >A : A<T>
 >B : B
+>null : null
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
 >F2 : <T>(x: T) => A<B>
 >T : T
 >x : T
 >T : T
->C : unknown
+>C : any
 >A : A<T>
->C : unknown
+>C : any
 >B : B
+>null : null
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
 >F3 : <T>(x: T) => A<B>[]
 >T : T
 >x : T
 >T : T
->C : unknown
+>C : any
 >A : A<T>
->C : unknown
+>C : any
 >B : B
+>null : null
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
 >F4 : <T extends A<B>>(x: T) => A<B>[]
@@ -45,15 +48,17 @@ export module C {
 >x : T
 >T : T
 >Array : T[]
->C : unknown
+>C : any
 >A : A<T>
->C : unknown
+>C : any
 >B : B
+>null : null
 
     export function F5<T>(): T { return null; }
 >F5 : <T>() => T
 >T : T
 >T : T
+>null : null
 
     export function F6<T extends A<B>>(x: T): T { return null; }
 >F6 : <T extends A<B>>(x: T) => T
@@ -63,6 +68,7 @@ export module C {
 >x : T
 >T : T
 >T : T
+>null : null
 
     export class D<T>{
 >D : D<T>
@@ -77,9 +83,9 @@ export module C {
 
 export var a: C.A<C.B>;
 >a : C.A<C.B>
->C : unknown
+>C : any
 >A : C.A<T>
->C : unknown
+>C : any
 >B : C.B
 
 export var b = C.F;
@@ -114,24 +120,24 @@ export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 >C.D : typeof C.D
 >C : typeof C
 >D : typeof C.D
->C : unknown
+>C : any
 >A : C.A<T>
->C : unknown
+>C : any
 >B : C.B
 >new C.A<C.B>() : C.A<C.B>
 >C.A : typeof C.A
 >C : typeof C
 >A : typeof C.A
->C : unknown
+>C : any
 >B : C.B
 >val : C.A<C.B>
 
 export function f<T extends C.A<C.B>>() { }
 >f : <T extends C.A<C.B>>() => void
 >T : T
->C : unknown
+>C : any
 >A : C.A<T>
->C : unknown
+>C : any
 >B : C.B
 
 export var g = C.F5<C.A<C.B>>();
@@ -140,23 +146,25 @@ export var g = C.F5<C.A<C.B>>();
 >C.F5 : <T>() => T
 >C : typeof C
 >F5 : <T>() => T
->C : unknown
+>C : any
 >A : C.A<T>
->C : unknown
+>C : any
 >B : C.B
 
 export class h extends C.A<C.B>{ }
 >h : h
->C : unknown
->A : C.A<T>
->C : unknown
+>C.A : C.A<C.B>
+>C : typeof C
+>A : typeof C.A
+>C : any
 >B : C.B
 
 export interface i extends C.A<C.B> { }
 >i : i
->C : unknown
+>C.A : any
+>C : typeof C
 >A : C.A<T>
->C : unknown
+>C : any
 >B : C.B
 
 export var j = C.F6;

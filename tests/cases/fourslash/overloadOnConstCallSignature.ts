@@ -15,4 +15,4 @@ verify.currentSignatureHelpIs('foo(name: \'order\'): string');
 edit.insert('"hi"');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) x: string');
+verify.quickInfoIs('var x: string');

@@ -1,0 +1,27 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(1,17): error TS2501: A rest element cannot contain a binding pattern.
+tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(2,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar'.
+  Property 'x' is missing in type 'FooIterator'.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts (2 errors) ====
+    function fun(...[a, b]: Bar[]) { }
+                    ~~~~~~
+!!! error TS2501: A rest element cannot contain a binding pattern.
+    fun(new FooIterator);
+        ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar'.
+!!! error TS2345:   Property 'x' is missing in type 'FooIterator'.
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }

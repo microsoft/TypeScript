@@ -7,11 +7,13 @@ function foo(x) {
 >x : any
 
     return 1;
+>1 : number
 }
 var r = foo(1);
 >r : number
 >foo(1) : number
 >foo : (x: any) => number
+>1 : number
 
 function foo2(x) {
 >foo2 : (x: any) => number
@@ -26,6 +28,7 @@ var r2 = foo2(1);
 >r2 : number
 >foo2(1) : number
 >foo2 : (x: any) => number
+>1 : number
 
 function foo3() {
 >foo3 : () => any
@@ -52,21 +55,28 @@ var r4 = foo4(1);
 >r4 : number
 >foo4(1) : number
 >foo4 : <T>(x: T) => T
+>1 : number
 
 function foo5(x) {
 >foo5 : (x: any) => number
 >x : any
 
     if (true) {
+>true : boolean
+
         return 1;
+>1 : number
+
     } else {
         return 2;
+>2 : number
     }
 }
 var r5 = foo5(1);
 >r5 : number
 >foo5(1) : number
 >foo5 : (x: any) => number
+>1 : number
 
 function foo6(x) {
 >foo6 : (x: any) => any[]
@@ -89,6 +99,7 @@ var r6 = foo6(1);
 >r6 : any[]
 >foo6(1) : any[]
 >foo6 : (x: any) => any[]
+>1 : number
 
 function foo7(x) {
 >foo7 : (x: any) => string
@@ -102,6 +113,7 @@ var r7 = foo7(1);
 >r7 : string
 >foo7(1) : string
 >foo7 : (x: any) => string
+>1 : number
 
 // object types
 function foo8(x: number) {
@@ -117,6 +129,7 @@ var r8 = foo8(1);
 >r8 : { x: number; }
 >foo8(1) : { x: number; }
 >foo8 : (x: number) => { x: number; }
+>1 : number
 
 interface I {
 >I : I
@@ -139,6 +152,7 @@ var r9 = foo9(1);
 >r9 : I
 >foo9(1) : I
 >foo9 : (x: number) => I
+>1 : number
 
 class C {
 >C : C
@@ -161,12 +175,14 @@ var r10 = foo10(1);
 >r10 : C
 >foo10(1) : C
 >foo10 : (x: number) => C
+>1 : number
 
 module M {
 >M : typeof M
 
     export var x = 1;
 >x : number
+>1 : number
 
     export class C { foo: string }
 >C : C
@@ -213,10 +229,12 @@ var r12 = foo12();
 
 function m1() { return 1; }
 >m1 : typeof m1
+>1 : number
 
 module m1 { export var y = 2; }
 >m1 : typeof m1
 >y : number
+>2 : number
 
 function foo13() {
 >foo13 : () => typeof m1
@@ -243,6 +261,7 @@ module c1 {
 
     export var x = 1;
 >x : number
+>1 : number
 }
 function foo14() {
 >foo14 : () => typeof c1
@@ -262,6 +281,7 @@ enum e1 { A }
 module e1 { export var y = 1; }
 >e1 : typeof e1
 >y : number
+>1 : number
 
 function foo15() {
 >foo15 : () => typeof e1

@@ -5,6 +5,7 @@ var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 >foo : () => boolean
+>true : boolean
 
 class A {
 >A : A
@@ -14,6 +15,7 @@ class A {
 
     static foo() { return false; }
 >foo : () => boolean
+>false : boolean
 }
 module M {
 >M : typeof M
@@ -37,13 +39,16 @@ var ResultIsAny1 = void BOOLEAN;
 var ResultIsAny2 = void true;
 >ResultIsAny2 : any
 >void true : undefined
+>true : boolean
 
 var ResultIsAny3 = void { x: true, y: false };
 >ResultIsAny3 : any
 >void { x: true, y: false } : undefined
 >{ x: true, y: false } : { x: boolean; y: boolean; }
 >x : boolean
+>true : boolean
 >y : boolean
+>false : boolean
 
 // boolean type expressions
 var ResultIsAny4 = void objA.a;
@@ -84,6 +89,7 @@ var ResultIsAny8 = void void BOOLEAN;
 // miss assignment operators
 void true;
 >void true : undefined
+>true : boolean
 
 void BOOLEAN;
 >void BOOLEAN : undefined
@@ -97,6 +103,8 @@ void foo();
 void true, false;
 >void true, false : boolean
 >void true : undefined
+>true : boolean
+>false : boolean
 
 void objA.a;
 >void objA.a : undefined

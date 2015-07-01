@@ -18,17 +18,15 @@ module C {
 
 //// [importedModuleAddToGlobal.js]
 var B;
-(function (_B) {
+(function (B_1) {
     var B = (function () {
         function B() {
         }
         return B;
     })();
-    _B.B = B;
+    B_1.B = B;
 })(B || (B = {}));
 var C;
 (function (C) {
-    function hello() {
-        return null;
-    }
+    function hello() { return null; }
 })(C || (C = {}));

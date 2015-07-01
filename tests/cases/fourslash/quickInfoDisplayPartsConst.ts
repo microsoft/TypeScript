@@ -22,13 +22,12 @@
 /////*15*/h(10);
 /////*16*/h("hello");
 
-debugger;
 var marker = 0;
 function verifyConst(name: string, typeDisplay: ts.SymbolDisplayPart[], optionalNameDisplay?: ts.SymbolDisplayPart[], optionalKindModifiers?: string) {
     marker++;
     goTo.marker(marker.toString());
     verify.verifyQuickInfoDisplayParts("const", optionalKindModifiers || "", { start: test.markerByName(marker.toString()).position, length: name.length },
-        [{ text: "(", kind: "punctuation" }, { text: "const", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "const", kind: "keyword" },
             { text: " ", kind: "space" }].concat(optionalNameDisplay || [{ text: name, kind: "localName" }]).concat(
             { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }).concat(typeDisplay),
         []);

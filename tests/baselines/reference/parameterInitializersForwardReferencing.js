@@ -74,9 +74,7 @@ function outside() {
     }
 }
 function defaultArgFunction(a, b) {
-    if (a === void 0) { a = function () {
-        return b;
-    }; }
+    if (a === void 0) { a = function () { return b; }; }
     if (b === void 0) { b = 1; }
 }
 function defaultArgArrow(a, b) {
@@ -103,8 +101,6 @@ var x = function (a, b, c) {
 };
 // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
 function f(a, b, c) {
-    if (b === void 0) { b = function () {
-        return c;
-    }; }
+    if (b === void 0) { b = function () { return c; }; }
     if (c === void 0) { c = b(); }
 }

@@ -1,0 +1,39 @@
+//// [varArgConstructorMemberParameter.ts]
+class Foo1 {
+    constructor (...args: string[]) { }
+}
+
+class Foo2 {
+    constructor (public args: string[]) { }
+}
+
+class Foo3 {
+    constructor (public ...args: string[]) { }
+}
+
+
+//// [varArgConstructorMemberParameter.js]
+var Foo1 = (function () {
+    function Foo1() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i - 0] = arguments[_i];
+        }
+    }
+    return Foo1;
+})();
+var Foo2 = (function () {
+    function Foo2(args) {
+        this.args = args;
+    }
+    return Foo2;
+})();
+var Foo3 = (function () {
+    function Foo3(public) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+    }
+    return Foo3;
+})();

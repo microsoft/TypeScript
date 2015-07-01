@@ -4,6 +4,4 @@ function foo(bar:{a:string;}) { return {a:""} }
 
 
 //// [functionOverloads18.js]
-function foo(bar) {
-    return { a: "" };
-}
+function foo(bar) { return { a: "" }; }

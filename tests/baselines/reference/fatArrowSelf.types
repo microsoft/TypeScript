@@ -28,7 +28,7 @@ module Consumer {
 
         constructor (private emitter: Events.EventEmitter) { }
 >emitter : Events.EventEmitter
->Events : unknown
+>Events : any
 >EventEmitter : Events.EventEmitter
 
         private register() {
@@ -41,6 +41,7 @@ module Consumer {
 >this : EventEmitterConsummer
 >emitter : Events.EventEmitter
 >addListener : (type: string, listener: Events.ListenerCallback) => void
+>'change' : string
 >(e) => {                this.changed();            } : (e: any) => void
 >e : any
 

@@ -49,20 +49,15 @@ delete objA.a, M.n;
 // delete  operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];
-function foo() {
-    return 1;
-}
+function foo() { return 1; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return 1;
-    };
+    A.foo = function () { return 1; };
     return A;
 })();
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // number type var
@@ -71,9 +66,7 @@ var ResultIsBoolean2 = delete NUMBER1;
 // number type literal
 var ResultIsBoolean3 = delete 1;
 var ResultIsBoolean4 = delete { x: 1, y: 2 };
-var ResultIsBoolean5 = delete { x: 1, y: function (n) {
-    return n;
-} };
+var ResultIsBoolean5 = delete { x: 1, y: function (n) { return n; } };
 // number type expressions
 var ResultIsBoolean6 = delete objA.a;
 var ResultIsBoolean7 = delete M.n;

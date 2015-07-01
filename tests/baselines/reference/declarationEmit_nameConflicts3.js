@@ -27,30 +27,26 @@ module M.P {
 }
 
 //// [declarationEmit_nameConflicts3.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var M;
 (function (M) {
     var D;
     (function (D) {
-        function f() {
-        }
+        function f() { }
         D.f = f;
     })(D = M.D || (M.D = {}));
     var C;
     (function (C) {
-        function f() {
-        }
+        function f() { }
         C.f = f;
     })(C = M.C || (M.C = {}));
     var E;
     (function (E) {
-        function f() {
-        }
+        function f() { }
         E.f = f;
     })(E = M.E || (M.E = {}));
 })(M || (M = {}));
@@ -61,8 +57,7 @@ var M;
         var C = (function () {
             function C() {
             }
-            C.f = function () {
-            };
+            C.f = function () { };
             return C;
         })();
         P.C = C;
@@ -78,7 +73,6 @@ var M;
             D[D["f"] = 0] = "f";
         })(P.D || (P.D = {}));
         var D = P.D;
-        P.v; // ok
         P.w = M.D.f; // error, should be typeof M.D.f
         P.x = M.C.f; // error, should be typeof M.C.f
         P.x = M.E.f; // error, should be typeof M.E.f

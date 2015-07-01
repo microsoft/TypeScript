@@ -24,9 +24,9 @@ var Z;
 var A;
 (function (A) {
     var M;
-    (function (M) {
+    (function (M_1) {
         function bar() {
         }
-        M.bar = bar;
+        M_1.bar = bar;
     })(M = A.M || (A.M = {}));
 })(A || (A = {}));

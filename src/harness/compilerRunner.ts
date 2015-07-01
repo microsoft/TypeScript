@@ -1,7 +1,6 @@
 /// <reference path='harness.ts' />
 /// <reference path='runnerbase.ts' />
 /// <reference path='typeWriter.ts' />
-/// <reference path='syntacticCleaner.ts' />
 
 const enum CompilerTestType {
     Conformance,
@@ -18,7 +17,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public options: string;
 
-    constructor(public testType?: CompilerTestType) {
+    constructor(public testType: CompilerTestType) {
         super();
         this.errors = true;
         this.emit = true;
@@ -97,7 +96,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     program = _program;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
-                });
+                    });
             });
 
             beforeEach(() => {
@@ -150,9 +149,8 @@ class CompilerBaselineRunner extends RunnerBase {
             // check errors
             it('Correct errors for ' + fileName, () => {
                 if (this.errors) {
-                    Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
+                    Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.tsx?$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;
-                        
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
                 }
@@ -160,8 +158,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // Source maps?
             it('Correct sourcemap content for ' + fileName, () => {
-                if (options.sourceMap) {
-                    Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.ts$/, '.sourcemap.txt'), () => {
+                if (options.sourceMap || options.inlineSourceMap) {
+                    Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.tsx?$/, '.sourcemap.txt'), () => {
                         var record = result.getSourceMapRecord();
                         if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
@@ -172,7 +170,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-
             it('Correct JS output for ' + fileName, () => {
                 if (!ts.fileExtensionIs(lastUnit.name, '.d.ts') && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
@@ -180,7 +177,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
 
                     // check js output
-                    Harness.Baseline.runBaseline('Correct JS output for ' + fileName, justName.replace(/\.ts/, '.js'), () => {
+                    Harness.Baseline.runBaseline('Correct JS output for ' + fileName, justName.replace(/\.tsx?/, '.js'), () => {
                         var tsCode = '';
                         var tsSources = otherFiles.concat(toBeCompiled);
                         if (tsSources.length > 1) {
@@ -196,8 +193,6 @@ class CompilerBaselineRunner extends RunnerBase {
                             jsCode += '//// [' + Harness.Path.getFileName(result.files[i].fileName) + ']\r\n';
                             jsCode += getByteOrderMarkText(result.files[i]);
                             jsCode += result.files[i].code;
-                            // Re-enable this if we want to do another comparison of old vs new compiler baselines
-                            // jsCode += SyntacticCleaner.clean(result.files[i].code);
                         }
 
                         if (result.declFilesCode.length > 0) {
@@ -229,12 +224,18 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct Sourcemap output for ' + fileName, () => {
-                if (options.sourceMap) {
+                if (options.inlineSourceMap) {
+                    if (result.sourceMaps.length > 0) {
+                        throw new Error('No sourcemap files should be generated if inlineSourceMaps was set.');
+                    }
+                    return null;
+                }
+                else if (options.sourceMap) {
                     if (result.sourceMaps.length !== result.files.length) {
                         throw new Error('Number of sourcemap files should be same as js files.');
                     }
 
-                    Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.ts/, '.js.map'), () => {
+                    Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.tsx?/, '.js.map'), () => {
                         if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
                             // Baselining isn't required here because there is no output.
@@ -253,18 +254,93 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-            it('Correct type baselines for ' + fileName, () => {
+            it('Correct type/symbol baselines for ' + fileName, () => {
+                if (fileName.indexOf("APISample") >= 0) {
+                    return;
+                }
+
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
-                    Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => {
-                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
-                        var typeLines: string[] = [];
-                        var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-                        var walker = new TypeWriterWalker(program);
+                    // The full walker simulates the types that you would get from doing a full 
+                    // compile.  The pull walker simulates the types you get when you just do
+                    // a type query for a random node (like how the LS would do it).  Most of the
+                    // time, these will be the same.  However, occasionally, they can be different.
+                    // Specifically, when the compiler internally depends on symbol IDs to order
+                    // things, then we may see different results because symbols can be created in a 
+                    // different order with 'pull' operations, and thus can produce slightly differing
+                    // output.
+                    //
+                    // For example, with a full type check, we may see a type outputed as: number | string
+                    // But with a pull type check, we may see it as:                       string | number
+                    //
+                    // These types are equivalent, but depend on what order the compiler observed 
+                    // certain parts of the program.
+
+                    let allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
+
+                    let fullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ true);
+                    let pullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ false);
+
+                    let fullResults: ts.Map<TypeWriterResult[]> = {};
+                    let pullResults: ts.Map<TypeWriterResult[]> = {};
+
+                    for (let sourceFile of allFiles) {
+                        fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                        pullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                    }
+
+                    // Produce baselines.  The first gives the types for all expressions.
+                    // The second gives symbols for all identifiers.
+                    var e1: Error, e2: Error;
+                    try {
+                        checkBaseLines(/*isSymbolBaseLine:*/ false);
+                    }
+                    catch (e) {
+                        e1 = e;
+                    }
+
+                    try {
+                        checkBaseLines(/*isSymbolBaseLine:*/ true);
+                    }
+                    catch (e) {
+                        e2 = e;
+                    }
+
+                    if (e1 || e2) {
+                        throw e1 || e2;
+                    }
+
+                    return;
+
+                    function checkBaseLines(isSymbolBaseLine: boolean) {
+                        let fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
+                        let pullBaseLine = generateBaseLine(pullResults, isSymbolBaseLine);
+
+                        let fullExtension = isSymbolBaseLine ? '.symbols' : '.types';
+                        let pullExtension = isSymbolBaseLine ? '.symbols.pull' : '.types.pull';
+
+                        if (fullBaseLine !== pullBaseLine) {
+                            Harness.Baseline.runBaseline('Correct full information for ' + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                            Harness.Baseline.runBaseline('Correct pull information for ' + fileName, justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
+                        }
+                        else {
+                            Harness.Baseline.runBaseline('Correct information for ' + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                        }
+                    }
+
+                    function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                        let typeLines: string[] = [];
+                        let typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
-                            walker.getTypes(file.unitName).forEach(result => {
-                                var formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + result.type;
+                            typeWriterResults[file.unitName].forEach(result => {
+                                if (isSymbolBaseline && !result.symbol) {
+                                    return;
+                                }
+
+                                var typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
+                                var formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
                                 if (!typeMap[file.unitName]) {
                                     typeMap[file.unitName] = {};
                                 }
@@ -288,18 +364,20 @@ class CompilerBaselineRunner extends RunnerBase {
                                             typeLines.push('>' + ty + '\r\n');
                                         });
                                         if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === '')) {
-                                        } else {
+                                        }
+                                        else {
                                             typeLines.push('\r\n');
                                         }
                                     }
-                                } else {
+                                }
+                                else {
                                     typeLines.push('No type information for this code.');
                                 }
                             }
                         });
 
                         return typeLines.join('');
-                    });
+                    }
                 }
             });
         });
@@ -313,7 +391,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
         // this will set up a series of describe/it blocks to run between the setup and cleanup phases
         if (this.tests.length === 0) {
-            var testFiles = this.enumerateFiles(this.basePath, /\.ts$/, { recursive: true });
+            var testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
             testFiles.forEach(fn => {
                 fn = fn.replace(/\\/g, "/");
                 this.checkTestCodeOutput(fn);

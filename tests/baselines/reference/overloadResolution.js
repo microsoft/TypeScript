@@ -95,11 +95,10 @@ var s = fn5((n) => n.substr(0));
 
 
 //// [overloadResolution.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var SomeBase = (function () {
     function SomeBase() {
@@ -127,16 +126,12 @@ var SomeDerived3 = (function (_super) {
     }
     return SomeDerived3;
 })(SomeBase);
-function fn1() {
-    return null;
-}
+function fn1() { return null; }
 var s = fn1(undefined);
 var s;
 // No candidate overloads found
 fn1({}); // Error
-function fn2() {
-    return undefined;
-}
+function fn2() { return undefined; }
 var d = fn2(0, undefined);
 var d;
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
@@ -145,9 +140,7 @@ var s = fn2(0, '');
 fn2('', 0); // Error
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 fn2('', 0); // OK
-function fn3() {
-    return null;
-}
+function fn3() { return null; }
 var s = fn3(3);
 var s = fn3('', 3, '');
 var n = fn3(5, 5, 5);
@@ -158,8 +151,7 @@ var s = fn3('', '', '');
 var n = fn3('', '', 3);
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 fn3(); // Error
-function fn4() {
-}
+function fn4() { }
 fn4('', 3);
 fn4(3, ''); // Error
 fn4('', 3); // Error
@@ -174,8 +166,6 @@ fn4(null, null); // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4(true, null); // Error
 fn4(null, true); // Error
-function fn5() {
-    return undefined;
-}
+function fn5() { return undefined; }
 var n = fn5(function (n) { return n.toFixed(); });
 var s = fn5(function (n) { return n.substr(0); });

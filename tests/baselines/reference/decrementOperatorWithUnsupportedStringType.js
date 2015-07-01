@@ -69,20 +69,15 @@ objA.a--, M.n--;
 // -- operator on string type
 var STRING;
 var STRING1 = ["", ""];
-function foo() {
-    return "";
-}
+function foo() { return ""; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return "";
-    };
+    A.foo = function () { return ""; };
     return A;
 })();
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // string type var
@@ -93,14 +88,10 @@ var ResultIsNumber4 = STRING1--;
 // string type literal
 var ResultIsNumber5 = --"";
 var ResultIsNumber6 = --{ x: "", y: "" };
-var ResultIsNumber7 = --{ x: "", y: function (s) {
-    return s;
-} };
+var ResultIsNumber7 = --{ x: "", y: function (s) { return s; } };
 var ResultIsNumber8 = ""--;
 var ResultIsNumber9 = { x: "", y: "" }--;
-var ResultIsNumber10 = { x: "", y: function (s) {
-    return s;
-} }--;
+var ResultIsNumber10 = { x: "", y: function (s) { return s; } }--;
 // string type expressions
 var ResultIsNumber11 = --objA.a;
 var ResultIsNumber12 = --M.n;

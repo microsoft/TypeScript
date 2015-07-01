@@ -28,12 +28,8 @@ var C = (function () {
         this.b = '';
         this.d = function () { return ''; };
     }
-    C.prototype.c = function () {
-        return '';
-    };
-    C.f = function () {
-        return '';
-    };
+    C.prototype.c = function () { return ''; };
+    C.f = function () { return ''; };
     C.g = function () { return ''; };
     return C;
 })();

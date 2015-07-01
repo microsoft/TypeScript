@@ -1,0 +1,15 @@
+=== tests/cases/compiler/generatorES6_6.ts ===
+class C {
+>C : C
+
+  *[Symbol.iterator]() {
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+    let a = yield 1;
+>a : any
+>yield 1 : any
+>1 : number
+  }
+}

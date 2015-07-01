@@ -97,9 +97,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -108,9 +106,7 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 var aNumber = 9.9;
@@ -149,14 +145,13 @@ throw aFunctionInModule;
 // no initializer or annotation, so this is an 'any'
 var x;
 throw x;
+// literals
 throw 0.0;
 throw false;
 throw null;
 throw undefined;
 throw 'a string';
-throw function () {
-    return 'a string';
-};
+throw function () { return 'a string'; };
 throw function (x) { return 42; };
 throw { x: 12, y: 13 };
 throw [];

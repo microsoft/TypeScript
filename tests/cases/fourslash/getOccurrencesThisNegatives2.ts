@@ -143,5 +143,5 @@
 
 test.markers().forEach(m => {
     goTo.position(m.position, m.fileName)
-    verify.occurrencesAtPositionCount(1);
+    verify.occurrencesAtPositionCount(0);
 });

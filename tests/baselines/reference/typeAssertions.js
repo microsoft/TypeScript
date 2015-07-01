@@ -43,17 +43,14 @@ someOther = <SomeOther>someOther;
 
 
 //// [typeAssertions.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
-function fn1(t) {
-}
-function fn2(t) {
-}
+function fn1(t) { }
+function fn2(t) { }
 fn1(fn2(4)); // Error
 var a;
 var s;

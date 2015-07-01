@@ -30,12 +30,16 @@ var x1: Action[] = [
     { id: 2, trueness: false },
 >{ id: 2, trueness: false } : { id: number; trueness: boolean; }
 >id : number
+>2 : number
 >trueness : boolean
+>false : boolean
 
     { id: 3, name: "three" }
 >{ id: 3, name: "three" } : { id: number; name: string; }
 >id : number
+>3 : number
 >name : string
+>"three" : string
 
 ]
 
@@ -83,12 +87,16 @@ var z1: { id: number }[] =
         { id: 2, trueness: false },
 >{ id: 2, trueness: false } : { id: number; trueness: boolean; }
 >id : number
+>2 : number
 >trueness : boolean
+>false : boolean
 
         { id: 3, name: "three" }
 >{ id: 3, name: "three" } : { id: number; name: string; }
 >id : number
+>3 : number
 >name : string
+>"three" : string
 
     ]
 

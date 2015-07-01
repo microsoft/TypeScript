@@ -1,21 +1,21 @@
 tests/cases/compiler/classUpdateTests.ts(34,2): error TS2377: Constructors for derived classes must contain a 'super' call.
 tests/cases/compiler/classUpdateTests.ts(43,18): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/compiler/classUpdateTests.ts(46,17): error TS2311: A class may only extend another class.
-tests/cases/compiler/classUpdateTests.ts(47,18): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/compiler/classUpdateTests.ts(57,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
 tests/cases/compiler/classUpdateTests.ts(63,7): error TS2415: Class 'L' incorrectly extends base class 'G'.
   Property 'p1' is private in type 'L' but not in type 'G'.
 tests/cases/compiler/classUpdateTests.ts(69,7): error TS2415: Class 'M' incorrectly extends base class 'G'.
   Property 'p1' is private in type 'M' but not in type 'G'.
 tests/cases/compiler/classUpdateTests.ts(70,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
-tests/cases/compiler/classUpdateTests.ts(93,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(93,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(95,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(99,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(99,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(101,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(105,3): error TS1129: Statement expected.
-tests/cases/compiler/classUpdateTests.ts(105,15): error TS2339: Property 'p1' does not exist on type 'Q'.
-tests/cases/compiler/classUpdateTests.ts(111,3): error TS1129: Statement expected.
-tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' does not exist on type 'R'.
+tests/cases/compiler/classUpdateTests.ts(105,3): error TS1128: Declaration or statement expected.
+tests/cases/compiler/classUpdateTests.ts(105,14): error TS1005: ';' expected.
+tests/cases/compiler/classUpdateTests.ts(107,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/classUpdateTests.ts(111,3): error TS1128: Declaration or statement expected.
+tests/cases/compiler/classUpdateTests.ts(111,15): error TS1005: ';' expected.
+tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or statement expected.
 
 
 ==== tests/cases/compiler/classUpdateTests.ts (16 errors) ====
@@ -69,11 +69,7 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     }
     
     class I extends Object {
-                    ~~~~~~
-!!! error TS2311: A class may only extend another class.
     	constructor() { super(); } // ERROR - no super call allowed
-    	                ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
     }
     
     class J extends G {
@@ -137,7 +133,7 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     	constructor() {
     		public p1 = 0; // ERROR
     		~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     	}
     }
     ~
@@ -147,7 +143,7 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     	constructor() {
     		private p1 = 0; // ERROR
     		~~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     	}
     }
     ~
@@ -157,18 +153,22 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     	constructor() {
     		public this.p1 = 0; // ERROR
     		~~~~~~
-!!! error TS1129: Statement expected.
-    		            ~~
-!!! error TS2339: Property 'p1' does not exist on type 'Q'.
+!!! error TS1128: Declaration or statement expected.
+    		           ~
+!!! error TS1005: ';' expected.
     	}
     }
+    ~
+!!! error TS1128: Declaration or statement expected.
     
     class R {
     	constructor() {
     		private this.p1 = 0; // ERROR
     		~~~~~~~
-!!! error TS1129: Statement expected.
-    		             ~~
-!!! error TS2339: Property 'p1' does not exist on type 'R'.
+!!! error TS1128: Declaration or statement expected.
+    		            ~
+!!! error TS1005: ';' expected.
     	}
     }
+    ~
+!!! error TS1128: Declaration or statement expected.

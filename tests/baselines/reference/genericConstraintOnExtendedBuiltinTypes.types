@@ -12,7 +12,8 @@ declare module EndGate {
 
 interface Number extends EndGate.ICloneable { }
 >Number : Number
->EndGate : unknown
+>EndGate.ICloneable : any
+>EndGate : typeof EndGate
 >ICloneable : EndGate.ICloneable
 
 module EndGate.Tweening {
@@ -52,7 +53,7 @@ module EndGate.Tweening {
 
     export class NumberTween extends Tween<number>{
 >NumberTween : NumberTween
->Tween : Tween<T>
+>Tween : Tween<number>
 
         constructor(from: number) {
 >from : number

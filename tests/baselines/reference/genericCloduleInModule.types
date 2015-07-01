@@ -17,12 +17,13 @@ module A {
 
         export var x = 1;
 >x : number
+>1 : number
     }
 }
 
 var b: A.B<number>;
 >b : A.B<number>
->A : unknown
+>A : any
 >B : A.B<T>
 
 b.foo();

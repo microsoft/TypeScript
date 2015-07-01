@@ -10,7 +10,7 @@
 ////}
 
 goTo.marker("1");
-verify.quickInfoIs('(function) foo(): void');
+verify.quickInfoIs('function foo(): void');
 goTo.marker("2");
 verify.quickInfoIs('(local function) bar2(): void');
 goTo.marker("3");

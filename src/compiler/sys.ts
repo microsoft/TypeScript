@@ -1,22 +1,22 @@
 /// <reference path="core.ts"/>
 
-module ts {
+namespace ts {
     export interface System {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(fileName: string, encoding?: string): string;
-        writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile? (fileName: string, callback: (fileName: string) => void): FileWatcher;
+        readFile(path: string, encoding?: string): string;
+        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
-        createDirectory(directoryName: string): void;
+        createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string): string[];
-        getMemoryUsage? (): number;
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
 
@@ -109,7 +109,11 @@ module ts {
                 }
             }
 
-            function getNames(collection: any): string[] {
+            function getCanonicalPath(path: string): string {
+                return path.toLowerCase();
+            }
+
+            function getNames(collection: any): string[]{
                 var result: string[] = [];
                 for (var e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
                     result.push(e.item().Name);
@@ -117,22 +121,26 @@ module ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string): string[] {
+            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 var result: string[] = [];
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
-                    for (var i = 0; i < files.length; i++) {
-                        var name = files[i];
-                        if (!extension || fileExtensionIs(name, extension)) {
-                            result.push(combinePaths(path, name));
+                    for (let current of files) {
+                        let name = combinePaths(path, current);
+                        if ((!extension || fileExtensionIs(name, extension)) && !contains(exclude, getCanonicalPath(name))) {
+                            result.push(name);
                         }
                     }
                     var subfolders = getNames(folder.subfolders);
-                    for (var i = 0; i < subfolders.length; i++) {
-                        visitDirectory(combinePaths(path, subfolders[i]));
+                    for (let current of subfolders) {
+                        let name = combinePaths(path, current);
+                        if (!contains(exclude, getCanonicalPath(name))) {
+                            visitDirectory(name);
+                        }
                     }
                 }
             }
@@ -223,27 +231,34 @@ module ts {
                 _fs.writeFileSync(fileName, data, "utf8");
             }
 
-            function readDirectory(path: string, extension?: string): string[] {
+            function getCanonicalPath(path: string): string {
+                return useCaseSensitiveFileNames ? path.toLowerCase() : path;
+            }
+
+            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 var result: string[] = [];
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
                     var files = _fs.readdirSync(path || ".").sort();
                     var directories: string[] = [];
-                    for (var i = 0; i < files.length; i++) {
-                        var name = combinePaths(path, files[i]);
-                        var stat = _fs.lstatSync(name);
-                        if (stat.isFile()) {
-                            if (!extension || fileExtensionIs(name, extension)) {
-                                result.push(name);
+                    for (let current of files) {
+                        var name = combinePaths(path, current);
+                        if (!contains(exclude, getCanonicalPath(name))) {
+                            var stat = _fs.statSync(name);
+                            if (stat.isFile()) {
+                                if (!extension || fileExtensionIs(name, extension)) {
+                                    result.push(name);
+                                }
+                            }
+                            else if (stat.isDirectory()) {
+                                directories.push(name);
                             }
                         }
-                        else if (stat.isDirectory()) {
-                            directories.push(name);
-                        }
                     }
-                    for (var i = 0; i < directories.length; i++) {
-                        visitDirectory(directories[i]);
+                    for (let current of directories) {
+                        visitDirectory(current);
                     }
                 }
             }

@@ -1,0 +1,23 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(1,15): error TS2495: Type 'StringIterator' is not an array type or a string type.
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(11,6): error TS2304: Cannot find name 'Symbol'.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts (2 errors) ====
+    for (var v of new StringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2495: Type 'StringIterator' is not an array type or a string type.
+    
+    // In ES3/5, you cannot for...of over an arbitrary iterable.
+    class StringIterator {
+        next() {
+            return {
+                done: true,
+                value: ""
+            };
+        }
+        [Symbol.iterator]() {
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return this;
+        }
+    }

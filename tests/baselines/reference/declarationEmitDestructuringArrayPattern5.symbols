@@ -1,0 +1,10 @@
+=== tests/cases/compiler/declarationEmitDestructuringArrayPattern5.ts ===
+var [, , z] = [1, 2, 4];
+>z : Symbol(z, Decl(declarationEmitDestructuringArrayPattern5.ts, 0, 8))
+
+var [, a, , ] = [3, 4, 5];
+>a : Symbol(a, Decl(declarationEmitDestructuringArrayPattern5.ts, 1, 6))
+
+var [, , [, b, ]] = [3,5,[0, 1]];
+>b : Symbol(b, Decl(declarationEmitDestructuringArrayPattern5.ts, 2, 11))
+

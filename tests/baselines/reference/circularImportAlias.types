@@ -10,8 +10,9 @@ module B {
 
     export class D extends a.C {
 >D : D
->a : unknown
->C : a.C
+>a.C : a.C
+>a : typeof a
+>C : typeof a.C
 
         id: number;
 >id : number

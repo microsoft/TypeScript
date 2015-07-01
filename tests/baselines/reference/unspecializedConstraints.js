@@ -154,11 +154,10 @@ module ts {
 
 
 //// [unspecializedConstraints.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var ts;
 (function (ts) {
@@ -240,7 +239,9 @@ var ts;
             this.flags = flags;
         }
         Property.prototype.equals = function (other) {
-            return this.name === other.name && this.flags === other.flags && this.type.equals(other.type);
+            return this.name === other.name &&
+                this.flags === other.flags &&
+                this.type.equals(other.type);
         };
         return Property;
     })(Symbol);
@@ -258,10 +259,14 @@ var ts;
             this.returnType = returnType;
         }
         Signature.prototype.equalsNoReturn = function (other) {
-            return this.parameters.length === other.parameters.length && this.typeParameters.length === other.typeParameters.length && arrayEquals(this.parameters, other.parameters) && arrayEquals(this.typeParameters, other.typeParameters);
+            return this.parameters.length === other.parameters.length &&
+                this.typeParameters.length === other.typeParameters.length &&
+                arrayEquals(this.parameters, other.parameters) &&
+                arrayEquals(this.typeParameters, other.typeParameters);
         };
         Signature.prototype.equals = function (other) {
-            return this.equalsNoReturn(other) && this.returnType.equals(other.returnType);
+            return this.equalsNoReturn(other) &&
+                this.returnType.equals(other.returnType);
         };
         return Signature;
     })(Symbol);
@@ -274,7 +279,9 @@ var ts;
             this.flags = flags;
         }
         Parameter.prototype.equals = function (other) {
-            return this.name === other.name && this.flags === other.flags && this.type.equals(other.type);
+            return this.name === other.name &&
+                this.flags === other.flags &&
+                this.type.equals(other.type);
         };
         return Parameter;
     })(Symbol);

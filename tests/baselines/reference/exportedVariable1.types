@@ -3,6 +3,7 @@ export var foo = {name: "Bill"};
 >foo : { name: string; }
 >{name: "Bill"} : { name: string; }
 >name : string
+>"Bill" : string
 
 var upper = foo.name.toUpperCase();
 >upper : string

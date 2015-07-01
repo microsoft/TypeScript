@@ -140,11 +140,9 @@ b++;
 // modules
 var moduleType1;
 (function (moduleType1) {
-    moduleType1.baz1;
 })(moduleType1 || (moduleType1 = {}));
 var moduleType\u0032;
-(function (moduleType\u0032) {
-    moduleType\u0032.baz2;
+(function (moduleType2) {
 })(moduleType\u0032 || (moduleType\u0032 = {}));
 moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
@@ -204,19 +202,20 @@ constructorTestObject.arg\u0031 = 1;
 constructorTestObject.arg2 = 'string';
 constructorTestObject.arg\u0033 = true;
 constructorTestObject.arg4 = 2;
+// Lables
 l\u0061bel1: while (false) {
     while (false)
-        continue label1;
+        continue label1; // it will go to next iteration of outer loop 
 }
 label2: while (false) {
     while (false)
-        continue l\u0061bel2;
+        continue l\u0061bel2; // it will go to next iteration of outer loop 
 }
 label3: while (false) {
     while (false)
-        continue label3;
+        continue label3; // it will go to next iteration of outer loop 
 }
 l\u0061bel4: while (false) {
     while (false)
-        continue l\u0061bel4;
+        continue l\u0061bel4; // it will go to next iteration of outer loop 
 }

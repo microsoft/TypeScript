@@ -1,6 +1,7 @@
 === tests/cases/compiler/privacyCheckAnonymousFunctionParameter.ts ===
 export var x = 1;  // Makes this an external module
 >x : number
+>1 : number
 
 interface Iterator<T> {
 >Iterator : Iterator<T>
@@ -21,6 +22,7 @@ module Query {
 >T : T
 
         return null;
+>null : null
     }
 
     function fromOrderBy() {
@@ -33,6 +35,8 @@ module Query {
 >test : Iterator<{}>
 
             return true;
+>true : boolean
+
         });
     }
 }

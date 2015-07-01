@@ -4,7 +4,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
       Types of property 'b' are incompatible.
         Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(52,15): error TS2320: Interface 'Derived3<T>' cannot simultaneously extend types 'Base1<number>' and 'Base2<number>'.
-  Named properties 'x' of types 'Base1<number>' and 'Base2<number>' are not identical.
+  Named property 'x' of types 'Base1<number>' and 'Base2<number>' are not identical.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(54,15): error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base1<number>'.
   Types of property 'x' are incompatible.
     Type '{ a: T; b: T; }' is not assignable to type '{ a: number; }'.
@@ -86,7 +86,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
         interface Derived3<T> extends Base1<number>, Base2<number> { } // error
                   ~~~~~~~~
 !!! error TS2320: Interface 'Derived3<T>' cannot simultaneously extend types 'Base1<number>' and 'Base2<number>'.
-!!! error TS2320:   Named properties 'x' of types 'Base1<number>' and 'Base2<number>' are not identical.
+!!! error TS2320:   Named property 'x' of types 'Base1<number>' and 'Base2<number>' are not identical.
     
         interface Derived4<T> extends Base1<number>, Base2<number> { // error
                   ~~~~~~~~

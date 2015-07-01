@@ -44,10 +44,8 @@ var Elephant = (function () {
     }
     return Elephant;
 })();
-function foo(animals) {
-}
-function bar(animals) {
-}
+function foo(animals) { }
+function bar(animals) { }
 foo([
     new Giraffe(),
     new Elephant()

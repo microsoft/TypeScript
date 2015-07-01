@@ -48,11 +48,10 @@ class FooBase {
 }
 
 //// [complexClassRelationships.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // There should be no errors in this file
 var Derived = (function (_super) {
@@ -68,9 +67,7 @@ var Derived = (function (_super) {
 })(Base);
 var BaseCollection = (function () {
     function BaseCollection(f) {
-        (function (item) {
-            return [item.Components];
-        });
+        (function (item) { return [item.Components]; });
     }
     return BaseCollection;
 })();
@@ -83,9 +80,7 @@ var Thing = (function () {
     function Thing() {
     }
     Object.defineProperty(Thing.prototype, "Components", {
-        get: function () {
-            return null;
-        },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });

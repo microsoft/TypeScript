@@ -119,22 +119,27 @@ export module M.Q {
     }
     export interface b extends M.b { } // ok
 >b : b
->M : unknown
+>M.b : any
+>M : typeof M
 >b : M.C
 
     export interface I extends M.c.I { } // ok
 >I : I
->M : unknown
->c : unknown
+>M.c.I : any
+>M.c : typeof M.N
+>M : typeof M
+>c : typeof M.N
 >I : M.c.I
 
     export module c {
->c : unknown
+>c : any
 
         export interface I extends M.c.I { } // ok
 >I : I
->M : unknown
->c : unknown
+>M.c.I : any
+>M.c : typeof M.N
+>M : typeof M
+>c : typeof M.N
 >I : M.c.I
     }
 }

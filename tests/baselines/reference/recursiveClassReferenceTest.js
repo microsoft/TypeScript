@@ -105,33 +105,30 @@ module Sample.Thing.Languages.PlainText {
 //// [recursiveClassReferenceTest.js]
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Sample;
 (function (Sample) {
     var Actions;
     (function (Actions) {
         var Thing;
-        (function (_Thing) {
+        (function (Thing_1) {
             var Find;
             (function (Find) {
                 var StartFindAction = (function () {
                     function StartFindAction() {
                     }
-                    StartFindAction.prototype.getId = function () {
-                        return "yo";
-                    };
+                    StartFindAction.prototype.getId = function () { return "yo"; };
                     StartFindAction.prototype.run = function (Thing) {
                         return true;
                     };
                     return StartFindAction;
                 })();
                 Find.StartFindAction = StartFindAction;
-            })(Find = _Thing.Find || (_Thing.Find = {}));
+            })(Find = Thing_1.Find || (Thing_1.Find = {}));
         })(Thing = Actions.Thing || (Actions.Thing = {}));
     })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));
@@ -148,11 +145,9 @@ var Sample;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
-                FindWidget.prototype.gar = function (runner) {
-                    if (true) {
-                        return runner(this);
-                    }
-                };
+                FindWidget.prototype.gar = function (runner) { if (true) {
+                    return runner(this);
+                } };
                 FindWidget.prototype.getDomNode = function () {
                     return domNode;
                 };
@@ -167,9 +162,7 @@ var Sample;
 var AbstractMode = (function () {
     function AbstractMode() {
     }
-    AbstractMode.prototype.getInitialState = function () {
-        return null;
-    };
+    AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
 })();
 var Sample;
@@ -190,9 +183,7 @@ var Sample;
                     State.prototype.equals = function (other) {
                         return this === other;
                     };
-                    State.prototype.getMode = function () {
-                        return mode;
-                    };
+                    State.prototype.getMode = function () { return mode; };
                     return State;
                 })();
                 PlainText.State = State;

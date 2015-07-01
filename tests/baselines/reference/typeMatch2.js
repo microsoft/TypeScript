@@ -45,11 +45,10 @@ function f4() {
 
 
 //// [typeMatch2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 function f1() {
     var a = { x: 1, y: 2 };
@@ -93,12 +92,8 @@ function f4() {
     a = { x: 1, y: _any };
     a = { x: 1, y: _any, z: 1 };
     a = { x: 1 }; // error
-    var mf = function m(n) {
-        return false;
-    };
-    var zf = function z(n) {
-        return true;
-    };
+    var mf = function m(n) { return false; };
+    var zf = function z(n) { return true; };
     mf = zf;
     mf(_any);
     zf(_any);

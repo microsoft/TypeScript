@@ -7,33 +7,46 @@ for(var x in {}) {
 }
 
 ONE:
+>ONE : any
+
 for(var x in {}) {
 >x : any
 >{} : {}
 
     break ONE;
+>ONE : any
 }
 
 TWO:
+>TWO : any
+
 THREE:
+>THREE : any
+
 for(var x in {}) {
 >x : any
 >{} : {}
 
     break THREE;
+>THREE : any
 }
 
 FOUR:
+>FOUR : any
+
 for(var x in {}) {
 >x : any
 >{} : {}
 
     FIVE:
+>FIVE : any
+
     for(var x in {}) {
 >x : any
 >{} : {}
 
         break FOUR;
+>FOUR : any
     }
 }
 
@@ -42,12 +55,17 @@ for(var x in {}) {
 >{} : {}
 
     SIX:
+>SIX : any
+
     for(var x in {}) break SIX;
 >x : any
 >{} : {}
+>SIX : any
 }
 
 SEVEN:
+>SEVEN : any
+
 for (var x in {}) for (var x in {}) for (var x in {}) break SEVEN;
 >x : any
 >{} : {}
@@ -55,8 +73,11 @@ for (var x in {}) for (var x in {}) for (var x in {}) break SEVEN;
 >{} : {}
 >x : any
 >{} : {}
+>SEVEN : any
 
 EIGHT:
+>EIGHT : any
+
 for (var x in {}){
 >x : any
 >{} : {}
@@ -66,5 +87,6 @@ for (var x in {}){
 >function () { } : () => void
 
     break EIGHT;
+>EIGHT : any
 }
 

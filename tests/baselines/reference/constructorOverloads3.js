@@ -23,18 +23,16 @@ f1.bar1();
 
 
 //// [constructorOverloads3.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
     }
-    Foo.prototype.bar1 = function () {
-    };
+    Foo.prototype.bar1 = function () { };
     return Foo;
 })(FooBase);
 var f1 = new Foo("hey");

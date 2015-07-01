@@ -12,8 +12,8 @@ module A {
 
 var c: A.B.C = new A.B.C();
 >c : A.B.C
->A : unknown
->B : unknown
+>A : any
+>B : any
 >C : A.B.C
 >new A.B.C() : A.B.C
 >A.B.C : typeof A.B.C

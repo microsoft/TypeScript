@@ -41,7 +41,7 @@ function foo2() {
 // Qualified name
 function foo3(): m.c[] {
 >foo3 : () => m.c[]
->m : unknown
+>m : any
 >c : m.c
 
     return [new m.c()];
@@ -82,7 +82,7 @@ function foo6() {
 // Qualified name with type arguments
 function foo7(): m.g<number>[] {
 >foo7 : () => m.g<number>[]
->m : unknown
+>m : any
 >g : m.g<T>
 
     return [new m.g<number>()];

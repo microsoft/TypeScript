@@ -1,4 +1,6 @@
-EmitOutputStatus : DeclarationGenerationSkipped
-Filename : tests/cases/fourslash/inputFile.js
+EmitSkipped: false
+FileName : tests/cases/fourslash/inputFile.js
 var x = "hello world";
+FileName : tests/cases/fourslash/inputFile.d.ts
+declare var x: number;
 

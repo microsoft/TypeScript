@@ -16,11 +16,10 @@ A.bar(); // valid
 C2.bar(); // valid
 
 //// [classSideInheritance1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
@@ -28,9 +27,7 @@ var A = (function () {
     A.bar = function () {
         return "";
     };
-    A.prototype.foo = function () {
-        return 1;
-    };
+    A.prototype.foo = function () { return 1; };
     return A;
 })();
 var C2 = (function (_super) {

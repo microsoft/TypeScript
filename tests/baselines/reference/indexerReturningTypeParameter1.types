@@ -29,6 +29,7 @@ class c {
 >T : T
 
         return null;
+>null : null
     }
 }
 var a2: c;

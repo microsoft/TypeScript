@@ -18,11 +18,10 @@ class C extends B {
 
 
 //// [lift.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var B = (function () {
     function B(y) {
@@ -37,11 +36,7 @@ var C = (function (_super) {
         var x = 10 + w;
         var ll = x * w;
     }
-    C.prototype.liftxyz = function () {
-        return x + z + this.y;
-    };
-    C.prototype.liftxylocllz = function () {
-        return x + z + this.y + this.ll;
-    };
+    C.prototype.liftxyz = function () { return x + z + this.y; };
+    C.prototype.liftxylocllz = function () { return x + z + this.y + this.ll; };
     return C;
 })(B);

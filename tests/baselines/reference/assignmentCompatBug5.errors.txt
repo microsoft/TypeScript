@@ -3,7 +3,10 @@ tests/cases/compiler/assignmentCompatBug5.ts(2,6): error TS2345: Argument of typ
 tests/cases/compiler/assignmentCompatBug5.ts(5,6): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'number[]'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/assignmentCompatBug5.ts(8,6): error TS2345: Argument of type '(s: string) => void' is not assignable to parameter of type '(n: number) => number'.
+  Types of parameters 's' and 'n' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/assignmentCompatBug5.ts(9,6): error TS2345: Argument of type '(n: number) => void' is not assignable to parameter of type '(n: number) => number'.
+  Type 'void' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/assignmentCompatBug5.ts (4 errors) ====
@@ -23,8 +26,11 @@ tests/cases/compiler/assignmentCompatBug5.ts(9,6): error TS2345: Argument of typ
     foo3((s:string) => { });
          ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(s: string) => void' is not assignable to parameter of type '(n: number) => number'.
+!!! error TS2345:   Types of parameters 's' and 'n' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     foo3((n) => { return; });
          ~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(n: number) => void' is not assignable to parameter of type '(n: number) => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
     
     

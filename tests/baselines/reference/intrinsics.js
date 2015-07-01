@@ -19,7 +19,6 @@ var foo: (__proto__: number) => void;
 var hasOwnProperty; // Error
 var m1;
 (function (m1) {
-    m1.__proto__;
     var C = (function () {
         function C() {
         }

@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty4.ts ===
+var x = {
+>x : {}
+>{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : {}
+
+    [Symbol()]: 0,
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+>0 : number
+
+    [Symbol()]() { },
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    get [Symbol()]() {
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+        return 0;
+>0 : number
+    }
+}

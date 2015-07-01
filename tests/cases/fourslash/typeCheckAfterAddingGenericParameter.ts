@@ -20,5 +20,3 @@ edit.insert(", X");
 goTo.marker('addTypeParam');
 
 edit.insert(", X");
-
-diagnostics.validateTypesAtPositions(91, 163);

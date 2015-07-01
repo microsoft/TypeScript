@@ -49,6 +49,25 @@ module FourSlashInterface {
         position: number;
         data?: any;
     }
+    
+    export interface EditorOptions {
+        IndentSize: number;
+        TabSize: number;
+        NewLineCharacter: string;
+        ConvertTabsToSpaces: boolean;
+    }
+
+    export interface FormatCodeOptions extends EditorOptions {
+        InsertSpaceAfterCommaDelimiter: boolean;
+        InsertSpaceAfterSemicolonInForStatements: boolean;
+        InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+        InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        PlaceOpenBraceOnNewLineForFunctions: boolean;
+        PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        [s: string]: boolean | number| string;
+    }
 
     export interface Range {
         fileName: string;
@@ -80,16 +99,6 @@ module FourSlashInterface {
         }
     }
 
-    export class diagnostics {
-        public validateTypeAtCurrentPosition() {
-            return this.validateTypesAtPositions(FourSlash.currentTestState.currentCaretPosition);
-        }
-
-        public validateTypesAtPositions(...positions: number[]) {
-            return FourSlash.currentTestState.verifyTypesAgainstFullCheckAtPositions(positions);
-        }
-    }
-
     export class goTo {
         // Moves the caret to the specified marker,
         // or the anonymous marker ('/**/') if no name
@@ -108,6 +117,10 @@ module FourSlashInterface {
 
         public definition(definitionIndex: number = 0) {
             FourSlash.currentTestState.goToDefinition(definitionIndex);
+        }
+
+        public type(definitionIndex: number = 0) {
+            FourSlash.currentTestState.goToTypeDefinition(definitionIndex);
         }
 
         public position(position: number, fileIndex?: number);
@@ -172,6 +185,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyCompletionListIsEmpty(this.negative);
         }
 
+        public completionListAllowsNewIdentifier() {
+            FourSlash.currentTestState.verifyCompletionListAllowsNewIdentifier(this.negative);
+        }
+
         public memberListIsEmpty() {
             FourSlash.currentTestState.verifyMemberListIsEmpty(this.negative);
         }
@@ -221,6 +238,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyDefinitionsCount(this.negative, expectedCount);
         }
 
+        public typeDefinitionCountIs(expectedCount: number) {
+            FourSlash.currentTestState.verifyTypeDefinitionsCount(this.negative, expectedCount);
+        }
+
         public definitionLocationExists() {
             FourSlash.currentTestState.verifyDefinitionLocationExists(this.negative);
         }
@@ -262,6 +283,10 @@ module FourSlashInterface {
 
         public currentFileContentIs(text: string) {
             FourSlash.currentTestState.verifyCurrentFileContent(text);
+        }
+
+        public verifyGetEmitOutputForCurrentFile(expected: string): void {
+            FourSlash.currentTestState.verifyGetEmitOutputForCurrentFile(expected);
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
@@ -422,6 +447,18 @@ module FourSlashInterface {
             displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
             FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
+
+        public getSyntacticDiagnostics(expected: string) {
+            FourSlash.currentTestState.getSyntacticDiagnostics(expected);
+        }
+
+        public getSemanticDiagnostics(expected: string) {
+            FourSlash.currentTestState.getSemanticDiagnostics(expected);
+        }
+
+        public ProjectInfo(expected: string []) {
+            FourSlash.currentTestState.verifyProjectInfo(expected);
+        }
     }
 
     export class edit {
@@ -543,6 +580,14 @@ module FourSlashInterface {
             FourSlash.currentTestState.formatDocument();
         }
 
+        public copyFormatOptions(): FormatCodeOptions {
+            return FourSlash.currentTestState.copyFormatOptions();
+        }
+
+        public setFormatOptions(options: FormatCodeOptions) {
+            return FourSlash.currentTestState.setFormatOptions(options);
+        }
+
         public selection(startMarker: string, endMarker: string) {
             FourSlash.currentTestState.formatSelection(FourSlash.currentTestState.getMarkerByName(startMarker).position, FourSlash.currentTestState.getMarkerByName(endMarker).position);
         }
@@ -557,11 +602,11 @@ module FourSlashInterface {
 
     export class cancellation {
         public resetCancelled() {
-            FourSlash.currentTestState.cancellationToken.resetCancelled();
+            FourSlash.currentTestState.resetCancelled();
         }
 
         public setCancelled(numberOfCalls: number = 0) {
-            FourSlash.currentTestState.cancellationToken.setCancelled(numberOfCalls);
+            FourSlash.currentTestState.setCancelled(numberOfCalls);
         }
     }
 
@@ -602,6 +647,10 @@ module FourSlashInterface {
             return getClassification("punctuation", text, position);
         }
 
+        export function docCommentTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("docCommentTagName", text, position);
+        }
+
         export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
             return getClassification("className", text, position);
         }
@@ -622,8 +671,12 @@ module FourSlashInterface {
             return getClassification("typeParameterName", text, position);
         }
 
-        export function typeAlias(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
-            return getClassification("typeAlias", text, position);
+        export function parameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("parameterName", text, position);
+        }
+
+        export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("typeAliasName", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {
@@ -643,7 +696,6 @@ module fs {
     export var edit = new FourSlashInterface.edit();
     export var debug = new FourSlashInterface.debug();
     export var format = new FourSlashInterface.format();
-    export var diagnostics = new FourSlashInterface.diagnostics();
     export var cancellation = new FourSlashInterface.cancellation();
 }
 module ts {
@@ -662,6 +714,5 @@ var verify = new FourSlashInterface.verify();
 var edit = new FourSlashInterface.edit();
 var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
-var diagnostics = new FourSlashInterface.diagnostics();
 var cancellation = new FourSlashInterface.cancellation();
 var classification = FourSlashInterface.classification;

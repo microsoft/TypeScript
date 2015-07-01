@@ -13,11 +13,10 @@ var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
 
 
 //// [contextualTypingOfConditionalExpression2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
@@ -38,5 +37,4 @@ var C = (function (_super) {
     }
     return C;
 })(A);
-var x2 = true ? function (a) { return a.foo; } : function (b) {
-};
+var x2 = true ? function (a) { return a.foo; } : function (b) { };

@@ -21,11 +21,10 @@ class C extends B {
 
 //// [protectedClassPropertyAccessibleWithinSubclass.js]
 // no errors
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var B = (function () {
     function B() {
@@ -38,36 +37,20 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     Object.defineProperty(C.prototype, "y", {
-        get: function () {
-            return this.x;
-        },
-        set: function (x) {
-            this.y = this.x;
-        },
+        get: function () { return this.x; },
+        set: function (x) { this.y = this.x; },
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () {
-        return this.x;
-    };
-    C.prototype.bar = function () {
-        return this.foo();
-    };
+    C.prototype.foo = function () { return this.x; };
+    C.prototype.bar = function () { return this.foo(); };
     Object.defineProperty(C, "y", {
-        get: function () {
-            return this.x;
-        },
-        set: function (x) {
-            this.y = this.x;
-        },
+        get: function () { return this.x; },
+        set: function (x) { this.y = this.x; },
         enumerable: true,
         configurable: true
     });
-    C.foo = function () {
-        return this.x;
-    };
-    C.bar = function () {
-        this.foo();
-    };
+    C.foo = function () { return this.x; };
+    C.bar = function () { this.foo(); };
     return C;
 })(B);

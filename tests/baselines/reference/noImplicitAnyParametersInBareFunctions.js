@@ -46,20 +46,15 @@ var f14 = (x, ...r) => "";
 
 //// [noImplicitAnyParametersInBareFunctions.js]
 // No implicit-'any' errors.
-function f1() {
-}
+function f1() { }
 // Implicit-'any' error for x.
-function f2(x) {
-}
+function f2(x) { }
 // No implicit-'any' errors.
-function f3(x) {
-}
+function f3(x) { }
 // Implicit-'any' errors for x, y, and z.
-function f4(x, y, z) {
-}
+function f4(x, y, z) { }
 // Implicit-'any' errors for x, and z.
-function f5(x, y, z) {
-}
+function f5(x, y, z) { }
 // Implicit-'any[]' error for r.
 function f6() {
     var r = [];
@@ -74,8 +69,7 @@ function f7(x) {
         r[_i - 1] = arguments[_i];
     }
 }
-function f8(x3, y3) {
-}
+function f8(x3, y3) { }
 // No implicit-'any' errors.
 var f9 = function () { return ""; };
 // Implicit-'any' errors for x.

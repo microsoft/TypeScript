@@ -174,11 +174,10 @@ var r18 = foo18(r18arg1);
 
 //// [subtypingWithCallSignatures2.js]
 // checking subtype relations for function types as it relates to contextual signature instantiation
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Base = (function () {
     function Base() {
@@ -217,8 +216,7 @@ var r2 = foo2(r2arg1);
 var r2a = [r2arg1, r2arg2];
 var r2b = [r2arg2, r2arg1];
 var r3arg1 = function (x) { return x; };
-var r3arg2 = function (x) {
-};
+var r3arg2 = function (x) { };
 var r3 = foo3(r3arg1);
 var r3a = [r3arg1, r3arg2];
 var r3b = [r3arg2, r3arg1];

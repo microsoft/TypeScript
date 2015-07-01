@@ -11,6 +11,7 @@ module TypeScript.Parser {
 >SyntaxNode : SyntaxNode
 
             return null;
+>null : null
         }
     }
 }
@@ -63,6 +64,7 @@ module TypeScript {
 >findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken
 >position : number
 >includeSkippedTokens : boolean
+>false : boolean
 >PositionedToken : PositionedToken
 
             var positionedToken = this.findTokenInternal(null, position, 0);
@@ -71,9 +73,12 @@ module TypeScript {
 >this.findTokenInternal : (x: any, y: any, z: any) => any
 >this : SyntaxNode
 >findTokenInternal : (x: any, y: any, z: any) => any
+>null : null
 >position : number
+>0 : number
 
             return null;
+>null : null
         }
         findTokenInternal(x, y, z) {
 >findTokenInternal : (x: any, y: any, z: any) => any
@@ -82,6 +87,7 @@ module TypeScript {
 >z : any
 
             return null;
+>null : null
         }
     }
 }

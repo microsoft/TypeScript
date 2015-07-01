@@ -31,37 +31,26 @@ sourceFile:outputdir_multifolder/ref/m1.ts
 ---
 >>>var m1_c1 = (function () {
 1->
-2 >^^^^
-3 >    ^^^^^
-4 >         ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >class 
-3 >    m1_c1
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 5) Source(2, 7) + SourceIndex(0)
-3 >Emitted(2, 10) Source(2, 12) + SourceIndex(0)
 ---
 >>>    function m1_c1() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             m1_c1
 1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(3, 14) Source(2, 7) + SourceIndex(0) name (m1_c1)
-3 >Emitted(3, 19) Source(2, 12) + SourceIndex(0) name (m1_c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^->
-1 > {
+1->class m1_c1 {
   >    public m1_c1_p1: number;
   >
 2 >    }
-1 >Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
 2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (m1_c1.constructor)
 ---
 >>>    return m1_c1;
@@ -119,16 +108,10 @@ sourceFile:outputdir_multifolder/ref/m1.ts
 ---
 >>>function m1_f1() {
 1 >
-2 >^^^^^^^^^
-3 >         ^^^^^
-4 >              ^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >function 
-3 >         m1_f1
 1 >Emitted(8, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(8, 10) Source(7, 10) + SourceIndex(0)
-3 >Emitted(8, 15) Source(7, 15) + SourceIndex(0)
 ---
 >>>    return m1_instance1;
 1->^^^^
@@ -136,7 +119,7 @@ sourceFile:outputdir_multifolder/ref/m1.ts
 3 >          ^
 4 >           ^^^^^^^^^^^^
 5 >                       ^
-1->() {
+1->function m1_f1() {
   >    
 2 >    return
 3 >           
@@ -185,37 +168,26 @@ sourceFile:outputdir_multifolder_ref/m2.ts
 ---
 >>>var m2_c1 = (function () {
 1->
-2 >^^^^
-3 >    ^^^^^
-4 >         ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >class 
-3 >    m2_c1
 1->Emitted(12, 1) Source(2, 1) + SourceIndex(1)
-2 >Emitted(12, 5) Source(2, 7) + SourceIndex(1)
-3 >Emitted(12, 10) Source(2, 12) + SourceIndex(1)
 ---
 >>>    function m2_c1() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             m2_c1
 1->Emitted(13, 5) Source(2, 1) + SourceIndex(1) name (m2_c1)
-2 >Emitted(13, 14) Source(2, 7) + SourceIndex(1) name (m2_c1)
-3 >Emitted(13, 19) Source(2, 12) + SourceIndex(1) name (m2_c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^->
-1 > {
+1->class m2_c1 {
   >    public m2_c1_p1: number;
   >
 2 >    }
-1 >Emitted(14, 5) Source(4, 1) + SourceIndex(1) name (m2_c1.constructor)
+1->Emitted(14, 5) Source(4, 1) + SourceIndex(1) name (m2_c1.constructor)
 2 >Emitted(14, 6) Source(4, 2) + SourceIndex(1) name (m2_c1.constructor)
 ---
 >>>    return m2_c1;
@@ -273,16 +245,10 @@ sourceFile:outputdir_multifolder_ref/m2.ts
 ---
 >>>function m2_f1() {
 1 >
-2 >^^^^^^^^^
-3 >         ^^^^^
-4 >              ^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >function 
-3 >         m2_f1
 1 >Emitted(18, 1) Source(7, 1) + SourceIndex(1)
-2 >Emitted(18, 10) Source(7, 10) + SourceIndex(1)
-3 >Emitted(18, 15) Source(7, 15) + SourceIndex(1)
 ---
 >>>    return m2_instance1;
 1->^^^^
@@ -290,7 +256,7 @@ sourceFile:outputdir_multifolder_ref/m2.ts
 3 >          ^
 4 >           ^^^^^^^^^^^^
 5 >                       ^
-1->() {
+1->function m2_f1() {
   >    
 2 >    return
 3 >           
@@ -360,37 +326,26 @@ sourceFile:outputdir_multifolder/test.ts
 ---
 >>>var c1 = (function () {
 1->
-2 >^^^^
-3 >    ^^
-4 >      ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >class 
-3 >    c1
 1->Emitted(24, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(24, 5) Source(4, 7) + SourceIndex(2)
-3 >Emitted(24, 7) Source(4, 9) + SourceIndex(2)
 ---
 >>>    function c1() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             c1
 1->Emitted(25, 5) Source(4, 1) + SourceIndex(2) name (c1)
-2 >Emitted(25, 14) Source(4, 7) + SourceIndex(2) name (c1)
-3 >Emitted(25, 16) Source(4, 9) + SourceIndex(2) name (c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^->
-1 > {
+1->class c1 {
   >    public p1: number;
   >
 2 >    }
-1 >Emitted(26, 5) Source(6, 1) + SourceIndex(2) name (c1.constructor)
+1->Emitted(26, 5) Source(6, 1) + SourceIndex(2) name (c1.constructor)
 2 >Emitted(26, 6) Source(6, 2) + SourceIndex(2) name (c1.constructor)
 ---
 >>>    return c1;
@@ -448,16 +403,10 @@ sourceFile:outputdir_multifolder/test.ts
 ---
 >>>function f1() {
 1 >
-2 >^^^^^^^^^
-3 >         ^^
-4 >           ^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >function 
-3 >         f1
 1 >Emitted(30, 1) Source(9, 1) + SourceIndex(2)
-2 >Emitted(30, 10) Source(9, 10) + SourceIndex(2)
-3 >Emitted(30, 12) Source(9, 12) + SourceIndex(2)
 ---
 >>>    return instance1;
 1->^^^^
@@ -465,7 +414,7 @@ sourceFile:outputdir_multifolder/test.ts
 3 >          ^
 4 >           ^^^^^^^^^
 5 >                    ^
-1->() {
+1->function f1() {
   >    
 2 >    return
 3 >           

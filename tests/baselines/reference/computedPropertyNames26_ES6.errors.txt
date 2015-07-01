@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames26_ES6.ts(10,12): error TS2466: 'super' cannot be referenced in a computed property name.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames26_ES6.ts (1 errors) ====
+    class Base {
+        bar() {
+            return 0;
+        }
+    }
+    class C extends Base {
+        // Gets emitted as super, not _super, which is consistent with
+        // use of super in static properties initializers.
+        [
+            { [super.bar()]: 1 }[0]
+               ~~~~~
+!!! error TS2466: 'super' cannot be referenced in a computed property name.
+        ]() { }
+    }

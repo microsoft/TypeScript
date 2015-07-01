@@ -14,18 +14,10 @@ class A
 }
 
 //// [es6-amd.js]
-var A = (function () {
-    function A() {
+class A {
+    constructor() {
     }
-    A.prototype.B = function () {
+    B() {
         return 42;
-    };
-    return A;
-})();
-//# sourceMappingURL=es6-amd.js.map
-
-//// [es6-amd.d.ts]
-declare class A {
-    constructor();
-    B(): number;
+    }
 }

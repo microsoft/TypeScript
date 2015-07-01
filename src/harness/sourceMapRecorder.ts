@@ -46,7 +46,7 @@ module Harness.SourceMapRecoder {
         }
 
         function isSourceMappingSegmentEnd() {
-            if (decodingIndex == sourceMapMappings.length) {
+            if (decodingIndex === sourceMapMappings.length) {
                 return true;
             }
 
@@ -95,7 +95,7 @@ module Harness.SourceMapRecoder {
                     var currentByte = base64FormatDecode();
 
                     // If msb is set, we still have more bits to continue
-                    moreDigits = (currentByte & 32) != 0;
+                    moreDigits = (currentByte & 32) !== 0;
 
                     // least significant 5 bits are the next msbs in the final value.
                     value = value | ((currentByte & 31) << shiftCount);
@@ -103,7 +103,7 @@ module Harness.SourceMapRecoder {
                 }
 
                 // Least significant bit if 1 represents negative and rest of the msb is actual absolute value
-                if ((value & 1) == 0) {
+                if ((value & 1) === 0) {
                     // + number
                     value = value >> 1;
                 }
@@ -182,7 +182,7 @@ module Harness.SourceMapRecoder {
                     }
                 }
                 // Dont support reading mappings that dont have information about original source and its line numbers
-                if (createErrorIfCondition(!isSourceMappingSegmentEnd(), "Unsupported Error Format: There are more entries after " + (decodeOfEncodedMapping.nameIndex == -1 ? "sourceColumn" : "nameIndex"))) {
+                if (createErrorIfCondition(!isSourceMappingSegmentEnd(), "Unsupported Error Format: There are more entries after " + (decodeOfEncodedMapping.nameIndex === -1 ? "sourceColumn" : "nameIndex"))) {
                     return { error: errorDecodeOfEncodedMapping, sourceMapSpan: decodeOfEncodedMapping };
                 }
 
@@ -237,6 +237,9 @@ module Harness.SourceMapRecoder {
             sourceMapRecoder.WriteLine("mapUrl: " + sourceMapData.jsSourceMappingURL);
             sourceMapRecoder.WriteLine("sourceRoot: " + sourceMapData.sourceMapSourceRoot);
             sourceMapRecoder.WriteLine("sources: " + sourceMapData.sourceMapSources);
+            if (sourceMapData.sourceMapSourcesContent) {
+                sourceMapRecoder.WriteLine("sourcesContent: " + JSON.stringify(sourceMapData.sourceMapSourcesContent));
+            }
             sourceMapRecoder.WriteLine("===================================================================");
         }
 
@@ -246,7 +249,7 @@ module Harness.SourceMapRecoder {
                 mapString += " name (" + sourceMapNames[mapEntry.nameIndex] + ")";
             }
             else {
-                if (mapEntry.nameIndex != -1 || getAbsentNameIndex) {
+                if (mapEntry.nameIndex !== -1 || getAbsentNameIndex) {
                     mapString += " nameIndex (" + mapEntry.nameIndex + ")";
                 }
             }
@@ -259,12 +262,12 @@ module Harness.SourceMapRecoder {
             var decodeResult = SourceMapDecoder.decodeNextEncodedSourceMapSpan();
             var decodedErrors: string[];
             if (decodeResult.error
-                || decodeResult.sourceMapSpan.emittedLine != sourceMapSpan.emittedLine
-                || decodeResult.sourceMapSpan.emittedColumn != sourceMapSpan.emittedColumn
-                || decodeResult.sourceMapSpan.sourceLine != sourceMapSpan.sourceLine
-                || decodeResult.sourceMapSpan.sourceColumn != sourceMapSpan.sourceColumn
-                || decodeResult.sourceMapSpan.sourceIndex != sourceMapSpan.sourceIndex
-                || decodeResult.sourceMapSpan.nameIndex != sourceMapSpan.nameIndex) {
+                || decodeResult.sourceMapSpan.emittedLine   !== sourceMapSpan.emittedLine
+                || decodeResult.sourceMapSpan.emittedColumn !== sourceMapSpan.emittedColumn
+                || decodeResult.sourceMapSpan.sourceLine    !== sourceMapSpan.sourceLine
+                || decodeResult.sourceMapSpan.sourceColumn  !== sourceMapSpan.sourceColumn
+                || decodeResult.sourceMapSpan.sourceIndex   !== sourceMapSpan.sourceIndex
+                || decodeResult.sourceMapSpan.nameIndex     !== sourceMapSpan.nameIndex) {
                 if (decodeResult.error) {
                     decodedErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
                 }
@@ -285,7 +288,7 @@ module Harness.SourceMapRecoder {
         }
 
         export function recordNewSourceFileSpan(sourceMapSpan: ts.SourceMapSpan, newSourceFileCode: string) {
-            assert.isTrue(spansOnSingleLine.length == 0 || spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine, "new file source map span should be on new line. We currently handle only that scenario");
+            assert.isTrue(spansOnSingleLine.length === 0 || spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine, "new file source map span should be on new line. We currently handle only that scenario");
             recordSourceMapSpan(sourceMapSpan);
 
             assert.isTrue(spansOnSingleLine.length === 1);
@@ -392,9 +395,9 @@ module Harness.SourceMapRecoder {
 
                 var tsCodeLineMap = ts.computeLineStarts(sourceText);
                 for (var i = 0; i < tsCodeLineMap.length; i++) {
-                    writeSourceMapIndent(prevEmittedCol, i == 0 ? markerIds[index] : "  >");
+                    writeSourceMapIndent(prevEmittedCol, i === 0 ? markerIds[index] : "  >");
                     sourceMapRecoder.Write(getTextOfLine(i, tsCodeLineMap, sourceText));
-                    if (i == tsCodeLineMap.length - 1) {
+                    if (i === tsCodeLineMap.length - 1) {
                         sourceMapRecoder.WriteLine("");
                     }
                 }
@@ -444,7 +447,7 @@ module Harness.SourceMapRecoder {
             for (var j = 0; j < sourceMapData.sourceMapDecodedMappings.length; j++) {
                 var decodedSourceMapping = sourceMapData.sourceMapDecodedMappings[j];
                 var currentSourceFile = program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex]);
-                if (currentSourceFile != prevSourceFile) {
+                if (currentSourceFile !== prevSourceFile) {
                     SourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.text);
                     prevSourceFile = currentSourceFile;
                 }

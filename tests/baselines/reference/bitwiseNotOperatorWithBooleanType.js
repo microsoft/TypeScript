@@ -41,20 +41,15 @@ var ResultIsNumber8 = ~~BOOLEAN;
 //// [bitwiseNotOperatorWithBooleanType.js]
 // ~ operator on boolean type
 var BOOLEAN;
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return false;
-    };
+    A.foo = function () { return false; };
     return A;
 })();
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // boolean type var

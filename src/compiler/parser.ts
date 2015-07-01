@@ -1,13 +1,14 @@
 /// <reference path="scanner.ts"/>
 /// <reference path="utilities.ts"/>
 
-module ts {
-    var nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
+namespace ts {
+    let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
+    /* @internal */ export let parseTime = 0;
 
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
- 
+
     export function createNode(kind: SyntaxKind): Node {
         return new (getNodeConstructor(kind))();
     }
@@ -26,8 +27,8 @@ module ts {
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
         if (nodes) {
-            for (var i = 0, len = nodes.length; i < len; i++) {
-                var result = cbNode(nodes[i]);
+            for (let node of nodes) {
+                let result = cbNode(node);
                 if (result) {
                     return result;
                 }
@@ -46,8 +47,8 @@ module ts {
         // The visitXXX functions could be written as local functions that close over the cbNode and cbNodeArray
         // callback parameters, but that causes a closure allocation for each invocation with noticeable effects
         // on performance.
-        var visitNodes: (cb: (node: Node | Node[]) => T, nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
-        var cbNodes = cbNodeArray || cbNode;
+        let visitNodes: (cb: (node: Node | Node[]) => T, nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
+        let cbNodes = cbNodeArray || cbNode;
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
                 return visitNode(cbNode, (<QualifiedName>node).left) ||
@@ -63,7 +64,8 @@ module ts {
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).propertyName) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
                     visitNode(cbNode, (<VariableLikeDeclaration>node).name) ||
@@ -75,7 +77,8 @@ module ts {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNodes(cbNodes, (<SignatureDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<SignatureDeclaration>node).parameters) ||
                     visitNode(cbNode, (<SignatureDeclaration>node).type);
@@ -87,17 +90,22 @@ module ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).asteriskToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).name) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).questionToken) ||
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
+                    visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
+            case SyntaxKind.TypePredicate:
+                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
+                    visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
             case SyntaxKind.TypeLiteral:
@@ -119,6 +127,7 @@ module ts {
                 return visitNodes(cbNodes, (<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
                 return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
+                    visitNode(cbNode, (<PropertyAccessExpression>node).dotToken) ||
                     visitNode(cbNode, (<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
@@ -151,10 +160,16 @@ module ts {
                 return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
+                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
+            case SyntaxKind.AsExpression:
+                return visitNode(cbNode, (<AsExpression>node).expression) ||
+                    visitNode(cbNode, (<AsExpression>node).type);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
             case SyntaxKind.SpreadElementExpression:
                 return visitNode(cbNode, (<SpreadElementExpression>node).expression);
@@ -165,7 +180,8 @@ module ts {
                 return visitNodes(cbNodes, (<SourceFile>node).statements) ||
                     visitNode(cbNode, (<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<VariableStatement>node).declarationList);
             case SyntaxKind.VariableDeclarationList:
                 return visitNodes(cbNodes, (<VariableDeclarationList>node).declarations);
@@ -184,12 +200,16 @@ module ts {
             case SyntaxKind.ForStatement:
                 return visitNode(cbNode, (<ForStatement>node).initializer) ||
                     visitNode(cbNode, (<ForStatement>node).condition) ||
-                    visitNode(cbNode, (<ForStatement>node).iterator) ||
+                    visitNode(cbNode, (<ForStatement>node).incrementor) ||
                     visitNode(cbNode, (<ForStatement>node).statement);
             case SyntaxKind.ForInStatement:
                 return visitNode(cbNode, (<ForInStatement>node).initializer) ||
                     visitNode(cbNode, (<ForInStatement>node).expression) ||
                     visitNode(cbNode, (<ForInStatement>node).statement);
+            case SyntaxKind.ForOfStatement:
+                return visitNode(cbNode, (<ForOfStatement>node).initializer) ||
+                    visitNode(cbNode, (<ForOfStatement>node).expression) ||
+                    visitNode(cbNode, (<ForOfStatement>node).statement);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
@@ -200,7 +220,9 @@ module ts {
                     visitNode(cbNode, (<WithStatement>node).statement);
             case SyntaxKind.SwitchStatement:
                 return visitNode(cbNode, (<SwitchStatement>node).expression) ||
-                    visitNodes(cbNodes, (<SwitchStatement>node).clauses);
+                    visitNode(cbNode, (<SwitchStatement>node).caseBlock);
+            case SyntaxKind.CaseBlock:
+                return visitNodes(cbNodes, (<CaseBlock>node).clauses);
             case SyntaxKind.CaseClause:
                 return visitNode(cbNode, (<CaseClause>node).expression) ||
                     visitNodes(cbNodes, (<CaseClause>node).statements);
@@ -216,43 +238,75 @@ module ts {
                     visitNode(cbNode, (<TryStatement>node).catchClause) ||
                     visitNode(cbNode, (<TryStatement>node).finallyBlock);
             case SyntaxKind.CatchClause:
-                return visitNode(cbNode, (<CatchClause>node).name) ||
-                    visitNode(cbNode, (<CatchClause>node).type) ||
+                return visitNode(cbNode, (<CatchClause>node).variableDeclaration) ||
                     visitNode(cbNode, (<CatchClause>node).block);
+            case SyntaxKind.Decorator:
+                return visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
-                return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ClassDeclaration>node).name) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).typeParameters) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).members);
+            case SyntaxKind.ClassExpression:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<InterfaceDeclaration>node).name) ||
                     visitNodes(cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
                     visitNodes(cbNodes, (<InterfaceDeclaration>node).members);
             case SyntaxKind.TypeAliasDeclaration:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<TypeAliasDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<TypeAliasDeclaration>node).typeParameters) ||
                     visitNode(cbNode, (<TypeAliasDeclaration>node).type);
             case SyntaxKind.EnumDeclaration:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<EnumDeclaration>node).name) ||
                     visitNodes(cbNodes, (<EnumDeclaration>node).members);
             case SyntaxKind.EnumMember:
                 return visitNode(cbNode, (<EnumMember>node).name) ||
                     visitNode(cbNode, (<EnumMember>node).initializer);
             case SyntaxKind.ModuleDeclaration:
-                return visitNodes(cbNodes, node.modifiers) ||
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ModuleDeclaration>node).name) ||
                     visitNode(cbNode, (<ModuleDeclaration>node).body);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ImportEqualsDeclaration>node).name) ||
+                    visitNode(cbNode, (<ImportEqualsDeclaration>node).moduleReference);
             case SyntaxKind.ImportDeclaration:
-                return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).name) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).moduleReference);
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
+                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ImportClause:
+                return visitNode(cbNode, (<ImportClause>node).name) ||
+                    visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.NamespaceImport:
+                return visitNode(cbNode, (<NamespaceImport>node).name);
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
+                return visitNodes(cbNodes, (<NamedImportsOrExports>node).elements);
+            case SyntaxKind.ExportDeclaration:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ExportDeclaration>node).exportClause) ||
+                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return visitNode(cbNode, (<ImportOrExportSpecifier>node).propertyName) ||
+                    visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
-                return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).exportName);
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ExportAssignment>node).expression);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -261,260 +315,139 @@ module ts {
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNodes, (<HeritageClause>node).types);
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return visitNode(cbNode, (<ExpressionWithTypeArguments>node).expression) ||
+                    visitNodes(cbNodes, (<ExpressionWithTypeArguments>node).typeArguments);
             case SyntaxKind.ExternalModuleReference:
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
+            case SyntaxKind.MissingDeclaration:
+                return visitNodes(cbNodes, node.decorators);
+
+            case SyntaxKind.JsxElement:
+                return visitNode(cbNode, (<JsxElement>node).openingElement) ||
+                    visitNodes(cbNodes, (<JsxElement>node).children) ||
+                    visitNode(cbNode, (<JsxElement>node).closingElement);
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
+                    visitNodes(cbNodes, (<JsxOpeningLikeElement>node).attributes);
+            case SyntaxKind.JsxAttribute:
+                return visitNode(cbNode, (<JsxAttribute>node).name) ||
+                    visitNode(cbNode, (<JsxAttribute>node).initializer);
+            case SyntaxKind.JsxSpreadAttribute:
+                return visitNode(cbNode, (<JsxSpreadAttribute>node).expression);
+            case SyntaxKind.JsxExpression:
+                return visitNode(cbNode, (<JsxExpression>node).expression);
+            case SyntaxKind.JsxClosingElement:
+                return visitNode(cbNode, (<JsxClosingElement>node).tagName);
+
+            case SyntaxKind.JSDocTypeExpression:
+                return visitNode(cbNode, (<JSDocTypeExpression>node).type);
+            case SyntaxKind.JSDocUnionType:
+                return visitNodes(cbNodes, (<JSDocUnionType>node).types);
+            case SyntaxKind.JSDocTupleType:
+                return visitNodes(cbNodes, (<JSDocTupleType>node).types);
+            case SyntaxKind.JSDocArrayType:
+                return visitNode(cbNode, (<JSDocArrayType>node).elementType);
+            case SyntaxKind.JSDocNonNullableType:
+                return visitNode(cbNode, (<JSDocNonNullableType>node).type);
+            case SyntaxKind.JSDocNullableType:
+                return visitNode(cbNode, (<JSDocNullableType>node).type);
+            case SyntaxKind.JSDocRecordType:
+                return visitNodes(cbNodes, (<JSDocRecordType>node).members);
+            case SyntaxKind.JSDocTypeReference:
+                return visitNode(cbNode, (<JSDocTypeReference>node).name) ||
+                    visitNodes(cbNodes, (<JSDocTypeReference>node).typeArguments);
+            case SyntaxKind.JSDocOptionalType:
+                return visitNode(cbNode, (<JSDocOptionalType>node).type);
+            case SyntaxKind.JSDocFunctionType:
+                return visitNodes(cbNodes, (<JSDocFunctionType>node).parameters) ||
+                    visitNode(cbNode, (<JSDocFunctionType>node).type);
+            case SyntaxKind.JSDocVariadicType:
+                return visitNode(cbNode, (<JSDocVariadicType>node).type);
+            case SyntaxKind.JSDocConstructorType:
+                return visitNode(cbNode, (<JSDocConstructorType>node).type);
+            case SyntaxKind.JSDocThisType:
+                return visitNode(cbNode, (<JSDocThisType>node).type);
+            case SyntaxKind.JSDocRecordMember:
+                return visitNode(cbNode, (<JSDocRecordMember>node).name) ||
+                    visitNode(cbNode, (<JSDocRecordMember>node).type);
+            case SyntaxKind.JSDocComment:
+                return visitNodes(cbNodes, (<JSDocComment>node).tags);
+            case SyntaxKind.JSDocParameterTag:
+                return visitNode(cbNode, (<JSDocParameterTag>node).preParameterName) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).postParameterName);
+            case SyntaxKind.JSDocReturnTag:
+                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
+            case SyntaxKind.JSDocTypeTag:
+                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+            case SyntaxKind.JSDocTemplateTag:
+                return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
         }
     }
 
-    const enum ParsingContext {
-        SourceElements,          // Elements in source file
-        ModuleElements,          // Elements in module declaration
-        BlockStatements,         // Statements in block
-        SwitchClauses,           // Clauses in switch statement
-        SwitchClauseStatements,  // Statements in switch clause
-        TypeMembers,             // Members in interface or type literal
-        ClassMembers,            // Members in class declaration
-        EnumMembers,             // Members in enum declaration
-        TypeReferences,          // Type references in extends or implements clause
-        VariableDeclarations,    // Variable declarations in variable statement
-        ObjectBindingElements,   // Binding elements in object binding list
-        ArrayBindingElements,    // Binding elements in array binding list
-        ArgumentExpressions,     // Expressions in argument list
-        ObjectLiteralMembers,    // Members in object literal
-        ArrayLiteralMembers,     // Members in array literal
-        Parameters,              // Parameters in parameter list
-        TypeParameters,          // Type parameters in type parameter list
-        TypeArguments,           // Type arguments in type argument list
-        TupleElementTypes,       // Element types in tuple element type list
-        HeritageClauses,         // Heritage clauses for a class or interface declaration.
-        Count                    // Number of parsing contexts
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
+        let start = new Date().getTime();
+        let result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+
+        parseTime += new Date().getTime() - start;
+        return result;
     }
 
-    const enum Tristate {
-        False,
-        True,
-        Unknown
+    // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
+    // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
+    // The SourceFile will be created with the compiler attempting to reuse as many nodes from
+    // this file as possible.
+    //
+    // Note: this function mutates nodes from this SourceFile. That means any existing nodes
+    // from this SourceFile that are being held onto may change as a result (including
+    // becoming detached from any SourceFile).  It is recommended that this SourceFile not
+    // be used once 'update' is called on it.
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
+        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+    }
+    
+    /* @internal */
+    export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
     }
 
-    function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
-        switch (context) {
-            case ParsingContext.SourceElements:         return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.ModuleElements:         return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.BlockStatements:        return Diagnostics.Statement_expected;
-            case ParsingContext.SwitchClauses:          return Diagnostics.case_or_default_expected;
-            case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
-            case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
-            case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
-            case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
-            case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
-            case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
-            case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
-            case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
-            case ParsingContext.ArrayLiteralMembers:    return Diagnostics.Expression_or_comma_expected;
-            case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
-            case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
-            case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
-            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
-            case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
-        }
-    };
-
-    export function modifierToFlag(token: SyntaxKind): NodeFlags {
-        switch (token) {
-            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
-            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
-            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
-            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
-            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
-            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
-            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
-        }
-        return 0;
+    /* @internal */
+    // Exposed only for testing.
+    export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
     }
 
-    function fixupParentReferences(sourceFile: SourceFile) {
-        // normally parent references are set during binding.
-        // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
-        // walk over the nodes and set parent references
-        var parent: Node = sourceFile;
-        function walk(n: Node): void {
-            // walk down setting parents that differ from the parent we think it should be.  This
-            // allows us to quickly bail out of setting parents for subtrees during incremental 
-            // parsing
-            if (n.parent !== parent) {
-                n.parent = parent;
+    // Implement the parser as a singleton module.  We do this for perf reasons because creating
+    // parser instances can actually be expensive enough to impact us on projects with many source
+    // files.
+    module Parser {
+        // Share a single scanner across all calls to parse a source file.  This helps speed things
+        // up by avoiding the cost of creating/compiling scanners over and over again.
+        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+        const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
-                var saveParent = parent;
-                parent = n;
-                forEachChild(n, walk);
-                parent = saveParent;
-            }
-        }
+        let sourceFile: SourceFile;
+        let parseDiagnostics: Diagnostic[];
+        let syntaxCursor: IncrementalParser.SyntaxCursor;
 
-        forEachChild(sourceFile, walk);
-    }
+        let token: SyntaxKind;
+        let sourceText: string;
+        let nodeCount: number;
+        let identifiers: Map<string>;
+        let identifierCount: number;
 
-    export function isEvalOrArgumentsIdentifier(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
-    }
-
-    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-    function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
-        Debug.assert(isPrologueDirective(node));
-        var nodeText = getSourceTextOfNodeFromSourceFile(sourceFile,(<ExpressionStatement>node).expression);
-
-        // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
-        // string to contain unicode escapes (as per ES5).
-        return nodeText === '"use strict"' || nodeText === "'use strict'";
-    }
-
-    interface IncrementalElement extends TextRange {
-        parent?: Node;
-        intersectsChange: boolean
-        length?: number;
-        _children: Node[];
-    }
-
-    interface IncrementalNode extends Node, IncrementalElement {
-    }
-
-    interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
-        length: number
-    }
-
-    // Allows finding nodes in the source file at a certain position in an efficient manner.
-    // The implementation takes advantage of the calling pattern it knows the parser will
-    // make in order to optimize finding nodes as quickly as possible.
-    interface SyntaxCursor {
-        currentNode(position: number): IncrementalNode;
-    }
-
-    const enum InvalidPosition {
-        Value = -1
-    }
-
-    function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
-        var currentArray: NodeArray<Node> = sourceFile.statements;
-        var currentArrayIndex = 0;
-
-        Debug.assert(currentArrayIndex < currentArray.length);
-        var current = currentArray[currentArrayIndex];
-        var lastQueriedPosition = InvalidPosition.Value;
-
-        return {
-            currentNode(position: number) {
-                // Only compute the current node if the position is different than the last time 
-                // we were asked.  The parser commonly asks for the node at the same position 
-                // twice.  Once to know if can read an appropriate list element at a certain point,
-                // and then to actually read and consume the node.
-                if (position !== lastQueriedPosition) {
-                    // Much of the time the parser will need the very next node in the array that 
-                    // we just returned a node from.So just simply check for that case and move 
-                    // forward in the array instead of searching for the node again.
-                    if (current && current.end === position && currentArrayIndex < currentArray.length) {
-                        currentArrayIndex++;
-                        current = currentArray[currentArrayIndex];
-                    }
-
-                    // If we don't have a node, or the node we have isn't in the right position,
-                    // then try to find a viable node at the position requested.
-                    if (!current || current.pos !== position) {
-                        findHighestListElementThatStartsAtPosition(position);
-                    }
-                }
-
-                // Cache this query so that we don't do any extra work if the parser calls back 
-                // into us.  Note: this is very common as the parser will make pairs of calls like
-                // 'isListElement -> parseListElement'.  If we were unable to find a node when
-                // called with 'isListElement', we don't want to redo the work when parseListElement
-                // is called immediately after.
-                lastQueriedPosition = position;
-
-                // Either we don'd have a node, or we have a node at the position being asked for.
-                Debug.assert(!current || current.pos === position);
-                return <IncrementalNode>current;
-            }
-        };
-        
-        // Finds the highest element in the tree we can find that starts at the provided position.
-        // The element must be a direct child of some node list in the tree.  This way after we
-        // return it, we can easily return its next sibling in the list.
-        function findHighestListElementThatStartsAtPosition(position: number) {
-            // Clear out any cached state about the last node we found.
-            currentArray = undefined;
-            currentArrayIndex = InvalidPosition.Value;
-            current = undefined;
-
-            // Recurse into the source file to find the highest node at this position.
-            forEachChild(sourceFile, visitNode, visitArray);
-
-            function visitNode(node: Node) {
-                if (position >= node.pos && position < node.end) {
-                    // Position was within this node.  Keep searching deeper to find the node.
-                    forEachChild(node, visitNode, visitArray);
-
-                    // don't procede any futher in the search.
-                    return true;
-                }
-
-                // position wasn't in this node, have to keep searching.
-                return false;
-            }
-
-            function visitArray(array: NodeArray<Node>) {
-                if (position >= array.pos && position < array.end) {
-                    // position was in this array.  Search through this array to see if we find a
-                    // viable element.
-                    for (var i = 0, n = array.length; i < n; i++) {
-                        var child = array[i];
-                        if (child) {
-                            if (child.pos === position) {
-                                // Found the right node.  We're done.
-                                currentArray = array;
-                                currentArrayIndex = i;
-                                current = child;
-                                return true;
-                            }
-                            else {
-                                if (child.pos < position && position < child.end) {
-                                    // Position in somewhere within this child.  Search in it and 
-                                    // stop searching in this array.
-                                    forEachChild(child, visitNode, visitArray);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // position wasn't in this array, have to keep searching.
-                return false;
-            }
-        }
-    }
-
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
-        var parsingContext: ParsingContext;
-        var identifiers: Map<string>;
-        var identifierCount = 0;
-        var nodeCount = 0;
-        var lineStarts: number[];
-        var syntacticDiagnostics: Diagnostic[];
-        var scanner: Scanner;
-        var token: SyntaxKind;
-        var syntaxCursor: SyntaxCursor;
+        let parsingContext: ParsingContext;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
         // that some tokens that would be considered identifiers may be considered keywords.
         //
-        // When adding more parser context flags, consider which is the more common case that the 
-        // flag will be in.  This should be hte 'false' state for that flag.  The reason for this is
+        // When adding more parser context flags, consider which is the more common case that the
+        // flag will be in.  This should be the 'false' state for that flag.  The reason for this is
         // that we don't store data in our nodes unless the value is in the *non-default* state.  So,
-        // for example, more often than code 'allows-in' (or doesn't 'disallow-in').  We opt for 
+        // for example, more often than code 'allows-in' (or doesn't 'disallow-in').  We opt for
         // 'disallow-in' set to 'false'.  Otherwise, if we had 'allowsIn' set to 'true', then almost
         // all nodes would need extra state on them to store this info.
         //
@@ -523,7 +456,7 @@ module ts {
         //
         // An important thing about these context concepts.  By default they are effectively inherited
         // while parsing through every grammar production.  i.e. if you don't change them, then when
-        // you parse a sub-production, it will have the same context values as hte parent production.
+        // you parse a sub-production, it will have the same context values as the parent production.
         // This is great most of the time.  After all, consider all the 'expression' grammar productions
         // and how nearly all of them pass along the 'in' and 'yield' context values:
         //
@@ -534,28 +467,28 @@ module ts {
         //      EqualityExpression[?In, ?Yield] === RelationalExpression[?In, ?Yield]
         //      EqualityExpression[?In, ?Yield] !== RelationalExpression[?In, ?Yield]
         //
-        // Where you have to be careful is then understanding what the points are in the grammar 
+        // Where you have to be careful is then understanding what the points are in the grammar
         // where the values are *not* passed along.  For example:
         //
         // SingleNameBinding[Yield,GeneratorParameter]
         //      [+GeneratorParameter]BindingIdentifier[Yield] Initializer[In]opt
         //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
         //
-        // Here this is saying that if the GeneratorParameter context flag is set, that we should 
+        // Here this is saying that if the GeneratorParameter context flag is set, that we should
         // explicitly set the 'yield' context flag to false before calling into the BindingIdentifier
         // and we should explicitly unset the 'yield' context flag before calling into the Initializer.
-        // production.  Conversely, if the GeneratorParameter context flag is not set, then we 
+        // production.  Conversely, if the GeneratorParameter context flag is not set, then we
         // should leave the 'yield' context flag alone.
         //
-        // Getting this all correct is tricky and requires careful reading of the grammar to 
+        // Getting this all correct is tricky and requires careful reading of the grammar to
         // understand when these values should be changed versus when they should be inherited.
         //
         // Note: it should not be necessary to save/restore these flags during speculative/lookahead
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
-        var contextFlags: ParserContextFlags;
+        let contextFlags: ParserContextFlags;
 
-        // Whether or not we've had a parse error since creating the last AST node.  If we have 
+        // Whether or not we've had a parse error since creating the last AST node.  If we have
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
         // can be broken down into three categories:
         //
@@ -566,7 +499,7 @@ module ts {
         //    by the 'parseExpected' function.
         //
         // 3) A token was present that no parsing function was able to consume.  This type of error
-        //    only occurs in the 'abortParsingListOrMoveToNextToken' function when the parser 
+        //    only occurs in the 'abortParsingListOrMoveToNextToken' function when the parser
         //    decides to skip the token.
         //
         // In all of these cases, we want to mark the next node as having had an error before it.
@@ -575,52 +508,66 @@ module ts {
         // node.  in that event we would then not produce the same errors as we did before, causing
         // significant confusion problems.
         //
-        // Note: it is necessary that this value be saved/restored during speculative/lookahead 
-        // parsing.  During lookahead parsing, we will often create a node.  That node will have 
+        // Note: it is necessary that this value be saved/restored during speculative/lookahead
+        // parsing.  During lookahead parsing, we will often create a node.  That node will have
         // this value attached, and then this value will be set back to 'false'.  If we decide to
         // rewind, we must get back to the same value we had prior to the lookahead.
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        var parseErrorBeforeNextFinishedNode: boolean;
+        let parseErrorBeforeNextFinishedNode: boolean = false;
 
-        var sourceFile: SourceFile;
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
+            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
 
-        return parseSourceFile(sourceText, setParentNodes);
+            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
 
-        function parseSourceFile(text: string, setParentNodes: boolean): SourceFile {
-            // Set our initial state before parsing.
-            sourceText = text;
+            clearState();
+
+            return result;
+        }
+
+        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor) {
+            sourceText = _sourceText;
+            syntaxCursor = _syntaxCursor;
+
+            parseDiagnostics = [];
             parsingContext = 0;
             identifiers = {};
-            lineStarts = undefined;
-            syntacticDiagnostics = undefined;
-            contextFlags = 0;
+            identifierCount = 0;
+            nodeCount = 0;
+
+            contextFlags = isJavaScript(fileName) ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
-            sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
-            sourceFile.referenceDiagnostics = [];
-            sourceFile.parseDiagnostics = [];
-            sourceFile.semanticDiagnostics = [];
+            // Initialize and prime the scanner before parsing the source elements.
+            scanner.setText(sourceText);
+            scanner.setOnError(scanError);
+            scanner.setScriptTarget(languageVersion);
+            scanner.setLanguageVariant(isTsx(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
+        }
 
-            // Create and prime the scanner before parsing the source elements.
-            scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        function clearState() {
+            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.setText("");
+            scanner.setOnError(undefined);
+
+            // Clear any data.  We don't want to accidently hold onto it for too long.
+            parseDiagnostics = undefined;
+            sourceFile = undefined;
+            identifiers = undefined;
+            syntaxCursor = undefined;
+            sourceText = undefined;
+        }
+
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
+            sourceFile = createSourceFile(fileName, languageVersion);
+
+            // Prime the scanner.
             token = nextToken();
-
-            sourceFile.flags = fileExtensionIs(filename, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.end = sourceText.length;
-            sourceFile.filename = normalizePath(filename);
-            sourceFile.text = sourceText;
-
-            sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-            sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-            sourceFile.getLineStarts = getLineStarts;
-            sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
-            sourceFile.update = update;
-
             processReferenceComments(sourceFile);
 
-            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+            sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = parseTokenNode();
 
@@ -628,359 +575,91 @@ module ts {
 
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
-            sourceFile.languageVersion = languageVersion;
             sourceFile.identifiers = identifiers;
+            sourceFile.parseDiagnostics = parseDiagnostics;
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
             }
 
+            // If this is a javascript file, proactively see if we can get JSDoc comments for 
+            // relevant nodes in the file.  We'll use these to provide typing informaion if they're
+            // available.
+            if (isJavaScript(fileName)) {
+                addJSDocComments();
+            }
+
             return sourceFile;
         }
 
-        function update(newText: string, textChangeRange: TextChangeRange) {
-            if (textChangeRangeIsUnchanged(textChangeRange)) {
-                // if the text didn't change, then we can just return our current source file as-is.
-                return sourceFile;
-            }
-
-            if (sourceFile.statements.length === 0) {
-                // If we don't have any statements in the current source file, then there's no real
-                // way to incrementally parse.  So just do a full parse instead.
-                return parseSourceFile(newText, /*setNodeParents*/ true);
-            }
-
-            syntaxCursor = createSyntaxCursor(sourceFile);
-
-            // Make the actual change larger so that we know to reparse anything whose lookahead 
-            // might have intersected the change.
-            var changeRange = extendToAffectedRange(textChangeRange);
-
-            // The is the amount the nodes after the edit range need to be adjusted.  It can be 
-            // positive (if the edit added characters), negative (if the edit deleted characters)
-            // or zero (if this was a pure overwrite with nothing added/removed).
-            var delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
-
-            // If we added or removed characters during the edit, then we need to go and adjust all
-            // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
-            // or they may move backward (if we deleted chars).
-            //
-            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
-            // to reuse are already at the appropriate position in the new text.  That way when we
-            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
-            // it very easy to determine if we can reuse a node.  If the node's position is at where
-            // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
-            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
-            // us, then we'll need to skip it or crumble it as appropriate
-            //
-            // We will also adjust the positions of nodes that intersect the change range as well.
-            // By doing this, we ensure that all the positions in the old tree are consistent, not
-            // just the positions of nodes entirely before/after the change range.  By being 
-            // consistent, we can then easily map from positions to nodes in the old tree easily.
-            //
-            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
-            // that we cannot reuse these elements.
-            updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
-                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta);
-
-            // Now that we've set up our internal incremental state just proceed and parse the
-            // source file in the normal fashion.  When possible the parser will retrieve and
-            // reuse nodes from the old tree.
-            // 
-            // Note: passing in 'true' for setNodeParents is very important.  When incrementally
-            // parsing, we will be reusing nodes from the old tree, and placing it into new
-            // parents.  If we don't set the parents now, we'll end up with an observably 
-            // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
-            // will immediately bail out of walking any subtrees when we can see that their parents
-            // are already correct.
-            var result = parseSourceFile(newText, /*setNodeParents*/ true);
-
-            // Clear out the syntax cursor so it doesn't keep anything alive longer than it should.
-            syntaxCursor = undefined;
-
-            return result;
-        }
-
-        function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
-            visitNode(node);
-
-            function visitNode(child: IncrementalNode) {
-                if (child.pos > changeRangeOldEnd) {
-                    // Node is entirely past the change range.  We need to move both its pos and 
-                    // end, forward or backward appropriately.
-                    moveElementEntirelyPastChangeRange(child, delta);
-                    return;
-                }
-
-                // Check if the element intersects the change range.  If it does, then it is not
-                // reusable.  Also, we'll need to recurse to see what constituent portions we may
-                // be able to use.
-                var fullEnd = child.end;
-                if (fullEnd >= changeStart) {
-                    child.intersectsChange = true;
-
-                    // Adjust the pos or end (or both) of the intersecting element accordingly.
-                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                    forEachChild(child, visitNode, visitArray);
-                    return;
-                }
-
-                // Otherwise, the node is entirely before the change range.  No need to do anything with it.
-            }
-
-            function visitArray(array: IncrementalNodeArray) {
-                if (array.pos > changeRangeOldEnd) {
-                    // Array is entirely after the change range.  We need to move it, and move any of
-                    // its children.
-                    moveElementEntirelyPastChangeRange(array, delta);
-                }
-                else {
-                    // Check if the element intersects the change range.  If it does, then it is not
-                    // reusable.  Also, we'll need to recurse to see what constituent portions we may
-                    // be able to use.
-                    var fullEnd = array.end;
-                    if (fullEnd >= changeStart) {
-                        array.intersectsChange = true;
-
-                        // Adjust the pos or end (or both) of the intersecting array accordingly.
-                        adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                        for (var i = 0, n = array.length; i < n; i++) {
-                            visitNode(array[i]);
-                        }
-                    }
-                    // else {
-                    // Otherwise, the array is entirely before the change range.  No need to do anything with it.
-                    // }
-                }
-            }
-        }
-
-        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
-            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
-            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
-
-            // We have an element that intersects the change range in some way.  It may have its
-            // start, or its end (or both) in the changed range.  We want to adjust any part
-            // that intersects such that the final tree is in a consistent state.  i.e. all
-            // chlidren have spans within the span of their parent, and all siblings are ordered
-            // properly.
-
-            // We may need to update both the 'pos' and the 'end' of the element.
-
-            // If the 'pos' is before the start of the change, then we don't need to touch it.  
-            // If it isn't, then the 'pos' must be inside the change.  How we update it will 
-            // depend if delta is  positive or negative.  If delta is positive then we have 
-            // something like:
-            //
-            //  -------------------AAA-----------------
-            //  -------------------BBBCCCCCCC-----------------
-            //
-            // In this case, we consider any node that started in the change range to still be
-            // starting at the same position.
-            //
-            // however, if the delta is negative, then we instead have something like this:
-            //
-            //  -------------------XXXYYYYYYY-----------------
-            //  -------------------ZZZ-----------------
-            //
-            // In this case, any element that started in the 'X' range will keep its position.  
-            // However any element htat started after that will have their pos adjusted to be
-            // at the end of the new range.  i.e. any node that started in the 'Y' range will
-            // be adjusted to have their start at the end of the 'Z' range.
-            //
-            // The element will keep its position if possible.  Or Move backward to the new-end
-            // if it's in the 'Y' range.
-            element.pos = Math.min(element.pos, changeRangeNewEnd);
-
-            // If the 'end' is after the change range, then we always adjust it by the delta
-            // amount.  However, if the end is in the change range, then how we adjust it 
-            // will depend on if delta is  positive or negative.  If delta is positive then we
-            // have something like:
-            //
-            //  -------------------AAA-----------------
-            //  -------------------BBBCCCCCCC-----------------
-            //
-            // In this case, we consider any node that ended inside the change range to keep its
-            // end position.
-            //
-            // however, if the delta is negative, then we instead have something like this:
-            //
-            //  -------------------XXXYYYYYYY-----------------
-            //  -------------------ZZZ-----------------
-            //
-            // In this case, any element that ended in the 'X' range will keep its position.  
-            // However any element htat ended after that will have their pos adjusted to be
-            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
-            // be adjusted to have their end at the end of the 'Z' range.
-            if (element.end >= changeRangeOldEnd) {
-                // Element ends after the change range.  Always adjust the end pos.
-                element.end += delta;
-            }
-            else {
-                // Element ends in the change range.  The element will keep its position if 
-                // possible. Or Move backward to the new-end if it's in the 'Y' range.
-                element.end = Math.min(element.end, changeRangeNewEnd);
-            }
-
-            Debug.assert(element.pos <= element.end);
-            if (element.parent) {
-                Debug.assert(element.pos >= element.parent.pos);
-                Debug.assert(element.end <= element.parent.end);
-            }
-        }
-
-        function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
-            if (element.length) {
-                visitArray(<IncrementalNodeArray>element);
-            }
-            else {
-                visitNode(<IncrementalNode>element);
-            }
-
-            function visitNode(node: IncrementalNode) {
-                // Ditch any existing LS children we may have created.  This way we can avoid 
-                // moving them forward.
-                node._children = undefined;
-                node.pos += delta;
-                node.end += delta;
-
-                forEachChild(node, visitNode, visitArray);
-            }
-
-            function visitArray(array: IncrementalNodeArray) {
-                array.pos += delta;
-                array.end += delta;
-
-                for (var i = 0, n = array.length; i < n; i++) {
-                    visitNode(array[i]);
-                }
-            }
-        }
-
-        function extendToAffectedRange(changeRange: TextChangeRange): TextChangeRange {
-            // Consider the following code:
-            //      void foo() { /; }
-            //
-            // If the text changes with an insertion of / just before the semicolon then we end up with:
-            //      void foo() { //; }
-            //
-            // If we were to just use the changeRange a is, then we would not rescan the { token 
-            // (as it does not intersect the actual original change range).  Because an edit may
-            // change the token touching it, we actually need to look back *at least* one token so
-            // that the prior token sees that change.  
-            var maxLookahead = 1;
-
-            var start = changeRange.span.start;
-
-            // the first iteration aligns us with the change start. subsequent iteration move us to
-            // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
-            // start of the tree.
-            for (var i = 0; start > 0 && i <= maxLookahead; i++) {
-                var nearestNode = findNearestNodeStartingBeforeOrAtPosition(start);
-                var position = nearestNode.pos;
-
-                start = Math.max(0, position - 1);
-            }
-
-            var finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
-            var finalLength = changeRange.newLength + (changeRange.span.start - start);
-
-            return createTextChangeRange(finalSpan, finalLength);
-        }
-
-        function findNearestNodeStartingBeforeOrAtPosition(position: number): Node {
-            var bestResult: Node = sourceFile;
-            var lastNodeEntirelyBeforePosition: Node;
-
+        function addJSDocComments() {
             forEachChild(sourceFile, visit);
+            return;
 
-            if (lastNodeEntirelyBeforePosition) {
-                var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
-                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
-                    bestResult = lastChildOfLastEntireNodeBeforePosition;
+            function visit(node: Node) {
+                // Add additional cases as necessary depending on how we see JSDoc comments used
+                // in the wild.
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Parameter:
+                        addJSDocComment(node);
+                }
+
+                forEachChild(node, visit);
+            }
+        }
+
+        function addJSDocComment(node: Node) {
+            let comments = getLeadingCommentRangesOfNode(node, sourceFile);
+            if (comments) {
+                for (let comment of comments) {
+                    let jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
+                    if (jsDocComment) {
+                        node.jsDocComment = jsDocComment;
+                    }
                 }
             }
+        }
 
-            return bestResult;
+        export function fixupParentReferences(sourceFile: Node) {
+            // normally parent references are set during binding. However, for clients that only need
+            // a syntax tree, and no semantic features, then the binding process is an unnecessary
+            // overhead.  This functions allows us to set all the parents, without all the expense of
+            // binding.
 
-            function getLastChild(node: Node): Node {
-                while (true) {
-                    var lastChild = getLastChildWorker(node);
-                    if (lastChild) {
-                        node = lastChild;
-                    }
-                    else {
-                        return node;
-                    }
+            let parent: Node = sourceFile;
+            forEachChild(sourceFile, visitNode);
+            return;
+
+            function visitNode(n: Node): void {
+                // walk down setting parents that differ from the parent we think it should be.  This
+                // allows us to quickly bail out of setting parents for subtrees during incremental
+                // parsing
+                if (n.parent !== parent) {
+                    n.parent = parent;
+
+                    let saveParent = parent;
+                    parent = n;
+                    forEachChild(n, visitNode);
+                    parent = saveParent;
                 }
             }
+        }
 
-            function getLastChildWorker(node: Node): Node {
-                var last:Node = undefined;
-                forEachChild(node, child => {
-                    if (nodeIsPresent(child)) {
-                        last = child;
-                    }
-                });
-                return last;
-            }
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
+            let sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
-            function visit(child: Node) {
-                if (nodeIsMissing(child)) {
-                    // Missing nodes are effectively invisible to us.  We never even consider them
-                    // When trying to find the nearest node before us.
-                    return;
-                }
+            sourceFile.pos = 0;
+            sourceFile.end = sourceText.length;
+            sourceFile.text = sourceText;
+            sourceFile.bindDiagnostics = [];
+            sourceFile.languageVersion = languageVersion;
+            sourceFile.fileName = normalizePath(fileName);
+            sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.languageVariant = isTsx(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
 
-                // If the child intersects this position, then this node is currently the nearest 
-                // node that starts before the position.
-                if (child.pos <= position) {
-                    if (child.pos >= bestResult.pos) {
-                        // This node starts before the position, and is closer to the position than
-                        // the previous best node we found.  It is now the new best node.
-                        bestResult = child;
-                    }
-
-                    // Now, the node may overlap the position, or it may end entirely before the
-                    // position.  If it overlaps with the position, then either it, or one of its
-                    // children must be the nearest node before the position.  So we can just 
-                    // recurse into this child to see if we can find something better.
-                    if (position < child.end) {
-                        // The nearest node is either this child, or one of the children inside
-                        // of it.  We've already marked this child as the best so far.  Recurse
-                        // in case one of the children is better.
-                        forEachChild(child, visit);
-
-                        // Once we look at the children of this node, then there's no need to
-                        // continue any further.
-                        return true;
-                    }
-                    else {
-                        Debug.assert(child.end <= position);
-                        // The child ends entirely before this position.  Say you have the following
-                        // (where $ is the position)
-                        // 
-                        //      <complex expr 1> ? <complex expr 2> $ : <...> <...> 
-                        //
-                        // We would want to find the nearest preceding node in "complex expr 2". 
-                        // To support that, we keep track of this node, and once we're done searching
-                        // for a best node, we recurse down this node to see if we can find a good
-                        // result in it.
-                        //
-                        // This approach allows us to quickly skip over nodes that are entirely 
-                        // before the position, while still allowing us to find any nodes in the
-                        // last one that might be what we want.
-                        lastNodeEntirelyBeforePosition = child;
-                    }
-                }
-                else {
-                    Debug.assert(child.pos > position);
-                    // We're now at a node that is entirely past the position we're searching for.
-                    // This node (and all following nodes) could never contribute to the result,
-                    // so just skip them by returning 'true' here.
-                    return true;
-                }
-            }
+            return sourceFile;
         }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
@@ -990,10 +669,6 @@ module ts {
             else {
                 contextFlags &= ~flag;
             }
-        }
-
-        function setStrictModeContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.StrictMode);
         }
 
         function setDisallowInContext(val: boolean) {
@@ -1008,14 +683,31 @@ module ts {
             setContextFlag(val, ParserContextFlags.GeneratorParameter);
         }
 
+        function setDecoratorContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.Decorator);
+        }
+
+        function doOutsideOfContext<T>(flags: ParserContextFlags, func: () => T): T {
+            let currentContextFlags = contextFlags & flags;
+            if (currentContextFlags) {
+                setContextFlag(false, currentContextFlags);
+                let result = func();
+                setContextFlag(true, currentContextFlags);
+                return result;
+            }
+
+            // no need to do anything special as we are not in any of the requested contexts
+            return func();
+        }
+
         function allowInAnd<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.DisallowIn) {
                 setDisallowInContext(false);
-                var result = func();
+                let result = func();
                 setDisallowInContext(true);
                 return result;
             }
-            
+
             // no need to do anything special if 'in' is already allowed.
             return func();
         }
@@ -1027,7 +719,7 @@ module ts {
             }
 
             setDisallowInContext(true);
-            var result = func();
+            let result = func();
             setDisallowInContext(false);
             return result;
         }
@@ -1039,7 +731,7 @@ module ts {
             }
 
             setYieldContext(true);
-            var result = func();
+            let result = func();
             setYieldContext(false);
             return result;
         }
@@ -1047,7 +739,7 @@ module ts {
         function doOutsideOfYieldContext<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.Yield) {
                 setYieldContext(false);
-                var result = func();
+                let result = func();
                 setYieldContext(true);
                 return result;
             }
@@ -1056,12 +748,20 @@ module ts {
             return func();
         }
 
-        function inYieldContext() {
-            return (contextFlags & ParserContextFlags.Yield) !== 0;
+        function doInDecoratorContext<T>(func: () => T): T {
+            if (contextFlags & ParserContextFlags.Decorator) {
+                // no need to do anything special if we're already in the [Decorator] context.
+                return func();
+            }
+
+            setDecoratorContext(true);
+            let result = func();
+            setDecoratorContext(false);
+            return result;
         }
 
-        function inStrictModeContext() {
-            return (contextFlags & ParserContextFlags.StrictMode) !== 0;
+        function inYieldContext() {
+            return (contextFlags & ParserContextFlags.Yield) !== 0;
         }
 
         function inGeneratorParameterContext() {
@@ -1072,39 +772,31 @@ module ts {
             return (contextFlags & ParserContextFlags.DisallowIn) !== 0;
         }
 
-        function getLineStarts(): number[] {
-            return lineStarts || (lineStarts = computeLineStarts(sourceText));
-        }
-
-        function getLineAndCharacterFromSourcePosition(position: number) {
-            return getLineAndCharacterOfPosition(getLineStarts(), position);
-        }
-
-        function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
-            return getPositionFromLineAndCharacter(getLineStarts(), line, character);
+        function inDecoratorContext() {
+            return (contextFlags & ParserContextFlags.Decorator) !== 0;
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
-            var start = scanner.getTokenPos();
-            var length = scanner.getTextPos() - start;
+            let start = scanner.getTokenPos();
+            let length = scanner.getTextPos() - start;
 
             parseErrorAtPosition(start, length, message, arg0);
         }
 
         function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
-            var lastError = lastOrUndefined(sourceFile.parseDiagnostics);
+            let lastError = lastOrUndefined(parseDiagnostics);
             if (!lastError || start !== lastError.start) {
-                sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
+                parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
             }
 
-            // Mark that we've encountered an error.  We'll set an appropriate bit on the next 
+            // Mark that we've encountered an error.  We'll set an appropriate bit on the next
             // node we finish so that it can't be reused incrementally.
             parseErrorBeforeNextFinishedNode = true;
         }
 
         function scanError(message: DiagnosticMessage, length?: number) {
-            var pos = scanner.getTextPos();
+            let pos = scanner.getTextPos();
             parseErrorAtPosition(pos, length || 0, message);
         }
 
@@ -1136,23 +828,27 @@ module ts {
             return token = scanner.reScanTemplateToken();
         }
 
+        function scanJsxIdentifier(): SyntaxKind {
+            return token = scanner.scanJsxIdentifier();
+        }
+        
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
-            // Keep track of the state we'll need to rollback to if lookahead fails (or if the 
+            // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
-            var saveToken = token;
-            var saveParseDiagnosticsLength = sourceFile.parseDiagnostics.length;
-            var saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
+            let saveToken = token;
+            let saveParseDiagnosticsLength = parseDiagnostics.length;
+            let saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
             // because the saving/restorating of these flags happens naturally through the recursive
-            // descent nature of our parser.  However, we still store this here just so we can 
+            // descent nature of our parser.  However, we still store this here just so we can
             // assert that that invariant holds.
-            var saveContextFlags = contextFlags;
+            let saveContextFlags = contextFlags;
 
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
-            // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the 
-            // same. 
-            var result = isLookAhead
+            // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
+            // same.
+            let result = isLookAhead
                 ? scanner.lookAhead(callback)
                 : scanner.tryScan(callback);
 
@@ -1162,40 +858,41 @@ module ts {
             // then unconditionally restore us to where we were.
             if (!result || isLookAhead) {
                 token = saveToken;
-                sourceFile.parseDiagnostics.length = saveParseDiagnosticsLength;
+                parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
             }
 
             return result;
         }
 
-        // Invokes the provided callback then unconditionally restores the parser to the state it 
+        // Invokes the provided callback then unconditionally restores the parser to the state it
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
         function lookAhead<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookAhead:*/ true);
+            return speculationHelper(callback, /*isLookAhead*/ true);
         }
-        
+
         // Invokes the provided callback.  If the callback returns something falsy, then it restores
-        // the parser to the state it was in immediately prior to invoking the callback.  If the 
+        // the parser to the state it was in immediately prior to invoking the callback.  If the
         // callback returns something truthy, then the parser state is not rolled back.  The result
         // of invoking the callback is returned from this function.
         function tryParse<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookAhead:*/ false);
+            return speculationHelper(callback, /*isLookAhead*/ false);
         }
 
+        // Ignore strict mode flag because we will report an error in type checker instead.
         function isIdentifier(): boolean {
             if (token === SyntaxKind.Identifier) {
                 return true;
             }
-            
-            // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is 
+
+            // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is
             // considered a keyword and is not an identifier.
             if (token === SyntaxKind.YieldKeyword && inYieldContext()) {
                 return false;
             }
 
-            return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
+            return token > SyntaxKind.LastReservedWord;
         }
 
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
@@ -1224,11 +921,20 @@ module ts {
 
         function parseOptionalToken(t: SyntaxKind): Node {
             if (token === t) {
-                var node = createNode(t);
-                nextToken();
-                return finishNode(node);
+                return parseTokenNode();
             }
             return undefined;
+        }
+
+        function parseExpectedToken(t: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+            return parseOptionalToken(t) ||
+                createMissingNode(t, reportAtCurrentPosition, diagnosticMessage, arg0);
+        }
+
+        function parseTokenNode<T extends Node>(): T {
+            let node = <T>createNode(token);
+            nextToken();
+            return finishNode(node);
         }
 
         function canParseSemicolon() {
@@ -1257,7 +963,7 @@ module ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
-            var node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
+            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
@@ -1267,8 +973,8 @@ module ts {
             return node;
         }
 
-        function finishNode<T extends Node>(node: T): T {
-            node.end = scanner.getStartPos();
+        function finishNode<T extends Node>(node: T, end?: number): T {
+            node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
                 node.parserContextFlags = contextFlags;
@@ -1293,7 +999,7 @@ module ts {
                 parseErrorAtCurrentToken(diagnosticMessage, arg0);
             }
 
-            var result = createNode(kind, scanner.getStartPos());
+            let result = createNode(kind, scanner.getStartPos());
             (<Identifier>result).text = "";
             return finishNode(result);
         }
@@ -1309,13 +1015,18 @@ module ts {
         function createIdentifier(isIdentifier: boolean, diagnosticMessage?: DiagnosticMessage): Identifier {
             identifierCount++;
             if (isIdentifier) {
-                var node = <Identifier>createNode(SyntaxKind.Identifier);
+                let node = <Identifier>createNode(SyntaxKind.Identifier);
+
+                // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
+                if (token !== SyntaxKind.Identifier) {
+                    node.originalKeywordKind = token;
+                }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
             }
 
-            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition:*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
+            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -1332,14 +1043,26 @@ module ts {
                 token === SyntaxKind.NumericLiteral;
         }
 
-        function parsePropertyName(): DeclarationName {
+        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): DeclarationName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return parseLiteralNode(/*internName:*/ true);
+                return parseLiteralNode(/*internName*/ true);
             }
-            if (token === SyntaxKind.OpenBracketToken) {
+            if (allowComputedPropertyNames && token === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
             }
             return parseIdentifierName();
+        }
+
+        function parsePropertyName(): DeclarationName {
+            return parsePropertyNameWorker(/*allowComputedPropertyNames:*/ true);
+        }
+
+        function parseSimplePropertyName(): Identifier | LiteralExpression {
+            return <Identifier | LiteralExpression>parsePropertyNameWorker(/*allowComputedPropertyNames:*/ false);
+        }
+
+        function isSimplePropertyName() {
+            return token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || isIdentifierOrKeyword();
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
@@ -1347,17 +1070,17 @@ module ts {
             //     LiteralPropertyName
             //     [+GeneratorParameter] ComputedPropertyName
             //     [~GeneratorParameter] ComputedPropertyName[?Yield]
-            // 
+            //
             // ComputedPropertyName[Yield] :
             //     [ AssignmentExpression[In, ?Yield] ]
             //
-            var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
+            let node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
 
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            var yieldContext = inYieldContext();
+            let yieldContext = inYieldContext();
             if (inGeneratorParameterContext()) {
                 setYieldContext(false);
             }
@@ -1376,22 +1099,26 @@ module ts {
         }
 
         function nextTokenCanFollowModifier() {
+            if (token === SyntaxKind.ConstKeyword) {
+                // 'const' is only a modifier if followed by 'enum'.
+                return nextToken() === SyntaxKind.EnumKeyword;
+            }
+            if (token === SyntaxKind.ExportKeyword) {
+                nextToken();
+                if (token === SyntaxKind.DefaultKeyword) {
+                    return lookAhead(nextTokenIsClassOrFunction);
+                }
+                return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
+            }
+            if (token === SyntaxKind.DefaultKeyword) {
+                return nextTokenIsClassOrFunction();
+            }
             nextToken();
             return canFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
-            return isModifier(token) && tryParse(nextTokenCanFollowContextualModifier);
-        }
-
-        function nextTokenCanFollowContextualModifier() {
-            if (token === SyntaxKind.ConstKeyword) {
-                // 'const' is only a modifier if followed by 'enum'.
-                return nextToken() === SyntaxKind.EnumKeyword;
-            }
-
-            nextToken();
-            return canFollowModifier();
+            return isModifier(token) && tryParse(nextTokenCanFollowModifier);
         }
 
         function canFollowModifier(): boolean {
@@ -1401,26 +1128,39 @@ module ts {
                 || isLiteralPropertyName();
         }
 
+        function nextTokenIsClassOrFunction(): boolean {
+            nextToken();
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
+        }
+
         // True if positioned at the start of a list element
         function isListElement(parsingContext: ParsingContext, inErrorRecovery: boolean): boolean {
-            var node = currentNode(parsingContext);
+            let node = currentNode(parsingContext);
             if (node) {
                 return true;
             }
 
             switch (parsingContext) {
                 case ParsingContext.SourceElements:
-                case ParsingContext.ModuleElements:
-                    return isSourceElement(inErrorRecovery);
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
-                    return isStartOfStatement(inErrorRecovery);
+                    // If we're in error recovery, then we don't want to treat ';' as an empty statement.
+                    // The problem is that ';' can show up in far too many contexts, and if we see one
+                    // and assume it's a statement, then we may bail out inappropriately from whatever
+                    // we're parsing.  For example, if we have a semicolon in the middle of a class, then
+                    // we really don't want to assume the class is over and we're on a statement in the
+                    // outer module.  We just want to consume and move on.
+                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfStatement();
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
                     return isStartOfTypeMember();
                 case ParsingContext.ClassMembers:
-                    return lookAhead(isClassMemberStart);
+                    // We allow semicolons as class elements (as specified by ES6) as long as we're
+                    // not in error recovery.  If we're in error recovery, we don't want an errant
+                    // semicolon to be treated as a class member (since they're almost always used
+                    // for statements.
+                    return lookAhead(isClassMemberStart) || (token === SyntaxKind.SemicolonToken && !inErrorRecovery);
                 case ParsingContext.EnumMembers:
                     // Include open bracket computed properties. This technically also lets in indexers,
                     // which would be a candidate for improved error reporting.
@@ -1429,10 +1169,22 @@ module ts {
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
                     return isLiteralPropertyName();
-                case ParsingContext.TypeReferences:
-                    // We want to make sure that the "extends" in "extends foo" or the "implements" in
-                    // "implements foo" is not considered a type name.
-                    return isIdentifier() && !isNotHeritageClauseTypeName();
+                case ParsingContext.HeritageClauseElement:
+                    // If we see { } then only consume it as an expression if it is followed by , or {
+                    // That way we won't consume the body of a class in its heritage clause.
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        return lookAhead(isValidHeritageClauseObjectLiteral);
+                    }
+
+                    if (!inErrorRecovery) {
+                        return isStartOfLeftHandSideExpression() && !isHeritageClauseExtendsOrImplementsKeyword();
+                    }
+                    else {
+                        // If we're in error recovery we tighten up what we're willing to match.
+                        // That way we don't treat something like "this" as a valid heritage clause
+                        // element during recovery.
+                        return isIdentifier() && !isHeritageClauseExtendsOrImplementsKeyword();
+                    }
                 case ParsingContext.VariableDeclarations:
                     return isIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
@@ -1440,7 +1192,6 @@ module ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
-                    return token === SyntaxKind.CommaToken || isStartOfExpression();
                 case ParsingContext.ArrayLiteralMembers:
                     return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isStartOfExpression();
                 case ParsingContext.Parameters:
@@ -1450,9 +1201,39 @@ module ts {
                     return token === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
+                case ParsingContext.ImportOrExportSpecifiers:
+                    return isIdentifierOrKeyword();
+                case ParsingContext.JsxAttributes:
+                    return isIdentifierOrKeyword() || token === SyntaxKind.OpenBraceToken;
+                case ParsingContext.JsxChildren:
+                    return true;
+                case ParsingContext.JSDocFunctionParameters:
+                case ParsingContext.JSDocTypeArguments:
+                case ParsingContext.JSDocTupleTypes:
+                    return JSDocParser.isJSDocType();
+                case ParsingContext.JSDocRecordMembers:
+                    return isSimplePropertyName();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
+        }
+
+        function isValidHeritageClauseObjectLiteral() {
+            Debug.assert(token === SyntaxKind.OpenBraceToken);
+            if (nextToken() === SyntaxKind.CloseBraceToken) {
+                // if we see  "extends {}" then only treat the {} as what we're extending (and not
+                // the class body) if we have:
+                //
+                //      extends {} { 
+                //      extends {},
+                //      extends {} extends
+                //      extends {} implements
+
+                let next = nextToken();
+                return next === SyntaxKind.CommaToken || next === SyntaxKind.OpenBraceToken || next === SyntaxKind.ExtendsKeyword || next === SyntaxKind.ImplementsKeyword;
+            }
+
+            return true;
         }
 
         function nextTokenIsIdentifier() {
@@ -1460,14 +1241,19 @@ module ts {
             return isIdentifier();
         }
 
-        function isNotHeritageClauseTypeName(): boolean {
+        function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
             if (token === SyntaxKind.ImplementsKeyword ||
                 token === SyntaxKind.ExtendsKeyword) {
 
-                return lookAhead(nextTokenIsIdentifier);
+                return lookAhead(nextTokenIsStartOfExpression);
             }
 
             return false;
+        }
+
+        function nextTokenIsStartOfExpression() {
+            nextToken();
+            return isStartOfExpression();
         }
 
         // True if positioned at a list terminator
@@ -1478,7 +1264,6 @@ module ts {
             }
 
             switch (kind) {
-                case ParsingContext.ModuleElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauses:
                 case ParsingContext.TypeMembers:
@@ -1486,10 +1271,11 @@ module ts {
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
+                case ParsingContext.ImportOrExportSpecifiers:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
-                case ParsingContext.TypeReferences:
+                case ParsingContext.HeritageClauseElement:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword;
                 case ParsingContext.VariableDeclarations:
                     return isVariableDeclaratorListTerminator();
@@ -1511,20 +1297,31 @@ module ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
-
+                case ParsingContext.JsxAttributes:
+                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken;
+                case ParsingContext.JsxChildren:
+                    return token === SyntaxKind.LessThanToken && lookAhead(nextTokenIsSlash);
+                case ParsingContext.JSDocFunctionParameters:
+                    return token === SyntaxKind.CloseParenToken || token === SyntaxKind.ColonToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocTypeArguments:
+                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocTupleTypes:
+                    return token === SyntaxKind.CloseBracketToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocRecordMembers:
+                    return token === SyntaxKind.CloseBraceToken;
             }
         }
 
         function isVariableDeclaratorListTerminator(): boolean {
-            // If we can consume a semicolon (either explicitly, or with ASI), then consider us done 
+            // If we can consume a semicolon (either explicitly, or with ASI), then consider us done
             // with parsing the list of  variable declarators.
             if (canParseSemicolon()) {
                 return true;
             }
 
-            // in the case where we're parsing the variable declarator of a 'for-in' statement, we 
-            // are done if we see an 'in' keyword in front of us.
-            if (token === SyntaxKind.InKeyword) {
+            // in the case where we're parsing the variable declarator of a 'for-in' statement, we
+            // are done if we see an 'in' keyword in front of us. Same with for-of
+            if (isInOrOfKeyword(token)) {
                 return true;
             }
 
@@ -1542,7 +1339,7 @@ module ts {
 
         // True if positioned at element or terminator of the current list or any enclosing list
         function isInSomeParsingContext(): boolean {
-            for (var kind = 0; kind < ParsingContext.Count; kind++) {
+            for (let kind = 0; kind < ParsingContext.Count; kind++) {
                 if (parsingContext & (1 << kind)) {
                     if (isListElement(kind, /* inErrorRecovery */ true) || isListTerminator(kind)) {
                         return true;
@@ -1554,30 +1351,16 @@ module ts {
         }
 
         // Parses a list of elements
-        function parseList<T extends Node>(kind: ParsingContext, checkForStrictMode: boolean, parseElement: () => T): NodeArray<T> {
-            var saveParsingContext = parsingContext;
+        function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
+            let saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            var result = <NodeArray<T>>[];
+            let result = <NodeArray<T>>[];
             result.pos = getNodePos();
-            var savedStrictModeContext = inStrictModeContext();
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    var element = parseListElement(kind, parseElement);
+                    let element = parseListElement(kind, parseElement);
                     result.push(element);
-
-                    // test elements only if we are not already in strict mode
-                    if (checkForStrictMode && !inStrictModeContext()) {
-                        if (isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(sourceFile, element)) {
-                                setStrictModeContext(true);
-                                checkForStrictMode = false;
-                            }
-                        }
-                        else {
-                            checkForStrictMode = false;
-                        }
-                    }
 
                     continue;
                 }
@@ -1587,18 +1370,17 @@ module ts {
                 }
             }
 
-            setStrictModeContext(savedStrictModeContext);
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
         }
 
-        function parseListElement<T extends Node>(kind: ParsingContext, parseElement: () => T): T {
-            var node = currentNode(kind);
+        function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
+            let node = currentNode(parsingContext);
             if (node) {
                 return <T>consumeNode(node);
             }
-            
+
             return parseElement();
         }
 
@@ -1606,9 +1388,9 @@ module ts {
             // If there is an outstanding parse error that we've encountered, but not attached to
             // some node, then we cannot get a node from the old source tree.  This is because we
             // want to mark the next node we encounter as being unusable.
-            // 
-            // Note: This may be too conservative.  Perhaps we could reuse hte node and set the bit
-            // on it (or its leftmost child) as having the error.  For now though, being conservative 
+            //
+            // Note: This may be too conservative.  Perhaps we could reuse the node and set the bit
+            // on it (or its leftmost child) as having the error.  For now though, being conservative
             // is nice and likely won't ever affect perf.
             if (parseErrorBeforeNextFinishedNode) {
                 return undefined;
@@ -1619,7 +1401,7 @@ module ts {
                 return undefined;
             }
 
-            var node = syntaxCursor.currentNode(scanner.getStartPos());
+            let node = syntaxCursor.currentNode(scanner.getStartPos());
 
             // Can't reuse a missing node.
             if (nodeIsMissing(node)) {
@@ -1631,24 +1413,24 @@ module ts {
                 return undefined;
             }
 
-            // Can't reuse a node that contains a parse error.  This is necessary so that we 
+            // Can't reuse a node that contains a parse error.  This is necessary so that we
             // produce the same set of errors again.
             if (containsParseError(node)) {
                 return undefined;
             }
 
-            // We can only reuse a node if it was parsed under the same strict mode that we're 
+            // We can only reuse a node if it was parsed under the same strict mode that we're
             // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
             // the user added 'using strict' at the top of the file, then we can't use that node
             // again as the presense of strict mode may cause us to parse the tokens in the file
             // differetly.
-            // 
+            //
             // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
             // are unaffected by strict mode.  It's just the parser will decide what to do with it
             // differently depending on what mode it is in.
             //
             // This also applies to all our other context flags as well.
-            var nodeContextFlags = node.parserContextFlags & ParserContextFlags.ParserGeneratedFlags;
+            let nodeContextFlags = node.parserContextFlags & ParserContextFlags.ParserGeneratedFlags;
             if (nodeContextFlags !== contextFlags) {
                 return undefined;
             }
@@ -1671,15 +1453,13 @@ module ts {
 
         function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
             switch (parsingContext) {
-                case ParsingContext.ModuleElements:
-                    return isReusableModuleElement(node);
-
                 case ParsingContext.ClassMembers:
                     return isReusableClassMember(node);
 
                 case ParsingContext.SwitchClauses:
                     return isReusableSwitchClause(node);
 
+                case ParsingContext.SourceElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
                     return isReusableStatement(node);
@@ -1696,32 +1476,26 @@ module ts {
                 case ParsingContext.Parameters:
                     return isReusableParameter(node);
 
-                // Any other lists we do not care about reusing nodes in.  But feel free to add if 
+                // Any other lists we do not care about reusing nodes in.  But feel free to add if
                 // you can do so safely.  Danger areas involve nodes that may involve speculative
                 // parsing.  If speculative parsing is involved with the node, then the range the
                 // parser reached while looking ahead might be in the edited range (see the example
                 // in canReuseVariableDeclaratorNode for a good case of this).
                 case ParsingContext.HeritageClauses:
-                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // This would probably be safe to reuse.  There is no speculative parsing with
                 // heritage clauses.
 
-                case ParsingContext.TypeReferences:
-                // This would probably be safe to reuse.  There is no speculative parsing with 
-                // type names in a heritage clause.  There can be generic names in the type
-                // name list.  But because it is a type context, we never use speculative 
-                // parsing on the type argument list.
-
                 case ParsingContext.TypeParameters:
-                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // This would probably be safe to reuse.  There is no speculative parsing with
                 // type parameters.  Note that that's because type *parameters* only occur in
                 // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
                 // *expression* contexts.
 
                 case ParsingContext.TupleElementTypes:
-                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // This would probably be safe to reuse.  There is no speculative parsing with
                 // tuple types.
 
-                // Technically, type argument list types are probably safe to reuse.  While 
+                // Technically, type argument list types are probably safe to reuse.  While
                 // speculative parsing is involved with them (since type argument lists are only
                 // produced from speculative parsing a < as a type argument list), we only have
                 // the types because speculative parsing succeeded.  Thus, the lookahead never
@@ -1729,51 +1503,26 @@ module ts {
                 case ParsingContext.TypeArguments:
 
                 // Note: these are almost certainly not safe to ever reuse.  Expressions commonly
-                // need a large amount of lookahead, and we should not reuse them as they may 
+                // need a large amount of lookahead, and we should not reuse them as they may
                 // have actually intersected the edit.
                 case ParsingContext.ArgumentExpressions:
 
                 // This is not safe to reuse for the same reason as the 'AssignmentExpression'
-                // cases.  i.e. a property assignment may end with an expression, and thus might 
+                // cases.  i.e. a property assignment may end with an expression, and thus might
                 // have lookahead far beyond it's old node.
                 case ParsingContext.ObjectLiteralMembers:
-            }
 
-            return false;
-        }
+                // This is probably not safe to reuse.  There can be speculative parsing with
+                // type names in a heritage clause.  There can be generic names in the type
+                // name list, and there can be left hand side expressions (which can have type
+                // arguments.)
+                case ParsingContext.HeritageClauseElement:
 
-        function isReusableModuleElement(node: Node) {
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ExportAssignment:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.EnumDeclaration:
+                // Perhaps safe to reuse, but it's unlikely we'd see more than a dozen attributes
+                // on any given element. Same for children.
+                case ParsingContext.JsxAttributes:
+                case ParsingContext.JsxChildren:
 
-                    // Keep in sync with isStatement:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.Block:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ContinueStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.EmptyStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.LabeledStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.DebuggerStatement:
-                        return true;
-                }
             }
 
             return false;
@@ -1784,11 +1533,20 @@ module ts {
                 switch (node.kind) {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.IndexSignature:
-                    case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.SemicolonClassElement:
                         return true;
+                    case SyntaxKind.MethodDeclaration:
+                        // Method declarations are not necessarily reusable.  An object-literal
+                        // may have a method calls "constructor(...)" and we must reparse that
+                        // into an actual .ConstructorDeclaration.
+                        let methodDeclaration = <MethodDeclaration>node;
+                        let nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
+                            (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
+
+                        return !nameIsConstructor;
                 }
             }
 
@@ -1821,6 +1579,7 @@ module ts {
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                     case SyntaxKind.ForStatement:
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.WithStatement:
@@ -1829,6 +1588,15 @@ module ts {
                     case SyntaxKind.LabeledStatement:
                     case SyntaxKind.DoStatement:
                     case SyntaxKind.DebuggerStatement:
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         return true;
                 }
             }
@@ -1862,26 +1630,30 @@ module ts {
 
             // Very subtle incremental parsing bug.  Consider the following code:
             //
-            //      var v = new List < A, B
+            //      let v = new List < A, B
             //
-            // This is actually legal code.  It's a list of variable declarators "v = new List<A" 
+            // This is actually legal code.  It's a list of variable declarators "v = new List<A"
             // on one side and "B" on the other. If you then change that to:
             //
-            //      var v = new List < A, B >()
-            // 
+            //      let v = new List < A, B >()
+            //
             // then we have a problem.  "v = new List<A" doesn't intersect the change range, so we
             // start reparsing at "B" and we completely fail to handle this properly.
             //
             // In order to prevent this, we do not allow a variable declarator to be reused if it
             // has an initializer.
-            var variableDeclarator = <VariableDeclaration>node;
+            let variableDeclarator = <VariableDeclaration>node;
             return variableDeclarator.initializer === undefined;
         }
 
         function isReusableParameter(node: Node) {
-            // TODO: this most likely needs the same initializer check that 
-            // isReusableVariableDeclaration has.
-            return node.kind === SyntaxKind.Parameter;
+            if (node.kind !== SyntaxKind.Parameter) {
+                return false;
+            }
+
+            // See the comment in isReusableVariableDeclaration for why we do this.
+            let parameter = <ParameterDeclaration>node;
+            return parameter.initializer === undefined;
         }
 
         // Returns true if we should abort parsing.
@@ -1895,14 +1667,45 @@ module ts {
             return false;
         }
 
+        function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
+            switch (context) {
+                case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
+                case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
+                case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
+                case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
+                case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+                case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
+                case ParsingContext.HeritageClauseElement: return Diagnostics.Expression_expected;
+                case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
+                case ParsingContext.ObjectBindingElements: return Diagnostics.Property_destructuring_pattern_expected;
+                case ParsingContext.ArrayBindingElements: return Diagnostics.Array_element_destructuring_pattern_expected;
+                case ParsingContext.ArgumentExpressions: return Diagnostics.Argument_expression_expected;
+                case ParsingContext.ObjectLiteralMembers: return Diagnostics.Property_assignment_expected;
+                case ParsingContext.ArrayLiteralMembers: return Diagnostics.Expression_or_comma_expected;
+                case ParsingContext.Parameters: return Diagnostics.Parameter_declaration_expected;
+                case ParsingContext.TypeParameters: return Diagnostics.Type_parameter_declaration_expected;
+                case ParsingContext.TypeArguments: return Diagnostics.Type_argument_expected;
+                case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
+                case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
+                case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
+                case ParsingContext.JsxAttributes: return Diagnostics.Identifier_expected;
+                case ParsingContext.JsxChildren: return Diagnostics.Identifier_expected;
+                case ParsingContext.JSDocFunctionParameters: return Diagnostics.Parameter_declaration_expected;
+                case ParsingContext.JSDocTypeArguments: return Diagnostics.Type_argument_expected;
+                case ParsingContext.JSDocTupleTypes: return Diagnostics.Type_expected;
+                case ParsingContext.JSDocRecordMembers: return Diagnostics.Property_assignment_expected;
+            }
+        };
+
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
-            var saveParsingContext = parsingContext;
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
+            let saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            var result = <NodeArray<T>>[];
+            let result = <NodeArray<T>>[];
             result.pos = getNodePos();
 
-            var commaStart = -1; // Meaning the previous token was not a comma
+            let commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     result.push(parseListElement(kind, parseElement));
@@ -1910,11 +1713,24 @@ module ts {
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
                     }
+
                     commaStart = -1; // Back to the state where the last token was not a comma
                     if (isListTerminator(kind)) {
                         break;
                     }
+
+                    // We didn't get a comma, and the list wasn't terminated, explicitly parse
+                    // out a comma so we give a good error message.
                     parseExpected(SyntaxKind.CommaToken);
+
+                    // If the token was a semicolon, and the caller allows that, then skip it and
+                    // continue.  This ensures we get back on track and don't result in tons of
+                    // parse errors.  For example, this can happen when people do things like use
+                    // a semicolon to delimit object literal members.   Note: we'll have already
+                    // reported an error when we called parseExpected above.
+                    if (considerSemicolonAsDelimeter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                        nextToken();
+                    }
                     continue;
                 }
 
@@ -1943,8 +1759,8 @@ module ts {
         }
 
         function createMissingList<T>(): NodeArray<T> {
-            var pos = getNodePos();
-            var result = <NodeArray<T>>[];
+            let pos = getNodePos();
+            let result = <NodeArray<T>>[];
             result.pos = pos;
             result.end = pos;
             return result;
@@ -1952,7 +1768,7 @@ module ts {
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
             if (parseExpected(open)) {
-                var result = parseDelimitedList(kind, parseElement);
+                let result = parseDelimitedList(kind, parseElement);
                 parseExpected(close);
                 return result;
             }
@@ -1962,9 +1778,9 @@ module ts {
 
         // The allowReservedWords parameter controls whether reserved words are permitted after the first dot
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
-            var entity: EntityName = parseIdentifier(diagnosticMessage);
+            let entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
-                var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
+                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -1973,60 +1789,52 @@ module ts {
         }
 
         function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
-            // Technically a keyword is valid here as all keywords are identifier names.
-            // However, often we'll encounter this in error situations when the keyword
+            // Technically a keyword is valid here as all identifiers and keywords are identifier names.
+            // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
             //
             // So, we check for the following specific case:
             //
             //      name.
-            //      keyword identifierNameOrKeyword
+            //      identifierOrKeyword identifierNameOrKeyword
             //
-            // Note: the newlines are important here.  For example, if that above code 
+            // Note: the newlines are important here.  For example, if that above code
             // were rewritten into:
             //
-            //      name.keyword
+            //      name.identifierOrKeyword
             //      identifierNameOrKeyword
             //
             // Then we would consider it valid.  That's because ASI would take effect and
-            // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
+            // the code would be implicitly: "name.identifierOrKeyword; identifierNameOrKeyword".
             // In the first case though, ASI will not take effect because there is not a
-            // line terminator after the keyword.
-            if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
-                var matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
+            // line terminator after the identifier or keyword.
+            if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
+                let matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 if (matchesPattern) {
-                    // Report that we need an identifier.  However, report it right after the dot, 
-                    // and not on the next token.  This is because the next token might actually 
-                    // be an identifier and the error woudl be quite confusing.
-                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken:*/ true, Diagnostics.Identifier_expected);
+                    // Report that we need an identifier.  However, report it right after the dot,
+                    // and not on the next token.  This is because the next token might actually
+                    // be an identifier and the error would be quite confusing.
+                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken*/ true, Diagnostics.Identifier_expected);
                 }
             }
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-
-
-        function parseTokenNode<T extends Node>(): T {
-            var node = <T>createNode(token);
-            nextToken();
-            return finishNode(node);
-        }
-
         function parseTemplateExpression(): TemplateExpression {
-            var template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
+            let template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
             template.head = parseLiteralNode();
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
-            var templateSpans = <NodeArray<TemplateSpan>>[];
+            let templateSpans = <NodeArray<TemplateSpan>>[];
             templateSpans.pos = getNodePos();
 
             do {
                 templateSpans.push(parseTemplateSpan());
             }
-            while (templateSpans[templateSpans.length - 1].literal.kind === SyntaxKind.TemplateMiddle)
+            while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle)
 
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
@@ -2035,18 +1843,17 @@ module ts {
         }
 
         function parseTemplateSpan(): TemplateSpan {
-            var span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
+            let span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
-            var literal: LiteralExpression;
+            let literal: LiteralExpression;
 
             if (token === SyntaxKind.CloseBraceToken) {
                 reScanTemplateToken()
                 literal = parseLiteralNode();
             }
             else {
-                literal = <LiteralExpression>createMissingNode(
-                    SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
@@ -2054,18 +1861,22 @@ module ts {
         }
 
         function parseLiteralNode(internName?: boolean): LiteralExpression {
-            var node = <LiteralExpression>createNode(token);
-            var text = scanner.getTokenValue();
+            let node = <LiteralExpression>createNode(token);
+            let text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
+
+            if (scanner.hasExtendedUnicodeEscape()) {
+                node.hasExtendedUnicodeEscape = true;
+            }
 
             if (scanner.isUnterminated()) {
                 node.isUnterminated = true;
             }
 
-            var tokenPos = scanner.getTokenPos();
+            let tokenPos = scanner.getTokenPos();
             nextToken();
             finishNode(node);
-            
+
             // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal.But because of how the scanner separates the tokens, we would
@@ -2084,9 +1895,17 @@ module ts {
 
         // TYPES
 
-        function parseTypeReference(): TypeReferenceNode {
-            var node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+        function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
+            let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                nextToken();
+                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                node.parameterName = <Identifier>typeName;
+                node.type = parseType();
+                return finishNode(node);
+            }
+            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
+            node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
@@ -2094,17 +1913,17 @@ module ts {
         }
 
         function parseTypeQuery(): TypeQueryNode {
-            var node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
+            let node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
             parseExpected(SyntaxKind.TypeOfKeyword);
             node.exprName = parseEntityName(/*allowReservedWords*/ true);
             return finishNode(node);
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
-            var node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            let node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             node.name = parseIdentifier();
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
-                // It's not uncommon for people to write improper constraints to a generic.  If the 
+                // It's not uncommon for people to write improper constraints to a generic.  If the
                 // user writes a constraint that is an expression and not an actual type, then parse
                 // it out as an expression (so we can recover well), but report that a type is needed
                 // instead.
@@ -2135,7 +1954,7 @@ module ts {
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
                 return token === SyntaxKind.StringLiteral
-                    ? <StringLiteralTypeNode>parseLiteralNode(/*internName:*/ true)
+                    ? <StringLiteral>parseLiteralNode(/*internName*/ true)
                     : parseType();
             }
 
@@ -2143,7 +1962,7 @@ module ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifier(token);
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifier(token) || token === SyntaxKind.AtToken;
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -2154,7 +1973,8 @@ module ts {
         }
 
         function parseParameter(): ParameterDeclaration {
-            var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            let node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            node.decorators = parseDecorators();
             setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
@@ -2166,7 +1986,7 @@ module ts {
 
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
-                // 'use strict' 
+                // 'use strict'
                 // function foo(static)
                 // isParameter('static') === true, because of isModifier('static')
                 // however 'static' is not a legal identifier in a strict mode.
@@ -2196,11 +2016,11 @@ module ts {
         }
 
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldAndGeneratorParameterContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
-            var returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
+            returnToken: SyntaxKind,
+            yieldAndGeneratorParameterContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
+            let returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
             signature.parameters = parseParameterList(yieldAndGeneratorParameterContext, requireCompleteParameterList);
 
@@ -2213,7 +2033,7 @@ module ts {
             }
         }
 
-        // Note: after careful analysis of the grammar, it does not appear to be possible to 
+        // Note: after careful analysis of the grammar, it does not appear to be possible to
         // have 'Yield' And 'GeneratorParameter' not in sync.  i.e. any production calling
         // this FormalParameters production either always sets both to true, or always sets
         // both to false.  As such we only have a single parameter to represent both.
@@ -2233,13 +2053,13 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
             if (parseExpected(SyntaxKind.OpenParenToken)) {
-                var savedYieldContext = inYieldContext();
-                var savedGeneratorParameterContext = inGeneratorParameterContext();
+                let savedYieldContext = inYieldContext();
+                let savedGeneratorParameterContext = inGeneratorParameterContext();
 
                 setYieldContext(yieldAndGeneratorParameterContext);
                 setGeneratorParameterContext(yieldAndGeneratorParameterContext);
 
-                var result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
+                let result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
 
                 setYieldContext(savedYieldContext);
                 setGeneratorParameterContext(savedGeneratorParameterContext);
@@ -2260,25 +2080,22 @@ module ts {
         }
 
         function parseTypeMemberSemicolon() {
-            // Try to parse out an explicit or implicit (ASI) semicolon for a type member.  If we
-            // don't have one, then an appropriate error will be reported.
-            if (parseSemicolon()) {
+            // We allow type members to be separated by commas or (possibly ASI) semicolons.
+            // First check if it was a comma.  If so, we're done with the member.
+            if (parseOptional(SyntaxKind.CommaToken)) {
                 return;
             }
 
-            // If we don't have a semicolon, then the user may have written a comma instead 
-            // accidently (pretty easy to do since commas are so prevalent as list separators). So
-            // just consume the comma and keep going.  Note: we'll have already reported the error
-            // about the missing semicolon above.
-            parseOptional(SyntaxKind.CommaToken);
+            // Didn't have a comma.  We must have a (possible ASI) semicolon.
+            parseSemicolon();
         }
 
         function parseSignatureMember(kind: SyntaxKind): SignatureDeclaration {
-            var node = <SignatureDeclaration>createNode(kind);
+            let node = <SignatureDeclaration>createNode(kind);
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
             parseTypeMemberSemicolon();
             return finishNode(node);
         }
@@ -2346,9 +2163,9 @@ module ts {
             return token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBracketToken;
         }
 
-        function parseIndexSignatureDeclaration(modifiers: ModifiersArray): IndexSignatureDeclaration {
-            var fullStart = modifiers ? modifiers.pos : scanner.getStartPos();
-            var node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
+        function parseIndexSignatureDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): IndexSignatureDeclaration {
+            let node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
@@ -2357,23 +2174,23 @@ module ts {
         }
 
         function parsePropertyOrMethodSignature(): Declaration {
-            var fullStart = scanner.getStartPos();
-            var name = parsePropertyName();
-            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            let fullStart = scanner.getStartPos();
+            let name = parsePropertyName();
+            let questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                var method = <MethodDeclaration>createNode(SyntaxKind.MethodSignature, fullStart);
+                let method = <MethodDeclaration>createNode(SyntaxKind.MethodSignature, fullStart);
                 method.name = name;
                 method.questionToken = questionToken;
 
                 // Method signatues don't exist in expression contexts.  So they have neither
                 // [Yield] nor [GeneratorParameter]
-                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, method);
+                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, method);
                 parseTypeMemberSemicolon();
                 return finishNode(method);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertySignature, fullStart);
+                let property = <PropertyDeclaration>createNode(SyntaxKind.PropertySignature, fullStart);
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
@@ -2390,7 +2207,7 @@ module ts {
                     return true;
                 default:
                     if (isModifier(token)) {
-                        var result = lookAhead(isStartOfIndexSignatureDeclaration);
+                        let result = lookAhead(isStartOfIndexSignatureDeclaration);
                         if (result) {
                             return result;
                         }
@@ -2425,7 +2242,7 @@ module ts {
                 case SyntaxKind.OpenBracketToken:
                     // Indexer or computed property
                     return isIndexSignature()
-                        ? parseIndexSignatureDeclaration(/*modifiers:*/ undefined)
+                        ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined)
                         : parsePropertyOrMethodSignature();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(isStartOfConstructSignature)) {
@@ -2436,14 +2253,14 @@ module ts {
                 case SyntaxKind.NumericLiteral:
                     return parsePropertyOrMethodSignature();
                 default:
-                    // Index declaration as allowed as a type member.  But as per the grammar, 
+                    // Index declaration as allowed as a type member.  But as per the grammar,
                     // they also allow modifiers. So we have to check for an index declaration
-                    // that might be following modifiers. This ensures that things work properly 
+                    // that might be following modifiers. This ensures that things work properly
                     // when incrementally parsing as the parser will produce the Index declaration
                     // if it has the same text regardless of whether it is inside a class or an
                     // object type.
                     if (isModifier(token)) {
-                        var result = tryParse(parseIndexSignatureWithModifiers);
+                        let result = tryParse(parseIndexSignatureWithModifiers);
                         if (result) {
                             return result;
                         }
@@ -2456,9 +2273,11 @@ module ts {
         }
 
         function parseIndexSignatureWithModifiers() {
-            var modifiers = parseModifiers();
+            let fullStart = scanner.getStartPos();
+            let decorators = parseDecorators();
+            let modifiers = parseModifiers();
             return isIndexSignature()
-                ? parseIndexSignatureDeclaration(modifiers)
+                ? parseIndexSignatureDeclaration(fullStart, decorators, modifiers)
                 : undefined;
         }
 
@@ -2468,15 +2287,15 @@ module ts {
         }
 
         function parseTypeLiteral(): TypeLiteralNode {
-            var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
+            let node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             node.members = parseObjectTypeMembers();
             return finishNode(node);
         }
 
         function parseObjectTypeMembers(): NodeArray<Declaration> {
-            var members: NodeArray<Declaration>;
+            let members: NodeArray<Declaration>;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                members = parseList(ParsingContext.TypeMembers, /*checkForStrictMode*/ false, parseTypeMember);
+                members = parseList(ParsingContext.TypeMembers, parseTypeMember);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -2487,13 +2306,13 @@ module ts {
         }
 
         function parseTupleType(): TupleTypeNode {
-            var node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
+            let node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 
         function parseParenthesizedType(): ParenthesizedTypeNode {
-            var node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
+            let node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
             parseExpected(SyntaxKind.CloseParenToken);
@@ -2501,16 +2320,16 @@ module ts {
         }
 
         function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
-            var node = <FunctionOrConstructorTypeNode>createNode(kind);
+            let node = <FunctionOrConstructorTypeNode>createNode(kind);
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
             return finishNode(node);
         }
 
         function parseKeywordAndNoDot(): TypeNode {
-            var node = parseTokenNode<TypeNode>();
+            let node = parseTokenNode<TypeNode>();
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
@@ -2520,9 +2339,10 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
-                    var node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReference();
+                    let node = tryParse(parseKeywordAndNoDot);
+                    return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
@@ -2534,7 +2354,7 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReference();
+                    return parseTypeReferenceOrTypePredicate();
             }
         }
 
@@ -2544,6 +2364,7 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
@@ -2566,10 +2387,10 @@ module ts {
         }
 
         function parseArrayTypeOrHigher(): TypeNode {
-            var type = parseNonArrayType();
+            let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 parseExpected(SyntaxKind.CloseBracketToken);
-                var node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
+                let node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
                 node.elementType = type;
                 type = finishNode(node);
             }
@@ -2577,15 +2398,15 @@ module ts {
         }
 
         function parseUnionTypeOrHigher(): TypeNode {
-            var type = parseArrayTypeOrHigher();
+            let type = parseArrayTypeOrHigher();
             if (token === SyntaxKind.BarToken) {
-                var types = <NodeArray<TypeNode>>[type];
+                let types = <NodeArray<TypeNode>>[type];
                 types.pos = type.pos;
                 while (parseOptional(SyntaxKind.BarToken)) {
                     types.push(parseArrayTypeOrHigher());
                 }
                 types.end = getNodeEnd();
-                var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
+                let node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
                 node.types = types;
                 type = finishNode(node);
             }
@@ -2633,13 +2454,13 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            var savedYieldContext = inYieldContext();
-            var savedGeneratorParameterContext = inGeneratorParameterContext();
+            let savedYieldContext = inYieldContext();
+            let savedGeneratorParameterContext = inGeneratorParameterContext();
 
             setYieldContext(false);
             setGeneratorParameterContext(false);
 
-            var result = parseTypeWorker();
+            let result = parseTypeWorker();
 
             setYieldContext(savedYieldContext);
             setGeneratorParameterContext(savedGeneratorParameterContext);
@@ -2662,8 +2483,7 @@ module ts {
         }
 
         // EXPRESSIONS
-
-        function isStartOfExpression(): boolean {
+        function isStartOfLeftHandSideExpression(): boolean {
             switch (token) {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -2678,9 +2498,23 @@ module ts {
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
+                case SyntaxKind.Identifier:
+                    return true;
+                default:
+                    return isIdentifier();
+            }
+        }
+
+        function isStartOfExpression(): boolean {
+            if (isStartOfLeftHandSideExpression()) {
+                return true;
+            }
+
+            switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
@@ -2691,7 +2525,6 @@ module ts {
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                 case SyntaxKind.LessThanToken:
-                case SyntaxKind.Identifier:
                 case SyntaxKind.YieldKeyword:
                     // Yield always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
@@ -2711,18 +2544,33 @@ module ts {
         }
 
         function isStartOfExpressionStatement(): boolean {
-            // As per the grammar, neither '{' nor 'function' can start an expression statement.
-            return token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.FunctionKeyword && isStartOfExpression();
+            // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
+            return token !== SyntaxKind.OpenBraceToken &&
+                token !== SyntaxKind.FunctionKeyword &&
+                token !== SyntaxKind.ClassKeyword &&
+                token !== SyntaxKind.AtToken &&
+                isStartOfExpression();
         }
 
         function parseExpression(): Expression {
             // Expression[in]:
-            //      AssignmentExpression[in] 
+            //      AssignmentExpression[in]
             //      Expression[in] , AssignmentExpression[in]
 
-            var expr = parseAssignmentExpressionOrHigher();
-            while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
+            // clear the decorator context when parsing Expression, as it should be unambiguous when parsing a decorator
+            let saveDecoratorContext = inDecoratorContext();
+            if (saveDecoratorContext) {
+                setDecoratorContext(false);
+            }
+
+            let expr = parseAssignmentExpressionOrHigher();
+            let operatorToken: Node;
+            while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
+            }
+
+            if (saveDecoratorContext) {
+                setDecoratorContext(true);
             }
             return expr;
         }
@@ -2732,13 +2580,13 @@ module ts {
                 // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
                 // there is no newline after the last token and if we're on an expression.  If so, parse
                 // this as an equals-value clause with a missing equals.
-                // NOTE: There are two places where we allow equals-value clauses.  The first is in a 
+                // NOTE: There are two places where we allow equals-value clauses.  The first is in a
                 // variable declarator.  The second is with a parameter.  For variable declarators
                 // it's more likely that a { would be a allowed (as an object literal).  While this
                 // is also allowed for parameters, the risk is that we consume the { as an object
                 // literal when it really will be for the block following the parameter.
                 if (scanner.hasPrecedingLineBreak() || (inParameter && token === SyntaxKind.OpenBraceToken) || !isStartOfExpression()) {
-                    // preceding line break, open brace in a parameter (likely a function body) or current token is not an expression - 
+                    // preceding line break, open brace in a parameter (likely a function body) or current token is not an expression -
                     // do not try to parse initializer
                     return undefined;
                 }
@@ -2759,19 +2607,19 @@ module ts {
             //      4) ArrowFunctionExpression[?in,?yield]
             //      5) [+Yield] YieldExpression[?In]
             //
-            // Note: for ease of implementation we treat productions '2' and '3' as the same thing. 
+            // Note: for ease of implementation we treat productions '2' and '3' as the same thing.
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
             // First, do the simple check if we have a YieldExpression (production '5').
             if (isYieldExpression()) {
                 return parseYieldExpression();
-            } 
+            }
 
             // Then, check if we have an arrow function (production '4') that starts with a parenthesized
             // parameter list. If we do, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
-            // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
+            // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            var arrowExpression = tryParseParenthesizedArrowFunctionExpression();
+            let arrowExpression = tryParseParenthesizedArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -2780,12 +2628,12 @@ module ts {
             // start with a LogicalOrExpression, while the assignment productions can only start with
             // LeftHandSideExpressions.
             //
-            // So, first, we try to just parse out a BinaryExpression.  If we get something that is a 
-            // LeftHandSide or higher, then we can try to parse out the assignment expression part.  
-            // Otherwise, we try to parse out the conditional expression bit.  We want to allow any 
+            // So, first, we try to just parse out a BinaryExpression.  If we get something that is a
+            // LeftHandSide or higher, then we can try to parse out the assignment expression part.
+            // Otherwise, we try to parse out the conditional expression bit.  We want to allow any
             // binary expression here, so we pass in the 'lowest' precedence here so that it matches
             // and consumes anything.
-            var expr = parseBinaryExpressionOrHigher(/*precedence:*/ 0);
+            let expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
 
             // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
@@ -2795,15 +2643,13 @@ module ts {
             }
 
             // Now see if we might be in cases '2' or '3'.
-            // If the expression was a LHS expression, and we have an assignment operator, then 
+            // If the expression was a LHS expression, and we have an assignment operator, then
             // we're in '2' or '3'. Consume the assignment and return.
             //
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like > > =  becoming >>=
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                var operator = token;
-                nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -2812,33 +2658,27 @@ module ts {
 
         function isYieldExpression(): boolean {
             if (token === SyntaxKind.YieldKeyword) {
-                // If we have a 'yield' keyword, and htis is a context where yield expressions are 
+                // If we have a 'yield' keyword, and htis is a context where yield expressions are
                 // allowed, then definitely parse out a yield expression.
                 if (inYieldContext()) {
-                    return true;
-                }
-
-                if (inStrictModeContext()) {
-                    // If we're in strict mode, then 'yield' is a keyword, could only ever start
-                    // a yield expression.
                     return true;
                 }
 
                 // We're in a context where 'yield expr' is not allowed.  However, if we can
                 // definitely tell that the user was trying to parse a 'yield expr' and not
                 // just a normal expr that start with a 'yield' identifier, then parse out
-                // a 'yield expr'.  We can then report an error later that they are only 
+                // a 'yield expr'.  We can then report an error later that they are only
                 // allowed in generator expressions.
-                // 
+                //
                 // for example, if we see 'yield(foo)', then we'll have to treat that as an
                 // invocation expression of something called 'yield'.  However, if we have
-                // 'yield foo' then that is not legal as a normal expression, so we can 
+                // 'yield foo' then that is not legal as a normal expression, so we can
                 // definitely recognize this as a yield expression.
                 //
                 // for now we just check if the next token is an identifier.  More heuristics
                 // can be added here later as necessary.  We just need to make sure that we
                 // don't accidently consume something legal.
-                return lookAhead(nextTokenIsIdentifierOnSameLine);
+                return lookAhead(nextTokenIsIdentifierOrKeywordOrNumberOnSameLine);
             }
 
             return false;
@@ -2846,11 +2686,11 @@ module ts {
 
         function nextTokenIsIdentifierOnSameLine() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() && isIdentifier()
+            return !scanner.hasPrecedingLineBreak() && isIdentifier();
         }
 
         function parseYieldExpression(): YieldExpression {
-            var node = <YieldExpression>createNode(SyntaxKind.YieldExpression);
+            let node = <YieldExpression>createNode(SyntaxKind.YieldExpression);
 
             // YieldExpression[In] :
             //      yield
@@ -2865,7 +2705,7 @@ module ts {
                 return finishNode(node);
             }
             else {
-                // if the next token is not on the same line as yield.  or we don't have an '*' or 
+                // if the next token is not on the same line as yield.  or we don't have an '*' or
                 // the start of an expressin, then this is just a simple "yield" expression.
                 return finishNode(node);
             }
@@ -2874,9 +2714,9 @@ module ts {
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
-            var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
 
-            var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
+            let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
             parameter.name = identifier;
             finishNode(parameter);
 
@@ -2884,14 +2724,14 @@ module ts {
             node.parameters.pos = parameter.pos;
             node.parameters.end = parameter.end;
 
-            parseExpected(SyntaxKind.EqualsGreaterThanToken);
+            node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>");
             node.body = parseArrowFunctionExpressionBody();
 
             return finishNode(node);
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
-            var triState = isParenthesizedArrowFunctionExpression();
+            let triState = isParenthesizedArrowFunctionExpression();
 
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -2902,8 +2742,8 @@ module ts {
             // following => or { token. Otherwise, we *might* have an arrow function.  Try to parse
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
-            var arrowFunction = triState === Tristate.True
-                ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ true)
+            let arrowFunction = triState === Tristate.True
+                ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ true)
                 : tryParse(parsePossibleParenthesizedArrowFunctionExpressionHead);
 
             if (!arrowFunction) {
@@ -2911,15 +2751,13 @@ module ts {
                 return undefined;
             }
 
-            // If we have an arrow, then try to parse the body. Even if not, try to parse if we 
+            // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
-            if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
-                arrowFunction.body = parseArrowFunctionExpressionBody();
-            }
-            else {
-                // If not, we're probably better off bailing out and returning a bogus function expression.
-                arrowFunction.body = parseIdentifier();
-            }
+            var lastToken = token;
+            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
+            arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
+                ? parseArrowFunctionExpressionBody()
+                : parseIdentifier();
 
             return finishNode(arrowFunction);
         }
@@ -2944,8 +2782,8 @@ module ts {
         }
 
         function isParenthesizedArrowFunctionExpressionWorker() {
-            var first = token;
-            var second = nextToken();
+            let first = token;
+            let second = nextToken();
 
             if (first === SyntaxKind.OpenParenToken) {
                 if (second === SyntaxKind.CloseParenToken) {
@@ -2953,7 +2791,7 @@ module ts {
                     // This is an arrow function with no parameters.
                     // The last one is not actually an arrow function,
                     // but this is probably what the user intended.
-                    var third = nextToken();
+                    let third = nextToken();
                     switch (third) {
                         case SyntaxKind.EqualsGreaterThanToken:
                         case SyntaxKind.ColonToken:
@@ -2962,6 +2800,16 @@ module ts {
                         default:
                             return Tristate.False;
                     }
+                }
+
+                // If encounter "([" or "({", this could be the start of a binding pattern.
+                // Examples:
+                //      ([ x ]) => { }
+                //      ({ x }) => { }
+                //      ([ x ])
+                //      ({ x })
+                if (second === SyntaxKind.OpenBracketToken || second === SyntaxKind.OpenBraceToken) {
+                    return Tristate.Unknown;
                 }
 
                 // Simple case: "(..."
@@ -2998,25 +2846,52 @@ module ts {
                     return Tristate.False;
                 }
 
+                // JSX overrides
+                if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    let isArrowFunctionInJsx = lookAhead(() => {
+                        let third = nextToken();
+                        if (third === SyntaxKind.ExtendsKeyword) {
+                            let fourth = nextToken();
+                            switch (fourth) {
+                                case SyntaxKind.EqualsToken:
+                                case SyntaxKind.GreaterThanToken:
+                                    return false;
+                                default:
+                                    return true;
+                            }
+                        }
+                        else if (third === SyntaxKind.CommaToken) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    if (isArrowFunctionInJsx) {
+                        return Tristate.True;
+                    }
+                    
+                    return Tristate.False;
+                }
+
                 // This *could* be a parenthesized arrow function.
                 return Tristate.Unknown;
             }
         }
 
-        function parsePossibleParenthesizedArrowFunctionExpressionHead() {
-            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ false);
+        function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction {
+            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
-        function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
-            var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction);
+        function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
+            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             // Arrow functions are never generators.
             //
             // If we're speculatively parsing a signature for a parenthesized arrow function, then
             // we have to have a complete parameter list.  Otherwise we might see something like
             // a => (b => c)
-            // And think that "(b =>" was actually a parenthesized arrow function with a missing 
+            // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ !allowAmbiguity, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ !allowAmbiguity, node);
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {
@@ -3041,17 +2916,21 @@ module ts {
 
         function parseArrowFunctionExpressionBody(): Block | Expression {
             if (token === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
+                return parseFunctionBlock(/*allowYield*/ false, /*ignoreMissingOpenBrace*/ false);
             }
 
-            if (isStartOfStatement(/*inErrorRecovery:*/ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
-                // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
+            if (token !== SyntaxKind.SemicolonToken &&
+                token !== SyntaxKind.FunctionKeyword &&
+                token !== SyntaxKind.ClassKeyword &&
+                isStartOfStatement() &&
+                !isStartOfExpressionStatement()) {
+                // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
                 //
-                // Here we try to recover from a potential error situation in the case where the 
+                // Here we try to recover from a potential error situation in the case where the
                 // user meant to supply a block. For example, if the user wrote:
                 //
                 //  a =>
-                //      var v = 0;
+                //      let v = 0;
                 //  }
                 //
                 // they may be missing an open brace.  Check to see if that's the case so we can
@@ -3059,7 +2938,7 @@ module ts {
                 // up preemptively closing the containing construct.
                 //
                 // Note: even when 'ignoreMissingOpenBrace' is passed as true, parseBody will still error.
-                return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ true);
+                return parseFunctionBlock(/*allowYield*/ false, /*ignoreMissingOpenBrace*/ true);
             }
 
             return parseAssignmentExpressionOrHigher();
@@ -3067,32 +2946,39 @@ module ts {
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
-            if (!parseOptional(SyntaxKind.QuestionToken)) {
+            let questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (!questionToken) {
                 return leftOperand;
             }
 
-            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
-            // we do not that for the 'whenFalse' part.  
-            var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
+            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and
+            // we do not that for the 'whenFalse' part.
+            let node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
             node.condition = leftOperand;
-            node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
-            parseExpected(SyntaxKind.ColonToken);
+            node.questionToken = questionToken;
+            node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
+            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition*/ false,
+                Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
             node.whenFalse = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
 
         function parseBinaryExpressionOrHigher(precedence: number): Expression {
-            var leftOperand = parseUnaryExpressionOrHigher();
+            let leftOperand = parseUnaryExpressionOrHigher();
             return parseBinaryExpressionRest(precedence, leftOperand);
+        }
+
+        function isInOrOfKeyword(t: SyntaxKind) {
+            return t === SyntaxKind.InKeyword || t === SyntaxKind.OfKeyword;
         }
 
         function parseBinaryExpressionRest(precedence: number, leftOperand: Expression): Expression {
             while (true) {
-                // We either have a binary operator here, or we're finished.  We call 
+                // We either have a binary operator here, or we're finished.  We call
                 // reScanGreaterToken so that we merge token sequences like > and = into >=
 
                 reScanGreaterToken();
-                var newPrecedence = getBinaryOperatorPrecedence();
+                let newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
                 if (newPrecedence <= precedence) {
@@ -3103,9 +2989,23 @@ module ts {
                     break;
                 }
 
-                var operator = token;
-                nextToken();
-                leftOperand = makeBinaryExpression(leftOperand, operator, parseBinaryExpressionOrHigher(newPrecedence));
+                if (token === SyntaxKind.AsKeyword) {
+                    // Make sure we *do* perform ASI for constructs like this:
+                    //    var x = foo
+                    //    as (Bar)
+                    // This should be parsed as an initialized variable, followed
+                    // by a function call to 'as' with the argument 'Bar'
+                    if (scanner.hasPrecedingLineBreak()) {
+                        break;
+                    }
+                    else {
+                        nextToken();
+                        leftOperand = makeAsExpression(leftOperand, parseType());
+                    }
+                }
+                else {
+                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                }
             }
 
             return leftOperand;
@@ -3142,6 +3042,7 @@ module ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                     return 7;
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
@@ -3161,16 +3062,23 @@ module ts {
             return -1;
         }
 
-        function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
-            var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
+        function makeBinaryExpression(left: Expression, operatorToken: Node, right: Expression): BinaryExpression {
+            let node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
             node.left = left;
-            node.operator = operator;
+            node.operatorToken = operatorToken;
             node.right = right;
             return finishNode(node);
         }
 
+        function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
+            let node = <AsExpression>createNode(SyntaxKind.AsExpression, left.pos);
+            node.expression = left;
+            node.type = right;
+            return finishNode(node);
+        }
+
         function parsePrefixUnaryExpression() {
-            var node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
+            let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
             node.operator = token;
             nextToken();
             node.operand = parseUnaryExpressionOrHigher();
@@ -3178,21 +3086,21 @@ module ts {
         }
 
         function parseDeleteExpression() {
-            var node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
+            let node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
 
         function parseTypeOfExpression() {
-            var node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
+            let node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
 
         function parseVoidExpression() {
-            var node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+            let node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
@@ -3214,18 +3122,24 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    return parseTypeAssertion();
+                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
+                        return parseTypeAssertion();
+                    }
+                    if(lookAhead(nextTokenIsIdentifier)) {
+                        return parseJsxElementOrSelfClosingElement();
+                    }
+                    // Fall through
                 default:
                     return parsePostfixExpressionOrHigher();
             }
         }
 
         function parsePostfixExpressionOrHigher(): PostfixExpression {
-            var expression = parseLeftHandSideExpressionOrHigher();
+            let expression = parseLeftHandSideExpressionOrHigher();
 
             Debug.assert(isLeftHandSideExpression(expression));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                var node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
+                let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
                 node.operand = expression;
                 node.operator = token;
                 nextToken();
@@ -3237,15 +3151,15 @@ module ts {
 
         function parseLeftHandSideExpressionOrHigher(): LeftHandSideExpression {
             // Original Ecma:
-            // LeftHandSideExpression: See 11.2 
+            // LeftHandSideExpression: See 11.2
             //      NewExpression
-            //      CallExpression 
+            //      CallExpression
             //
             // Our simplification:
             //
-            // LeftHandSideExpression: See 11.2 
-            //      MemberExpression  
-            //      CallExpression 
+            // LeftHandSideExpression: See 11.2
+            //      MemberExpression
+            //      CallExpression
             //
             // See comment in parseMemberExpressionOrHigher on how we replaced NewExpression with
             // MemberExpression to make our lives easier.
@@ -3254,23 +3168,23 @@ module ts {
             // out into its own productions:
             //
             // CallExpression:
-            //      MemberExpression Arguments 
+            //      MemberExpression Arguments
             //      CallExpression Arguments
             //      CallExpression[Expression]
             //      CallExpression.IdentifierName
             //      super   (   ArgumentListopt   )
             //      super.IdentifierName
             //
-            // Because of the recursion in these calls, we need to bottom out first.  There are two 
+            // Because of the recursion in these calls, we need to bottom out first.  There are two
             // bottom out states we can run into.  Either we see 'super' which must start either of
             // the last two CallExpression productions.  Or we have a MemberExpression which either
             // completes the LeftHandSideExpression, or starts the beginning of the first four
             // CallExpression productions.
-            var expression = token === SyntaxKind.SuperKeyword
+            let expression = token === SyntaxKind.SuperKeyword
                 ? parseSuperExpression()
                 : parseMemberExpressionOrHigher();
 
-            // Now, we *may* be complete.  However, we might have consumed the start of a 
+            // Now, we *may* be complete.  However, we might have consumed the start of a
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
             return parseCallExpressionRest(expression);
         }
@@ -3280,39 +3194,39 @@ module ts {
             // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
             // like so:
             //
-            //   PrimaryExpression : See 11.1 
+            //   PrimaryExpression : See 11.1
             //      this
             //      Identifier
             //      Literal
             //      ArrayLiteral
             //      ObjectLiteral
-            //      (Expression) 
+            //      (Expression)
             //      FunctionExpression
             //      new MemberExpression Arguments?
             //
-            //   MemberExpression : See 11.2 
-            //      PrimaryExpression 
+            //   MemberExpression : See 11.2
+            //      PrimaryExpression
             //      MemberExpression[Expression]
             //      MemberExpression.IdentifierName
             //
-            //   CallExpression : See 11.2 
-            //      MemberExpression 
+            //   CallExpression : See 11.2
+            //      MemberExpression
             //      CallExpression Arguments
             //      CallExpression[Expression]
-            //      CallExpression.IdentifierName 
+            //      CallExpression.IdentifierName
             //
             // Technically this is ambiguous.  i.e. CallExpression defines:
             //
             //   CallExpression:
             //      CallExpression Arguments
-            // 
+            //
             // If you see: "new Foo()"
             //
-            // Then that could be treated as a single ObjectCreationExpression, or it could be 
+            // Then that could be treated as a single ObjectCreationExpression, or it could be
             // treated as the invocation of "new Foo".  We disambiguate that in code (to match
             // the original grammar) by making sure that if we see an ObjectCreationExpression
             // we always consume arguments if they are there. So we treat "new Foo()" as an
-            // object creation only, and not at all as an invocation)  Another way to think 
+            // object creation only, and not at all as an invocation)  Another way to think
             // about this is that for every "new" that we see, we will consume an argument list if
             // it is there as part of the *associated* object creation node.  Any additional
             // argument lists we see, will become invocation expressions.
@@ -3323,27 +3237,175 @@ module ts {
             //
             // Because CallExpression and MemberExpression are left recursive, we need to bottom out
             // of the recursion immediately.  So we parse out a primary expression to start with.
-            var expression = parsePrimaryExpression();
+            let expression = parsePrimaryExpression();
             return parseMemberExpressionRest(expression);
         }
 
         function parseSuperExpression(): MemberExpression {
-            var expression = parseTokenNode<PrimaryExpression>();
+            let expression = parseTokenNode<PrimaryExpression>();
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken) {
                 return expression;
             }
 
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
-            var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+            let node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
-            parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
-            node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
+            node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+            return finishNode(node);
+        }
+        
+        function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
+            let opening = parseJsxOpeningOrSelfClosingElement();
+            if (opening.kind === SyntaxKind.JsxOpeningElement) {
+                let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
+                node.openingElement = opening;
+
+                node.children = parseJsxChildren(node.openingElement.tagName);
+                node.closingElement = parseJsxClosingElement();
+                return finishNode(node);
+            }
+            else {
+                Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
+                // Nothing else to do for self-closing elements
+                return <JsxSelfClosingElement>opening;
+            }
+        }
+
+        function parseJsxText(): JsxText {
+            let node = <JsxText>createNode(SyntaxKind.JsxText, scanner.getStartPos());
+            token = scanner.scanJsxToken();
+            return finishNode(node);
+        }
+
+        function parseJsxChild(): JsxChild {
+            switch (token) {
+                case SyntaxKind.JsxText:
+                    return parseJsxText();
+                case SyntaxKind.OpenBraceToken:
+                    return parseJsxExpression();
+                case SyntaxKind.LessThanToken:
+                    return parseJsxElementOrSelfClosingElement();
+            }
+            Debug.fail('Unknown JSX child kind ' + token);
+        }
+
+        function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
+            let result = <NodeArray<JsxChild>>[];
+            result.pos = scanner.getStartPos();
+            let saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JsxChildren;
+
+            while(true) {
+                token = scanner.reScanJsxToken();
+                if (token === SyntaxKind.LessThanSlashToken) {
+                    break;
+                }
+                else if (token === SyntaxKind.EndOfFileToken) {
+                    parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                    break;
+                }
+                result.push(parseJsxChild());
+            }
+
+            result.end = scanner.getTokenPos();
+
+            parsingContext = saveParsingContext;
+
+            return result;
+        }
+        
+        function parseJsxOpeningOrSelfClosingElement(): JsxOpeningElement|JsxSelfClosingElement {
+            let fullStart = scanner.getStartPos();
+
+            parseExpected(SyntaxKind.LessThanToken);
+
+            let tagName = parseJsxElementName();
+
+            let attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
+            let node: JsxOpeningLikeElement;
+
+            if (parseOptional(SyntaxKind.GreaterThanToken)) {
+                node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
+            }
+            else {
+                parseExpected(SyntaxKind.SlashToken);
+                parseExpected(SyntaxKind.GreaterThanToken);
+                node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
+            }
+
+            node.tagName = tagName;
+            node.attributes = attributes;
+
+            return finishNode(node);
+        }
+        
+        function parseJsxElementName(): EntityName {
+            scanJsxIdentifier();
+            let elementName: EntityName = parseIdentifier();
+            while (parseOptional(SyntaxKind.DotToken)) {
+                scanJsxIdentifier();
+                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                node.left = elementName;
+                node.right = parseIdentifierName();
+                elementName = finishNode(node);
+            }
+            return elementName;
+        }
+
+        function parseJsxExpression(): JsxExpression {
+            let node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
+
+            parseExpected(SyntaxKind.OpenBraceToken);
+            if (token !== SyntaxKind.CloseBraceToken) {
+                node.expression = parseExpression();
+            }
+            parseExpected(SyntaxKind.CloseBraceToken);
+
+            return finishNode(node);
+        }
+
+        function parseJsxAttribute(): JsxAttribute | JsxSpreadAttribute {
+            if (token === SyntaxKind.OpenBraceToken) {
+                return parseJsxSpreadAttribute();
+            }
+
+            scanJsxIdentifier();
+            let node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
+            node.name = parseIdentifierName();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                switch (token) {
+                    case SyntaxKind.StringLiteral:
+                        node.initializer = parseLiteralNode();
+                        break;
+                    default:
+                        node.initializer = parseJsxExpression();
+                        break;
+                }
+            }
+            return finishNode(node);
+        }
+
+        function parseJsxSpreadAttribute(): JsxSpreadAttribute {
+            let node = <JsxSpreadAttribute>createNode(SyntaxKind.JsxSpreadAttribute);
+            parseExpected(SyntaxKind.OpenBraceToken);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.expression = parseExpression();
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseJsxClosingElement(): JsxClosingElement {
+            let node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement);
+            parseExpected(SyntaxKind.LessThanSlashToken);
+            node.tagName = parseJsxElementName();
+            parseExpected(SyntaxKind.GreaterThanToken);
             return finishNode(node);
         }
 
         function parseTypeAssertion(): TypeAssertion {
-            var node = <TypeAssertion>createNode(SyntaxKind.TypeAssertionExpression);
+            let node = <TypeAssertion>createNode(SyntaxKind.TypeAssertionExpression);
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
@@ -3353,17 +3415,19 @@ module ts {
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
-                var dotOrBracketStart = scanner.getTokenPos();
-                if (parseOptional(SyntaxKind.DotToken)) {
-                    var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                let dotToken = parseOptionalToken(SyntaxKind.DotToken);
+                if (dotToken) {
+                    let propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     propertyAccess.expression = expression;
-                    propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
+                    propertyAccess.dotToken = dotToken;
+                    propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                     expression = finishNode(propertyAccess);
                     continue;
                 }
 
-                if (parseOptional(SyntaxKind.OpenBracketToken)) {
-                    var indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName                
+                if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
+                    let indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
                     indexedAccess.expression = expression;
 
                     // It's not uncommon for a user to write: "new Type[]".
@@ -3371,7 +3435,7 @@ module ts {
                     if (token !== SyntaxKind.CloseBracketToken) {
                         indexedAccess.argumentExpression = allowInAnd(parseExpression);
                         if (indexedAccess.argumentExpression.kind === SyntaxKind.StringLiteral || indexedAccess.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                            var literal = <LiteralExpression>indexedAccess.argumentExpression;
+                            let literal = <LiteralExpression>indexedAccess.argumentExpression;
                             literal.text = internIdentifier(literal.text);
                         }
                     }
@@ -3382,7 +3446,7 @@ module ts {
                 }
 
                 if (token === SyntaxKind.NoSubstitutionTemplateLiteral || token === SyntaxKind.TemplateHead) {
-                    var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
+                    let tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
                     tagExpression.tag = expression;
                     tagExpression.template = token === SyntaxKind.NoSubstitutionTemplateLiteral
                         ? parseLiteralNode()
@@ -3398,18 +3462,17 @@ module ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
-
                 if (token === SyntaxKind.LessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
-                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's 
+                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
                     // stack.
-                    var typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    let typeArguments = tryParse(parseTypeArgumentsInExpression);
                     if (!typeArguments) {
                         return expression;
                     }
 
-                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
@@ -3417,7 +3480,7 @@ module ts {
                     continue;
                 }
                 else if (token === SyntaxKind.OpenParenToken) {
-                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
                     expression = finishNode(callExpr);
@@ -3430,7 +3493,7 @@ module ts {
 
         function parseArgumentList() {
             parseExpected(SyntaxKind.OpenParenToken);
-            var result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
+            let result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return result;
         }
@@ -3440,7 +3503,7 @@ module ts {
                 return undefined;
             }
 
-            var typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+            let typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
             if (!parseExpected(SyntaxKind.GreaterThanToken)) {
                 // If it doesn't have the closing >  then it's definitely not an type argument list.
                 return undefined;
@@ -3455,8 +3518,8 @@ module ts {
 
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token) {
-                case SyntaxKind.OpenParenToken:                 // foo<x>(   
-                // this case are the only case where this token can legally follow a type argument 
+                case SyntaxKind.OpenParenToken:                 // foo<x>(
+                // this case are the only case where this token can legally follow a type argument
                 // list.  So we definitely want to treat this as a type arg list.
 
                 case SyntaxKind.DotToken:                       // foo<x>.
@@ -3464,7 +3527,6 @@ module ts {
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
                 case SyntaxKind.ColonToken:                     // foo<x>:
                 case SyntaxKind.SemicolonToken:                 // foo<x>;
-                case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.QuestionToken:                  // foo<x>?
                 case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
                 case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
@@ -3477,10 +3539,16 @@ module ts {
                 case SyntaxKind.BarToken:                       // foo<x> |
                 case SyntaxKind.CloseBraceToken:                // foo<x> }
                 case SyntaxKind.EndOfFileToken:                 // foo<x>
-                    // these cases can't legally follow a type arg list.  However, they're not legal 
+                    // these cases can't legally follow a type arg list.  However, they're not legal
                     // expressions either.  The user is probably in the middle of a generic type. So
                     // treat it as such.
                     return true;
+
+                case SyntaxKind.CommaToken:                     // foo<x>,
+                case SyntaxKind.OpenBraceToken:                 // foo<x> {
+                // We don't want to treat these as type arguments.  Otherwise we'll parse this
+                // as an invocation expression.  Instead, we want to parse out the expression 
+                // in isolation from the type arguments.
 
                 default:
                     // Anything else treat as an expression.
@@ -3506,6 +3574,8 @@ module ts {
                     return parseArrayLiteralExpression();
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
+                case SyntaxKind.ClassKeyword:
+                    return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
@@ -3524,83 +3594,80 @@ module ts {
         }
 
         function parseParenthesizedExpression(): ParenthesizedExpression {
-            var node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
+            let node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
 
-        function parseAssignmentExpressionOrOmittedExpression(): Expression {
-            return token === SyntaxKind.CommaToken
-                ? <Expression>createNode(SyntaxKind.OmittedExpression)
-                : parseAssignmentExpressionOrHigher();
-        }
-
         function parseSpreadElement(): Expression {
-            var node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
+            let node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
             parseExpected(SyntaxKind.DotDotDotToken);
             node.expression = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
 
-        function parseArrayLiteralElement(): Expression {
-            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() : parseAssignmentExpressionOrOmittedExpression();
+        function parseArgumentOrArrayLiteralElement(): Expression {
+            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
+                token === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
+                    parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
-            return allowInAnd(parseAssignmentExpressionOrOmittedExpression);
+            return doOutsideOfContext(disallowInAndDecoratorContext, parseArgumentOrArrayLiteralElement);
         }
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
-            var node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
+            let node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
-            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement);
+            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 
-        function tryParseAccessorDeclaration(fullStart: number, modifiers: ModifiersArray): AccessorDeclaration {
+        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): AccessorDeclaration {
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
+                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers);
             }
             else if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, modifiers);
+                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, decorators, modifiers);
             }
 
             return undefined;
         }
 
         function parseObjectLiteralElement(): ObjectLiteralElement {
-            var fullStart = scanner.getStartPos();
-            var modifiers = parseModifiers();
+            let fullStart = scanner.getStartPos();
+            let decorators = parseDecorators();
+            let modifiers = parseModifiers();
 
-            var accessor = tryParseAccessorDeclaration(fullStart, modifiers);
+            let accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
             if (accessor) {
                 return accessor;
             }
 
-            var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            var tokenIsIdentifier = isIdentifier();
-            var nameToken = token;
-            var propertyName = parsePropertyName();
+            let asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            let tokenIsIdentifier = isIdentifier();
+            let nameToken = token;
+            let propertyName = parsePropertyName();
 
             // Disallowing of optional property assignments happens in the grammar checker.
-            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            let questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, propertyName, questionToken);
+                return parseMethodDeclaration(fullStart, decorators, modifiers, asteriskToken, propertyName, questionToken);
             }
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
-                var shorthandDeclaration = <ShorthandPropertyAssignment>createNode(SyntaxKind.ShorthandPropertyAssignment, fullStart);
+                let shorthandDeclaration = <ShorthandPropertyAssignment>createNode(SyntaxKind.ShorthandPropertyAssignment, fullStart);
                 shorthandDeclaration.name = <Identifier>propertyName;
                 shorthandDeclaration.questionToken = questionToken;
                 return finishNode(shorthandDeclaration);
             }
             else {
-                var propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
+                let propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
                 propertyAssignment.name = propertyName;
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
@@ -3610,13 +3677,13 @@ module ts {
         }
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
-            var node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
+            let node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -3626,12 +3693,19 @@ module ts {
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
             // FunctionExpression:
             //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
-            var node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
+            let saveDecoratorContext = inDecoratorContext();
+            if (saveDecoratorContext) {
+                setDecoratorContext(false);
+            }
+            let node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = node.asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlock(/*allowYield:*/ !!node.asteriskToken, /* ignoreMissingOpenBrace */ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ !!node.asteriskToken, /*requireCompleteParameterList*/ false, node);
+            node.body = parseFunctionBlock(/*allowYield*/ !!node.asteriskToken, /* ignoreMissingOpenBrace */ false);
+            if (saveDecoratorContext) {
+                setDecoratorContext(true);
+            }
             return finishNode(node);
         }
 
@@ -3640,7 +3714,7 @@ module ts {
         }
 
         function parseNewExpression(): NewExpression {
-            var node = <NewExpression>createNode(SyntaxKind.NewExpression);
+            let node = <NewExpression>createNode(SyntaxKind.NewExpression);
             parseExpected(SyntaxKind.NewKeyword);
             node.expression = parseMemberExpressionOrHigher();
             node.typeArguments = tryParse(parseTypeArgumentsInExpression);
@@ -3652,10 +3726,10 @@ module ts {
         }
 
         // STATEMENTS
-        function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean, diagnosticMessage?: DiagnosticMessage): Block {
-            var node = <Block>createNode(SyntaxKind.Block);
+        function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+            let node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
-                node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -3665,10 +3739,21 @@ module ts {
         }
 
         function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
-            var savedYieldContext = inYieldContext();
+            let savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
 
-            var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true, diagnosticMessage);
+            // We may be in a [Decorator] context when parsing a function expression or 
+            // arrow function. The body of the function is not in [Decorator] context.
+            let saveDecoratorContext = inDecoratorContext();
+            if (saveDecoratorContext) {
+                setDecoratorContext(false);
+            }
+
+            let block = parseBlock(ignoreMissingOpenBrace, diagnosticMessage);
+
+            if (saveDecoratorContext) {
+                setDecoratorContext(true);
+            }
 
             setYieldContext(savedYieldContext);
 
@@ -3676,13 +3761,13 @@ module ts {
         }
 
         function parseEmptyStatement(): Statement {
-            var node = <Statement>createNode(SyntaxKind.EmptyStatement);
+            let node = <Statement>createNode(SyntaxKind.EmptyStatement);
             parseExpected(SyntaxKind.SemicolonToken);
             return finishNode(node);
         }
 
         function parseIfStatement(): IfStatement {
-            var node = <IfStatement>createNode(SyntaxKind.IfStatement);
+            let node = <IfStatement>createNode(SyntaxKind.IfStatement);
             parseExpected(SyntaxKind.IfKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
@@ -3693,7 +3778,7 @@ module ts {
         }
 
         function parseDoStatement(): DoStatement {
-            var node = <DoStatement>createNode(SyntaxKind.DoStatement);
+            let node = <DoStatement>createNode(SyntaxKind.DoStatement);
             parseExpected(SyntaxKind.DoKeyword);
             node.statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
@@ -3702,7 +3787,7 @@ module ts {
             parseExpected(SyntaxKind.CloseParenToken);
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
-            // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in 
+            // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             parseOptional(SyntaxKind.SemicolonToken);
@@ -3710,7 +3795,7 @@ module ts {
         }
 
         function parseWhileStatement(): WhileStatement {
-            var node = <WhileStatement>createNode(SyntaxKind.WhileStatement);
+            let node = <WhileStatement>createNode(SyntaxKind.WhileStatement);
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
@@ -3719,30 +3804,36 @@ module ts {
             return finishNode(node);
         }
 
-        function parseForOrForInStatement(): Statement {
-            var pos = getNodePos();
+        function parseForOrForInOrForOfStatement(): Statement {
+            let pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
 
-            var initializer: VariableDeclarationList | Expression = undefined;
+            let initializer: VariableDeclarationList | Expression = undefined;
             if (token !== SyntaxKind.SemicolonToken) {
                 if (token === SyntaxKind.VarKeyword || token === SyntaxKind.LetKeyword || token === SyntaxKind.ConstKeyword) {
-                    initializer = parseVariableDeclarationList(/*disallowIn:*/ true);
+                    initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
                 }
                 else {
                     initializer = disallowInAnd(parseExpression);
                 }
             }
-            var forOrForInStatement: IterationStatement;
+            let forOrForInOrForOfStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
-                var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
+                let forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInStatement = forInStatement;
+                forOrForInOrForOfStatement = forInStatement;
             }
-            else {
-                var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
+            else if (parseOptional(SyntaxKind.OfKeyword)) {
+                let forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
+                forOfStatement.initializer = initializer;
+                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+                parseExpected(SyntaxKind.CloseParenToken);
+                forOrForInOrForOfStatement = forOfStatement;
+            } else {
+                let forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
@@ -3750,19 +3841,19 @@ module ts {
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
-                    forStatement.iterator = allowInAnd(parseExpression);
+                    forStatement.incrementor = allowInAnd(parseExpression);
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInStatement = forStatement;
+                forOrForInOrForOfStatement = forStatement;
             }
 
-            forOrForInStatement.statement = parseStatement();
+            forOrForInOrForOfStatement.statement = parseStatement();
 
-            return finishNode(forOrForInStatement);
+            return finishNode(forOrForInOrForOfStatement);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
-            var node = <BreakOrContinueStatement>createNode(kind);
+            let node = <BreakOrContinueStatement>createNode(kind);
 
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) {
@@ -3774,7 +3865,7 @@ module ts {
         }
 
         function parseReturnStatement(): ReturnStatement {
-            var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
+            let node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
 
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!canParseSemicolon()) {
@@ -3786,7 +3877,7 @@ module ts {
         }
 
         function parseWithStatement(): WithStatement {
-            var node = <WithStatement>createNode(SyntaxKind.WithStatement);
+            let node = <WithStatement>createNode(SyntaxKind.WithStatement);
             parseExpected(SyntaxKind.WithKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
@@ -3796,19 +3887,19 @@ module ts {
         }
 
         function parseCaseClause(): CaseClause {
-            var node = <CaseClause>createNode(SyntaxKind.CaseClause);
+            let node = <CaseClause>createNode(SyntaxKind.CaseClause);
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
             return finishNode(node);
         }
 
         function parseDefaultClause(): DefaultClause {
-            var node = <DefaultClause>createNode(SyntaxKind.DefaultClause);
+            let node = <DefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
             return finishNode(node);
         }
 
@@ -3817,14 +3908,16 @@ module ts {
         }
 
         function parseSwitchStatement(): SwitchStatement {
-            var node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement);
+            let node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement);
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
+            let caseBlock = <CaseBlock>createNode(SyntaxKind.CaseBlock, scanner.getStartPos());
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
+            caseBlock.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
             parseExpected(SyntaxKind.CloseBraceToken);
+            node.caseBlock = finishNode(caseBlock);
             return finishNode(node);
         }
 
@@ -3832,12 +3925,12 @@ module ts {
             // ThrowStatement[Yield] :
             //      throw [no LineTerminator here]Expression[In, ?Yield];
 
-            // Because of automatic semicolon insertion, we need to report error if this 
+            // Because of automatic semicolon insertion, we need to report error if this
             // throw could be terminated with a semicolon.  Note: we can't call 'parseExpression'
-            // directly as that might consume an expression on the following line.  
+            // directly as that might consume an expression on the following line.
             // We just return 'undefined' in that case.  The actual error will be reported in the
             // grammar walker.
-            var node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement);
+            let node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement);
             parseExpected(SyntaxKind.ThrowKeyword);
             node.expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
@@ -3846,35 +3939,36 @@ module ts {
 
         // TODO: Review for error recovery
         function parseTryStatement(): TryStatement {
-            var node = <TryStatement>createNode(SyntaxKind.TryStatement);
+            let node = <TryStatement>createNode(SyntaxKind.TryStatement);
 
             parseExpected(SyntaxKind.TryKeyword);
-            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode*/ false);
+            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             node.catchClause = token === SyntaxKind.CatchKeyword ? parseCatchClause() : undefined;
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
             if (!node.catchClause || token === SyntaxKind.FinallyKeyword) {
                 parseExpected(SyntaxKind.FinallyKeyword);
-                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode*/ false);
+                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
             return finishNode(node);
         }
 
         function parseCatchClause(): CatchClause {
-            var result = <CatchClause>createNode(SyntaxKind.CatchClause);
+            let result = <CatchClause>createNode(SyntaxKind.CatchClause);
             parseExpected(SyntaxKind.CatchKeyword);
-            parseExpected(SyntaxKind.OpenParenToken);
-            result.name = parseIdentifier();
-            result.type = parseTypeAnnotation();
+            if (parseExpected(SyntaxKind.OpenParenToken)) {
+                result.variableDeclaration = parseVariableDeclaration();
+            }
+
             parseExpected(SyntaxKind.CloseParenToken);
-            result.block = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode:*/ false);
+            result.block = parseBlock(/*ignoreMissingOpenBrace*/ false);
             return finishNode(result);
         }
 
         function parseDebuggerStatement(): Statement {
-            var node = <Statement>createNode(SyntaxKind.DebuggerStatement);
+            let node = <Statement>createNode(SyntaxKind.DebuggerStatement);
             parseExpected(SyntaxKind.DebuggerKeyword);
             parseSemicolon();
             return finishNode(node);
@@ -3884,49 +3978,120 @@ module ts {
             // Avoiding having to do the lookahead for a labeled statement by just trying to parse
             // out an expression, seeing if it is identifier and then seeing if it is followed by
             // a colon.
-            var fullStart = scanner.getStartPos();
-            var expression = allowInAnd(parseExpression);
+            let fullStart = scanner.getStartPos();
+            let expression = allowInAnd(parseExpression);
 
             if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
-                var labeledStatement = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, fullStart);
+                let labeledStatement = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, fullStart);
                 labeledStatement.label = <Identifier>expression;
                 labeledStatement.statement = parseStatement();
                 return finishNode(labeledStatement);
             }
             else {
-                var expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
+                let expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
                 expressionStatement.expression = expression;
                 parseSemicolon();
                 return finishNode(expressionStatement);
             }
         }
 
-        function isStartOfStatement(inErrorRecovery: boolean): boolean {
-            // Functions and variable statements are allowed as a statement.  But as per the grammar,
-            // they also allow modifiers.  So we have to check for those statements that might be 
-            // following modifiers.This ensures that things work properly when incrementally parsing 
-            // as the parser will produce the same FunctionDeclaraiton or VariableStatement if it has 
-            // the same text regardless of whether it is inside a block or not.
-            if (isModifier(token)) {
-                var result = lookAhead(parseVariableStatementOrFunctionDeclarationWithModifiers);
-                if (result) {
-                    return true;
+        function isIdentifierOrKeyword() {
+            return token >= SyntaxKind.Identifier;
+        }
+
+        function nextTokenIsIdentifierOrKeywordOnSameLine() {
+            nextToken();
+            return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
+        }
+
+        function nextTokenIsIdentifierOrKeywordOrNumberOnSameLine() {
+            nextToken();
+            return (isIdentifierOrKeyword() || token === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
+        }
+
+        function isDeclaration(): boolean {
+            while (true) {
+                switch (token) {
+                    case SyntaxKind.VarKeyword:
+                    case SyntaxKind.LetKeyword:
+                    case SyntaxKind.ConstKeyword:
+                    case SyntaxKind.FunctionKeyword:
+                    case SyntaxKind.ClassKeyword:
+                    case SyntaxKind.EnumKeyword:
+                        return true;
+
+                    // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
+                    // however, an identifier cannot be followed by another identifier on the same line. This is what we
+                    // count on to parse out the respective declarations. For instance, we exploit this to say that
+                    //
+                    //    namespace n
+                    //
+                    // can be none other than the beginning of a namespace declaration, but need to respect that JavaScript sees
+                    //
+                    //    namespace
+                    //    n
+                    //
+                    // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
+                    // We need to look one token ahead to see if it permissible to try parsing a declaration.
+                    //
+                    // *Note*: 'interface' is actually a strict mode reserved word. So while
+                    //
+                    //   "use strict"
+                    //   interface
+                    //   I {}
+                    //
+                    // could be legal, it would add complexity for very little gain.
+                    case SyntaxKind.InterfaceKeyword:
+                    case SyntaxKind.TypeKeyword:
+                        return nextTokenIsIdentifierOnSameLine();
+                    case SyntaxKind.ModuleKeyword:
+                    case SyntaxKind.NamespaceKeyword:
+                        return nextTokenIsIdentifierOrStringLiteralOnSameLine();
+                    case SyntaxKind.DeclareKeyword:
+                        nextToken();
+                        // ASI takes effect for this modifier.
+                        if (scanner.hasPrecedingLineBreak()) {
+                            return false;
+                        }
+                        continue;
+
+                    case SyntaxKind.ImportKeyword:
+                        nextToken();
+                        return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
+                            token === SyntaxKind.OpenBraceToken || isIdentifierOrKeyword();
+                    case SyntaxKind.ExportKeyword:
+                        nextToken();
+                        if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
+                            token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword) {
+                            return true;
+                        }
+                        continue;
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.StaticKeyword:
+                        nextToken();
+                        continue;
+                    default:
+                        return false;
                 }
             }
+        }
 
+        function isStartOfDeclaration(): boolean {
+            return lookAhead(isDeclaration);
+        }
+
+        function isStartOfStatement(): boolean {
             switch (token) {
+                case SyntaxKind.AtToken:
                 case SyntaxKind.SemicolonToken:
-                    // If we're in error recovery, then we don't want to treat ';' as an empty statement.
-                    // The problem is that ';' can show up in far too many contexts, and if we see one
-                    // and assume it's a statement, then we may bail out inappropriately from whatever
-                    // we're parsing.  For example, if we have a semicolon in the middle of a class, then
-                    // we really don't want to assume the class is over and we're on a statement in the
-                    // outer module.  We just want to consume and move on.
-                    return !inErrorRecovery;
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.ClassKeyword:
+                case SyntaxKind.EnumKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
                 case SyntaxKind.WhileKeyword:
@@ -3944,59 +4109,61 @@ module ts {
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return true;
+
                 case SyntaxKind.ConstKeyword:
-                    // const keyword can precede enum keyword when defining constant enums
-                    // 'const enum' do not start statement.
-                    // In ES 6 'enum' is a future reserved keyword, so it should not be used as identifier
-                    var isConstEnum = lookAhead(nextTokenIsEnumKeyword);
-                    return !isConstEnum;
+                case SyntaxKind.ExportKeyword:
+                case SyntaxKind.ImportKeyword:
+                    return isStartOfDeclaration();
+
+                case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ModuleKeyword:
-                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
-                    // When followed by an identifier, these do not start a statement but might
-                    // instead be following declarations
-                    if (isDeclarationStart()) {
-                        return false;
-                    }
+                    // When these don't start a declaration, they're an identifier in an expression statement
+                    return true;
 
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
-                    // When followed by an identifier or keyword, these do not start a statement but
-                    // might instead be following type members
-                    if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine)) {
-                        return false;
-                    }
+                    // When these don't start a declaration, they may be the start of a class member if an identifier
+                    // immediately follows. Otherwise they're an identifier in an expression statement.
+                    return isStartOfDeclaration() || !lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
+
                 default:
                     return isStartOfExpression();
             }
         }
 
-        function nextTokenIsEnumKeyword() {
+        function nextTokenIsIdentifierOrStartOfDestructuring() {
             nextToken();
-            return token === SyntaxKind.EnumKeyword
+            return isIdentifier() || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken;
         }
 
-        function nextTokenIsIdentifierOrKeywordOnSameLine() {
-            nextToken();
-            return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
+        function isLetDeclaration() {
+            // In ES6 'let' always starts a lexical declaration if followed by an identifier or { 
+            // or [.
+            return lookAhead(nextTokenIsIdentifierOrStartOfDestructuring);
         }
 
         function parseStatement(): Statement {
             switch (token) {
-                case SyntaxKind.OpenBraceToken:
-                    return parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode:*/ false);
-                case SyntaxKind.VarKeyword:
-                case SyntaxKind.ConstKeyword:
-                    // const here should always be parsed as const declaration because of check in 'isStatement' 
-                    return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
-                case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined);
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
+                case SyntaxKind.OpenBraceToken:
+                    return parseBlock(/*ignoreMissingOpenBrace*/ false);
+                case SyntaxKind.VarKeyword:
+                    return parseVariableStatement(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                case SyntaxKind.LetKeyword:
+                    if (isLetDeclaration()) {
+                        return parseVariableStatement(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                    }
+                    break;
+                case SyntaxKind.FunctionKeyword:
+                    return parseFunctionDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                case SyntaxKind.ClassKeyword:
+                    return parseClassDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
                 case SyntaxKind.IfKeyword:
                     return parseIfStatement();
                 case SyntaxKind.DoKeyword:
@@ -4004,7 +4171,7 @@ module ts {
                 case SyntaxKind.WhileKeyword:
                     return parseWhileStatement();
                 case SyntaxKind.ForKeyword:
-                    return parseForOrForInStatement();
+                    return parseForOrForInOrForOfStatement();
                 case SyntaxKind.ContinueKeyword:
                     return parseBreakOrContinueStatement(SyntaxKind.ContinueStatement);
                 case SyntaxKind.BreakKeyword:
@@ -4018,60 +4185,81 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
-                // Include the next two for error recovery.
+                // Include 'catch' and 'finally' for error recovery.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
-                case SyntaxKind.LetKeyword:
-                    // If let follows identifier on the same line, it is declaration parse it as variable statement
-                    if (isLetDeclaration()) {
-                        return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
-                    }
-                // Else parse it like identifier - fall through
-                default:
-                    // Functions and variable statements are allowed as a statement.  But as per 
-                    // the grammar, they also allow modifiers.  So we have to check for those 
-                    // statements that might be following modifiers.  This ensures that things
-                    // work properly when incrementally parsing as the parser will produce the
-                    // same FunctionDeclaraiton or VariableStatement if it has the same text
-                    // regardless of whether it is inside a block or not.
-                    if (isModifier(token)) {
-                        var result = tryParse(parseVariableStatementOrFunctionDeclarationWithModifiers);
-                        if (result) {
-                            return result;
-                        }
-                    }
+                case SyntaxKind.AtToken:
+                    return parseDeclaration();
 
-                    return parseExpressionOrLabeledStatement();
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.TypeKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.ExportKeyword:
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.StaticKeyword:
+                    if (isStartOfDeclaration()) {
+                        return parseDeclaration();
+                    }
+                    break;
+            }
+            return parseExpressionOrLabeledStatement();
+        }
+
+        function parseDeclaration(): Statement {
+            let fullStart = getNodePos();
+            let decorators = parseDecorators();
+            let modifiers = parseModifiers();
+            switch (token) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
+                    return parseVariableStatement(fullStart, decorators, modifiers);
+                case SyntaxKind.FunctionKeyword:
+                    return parseFunctionDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.ClassKeyword:
+                    return parseClassDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.InterfaceKeyword:
+                    return parseInterfaceDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.TypeKeyword:
+                    return parseTypeAliasDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.EnumKeyword:
+                    return parseEnumDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                    return parseModuleDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.ImportKeyword:
+                    return parseImportDeclarationOrImportEqualsDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.ExportKeyword:
+                    nextToken();
+                    return token === SyntaxKind.DefaultKeyword || token === SyntaxKind.EqualsToken ?
+                        parseExportAssignment(fullStart, decorators, modifiers) :
+                        parseExportDeclaration(fullStart, decorators, modifiers);
+                default:
+                    if (decorators || modifiers) {
+                        // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
+                        // would follow. For recovery and error reporting purposes, return an incomplete declaration.                        
+                        let node = <Statement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                        node.pos = fullStart;
+                        node.decorators = decorators;
+                        setModifiers(node, modifiers);
+                        return finishNode(node);
+                    }
             }
         }
 
-        function parseVariableStatementOrFunctionDeclarationWithModifiers(): FunctionDeclaration | VariableStatement {
-            var start = scanner.getStartPos();
-            var modifiers = parseModifiers();
-            switch (token) {
-                case SyntaxKind.ConstKeyword:
-                    var nextTokenIsEnum = lookAhead(nextTokenIsEnumKeyword)
-                    if (nextTokenIsEnum) {
-                        return undefined;
-                    }
-                    return parseVariableStatement(start, modifiers);
-
-                case SyntaxKind.LetKeyword:
-                    if (!isLetDeclaration()) {
-                        return undefined;
-                    }
-                    return parseVariableStatement(start, modifiers);
-
-                case SyntaxKind.VarKeyword:
-                    return parseVariableStatement(start, modifiers);
-                case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration(start, modifiers);
-            }
-
-            return undefined;
+        function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token === SyntaxKind.StringLiteral);
         }
 
         function parseFunctionBlockOrSemicolon(isGenerator: boolean, diagnosticMessage?: DiagnosticMessage): Block {
@@ -4080,7 +4268,7 @@ module ts {
                 return;
             }
 
-            return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false, diagnosticMessage);
+            return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace*/ false, diagnosticMessage);
         }
 
         // DECLARATIONS
@@ -4089,7 +4277,7 @@ module ts {
             if (token === SyntaxKind.CommaToken) {
                 return <BindingElement>createNode(SyntaxKind.OmittedExpression);
             }
-            var node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            let node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
             node.initializer = parseInitializer(/*inParameter*/ false);
@@ -4097,15 +4285,16 @@ module ts {
         }
 
         function parseObjectBindingElement(): BindingElement {
-            var node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            let node = <BindingElement>createNode(SyntaxKind.BindingElement);
             // TODO(andersh): Handle computed properties
-            var id = parsePropertyName();
-            if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
-                node.name = <Identifier>id;
+            let tokenIsIdentifier = isIdentifier();
+            let propertyName = parsePropertyName();
+            if (tokenIsIdentifier && token !== SyntaxKind.ColonToken) {
+                node.name = <Identifier>propertyName;
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
-                node.propertyName = <Identifier>id;
+                node.propertyName = <Identifier>propertyName;
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer(/*inParameter*/ false);
@@ -4113,7 +4302,7 @@ module ts {
         }
 
         function parseObjectBindingPattern(): BindingPattern {
-            var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
+            let node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
             node.elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement);
             parseExpected(SyntaxKind.CloseBraceToken);
@@ -4121,7 +4310,7 @@ module ts {
         }
 
         function parseArrayBindingPattern(): BindingPattern {
-            var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
+            let node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
             node.elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
             parseExpected(SyntaxKind.CloseBracketToken);
@@ -4143,15 +4332,17 @@ module ts {
         }
 
         function parseVariableDeclaration(): VariableDeclaration {
-            var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
+            let node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            if (!isInOrOfKeyword(token)) {
+                node.initializer = parseInitializer(/*inParameter*/ false);
+            }
             return finishNode(node);
         }
 
-        function parseVariableDeclarationList(disallowIn: boolean): VariableDeclarationList {
-            var node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
+        function parseVariableDeclarationList(inForStatementInitializer: boolean): VariableDeclarationList {
+            let node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
 
             switch (token) {
                 case SyntaxKind.VarKeyword:
@@ -4167,74 +4358,115 @@ module ts {
             }
 
             nextToken();
-            var savedDisallowIn = inDisallowInContext();
-            setDisallowInContext(disallowIn);
 
-            node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+            // The user may have written the following:
+            //
+            //    for (let of X) { }
+            //
+            // In this case, we want to parse an empty declaration list, and then parse 'of'
+            // as a keyword. The reason this is not automatic is that 'of' is a valid identifier.
+            // So we need to look ahead to determine if 'of' should be treated as a keyword in
+            // this context.
+            // The checker will then give an error that there is an empty declaration list.
+            if (token === SyntaxKind.OfKeyword && lookAhead(canFollowContextualOfKeyword)) {
+                node.declarations = createMissingList<VariableDeclaration>();
+            }
+            else {
+                let savedDisallowIn = inDisallowInContext();
+                setDisallowInContext(inForStatementInitializer);
 
-            setDisallowInContext(savedDisallowIn);
+                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+
+                setDisallowInContext(savedDisallowIn);
+            }
 
             return finishNode(node);
         }
 
-        function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
-            var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
+        function canFollowContextualOfKeyword(): boolean {
+            return nextTokenIsIdentifier() && nextToken() === SyntaxKind.CloseParenToken;
+        }
+
+        function parseVariableStatement(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): VariableStatement {
+            let node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.declarationList = parseVariableDeclarationList(/*disallowIn:*/ false);
+            node.declarationList = parseVariableDeclarationList(/*inForStatementInitializer*/ false);
             parseSemicolon();
             return finishNode(node);
         }
 
-        function parseFunctionDeclaration(fullStart: number, modifiers: ModifiersArray): FunctionDeclaration {
-            var node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
+        function parseFunctionDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): FunctionDeclaration {
+            let node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = parseIdentifier();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
+            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ !!node.asteriskToken, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
         }
 
-        function parseConstructorDeclaration(pos: number, modifiers: ModifiersArray): ConstructorDeclaration {
-            var node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
+        function parseConstructorDeclaration(pos: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ConstructorDeclaration {
+            let node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false, Diagnostics.or_expected);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, Diagnostics.or_expected);
             return finishNode(node);
         }
 
-        function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
-            var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
+        function parseMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
+            let method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
+            method.decorators = decorators;
             setModifiers(method, modifiers);
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*requireCompleteParameterList:*/ false, method);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ !!asteriskToken, /*requireCompleteParameterList*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(!!asteriskToken, diagnosticMessage);
             return finishNode(method);
         }
 
-        function parsePropertyOrMethodDeclaration(fullStart: number, modifiers: ModifiersArray): ClassElement {
-            var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            var name = parsePropertyName();
+        function parsePropertyDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, name: DeclarationName, questionToken: Node): ClassElement {
+            let property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
+            property.decorators = decorators;
+            setModifiers(property, modifiers);
+            property.name = name;
+            property.questionToken = questionToken;
+            property.type = parseTypeAnnotation();
 
+            // For instance properties specifically, since they are evaluated inside the constructor,
+            // we do *not * want to parse yield expressions, so we specifically turn the yield context
+            // off. The grammar would look something like this:
+            //
+            //    MemberVariableDeclaration[Yield]:
+            //        AccessibilityModifier_opt   PropertyName   TypeAnnotation_opt   Initialiser_opt[In];
+            //        AccessibilityModifier_opt  static_opt  PropertyName   TypeAnnotation_opt   Initialiser_opt[In, ?Yield];
+            //
+            // The checker may still error in the static case to explicitly disallow the yield expression.
+            property.initializer = modifiers && modifiers.flags & NodeFlags.Static
+                ? allowInAnd(parseNonParameterInitializer)
+                : doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.DisallowIn, parseNonParameterInitializer);
+
+            parseSemicolon();
+            return finishNode(property);
+        }
+
+        function parsePropertyOrMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassElement {
+            let asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            let name = parsePropertyName();
+            
             // Note: this is not legal as per the grammar.  But we allow it in the parser and
             // report an error in the grammar checker.
-            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            let questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, Diagnostics.or_expected);
+                return parseMethodDeclaration(fullStart, decorators, modifiers, asteriskToken, name, questionToken, Diagnostics.or_expected);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
-                setModifiers(property, modifiers);
-                property.name = name;
-                property.questionToken = questionToken;
-                property.type = parseTypeAnnotation();
-                property.initializer = allowInAnd(parseNonParameterInitializer);
-                parseSemicolon();
-                return finishNode(property);
+                return parsePropertyDeclaration(fullStart, decorators, modifiers, name, questionToken);
             }
         }
 
@@ -4242,21 +4474,48 @@ module ts {
             return parseInitializer(/*inParameter*/ false);
         }
 
-        function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, modifiers: ModifiersArray): AccessorDeclaration {
-            var node = <AccessorDeclaration>createNode(kind, fullStart);
+        function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): AccessorDeclaration {
+            let node = <AccessorDeclaration>createNode(kind, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false);
             return finishNode(node);
         }
 
+        function isClassMemberModifier(idToken: SyntaxKind) {
+            switch (idToken) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.StaticKeyword:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         function isClassMemberStart(): boolean {
-            var idToken: SyntaxKind;
+            let idToken: SyntaxKind;
+
+            if (token === SyntaxKind.AtToken) {
+                return true;
+            }
 
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
             while (isModifier(token)) {
                 idToken = token;
+                // If the idToken is a class modifier (protected, private, public, and static), it is
+                // certain that we are starting to parse class member. This allows better error recovery
+                // Example:
+                //      public foo() ...     // true
+                //      public @dec blah ... // true; we will then report an error later
+                //      export public ...    // true; we will then report an error later
+                if (isClassMemberModifier(idToken)) {
+                    return true;
+                }
+
                 nextToken();
             }
 
@@ -4275,7 +4534,7 @@ module ts {
             if (token === SyntaxKind.OpenBracketToken) {
                 return true;
             }
-            
+
             // If we were able to get any potential identifier...
             if (idToken !== undefined) {
                 // If we have a non-keyword identifier, or if we have an accessor, then it's safe to parse.
@@ -4305,12 +4564,35 @@ module ts {
             return false;
         }
 
-        function parseModifiers(): ModifiersArray {
-            var flags = 0;
-            var modifiers: ModifiersArray;
+        function parseDecorators(): NodeArray<Decorator> {
+            let decorators: NodeArray<Decorator>;
             while (true) {
-                var modifierStart = scanner.getStartPos();
-                var modifierKind = token;
+                let decoratorStart = getNodePos();
+                if (!parseOptional(SyntaxKind.AtToken)) {
+                    break;
+                }
+
+                if (!decorators) {
+                    decorators = <NodeArray<Decorator>>[];
+                    decorators.pos = scanner.getStartPos();
+                }
+
+                let decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
+                decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
+                decorators.push(finishNode(decorator));
+            }
+            if (decorators) {
+                decorators.end = getNodeEnd();
+            }
+            return decorators;
+        }
+
+        function parseModifiers(): ModifiersArray {
+            let flags = 0;
+            let modifiers: ModifiersArray;
+            while (true) {
+                let modifierStart = scanner.getStartPos();
+                let modifierKind = token;
 
                 if (!parseAnyContextualModifier()) {
                     break;
@@ -4331,20 +4613,27 @@ module ts {
         }
 
         function parseClassElement(): ClassElement {
-            var fullStart = getNodePos();
-            var modifiers = parseModifiers();
+            if (token === SyntaxKind.SemicolonToken) {
+                let result = <SemicolonClassElement>createNode(SyntaxKind.SemicolonClassElement);
+                nextToken();
+                return finishNode(result);
+            }
 
-            var accessor = tryParseAccessorDeclaration(fullStart, modifiers);
+            let fullStart = getNodePos();
+            let decorators = parseDecorators();
+            let modifiers = parseModifiers();
+
+            let accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
             if (accessor) {
                 return accessor;
             }
 
             if (token === SyntaxKind.ConstructorKeyword) {
-                return parseConstructorDeclaration(fullStart, modifiers);
+                return parseConstructorDeclaration(fullStart, decorators, modifiers);
             }
 
             if (isIndexSignature()) {
-                return parseIndexSignatureDeclaration(modifiers);
+                return parseIndexSignatureDeclaration(fullStart, decorators, modifiers);
             }
 
             // It is very important that we check this *after* checking indexers because
@@ -4355,20 +4644,39 @@ module ts {
                 token === SyntaxKind.AsteriskToken ||
                 token === SyntaxKind.OpenBracketToken) {
 
-                return parsePropertyOrMethodDeclaration(fullStart, modifiers);
+                return parsePropertyOrMethodDeclaration(fullStart, decorators, modifiers);
+            }
+
+            if (decorators || modifiers) {
+                // treat this as a property declaration with a missing name.
+                let name = <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                return parsePropertyDeclaration(fullStart, decorators, modifiers, name, /*questionToken*/ undefined);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
             Debug.fail("Should not have attempted to parse class member declaration.");
         }
 
-        function parseClassDeclaration(fullStart: number, modifiers: ModifiersArray): ClassDeclaration {
-            var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
+        function parseClassExpression(): ClassExpression {
+            return <ClassExpression>parseClassDeclarationOrExpression(
+                /*fullStart*/ scanner.getStartPos(),
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                SyntaxKind.ClassExpression);
+        }
+
+        function parseClassDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassDeclaration {
+            return <ClassDeclaration>parseClassDeclarationOrExpression(fullStart, decorators, modifiers, SyntaxKind.ClassDeclaration);
+        }
+
+        function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
+            var node = <ClassLikeDeclaration>createNode(kind, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseIdentifier();
+            node.name = parseOptionalIdentifier();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // ClassTail[Yield,GeneratorParameter] : See 14.5
@@ -4383,6 +4691,7 @@ module ts {
             else {
                 node.members = createMissingList<ClassElement>();
             }
+
             return finishNode(node);
         }
 
@@ -4401,19 +4710,29 @@ module ts {
         }
 
         function parseHeritageClausesWorker() {
-            return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode:*/ false, parseHeritageClause);
+            return parseList(ParsingContext.HeritageClauses, parseHeritageClause);
         }
 
         function parseHeritageClause() {
             if (token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword) {
-                var node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
+                let node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
                 node.token = token;
                 nextToken();
-                node.types = parseDelimitedList(ParsingContext.TypeReferences, parseTypeReference);
+                node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
                 return finishNode(node);
             }
 
             return undefined;
+        }
+
+        function parseExpressionWithTypeArguments(): ExpressionWithTypeArguments {
+            let node = <ExpressionWithTypeArguments>createNode(SyntaxKind.ExpressionWithTypeArguments);
+            node.expression = parseLeftHandSideExpressionOrHigher();
+            if (token === SyntaxKind.LessThanToken) {
+                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            }
+
+            return finishNode(node);
         }
 
         function isHeritageClause(): boolean {
@@ -4421,25 +4740,28 @@ module ts {
         }
 
         function parseClassMembers() {
-            return parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassElement);
+            return parseList(ParsingContext.ClassMembers, parseClassElement);
         }
 
-        function parseInterfaceDeclaration(fullStart: number, modifiers: ModifiersArray): InterfaceDeclaration {
-            var node = <InterfaceDeclaration>createNode(SyntaxKind.InterfaceDeclaration, fullStart);
+        function parseInterfaceDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): InterfaceDeclaration {
+            let node = <InterfaceDeclaration>createNode(SyntaxKind.InterfaceDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ false);
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ false);
             node.members = parseObjectTypeMembers();
             return finishNode(node);
         }
 
-        function parseTypeAliasDeclaration(fullStart: number, modifiers: ModifiersArray): TypeAliasDeclaration {
-            var node = <TypeAliasDeclaration>createNode(SyntaxKind.TypeAliasDeclaration, fullStart);
+        function parseTypeAliasDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): TypeAliasDeclaration {
+            let node = <TypeAliasDeclaration>createNode(SyntaxKind.TypeAliasDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.TypeKeyword);
             node.name = parseIdentifier();
+            node.typeParameters = parseTypeParameters();
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
@@ -4451,14 +4773,15 @@ module ts {
         // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
         // or any time an integer literal initializer is encountered.
         function parseEnumMember(): EnumMember {
-            var node = <EnumMember>createNode(SyntaxKind.EnumMember, scanner.getStartPos());
+            let node = <EnumMember>createNode(SyntaxKind.EnumMember, scanner.getStartPos());
             node.name = parsePropertyName();
             node.initializer = allowInAnd(parseNonParameterInitializer);
             return finishNode(node);
         }
 
-        function parseEnumDeclaration(fullStart: number, modifiers: ModifiersArray): EnumDeclaration {
-            var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, fullStart);
+        function parseEnumDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): EnumDeclaration {
+            let node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
@@ -4473,9 +4796,9 @@ module ts {
         }
 
         function parseModuleBlock(): ModuleBlock {
-            var node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
+            let node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/false, parseModuleElement);
+                node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4484,30 +4807,39 @@ module ts {
             return finishNode(node);
         }
 
-        function parseInternalModuleTail(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
-            var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
+        function parseModuleOrNamespaceDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
+            let node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
             node.flags |= flags;
             node.name = parseIdentifier();
             node.body = parseOptional(SyntaxKind.DotToken)
-                ? parseInternalModuleTail(getNodePos(), /*modifiers:*/undefined, NodeFlags.Export)
+                ? parseModuleOrNamespaceDeclaration(getNodePos(), /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.Export)
                 : parseModuleBlock();
             return finishNode(node);
         }
 
-        function parseAmbientExternalModuleDeclaration(fullStart: number, modifiers: ModifiersArray): ModuleDeclaration {
-            var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
+        function parseAmbientExternalModuleDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ModuleDeclaration {
+            let node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.name = parseLiteralNode(/*internName:*/ true);
+            node.name = parseLiteralNode(/*internName*/ true);
             node.body = parseModuleBlock();
             return finishNode(node);
         }
 
-        function parseModuleDeclaration(fullStart: number, modifiers: ModifiersArray): ModuleDeclaration {
-            parseExpected(SyntaxKind.ModuleKeyword);
-            return token === SyntaxKind.StringLiteral
-                ? parseAmbientExternalModuleDeclaration(fullStart, modifiers)
-                : parseInternalModuleTail(fullStart, modifiers, modifiers ? modifiers.flags : 0);
+        function parseModuleDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ModuleDeclaration {
+            let flags = modifiers ? modifiers.flags : 0;
+            if (parseOptional(SyntaxKind.NamespaceKeyword)) {
+                flags |= NodeFlags.Namespace;
+            }
+            else {
+                parseExpected(SyntaxKind.ModuleKeyword);
+                if (token === SyntaxKind.StringLiteral) {
+                    return parseAmbientExternalModuleDeclaration(fullStart, decorators, modifiers);
+                }
+            }
+            return parseModuleOrNamespaceDeclaration(fullStart, decorators, modifiers, flags);
         }
 
         function isExternalModuleReference() {
@@ -4519,15 +4851,81 @@ module ts {
             return nextToken() === SyntaxKind.OpenParenToken;
         }
 
-        function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration {
-            var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
-            setModifiers(node, modifiers);
+        function nextTokenIsSlash() {
+            return nextToken() === SyntaxKind.SlashToken;
+        }
+
+        function nextTokenIsCommaOrFromKeyword() {
+            nextToken();
+            return token === SyntaxKind.CommaToken ||
+                token === SyntaxKind.FromKeyword;
+        }
+
+        function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
-            node.name = parseIdentifier();
-            parseExpected(SyntaxKind.EqualsToken);
-            node.moduleReference = parseModuleReference();
+            let afterImportPos = scanner.getStartPos();
+
+            let identifier: Identifier;
+            if (isIdentifier()) {
+                identifier = parseIdentifier();
+                if (token !== SyntaxKind.CommaToken && token !== SyntaxKind.FromKeyword) {
+                    // ImportEquals declaration of type:
+                    // import x = require("mod"); or
+                    // import x = M.x;
+                    let importEqualsDeclaration = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
+                    importEqualsDeclaration.decorators = decorators;
+                    setModifiers(importEqualsDeclaration, modifiers);
+                    importEqualsDeclaration.name = identifier;
+                    parseExpected(SyntaxKind.EqualsToken);
+                    importEqualsDeclaration.moduleReference = parseModuleReference();
+                    parseSemicolon();
+                    return finishNode(importEqualsDeclaration);
+                }
+            }
+
+            // Import statement
+            let importDeclaration = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
+            importDeclaration.decorators = decorators;
+            setModifiers(importDeclaration, modifiers);
+
+            // ImportDeclaration:
+            //  import ImportClause from ModuleSpecifier ;
+            //  import ModuleSpecifier;
+            if (identifier || // import id
+                token === SyntaxKind.AsteriskToken || // import *
+                token === SyntaxKind.OpenBraceToken) { // import {
+                importDeclaration.importClause = parseImportClause(identifier, afterImportPos);
+                parseExpected(SyntaxKind.FromKeyword);
+            }
+
+            importDeclaration.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(importDeclaration);
+        }
+
+        function parseImportClause(identifier: Identifier, fullStart: number) {
+            //ImportClause:
+            //  ImportedDefaultBinding
+            //  NameSpaceImport
+            //  NamedImports
+            //  ImportedDefaultBinding, NameSpaceImport
+            //  ImportedDefaultBinding, NamedImports
+
+            let importClause = <ImportClause>createNode(SyntaxKind.ImportClause, fullStart);
+            if (identifier) {
+                // ImportedDefaultBinding:
+                //  ImportedBinding
+                importClause.name = identifier;
+            }
+
+            // If there was no default import or if there is comma token after default import
+            // parse namespace or named imports
+            if (!importClause.name ||
+                parseOptional(SyntaxKind.CommaToken)) {
+                importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+            }
+
+            return finishNode(importClause);
         }
 
         function parseModuleReference() {
@@ -4537,157 +4935,136 @@ module ts {
         }
 
         function parseExternalModuleReference() {
-            var node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
+            let node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
             parseExpected(SyntaxKind.RequireKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-
-            // We allow arbitrary expressions here, even though the grammar only allows string 
-            // literals.  We check to ensure that it is only a string literal later in the grammar
-            // walker.
-            node.expression = parseExpression();
-
-            // Ensure the string being required is in our 'identifier' table.  This will ensure 
-            // that features like 'find refs' will look inside this file when search for its name.
-            if (node.expression.kind === SyntaxKind.StringLiteral) {
-                internIdentifier((<LiteralExpression>node.expression).text);
-            }
-
+            node.expression = parseModuleSpecifier();
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
 
-        function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
-            var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
+        function parseModuleSpecifier(): Expression {
+            // We allow arbitrary expressions here, even though the grammar only allows string
+            // literals.  We check to ensure that it is only a string literal later in the grammar
+            // walker.
+            let result = parseExpression();
+            // Ensure the string being required is in our 'identifier' table.  This will ensure
+            // that features like 'find refs' will look inside this file when search for its name.
+            if (result.kind === SyntaxKind.StringLiteral) {
+                internIdentifier((<LiteralExpression>result).text);
+            }
+            return result;
+        }
+
+        function parseNamespaceImport(): NamespaceImport {
+            // NameSpaceImport:
+            //  * as ImportedBinding
+            let namespaceImport = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
+            parseExpected(SyntaxKind.AsteriskToken);
+            parseExpected(SyntaxKind.AsKeyword);
+            namespaceImport.name = parseIdentifier();
+            return finishNode(namespaceImport);
+        }
+
+        function parseNamedImportsOrExports(kind: SyntaxKind): NamedImportsOrExports {
+            let node = <NamedImports>createNode(kind);
+
+            // NamedImports:
+            //  { }
+            //  { ImportsList }
+            //  { ImportsList, }
+
+            // ImportsList:
+            //  ImportSpecifier
+            //  ImportsList, ImportSpecifier
+            node.elements = parseBracketedList(ParsingContext.ImportOrExportSpecifiers,
+                kind === SyntaxKind.NamedImports ? parseImportSpecifier : parseExportSpecifier,
+                SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseExportSpecifier() {
+            return parseImportOrExportSpecifier(SyntaxKind.ExportSpecifier);
+        }
+
+        function parseImportSpecifier() {
+            return parseImportOrExportSpecifier(SyntaxKind.ImportSpecifier);
+        }
+
+        function parseImportOrExportSpecifier(kind: SyntaxKind): ImportOrExportSpecifier {
+            let node = <ImportSpecifier>createNode(kind);
+            // ImportSpecifier:
+            //   BindingIdentifier
+            //   IdentifierName as BindingIdentifier
+            // ExportSpecififer:
+            //   IdentifierName
+            //   IdentifierName as IdentifierName
+            let checkIdentifierIsKeyword = isKeyword(token) && !isIdentifier();
+            let checkIdentifierStart = scanner.getTokenPos();
+            let checkIdentifierEnd = scanner.getTextPos();
+            let identifierName = parseIdentifierName();
+            if (token === SyntaxKind.AsKeyword) {
+                node.propertyName = identifierName;
+                parseExpected(SyntaxKind.AsKeyword);
+                checkIdentifierIsKeyword = isKeyword(token) && !isIdentifier();
+                checkIdentifierStart = scanner.getTokenPos();
+                checkIdentifierEnd = scanner.getTextPos();
+                node.name = parseIdentifierName();
+            }
+            else {
+                node.name = identifierName;
+            }
+            if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
+                // Report error identifier expected
+                parseErrorAtPosition(checkIdentifierStart, checkIdentifierEnd - checkIdentifierStart, Diagnostics.Identifier_expected);
+            }
+            return finishNode(node);
+        }
+
+        function parseExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ExportDeclaration {
+            let node = <ExportDeclaration>createNode(SyntaxKind.ExportDeclaration, fullStart);
+            node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.exportName = parseIdentifier();
+            if (parseOptional(SyntaxKind.AsteriskToken)) {
+                parseExpected(SyntaxKind.FromKeyword);
+                node.moduleSpecifier = parseModuleSpecifier();
+            }
+            else {
+                node.exportClause = parseNamedImportsOrExports(SyntaxKind.NamedExports);
+                if (parseOptional(SyntaxKind.FromKeyword)) {
+                    node.moduleSpecifier = parseModuleSpecifier();
+                }
+            }
             parseSemicolon();
             return finishNode(node);
         }
 
-        function isLetDeclaration() {
-            // It is let declaration if in strict mode or next token is identifier on same line.
-            // otherwise it needs to be treated like identifier
-            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOnSameLine);
-        }
-
-        function isDeclarationStart(): boolean {
-            switch (token) {
-                case SyntaxKind.VarKeyword:
-                case SyntaxKind.ConstKeyword:
-                case SyntaxKind.FunctionKeyword:
-                    return true;
-                case SyntaxKind.LetKeyword:
-                    return isLetDeclaration();
-                case SyntaxKind.ClassKeyword:
-                case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.EnumKeyword:
-                case SyntaxKind.ImportKeyword:
-                case SyntaxKind.TypeKeyword:
-                    // Not true keywords so ensure an identifier follows
-                    return lookAhead(nextTokenIsIdentifierOrKeyword);
-                case SyntaxKind.ModuleKeyword:
-                    // Not a true keyword so ensure an identifier or string literal follows
-                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
-                case SyntaxKind.ExportKeyword:
-                    // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrDeclarationStart);
-                case SyntaxKind.DeclareKeyword:
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.StaticKeyword:
-                    // Check for modifier on source element
-                    return lookAhead(nextTokenIsDeclarationStart);
+        function parseExportAssignment(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ExportAssignment {
+            let node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
+            node.decorators = decorators;
+            setModifiers(node, modifiers);
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.isExportEquals = true;
             }
-        }
-
-        function isIdentifierOrKeyword() {
-            return token >= SyntaxKind.Identifier;
-        }
-
-        function nextTokenIsIdentifierOrKeyword() {
-            nextToken();
-            return isIdentifierOrKeyword();
-        }
-
-        function nextTokenIsIdentifierOrKeywordOrStringLiteral() {
-            nextToken();
-            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
-        }
-
-        function nextTokenIsEqualsTokenOrDeclarationStart() {
-            nextToken();
-            return token === SyntaxKind.EqualsToken || isDeclarationStart();
-        }
-
-        function nextTokenIsDeclarationStart() {
-            nextToken();
-            return isDeclarationStart();
-        }
-
-        function parseDeclaration(): ModuleElement {
-            var fullStart = getNodePos();
-            var modifiers = parseModifiers();
-            if (token === SyntaxKind.ExportKeyword) {
-                nextToken();
-                if (parseOptional(SyntaxKind.EqualsToken)) {
-                    return parseExportAssignmentTail(fullStart, modifiers);
-                }
+            else {
+                parseExpected(SyntaxKind.DefaultKeyword);
             }
-
-            switch (token) {
-                case SyntaxKind.VarKeyword:
-                case SyntaxKind.LetKeyword:
-                case SyntaxKind.ConstKeyword:
-                    return parseVariableStatement(fullStart, modifiers);
-                case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration(fullStart, modifiers);
-                case SyntaxKind.ClassKeyword:
-                    return parseClassDeclaration(fullStart, modifiers);
-                case SyntaxKind.InterfaceKeyword:
-                    return parseInterfaceDeclaration(fullStart, modifiers);
-                case SyntaxKind.TypeKeyword:
-                    return parseTypeAliasDeclaration(fullStart, modifiers);
-                case SyntaxKind.EnumKeyword:
-                    return parseEnumDeclaration(fullStart, modifiers);
-                case SyntaxKind.ModuleKeyword:
-                    return parseModuleDeclaration(fullStart, modifiers);
-                case SyntaxKind.ImportKeyword:
-                    return parseImportDeclaration(fullStart, modifiers);
-                default:
-                    Debug.fail("Mismatch between isDeclarationStart and parseDeclaration");
-            }
-        }
-
-        function isSourceElement(inErrorRecovery: boolean): boolean {
-            return isDeclarationStart() || isStartOfStatement(inErrorRecovery);
-        }
-
-        function parseSourceElement() {
-            return parseSourceElementOrModuleElement();
-        }
-
-        function parseModuleElement() {
-            return parseSourceElementOrModuleElement();
-        }
-
-        function parseSourceElementOrModuleElement(): ModuleElement {
-            return isDeclarationStart()
-                ? parseDeclaration()
-                : parseStatement();
+            node.expression = parseAssignmentExpressionOrHigher();
+            parseSemicolon();
+            return finishNode(node);
         }
 
         function processReferenceComments(sourceFile: SourceFile): void {
-            var triviaScanner = createScanner(languageVersion, /*skipTrivia*/false, sourceText);
-            var referencedFiles: FileReference[] = [];
-            var amdDependencies: string[] = [];
-            var amdModuleName: string;
+            let triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
+            let referencedFiles: FileReference[] = [];
+            let amdDependencies: { path: string; name: string }[] = [];
+            let amdModuleName: string;
 
-            // Keep scanning all the leading trivia in the file until we get to something that 
-            // isn't trivia.  Any single line comment will be analyzed to see if it is a 
+            // Keep scanning all the leading trivia in the file until we get to something that
+            // isn't trivia.  Any single line comment will be analyzed to see if it is a
             // reference comment.
             while (true) {
-                var kind = triviaScanner.scan();
+                let kind = triviaScanner.scan();
                 if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
                     continue;
                 }
@@ -4695,96 +5072,1310 @@ module ts {
                     break;
                 }
 
-                var range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
+                let range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
 
-                var comment = sourceText.substring(range.pos, range.end);
-                var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
+                let comment = sourceText.substring(range.pos, range.end);
+                let referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
-                    var fileReference = referencePathMatchResult.fileReference;
+                    let fileReference = referencePathMatchResult.fileReference;
                     sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
-                    var diagnosticMessage = referencePathMatchResult.diagnosticMessage;
+                    let diagnosticMessage = referencePathMatchResult.diagnosticMessage;
                     if (fileReference) {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
-                    var amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
-                    var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
+                    let amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
+                    let amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
 
-                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
-                    var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
+                    let amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s/gim;
+                    let pathRegex = /\spath\s*=\s*('|")(.+?)\1/gim;
+                    let nameRegex = /\sname\s*=\s*('|")(.+?)\1/gim;
+                    let amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
-                        amdDependencies.push(amdDependencyMatchResult[2]);
+                        let pathMatchResult = pathRegex.exec(comment);
+                        let nameMatchResult = nameRegex.exec(comment);
+                        if (pathMatchResult) {
+                            let amdDependency = { path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
+                            amdDependencies.push(amdDependency);
+                        }
                     }
                 }
             }
 
             sourceFile.referencedFiles = referencedFiles;
             sourceFile.amdDependencies = amdDependencies;
-            sourceFile.amdModuleName = amdModuleName;
+            sourceFile.moduleName = amdModuleName;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
-                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                || node.kind === SyntaxKind.ExportAssignment
+                    || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    || node.kind === SyntaxKind.ImportDeclaration
+                    || node.kind === SyntaxKind.ExportAssignment
+                    || node.kind === SyntaxKind.ExportDeclaration
                     ? node
                     : undefined);
         }
 
-        function getSyntacticDiagnostics() {
-            if (syntacticDiagnostics === undefined) {
-                // Don't bother doing any grammar checks if there are already parser errors.  
-                // Otherwise we may end up with too many cascading errors.
-                syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
+        const enum ParsingContext {
+            SourceElements,            // Elements in source file
+            BlockStatements,           // Statements in block
+            SwitchClauses,             // Clauses in switch statement
+            SwitchClauseStatements,    // Statements in switch clause
+            TypeMembers,               // Members in interface or type literal
+            ClassMembers,              // Members in class declaration
+            EnumMembers,               // Members in enum declaration
+            HeritageClauseElement,     // Elements in a heritage clause
+            VariableDeclarations,      // Variable declarations in variable statement
+            ObjectBindingElements,     // Binding elements in object binding list
+            ArrayBindingElements,      // Binding elements in array binding list
+            ArgumentExpressions,       // Expressions in argument list
+            ObjectLiteralMembers,      // Members in object literal
+            JsxAttributes,             // Attributes in jsx element
+            JsxChildren,               // Things between opening and closing JSX tags
+            ArrayLiteralMembers,       // Members in array literal
+            Parameters,                // Parameters in parameter list
+            TypeParameters,            // Type parameters in type parameter list
+            TypeArguments,             // Type arguments in type argument list
+            TupleElementTypes,         // Element types in tuple element type list
+            HeritageClauses,           // Heritage clauses for a class or interface declaration.
+            ImportOrExportSpecifiers,  // Named import clause's import specifier list
+            JSDocFunctionParameters,
+            JSDocTypeArguments,
+            JSDocRecordMembers,
+            JSDocTupleTypes,
+            Count                      // Number of parsing contexts
+        }
+
+        const enum Tristate {
+            False,
+            True,
+            Unknown
+        }
+
+        export module JSDocParser {
+            export function isJSDocType() {
+                switch (token) {
+                    case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.QuestionToken:
+                    case SyntaxKind.OpenParenToken:
+                    case SyntaxKind.OpenBracketToken:
+                    case SyntaxKind.ExclamationToken:
+                    case SyntaxKind.OpenBraceToken:
+                    case SyntaxKind.FunctionKeyword:
+                    case SyntaxKind.DotDotDotToken:
+                    case SyntaxKind.NewKeyword:
+                    case SyntaxKind.ThisKeyword:
+                        return true;
+                }
+
+                return isIdentifierOrKeyword();
             }
 
-            Debug.assert(syntacticDiagnostics !== undefined);
-            return syntacticDiagnostics;
+            export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
+                let jsDocTypeExpression = parseJSDocTypeExpression(start, length);
+                let diagnostics = parseDiagnostics;
+                clearState();
+
+                return jsDocTypeExpression ? { jsDocTypeExpression, diagnostics } : undefined;
+            }
+
+            // Parses out a JSDoc type expression.  The starting position should be right at the open
+            // curly in the type expression.  Returns 'undefined' if it encounters any errors while parsing.
+            /* @internal */
+            export function parseJSDocTypeExpression(start: number, length: number): JSDocTypeExpression {
+                scanner.setText(sourceText, start, length);
+        
+                // Prime the first token for us to start processing.
+                token = nextToken();
+
+                let result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
+
+                parseExpected(SyntaxKind.OpenBraceToken);
+                result.type = parseJSDocTopLevelType();
+                parseExpected(SyntaxKind.CloseBraceToken);
+
+                fixupParentReferences(result);
+                return finishNode(result);
+            }
+
+            function parseJSDocTopLevelType(): JSDocType {
+                var type = parseJSDocType();
+                if (token === SyntaxKind.BarToken) {
+                    var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
+                    unionType.types = parseJSDocTypeList(type);
+                    type = finishNode(unionType);
+                }
+
+                if (token === SyntaxKind.EqualsToken) {
+                    var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                    nextToken();
+                    optionalType.type = type;
+                    type = finishNode(optionalType);
+                }
+
+                return type;
+            }
+
+            function parseJSDocType(): JSDocType {
+                let type = parseBasicTypeExpression();
+
+                while (true) {
+                    if (token === SyntaxKind.OpenBracketToken) {
+                        let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.pos);
+                        arrayType.elementType = type;
+
+                        nextToken();
+                        parseExpected(SyntaxKind.CloseBracketToken);
+
+                        type = finishNode(arrayType);
+                    }
+                    else if (token === SyntaxKind.QuestionToken) {
+                        let nullableType = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, type.pos);
+                        nullableType.type = type;
+
+                        nextToken();
+                        type = finishNode(nullableType);
+                    }
+                    else if (token === SyntaxKind.ExclamationToken) {
+                        let nonNullableType = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType, type.pos);
+                        nonNullableType.type = type;
+
+                        nextToken();
+                        type = finishNode(nonNullableType);
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                return type;
+            }
+
+            function parseBasicTypeExpression(): JSDocType {
+                switch (token) {
+                    case SyntaxKind.AsteriskToken:
+                        return parseJSDocAllType();
+                    case SyntaxKind.QuestionToken:
+                        return parseJSDocUnknownOrNullableType();
+                    case SyntaxKind.OpenParenToken:
+                        return parseJSDocUnionType();
+                    case SyntaxKind.OpenBracketToken:
+                        return parseJSDocTupleType();
+                    case SyntaxKind.ExclamationToken:
+                        return parseJSDocNonNullableType();
+                    case SyntaxKind.OpenBraceToken:
+                        return parseJSDocRecordType();
+                    case SyntaxKind.FunctionKeyword:
+                        return parseJSDocFunctionType();
+                    case SyntaxKind.DotDotDotToken:
+                        return parseJSDocVariadicType();
+                    case SyntaxKind.NewKeyword:
+                        return parseJSDocConstructorType();
+                    case SyntaxKind.ThisKeyword:
+                        return parseJSDocThisType();
+                    case SyntaxKind.AnyKeyword:
+                    case SyntaxKind.StringKeyword:
+                    case SyntaxKind.NumberKeyword:
+                    case SyntaxKind.BooleanKeyword:
+                    case SyntaxKind.SymbolKeyword:
+                    case SyntaxKind.VoidKeyword:
+                        return parseTokenNode<JSDocType>();
+                }
+
+                return parseJSDocTypeReference();
+            }
+
+            function parseJSDocThisType(): JSDocThisType {
+                let result = <JSDocThisType>createNode(SyntaxKind.JSDocThisType);
+                nextToken();
+                parseExpected(SyntaxKind.ColonToken);
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocConstructorType(): JSDocConstructorType {
+                let result = <JSDocConstructorType>createNode(SyntaxKind.JSDocConstructorType);
+                nextToken();
+                parseExpected(SyntaxKind.ColonToken);
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocVariadicType(): JSDocVariadicType {
+                let result = <JSDocVariadicType>createNode(SyntaxKind.JSDocVariadicType);
+                nextToken();
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocFunctionType(): JSDocFunctionType {
+                let result = <JSDocFunctionType>createNode(SyntaxKind.JSDocFunctionType);
+                nextToken();
+
+                parseExpected(SyntaxKind.OpenParenToken);
+                result.parameters = parseDelimitedList(ParsingContext.JSDocFunctionParameters, parseJSDocParameter);
+                checkForTrailingComma(result.parameters);
+                parseExpected(SyntaxKind.CloseParenToken);
+
+                if (token === SyntaxKind.ColonToken) {
+                    nextToken();
+                    result.type = parseJSDocType();
+                }
+
+                return finishNode(result);
+            }
+
+            function parseJSDocParameter(): ParameterDeclaration {
+                let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+                parameter.type = parseJSDocType();
+                return finishNode(parameter);
+            }
+
+            function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
+                let result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                nextToken();
+                result.type = type;
+                return finishNode(result);
+            }
+
+            function parseJSDocTypeReference(): JSDocTypeReference {
+                let result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
+                result.name = parseSimplePropertyName();
+
+                while (parseOptional(SyntaxKind.DotToken)) {
+                    if (token === SyntaxKind.LessThanToken) {
+                        result.typeArguments = parseTypeArguments();
+                        break;
+                    }
+                    else {
+                        result.name = parseQualifiedName(result.name);
+                    }
+                }
+
+                return finishNode(result);
+            }
+
+            function parseTypeArguments() {
+                // Move past the <
+                nextToken();
+                let typeArguments = parseDelimitedList(ParsingContext.JSDocTypeArguments, parseJSDocType);
+                checkForTrailingComma(typeArguments);
+                checkForEmptyTypeArgumentList(typeArguments);
+                parseExpected(SyntaxKind.GreaterThanToken);
+
+                return typeArguments;
+            }
+
+            function checkForEmptyTypeArgumentList(typeArguments: NodeArray<Node>) {
+                if (parseDiagnostics.length === 0 &&  typeArguments && typeArguments.length === 0) {
+                    let start = typeArguments.pos - "<".length;
+                    let end = skipTrivia(sourceText, typeArguments.end) + ">".length;
+                    return parseErrorAtPosition(start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
+                }
+            }
+
+            function parseQualifiedName(left: EntityName): QualifiedName {
+                let result = <QualifiedName>createNode(SyntaxKind.QualifiedName, left.pos);
+                result.left = left;
+                result.right = parseIdentifierName();
+
+                return finishNode(result);
+            }
+
+            function parseJSDocRecordType(): JSDocRecordType {
+                let result = <JSDocRecordType>createNode(SyntaxKind.JSDocRecordType);
+                nextToken();
+                result.members = parseDelimitedList(ParsingContext.JSDocRecordMembers, parseJSDocRecordMember);
+                checkForTrailingComma(result.members);
+                parseExpected(SyntaxKind.CloseBraceToken);
+                return finishNode(result);
+            }
+
+            function parseJSDocRecordMember(): JSDocRecordMember {
+                let result = <JSDocRecordMember>createNode(SyntaxKind.JSDocRecordMember);
+                result.name = parseSimplePropertyName();
+
+                if (token === SyntaxKind.ColonToken) {
+                    nextToken();
+                    result.type = parseJSDocType();
+                }
+
+                return finishNode(result);
+            }
+
+            function parseJSDocNonNullableType(): JSDocNonNullableType {
+                let result = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType);
+                nextToken();
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocTupleType(): JSDocTupleType {
+                let result = <JSDocTupleType>createNode(SyntaxKind.JSDocTupleType);
+                nextToken();
+                result.types = parseDelimitedList(ParsingContext.JSDocTupleTypes, parseJSDocType);
+                checkForTrailingComma(result.types);
+                parseExpected(SyntaxKind.CloseBracketToken);
+
+                return finishNode(result);
+            }
+
+            function checkForTrailingComma(list: NodeArray<Node>) {
+                if (parseDiagnostics.length === 0 && list.hasTrailingComma) {
+                    let start = list.end - ",".length;
+                    parseErrorAtPosition(start, ",".length, Diagnostics.Trailing_comma_not_allowed);
+                }
+            }
+
+            function parseJSDocUnionType(): JSDocUnionType {
+                let result = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType);
+                nextToken();
+                result.types = parseJSDocTypeList(parseJSDocType());
+
+                parseExpected(SyntaxKind.CloseParenToken);
+
+                return finishNode(result);
+            }
+
+            function parseJSDocTypeList(firstType: JSDocType) {
+                Debug.assert(!!firstType);
+
+                let types = <NodeArray<JSDocType>>[];
+                types.pos = firstType.pos;
+
+                types.push(firstType);
+                while (parseOptional(SyntaxKind.BarToken)) {
+                    types.push(parseJSDocType());
+                }
+
+                types.end = scanner.getStartPos();
+                return types;
+            }
+
+            function parseJSDocAllType(): JSDocAllType {
+                let result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
+                nextToken();
+                return finishNode(result);
+            }
+
+            function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
+                let pos = scanner.getStartPos();
+                // skip the ?
+                nextToken();
+
+                // Need to lookahead to decide if this is a nullable or unknown type.
+
+                // Here are cases where we'll pick the unknown type:
+                //
+                //      Foo(?,
+                //      { a: ? }
+                //      Foo(?)
+                //      Foo<?>
+                //      Foo(?=
+                //      (?|
+                if (token === SyntaxKind.CommaToken ||
+                    token === SyntaxKind.CloseBraceToken ||
+                    token === SyntaxKind.CloseParenToken ||
+                    token === SyntaxKind.GreaterThanToken ||
+                    token === SyntaxKind.EqualsToken ||
+                    token === SyntaxKind.BarToken) {
+
+                    let result = <JSDocUnknownType>createNode(SyntaxKind.JSDocUnknownType, pos);
+                    return finishNode(result);
+                }
+                else {
+                    let result = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, pos);
+                    result.type = parseJSDocType();
+                    return finishNode(result);
+                }
+            }
+
+            export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
+                let jsDocComment = parseJSDocComment(/*parent:*/ undefined, start, length);
+                let diagnostics = parseDiagnostics;
+                clearState();
+
+                return jsDocComment ? { jsDocComment, diagnostics } : undefined;
+            }
+
+            export function parseJSDocComment(parent: Node, start: number, length: number): JSDocComment {
+                let comment = parseJSDocCommentWorker(start, length);
+                if (comment) {
+                    fixupParentReferences(comment);
+                    comment.parent = parent;
+                }
+
+                return comment;
+            }
+
+            export function parseJSDocCommentWorker(start: number, length: number): JSDocComment {
+                let content = sourceText;
+                start = start || 0;
+                let end = length === undefined ? content.length : start + length;
+                length = end - start;
+
+                Debug.assert(start >= 0);
+                Debug.assert(start <= end);
+                Debug.assert(end <= content.length);
+
+                let tags: NodeArray<JSDocTag>;
+                let pos: number;
+                
+                // NOTE(cyrusn): This is essentially a handwritten scanner for JSDocComments. I 
+                // considered using an actual Scanner, but this would complicate things.  The 
+                // scanner would need to know it was in a Doc Comment.  Otherwise, it would then
+                // produce comments *inside* the doc comment.  In the end it was just easier to
+                // write a simple scanner rather than go that route.
+                if (length >= "/** */".length) {
+                    if (content.charCodeAt(start) === CharacterCodes.slash &&
+                        content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+                        content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+                        content.charCodeAt(start + 3) !== CharacterCodes.asterisk) {
+
+                        // Initially we can parse out a tag.  We also have seen a starting asterisk.
+                        // This is so that /** * @type */ doesn't parse.
+                        let canParseTag = true;
+                        let seenAsterisk = true;
+
+                        for (pos = start + "/**".length; pos < end;) {
+                            let ch = content.charCodeAt(pos);
+                            pos++;
+
+                            if (ch === CharacterCodes.at && canParseTag) {
+                                parseTag();
+                        
+                                // Once we parse out a tag, we cannot keep parsing out tags on this line.
+                                canParseTag = false;
+                                continue;
+                            }
+
+                            if (isLineBreak(ch)) {
+                                // After a line break, we can parse a tag, and we haven't seen as asterisk
+                                // on the next line yet.
+                                canParseTag = true;
+                                seenAsterisk = false;
+                                continue;
+                            }
+
+                            if (isWhiteSpace(ch)) {
+                                // Whitespace doesn't affect any of our parsing.
+                                continue;
+                            }
+
+                            // Ignore the first asterisk on a line.
+                            if (ch === CharacterCodes.asterisk) {
+                                if (seenAsterisk) {
+                                    // If we've already seen an asterisk, then we can no longer parse a tag
+                                    // on this line.
+                                    canParseTag = false;
+                                }
+                                seenAsterisk = true;
+                                continue;
+                            }
+
+                            // Anything else is doc comment text.  We can't do anything with it.  Because it
+                            // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                            // line break.
+                            canParseTag = false;
+                        }
+                    }
+                }
+
+                return createJSDocComment();
+
+                function createJSDocComment(): JSDocComment {
+                    if (!tags) {
+                        return undefined;
+                    }
+
+                    let result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
+                    result.tags = tags;
+                    return finishNode(result, end);
+                }
+
+                function skipWhitespace(): void {
+                    while (pos < end && isWhiteSpace(content.charCodeAt(pos))) {
+                        pos++;
+                    }
+                }
+
+                function parseTag(): void {
+                    Debug.assert(content.charCodeAt(pos - 1) === CharacterCodes.at);
+                    let atToken = createNode(SyntaxKind.AtToken, pos - 1);
+                    atToken.end = pos;
+
+                    let tagName = scanIdentifier();
+                    if (!tagName) {
+                        return;
+                    }
+
+                    let tag = handleTag(atToken, tagName) || handleUnknownTag(atToken, tagName);
+                    addTag(tag);
+                }
+
+                function handleTag(atToken: Node, tagName: Identifier): JSDocTag {
+                    if (tagName) {
+                        switch (tagName.text) {
+                            case "param":
+                                return handleParamTag(atToken, tagName);
+                            case "return":
+                            case "returns":
+                                return handleReturnTag(atToken, tagName);
+                            case "template":
+                                return handleTemplateTag(atToken, tagName);
+                            case "type":
+                                return handleTypeTag(atToken, tagName);
+                        }
+                    }
+
+                    return undefined;
+                }
+
+                function handleUnknownTag(atToken: Node, tagName: Identifier) {
+                    let result = <JSDocTag>createNode(SyntaxKind.JSDocTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    return finishNode(result, pos);
+                }
+
+                function addTag(tag: JSDocTag): void {
+                    if (tag) {
+                        if (!tags) {
+                            tags = <NodeArray<JSDocTag>>[];
+                            tags.pos = tag.pos;
+                        }
+
+                        tags.push(tag);
+                        tags.end = tag.end;
+                    }
+                }
+
+                function tryParseTypeExpression(): JSDocTypeExpression {
+                    skipWhitespace();
+
+                    if (content.charCodeAt(pos) !== CharacterCodes.openBrace) {
+                        return undefined;
+                    }
+
+                    let typeExpression = parseJSDocTypeExpression(pos, end - pos);
+                    pos = typeExpression.end;
+                    return typeExpression;
+                }
+
+                function handleParamTag(atToken: Node, tagName: Identifier) {
+                    let typeExpression = tryParseTypeExpression();
+
+                    skipWhitespace();
+                    let name: Identifier;
+                    let isBracketed: boolean;
+                    if (content.charCodeAt(pos) === CharacterCodes.openBracket) {
+                        pos++;
+                        skipWhitespace();
+                        name = scanIdentifier();
+                        isBracketed = true;
+                    }
+                    else {
+                        name = scanIdentifier();
+                    }
+
+                    if (!name) {
+                        parseErrorAtPosition(pos, 0, Diagnostics.Identifier_expected);
+                        return undefined;
+                    }
+
+                    let preName: Identifier, postName: Identifier;
+                    if (typeExpression) {
+                        postName = name;
+                    }
+                    else {
+                        preName = name;
+                    }
+
+                    if (!typeExpression) {
+                        typeExpression = tryParseTypeExpression();
+                    }
+
+                    let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.preParameterName = preName;
+                    result.typeExpression = typeExpression;
+                    result.postParameterName = postName;
+                    result.isBracketed = isBracketed;
+                    return finishNode(result, pos);
+                }
+
+                function handleReturnTag(atToken: Node, tagName: Identifier): JSDocReturnTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                    }
+
+                    let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = tryParseTypeExpression();
+                    return finishNode(result, pos);
+                }
+
+                function handleTypeTag(atToken: Node, tagName: Identifier): JSDocTypeTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                    }
+
+                    let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = tryParseTypeExpression();
+                    return finishNode(result, pos);
+                }
+
+                function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                    }
+
+                    let typeParameters = <NodeArray<TypeParameterDeclaration>>[];
+                    typeParameters.pos = pos;
+
+                    while (true) {
+                        skipWhitespace();
+
+                        let startPos = pos;
+                        let name = scanIdentifier();
+                        if (!name) {
+                            parseErrorAtPosition(startPos, 0, Diagnostics.Identifier_expected);
+                            return undefined;
+                        }
+
+                        let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.pos);
+                        typeParameter.name = name;
+                        finishNode(typeParameter, pos);
+
+                        typeParameters.push(typeParameter);
+
+                        skipWhitespace();
+                        if (content.charCodeAt(pos) !== CharacterCodes.comma) {
+                            break;
+                        }
+
+                        pos++;
+                    }
+
+                    typeParameters.end = pos;
+
+                    let result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeParameters = typeParameters;
+                    return finishNode(result, pos);
+                }
+
+                function scanIdentifier(): Identifier {
+                    let startPos = pos;
+                    for (; pos < end; pos++) {
+                        let ch = content.charCodeAt(pos);
+                        if (pos === startPos && isIdentifierStart(ch, ScriptTarget.Latest)) {
+                            continue;
+                        }
+                        else if (pos > startPos && isIdentifierPart(ch, ScriptTarget.Latest)) {
+                            continue;
+                        }
+
+                        break;
+                    }
+
+                    if (startPos === pos) {
+                        return undefined;
+                    }
+
+                    let result = <Identifier>createNode(SyntaxKind.Identifier, startPos);
+                    result.text = content.substring(startPos, pos);
+                    return finishNode(result, pos);
+                }
+            }
         }
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
-        if (expr) {
-            switch (expr.kind) {
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.TaggedTemplateExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.ParenthesizedExpression:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Identifier:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NumericLiteral:
+    module IncrementalParser {
+        export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
+            aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
+
+            checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
+            if (textChangeRangeIsUnchanged(textChangeRange)) {
+                // if the text didn't change, then we can just return our current source file as-is.
+                return sourceFile;
+            }
+
+            if (sourceFile.statements.length === 0) {
+                // If we don't have any statements in the current source file, then there's no real
+                // way to incrementally parse.  So just do a full parse instead.
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+            }
+
+            // Make sure we're not trying to incrementally update a source file more than once.  Once
+            // we do an update the original source file is considered unusbale from that point onwards.
+            //
+            // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
+            // tree and give them new positions and parents.  From that point on, trusting the old
+            // tree at all is not possible as far too much of it may violate invariants.
+            let incrementalSourceFile = <IncrementalNode><Node>sourceFile;
+            Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
+            incrementalSourceFile.hasBeenIncrementallyParsed = true;
+
+            let oldText = sourceFile.text;
+            let syntaxCursor = createSyntaxCursor(sourceFile);
+
+            // Make the actual change larger so that we know to reparse anything whose lookahead
+            // might have intersected the change.
+            let changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+            checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
+
+            // Ensure that extending the affected range only moved the start of the change range
+            // earlier in the file.
+            Debug.assert(changeRange.span.start <= textChangeRange.span.start);
+            Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
+            Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
+
+            // The is the amount the nodes after the edit range need to be adjusted.  It can be
+            // positive (if the edit added characters), negative (if the edit deleted characters)
+            // or zero (if this was a pure overwrite with nothing added/removed).
+            let delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
+
+            // If we added or removed characters during the edit, then we need to go and adjust all
+            // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they
+            // may move backward (if we deleted chars).
+            //
+            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+            // to reuse are already at the appropriate position in the new text.  That way when we
+            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+            // it very easy to determine if we can reuse a node.  If the node's position is at where
+            // we are in the text, then we can reuse it.  Otherwise we can't.  If the node's position
+            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+            // us, then we'll need to skip it or crumble it as appropriate
+            //
+            // We will also adjust the positions of nodes that intersect the change range as well.
+            // By doing this, we ensure that all the positions in the old tree are consistent, not
+            // just the positions of nodes entirely before/after the change range.  By being
+            // consistent, we can then easily map from positions to nodes in the old tree easily.
+            //
+            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+            // that we cannot reuse these elements.
+            updateTokenPositionsAndMarkElements(incrementalSourceFile,
+                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
+
+            // Now that we've set up our internal incremental state just proceed and parse the
+            // source file in the normal fashion.  When possible the parser will retrieve and
+            // reuse nodes from the old tree.
+            //
+            // Note: passing in 'true' for setNodeParents is very important.  When incrementally
+            // parsing, we will be reusing nodes from the old tree, and placing it into new
+            // parents.  If we don't set the parents now, we'll end up with an observably
+            // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
+            // will immediately bail out of walking any subtrees when we can see that their parents
+            // are already correct.
+            let result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)
+
+            return result;
+        }
+
+        function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+            if (isArray) {
+                visitArray(<IncrementalNodeArray>element);
+            }
+            else {
+                visitNode(<IncrementalNode>element);
+            }
+            return;
+
+            function visitNode(node: IncrementalNode) {
+                if (aggressiveChecks && shouldCheckNode(node)) {
+                    var text = oldText.substring(node.pos, node.end);
+                }
+
+                // Ditch any existing LS children we may have created.  This way we can avoid
+                // moving them forward.
+                if (node._children) {
+                    node._children = undefined;
+                }
+
+                if (node.jsDocComment) {
+                    node.jsDocComment = undefined;
+                }
+
+                node.pos += delta;
+                node.end += delta;
+
+                if (aggressiveChecks && shouldCheckNode(node)) {
+                    Debug.assert(text === newText.substring(node.pos, node.end));
+                }
+
+                forEachChild(node, visitNode, visitArray);
+                checkNodePositions(node, aggressiveChecks);
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                array._children = undefined;
+                array.pos += delta;
+                array.end += delta;
+
+                for (let node of array) {
+                    visitNode(node);
+                }
+            }
+        }
+
+        function shouldCheckNode(node: Node) {
+            switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateExpression:
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.Identifier:
                     return true;
             }
+
+            return false;
         }
 
-        return false;
-    }
+        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+            Debug.assert(element.pos <= element.end);
 
-    export function isAssignmentOperator(token: SyntaxKind): boolean {
-        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+            // We have an element that intersects the change range in some way.  It may have its
+            // start, or its end (or both) in the changed range.  We want to adjust any part
+            // that intersects such that the final tree is in a consistent state.  i.e. all
+            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // properly.
+
+            // We may need to update both the 'pos' and the 'end' of the element.
+
+            // If the 'pos' is before the start of the change, then we don't need to touch it.
+            // If it isn't, then the 'pos' must be inside the change.  How we update it will
+            // depend if delta is  positive or negative.  If delta is positive then we have
+            // something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that started in the change range to still be
+            // starting at the same position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that started in the 'X' range will keep its position.
+            // However any element htat started after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that started in the 'Y' range will
+            // be adjusted to have their start at the end of the 'Z' range.
+            //
+            // The element will keep its position if possible.  Or Move backward to the new-end
+            // if it's in the 'Y' range.
+            element.pos = Math.min(element.pos, changeRangeNewEnd);
+
+            // If the 'end' is after the change range, then we always adjust it by the delta
+            // amount.  However, if the end is in the change range, then how we adjust it
+            // will depend on if delta is  positive or negative.  If delta is positive then we
+            // have something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that ended inside the change range to keep its
+            // end position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that ended in the 'X' range will keep its position.
+            // However any element htat ended after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+            // be adjusted to have their end at the end of the 'Z' range.
+            if (element.end >= changeRangeOldEnd) {
+                // Element ends after the change range.  Always adjust the end pos.
+                element.end += delta;
+            }
+            else {
+                // Element ends in the change range.  The element will keep its position if
+                // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                element.end = Math.min(element.end, changeRangeNewEnd);
+            }
+
+            Debug.assert(element.pos <= element.end);
+            if (element.parent) {
+                Debug.assert(element.pos >= element.parent.pos);
+                Debug.assert(element.end <= element.parent.end);
+            }
+        }
+
+        function checkNodePositions(node: Node, aggressiveChecks: boolean) {
+            if (aggressiveChecks) {
+                let pos = node.pos;
+                forEachChild(node, child => {
+                    Debug.assert(child.pos >= pos);
+                    pos = child.end;
+                });
+                Debug.assert(pos <= node.end);
+            }
+        }
+
+        function updateTokenPositionsAndMarkElements(
+            sourceFile: IncrementalNode,
+            changeStart: number,
+            changeRangeOldEnd: number,
+            changeRangeNewEnd: number,
+            delta: number,
+            oldText: string,
+            newText: string,
+            aggressiveChecks: boolean): void {
+
+            visitNode(sourceFile);
+            return;
+
+            function visitNode(child: IncrementalNode) {
+                Debug.assert(child.pos <= child.end);
+                if (child.pos > changeRangeOldEnd) {
+                    // Node is entirely past the change range.  We need to move both its pos and
+                    // end, forward or backward appropriately.
+                    moveElementEntirelyPastChangeRange(child, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
+                    return;
+                }
+
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                let fullEnd = child.end;
+                if (fullEnd >= changeStart) {
+                    child.intersectsChange = true;
+                    child._children = undefined;
+
+                    // Adjust the pos or end (or both) of the intersecting element accordingly.
+                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    forEachChild(child, visitNode, visitArray);
+
+                    checkNodePositions(child, aggressiveChecks);
+                    return;
+                }
+
+                // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+                Debug.assert(fullEnd < changeStart);
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                Debug.assert(array.pos <= array.end);
+                if (array.pos > changeRangeOldEnd) {
+                    // Array is entirely after the change range.  We need to move it, and move any of
+                    // its children.
+                    moveElementEntirelyPastChangeRange(array, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
+                    return;
+                }
+
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                let fullEnd = array.end;
+                if (fullEnd >= changeStart) {
+                    array.intersectsChange = true;
+                    array._children = undefined;
+
+                    // Adjust the pos or end (or both) of the intersecting array accordingly.
+                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    for (let node of array) {
+                        visitNode(node);
+                    }
+                    return;
+                }
+
+                // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+                Debug.assert(fullEnd < changeStart);
+            }
+        }
+
+        function extendToAffectedRange(sourceFile: SourceFile, changeRange: TextChangeRange): TextChangeRange {
+            // Consider the following code:
+            //      void foo() { /; }
+            //
+            // If the text changes with an insertion of / just before the semicolon then we end up with:
+            //      void foo() { //; }
+            //
+            // If we were to just use the changeRange a is, then we would not rescan the { token
+            // (as it does not intersect the actual original change range).  Because an edit may
+            // change the token touching it, we actually need to look back *at least* one token so
+            // that the prior token sees that change.
+            let maxLookahead = 1;
+
+            let start = changeRange.span.start;
+
+            // the first iteration aligns us with the change start. subsequent iteration move us to
+            // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
+            // start of the tree.
+            for (let i = 0; start > 0 && i <= maxLookahead; i++) {
+                let nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
+                Debug.assert(nearestNode.pos <= start);
+                let position = nearestNode.pos;
+
+                start = Math.max(0, position - 1);
+            }
+
+            let finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
+            let finalLength = changeRange.newLength + (changeRange.span.start - start);
+
+            return createTextChangeRange(finalSpan, finalLength);
+        }
+
+        function findNearestNodeStartingBeforeOrAtPosition(sourceFile: SourceFile, position: number): Node {
+            let bestResult: Node = sourceFile;
+            let lastNodeEntirelyBeforePosition: Node;
+
+            forEachChild(sourceFile, visit);
+
+            if (lastNodeEntirelyBeforePosition) {
+                let lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                    bestResult = lastChildOfLastEntireNodeBeforePosition;
+                }
+            }
+
+            return bestResult;
+
+            function getLastChild(node: Node): Node {
+                while (true) {
+                    let lastChild = getLastChildWorker(node);
+                    if (lastChild) {
+                        node = lastChild;
+                    }
+                    else {
+                        return node;
+                    }
+                }
+            }
+
+            function getLastChildWorker(node: Node): Node {
+                let last: Node = undefined;
+                forEachChild(node, child => {
+                    if (nodeIsPresent(child)) {
+                        last = child;
+                    }
+                });
+                return last;
+            }
+
+            function visit(child: Node) {
+                if (nodeIsMissing(child)) {
+                    // Missing nodes are effectively invisible to us.  We never even consider them
+                    // When trying to find the nearest node before us.
+                    return;
+                }
+
+                // If the child intersects this position, then this node is currently the nearest
+                // node that starts before the position.
+                if (child.pos <= position) {
+                    if (child.pos >= bestResult.pos) {
+                        // This node starts before the position, and is closer to the position than
+                        // the previous best node we found.  It is now the new best node.
+                        bestResult = child;
+                    }
+
+                    // Now, the node may overlap the position, or it may end entirely before the
+                    // position.  If it overlaps with the position, then either it, or one of its
+                    // children must be the nearest node before the position.  So we can just
+                    // recurse into this child to see if we can find something better.
+                    if (position < child.end) {
+                        // The nearest node is either this child, or one of the children inside
+                        // of it.  We've already marked this child as the best so far.  Recurse
+                        // in case one of the children is better.
+                        forEachChild(child, visit);
+
+                        // Once we look at the children of this node, then there's no need to
+                        // continue any further.
+                        return true;
+                    }
+                    else {
+                        Debug.assert(child.end <= position);
+                        // The child ends entirely before this position.  Say you have the following
+                        // (where $ is the position)
+                        //
+                        //      <complex expr 1> ? <complex expr 2> $ : <...> <...>
+                        //
+                        // We would want to find the nearest preceding node in "complex expr 2".
+                        // To support that, we keep track of this node, and once we're done searching
+                        // for a best node, we recurse down this node to see if we can find a good
+                        // result in it.
+                        //
+                        // This approach allows us to quickly skip over nodes that are entirely
+                        // before the position, while still allowing us to find any nodes in the
+                        // last one that might be what we want.
+                        lastNodeEntirelyBeforePosition = child;
+                    }
+                }
+                else {
+                    Debug.assert(child.pos > position);
+                    // We're now at a node that is entirely past the position we're searching for.
+                    // This node (and all following nodes) could never contribute to the result,
+                    // so just skip them by returning 'true' here.
+                    return true;
+                }
+            }
+        }
+
+        function checkChangeRange(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean) {
+            let oldText = sourceFile.text;
+            if (textChangeRange) {
+                Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+
+                if (aggressiveChecks || Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                    let oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
+                    let newTextPrefix = newText.substr(0, textChangeRange.span.start);
+                    Debug.assert(oldTextPrefix === newTextPrefix);
+
+                    let oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
+                    let newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
+                    Debug.assert(oldTextSuffix === newTextSuffix);
+                }
+            }
+        }
+
+        interface IncrementalElement extends TextRange {
+            parent?: Node;
+            intersectsChange: boolean
+            length?: number;
+            _children: Node[];
+        }
+
+        export interface IncrementalNode extends Node, IncrementalElement {
+            hasBeenIncrementallyParsed: boolean
+        }
+
+        interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
+            length: number
+        }
+
+        // Allows finding nodes in the source file at a certain position in an efficient manner.
+        // The implementation takes advantage of the calling pattern it knows the parser will
+        // make in order to optimize finding nodes as quickly as possible.
+        export interface SyntaxCursor {
+            currentNode(position: number): IncrementalNode;
+        }
+
+        function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
+            let currentArray: NodeArray<Node> = sourceFile.statements;
+            let currentArrayIndex = 0;
+
+            Debug.assert(currentArrayIndex < currentArray.length);
+            let current = currentArray[currentArrayIndex];
+            let lastQueriedPosition = InvalidPosition.Value;
+
+            return {
+                currentNode(position: number) {
+                    // Only compute the current node if the position is different than the last time
+                    // we were asked.  The parser commonly asks for the node at the same position
+                    // twice.  Once to know if can read an appropriate list element at a certain point,
+                    // and then to actually read and consume the node.
+                    if (position !== lastQueriedPosition) {
+                        // Much of the time the parser will need the very next node in the array that
+                        // we just returned a node from.So just simply check for that case and move
+                        // forward in the array instead of searching for the node again.
+                        if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
+                            currentArrayIndex++;
+                            current = currentArray[currentArrayIndex];
+                        }
+
+                        // If we don't have a node, or the node we have isn't in the right position,
+                        // then try to find a viable node at the position requested.
+                        if (!current || current.pos !== position) {
+                            findHighestListElementThatStartsAtPosition(position);
+                        }
+                    }
+
+                    // Cache this query so that we don't do any extra work if the parser calls back
+                    // into us.  Note: this is very common as the parser will make pairs of calls like
+                    // 'isListElement -> parseListElement'.  If we were unable to find a node when
+                    // called with 'isListElement', we don't want to redo the work when parseListElement
+                    // is called immediately after.
+                    lastQueriedPosition = position;
+
+                    // Either we don'd have a node, or we have a node at the position being asked for.
+                    Debug.assert(!current || current.pos === position);
+                    return <IncrementalNode>current;
+                }
+            };
+
+            // Finds the highest element in the tree we can find that starts at the provided position.
+            // The element must be a direct child of some node list in the tree.  This way after we
+            // return it, we can easily return its next sibling in the list.
+            function findHighestListElementThatStartsAtPosition(position: number) {
+                // Clear out any cached state about the last node we found.
+                currentArray = undefined;
+                currentArrayIndex = InvalidPosition.Value;
+                current = undefined;
+
+                // Recurse into the source file to find the highest node at this position.
+                forEachChild(sourceFile, visitNode, visitArray);
+                return;
+
+                function visitNode(node: Node) {
+                    if (position >= node.pos && position < node.end) {
+                        // Position was within this node.  Keep searching deeper to find the node.
+                        forEachChild(node, visitNode, visitArray);
+
+                        // don't procede any futher in the search.
+                        return true;
+                    }
+
+                    // position wasn't in this node, have to keep searching.
+                    return false;
+                }
+
+                function visitArray(array: NodeArray<Node>) {
+                    if (position >= array.pos && position < array.end) {
+                        // position was in this array.  Search through this array to see if we find a
+                        // viable element.
+                        for (let i = 0, n = array.length; i < n; i++) {
+                            let child = array[i];
+                            if (child) {
+                                if (child.pos === position) {
+                                    // Found the right node.  We're done.
+                                    currentArray = array;
+                                    currentArrayIndex = i;
+                                    current = child;
+                                    return true;
+                                }
+                                else {
+                                    if (child.pos < position && position < child.end) {
+                                        // Position in somewhere within this child.  Search in it and
+                                        // stop searching in this array.
+                                        forEachChild(child, visitNode, visitArray);
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // position wasn't in this array, have to keep searching.
+                    return false;
+                }
+            }
+        }
+
+        const enum InvalidPosition {
+            Value = -1
+        }
     }
 }

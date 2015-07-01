@@ -10,33 +10,22 @@ sourceFile:properties.ts
 -------------------------------------------------------------------
 >>>var MyClass = (function () {
 1 >
-2 >^^^^
-3 >    ^^^^^^^
-4 >           ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >class 
-3 >    MyClass
 1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(2, 7) + SourceIndex(0)
-3 >Emitted(1, 12) Source(2, 14) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             MyClass
 1->Emitted(2, 5) Source(2, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(2, 14) Source(2, 7) + SourceIndex(0) name (MyClass)
-3 >Emitted(2, 21) Source(2, 14) + SourceIndex(0) name (MyClass)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->class MyClass
   >{
   >    public get Count(): number
   >    {
@@ -49,7 +38,7 @@ sourceFile:properties.ts
   >    }
   >
 2 >    }
-1 >Emitted(3, 5) Source(13, 1) + SourceIndex(0) name (MyClass.constructor)
+1->Emitted(3, 5) Source(13, 1) + SourceIndex(0) name (MyClass.constructor)
 2 >Emitted(3, 6) Source(13, 2) + SourceIndex(0) name (MyClass.constructor)
 ---
 >>>    Object.defineProperty(MyClass.prototype, "Count", {

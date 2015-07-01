@@ -17,4 +17,4 @@
 ////}
 
 goTo.marker('1');
-verify.quickInfoIs("(var) r4: number");
+verify.quickInfoIs("var r4: number");

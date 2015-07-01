@@ -83,9 +83,7 @@ define(["require", "exports"], function (require, exports) {
     var M2;
     (function (M2) {
         var v;
-        M2.v; // one error (visibility)
         var w;
-        M2.w; // two errors (visibility and type mismatch)
     })(M2 || (M2 = {}));
     var M;
     (function (M) {
@@ -93,8 +91,7 @@ define(["require", "exports"], function (require, exports) {
         (function (F) {
             var t;
         })(F || (F = {}));
-        function F() {
-        }
+        function F() { }
         M.F = F; // Only one error for duplicate identifier (don't consider visibility)
     })(M || (M = {}));
     var M;

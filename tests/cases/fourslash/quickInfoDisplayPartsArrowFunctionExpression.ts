@@ -9,7 +9,7 @@ var marker = 0;
 function verifyInstance(instanceName: string, paramCount: number, type: string) {
     marker++;
     goTo.marker(marker.toString());
-    var displayParts = [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    var displayParts = [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: instanceName, kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "(", kind: "punctuation" }];
     

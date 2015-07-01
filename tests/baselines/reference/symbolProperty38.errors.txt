@@ -1,0 +1,15 @@
+tests/cases/conformance/es6/Symbols/symbolProperty38.ts(2,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+tests/cases/conformance/es6/Symbols/symbolProperty38.ts(5,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty38.ts (2 errors) ====
+    interface I {
+        [Symbol.isConcatSpreadable]: string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+    }
+    interface I {
+        [Symbol.isConcatSpreadable]: string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+    }
