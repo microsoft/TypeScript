@@ -80,24 +80,96 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnostic(diagnostic: Diagnostic) {
-        var output = "";
+    function reportDiagnostic(diagnostic: Diagnostic): void {
+        let output = "";
         
         if (diagnostic.file) {
-            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            let { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            output += `${ diagnostic.file.fileName }(${ line + 1 },${ character + 1 }): `;
         }
 
-        var category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        let category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
 
         sys.write(output);
     }
 
+    const redColorControlChar = "\u001b[31m";
+    const resetColorControlChar = "\u001b[0m";
+
+    function reportDiagnosticAllPrettyLike(diagnostic: Diagnostic): void {
+        let output = "";
+
+        if (diagnostic.file) {
+            let { start, length, file } = diagnostic;
+            let { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
+            let { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
+            
+            output += sys.newLine;
+            for (let i = 0, indexOfLastLine = lastLine - firstLine; i <= indexOfLastLine; i++) {
+                let lineStart = getPositionOfLineAndCharacter(file, firstLine + i, 0);
+                let lineEnd = getPositionOfLineAndCharacter(file, firstLine + i + 1, 0);
+                let lineContent = file.text.slice(lineStart, lineEnd);
+                lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+                lineContent = lineContent.replace("\t", "    "); // normalize tabs to 4 spaces
+
+                output += lineContent + sys.newLine;
+                
+                if (i === 0) {
+                    let lastCharForLine = i === indexOfLastLine ? lastLineChar : undefined;
+
+                    output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                    output += redColorControlChar;
+                    output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+                    output += resetColorControlChar;
+                }
+                else if (i === indexOfLastLine) {
+                    output += redColorControlChar;
+                    output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+                    output += resetColorControlChar;
+                    // Don't bother "filling" at the end.
+                }
+                else {
+                    output += lineContent.replace(/^(\s*)(.*)$/, replaceLineWithRedSquiggles);
+                }
+
+                output += sys.newLine;
+            }
+
+            output += `${ file.fileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+        }
+
+        let category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        output += sys.newLine + sys.newLine;
+
+        sys.write(output);
+    }
+
+    function replaceLineWithRedSquiggles(orig: string, leadingWhitespace: string, content: string): string {
+        return leadingWhitespace + redColorControlChar + content.replace(/./g, "~") + resetColorControlChar;
+    }
+
+    /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
+    function splitContentByNewlines(content: string) {
+        // Split up the input file by line
+        // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
+        // we have to use string-based splitting instead and try to figure out the delimiting chars
+        var lines = content.split('\r\n');
+        if (lines.length === 1) {
+            lines = content.split('\n');
+
+            if (lines.length === 1) {
+                lines = content.split("\r");
+            }
+        }
+        return lines;
+    }
+
     function reportDiagnostics(diagnostics: Diagnostic[]) {
         for (var i = 0; i < diagnostics.length; i++) {
-            reportDiagnostic(diagnostics[i]);
+            reportDiagnosticAllPrettyLike(diagnostics[i]);
         }
     }
 
