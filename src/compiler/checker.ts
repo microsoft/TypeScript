@@ -2234,8 +2234,8 @@ namespace ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 type = getTypeOfPropertyOfType(parentType, name.text) ||
-                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                    getIndexTypeOfType(parentType, IndexKind.String);
+                isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
@@ -2618,7 +2618,7 @@ namespace ts {
         // Appends the outer type parameters of a node to a set of type parameters and returns the resulting set. The function
         // allocates a new array if the input type parameter set is undefined, but otherwise it modifies the set in-place and
         // returns the same array.
-        function appendOuterTypeParameters(typeParameters: TypeParameter[], node: Node): TypeParameter[]{
+        function appendOuterTypeParameters(typeParameters: TypeParameter[], node: Node): TypeParameter[] {
             while (true) {
                 node = node.parent;
                 if (!node) {
@@ -3203,9 +3203,11 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getPropertiesOfUnionType(<UnionType>type) : getPropertiesOfObjectType(type);
         }
 
-        // For a type parameter, return the base constraint of the type parameter. For the string, number,
-        // boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
-        // type itself. Note that the apparent type of a union type is the union type itself.
+        /**
+         * For a type parameter, return the base constraint of the type parameter. For the string, number,
+         * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
+         * type itself. Note that the apparent type of a union type is the union type itself.
+         */
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.Union) {
                 type = getReducedTypeOfUnionType(<UnionType>type);
@@ -3839,8 +3841,8 @@ namespace ts {
           */
         function createTypedPropertyDescriptorType(propertyType: Type): Type {
             let globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyObjectType 
-                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType]) 
+            return globalTypedPropertyDescriptorType !== emptyObjectType
+                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType])
                 : emptyObjectType;
         }
         
@@ -4337,6 +4339,16 @@ namespace ts {
             return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined);
         }
 
+        /**
+         * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
+         * @param source The left-hand-side of the relation.
+         * @param target The right-hand-side of the relation.
+         * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', or 'subTypeRelation'.
+         * Used as both to determine which checks are performed and as a cache of previously computed results.
+         * @param errorNode The node upon which all errors will be reported, if defined.
+         * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
+         * @param containingMessageChain A chain of errors to prepend any new errors found.
+         */
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
@@ -4644,6 +4656,7 @@ namespace ts {
                 let requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectLiteral);
                 for (let targetProp of properties) {
                     let sourceProp = getPropertyOfType(source, targetProp.name);
+
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
                             if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
@@ -4654,24 +4667,24 @@ namespace ts {
                             }
                         }
                         else if (!(targetProp.flags & SymbolFlags.Prototype)) {
-                            let sourceFlags = getDeclarationFlagsFromSymbol(sourceProp);
-                            let targetFlags = getDeclarationFlagsFromSymbol(targetProp);
-                            if (sourceFlags & NodeFlags.Private || targetFlags & NodeFlags.Private) {
+                            let sourcePropFlags = getDeclarationFlagsFromSymbol(sourceProp);
+                            let targetPropFlags = getDeclarationFlagsFromSymbol(targetProp);
+                            if (sourcePropFlags & NodeFlags.Private || targetPropFlags & NodeFlags.Private) {
                                 if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
                                     if (reportErrors) {
-                                        if (sourceFlags & NodeFlags.Private && targetFlags & NodeFlags.Private) {
+                                        if (sourcePropFlags & NodeFlags.Private && targetPropFlags & NodeFlags.Private) {
                                             reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
                                         }
                                         else {
                                             reportError(Diagnostics.Property_0_is_private_in_type_1_but_not_in_type_2, symbolToString(targetProp),
-                                                typeToString(sourceFlags & NodeFlags.Private ? source : target),
-                                                typeToString(sourceFlags & NodeFlags.Private ? target : source));
+                                                typeToString(sourcePropFlags & NodeFlags.Private ? source : target),
+                                                typeToString(sourcePropFlags & NodeFlags.Private ? target : source));
                                         }
                                     }
                                     return Ternary.False;
                                 }
                             }
-                            else if (targetFlags & NodeFlags.Protected) {
+                            else if (targetPropFlags & NodeFlags.Protected) {
                                 let sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
                                 let sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(sourceProp.parent) : undefined;
                                 let targetClass = <InterfaceType>getDeclaredTypeOfSymbol(targetProp.parent);
@@ -4683,7 +4696,7 @@ namespace ts {
                                     return Ternary.False;
                                 }
                             }
-                            else if (sourceFlags & NodeFlags.Protected) {
+                            else if (sourcePropFlags & NodeFlags.Protected) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2,
                                         symbolToString(targetProp), typeToString(source), typeToString(target));
@@ -4825,7 +4838,7 @@ namespace ts {
                 if (source.typePredicate && target.typePredicate) {
                     let hasDifferentParameterIndex = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
                     let hasDifferentTypes: boolean;
-                    if (hasDifferentParameterIndex || 
+                    if (hasDifferentParameterIndex ||
                         (hasDifferentTypes = !isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type))) {
 
                         if (reportErrors) {
@@ -4835,12 +4848,12 @@ namespace ts {
                             let targetTypeText = typeToString(target.typePredicate.type);
 
                             if (hasDifferentParameterIndex) {
-                                reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, 
+                                reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1,
                                     sourceParamText,
                                     targetParamText);
                             }
                             else if (hasDifferentTypes) {
-                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, 
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
                                     sourceTypeText,
                                     targetTypeText);
                             }
@@ -5858,7 +5871,7 @@ namespace ts {
                     if (!assumeTrue) {
                         if (type.flags & TypeFlags.Union) {
                             return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, signature.typePredicate.type)));
-                        } 
+                        }
                         return type;
                     }
                     return getNarrowedType(type, signature.typePredicate.type);
@@ -6097,20 +6110,20 @@ namespace ts {
                     if (container && isClassLike(container.parent)) {
                         if (container.flags & NodeFlags.Static) {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor;
                         }
                         else {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor ||
-                                container.kind === SyntaxKind.PropertyDeclaration ||
-                                container.kind === SyntaxKind.PropertySignature ||
-                                container.kind === SyntaxKind.Constructor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor ||
+                            container.kind === SyntaxKind.PropertyDeclaration ||
+                            container.kind === SyntaxKind.PropertySignature ||
+                            container.kind === SyntaxKind.Constructor;
                         }
                     }
                 }
@@ -6799,7 +6812,7 @@ namespace ts {
             checkJsxOpeningLikeElement(node.openingElement);
 
             // Check children
-            for(let child of node.children) {
+            for (let child of node.children) {
                 switch (child.kind) {
                     case SyntaxKind.JsxExpression:
                         checkJsxExpression(<JsxExpression>child);
@@ -6850,7 +6863,7 @@ namespace ts {
             else if (elementAttributesType && !isTypeAny(elementAttributesType)) {
                 let correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
                 correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
-                    // If there's no corresponding property with this name, error
+                // If there's no corresponding property with this name, error
                 if (!correspondingPropType && isUnhyphenatedJsxName(node.name.text)) {
                     error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
                     return unknownType;
@@ -6877,7 +6890,7 @@ namespace ts {
         function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
             let type = checkExpression(node.expression);
             let props = getPropertiesOfType(type);
-            for(let prop of props) {
+            for (let prop of props) {
                 // Is there a corresponding property in the element attributes type? Skip checking of properties
                 // that have already been assigned to, as these are not actually pushed into the resulting type
                 if (!nameTable[prop.name]) {
@@ -6957,7 +6970,7 @@ namespace ts {
                 else {
                     valueSymbol = checkQualifiedName(<QualifiedName>node.tagName).symbol;
                 }
-                
+
                 if (valueSymbol !== unknownSymbol) {
                     links.jsxFlags |= JsxFlags.ClassElement;
                 }
@@ -7214,46 +7227,95 @@ namespace ts {
             return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.PropertyDeclaration;
         }
 
-        function getDeclarationFlagsFromSymbol(s: Symbol) {
+        function getDeclarationFlagsFromSymbol(s: Symbol): NodeFlags {
             return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) {
+        /**
+         * Check whether the requested property access is valid.
+         * Returns true if node is a valid property access, and false otherwise.
+         * @param node The node to be checked.
+         * @param left The left hand side of the property access (e.g.: the super in `super.foo`).
+         * @param type The type of left.
+         * @param prop The symbol for the right hand side of the property access.
+         */
+        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             let flags = getDeclarationFlagsFromSymbol(prop);
-            // Public properties are always accessible
-            if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
-                return;
+            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);;
+
+            if (left.kind === SyntaxKind.SuperKeyword) {
+                let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
+                    (<PropertyAccessExpression>node).name :
+                    (<QualifiedName>node).right;
+
+                // TS 1.0 spec (April 2014): 4.8.2
+                // - In a constructor, instance member function, instance member accessor, or
+                //   instance member variable initializer where this references a derived class instance,
+                //   a super property access is permitted and must specify a public instance member function of the base class.
+                // - In a static member function or static member accessor
+                //   where this references the constructor function object of a derived class,
+                //   a super property access is permitted and must specify a public static member function of the base class.
+                if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
+                    // `prop` refers to a *property* declared in the super class
+                    // rather than a *method*, so it does not satisfy the above criteria.
+
+                    error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                    return false;
+                }
+
+                if (flags & NodeFlags.Abstract) {
+                    // A method cannot be accessed in a super property access if the method is abstract.
+                    // This error could mask a private property access error. But, a member 
+                    // cannot simultaneously be private and abstract, so this will trigger an
+                    // additional error elsewhere.
+
+                    error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(declaringClass));
+                    return false;
+                }
             }
+
+            // Public properties are otherwise accessible.
+            if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
+                return true;
+            }
+
             // Property is known to be private or protected at this point
             // Get the declaring and enclosing class instance types
             let enclosingClassDeclaration = getContainingClass(node);
+
             let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
-            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+
             // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
                 if (declaringClass !== enclosingClass) {
                     error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                    return false;
                 }
-                return;
+                return true;
             }
+
             // Property is known to be protected at this point
+
             // All protected properties of a supertype are accessible in a super access
             if (left.kind === SyntaxKind.SuperKeyword) {
-                return;
+                return true;
             }
             // A protected property is accessible in the declaring class and classes derived from it
             if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
-                return;
+                return false;
             }
             // No further restrictions for static properties
             if (flags & NodeFlags.Static) {
-                return;
+                return true;
             }
             // An instance property must be accessed through an instance of the enclosing class
+            // TODO: why is the first part of this check here?
             if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+                return false;
             }
+            return true;
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -7282,21 +7344,11 @@ namespace ts {
                 }
                 return unknownType;
             }
+            
             getNodeLinks(node).resolvedSymbol = prop;
+
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                // TS 1.0 spec (April 2014): 4.8.2
-                // - In a constructor, instance member function, instance member accessor, or
-                //   instance member variable initializer where this references a derived class instance,
-                //   a super property access is permitted and must specify a public instance member function of the base class.
-                // - In a static member function or static member accessor
-                //   where this references the constructor function object of a derived class,
-                //   a super property access is permitted and must specify a public static member function of the base class.
-                if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                    error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                }
-                else {
-                    checkClassPropertyAccess(node, left, type, prop);
-                }
+                checkClassPropertyAccess(node, left, type, prop);
             }
             return getTypeOfSymbol(prop);
         }
@@ -7310,14 +7362,7 @@ namespace ts {
             if (type !== unknownType && !isTypeAny(type)) {
                 let prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                    if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                        return false;
-                    }
-                    else {
-                        let modificationCount = diagnostics.getModificationCount();
-                        checkClassPropertyAccess(node, left, type, prop);
-                        return diagnostics.getModificationCount() === modificationCount;
-                    }
+                    return checkClassPropertyAccess(node, left, type, prop);
                 }
             }
             return true;
@@ -7564,7 +7609,7 @@ namespace ts {
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
             let isDecorator: boolean;
             let spreadArgIndex = -1;
-            
+
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 let tagExpression = <TaggedTemplateExpression>node;
 
@@ -7745,17 +7790,17 @@ namespace ts {
                             errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
                             typeArgumentHeadMessage = headMessage;
                         }
-                        
+
                         typeArgumentsAreAssignable = checkTypeAssignableTo(
-                            typeArgument, 
-                            constraint, 
+                            typeArgument,
+                            constraint,
                             reportErrors ? typeArgNode : undefined,
-                            typeArgumentHeadMessage, 
+                            typeArgumentHeadMessage,
                             errorInfo);
                     }
                 }
             }
-            
+
             return typeArgumentsAreAssignable;
         }
 
@@ -7785,7 +7830,7 @@ namespace ts {
                     }
                 }
             }
-            
+
             return true;
         }
 
@@ -7891,7 +7936,7 @@ namespace ts {
                     // "static" or "constructor" side of the class)
                     let classSymbol = getSymbolOfNode(node);
                     return getTypeOfSymbol(classSymbol);
-                
+
                 case SyntaxKind.Parameter:
                     // For a parameter decorator, the `target` is the parent type of the 
                     // parameter's containing method. 
@@ -7901,7 +7946,7 @@ namespace ts {
                         return getTypeOfSymbol(classSymbol);
                     }
                     
-                    // fall-through
+                // fall-through
                     
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -7912,7 +7957,7 @@ namespace ts {
                     // declared "static"; otherwise, it is the "instance"-side type of the 
                     // parent of the member.
                     return getParentTypeOfClassElement(<ClassElement>node);
-                    
+
                 default:
                     Debug.fail("Unsupported decorator target.");
                     return unknownType;
@@ -7940,7 +7985,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     Debug.fail("Class decorators should not have a second synthetic argument.");
                     return unknownType;
-                    
+
                 case SyntaxKind.Parameter:
                     node = node.parent;
                     if (node.kind === SyntaxKind.Constructor) {
@@ -7948,10 +7993,10 @@ namespace ts {
                         return anyType;
                     }
                     
-                    // For a non-constructor parameter decorator, the `propertyKey` will be either
-                    // a string or a symbol, based on the name of the parameter's containing method.
+                // For a non-constructor parameter decorator, the `propertyKey` will be either
+                // a string or a symbol, based on the name of the parameter's containing method.
                     
-                    // fall-through
+                // fall-through
                     
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -7967,7 +8012,7 @@ namespace ts {
                         case SyntaxKind.NumericLiteral:
                         case SyntaxKind.StringLiteral:
                             return getStringLiteralType(<StringLiteral>element.name);
-                            
+
                         case SyntaxKind.ComputedPropertyName:
                             let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
                             if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
@@ -7976,13 +8021,13 @@ namespace ts {
                             else {
                                 return stringType;
                             }
-                            
+
                         default:
                             Debug.fail("Unsupported property name.");
                             return unknownType;
                     }
 
-                    
+
                 default:
                     Debug.fail("Unsupported decorator target.");
                     return unknownType;
@@ -8019,7 +8064,7 @@ namespace ts {
                     // for the type of the member.
                     let propertyType = getTypeOfNode(node);
                     return createTypedPropertyDescriptorType(propertyType);
-                    
+
                 default:
                     Debug.fail("Unsupported decorator target.");
                     return unknownType;
@@ -8072,7 +8117,7 @@ namespace ts {
                 (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
                 return undefined;
             }
-            
+
             return args[argIndex];
         }
 
@@ -8092,7 +8137,7 @@ namespace ts {
                 return arg;
             }
         }
-        
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             let isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             let isDecorator = node.kind === SyntaxKind.Decorator;
@@ -8220,7 +8265,7 @@ namespace ts {
                     let diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
-                        
+
                     if (headMessage) {
                         diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, headMessage);
                     }
@@ -8246,7 +8291,7 @@ namespace ts {
             }
 
             return resolveErrorCall(node);
-            
+
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 let errorInfo: DiagnosticMessageChain;
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
@@ -8393,7 +8438,7 @@ namespace ts {
 
             let expressionType = checkExpression(node.expression);
 
-            // If ConstructExpr's apparent type(section 3.8.1) is an object type with one or
+            // If expressionType's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
             // function call, but using the construct signatures as the initial set of candidate
             // signatures for overload resolution. The result type of the function call becomes
@@ -8404,8 +8449,17 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
+            // If the expression is a class of abstract type, then it cannot be instantiated.
+            // Note, only class declarations can be declared abstract.
+            // In the case of a merged class-module or class-interface declaration,
+            // only the class declaration node will have the Abstract flag set.
+            let valueDecl = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
+            if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
+                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
+            }
+
             // TS 1.0 spec: 4.11
-            // If ConstructExpr is of type Any, Args can be any argument
+            // If expressionType is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
             if (isTypeAny(expressionType)) {
                 if (node.typeArguments) {
@@ -8423,7 +8477,7 @@ namespace ts {
                 return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
-            // If ConstructExpr's apparent type is an object type with no construct signatures but
+            // If expressionType's apparent type is an object type with no construct signatures but
             // one or more call signatures, the expression is processed as a function call. A compile-time
             // error occurs if the result of the function call is not Void. The type of the result of the
             // operation is Any.
@@ -8471,13 +8525,13 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     return Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
-                
+
                 case SyntaxKind.Parameter:
                     return Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression;
-                    
+
                 case SyntaxKind.PropertyDeclaration:
                     return Diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression;
-                    
+
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -8494,12 +8548,12 @@ namespace ts {
             if (apparentType === unknownType) {
                 return resolveErrorCall(node);
             }
-            
+
             let callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
             if (funcType === anyType || (!callSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
                 return resolveUntypedCall(node);
             }
-            
+
             let headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
                 let errorInfo: DiagnosticMessageChain;
@@ -8508,7 +8562,7 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
                 return resolveErrorCall(node);
             }
-            
+
             return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
         }
 
@@ -8542,6 +8596,11 @@ namespace ts {
             return links.resolvedSignature;
         }
 
+        /**
+         * Syntactically and semantically checks a call or new expression.
+         * @param node The call/new expression to be checked.
+         * @returns On success, the expression's signature's return type. On failure, anyType.
+         */
         function checkCallExpression(node: CallExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
@@ -8552,6 +8611,7 @@ namespace ts {
             }
             if (node.kind === SyntaxKind.NewExpression) {
                 let declaration = signature.declaration;
+
                 if (declaration &&
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
@@ -8800,6 +8860,7 @@ namespace ts {
 
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+
             // Grammar checking
             let hasGrammarError = checkGrammarFunctionLikeDeclaration(node);
             if (!hasGrammarError && node.kind === SyntaxKind.FunctionExpression) {
@@ -9140,8 +9201,8 @@ namespace ts {
                     let type = isTypeAny(sourceType)
                         ? sourceType
                         : getTypeOfPropertyOfType(sourceType, name.text) ||
-                            isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
-                            getIndexTypeOfType(sourceType, IndexKind.String);
+                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
                     }
@@ -9408,7 +9469,7 @@ namespace ts {
         function isYieldExpressionInClass(node: YieldExpression): boolean {
             let current: Node = node
             let parent = node.parent;
-            while (parent) { 
+            while (parent) {
                 if (isFunctionLike(parent) && current === (<FunctionLikeDeclaration>parent).body) {
                     return false;
                 }
@@ -9783,12 +9844,12 @@ namespace ts {
                                 if (hasReportedError) {
                                     break;
                                 }
-                                if (param.name.kind === SyntaxKind.ObjectBindingPattern || 
+                                if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
                                     param.name.kind === SyntaxKind.ArrayBindingPattern) {
 
                                     (function checkBindingPattern(pattern: BindingPattern) {
                                         for (let element of pattern.elements) {
-                                            if (element.name.kind === SyntaxKind.Identifier && 
+                                            if (element.name.kind === SyntaxKind.Identifier &&
                                                 (<Identifier>element.name).text === typePredicate.parameterName) {
 
                                                 error(typePredicateNode.parameterName,
@@ -9917,6 +9978,12 @@ namespace ts {
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionLikeDeclaration(node);
+            
+            // Abstract methods cannot have an implementation.
+            // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
+            if(node.flags & NodeFlags.Abstract && node.body) {
+                error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
+            }
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
@@ -10151,7 +10218,7 @@ namespace ts {
             error(signatureDeclarationNode, Diagnostics.Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature);
         }
 
-        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags) {
+        function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
             if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
                 if (!(flags & NodeFlags.Ambient)) {
@@ -10197,6 +10264,9 @@ namespace ts {
                         else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
+                        else if (deviation & NodeFlags.Abstract) {
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract);
+                        }
                     });
                 }
             }
@@ -10213,7 +10283,7 @@ namespace ts {
                 }
             }
 
-            let flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected;
+            let flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected | NodeFlags.Abstract;
             let someNodeFlags: NodeFlags = 0;
             let allNodeFlags = flagsToCheck;
             let someHaveQuestionToken = false;
@@ -10263,7 +10333,14 @@ namespace ts {
                     error(errorNode, Diagnostics.Constructor_implementation_is_missing);
                 }
                 else {
-                    error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+                    // Report different errors regarding non-consecutive blocks of declarations depending on whether
+                    // the node in question is abstract.
+                    if (node.flags & NodeFlags.Abstract) {
+                        error(errorNode, Diagnostics.All_declarations_of_an_abstract_method_must_be_consecutive);
+                    }
+                    else {
+                        error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+                    }
                 }
             }
 
@@ -10335,7 +10412,9 @@ namespace ts {
                 });
             }
 
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
+            // Abstract methods can't have an implementation -- in particular, they don't need one.
+            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body && 
+                !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) ) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
@@ -10707,8 +10786,8 @@ namespace ts {
             if (returnType.flags & TypeFlags.Any) {
                 return;
             }
-            
-            let expectedReturnType: Type; 
+
+            let expectedReturnType: Type;
             let headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             let errorInfo: DiagnosticMessageChain;
             switch (node.parent.kind) {
@@ -10725,7 +10804,7 @@ namespace ts {
                         Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
 
                     break;
-                    
+
                 case SyntaxKind.PropertyDeclaration:
                     expectedReturnType = voidType;
                     errorInfo = chainDiagnosticMessages(
@@ -10741,12 +10820,12 @@ namespace ts {
                     expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
             }
-            
+
             checkTypeAssignableTo(
-                returnType, 
-                expectedReturnType, 
-                node, 
-                headMessage, 
+                returnType,
+                expectedReturnType,
+                node,
+                headMessage,
                 errorInfo);
         }
         
@@ -10810,7 +10889,7 @@ namespace ts {
             if (!nodeCanBeDecorated(node)) {
                 return;
             }
-            
+
             if (!compilerOptions.experimentalDecorators) {
                 error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Specify_experimentalDecorators_to_remove_this_warning);
             }
@@ -11263,7 +11342,7 @@ namespace ts {
 
         function checkExpressionStatement(node: ExpressionStatement) {
             // Grammar checking
-            checkGrammarStatementInAmbientContext(node)
+            checkGrammarStatementInAmbientContext(node);
 
             checkExpression(node.expression);
         }
@@ -11990,6 +12069,7 @@ namespace ts {
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
                         // that all instantiated base constructor signatures return the same type. We can simply compare the type
@@ -12064,45 +12144,67 @@ namespace ts {
                 }
 
                 let derived = getTargetSymbol(getPropertyOfObjectType(type, base.name));
+                let baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
+
+                Debug.assert(!!derived, "derived should point to something, even if it is the base class' declaration.");
+
                 if (derived) {
-                    let baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
-                    let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
-                    if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
-                        // either base or derived property is private - not override, skip it
-                        continue;
-                    }
+                    // In order to resolve whether the inherited method was overriden in the base class or not,
+                    // we compare the Symbols obtained. Since getTargetSymbol returns the symbol on the *uninstantiated*
+                    // type declaration, derived and base resolve to the same symbol even in the case of generic classes.
+                    if (derived === base) { 
+                        // derived class inherits base without override/redeclaration
 
-                    if ((baseDeclarationFlags & NodeFlags.Static) !== (derivedDeclarationFlags & NodeFlags.Static)) {
-                        // value of 'static' is not the same for properties - not override, skip it
-                        continue;
-                    }
+                        let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
 
-                    if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
-                        // method is overridden with method or property/accessor is overridden with property/accessor - correct case
-                        continue;
+                        // It is an error to inherit an abstract member without implementing it or being declared abstract.
+                        // If there is no declaration for the derived class (as in the case of class expressions), 
+                        // then the class cannot be declared abstract. 
+                        if ( baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
+                            error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                                typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                        }
                     }
+                    else { 
+                        // derived overrides base.
+                        let derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
+                        if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
+                            // either base or derived property is private - not override, skip it
+                            continue;
+                        }
 
-                    let errorMessage: DiagnosticMessage;
-                    if (base.flags & SymbolFlags.Method) {
-                        if (derived.flags & SymbolFlags.Accessor) {
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+                        if ((baseDeclarationFlags & NodeFlags.Static) !== (derivedDeclarationFlags & NodeFlags.Static)) {
+                            // value of 'static' is not the same for properties - not override, skip it
+                            continue;
+                        }
+
+                        if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
+                            // method is overridden with method or property/accessor is overridden with property/accessor - correct case
+                            continue;
+                        }
+
+                        let errorMessage: DiagnosticMessage;
+                        if (base.flags & SymbolFlags.Method) {
+                            if (derived.flags & SymbolFlags.Accessor) {
+                                errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+                            }
+                            else {
+                                Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
+                                errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
+                            }
+                        }
+                        else if (base.flags & SymbolFlags.Property) {
+                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
                         else {
-                            Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
+                            Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
+                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
-                    }
-                    else if (base.flags & SymbolFlags.Property) {
-                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
-                        errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
-                    }
-                    else {
-                        Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
-                        Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
-                        errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
-                    }
 
-                    error(derived.valueDeclaration.name, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                        error(derived.valueDeclaration.name, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                    }
                 }
             }
         }
@@ -13135,7 +13237,7 @@ namespace ts {
                             if ((<ClassExpression>location).name) {
                                 copySymbol(location.symbol, meaning);
                             }
-                            // Fall through
+                        // Fall through
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             if (!(memberFlags & NodeFlags.Static)) {
@@ -13352,8 +13454,8 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
+                    // Fall through
 
-                // fall through
                 case SyntaxKind.NumericLiteral:
                     // index access
                     if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
@@ -13447,7 +13549,7 @@ namespace ts {
           */
         function getParentTypeOfClassElement(node: ClassElement) {
             let classSymbol = getSymbolOfNode(node.parent);
-            return node.flags & NodeFlags.Static 
+            return node.flags & NodeFlags.Static
                 ? getTypeOfSymbol(classSymbol)
                 : getDeclaredTypeOfSymbol(classSymbol);
         }
@@ -13541,7 +13643,7 @@ namespace ts {
                 if (links.isNestedRedeclaration === undefined) {
                     let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
                     links.isNestedRedeclaration = isStatementWithLocals(container) &&
-                       !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                    !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 }
                 return links.isNestedRedeclaration;
             }
@@ -14147,6 +14249,14 @@ namespace ts {
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
+                        else if (flags & NodeFlags.Abstract) {
+                            if (modifier.kind === SyntaxKind.PrivateKeyword) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract");
+                            }
+                            else {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
+                            }
+                        }
                         flags |= modifierToFlag(modifier.kind);
                         break;
 
@@ -14163,6 +14273,9 @@ namespace ts {
                         else if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
                         }
+                        else if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                        }
                         flags |= NodeFlags.Static;
                         lastStatic = modifier;
                         break;
@@ -14173,6 +14286,9 @@ namespace ts {
                         }
                         else if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
+                        }
+                        else if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "abstract");
                         }
                         else if (flags & NodeFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
@@ -14203,7 +14319,29 @@ namespace ts {
                             return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
                         }
                         flags |= NodeFlags.Ambient;
-                        lastDeclare = modifier
+                        lastDeclare = modifier;
+                        break;
+
+                    case SyntaxKind.AbstractKeyword:
+                        if (flags & NodeFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
+                        }
+                        if (node.kind !== SyntaxKind.ClassDeclaration) {
+                            if (node.kind !== SyntaxKind.MethodDeclaration) {
+                                return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_or_method_declaration);
+                            }
+                            if (!(node.parent.kind === SyntaxKind.ClassDeclaration && node.parent.flags & NodeFlags.Abstract)) {
+                                return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
+                            }
+                            if (flags & NodeFlags.Static) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                            }
+                            if (flags & NodeFlags.Private) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
+                            }
+                        }
+
+                        flags |= NodeFlags.Abstract;
                         break;
 
                     case SyntaxKind.AsyncKeyword:
@@ -14225,6 +14363,9 @@ namespace ts {
             if (node.kind === SyntaxKind.Constructor) {
                 if (flags & NodeFlags.Static) {
                     return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "static");
+                }
+                if (flags & NodeFlags.Abstract) {
+                    return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract");
                 }
                 else if (flags & NodeFlags.Protected) {
                     return grammarErrorOnNode(lastProtected, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");

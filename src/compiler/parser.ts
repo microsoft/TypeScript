@@ -4141,6 +4141,7 @@ namespace ts {
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.StaticKeyword:
+                    case SyntaxKind.AbstractKeyword:
                         nextToken();
                         continue;
                     default:
@@ -4278,6 +4279,7 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
+                case SyntaxKind.AbstractKeyword:
                 case SyntaxKind.StaticKeyword:
                     if (isStartOfDeclaration()) {
                         return parseDeclaration();

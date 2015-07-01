@@ -75,26 +75,26 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 194 /* ForStatement */:
-            case 195 /* ForInStatement */:
-            case 193 /* WhileStatement */:
-            case 192 /* DoStatement */:
-                if (node.statement.kind !== 187 /* Block */) {
+            case 195 /* ForStatement */:
+            case 196 /* ForInStatement */:
+            case 194 /* WhileStatement */:
+            case 193 /* DoStatement */:
+                if (node.statement.kind !== 188 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 191 /* IfStatement */:
+            case 192 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 187 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 188 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 187 /* Block */ &&
-                    ifStatement.elseStatement.kind !== 191 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== 188 /* Block */ &&
+                    ifStatement.elseStatement.kind !== 192 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 176 /* BinaryExpression */:
+            case 177 /* BinaryExpression */:
                 var op = node.operatorToken.kind;
                 if (op === 29 /* EqualsEqualsToken */ || op == 30 /* ExclamationEqualsToken */) {
                     report(node, "Use '===' and '!=='.");

@@ -765,7 +765,6 @@
         "category": "Error",
         "code": 1311
     },
-
     "The return type of a property decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1236
@@ -790,7 +789,22 @@
         "category": "Error",
         "code": 1241
     },
-
+    "'abstract' modifier can only appear on a class or method declaration.": {
+        "category": "Error",
+        "code": 1242
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1243
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1244
+    },
+    "Method '{0}' cannot have an implementation because it is marked abstract.": {
+        "category": "Error",
+        "code": 1245
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -931,11 +945,11 @@
         "category": "Error",
         "code": 2336
     },
-    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+    "Super calls are not permitted outside constructors or in nested functions inside constructors.": {
         "category": "Error",
         "code": 2337
     },
-    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.": {
         "category": "Error",
         "code": 2338
     },
@@ -943,7 +957,7 @@
         "category": "Error",
         "code": 2339
     },
-    "Only public and protected methods of the base class are accessible via the 'super' keyword": {
+    "Only public and protected methods of the base class are accessible via the 'super' keyword.": {
         "category": "Error",
         "code": 2340
     },
@@ -1579,7 +1593,34 @@
         "category": "Error",
         "code": 2510
     },
-
+    "Cannot create an instance of the abstract class '{0}'.": {
+        "category": "Error",
+        "code": 2511
+    },
+    "Overload signatures must all be abstract or not abstract.": {
+        "category": "Error",
+        "code": 2512
+    },
+    "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
+        "category": "Error",
+        "code": 2513
+    },
+    "Classes containing abstract methods must be marked abstract.": {
+        "category": "Error",
+        "code": 2514
+    },
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+        "category": "Error",
+        "code": 2515
+    },
+    "All declarations of an abstract method must be consecutive.": {
+        "category": "Error",
+        "code": 2516
+    },
+    "Constructor objects of abstract type cannot be assigned to constructor objects of non-abstract type": {
+        "category": "Error",
+        "code":2517
+    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
@@ -1600,7 +1641,6 @@
         "category": "Error",
         "code": 2524
     },
-
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600
@@ -1641,7 +1681,6 @@
         "category": "Error",
         "code": 2650
     },
-
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
