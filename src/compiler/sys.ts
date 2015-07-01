@@ -6,6 +6,7 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
+        writesToTty?(): boolean;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: (path: string) => void): FileWatcher;
@@ -187,7 +188,8 @@ namespace ts {
         function getNodeSystem(): System {
             var _fs = require("fs");
             var _path = require("path");
-            var _os = require('os');
+            var _os = require("os");
+            var _tty = require("tty");
 
             var platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -271,6 +273,7 @@ namespace ts {
                     // 1 is a standard descriptor for stdout
                     _fs.writeSync(1, s);
                 },
+                writesToTty: () => _tty.isatty(1),
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
