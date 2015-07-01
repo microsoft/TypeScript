@@ -65,6 +65,7 @@ namespace ts {
 
         interface NodeLinks {
             visibleChildren?: Node[];
+            visited?: boolean;
         }
 
         let nodeLinks: NodeLinks[] = [];
@@ -222,7 +223,7 @@ namespace ts {
                             Debug.assert(asynchronousSubModuleDeclarationEmitInfo === undefined);
                             asynchronousSubModuleDeclarationEmitInfo = [];
                         }
-                        writeModuleElement(nodeToCheck);
+                        //writeModuleElement(nodeToCheck);
                         if (nodeToCheck.kind === SyntaxKind.ModuleDeclaration) {
                             moduleElementEmitInfo.subModuleElementDeclarationEmitInfo = asynchronousSubModuleDeclarationEmitInfo;
                             asynchronousSubModuleDeclarationEmitInfo = undefined;
@@ -521,69 +522,71 @@ namespace ts {
             }
         }
 
-        function isModuleElementVisible(node: Declaration) {
-            return resolver.isDeclarationVisible(node);
-        }
+        //function isModuleElementVisible(node: Declaration) {
+        //    return resolver.isDeclarationVisible(node);
+        //}
 
-        function emitModuleElement(node: Node, isModuleElementVisible: boolean) {
-            if (isModuleElementVisible) {
-                writeModuleElement(node);
-            }
-            // Import equals declaration in internal module can become visible as part of any emit so lets make sure we add these irrespective
-            else if (node.kind === SyntaxKind.ImportEqualsDeclaration ||
-                (node.parent.kind === SyntaxKind.SourceFile && isExternalModule(currentSourceFile))) {
-                let isVisible: boolean;
-                if (asynchronousSubModuleDeclarationEmitInfo && node.parent.kind !== SyntaxKind.SourceFile) {
-                    // Import declaration of another module that is visited async so lets put it in right spot
-                    asynchronousSubModuleDeclarationEmitInfo.push({
-                        node,
-                        outputPos: writer.getTextPos(),
-                        indent: writer.getIndent(),
-                        isVisible
-                    });
-                }
-                else {
-                    if (node.kind === SyntaxKind.ImportDeclaration) {
-                        let importDeclaration = <ImportDeclaration>node;
-                        if (importDeclaration.importClause) {
-                            isVisible = (importDeclaration.importClause.name && resolver.isDeclarationVisible(importDeclaration.importClause)) ||
-                            isVisibleNamedBinding(importDeclaration.importClause.namedBindings);
-                        }
-                    }
-                    moduleElementDeclarationEmitInfo.push({
-                        node,
-                        outputPos: writer.getTextPos(),
-                        indent: writer.getIndent(),
-                        isVisible
-                    });
-                }
-            }
-        }
+        //function emitModuleElement(node: Node, isModuleElementVisible: boolean) {
+        //    writeModuleElement(node);
+           
+        //    if (isModuleElementVisible) {
+        //        writeModuleElement(node);
+        //    }
+        //    // Import equals declaration in internal module can become visible as part of any emit so lets make sure we add these irrespective
+        //    else if (node.kind === SyntaxKind.ImportEqualsDeclaration ||
+        //        (node.parent.kind === SyntaxKind.SourceFile && isExternalModule(currentSourceFile))) {
+        //        let isVisible: boolean;
+        //        if (asynchronousSubModuleDeclarationEmitInfo && node.parent.kind !== SyntaxKind.SourceFile) {
+        //            // Import declaration of another module that is visited async so lets put it in right spot
+        //            asynchronousSubModuleDeclarationEmitInfo.push({
+        //                node,
+        //                outputPos: writer.getTextPos(),
+        //                indent: writer.getIndent(),
+        //                isVisible
+        //            });
+        //        }
+        //        else {
+        //            if (node.kind === SyntaxKind.ImportDeclaration) {
+        //                let importDeclaration = <ImportDeclaration>node;
+        //                if (importDeclaration.importClause) {
+        //                    isVisible = (importDeclaration.importClause.name && resolver.isDeclarationVisible(importDeclaration.importClause)) ||
+        //                    isVisibleNamedBinding(importDeclaration.importClause.namedBindings);
+        //                }
+        //            }
+        //            moduleElementDeclarationEmitInfo.push({
+        //                node,
+        //                outputPos: writer.getTextPos(),
+        //                indent: writer.getIndent(),
+        //                isVisible
+        //            });
+        //        }
+        //    }
+        //}
 
-        function writeModuleElement(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                    return writeFunctionDeclaration(<FunctionLikeDeclaration>node);
-                case SyntaxKind.VariableStatement:
-                    return writeVariableStatement(<VariableStatement>node);
-                case SyntaxKind.InterfaceDeclaration:
-                    return writeInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.ClassDeclaration:
-                    return writeClassDeclaration(<ClassDeclaration>node);
-                case SyntaxKind.TypeAliasDeclaration:
-                    return writeTypeAliasDeclaration(<TypeAliasDeclaration>node);
-                case SyntaxKind.EnumDeclaration:
-                    return writeEnumDeclaration(<EnumDeclaration>node);
-                case SyntaxKind.ModuleDeclaration:
-                    return writeModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.ImportEqualsDeclaration:
-                    return writeImportEqualsDeclaration(<ImportEqualsDeclaration>node);
-                case SyntaxKind.ImportDeclaration:
-                    return writeImportDeclaration(<ImportDeclaration>node);
-                default:
-                    Debug.fail("Unknown symbol kind");
-            }
-        }
+        //function writeModuleElement(node: Node) {
+        //    switch (node.kind) {
+        //        case SyntaxKind.FunctionDeclaration:
+        //            return writeFunctionDeclaration(<FunctionLikeDeclaration>node);
+        //        case SyntaxKind.VariableStatement:
+        //            return writeVariableStatement(<VariableStatement>node);
+        //        case SyntaxKind.InterfaceDeclaration:
+        //            return writeInterfaceDeclaration(<InterfaceDeclaration>node);
+        //        case SyntaxKind.ClassDeclaration:
+        //            return writeClassDeclaration(<ClassDeclaration>node);
+        //        case SyntaxKind.TypeAliasDeclaration:
+        //            return writeTypeAliasDeclaration(<TypeAliasDeclaration>node);
+        //        case SyntaxKind.EnumDeclaration:
+        //            return writeEnumDeclaration(<EnumDeclaration>node);
+        //        case SyntaxKind.ModuleDeclaration:
+        //            return writeModuleDeclaration(<ModuleDeclaration>node);
+        //        case SyntaxKind.ImportEqualsDeclaration:
+        //            return writeImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+        //        case SyntaxKind.ImportDeclaration:
+        //            return writeImportDeclaration(<ImportDeclaration>node);
+        //        default:
+        //            Debug.fail("Unknown symbol kind");
+        //    }
+        //}
 
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
@@ -1003,7 +1006,7 @@ namespace ts {
         function emitVariableDeclaration(node: VariableDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
-            if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+            //if (node.kind !== SyntaxKind.VariableDeclaration) {
                 if (isBindingPattern(node.name)) {
                     emitBindingPattern(<BindingPattern>node.name);
                 }
@@ -1023,7 +1026,7 @@ namespace ts {
                         writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
                     }
                 }
-            }
+            //}
 
             function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult: SymbolAccessiblityResult) {
                 if (node.kind === SyntaxKind.VariableDeclaration) {
@@ -1132,6 +1135,25 @@ namespace ts {
                 write("var ");
             }
             emitCommaList(node.declarationList.declarations, emitVariableDeclaration, resolver.isDeclarationVisible);
+            write(";");
+            writeLine();
+        }
+
+        // TODO: we only should have either statement or declaration
+        function writeVariableDeclaration(node: VariableDeclaration) {
+            emitJsDocComments(node);
+            emitModuleElementDeclarationFlags(node);
+            var declarationList = node.parent;
+            if (isLet(declarationList)) {
+                write("let ");
+            }
+            else if (isConst(declarationList)) {
+                write("const ");
+            }
+            else {
+                write("var ");
+            }
+            emitVariableDeclaration(node);
             write(";");
             writeLine();
         }
@@ -1546,18 +1568,27 @@ namespace ts {
         function emitNode(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                    return emitModuleElement(node, isModuleElementVisible(<Declaration>node));
+                    return writeFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.VariableStatement:
-                    return emitModuleElement(node, isVariableStatementVisible(<VariableStatement>node));
+                    return writeVariableStatement(<VariableStatement>node);
+
+                case SyntaxKind.VariableDeclaration:
+                    return writeVariableDeclaration(<VariableDeclaration>node);
+                case SyntaxKind.InterfaceDeclaration:
+                    return writeInterfaceDeclaration(<InterfaceDeclaration>node);
+                case SyntaxKind.ClassDeclaration:
+                    return writeClassDeclaration(<ClassDeclaration>node);
+                case SyntaxKind.TypeAliasDeclaration:
+                    return writeTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                case SyntaxKind.EnumDeclaration:
+                    return writeEnumDeclaration(<EnumDeclaration>node);
+                case SyntaxKind.ModuleDeclaration:
+                    return writeModuleDeclaration(<ModuleDeclaration>node);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return writeImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
-                    // Import declaration without import clause is visible, otherwise it is not visible
-                    return emitModuleElement(node, /*isModuleElementVisible*/!(<ImportDeclaration>node).importClause);
+                    return writeImportDeclaration(<ImportDeclaration>node);
+
                 case SyntaxKind.ExportDeclaration:
                     return emitExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.Constructor:
@@ -1600,8 +1631,149 @@ namespace ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
 
-        function walkTypes(node: Node): void {
 
+        function visitNode(node: Node): void {
+            switch (node.kind) {
+                // import/export aliases
+                case SyntaxKind.ExportDeclaration:
+                    return visitExportDeclaration(<ExportDeclaration> node);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration> node);
+                case SyntaxKind.ExportAssignment:
+                    return visitExportAssignment(<ExportAssignment> node);
+
+                // declarations
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.IndexSignature:
+                    return visitSignatureDeclaration(<FunctionLikeDeclaration>node);
+
+                //case SyntaxKind.GetAccessor:
+                //case SyntaxKind.SetAccessor:
+                //    return emitAccessorDeclaration(<AccessorDeclaration>node);
+
+                case SyntaxKind.TypeParameter:
+                    return visitNode((<TypeParameterDeclaration>node).constraint);
+
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
+                        visitNodes((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses);
+
+                case SyntaxKind.TypeAliasDeclaration:
+                    return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
+                        visitNode((<TypeAliasDeclaration>node).type);
+
+                case SyntaxKind.VariableStatement:
+                    return visitNodes((<VariableStatement>node).declarationList.declarations);
+
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return visitPropertyDeclaration(<PropertyDeclaration>node);
+
+                // TypeNodes
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.StringLiteral:
+                    // Nothing to visit
+                    return;
+
+                case SyntaxKind.TypePredicate:
+                    return visitNode((<TypePredicateNode>node).type);
+                case SyntaxKind.ArrayType:
+                    return visitNode((<ArrayTypeNode>node).elementType);
+                case SyntaxKind.TupleType:
+                    return visitNodes((<TupleTypeNode>node).elementTypes);
+                case SyntaxKind.UnionType:
+                    return visitNodes((<UnionTypeNode>node).types);
+                case SyntaxKind.ParenthesizedType:
+                    return visitNode((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                    return visitSignatureDeclaration(<FunctionOrConstructorTypeNode>node);
+                case SyntaxKind.TypeLiteral:
+                    return visitNodes((<TypeLiteralNode>node).members);
+                //case SyntaxKind.ExpressionWithTypeArguments:
+                //    return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
+                case SyntaxKind.TypeQuery:
+                    return visitTypeName((<TypeQueryNode>node).exprName);
+                case SyntaxKind.TypeReference:
+                    return visitTypeName((<TypeReferenceNode>node).typeName) ||
+                        visitNodes((<TypeReferenceNode>node).typeArguments);
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return visitTypeName(<Identifier|QualifiedName>node);
+            }
+        }
+
+        function visitNodes(nodes: NodeArray<any>): void{
+            forEach(nodes, visitNode);
+        }
+
+        function visitExportDeclaration(node: ExportDeclaration): void {
+            if (!node.moduleSpecifier) {
+                forEach(node.exportClause.elements, collectAliasDeclaration);
+            }
+        }
+
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): void {
+            if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
+                collectAliasDeclaration(node);
+            }
+        }
+
+        function visitExportAssignment(node: ExportAssignment): void {
+            collectAliasDeclaration(node);
+        }
+
+        function visitSignatureDeclaration(node: SignatureDeclaration): void {
+            if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
+                return;
+            }
+
+            visitNodes(node.typeParameters);
+            visitNodes(node.parameters);
+
+            if (node.type) {
+                visitNode(node.type);
+            }
+            else if (node.kind !== SyntaxKind.Constructor) {
+                // TODO: handel infered type
+            }
+        }
+
+        function visitPropertyDeclaration(node: PropertyDeclaration): void {
+            if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
+                return;
+            }
+
+            if (node.type) {
+                visitNode(node.type);
+            }
+            else {
+                // TODO: handel infered type
+            }
+        }
+
+        function visitTypeName(node: Identifier|QualifiedName): void {
+            let symbol = resolver.getSymbolAtLocation(node);
+            Debug.assert(!!symbol);
+            collectDeclarations(symbol);
+        }
+
+        function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment) {
+            let target = resolver.getLocalTargetOfAliasDeclaration(node);
+            Debug.assert(!!target);
+            collectDeclarations(target);
         }
 
         function isDeclarationVisible(node: Node): boolean {
@@ -1660,41 +1832,100 @@ namespace ts {
             }
         }
 
-        function collectChildDeclarations(node: Node): void {
-            let links = getNodeLinks(node);
-            forEachTopLevelDeclaration(node, child => {
-                if (!isDeclarationVisible(child)) {
-                    return;
-                }
-
-                if (!links.visibleChildren) {
-                    links.visibleChildren = [];
-                }
-                links.visibleChildren.push(child);
-
-                // if there are any types we need to write later on
-                // make sure to visit them and collect their declarations
-                walkTypes(child);
-
-                // visit nested declarations
-                switch (child.kind) {
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.ClassDeclaration:
+        function getEnclosingDeclaration(node: Node): Node {
+            while (node.parent) {
+                switch (node.parent.kind) {
+                    case SyntaxKind.SourceFile:
                     case SyntaxKind.EnumDeclaration:
-                        collectChildDeclarations(child);
-                        break;
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        return node.parent;
+                    default:
+                        node = node.parent;
                 }
-            });
+            }
+            return undefined;
+        }
+
+        function collectDeclarations(symbol: Symbol): void {
+            forEach(symbol.declarations, collectDeclaration);
+        }
+
+        function collectDeclaration(node: Node) {
+            let links = getNodeLinks(node);
+            if (!links.visited) {
+                links.visited = true;
+
+                // Make the declaration visble by attaching it to its
+                // parent's visible declarations.
+                // also make sure the parent is reachable from a top-level
+                // declaration
+                let parent = getEnclosingDeclaration(node);
+                if (parent) {
+                    ensureDeclarationVisible(parent);
+                    attachVisibleChild(parent, node);
+                }
+
+                visitNode(node);
+            }
+
+            // Collect children as well
+            switch (node.kind) {
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    forEachTopLevelDeclaration(node, child => {
+                        if (isDeclarationVisible(child)) {
+                            collectDeclaration(child);
+                        }
+                    });
+                    break;
+            }
+
+        }
+
+        function ensureDeclarationVisible(node: Node): void {
+            let links = getNodeLinks(node);
+            if (!links.visited) {
+                links.visited = true;
+
+                var parent = getEnclosingDeclaration(node);
+                if (parent) {
+                    ensureDeclarationVisible(parent);
+                    attachVisibleChild(parent, node);
+                }
+            }
+        }
+
+        function attachVisibleChild(node: Node, child: Node): void {
+            let links = getNodeLinks(node);
+            if (!links.visibleChildren) {
+                links.visibleChildren = [];
+            }
+            links.visibleChildren.push(child);
+        }
+
+        function compareDeclarations(d1: Node, d2: Node): Comparison {
+            return compareValues(d1.pos, d2.pos) || Comparison.EqualTo;
+        }
+
+        function sortDeclarations(nodes: Node[]): Node[] {
+            return nodes && nodes.sort(compareDeclarations);
         }
 
         function writeChildDeclarations(node: Node): void {
-            forEach(getNodeLinks(node).visibleChildren, emitNode);
+            forEach(sortDeclarations(getNodeLinks(node).visibleChildren), emitNode);
         }
 
         function emitSourceFileDeclarations(sourceFile: SourceFile): void {
             // Collect all visible declarations
-            collectChildDeclarations(sourceFile);
+            forEachTopLevelDeclaration(sourceFile, child => {
+                if (isDeclarationVisible(child)) {
+                    collectDeclaration(child);
+                }
+            });
 
             // write the declarations
             writeChildDeclarations(sourceFile);
@@ -1706,11 +1937,11 @@ namespace ts {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
         // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.reportedDeclarationError) {
+        //if (!emitDeclarationResult.reportedDeclarationError) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
-        }
+        //}
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
             let appliedSyncOutputPos = 0;

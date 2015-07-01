@@ -783,6 +783,21 @@ namespace ts {
             }
         }
 
+
+
+        function getLocalTargetOfAliasDeclaration(node: Declaration): Symbol {
+            switch (node.kind) {
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) ? undefined :
+                        getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>(<ImportEqualsDeclaration>node).moduleReference, <ImportEqualsDeclaration>node);
+                case SyntaxKind.ExportSpecifier:
+                    return (<ExportDeclaration>(<ExportSpecifier>node).parent.parent).moduleSpecifier ? undefined :
+                        resolveEntityName((<ExportSpecifier>node).propertyName || (<ExportSpecifier>node).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                case SyntaxKind.ExportAssignment:
+                    return resolveEntityName(<Identifier>(<ExportAssignment>node).expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+            }
+        }
+
         function resolveSymbol(symbol: Symbol): Symbol {
             return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
         }
@@ -14158,6 +14173,10 @@ namespace ts {
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
+                resolveName,
+                getSymbolAtLocation,
+                resolveAlias,
+                getLocalTargetOfAliasDeclaration,
             };
         }
 
