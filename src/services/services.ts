@@ -2801,34 +2801,25 @@ namespace ts {
         }
 
         /// Completion
-        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
-            let displayName = symbol.getName();
-            if (displayName) {
-                // If this is the default export, get the name of the declaration if it exists
-                if (displayName === "default") {
-                    let localSymbol = getLocalSymbolForExportDefault(symbol);
-                    if (localSymbol && localSymbol.name) {
-                        displayName = symbol.valueDeclaration.localSymbol.name;
-                    }
-                }
+        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
+            let displayName: string;
 
-                // Special case for function expression and class expression because despite sometimes having a name, the binder
-                // binds them to a symbol with the name "__function" and "__class" respectively. However, for completion entry, we want
-                // to display its declared name rather than "__function" and "__class".
-                //      var x = function foo () {
-                //          fo$  <- completion list should contain local name "foo"
-                //      }
-                //      foo$ <- completion list should not contain "foo"
-                // TODO (yuisu): Use getDeclaredName instead once the functions is rewritten
-                if (displayName === "__function" || displayName === "__class") {
-                    displayName = symbol.declarations[0].name.getText();
+            // In the case of default export, function expression and class expression,
+            // the binder bind them with "default", "__function", "__class" respectively.
+            // However, for completion entry, we want to display its declared name rather than binder name.
+            if (getLocalSymbolForExportDefault(symbol) ||
+                getDeclarationOfKind(symbol, SyntaxKind.FunctionExpression) ||
+                getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
+                let typeChecker = program.getTypeChecker();
+                displayName = getDeclaredName(typeChecker, symbol, location);
 
-                    // At this point, we expect that all completion list entries have declared name including function expression
-                    // because when we gather all relevant symbols, we check that the function expression must have declared name
-                    // before adding the symbol into our symbols table. (see: getSymbolsInScope)
-                    Debug.assert(displayName !== undefined,"Expected this function expression to have declared name");
-                }
-
+                // At this point, we expect that all completion list entries have declared name including function expression and class expression
+                // because when we gather all relevant symbols, we check that the function expression and class expression must have declared name
+                // before adding the symbol into our symbols table. (see: getSymbolsInScope)
+                Debug.assert(displayName !== undefined, "Expected displayed name from declaration to existed in this symbol: " + symbol.getName());
+            }
+            else {
+                displayName = symbol.getName();
                 let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -3534,7 +3525,7 @@ namespace ts {
                 // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
                 // We would like to only show things that can be added after a dot, so for instance numeric properties can
                 // not be accessed with a dot (a.1 <- invalid)
-                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
+                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true, location);
                 if (!displayName) {
                     return undefined;
                 }
@@ -3591,7 +3582,7 @@ namespace ts {
                 // We don't need to perform character checks here because we're only comparing the 
                 // name against 'entryName' (which is known to be good), not building a new 
                 // completion entry.
-                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false, location) === entryName ? s : undefined);
 
                 if (symbol) {
                     let { displayParts, documentation, symbolKind } = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
