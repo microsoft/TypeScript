@@ -2800,7 +2800,11 @@ namespace ts {
             return program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
         }
 
-        /// Completion
+        /**
+         * Get the name to be display in completion from a given symbol.
+         *
+         * @return undefined if the name is of external module otherwise a name with striped of any quote
+         */
         function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
             let displayName: string;
 
@@ -2832,37 +2836,37 @@ namespace ts {
             return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
         }
 
-        function getCompletionEntryDisplayName(displayName: string, target: ScriptTarget, performCharacterChecks: boolean): string {
-            if (!displayName) {
+        /**
+         * Get a displayName from a given for completion list, performing any necessary quotes stripping
+         * and checking whether the name is valid identifier name.
+         */
+        function getCompletionEntryDisplayName(name: string, target: ScriptTarget, performCharacterChecks: boolean): string {
+            if (!name) {
                 return undefined;
             }
 
-            let firstCharCode = displayName.charCodeAt(0);
-            if (displayName.length >= 2 &&
-                firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
-                (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                displayName = displayName.substring(1, displayName.length - 1);
-            }
+            name = stripQuotes(name);
 
-            if (!displayName) {
+            // We can simply return name with strip quotes because the name could be an invalid identifier name
+            // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
+            // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
+            if (!name) {
                 return undefined;
             }
 
             if (performCharacterChecks) {
-                if (!isIdentifierStart(displayName.charCodeAt(0), target)) {
+                if (!isIdentifierStart(name.charCodeAt(0), target)) {
                     return undefined;
                 }
 
-                for (let i = 1, n = displayName.length; i < n; i++) {
-                    if (!isIdentifierPart(displayName.charCodeAt(i), target)) {
+                for (let i = 1, n = name.length; i < n; i++) {
+                    if (!isIdentifierPart(name.charCodeAt(i), target)) {
                         return undefined;
                     }
                 }
             }
 
-            return unescapeIdentifier(displayName);
+            return unescapeIdentifier(name);
         }
 
         function getCompletionData(fileName: string, position: number) {

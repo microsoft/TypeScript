@@ -675,9 +675,16 @@ namespace ts {
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
     }
 
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
     export function stripQuotes(name: string) {
         let length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
+        if (length >= 2 &&
+            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
+            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
             return name.substring(1, length - 1);
         };
         return name;
