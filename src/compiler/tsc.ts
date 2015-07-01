@@ -145,6 +145,10 @@ namespace ts {
         sys.write(output);
     }
 
+    const diagnosticReporter = sys.writesToTty && sys.writesToTty() ?
+            reportDiagnosticWithColorAndContext :
+            reportDiagnostic;
+
     /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
     function splitContentByNewlines(content: string) {
         // Split up the input file by line
@@ -159,12 +163,6 @@ namespace ts {
             }
         }
         return lines;
-    }
-
-    function reportDiagnostics(diagnostics: Diagnostic[]) {
-        for (var i = 0; i < diagnostics.length; i++) {
-            reportDiagnosticWithColorAndContext(diagnostics[i]);
-        }
     }
 
     function padLeft(s: string, length: number) {
@@ -220,7 +218,7 @@ namespace ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors);
+            forEach(commandLine.errors, diagnosticReporter);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -285,7 +283,7 @@ namespace ts {
                     let configObject = result.config;
                     let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
-                        reportDiagnostics(configParseResult.errors);
+                        forEach(configParseResult.errors, diagnosticReporter);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     rootFileNames = configParseResult.fileNames;
@@ -422,17 +420,17 @@ namespace ts {
         function compileProgram(): ExitStatus {
             // First get any syntactic errors. 
             var diagnostics = program.getSyntacticDiagnostics();
-            reportDiagnostics(diagnostics);
+            forEach(diagnostics, diagnosticReporter);
 
             // If we didn't have any syntactic errors, then also try getting the global and 
             // semantic errors.
             if (diagnostics.length === 0) {
                 var diagnostics = program.getGlobalDiagnostics();
-                reportDiagnostics(diagnostics);
+                forEach(diagnostics, diagnosticReporter);
 
                 if (diagnostics.length === 0) {
                     var diagnostics = program.getSemanticDiagnostics();
-                    reportDiagnostics(diagnostics);
+                    forEach(diagnostics, diagnosticReporter);
                 }
             }
 
@@ -445,7 +443,7 @@ namespace ts {
 
             // Otherwise, emit and report any errors we ran into.
             var emitOutput = program.emit();
-            reportDiagnostics(emitOutput.diagnostics);
+            forEach(emitOutput.diagnostics, diagnosticReporter);
 
             // If the emitter didn't emit anything, then pass that value along.
             if (emitOutput.emitSkipped) {
