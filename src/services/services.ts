@@ -3010,18 +3010,24 @@ namespace ts {
             function tryGetGlobalSymbols(): boolean {
                 let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
                 if (objectLikeContainer) {
-                    // Object literal expression, look up possible property names from contextual type
+                    // We're looking up possible property names from contextual/inferred/declared type.
                     isMemberCompletion = true;
-                    isNewIdentifierLocation = true;
 
                     let typeForObject: Type;
                     let existingMembers: Declaration[];
 
                     if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                        // We are completing on contextual types, but may also include properties
+                        // other than those within the declared type.
+                        isNewIdentifierLocation = true;
+
                         typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
                         existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
                     }
                     else {
+                        // We are *only* completing on properties from the type being destructured.
+                        isNewIdentifierLocation = false;
+
                         typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                         existingMembers = (<BindingPattern>objectLikeContainer).elements;
                     }
