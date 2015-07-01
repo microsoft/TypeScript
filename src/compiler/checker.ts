@@ -7191,7 +7191,7 @@ namespace ts {
          */
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             let flags = getDeclarationFlagsFromSymbol(prop);
-            let declaringClass: InterfaceType;
+            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);;
 
             if (left.kind === SyntaxKind.SuperKeyword) {
                 let errorNode = (<PropertyAccessExpression>node).name ?
@@ -7219,8 +7219,6 @@ namespace ts {
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
 
-                    declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
-
                     error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(declaringClass));
                     return false;
                 }
@@ -7236,7 +7234,6 @@ namespace ts {
             let enclosingClassDeclaration = getContainingClass(node);
 
             let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
-            declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
             // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
@@ -8391,7 +8388,7 @@ namespace ts {
 
             let expressionType = checkExpression(node.expression);
 
-            // If ConstructExpr's apparent type(section 3.8.1) is an object type with one or
+            // If expressionType's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
             // function call, but using the construct signatures as the initial set of candidate
             // signatures for overload resolution. The result type of the function call becomes
@@ -8402,7 +8399,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            // If the expression is of abstract type, then it cannot be instantiated.
+            // If the expression is a class of abstract type, then it cannot be instantiated.
             // Note, only class declarations can be declared abstract.
             // In the case of a merged class-module or class-interface declaration,
             // only the class declaration node will have the Abstract flag set.
@@ -8412,7 +8409,7 @@ namespace ts {
             }
 
             // TS 1.0 spec: 4.11
-            // If ConstructExpr is of type Any, Args can be any argument
+            // If expressionType is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
             if (isTypeAny(expressionType)) {
                 if (node.typeArguments) {
@@ -8430,7 +8427,7 @@ namespace ts {
                 return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
-            // If ConstructExpr's apparent type is an object type with no construct signatures but
+            // If expressionType's apparent type is an object type with no construct signatures but
             // one or more call signatures, the expression is processed as a function call. A compile-time
             // error occurs if the result of the function call is not Void. The type of the result of the
             // operation is Any.
@@ -13837,6 +13834,12 @@ namespace ts {
                             if (flags & NodeFlags.Private) {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
                             }
+                        }
+                        else {
+                            // mark the constructor abstract for static-side assignability restrictions.
+                            
+                            // (<ClassDeclaration>node).members.????;
+                            
                         }
 
                         flags |= NodeFlags.Abstract;
