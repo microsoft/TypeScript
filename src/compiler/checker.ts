@@ -14340,12 +14340,6 @@ namespace ts {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
                             }
                         }
-                        else {
-                            // mark the constructor abstract for static-side assignability restrictions.
-                            
-                            // (<ClassDeclaration>node).members.????;
-                            
-                        }
 
                         flags |= NodeFlags.Abstract;
                         break;
