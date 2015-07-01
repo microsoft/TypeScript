@@ -3619,7 +3619,7 @@ namespace ts {
         function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
-            if (flags & SymbolFlags.Class) return symbol.declarations[0].kind === SyntaxKind.ClassExpression ?
+            if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
                 ScriptElementKind.localClassElement : ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
@@ -3832,7 +3832,7 @@ namespace ts {
                 // Special case for class expressions because we would like to indicate that
                 // the class name is local to the class body (similar to function expression)
                 //      (local class) class <className>
-                if (symbol.getName() === "__class") {
+                if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
                     pushTypePart(ScriptElementKind.localClassElement);
                 }
                 else {
