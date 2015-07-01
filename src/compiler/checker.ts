@@ -3734,12 +3734,12 @@ namespace ts {
                 // We only support expressions that are simple qualified names. For other expressions this produces undefined.
                 let typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
                     isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
-                        undefined;
+                    undefined;
                 let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
                 let type = symbol === unknownSymbol ? unknownType :
                     symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                        symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                            getTypeFromNonGenericTypeReference(node, symbol);
+                    symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
+                    getTypeFromNonGenericTypeReference(node, symbol);
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
@@ -4641,8 +4641,6 @@ namespace ts {
                     let sourceProp = getPropertyOfType(source, targetProp.name);
 
                     if (sourceProp !== targetProp) {
-                        // sourceProp !== targetProp -- ie: source and target have distinct declarations with the same name
-                        
                         if (!sourceProp) {
                             if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
                                 if (reportErrors) {
@@ -7216,7 +7214,7 @@ namespace ts {
                 }
 
                 if (flags & NodeFlags.Abstract) {
-                    // A method cannot be accessed in a super call if the method is abstract.
+                    // A method cannot be accessed in a super property access if the method is abstract.
                     // This error could mask a private property access error. But, a member 
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
