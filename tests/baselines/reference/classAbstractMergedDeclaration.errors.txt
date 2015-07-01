@@ -1,0 +1,66 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(7,16): error TS2300: Duplicate identifier 'CI'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(8,11): error TS2300: Duplicate identifier 'CI'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(10,11): error TS2300: Duplicate identifier 'IC'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(11,16): error TS2300: Duplicate identifier 'IC'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(17,16): error TS2300: Duplicate identifier 'CC2'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(19,1): error TS2511: Cannot create an instance of the abstract class 'CM'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(20,1): error TS2511: Cannot create an instance of the abstract class 'MC'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(21,1): error TS2511: Cannot create an instance of the abstract class 'CI'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(22,5): error TS2304: Cannot find name 'IC'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(23,1): error TS2511: Cannot create an instance of the abstract class 'CC1'.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts (13 errors) ====
+    abstract class CM {}
+    module CM {}
+    
+    module MC {}
+    abstract class MC {}
+    
+    abstract class CI {}
+                   ~~
+!!! error TS2300: Duplicate identifier 'CI'.
+    interface CI {}
+              ~~
+!!! error TS2300: Duplicate identifier 'CI'.
+    
+    interface IC {}
+              ~~
+!!! error TS2300: Duplicate identifier 'IC'.
+    abstract class IC {}
+                   ~~
+!!! error TS2300: Duplicate identifier 'IC'.
+    
+    abstract class CC1 {}
+                   ~~~
+!!! error TS2300: Duplicate identifier 'CC1'.
+    class CC1 {}
+          ~~~
+!!! error TS2300: Duplicate identifier 'CC1'.
+    
+    class CC2 {}
+          ~~~
+!!! error TS2300: Duplicate identifier 'CC2'.
+    abstract class CC2 {}
+                   ~~~
+!!! error TS2300: Duplicate identifier 'CC2'.
+    
+    new CM;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of the abstract class 'CM'.
+    new MC;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of the abstract class 'MC'.
+    new CI;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of the abstract class 'CI'.
+    new IC;
+        ~~
+!!! error TS2304: Cannot find name 'IC'.
+    new CC1;
+    ~~~~~~~
+!!! error TS2511: Cannot create an instance of the abstract class 'CC1'.
+    new CC2;
