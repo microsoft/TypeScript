@@ -674,6 +674,11 @@ namespace ts {
                 !options.experimentalDecorators) {
                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalDecorators_must_also_be_specified_when_option_emitDecoratorMetadata_is_specified));
             }
+            
+            if (options.experimentalAsyncFunctions &&
+                options.target !== ScriptTarget.ES6) {
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
+            }
         }
     }
 }

@@ -1,0 +1,11 @@
+tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts(1,24): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts(1,29): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts (2 errors) ====
+    async function foo(a = await): Promise<void> {
+                           ~~~~~
+!!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
+                                ~
+!!! error TS1109: Expression expected.
+    }

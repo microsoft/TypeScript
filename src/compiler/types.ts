@@ -142,6 +142,8 @@ namespace ts {
         // Contextual keywords
         AsKeyword,
         AnyKeyword,
+        AsyncKeyword,
+        AwaitKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
@@ -208,6 +210,7 @@ namespace ts {
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
+        AwaitExpression,
         PrefixUnaryExpression,
         PostfixUnaryExpression,
         BinaryExpression,
@@ -365,8 +368,9 @@ namespace ts {
         OctalLiteral =      0x00004000,  // Octal numeric literal
         Namespace =         0x00008000,  // Namespace declaration
         ExportContext =     0x00010000,  // Export context (initialized by binding)
+        Async =             0x00020000,  // Property/Method/Function
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -376,37 +380,40 @@ namespace ts {
         None = 0,
 
         // If this node was parsed in a context where 'in-expressions' are not allowed.
-        DisallowIn = 1 << 1,
+        DisallowIn = 1 << 0,
 
         // If this node was parsed in the 'yield' context created when parsing a generator.
-        Yield = 1 << 2,
-
-        // If this node was parsed in the parameters of a generator.
-        GeneratorParameter = 1 << 3,
+        Yield = 1 << 1,
 
         // If this node was parsed as part of a decorator
-        Decorator = 1 << 4,
+        Decorator = 1 << 2,
+
+        // If this node was parsed in the 'await' context created when parsing an async function.
+        Await = 1 << 3,
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.
-        ThisNodeHasError = 1 << 5,
+        ThisNodeHasError = 1 << 4,
 
         // This node was parsed in a JavaScript file and can be processed differently.  For example
         // its type can be specified usign a JSDoc comment.
-        JavaScriptFile = 1 << 6,
+        JavaScriptFile = 1 << 5,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
-
+        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
+        
+        // Exclude these flags when parsing a Type
+        TypeExcludesFlags = Yield | Await,       
+        
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 7,
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 8
+        HasAggregatedChildData = 1 << 7
     }
 
     export const enum JsxFlags {
@@ -723,6 +730,10 @@ namespace ts {
     }
 
     export interface VoidExpression extends UnaryExpression {
+        expression: UnaryExpression;
+    }
+
+    export interface AwaitExpression extends UnaryExpression {
         expression: UnaryExpression;
     }
 
@@ -1658,21 +1669,26 @@ namespace ts {
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
         CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
         EmitExtends                 = 0x00000008,  // Emit __extends
-        SuperInstance               = 0x00000010,  // Instance 'super' reference
-        SuperStatic                 = 0x00000020,  // Static 'super' reference
-        ContextChecked              = 0x00000040,  // Contextual types have been assigned
+        EmitDecorate                = 0x00000010,  // Emit __decorate
+        EmitParam                   = 0x00000020,  // Emit __param helper for decorators
+        EmitAwaiter                 = 0x00000040,  // Emit __awaiter
+        EmitGenerator               = 0x00000080,  // Emit __generator
+        SuperInstance               = 0x00000100,  // Instance 'super' reference
+        SuperStatic                 = 0x00000200,  // Static 'super' reference
+        ContextChecked              = 0x00000400,  // Contextual types have been assigned
+        LexicalArguments            = 0x00000800,
+        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00000080,
-        BlockScopedBindingInLoop    = 0x00000100,
-        EmitDecorate                = 0x00000200,  // Emit __decorate
-        EmitParam                   = 0x00000400,  // Emit __param helper for decorators
-        LexicalModuleMergesWithClass = 0x00000800,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00002000,
+        BlockScopedBindingInLoop    = 0x00004000,
+        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
+        resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
@@ -1944,6 +1960,7 @@ namespace ts {
         watch?: boolean;
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
+        experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
 

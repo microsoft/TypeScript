@@ -106,6 +106,8 @@ namespace ts {
         "while": SyntaxKind.WhileKeyword,
         "with": SyntaxKind.WithKeyword,
         "yield": SyntaxKind.YieldKeyword,
+        "async": SyntaxKind.AsyncKeyword,
+        "await": SyntaxKind.AwaitKeyword,
         "of": SyntaxKind.OfKeyword,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
