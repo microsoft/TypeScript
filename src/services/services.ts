@@ -3024,12 +3024,15 @@ namespace ts {
                         typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
                         existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
                     }
-                    else {
+                    else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
                         // We are *only* completing on properties from the type being destructured.
                         isNewIdentifierLocation = false;
 
                         typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                         existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                    }
+                    else {
+                        Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
                     }
 
                     if (!typeForObject) {
