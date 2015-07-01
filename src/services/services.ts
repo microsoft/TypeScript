@@ -5117,10 +5117,10 @@ namespace ts {
              * a reference to a symbol can occur anywhere.
              */
             function getSymbolScope(symbol: Symbol): Node {
-                // If this is the symbol of a function expression, then named references
-                // are limited to its own scope.
+                // If this is the symbol of a named function expression or named class expression,
+                // then named references are limited to its own scope.
                 let valueDeclaration = symbol.valueDeclaration;
-                if (valueDeclaration && valueDeclaration.kind === SyntaxKind.FunctionExpression) {
+                if (valueDeclaration && (valueDeclaration.kind === SyntaxKind.FunctionExpression || valueDeclaration.kind === SyntaxKind.ClassExpression)) {
                     return valueDeclaration;
                 }
 
