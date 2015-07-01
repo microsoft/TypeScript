@@ -98,7 +98,7 @@ namespace ts {
     const redColorControlChar = "\u001b[31m";
     const resetColorControlChar = "\u001b[0m";
 
-    function reportDiagnosticAllPrettyLike(diagnostic: Diagnostic): void {
+    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic): void {
         let output = "";
 
         if (diagnostic.file) {
@@ -163,7 +163,7 @@ namespace ts {
 
     function reportDiagnostics(diagnostics: Diagnostic[]) {
         for (var i = 0; i < diagnostics.length; i++) {
-            reportDiagnosticAllPrettyLike(diagnostics[i]);
+            reportDiagnosticWithColorAndContext(diagnostics[i]);
         }
     }
 
