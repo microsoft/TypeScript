@@ -3062,20 +3062,17 @@ namespace ts {
                 }
                 else if(jsxContainer) {
                     let attrsType: Type;
-                    if (jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) {
-                        // Cursor is inside a JSX self-closing element
-                        attrsType = typeChecker.getJsxElementAttributesType(<JsxSelfClosingElement>jsxContainer);
-                    }
-                    else if(jsxContainer.kind === SyntaxKind.JsxOpeningElement) {
-                        // Cursor is inside a JSX element
-                        attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningElement>jsxContainer);
-                    }
+                    if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
+                        // Cursor is inside a JSX self-closing element or opening element
+                        attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
 
-                    if (attrsType) {
-                        symbols = typeChecker.getPropertiesOfType(attrsType);
-                        isMemberCompletion = true;
-                        isNewIdentifierLocation = false;
-                        return true;
+                        if (attrsType) {
+                            symbols = filterJsxAttributes((<JsxOpeningLikeElement>jsxContainer).attributes, typeChecker.getPropertiesOfType(attrsType));
+                            isMemberCompletion = true;
+                            isNewIdentifierLocation = false;
+                            return true;
+                        }
+
                     }
                 }
 
@@ -3474,6 +3471,22 @@ namespace ts {
 
                 return filteredMembers;
             }
+        }
+
+        function filterJsxAttributes(attributes: NodeArray<JsxAttribute|JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+            let seenNames: Map<boolean> = {};
+            for(let attr of attributes) {
+                if(attr.kind === SyntaxKind.JsxAttribute) {
+                    seenNames[(<JsxAttribute>attr).name.text] = true;
+                }
+            }
+            let result: Symbol[] = [];
+            for(let sym of symbols) {
+                if(!seenNames[sym.name]) {
+                    result.push(sym);
+                }
+            }
+            return result;
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {

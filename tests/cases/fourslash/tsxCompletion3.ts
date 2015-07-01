@@ -11,3 +11,4 @@
 
 goTo.marker();
 verify.completionListContains('two');
+verify.not.completionListContains('one');
