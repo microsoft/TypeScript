@@ -7244,8 +7244,7 @@ namespace ts {
             let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);;
 
             if (left.kind === SyntaxKind.SuperKeyword) {
-                let errorNode = (<PropertyAccessExpression>node).name ?
-                    (<PropertyAccessExpression>node).name :
+                let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ? (<PropertyAccessExpression>node).name :
                     (<QualifiedName>node).right;
 
                 // TS 1.0 spec (April 2014): 4.8.2
@@ -9978,6 +9977,12 @@ namespace ts {
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionLikeDeclaration(node);
+            
+            // Abstract methods cannot have an implementation.
+            // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
+            if(node.flags & NodeFlags.Abstract && node.body) {
+                error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
+            }
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
@@ -10380,12 +10385,6 @@ namespace ts {
                     if (nodeIsPresent(node.body)) {
                         if (!bodyDeclaration) {
                             bodyDeclaration = node;
-                        }
-
-                        // abstract functions cannot have an implementation.
-                        // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
-                        if (currentNodeFlags & NodeFlags.Abstract && node.kind === SyntaxKind.MethodDeclaration && !isConstructor) {
-                            error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name))
                         }
                     }
                     else {
@@ -14251,8 +14250,9 @@ namespace ts {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
                         else if (flags & NodeFlags.Abstract) {
-                            if (modifier.kind === SyntaxKind.PrivateKeyword) { 
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract")}
+                            if (modifier.kind === SyntaxKind.PrivateKeyword) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract");
+                            }
                             else {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
                             }
