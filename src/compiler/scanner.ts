@@ -21,12 +21,16 @@ namespace ts {
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
+        scanJsxIdentifier(): SyntaxKind;
+        reScanJsxToken(): SyntaxKind;
+        scanJsxToken(): SyntaxKind;
         scan(): SyntaxKind;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
         setText(text: string, start?: number, length?: number): void;
         setOnError(onError: ErrorCallback): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
+        setLanguageVariant(variant: LanguageVariant): void;
         setTextPos(textPos: number): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it 
         // was in immediately prior to invoking the callback.  The result of invoking the callback
@@ -132,6 +136,7 @@ namespace ts {
         "++": SyntaxKind.PlusPlusToken,
         "--": SyntaxKind.MinusMinusToken,
         "<<": SyntaxKind.LessThanLessThanToken,
+        "</": SyntaxKind.LessThanSlashToken,
         ">>": SyntaxKind.GreaterThanGreaterThanToken,
         ">>>": SyntaxKind.GreaterThanGreaterThanGreaterThanToken,
         "&": SyntaxKind.AmpersandToken,
@@ -378,8 +383,31 @@ namespace ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
 
+    export function couldStartTrivia(text: string, pos: number): boolean {
+        // Keep in sync with skipTrivia
+        let ch = text.charCodeAt(pos);
+        switch (ch) {
+            case CharacterCodes.carriageReturn:
+            case CharacterCodes.lineFeed:
+            case CharacterCodes.tab:
+            case CharacterCodes.verticalTab:
+            case CharacterCodes.formFeed:
+            case CharacterCodes.space:
+            case CharacterCodes.slash:
+                // starts of normal trivia
+            case CharacterCodes.lessThan:
+            case CharacterCodes.equals:
+            case CharacterCodes.greaterThan:
+                // Starts of conflict marker trivia
+                return true;
+            default:
+                return ch > CharacterCodes.maxAsciiCharacter;
+        }
+    }
+
     /* @internal */ 
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+        // Keep in sync with couldStartTrivia
         while (true) {
             let ch = text.charCodeAt(pos);
             switch (ch) {
@@ -600,11 +628,12 @@ namespace ts {
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
-
+    
     /* @internal */ 
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
+                                  languageVariant = LanguageVariant.Standard,
                                   text?: string,
                                   onError?: ErrorCallback,
                                   start?: number,
@@ -644,9 +673,13 @@ namespace ts {
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
+            scanJsxIdentifier,
+            reScanJsxToken,
+            scanJsxToken,
             scan,
             setText,
             setScriptTarget,
+            setLanguageVariant,
             setOnError,
             setTextPos,
             tryScan,
@@ -936,7 +969,7 @@ namespace ts {
                 error(Diagnostics.Unexpected_end_of_text);
                 isInvalidExtendedEscape = true;
             }
-            else if (text.charCodeAt(pos) == CharacterCodes.closeBrace) {
+            else if (text.charCodeAt(pos) === CharacterCodes.closeBrace) {
                 // Only swallow the following character up if it's a '}'.
                 pos++;
             }
@@ -1281,6 +1314,9 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                         }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash && languageVariant === LanguageVariant.JSX) {
+                            return pos += 2, token = SyntaxKind.LessThanSlashToken;
+                        }
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
                         if (isConflictMarkerTrivia(text, pos)) {
@@ -1460,6 +1496,62 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue();
         }
 
+        function reScanJsxToken(): SyntaxKind {
+            pos = tokenPos = startPos;
+            return token = scanJsxToken();
+        }
+
+        function scanJsxToken(): SyntaxKind {
+            startPos = tokenPos = pos;
+
+            if (pos >= end) {
+                return token = SyntaxKind.EndOfFileToken;
+            }
+
+            let char = text.charCodeAt(pos);
+            if (char === CharacterCodes.lessThan) {
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    pos += 2;
+                    return token = SyntaxKind.LessThanSlashToken;
+                }
+                pos++;
+                return token = SyntaxKind.LessThanToken;
+            }
+
+            if (char === CharacterCodes.openBrace) {
+                pos++;
+                return token = SyntaxKind.OpenBraceToken;
+            }
+
+            while (pos < end) {
+                pos++;
+                char = text.charCodeAt(pos);
+                if ((char === CharacterCodes.openBrace) || (char === CharacterCodes.lessThan)) {
+                    break;
+                }
+            }
+            return token = SyntaxKind.JsxText;
+        }
+
+        // Scans a JSX identifier; these differ from normal identifiers in that
+        // they allow dashes
+        function scanJsxIdentifier(): SyntaxKind {
+            if (token === SyntaxKind.Identifier) {
+                let firstCharPosition = pos;
+                while (pos < end) {
+                    let ch = text.charCodeAt(pos);
+                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch) : isIdentifierPart(ch))) {
+                        pos++;
+                    } 
+                    else {
+                        break;
+                    }
+                }
+                tokenValue += text.substr(firstCharPosition, pos - firstCharPosition);
+            }
+            return token;
+        }
+        
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             let savePos = pos;
             let saveStartPos = startPos;
@@ -1502,6 +1594,10 @@ namespace ts {
 
         function setScriptTarget(scriptTarget: ScriptTarget) {
             languageVersion = scriptTarget;
+        }
+
+        function setLanguageVariant(variant: LanguageVariant) {
+            languageVariant = variant;
         }
 
         function setTextPos(textPos: number) {

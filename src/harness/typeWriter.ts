@@ -41,7 +41,10 @@ class TypeWriterWalker {
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
 
-        var type = this.checker.getTypeAtLocation(node);
+        // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
+        // var type = this.checker.getTypeAtLocation(node);
+        var type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
+
         ts.Debug.assert(type !== undefined, "type doesn't exist");
         var symbol = this.checker.getSymbolAtLocation(node);
 

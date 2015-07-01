@@ -572,7 +572,7 @@ namespace ts {
     export function getNormalizedPathComponents(path: string, currentDirectory: string) {
         path = normalizeSlashes(path);
         let rootLength = getRootLength(path);
-        if (rootLength == 0) {
+        if (rootLength === 0) {
             // If the path is not rooted it is relative to current directory
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
@@ -702,9 +702,9 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".d.ts"];
+    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js"];
+    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {

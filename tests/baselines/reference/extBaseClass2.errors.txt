@@ -1,4 +1,4 @@
-tests/cases/compiler/extBaseClass2.ts(2,31): error TS2305: Module 'M' has no exported member 'B'.
+tests/cases/compiler/extBaseClass2.ts(2,31): error TS2339: Property 'B' does not exist on type 'typeof M'.
 tests/cases/compiler/extBaseClass2.ts(7,29): error TS2304: Cannot find name 'B'.
 
 
@@ -6,7 +6,7 @@ tests/cases/compiler/extBaseClass2.ts(7,29): error TS2304: Cannot find name 'B'.
     module N {
         export class C4 extends M.B {
                                   ~
-!!! error TS2305: Module 'M' has no exported member 'B'.
+!!! error TS2339: Property 'B' does not exist on type 'typeof M'.
         }
     }
     

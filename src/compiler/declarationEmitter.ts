@@ -40,7 +40,6 @@ namespace ts {
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
-        let languageVersion = compilerOptions.target || ScriptTarget.ES3;
 
         let write: (s: string) => void;
         let writeLine: () => void;
@@ -709,7 +708,12 @@ namespace ts {
         function writeModuleDeclaration(node: ModuleDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            write("module ");
+            if (node.flags & NodeFlags.Namespace) {
+                write("namespace ");
+            }
+            else {
+                write("module ");
+            }
             writeTextOfNode(currentSourceFile, node.name);
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;

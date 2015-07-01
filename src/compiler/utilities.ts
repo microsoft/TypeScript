@@ -42,7 +42,7 @@ namespace ts {
     // Pool writers to avoid needing to allocate them for every symbol we write.
     let stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
+        if (stringWriters.length === 0) {
             let str = "";
 
             let writeText: (text: string) => void = text => str += text;
@@ -169,13 +169,13 @@ namespace ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
     }
 
-    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
+    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
         let text = sourceFile.text;
-        return text.substring(skipTrivia(text, node.pos), node.end);
+        return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -186,8 +186,8 @@ namespace ts {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getTextOfNode(node: Node): string {
-        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
+    export function getTextOfNode(node: Node, includeTrivia = false): string {
+        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -274,7 +274,7 @@ namespace ts {
     }
 
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text, /*onError:*/ undefined, pos);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
         return createTextSpanFromBounds(start, scanner.getTextPos());
@@ -426,7 +426,7 @@ namespace ts {
                 // Specialized signatures can have string literals as their parameters' type names
                 return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return true;
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -460,7 +460,7 @@ namespace ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return true;
+                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
@@ -542,6 +542,7 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                     // These are not allowed inside a generator now, but eventually they may be allowed
                     // as local types. Regardless, any yield statements contained within them should be
                     // skipped in this traversal.
@@ -579,26 +580,15 @@ namespace ts {
                     return true;
             }
         }
-
         return false;
     }
 
     export function isAccessor(node: Node): boolean {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return true;
-            }
-        }
-
-        return false;
+        return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
     export function isClassLike(node: Node): boolean {
-        if (node) {
-            return node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression;
-        }
+        return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
     export function isFunctionLike(node: Node): boolean {
@@ -620,7 +610,6 @@ namespace ts {
                     return true;
             }
         }
-
         return false;
     }
 
@@ -640,7 +629,16 @@ namespace ts {
             }
         }
     }
-    
+
+    export function getContainingClass(node: Node): ClassLikeDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isClassLike(node)) {
+                return <ClassLikeDeclaration>node;
+            }
+        }
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
             node = node.parent;
@@ -653,7 +651,7 @@ namespace ts {
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (isClassLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -708,7 +706,7 @@ namespace ts {
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (isClassLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -770,8 +768,8 @@ namespace ts {
             return (<TaggedTemplateExpression>node).tag;
         }
         
-        // Will either be a CallExpression or NewExpression.
-        return (<CallExpression>node).expression;
+        // Will either be a CallExpression, NewExpression, or Decorator.
+        return (<CallExpression | Decorator>node).expression;
     }
 
     export function nodeCanBeDecorated(node: Node): boolean {
@@ -866,6 +864,7 @@ namespace ts {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
@@ -882,13 +881,14 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
                 }
-
                 return node.parent.kind === SyntaxKind.TypeQuery;
             case SyntaxKind.Identifier:
                 if (node.parent.kind === SyntaxKind.TypeQuery) {
@@ -929,13 +929,16 @@ namespace ts {
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
-                        return node === (<TypeAssertion>parent).expression;
+                    case SyntaxKind.AsExpression:
+                        return node === (<AssertionExpression>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
                         return true;
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1082,7 +1085,7 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    export function isBindingPattern(node: Node) {
+    export function isBindingPattern(node: Node): node is BindingPattern {
         return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
@@ -1102,6 +1105,7 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.Constructor:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
@@ -1250,7 +1254,7 @@ namespace ts {
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
-    export function getClassImplementsHeritageClauseElements(node: ClassDeclaration) {
+    export function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
@@ -1549,6 +1553,11 @@ namespace ts {
         function getReplacement(c: string) {
             return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
+    }
+
+    export function isIntrinsicJsxName(name: string) {
+        let ch = name.substr(0, 1);
+        return ch.toLowerCase() === ch;
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {
@@ -1907,6 +1916,8 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:
@@ -1933,6 +1944,12 @@ namespace ts {
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+        return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
+            (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
+            isClassLike(node.parent.parent);
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
@@ -1966,6 +1983,10 @@ namespace ts {
         return fileExtensionIs(fileName, ".js");
     }
 
+    export function isTsx(fileName: string) {
+        return fileExtensionIs(fileName, ".tsx");
+    }
+
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
@@ -1973,7 +1994,6 @@ namespace ts {
     function getExpandedCharCodes(input: string): number[] {
         let output: number[] = [];
         let length = input.length;
-        let leadSurrogate: number = undefined;
 
         for (let i = 0; i < length; i++) {
             let charCode = input.charCodeAt(i);
@@ -2103,6 +2123,12 @@ namespace ts {
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
         let end = start + length;
         return start <= textSpanEnd(span) && end >= span.start;
+    }
+
+    export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
+        let end1 = start1 + length1;
+        let end2 = start2 + length2;
+        return start2 <= end1 && end2 >= start1;
     }
 
     export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {

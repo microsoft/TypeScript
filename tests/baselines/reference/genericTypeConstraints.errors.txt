@@ -1,9 +1,8 @@
-tests/cases/compiler/genericTypeConstraints.ts(9,27): error TS2344: Type 'FooExtended' does not satisfy the constraint 'Foo'.
-  Property 'fooMethod' is missing in type 'FooExtended'.
 tests/cases/compiler/genericTypeConstraints.ts(9,31): error TS2344: Type 'FooExtended' does not satisfy the constraint 'Foo'.
+  Property 'fooMethod' is missing in type 'FooExtended'.
 
 
-==== tests/cases/compiler/genericTypeConstraints.ts (2 errors) ====
+==== tests/cases/compiler/genericTypeConstraints.ts (1 errors) ====
     class Foo {
         fooMethod() {}
     }
@@ -13,11 +12,9 @@ tests/cases/compiler/genericTypeConstraints.ts(9,31): error TS2344: Type 'FooExt
     class Bar<T extends Foo> { }
     
     class BarExtended extends Bar<FooExtended> {
-                              ~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'FooExtended' does not satisfy the constraint 'Foo'.
-!!! error TS2344:   Property 'fooMethod' is missing in type 'FooExtended'.
                                   ~~~~~~~~~~~
 !!! error TS2344: Type 'FooExtended' does not satisfy the constraint 'Foo'.
+!!! error TS2344:   Property 'fooMethod' is missing in type 'FooExtended'.
         constructor() {
             super();
         }
