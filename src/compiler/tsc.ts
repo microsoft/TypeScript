@@ -116,23 +116,21 @@ namespace ts {
 
                 output += lineContent + sys.newLine;
                 
+                output += redColorControlChar;
                 if (i === 0) {
                     let lastCharForLine = i === indexOfLastLine ? lastLineChar : undefined;
 
                     output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                    output += redColorControlChar;
                     output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
-                    output += resetColorControlChar;
                 }
                 else if (i === indexOfLastLine) {
-                    output += redColorControlChar;
                     output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
-                    output += resetColorControlChar;
                     // Don't bother "filling" at the end.
                 }
                 else {
-                    output += lineContent.replace(/^(\s*)(.*)$/, replaceLineWithRedSquiggles);
+                    output += lineContent.replace(/./g, "~");
                 }
+                output += resetColorControlChar;
 
                 output += sys.newLine;
             }
@@ -145,10 +143,6 @@ namespace ts {
         output += sys.newLine + sys.newLine;
 
         sys.write(output);
-    }
-
-    function replaceLineWithRedSquiggles(orig: string, leadingWhitespace: string, content: string): string {
-        return leadingWhitespace + redColorControlChar + content.replace(/./g, "~") + resetColorControlChar;
     }
 
     /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
