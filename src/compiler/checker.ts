@@ -3306,6 +3306,15 @@ namespace ts {
             return getSignaturesOfObjectOrUnionType(getApparentType(type), kind);
         }
 
+        function typeHasConstructSignatures(type: Type): boolean {
+            let apparentType = getApparentType(type);
+            if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Union)) {
+                let resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
+                return resolved.constructSignatures.length > 0;
+            }
+            return false;
+        }
+
         function typeHasCallOrConstructSignatures(type: Type): boolean {
             let apparentType = getApparentType(type);
             if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Union)) {
@@ -13207,15 +13216,53 @@ namespace ts {
 
             return undefined;
         }
+
+        function isFunctionType(type: Type): boolean {
+            return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
+        }
         
-        function isTypeReferenceWithValueDeclaration(node: TypeReferenceNode): boolean {
+        function isTypeWithValue(node: TypeReferenceNode): TypeWithValueResolutionResult {
+            // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             let symbol = resolveEntityName(node.typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
-            if (symbol.valueDeclaration) {
-                let type = getTypeOfSymbol(symbol);
-                return typeHasCallOrConstructSignatures(type);
+            let constructorType = symbol ? getTypeOfSymbol(symbol) : undefined;
+            if (constructorType && isConstructorType(constructorType)) {
+                return TypeWithValueResolutionResult.ConstructorTypeWithValue;
             }
-            
-            return false;
+
+            let type = getTypeFromTypeNode(node);
+            if (type === unknownType) {
+                return TypeWithValueResolutionResult.Unknown;
+            }
+            else if (type.flags & TypeFlags.Any) {
+                return TypeWithValueResolutionResult.ObjectType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.Void)) {
+                return TypeWithValueResolutionResult.VoidType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.Boolean)) {
+                return TypeWithValueResolutionResult.BooleanType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.NumberLike)) {
+                return TypeWithValueResolutionResult.NumberType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.StringLike)) {
+                return TypeWithValueResolutionResult.StringType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.Tuple)) {
+                return TypeWithValueResolutionResult.ArrayType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.ESSymbol)) {
+                return TypeWithValueResolutionResult.ESSymbolType;
+            }
+            else if (isFunctionType(type)) {
+                return TypeWithValueResolutionResult.FunctionType;
+            }
+            else if (isArrayType(type)) {
+                return TypeWithValueResolutionResult.ArrayType;
+            }
+            else {
+                return TypeWithValueResolutionResult.ObjectType;
+            }
         }
 
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
@@ -13315,7 +13362,7 @@ namespace ts {
                 collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
-                isTypeReferenceWithValueDeclaration,
+                isTypeWithValue,
             };
         }
 

@@ -4710,13 +4710,59 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
                 let typeName = node.typeName;
-                if (resolver.isTypeReferenceWithValueDeclaration(node)) {
-                    emitEntityNameAsExpression(typeName, /*useFallback*/ false);
-                }
-                else {
-                    write("(");
-                    emitEntityNameAsExpression(typeName, /*useFallback*/ true);
-                    write(") || Object");
+                let result = resolver.isTypeWithValue(node);
+                switch (result) {
+                    case TypeWithValueResolutionResult.Unknown:
+                        let temp = createAndRecordTempVariable(TempFlags.Auto);
+                        write("(typeof (");
+                        emitNodeWithoutSourceMap(temp);
+                        write(" = ")
+                        emitEntityNameAsExpression(typeName, /*useFallback*/ true);
+                        write(") === 'function' && ");
+                        emitNodeWithoutSourceMap(temp);
+                        write(") || Object");
+                        break;
+
+                    case TypeWithValueResolutionResult.ConstructorTypeWithValue:
+                        emitEntityNameAsExpression(typeName, /*useFallback*/ false);
+                        break;
+                        
+                    case TypeWithValueResolutionResult.VoidType:
+                        write("void 0");
+                        break;
+                        
+                    case TypeWithValueResolutionResult.BooleanType:
+                        write("Boolean");
+                        break;
+                        
+                    case TypeWithValueResolutionResult.NumberType:
+                        write("Number");
+                        break;
+                        
+                    case TypeWithValueResolutionResult.StringType:
+                        write("String");
+                        break;
+                        
+                    case TypeWithValueResolutionResult.ArrayType:
+                        write("Array");
+                        break;
+                        
+                    case TypeWithValueResolutionResult.ESSymbolType:
+                        if (languageVersion < ScriptTarget.ES6) {
+                            write("typeof Symbol === 'function' ? Symbol : Object");
+                        }
+                        else {
+                            write("Symbol");
+                        }
+                        break;
+                        
+                    case TypeWithValueResolutionResult.FunctionType:
+                        write("Function");
+                        break;
+                        
+                    case TypeWithValueResolutionResult.ObjectType:
+                        write("Object");
+                        break;
                 }
             }
             
@@ -5927,6 +5973,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 Debug.assert(!exportFunctionForFile);
                 // make sure that  name of 'exports' function does not conflict with existing identifiers
                 exportFunctionForFile = makeUniqueName("exports");
+                writeLine();
                 write("System.register(");
                 if (node.moduleName) {
                     write(`"${node.moduleName}", `);

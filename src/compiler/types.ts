@@ -1501,6 +1501,20 @@ namespace ts {
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string // If the symbol is not visible from module, module's name
     }
+    
+    /* @internal */
+    export enum TypeWithValueResolutionResult {
+        Unknown,
+        ConstructorTypeWithValue,
+        VoidType,
+        NumberType,
+        StringType,
+        BooleanType,
+        ArrayType,
+        ESSymbolType,
+        FunctionType,
+        ObjectType,
+    }
 
     /* @internal */
     export interface EmitResolver {
@@ -1525,7 +1539,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        isTypeReferenceWithValueDeclaration(node: TypeReferenceNode): boolean; 
+        isTypeWithValue(node: TypeReferenceNode): TypeWithValueResolutionResult; 
     }
 
     export const enum SymbolFlags {
