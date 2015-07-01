@@ -746,6 +746,22 @@ namespace ts {
             }
         }
     }
+    
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
+        if (node) {            
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return (<TypeReferenceNode>node).typeName;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return (<ExpressionWithTypeArguments>node).expression
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return (<EntityName><Node>node);
+            }
+        }
+
+        return undefined;
+    }
 
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
@@ -1321,6 +1337,10 @@ namespace ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isAsyncFunctionLike(node: Node): boolean {
+        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
+    }
+
     /**
      * A declaration has a dynamic name if both of the following are true:
      *   1. The declaration has a computed property name
@@ -1372,6 +1392,7 @@ namespace ts {
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.AsyncKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.DefaultKeyword:
@@ -1885,6 +1906,7 @@ namespace ts {
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
             case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
         }
         return 0;
     }
@@ -1949,7 +1971,7 @@ namespace ts {
             return false;
         }
     }
-
+    
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
         return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
