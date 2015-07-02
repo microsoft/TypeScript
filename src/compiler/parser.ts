@@ -1979,8 +1979,8 @@ namespace ts {
         function parseParameter(): ParameterDeclaration {
             let node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             node.decorators = parseDecorators();
-            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             setModifiers(node, parseModifiers());
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
