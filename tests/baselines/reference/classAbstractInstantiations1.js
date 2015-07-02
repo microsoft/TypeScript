@@ -7,6 +7,7 @@ class B extends A {}
 abstract class C extends B {}
 
 new A;
+new A(1); // should report 1 error
 new B;
 new C;
 
@@ -45,6 +46,7 @@ var C = (function (_super) {
     return C;
 })(B);
 new A;
+new A(1); // should report 1 error
 new B;
 new C;
 var a;
