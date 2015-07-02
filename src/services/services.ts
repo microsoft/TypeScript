@@ -3359,7 +3359,6 @@ namespace ts {
 
                         case SyntaxKind.DotDotDotToken:
                             return containingNodeKind === SyntaxKind.Parameter ||
-                                containingNodeKind === SyntaxKind.Constructor ||
                                 (previousToken.parent && previousToken.parent.parent &&
                                     previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
 
