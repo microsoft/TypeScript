@@ -3011,6 +3011,7 @@ namespace ts {
 
             function tryGetGlobalSymbols(): boolean {
                 let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
+                let jsxContainer = tryGetContainingJsxElement(contextToken);
                 if (objectLikeContainer) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -3061,30 +3062,19 @@ namespace ts {
                     }
                     return true;
                 }
-                else if (getAncestor(contextToken, SyntaxKind.JsxElement) || getAncestor(contextToken, SyntaxKind.JsxSelfClosingElement)) {
-                    // Go up until we hit either the element or expression
-                    let jsxNode = contextToken;
+                else if(jsxContainer) {
+                    let attrsType: Type;
+                    if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
+                        // Cursor is inside a JSX self-closing element or opening element
+                        attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
 
-                    while (jsxNode) {
-                        if (jsxNode.kind === SyntaxKind.JsxExpression) {
-                            // Defer to global completion if we're inside an {expression}
-                            break;
-                        } else if (jsxNode.kind === SyntaxKind.JsxSelfClosingElement || jsxNode.kind === SyntaxKind.JsxElement) {
-                            let attrsType: Type;
-                            if (jsxNode.kind === SyntaxKind.JsxSelfClosingElement) {
-                                // Cursor is inside a JSX self-closing element
-                                attrsType = typeChecker.getJsxElementAttributesType(<JsxSelfClosingElement>jsxNode);
-                            }
-                            else {
-                                Debug.assert(jsxNode.kind === SyntaxKind.JsxElement);
-                                // Cursor is inside a JSX element
-                                attrsType = typeChecker.getJsxElementAttributesType((<JsxElement>jsxNode).openingElement);
-                            }
-                            symbols = typeChecker.getPropertiesOfType(attrsType);
+                        if (attrsType) {
+                            symbols = filterJsxAttributes((<JsxOpeningLikeElement>jsxContainer).attributes, typeChecker.getPropertiesOfType(attrsType));
                             isMemberCompletion = true;
+                            isNewIdentifierLocation = false;
                             return true;
                         }
-                        jsxNode = jsxNode.parent;
+
                     }
                 }
 
@@ -3267,6 +3257,36 @@ namespace ts {
                     }
                 }
 
+                return undefined;
+            }
+
+            function tryGetContainingJsxElement(contextToken: Node): JsxOpeningLikeElement {
+                if (contextToken) {
+                    let parent = contextToken.parent;
+                    switch(contextToken.kind) {
+                        case SyntaxKind.LessThanSlashToken:
+                        case SyntaxKind.SlashToken:
+                        case SyntaxKind.Identifier:
+                            if(parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
+                                return <JsxOpeningLikeElement>parent;
+                            }
+                            break;
+
+                        case SyntaxKind.CloseBraceToken:
+                            // The context token is the closing } of an attribute, which means
+                            // its parent is a JsxExpression, whose parent is a JsxAttribute,
+                            // whose parent is a JsxOpeningLikeElement
+                            if(parent &&
+                                parent.kind === SyntaxKind.JsxExpression && 
+                                parent.parent && 
+                                parent.parent.kind === SyntaxKind.JsxAttribute) {
+
+                                return <JsxOpeningLikeElement>parent.parent.parent;
+                            }
+
+                            break;
+                    }
+                }
                 return undefined;
             }
 
@@ -3453,6 +3473,22 @@ namespace ts {
 
                 return filteredMembers;
             }
+        }
+
+        function filterJsxAttributes(attributes: NodeArray<JsxAttribute|JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+            let seenNames: Map<boolean> = {};
+            for(let attr of attributes) {
+                if(attr.kind === SyntaxKind.JsxAttribute) {
+                    seenNames[(<JsxAttribute>attr).name.text] = true;
+                }
+            }
+            let result: Symbol[] = [];
+            for(let sym of symbols) {
+                if(!seenNames[sym.name]) {
+                    result.push(sym);
+                }
+            }
+            return result;
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
