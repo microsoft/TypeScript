@@ -8456,6 +8456,7 @@ namespace ts {
             let valueDecl = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
+                return resolveErrorCall(node);
             }
 
             // TS 1.0 spec: 4.11
