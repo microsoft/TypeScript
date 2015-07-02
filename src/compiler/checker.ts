@@ -12686,10 +12686,7 @@ namespace ts {
                             // we will add the symbol into the table using its declared name
                             let name = (<FunctionExpression|ClassExpression>location).name;
                             if (name) {
-                                let symbol = location.symbol;
-                                if (symbol.flags & meaning && !hasProperty(symbols, name.text)) {
-                                    symbols[name.text] = symbol;
-                                }
+                                copySymbol(location.symbol, meaning, name.text);
                             }
                             break;
                     }
@@ -12701,11 +12698,18 @@ namespace ts {
                 copySymbols(globals, meaning);
             }
 
-            // Returns 'true' if we should stop processing symbols.
-            function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
+            /**
+             * Copy the given symbol into symbol tables if the symbol has the given meaning
+             * and it doesn't already existed in the symbol table
+             *
+             * @param symbol the symbol to be added into symbol table
+             * @param meaning meaning of symbol to filter by before adding to symbol table
+             * @param key a key for storing in symbol table; if null, use symbol.name
+             */
+            function copySymbol(symbol: Symbol, meaning: SymbolFlags, key?: string): void {
                 if (symbol.flags & meaning) {
-                    let id = symbol.name;
-                    if (!isReservedMemberName(id) && !hasProperty(symbols, id)) {
+                    let id = key || symbol.name;
+                    if (!hasProperty(symbols, id)) {
                         symbols[id] = symbol;
                     }
                 }
@@ -12714,9 +12718,7 @@ namespace ts {
             function copySymbols(source: SymbolTable, meaning: SymbolFlags): void {
                 if (meaning) {
                     for (let id in source) {
-                        if (hasProperty(source, id)) {
-                            copySymbol(source[id], meaning);
-                        }
+                        copySymbol(source[id], meaning);
                     }
                 }
             }
