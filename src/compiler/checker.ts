@@ -12034,6 +12034,12 @@ namespace ts {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
             checkClassLikeDeclaration(node);
+
+            // Interfaces cannot be merged with non-ambient classes.
+            if (getSymbolOfNode(node).flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
+                error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface)
+            }
+
             forEach(node.members, checkSourceElement);
         }
 
@@ -12306,6 +12312,16 @@ namespace ts {
                         checkIndexConstraints(type);
                     }
                 }
+
+                // Interfaces cannot merge with non-ambient classes.
+                if (symbol && symbol.declarations) {
+                    for (let declaration of symbol.declarations) {
+                        if (declaration.kind === SyntaxKind.ClassDeclaration && !isInAmbientContext(declaration)) {
+                            error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
+                            break;
+                        }
+                    }
+                }
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
                 if (!isSupportedExpressionWithTypeArguments(heritageElement)) {
@@ -12313,6 +12329,7 @@ namespace ts {
                 }
                 checkTypeReferenceNode(heritageElement);
             });
+
             forEach(node.members, checkSourceElement);
 
             if (produceDiagnostics) {
