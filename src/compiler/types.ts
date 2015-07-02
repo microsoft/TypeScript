@@ -48,6 +48,7 @@ namespace ts {
         SemicolonToken,
         CommaToken,
         LessThanToken,
+        LessThanSlashToken,
         GreaterThanToken,
         LessThanEqualsToken,
         GreaterThanEqualsToken,
@@ -139,8 +140,11 @@ namespace ts {
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AbstractKeyword,
         AsKeyword,
         AnyKeyword,
+        AsyncKeyword,
+        AwaitKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
@@ -207,6 +211,7 @@ namespace ts {
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
+        AwaitExpression,
         PrefixUnaryExpression,
         PostfixUnaryExpression,
         BinaryExpression,
@@ -217,6 +222,8 @@ namespace ts {
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
+        AsExpression,
+
         // Misc
         TemplateSpan,
         SemicolonClassElement,
@@ -264,6 +271,16 @@ namespace ts {
 
         // Module references
         ExternalModuleReference,
+
+        //JSX
+        JsxElement,
+        JsxSelfClosingElement,
+        JsxOpeningElement,
+        JsxText,
+        JsxClosingElement,
+        JsxAttribute,
+        JsxSpreadAttribute,
+        JsxExpression,
 
         // Clauses
         CaseClause,
@@ -343,17 +360,19 @@ namespace ts {
         Private =           0x00000020,  // Property/Method
         Protected =         0x00000040,  // Property/Method
         Static =            0x00000080,  // Property/Method
-        Default =           0x00000100,  // Function/Class (export default declaration)
-        MultiLine =         0x00000200,  // Multi-line array or object literal
-        Synthetic =         0x00000400,  // Synthetic node (for full fidelity)
-        DeclarationFile =   0x00000800,  // Node is a .d.ts file
-        Let =               0x00001000,  // Variable declaration
-        Const =             0x00002000,  // Variable declaration
-        OctalLiteral =      0x00004000,  // Octal numeric literal
-        Namespace =         0x00008000,  // Namespace declaration
-        ExportContext =     0x00010000,  // Export context (initialized by binding)
+        Abstract =          0x00000100,  // Class/Method/ConstructSignature
+        Async =             0x00000200,  // Property/Method/Function
+        Default =           0x00000400,  // Function/Class (export default declaration)
+        MultiLine =         0x00000800,  // Multi-line array or object literal
+        Synthetic =         0x00001000,  // Synthetic node (for full fidelity)
+        DeclarationFile =   0x00002000,  // Node is a .d.ts file
+        Let =               0x00004000,  // Variable declaration
+        Const =             0x00008000,  // Variable declaration
+        OctalLiteral =      0x00010000,  // Octal numeric literal
+        Namespace =         0x00020000,  // Namespace declaration
+        ExportContext =     0x00040000,  // Export context (initialized by binding)
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -363,38 +382,52 @@ namespace ts {
         None = 0,
 
         // If this node was parsed in a context where 'in-expressions' are not allowed.
-        DisallowIn = 1 << 1,
+        DisallowIn = 1 << 0,
 
         // If this node was parsed in the 'yield' context created when parsing a generator.
-        Yield = 1 << 2,
-
-        // If this node was parsed in the parameters of a generator.
-        GeneratorParameter = 1 << 3,
+        Yield = 1 << 1,
 
         // If this node was parsed as part of a decorator
-        Decorator = 1 << 4,
+        Decorator = 1 << 2,
+
+        // If this node was parsed in the 'await' context created when parsing an async function.
+        Await = 1 << 3,
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.
-        ThisNodeHasError = 1 << 5,
+        ThisNodeHasError = 1 << 4,
 
         // This node was parsed in a JavaScript file and can be processed differently.  For example
         // its type can be specified usign a JSDoc comment.
-        JavaScriptFile = 1 << 6,
+        JavaScriptFile = 1 << 5,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
-
+        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
+        
+        // Exclude these flags when parsing a Type
+        TypeExcludesFlags = Yield | Await,       
+        
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 7,
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 8
+        HasAggregatedChildData = 1 << 7
     }
+
+    export const enum JsxFlags {
+        None = 0,
+        IntrinsicNamedElement = 1 << 0,
+        IntrinsicIndexedElement = 1 << 1,
+        ClassElement = 1 << 2,
+        UnknownElement = 1 << 3,
+
+        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement
+    }
+
 
     /* @internal */
     export const enum RelationComparisonResult {
@@ -702,6 +735,10 @@ namespace ts {
         expression: UnaryExpression;
     }
 
+    export interface AwaitExpression extends UnaryExpression {
+        expression: UnaryExpression;
+    }
+
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
         expression?: Expression;
@@ -797,12 +834,65 @@ namespace ts {
         template: LiteralExpression | TemplateExpression;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
+
+    export interface AsExpression extends Expression {
+        expression: Expression;
+        type: TypeNode;
+    }
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
         expression: UnaryExpression;
     }
+
+    export type AssertionExpression = TypeAssertion | AsExpression;
+
+    /// A JSX expression of the form <TagName attrs>...</TagName>
+    export interface JsxElement extends PrimaryExpression {
+        openingElement: JsxOpeningElement;
+        children: NodeArray<JsxChild>;
+        closingElement: JsxClosingElement;
+    }
+
+    /// The opening element of a <Tag>...</Tag> JsxElement
+    export interface JsxOpeningElement extends Expression {
+        _openingElementBrand?: any;
+        tagName: EntityName;
+        attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
+    }
+
+    /// A JSX expression of the form <TagName attrs />
+    export interface JsxSelfClosingElement extends PrimaryExpression, JsxOpeningElement {
+        _selfClosingElementBrand?: any;
+    }
+
+    /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
+    export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+
+    export interface JsxAttribute extends Node {
+        name: Identifier;
+        /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
+        initializer?: Expression;
+    }
+
+    export interface JsxSpreadAttribute extends Node {
+        expression: Expression;
+    }
+
+    export interface JsxClosingElement extends Node {
+        tagName: EntityName;
+    }
+
+    export interface JsxExpression extends Expression {
+        expression?: Expression;
+    }
+
+    export interface JsxText extends Node {
+        _jsxTextExpressionBrand: any;
+    }
+
+    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
     export interface Statement extends Node {
         _statementBrand: any;
@@ -1144,6 +1234,7 @@ namespace ts {
         amdDependencies: {path: string; name: string}[];
         moduleName: string;
         referencedFiles: FileReference[];
+        languageVariant: LanguageVariant;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1212,11 +1303,11 @@ namespace ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
 
-        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getOptionsDiagnostics(): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1322,6 +1413,9 @@ namespace ts {
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+
+        getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
+        getJsxIntrinsicTagNames(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1577,21 +1671,26 @@ namespace ts {
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
         CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
         EmitExtends                 = 0x00000008,  // Emit __extends
-        SuperInstance               = 0x00000010,  // Instance 'super' reference
-        SuperStatic                 = 0x00000020,  // Static 'super' reference
-        ContextChecked              = 0x00000040,  // Contextual types have been assigned
+        EmitDecorate                = 0x00000010,  // Emit __decorate
+        EmitParam                   = 0x00000020,  // Emit __param helper for decorators
+        EmitAwaiter                 = 0x00000040,  // Emit __awaiter
+        EmitGenerator               = 0x00000080,  // Emit __generator
+        SuperInstance               = 0x00000100,  // Instance 'super' reference
+        SuperStatic                 = 0x00000200,  // Static 'super' reference
+        ContextChecked              = 0x00000400,  // Contextual types have been assigned
+        LexicalArguments            = 0x00000800,
+        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00000080,
-        BlockScopedBindingInLoop    = 0x00000100,
-        EmitDecorate                = 0x00000200,  // Emit __decorate
-        EmitParam                   = 0x00000400,  // Emit __param helper for decorators
-        LexicalModuleMergesWithClass = 0x00000800,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00002000,
+        BlockScopedBindingInLoop    = 0x00004000,
+        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
+        resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
@@ -1603,6 +1702,8 @@ namespace ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
+        jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
+        resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
     }
 
     export const enum TypeFlags {
@@ -1834,6 +1935,7 @@ namespace ts {
         help?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
+        jsx?: JsxEmit;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1860,6 +1962,7 @@ namespace ts {
         watch?: boolean;
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
+        experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
 
@@ -1877,11 +1980,17 @@ namespace ts {
         System = 4,
     }
 
+    export const enum JsxEmit {
+        None = 0,
+        Preserve = 1,
+        React = 2
+    }
+
     export const enum NewLineKind {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-	
+
     export interface LineAndCharacter {
         line: number;
         /*
@@ -1895,6 +2004,11 @@ namespace ts {
         ES5 = 1,
         ES6 = 2,
         Latest = ES6,
+    }
+
+    export const enum LanguageVariant {
+        Standard,
+        JSX
     }
 
     export interface ParsedCommandLine {

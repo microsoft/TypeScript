@@ -50,6 +50,7 @@ var strOrNum: string | number;
 function isC1(x: any): x is C1 {
 >isC1 : Symbol(isC1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 17, 30))
 >x : Symbol(x, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 20, 14))
+>x : Symbol(x, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 20, 14))
 >C1 : Symbol(C1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 0, 0))
 
     return true;
@@ -58,6 +59,7 @@ function isC1(x: any): x is C1 {
 function isC2(x: any): x is C2 {
 >isC2 : Symbol(isC2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 22, 1))
 >x : Symbol(x, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 24, 14))
+>x : Symbol(x, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 24, 14))
 >C2 : Symbol(C2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 5, 1))
 
     return true;
@@ -65,6 +67,7 @@ function isC2(x: any): x is C2 {
 
 function isD1(x: any): x is D1 {
 >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 26, 1))
+>x : Symbol(x, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 28, 14))
 >x : Symbol(x, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 28, 14))
 >D1 : Symbol(D1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 10, 1))
 

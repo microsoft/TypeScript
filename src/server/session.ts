@@ -1,6 +1,5 @@
 /// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
-/// <reference path="node.d.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
 
@@ -61,7 +60,7 @@ namespace ts.server {
         };
     }
 
-    interface PendingErrorCheck {
+    export interface PendingErrorCheck {
         fileName: string;
         project: Project;
     }
@@ -114,11 +113,16 @@ namespace ts.server {
         pendingOperation = false;
         fileHash: ts.Map<number> = {};
         nextFileId = 1;
-        errorTimer: NodeJS.Timer;
+        errorTimer: any; /*NodeJS.Timer | number*/
         immediateId: any;
         changeSeq = 0;
 
-        constructor(private host: ServerHost, private logger: Logger) {
+        constructor(
+            private host: ServerHost, 
+            private byteLength: (buf: string, encoding?: string) => number, 
+            private hrtime: (start?: number[]) => number[], 
+            private logger: Logger
+        ) {
             this.projectService =
                 new ProjectService(host, logger, (eventName,project,fileName) => {
                 this.handleEvent(eventName, project, fileName);
@@ -149,17 +153,17 @@ namespace ts.server {
             this.host.write(line + this.host.newLine);
         }
 
-        send(msg: NodeJS._debugger.Message) {
+        send(msg: protocol.Message) {
             var json = JSON.stringify(msg);
             if (this.logger.isVerbose()) {
                 this.logger.info(msg.type + ": " + json);
             }
-            this.sendLineToClient('Content-Length: ' + (1 + Buffer.byteLength(json, 'utf8')) +
+            this.sendLineToClient('Content-Length: ' + (1 + this.byteLength(json, 'utf8')) +
                 '\r\n\r\n' + json);
         }
 
         event(info: any, eventName: string) {
-            var ev: NodeJS._debugger.Event = {
+            var ev: protocol.Event = {
                 seq: 0,
                 type: "event",
                 event: eventName,
@@ -838,7 +842,7 @@ namespace ts.server {
         onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
-                var start = process.hrtime();                
+                var start = this.hrtime();                
             }
             try {
                 var request = <protocol.Request>JSON.parse(message);
@@ -980,7 +984,7 @@ namespace ts.server {
                 }
 
                 if (this.logger.isVerbose()) {
-                    var elapsed = process.hrtime(start);
+                    var elapsed = this.hrtime(start);
                     var seconds = elapsed[0]
                     var nanoseconds = elapsed[1];
                     var elapsedMs = ((1e9 * seconds) + nanoseconds)/1000000.0;

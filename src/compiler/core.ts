@@ -2,17 +2,19 @@
 
 /* @internal */
 namespace ts {
-    // Ternary values are defined such that
-    // x & y is False if either x or y is False.
-    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-    // x & y is True if both x and y are True.
-    // x | y is False if both x and y are False.
-    // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-    // x | y is True if either x or y is True.
+    /**
+     * Ternary values are defined such that
+     * x & y is False if either x or y is False.
+     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+     * x & y is True if both x and y are True.
+     * x | y is False if both x and y are False.
+     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+     * x | y is True if either x or y is True.
+     */
     export const enum Ternary {
         False = 0,
         Maybe = 1,
-        True  = -1
+        True = -1
     }
 
     export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
@@ -59,6 +61,11 @@ namespace ts {
 
     export interface StringSet extends Map<any> { }
 
+    /**
+     * Iterates through 'array' by index and performs the callback on each element of array until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, the callback is applied to each element of array and undefined is returned.
+     */
     export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
@@ -702,9 +709,9 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".d.ts"];
+    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js"];
+    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
