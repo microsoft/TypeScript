@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/classDeclarations/file1.ts(11,7): error TS2511: Only an ambient class can be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/file1.ts(13,11): error TS2511: Only an ambient class can be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/file1.ts(15,11): error TS2511: Only an ambient class can be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/file1.ts(17,7): error TS2511: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/file1.ts(11,7): error TS2518: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/file1.ts(13,11): error TS2518: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/file1.ts(15,11): error TS2518: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/file1.ts(17,7): error TS2518: Only an ambient class can be merged with an interface.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/file1.ts (4 errors) ====
@@ -17,19 +17,19 @@ tests/cases/conformance/classes/classDeclarations/file1.ts(17,7): error TS2511: 
     
     class C3 { } // error -- cannot merge non-ambient class and interface
           ~~
-!!! error TS2511: Only an ambient class can be merged with an interface.
+!!! error TS2518: Only an ambient class can be merged with an interface.
     
     interface C3 { } // error -- cannot merge non-ambient class and interface
               ~~
-!!! error TS2511: Only an ambient class can be merged with an interface.
+!!! error TS2518: Only an ambient class can be merged with an interface.
     
     interface C4 { } // error -- cannot merge non-ambient class and interface
               ~~
-!!! error TS2511: Only an ambient class can be merged with an interface.
+!!! error TS2518: Only an ambient class can be merged with an interface.
     
     class C4 { } // error -- cannot merge non-ambient class and interface
           ~~
-!!! error TS2511: Only an ambient class can be merged with an interface.
+!!! error TS2518: Only an ambient class can be merged with an interface.
     
     interface C5 {
         x1: number;
