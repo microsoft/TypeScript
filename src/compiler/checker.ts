@@ -4872,10 +4872,21 @@ namespace ts {
                     return Ternary.False;
                 }
 
-                let t = getReturnTypeOfSignature(target);
-                if (t === voidType) return result;
-                let s = getReturnTypeOfSignature(source);
-                return result & isRelatedTo(s, t, reportErrors);
+                let targetReturnType = getReturnTypeOfSignature(target);
+                if (targetReturnType === voidType) return result;
+                let sourceReturnType = getReturnTypeOfSignature(source);
+                
+                let targetReturnDecl = targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                let sourceReturnDecl = sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
+                
+                if(sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract && (!targetReturnDecl || !(targetReturnDecl.flags & NodeFlags.Abstract))) {
+                    if(reportErrors) {
+                        reportError(Diagnostics.Constructor_objects_of_abstract_type_cannot_be_assigned_to_constructor_objects_of_non_abstract_type);
+                    }
+                    return Ternary.False;
+                }
+                
+                return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
             }
 
             function signaturesIdenticalTo(source: ObjectType, target: ObjectType, kind: SignatureKind): Ternary {
