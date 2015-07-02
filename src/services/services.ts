@@ -7387,8 +7387,8 @@ namespace ts {
                 }
                 let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
                 proto.kind = kind;
-                proto.pos = 0;
-                proto.end = 0;
+                proto.pos = -1;
+                proto.end = -1;
                 proto.flags = 0;
                 proto.parent = undefined;
                 Node.prototype = proto;
