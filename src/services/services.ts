@@ -2902,23 +2902,30 @@ namespace ts {
             let jsx = options.jsx !== JsxEmit.None;
             let target = options.target;
 
-            // Find the node where completion is requested on, in the case of a completion after 
-            // a dot, it is the member access expression other wise, it is a request for all 
-            // visible symbols in the scope, and the node is the current location.
+            // Find the node where completion is requested on.
+            // Also determine whether we are trying to complete with members of that node
+            // or attributes of a JSX tag.
             let node = currentToken;
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
 
             let location = getTouchingPropertyName(sourceFile, position);
-            if(contextToken) {
-                let kind = contextToken.kind;
-                if (kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                    node = (<PropertyAccessExpression>contextToken.parent).expression;
-                    isRightOfDot = true;
-                }
-                else if (kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
-                    node = (<QualifiedName>contextToken.parent).left;
-                    isRightOfDot = true;
+            if (contextToken) {
+                let { parent, kind } = contextToken;
+                if (kind === SyntaxKind.DotToken) {
+                    if (parent.kind === SyntaxKind.PropertyAccessExpression) {
+                        node = (<PropertyAccessExpression>contextToken.parent).expression;
+                        isRightOfDot = true;
+                    }
+                    else if (parent.kind === SyntaxKind.QualifiedName) {
+                        node = (<QualifiedName>contextToken.parent).left;
+                        isRightOfDot = true;
+                    }
+                    else {
+                        // There is nothing that precedes the dot, so this likely just a stray character
+                        // or leading into a '...' token. Just bail out instead.
+                        return undefined;
+                    }
                 }
                 else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
                     isRightOfOpenTag = true;
