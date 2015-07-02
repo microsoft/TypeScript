@@ -1868,7 +1868,7 @@ namespace ts {
                     newSourceFile.nameTable = undefined;
 
                     // dispose all resources held by old script snapshot
-                    if (sourceFile.scriptSnapshot) {
+                    if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
                         if (sourceFile.scriptSnapshot.dispose) {
                             sourceFile.scriptSnapshot.dispose();
                         }
