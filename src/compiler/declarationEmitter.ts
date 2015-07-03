@@ -594,6 +594,9 @@ namespace ts {
             if (node.flags & NodeFlags.Static) {
                 write("static ");
             }
+            if (node.flags & NodeFlags.Abstract) {
+                write("abstract ");
+            }
         }
 
         function writeImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -918,6 +921,10 @@ namespace ts {
 
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
+            if (node.flags & NodeFlags.Abstract) {
+                write("abstract ");
+            }
+
             write("class ");
             writeTextOfNode(currentSourceFile, node.name);
             let prevEnclosingDeclaration = enclosingDeclaration;

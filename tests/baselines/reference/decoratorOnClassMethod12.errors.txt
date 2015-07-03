@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts(6,10): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts(6,10): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
 
 
 ==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts (1 errors) ====
@@ -9,7 +9,7 @@ tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts(6,10
         class C extends S {
             @super.decorator
              ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
             method() { }
         }
     }
