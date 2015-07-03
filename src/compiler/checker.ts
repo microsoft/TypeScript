@@ -4486,9 +4486,9 @@ namespace ts {
                         }
                     }
                     else {
-                        // A check of the form A | B = C & D can be satisfied either by having C be related to A | B,
-                        // D be related to A | B, C & D be related to A, or C & D be related to B. Thus, we need to
-                        // check both sides here.
+                        // It is necessary to try "each" checks on both sides because there may be nested "some" checks
+                        // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
+                        // A & B = (A & B) | (C & D).
                         if (source.flags & TypeFlags.Intersection) {
                             // If target is a union type the following check will report errors so we suppress them here
                             if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
