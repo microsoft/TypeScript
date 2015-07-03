@@ -167,6 +167,23 @@ interface ObjectConstructor {
       *  property.
       */
     defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
+
+    /**
+     * The Object.observe() method is used for asynchronously observing the changes to 
+     * an object. It provides a stream of changes in the order in which they occur.
+     * @param {any}      o        [The object to be observed]
+     * @param {Function} callback [callback is called each time a change is made to obj, 
+     * with an array of all changes in the order in which they occurred.]
+     *
+     * example:
+     * var obj = { foo: 1, bar: 1}
+     *
+     * Object.observe(obj, function(changes) {
+     *   console.log(changes)
+     * })
+     * 
+     */
+    observe(o: any, callback: Function): any;
 }
 
 interface Function {
