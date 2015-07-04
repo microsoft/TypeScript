@@ -1632,15 +1632,15 @@ namespace ts {
         }
 
 
-        function visitNode(node: Node, errorNode: Declaration): void {
+        function visitNode(node: Node): void {
             switch (node.kind) {
                 // import/export aliases
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration> node, errorNode);
+                    return visitExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration> node, errorNode);
+                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment> node, errorNode);
+                    return visitExportAssignment(<ExportAssignment>node);
 
                 // declarations
                 case SyntaxKind.FunctionDeclaration:
@@ -1657,16 +1657,16 @@ namespace ts {
                 //    return emitAccessorDeclaration(<AccessorDeclaration>node);
 
                 case SyntaxKind.TypeParameter:
-                    return visitNode((<TypeParameterDeclaration>node).constraint, <TypeParameterDeclaration>node);
+                    return visitNode((<TypeParameterDeclaration>node).constraint);
 
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
-                        visitNodes((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses, <InterfaceDeclaration|ClassDeclaration>node);
+                        visitNodes((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses);
 
                 case SyntaxKind.TypeAliasDeclaration:
                     return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
-                        visitNode((<TypeAliasDeclaration>node).type, <TypeAliasDeclaration>node);
+                        visitNode((<TypeAliasDeclaration>node).type);
 
                 case SyntaxKind.VariableStatement:
                     return visitNodes((<VariableStatement>node).declarationList.declarations);
@@ -1688,52 +1688,54 @@ namespace ts {
                     return;
 
                 case SyntaxKind.TypePredicate:
-                    return visitNode((<TypePredicateNode>node).type, errorNode);
+                    return visitNode((<TypePredicateNode>node).type);
                 case SyntaxKind.ArrayType:
-                    return visitNode((<ArrayTypeNode>node).elementType, errorNode);
+                    return visitNode((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TupleType:
-                    return visitNodes((<TupleTypeNode>node).elementTypes, errorNode);
+                    return visitNodes((<TupleTypeNode>node).elementTypes);
                 case SyntaxKind.UnionType:
-                    return visitNodes((<UnionTypeNode>node).types, errorNode);
+                    return visitNodes((<UnionTypeNode>node).types);
                 case SyntaxKind.ParenthesizedType:
-                    return visitNode((<ParenthesizedTypeNode>node).type, errorNode);
+                    return visitNode((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return visitSignatureDeclaration(<FunctionOrConstructorTypeNode>node);
                 case SyntaxKind.TypeLiteral:
-                    return visitNodes((<TypeLiteralNode>node).members, errorNode);
+                    return visitNodes((<TypeLiteralNode>node).members);
                 //case SyntaxKind.ExpressionWithTypeArguments:
                 //    return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
-                    return visitTypeName((<TypeQueryNode>node).exprName, errorNode);
+                    return visitNode((<TypeQueryNode>node).exprName);
                 case SyntaxKind.TypeReference:
-                    return visitTypeName((<TypeReferenceNode>node).typeName, errorNode) ||
-                        visitNodes((<TypeReferenceNode>node).typeArguments, errorNode);
-                case SyntaxKind.Identifier:
+                    return visitNode((<TypeReferenceNode>node).typeName) ||
+                        visitNodes((<TypeReferenceNode>node).typeArguments);
                 case SyntaxKind.QualifiedName:
-                    return visitTypeName(<Identifier|QualifiedName>node, errorNode);
+                    return visitNode((<QualifiedName>node).left) ||
+                        visitNode((<QualifiedName>node).right);
+                case SyntaxKind.Identifier:
+                    return visitTypeName(<Identifier|QualifiedName>node);
             }
         }
 
-        function visitNodes(nodes: NodeArray<any>, errorNode?: Declaration): void {
-            forEach(nodes, n => visitNode(n, errorNode));
+        function visitNodes(nodes: NodeArray<any>): void {
+            forEach(nodes, visitNode);
         }
 
-        function visitExportDeclaration(node: ExportDeclaration, errorNode: Declaration): void {
+        function visitExportDeclaration(node: ExportDeclaration): void {
             if (!node.moduleSpecifier) {
-                forEach(node.exportClause.elements, e => collectAliasDeclaration(e, errorNode));
+                forEach(node.exportClause.elements, collectAliasDeclaration);
             }
         }
 
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration, errorNode: Declaration): void {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): void {
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
-                collectAliasDeclaration(node, errorNode);
+                collectAliasDeclaration(node);
             }
         }
 
-        function visitExportAssignment(node: ExportAssignment, errorNode: Declaration): void {
+        function visitExportAssignment(node: ExportAssignment): void {
             if (node.expression.kind === SyntaxKind.Identifier) {
-                collectAliasDeclaration(node, errorNode);
+                collectAliasDeclaration(node);
             }
         }
 
@@ -1746,7 +1748,7 @@ namespace ts {
             visitNodes(node.parameters);
 
             if (node.type) {
-                visitNode(node.type, node);
+                visitNode(node.type);
             }
             else if (node.kind !== SyntaxKind.Constructor) {
                 // TODO: handel infered type
@@ -1759,23 +1761,23 @@ namespace ts {
             }
 
             if (node.type) {
-                visitNode(node.type, node);
+                visitNode(node.type);
             }
             else {
                 // TODO: handel infered type
             }
         }
 
-        function visitTypeName(node: Identifier|QualifiedName, errorNode: Declaration): void {
+        function visitTypeName(node: Identifier|QualifiedName): void {
             let symbol = resolver.getSymbolAtLocation(node);
             Debug.assert(!!symbol);
-            collectDeclarations(symbol, errorNode);
+            collectDeclarations(symbol, node);
         }
 
-        function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment, errorNode: Declaration) {
+        function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment) {
             let target = resolver.getLocalTargetOfAliasDeclaration(node);
             Debug.assert(!!target);
-            collectDeclarations(target, errorNode);
+            collectDeclarations(target, node);
         }
 
         function isDeclarationVisible(node: Node): boolean {
@@ -1808,6 +1810,10 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration:
                     // TODO: handel ambient context
                     return (node.flags & NodeFlags.Export) !== 0;
+
+                case SyntaxKind.VariableDeclaration:
+                    // TODO: do we need this
+                    return (node.parent.parent.flags & NodeFlags.Export) !== 0;
             }
 
             return false;
@@ -1850,7 +1856,7 @@ namespace ts {
             return undefined;
         }
 
-        function collectDeclarations(symbol: Symbol, errorNode: Declaration): void {
+        function collectDeclarations(symbol: Symbol, errorNode: Node): void {
             forEach(symbol.declarations, d => collectDeclaration(d, errorNode));
         }
 
@@ -1871,95 +1877,117 @@ namespace ts {
             return hasScopeAlteringExport
         }
 
-        function reportDeclarationAccessiblityMessage(errorNode: Declaration, referencedDeclaration: Declaration): void {
+        // TODO: remove this and update error messages to not use names
+        function getNameText(node: ParameterDeclaration|PropertyDeclaration|VariableDeclaration):string {
+            if (node.name.kind === SyntaxKind.Identifier) {
+                return (<Identifier>node.name).text;
+            }
+            return "__bindingpattern";
+        }
+
+        function reportDeclarationAccessiblityMessage(referencedDeclaration: Declaration, errorNode: Node): void {
             Debug.assert(referencedDeclaration.name && referencedDeclaration.name.kind === SyntaxKind.Identifier);
             let referencedDeclarationName = (<Identifier>referencedDeclaration.name).text;
-            switch (errorNode.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<ClassDeclaration>errorNode),
-                        Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.InterfaceDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<InterfaceDeclaration>errorNode),
-                        Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.VariableDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<VariableDeclaration>errorNode).type,
-                        Diagnostics.Exported_variable_0_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.PropertySignature:
-                    diagnostics.push(createDiagnosticForNode((<PropertyDeclaration>errorNode).type,
-                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.PropertyDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<PropertyDeclaration>errorNode).type,
-                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.VariableDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<VariableDeclaration>errorNode).type,
-                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.GetAccessor:
-                    diagnostics.push(createDiagnosticForNode((<AccessorDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.ConstructSignature:
-                    diagnostics.push(createDiagnosticForNode((<SignatureDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.CallSignature:
-                    diagnostics.push(createDiagnosticForNode((<SignatureDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.IndexSignature:
-                    diagnostics.push(createDiagnosticForNode((<SignatureDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.MethodDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<MethodDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.MethodSignature:
-                    diagnostics.push(createDiagnosticForNode((<SignatureDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.FunctionDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<FunctionDeclaration>errorNode).type,
-                        Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.Parameter:
-                    diagnostics.push(createDiagnosticForNode((<ParameterDeclaration>errorNode).type,
-                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.TypeAliasDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<TypeAliasDeclaration>errorNode).type,
-                        Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.ExportAssignment:
-                    diagnostics.push(createDiagnosticForNode((<ExportAssignment>errorNode).expression,
-                        Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0, referencedDeclarationName));
-                    break;
-                case SyntaxKind.TypeParameter:
-                    diagnostics.push(createDiagnosticForNode((<TypeParameterDeclaration>errorNode).constraint,
-                        Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1, referencedDeclarationName));
-                    break;
-                case SyntaxKind.ImportEqualsDeclaration:
-                    diagnostics.push(createDiagnosticForNode((<ImportEqualsDeclaration>errorNode).moduleReference,
-                        Diagnostics.Import_declaration_0_is_using_private_name_1, referencedDeclarationName));
-                    break;
+
+
+            referencedDeclarationName = "---" + referencedDeclarationName +"---";
+            let container = errorNode.parent;
+            while (true) {
+                switch (container.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
+                            (<ClassDeclaration>container).name.text, referencedDeclarationName));
+                        return;
+                    case SyntaxKind.InterfaceDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1,
+                            (<InterfaceDeclaration>container).name.text, referencedDeclarationName));
+                        return;
+                    case SyntaxKind.VariableDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Exported_variable_0_has_or_is_using_private_name_1,
+                            getNameText(<VariableDeclaration>container), referencedDeclarationName));
+                        return;
+                    case SyntaxKind.PropertySignature:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1,
+                            getNameText(<PropertyDeclaration>container), referencedDeclarationName));
+                        return;
+                    case SyntaxKind.PropertyDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1,
+                            getNameText(<PropertyDeclaration>container), referencedDeclarationName));
+                        return;
+                    case SyntaxKind.Parameter:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1,
+                            getNameText(<ParameterDeclaration>container), referencedDeclarationName));
+                        return;
+                    case SyntaxKind.GetAccessor:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.ConstructSignature:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.CallSignature:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.IndexSignature:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.MethodDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.MethodSignature:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.FunctionDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.TypeAliasDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
+                            (<TypeAliasDeclaration>container).name.text, referencedDeclarationName));
+                        return;
+                    case SyntaxKind.ExportAssignment:
+                        diagnostics.push(createDiagnosticForNode((<ExportAssignment>errorNode).expression,
+                            Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+                            referencedDeclarationName));
+                        return;
+                    case SyntaxKind.TypeParameter:
+                        diagnostics.push(createDiagnosticForNode((<TypeParameterDeclaration>errorNode).constraint,
+                            Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1,
+                            (<TypeParameterDeclaration>container).name.text, referencedDeclarationName));
+                        return;
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        diagnostics.push(createDiagnosticForNode((<ImportEqualsDeclaration>errorNode).moduleReference,
+                            Diagnostics.Import_declaration_0_is_using_private_name_1,
+                            (<ImportEqualsDeclaration>container).name.text, referencedDeclarationName));
+                        return;
+                }
+                container = container.parent;
             }
         }
 
-        function collectDeclaration(node: Node, errorNode?:Declaration): void {
+        function collectDeclaration(node: Node, errorNode?:Node): void {
             let links = getNodeLinks(node);
             if (!links.visited) {
                 links.visited = true;
-
-                if (errorNode) {
-                    if (!isDeclarationAccessible(node)) {
-                        reportDeclarationAccessiblityMessage(errorNode, <Declaration>node);
-                    }
-                }
 
                 // Make the declaration visble by attaching it to its
                 // parent's visible declarations.
@@ -1971,7 +1999,13 @@ namespace ts {
                     attachVisibleChild(parent, node);
                 }
 
-                visitNode(node, <Declaration>node);
+                visitNode(node);
+            }
+
+            if (errorNode) {
+                if (!isDeclarationAccessible(node)) {
+                    reportDeclarationAccessiblityMessage(<Declaration>node, errorNode);
+                }
             }
 
             // Collect children as well
