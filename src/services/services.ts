@@ -3240,15 +3240,13 @@ namespace ts {
                     isMemberCompletion = true;
                     isNewIdentifierLocation = false;
 
-                    let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
-                    Debug.assert(importDeclaration !== undefined);
+                    let importDeclaration = <ImportDeclaration>importClause.parent;
+                    Debug.assert(importDeclaration !== undefined && importDeclaration.kind === SyntaxKind.ImportDeclaration);
 
                     let exports: Symbol[];
-                    if (importDeclaration.moduleSpecifier) {
-                        let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                        if (moduleSpecifierSymbol) {
-                            exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
-                        }
+                    let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                    if (moduleSpecifierSymbol) {
+                        exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
                     }
 
                     //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
