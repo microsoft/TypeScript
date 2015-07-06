@@ -1618,7 +1618,6 @@ namespace ts {
     export class OperationCanceledException { }
 
     export class CancellationTokenObject {
-
         public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
         constructor(private cancellationToken: CancellationToken) {
@@ -6064,6 +6063,26 @@ namespace ts {
             return convertClassifications(getEncodedSemanticClassifications(fileName, span));
         }
 
+        function checkForClassificationCancellation(kind: SyntaxKind) {
+            // We don't want to actually call back into our host on every node to find out if we've
+            // been canceled.  That would be an enormous amount of chattyness, along with the all
+            // the overhead of marshalling the data to/from the host.  So instead we pick a few
+            // reasonable node kinds to bother checking on.  These node kinds represent high level
+            // constructs that we would expect to see commonly, but just at a far less frequent 
+            // interval.
+            //
+            // For example, in checker.ts (around 750k) we only have around 600 of these constructs.
+            // That means we're calling back into the host around every 1.2k of the file we process.
+            // Lib.d.ts has similar numbers.
+            switch (kind) {
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    cancellationToken.throwIfCancellationRequested();
+            }
+        }
+
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             synchronizeHostData();
 
@@ -6131,7 +6150,10 @@ namespace ts {
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
                 if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
-                    if (node.kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
+                    let kind = node.kind;
+                    checkForClassificationCancellation(kind);
+
+                    if (kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
                         let identifier = <Identifier>node;
 
                         // Only bother calling into the typechecker if this is an identifier that
@@ -6498,6 +6520,8 @@ namespace ts {
 
                 // Ignore nodes that don't intersect the original span to classify.
                 if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
+                    checkForClassificationCancellation(element.kind);
+
                     let children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         let child = children[i];
