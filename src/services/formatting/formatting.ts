@@ -424,12 +424,6 @@ namespace ts.formatting {
                     : parentDynamicIndentation.getIndentation();
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
-            //else {
-            //    let containingList = SmartIndenter.getContainingList(<Node>node, sourceFile);
-            //    if (containingList) {
-            //        containingList;
-            //    }
-            //}
 
             return {
                 indentation,
@@ -651,7 +645,13 @@ namespace ts.formatting {
                 }
 
                 if (fullCallOrNewExpressionIndentationInheritance) {
-                    inheritedIndentation = childIndentation.indentation;
+                    let ancesterExpression = (<CallExpression | NewExpression>node).expression;
+                    let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
+                    let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(child.end).line;
+
+                    if (ancesterExpressionEnd.line !== precedingArgumentEnd) {
+                        inheritedIndentation = childIndentation.indentation;
+                    }
                 }
 
                 return inheritedIndentation;
