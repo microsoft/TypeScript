@@ -3010,59 +3010,21 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
-                let jsxContainer = tryGetContainingJsxElement(contextToken);
-                if (objectLikeContainer) {
-                    // Object literal expression, look up possible property names from contextual type
-                    isMemberCompletion = true;
-                    isNewIdentifierLocation = true;
+                let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
+                let importClause: ImportClause;
+                let jsxContainer: JsxOpeningLikeElement;
 
-                    let typeForObject: Type;
-                    let existingMembers: Declaration[];
-
-                    if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                        typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
-                        existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
-                    }
-                    else {
-                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                        existingMembers = (<BindingPattern>objectLikeContainer).elements;
-                    }
-
-                    if (!typeForObject) {
-                        return false;
-                    }
-
-                    let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
-                    if (typeMembers && typeMembers.length > 0) {
-                        // Add filtered items to the completion list
-                        symbols = filterObjectMembersList(typeMembers, existingMembers);
-                    }
-                    return true;
+                if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
+                    return tryGetObjectLikeCompletionSymbols(objectLikeContainer);
                 }
-                else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
-                    // cursor is in import clause
+
+                if (importClause = <ImportClause>getAncestor(contextToken, SyntaxKind.ImportClause)) {
+                    // cursor is in an import clause
                     // try to show exported member for imported module
-                    isMemberCompletion = true;
-                    isNewIdentifierLocation = true;
-                    if (showCompletionsInImportsClause(contextToken)) {
-                        let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
-                        Debug.assert(importDeclaration !== undefined);
-
-                        let exports: Symbol[];
-                        if (importDeclaration.moduleSpecifier) {
-                            let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                            if (moduleSpecifierSymbol) {
-                                exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
-                            }
-                        }
-
-                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
-                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
-                    }
-                    return true;
+                    return tryGetImportClauseCompletionSymbols(importClause);
                 }
-                else if (jsxContainer) {
+
+                if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
                     let attrsType: Type;
                     if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                         // Cursor is inside a JSX self-closing element or opening element
@@ -3144,7 +3106,7 @@ namespace ts {
                 return result;
             }
 
-            function showCompletionsInImportsClause(node: Node): boolean {
+            function shouldShowCompletionsInImportsClause(node: Node): boolean {
                 if (node) {
                     // import {| 
                     // import {a,|
@@ -3240,6 +3202,58 @@ namespace ts {
                 }
 
                 return false;
+            }
+
+            function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | BindingPattern): boolean {
+                // Object literal expression, look up possible property names from contextual type
+                isMemberCompletion = true;
+                isNewIdentifierLocation = true;
+
+                let typeForObject: Type;
+                let existingMembers: Declaration[];
+
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                    typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                    existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
+                }
+                else {
+                    typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                    existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                }
+
+                if (!typeForObject) {
+                    return false;
+                }
+
+                let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                if (typeMembers && typeMembers.length > 0) {
+                    // Add filtered items to the completion list
+                    symbols = filterObjectMembersList(typeMembers, existingMembers);
+                }
+                return true;
+            }
+
+            function tryGetImportClauseCompletionSymbols(importClause: ImportClause): boolean {
+                // cursor is in import clause
+                // try to show exported member for imported module
+                isMemberCompletion = true;
+                isNewIdentifierLocation = true;
+                if (shouldShowCompletionsInImportsClause(contextToken)) {
+                    let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
+                    Debug.assert(importDeclaration !== undefined);
+
+                    let exports: Symbol[];
+                    if (importDeclaration.moduleSpecifier) {
+                        let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                        if (moduleSpecifierSymbol) {
+                            exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
+                        }
+                    }
+
+                    //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                    symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
+                }
+                return true;
             }
 
             /**
