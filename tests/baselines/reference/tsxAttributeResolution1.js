@@ -4,6 +4,7 @@ declare module JSX {
 	interface IntrinsicElements {
 		test1: Attribs1;
 		test2: { reqd: string };
+		var: { var: string };
 	}
 }
 interface Attribs1 {
@@ -24,12 +25,13 @@ interface Attribs1 {
 <test1 y={0} />; // Error, no property "y"
 <test1 y="foo" />; // Error, no property "y"
 <test1 x="32" />; // Error, "32" is not number
-// TODO attribute 'var' should be parseable
-// <test1 var="10" />; // Error, no 'var' property
+<test1 var="10" />; // Error, no 'var' property
 
 <test2 />; // Error, missing reqd
 <test2 reqd={10} />; // Error, reqd is not string
 
+// Should be OK
+<var var='var' />;
 
 
 //// [tsxAttributeResolution1.jsx]
@@ -44,7 +46,8 @@ interface Attribs1 {
 <test1 y={0}/>; // Error, no property "y"
 <test1 y="foo"/>; // Error, no property "y"
 <test1 x="32"/>; // Error, "32" is not number
-// TODO attribute 'var' should be parseable
-// <test1 var="10" />; // Error, no 'var' property
+<test1 var="10"/>; // Error, no 'var' property
 <test2 />; // Error, missing reqd
 <test2 reqd={10}/>; // Error, reqd is not string
+// Should be OK
+<var var='var'/>;
