@@ -1618,7 +1618,6 @@ namespace ts {
     export class OperationCanceledException { }
 
     export class CancellationTokenObject {
-
         public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
         constructor(private cancellationToken: CancellationToken) {
