@@ -191,6 +191,7 @@ namespace ts {
         ArrayType,
         TupleType,
         UnionType,
+        IntersectionType,
         ParenthesizedType,
         // Binding patterns
         ObjectBindingPattern,
@@ -667,9 +668,13 @@ namespace ts {
         elementTypes: NodeArray<TypeNode>;
     }
 
-    export interface UnionTypeNode extends TypeNode {
+    export interface UnionOrIntersectionTypeNode extends TypeNode {
         types: NodeArray<TypeNode>;
     }
+
+    export interface UnionTypeNode extends UnionOrIntersectionTypeNode { }
+
+    export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode { }
 
     export interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
@@ -1285,6 +1290,15 @@ namespace ts {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
+    export class OperationCanceledException { }
+
+    export interface CancellationToken {
+        isCancellationRequested(): boolean;
+   
+        /** @throws OperationCanceledException if isCancellationRequested is true */
+        throwIfCancellationRequested(): void;
+    }
+
     export interface Program extends ScriptReferenceHost {
         /**
          * Get a list of files in the program
@@ -1301,13 +1315,13 @@ namespace ts {
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
 
-        getOptionsDiagnostics(): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
-        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1418,9 +1432,9 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
-        /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
-        /* @internal */ getEmitResolver(sourceFile?: SourceFile): EmitResolver;
+        /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -1573,7 +1587,7 @@ namespace ts {
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
         Prototype               = 0x08000000,  // Prototype property (no source representation)
-        UnionProperty           = 0x10000000,  // Property in union type
+        SyntheticProperty       = 0x10000000,  // Property in union or intersection type
         Optional                = 0x20000000,  // Optional property
         ExportStar              = 0x40000000,  // Export * declaration
 
@@ -1652,7 +1666,7 @@ namespace ts {
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        unionType?: UnionType;              // Containing union type for union property
+        containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
@@ -1721,17 +1735,18 @@ namespace ts {
         Interface               = 0x00000800,  // Interface
         Reference               = 0x00001000,  // Generic type reference
         Tuple                   = 0x00002000,  // Tuple
-        Union                   = 0x00004000,  // Union
-        Anonymous               = 0x00008000,  // Anonymous
-        Instantiated            = 0x00010000,  // Instantiated anonymous type
+        Union                   = 0x00004000,  // Union (T | U)
+        Intersection            = 0x00008000,  // Intersection (T & U)
+        Anonymous               = 0x00010000,  // Anonymous
+        Instantiated            = 0x00020000,  // Instantiated anonymous type
         /* @internal */
-        FromSignature           = 0x00020000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00040000,  // Originates in an object literal
+        FromSignature           = 0x00040000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00080000,  // Originates in an object literal
         /* @internal */
-        ContainsUndefinedOrNull = 0x00080000,  // Type is or contains Undefined or Null type
+        ContainsUndefinedOrNull = 0x00100000,  // Type is or contains Undefined or Null type
         /* @internal */
-        ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
-        ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
+        ContainsObjectLiteral   = 0x00200000,  // Type is or contains object literal type
+        ESSymbol                = 0x00400000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1740,6 +1755,8 @@ namespace ts {
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        UnionOrIntersection = Union | Intersection,
+        StructuredType = ObjectType | Union | Intersection,
         /* @internal */ 
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
@@ -1799,7 +1816,7 @@ namespace ts {
         baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
     }
 
-    export interface UnionType extends Type {
+    export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
         reducedType: Type;                // Reduced union type (all subtypes removed)
@@ -1807,9 +1824,13 @@ namespace ts {
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
+    export interface UnionType extends UnionOrIntersectionType { }
+
+    export interface IntersectionType extends UnionOrIntersectionType { }
+
     /* @internal */
-    // Resolved object or union type
-    export interface ResolvedType extends ObjectType, UnionType {
+    // Resolved object, union, or intersection type
+    export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
@@ -2166,14 +2187,9 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
-    export interface CancellationToken {
-        isCancellationRequested(): boolean;
-    }
-
     export interface CompilerHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFileName(options: CompilerOptions): string;
-        getCancellationToken? (): CancellationToken;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;

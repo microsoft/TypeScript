@@ -115,7 +115,8 @@ namespace ts {
             case SyntaxKind.TupleType:
                 return visitNodes(cbNodes, (<TupleTypeNode>node).elementTypes);
             case SyntaxKind.UnionType:
-                return visitNodes(cbNodes, (<UnionTypeNode>node).types);
+            case SyntaxKind.IntersectionType:
+                return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
                 return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
             case SyntaxKind.ObjectBindingPattern:
@@ -1979,8 +1980,8 @@ namespace ts {
         function parseParameter(): ParameterDeclaration {
             let node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             node.decorators = parseDecorators();
-            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             setModifiers(node, parseModifiers());
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
@@ -2401,20 +2402,28 @@ namespace ts {
             return type;
         }
 
-        function parseUnionTypeOrHigher(): TypeNode {
-            let type = parseArrayTypeOrHigher();
-            if (token === SyntaxKind.BarToken) {
+        function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
+            let type = parseConstituentType();
+            if (token === operator) {
                 let types = <NodeArray<TypeNode>>[type];
                 types.pos = type.pos;
-                while (parseOptional(SyntaxKind.BarToken)) {
-                    types.push(parseArrayTypeOrHigher());
+                while (parseOptional(operator)) {
+                    types.push(parseConstituentType());
                 }
                 types.end = getNodeEnd();
-                let node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
+                let node = <UnionOrIntersectionTypeNode>createNode(kind, type.pos);
                 node.types = types;
                 type = finishNode(node);
             }
             return type;
+        }
+
+        function parseIntersectionTypeOrHigher(): TypeNode {
+            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseArrayTypeOrHigher, SyntaxKind.AmpersandToken);
+        }
+
+        function parseUnionTypeOrHigher(): TypeNode {
+            return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
         }
 
         function isStartOfFunctionType(): boolean {
