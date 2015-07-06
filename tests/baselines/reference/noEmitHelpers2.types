@@ -1,17 +1,17 @@
 === tests/cases/compiler/noEmitHelpers2.ts ===
 
-function decorator() { }
->decorator : () => void
+declare var decorator: any;
+>decorator : any
 
 @decorator
->decorator : () => void
+>decorator : any
 
 class A {
 >A : A
 
     constructor(a: number, @decorator b: string) {
 >a : number
->decorator : () => void
+>decorator : any
 >b : string
     }
 }

@@ -103,7 +103,7 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-});
+}).concat(servicesSources);
 
 var languageServiceLibrarySources = [
     "editorServices.ts",
@@ -715,3 +715,9 @@ task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function
     });
     ex.run();
 }, { async: true });
+
+desc("Updates the sublime plugin's tsserver");
+task("update-sublime", [serverFile], function() {
+    jake.cpR(serverFile, "../TypeScript-Sublime-Plugin/tsserver/");
+    jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
+});

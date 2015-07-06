@@ -24,6 +24,10 @@ function hasMissingIsKeyword(): x {
     return true;
 }
 
+function hasMissingParameter(): x is A {
+    return true;
+}
+
 function hasMissingTypeInTypeGuardType(x): x is {
     return true;
 }
@@ -135,6 +139,12 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
     return true;
 }
 
+// Should not crash the compiler
+var x: A;
+if (hasMissingParameter()) {
+    x.propA;
+}
+
 //// [typeGuardFunctionErrors.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -165,6 +175,9 @@ function hasTypeGuardTypeInsideTypeGuardType(x) {
     return true;
 }
 function hasMissingIsKeyword() {
+    return true;
+}
+function hasMissingParameter() {
     return true;
 }
 return true;
@@ -259,4 +272,9 @@ function b6(_a, p2, p3) {
 function b7(_a, p2, p3) {
     var a = _a.a, b = _a.b, p1 = _a.c.p1;
     return true;
+}
+// Should not crash the compiler
+var x;
+if (hasMissingParameter()) {
+    x.propA;
 }
