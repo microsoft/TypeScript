@@ -313,6 +313,13 @@ namespace ts {
                 if (e instanceof OperationCanceledException) {
                     // We were canceled while performing the operation.  Because our type checker 
                     // might be a bad state, we need to throw it away.
+                    //
+                    // Note: we are overly agressive here.  We do not actually *have* to throw away
+                    // the "noDiagnosticsTypeChecker".  However, for simplicity, i'd like to keep
+                    // the lifetimes of these two TypeCheckers the same.  Also, we generally only
+                    // cancel when the user has made a change anyways.  And, in that case, we (the
+                    // program instance) will get thrown away anyways.  So trying to keep one of 
+                    // these type checkers alive doesn't serve much purpose.
                     noDiagnosticsTypeChecker = undefined;
                     diagnosticsProducingTypeChecker = undefined;
                 }
