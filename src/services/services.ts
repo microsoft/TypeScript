@@ -3142,11 +3142,11 @@ namespace ts {
                 return scope;
             }
 
-            function isCompletionListBlocker(previousToken: Node): boolean {
+            function isCompletionListBlocker(contextToken: Node): boolean {
                 let start = new Date().getTime();
-                let result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
-                    isIdentifierDefinitionLocation(previousToken) ||
-                    isRightOfIllegalDot(previousToken);
+                let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
+                    isIdentifierDefinitionLocation(contextToken) ||
+                    isRightOfIllegalDot(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
@@ -3225,12 +3225,12 @@ namespace ts {
                 return false;
             }
 
-            function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
-                if (previousToken.kind === SyntaxKind.StringLiteral
-                    || previousToken.kind === SyntaxKind.RegularExpressionLiteral
-                    || isTemplateLiteralKind(previousToken.kind)) {
-                    let start = previousToken.getStart();
-                    let end = previousToken.getEnd();
+            function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.StringLiteral
+                    || contextToken.kind === SyntaxKind.RegularExpressionLiteral
+                    || isTemplateLiteralKind(contextToken.kind)) {
+                    let start = contextToken.getStart();
+                    let end = contextToken.getEnd();
 
                     // To be "in" one of these literals, the position has to be:
                     //   1. entirely within the token text.
@@ -3241,8 +3241,8 @@ namespace ts {
                     }
 
                     if (position === end) {
-                        return !!(<LiteralExpression>previousToken).isUnterminated ||
-                            previousToken.kind === SyntaxKind.RegularExpressionLiteral;
+                        return !!(<LiteralExpression>contextToken).isUnterminated ||
+                            contextToken.kind === SyntaxKind.RegularExpressionLiteral;
                     }
                 }
 
@@ -3316,10 +3316,10 @@ namespace ts {
                 return false;
             }
 
-            function isIdentifierDefinitionLocation(previousToken: Node): boolean {
-                if (previousToken) {
-                    let containingNodeKind = previousToken.parent.kind;
-                    switch (previousToken.kind) {
+            function isIdentifierDefinitionLocation(contextToken: Node): boolean {
+                if (contextToken) {
+                    let containingNodeKind = contextToken.parent.kind;
+                    switch (contextToken.kind) {
                         case SyntaxKind.CommaToken:
                             return containingNodeKind === SyntaxKind.VariableDeclaration ||
                                 containingNodeKind === SyntaxKind.VariableDeclarationList ||
@@ -3351,9 +3351,9 @@ namespace ts {
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
-                                previousToken.parent && previousToken.parent.parent &&
-                                (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                    previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
+                                contextToken.parent && contextToken.parent.parent &&
+                                (contextToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
+                                    contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
 
                         case SyntaxKind.LessThanToken:
                             return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
@@ -3366,8 +3366,8 @@ namespace ts {
 
                         case SyntaxKind.DotDotDotToken:
                             return containingNodeKind === SyntaxKind.Parameter ||
-                                (previousToken.parent && previousToken.parent.parent &&
-                                    previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
+                                (contextToken.parent && contextToken.parent.parent &&
+                                    contextToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
@@ -3390,7 +3390,7 @@ namespace ts {
                     }
 
                     // Previous token may have been a keyword that was converted to an identifier.
-                    switch (previousToken.getText()) {
+                    switch (contextToken.getText()) {
                         case "class":
                         case "interface":
                         case "enum":
@@ -3407,9 +3407,9 @@ namespace ts {
                 return false;
             }
 
-            function isRightOfIllegalDot(previousToken: Node): boolean {
-                if (previousToken && previousToken.kind === SyntaxKind.NumericLiteral) {
-                    let text = previousToken.getFullText();
+            function isRightOfIllegalDot(contextToken: Node): boolean {
+                if (contextToken && contextToken.kind === SyntaxKind.NumericLiteral) {
+                    let text = contextToken.getFullText();
                     return text.charAt(text.length - 1) === ".";
                 }
 
