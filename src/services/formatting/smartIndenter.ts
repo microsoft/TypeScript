@@ -129,8 +129,8 @@ namespace ts.formatting {
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
-                    // TODO: get previous line actual indentation when in call expression which is in multi-line
-                    actualIndentation = getPrecedingArgumentIndentationInMultiLineExpression(position, current, currentStart, first, sourceFile, options);
+
+                    actualIndentation = getPrecedingArgumentIndentationInMultiLineExpression(position, current, first, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation;
                     }
@@ -192,6 +192,7 @@ namespace ts.formatting {
             // actual indentation is used for statements\declarations if one of cases below is true:
             // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
             // - parent and child are not on the same line
+            // additionally, actual indentation is used for arguments in a call/new expression
             let useActualIndentation =
                 (isDeclaration(current) || isStatement(current) ||
                     parent.kind === SyntaxKind.CallExpression ||
@@ -380,7 +381,6 @@ namespace ts.formatting {
         function getPrecedingArgumentIndentationInMultiLineExpression(
             position: number,
             node: Node,
-            currentLineAndChar: LineAndCharacter,
             firstNodeInPosition: Node,
             sourceFile: SourceFile,
             options: EditorOptions) {
@@ -388,27 +388,27 @@ namespace ts.formatting {
             if (position === Value.Unknown || node !== firstNodeInPosition) {
                 return Value.Unknown;
             }
-
-            // get previous line actual indentation when in call expression which is in multi-line
+            
             if (node.kind === SyntaxKind.CallExpression ||
                 node.kind === SyntaxKind.NewExpression) {
 
                 let arguments = (<CallExpression | NewExpression>node).arguments;
                 if (!arguments.length) {
+                    // do nothing when the expression has no arguments
                     return Value.Unknown;
                 }
-
-                // compare current line and ancester expression end line - get actual indentation when they are different
-                let ancesterExpression = (<CallExpression | NewExpression>node).expression;
-                let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
 
                 let precedingArgument = findPrecedingTokenFromNodeArray(position, arguments);
                 if (!precedingArgument) {
                     return Value.Unknown;
                 }
-
+                
+                let ancesterExpression = (<CallExpression | NewExpression>node).expression;
+                let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
+                
                 let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(precedingArgument.end);
                 if (precedingArgumentEnd.line === ancesterExpressionEnd.line) {
+                    // do nothing when no line break is between argument list start and cursor.
                     return Value.Unknown;
                 }
 

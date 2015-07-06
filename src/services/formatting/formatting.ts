@@ -602,26 +602,14 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                let fullCallOrNewExpressionIndentationInheritance = isListItem && (
+                // inherit indentation of preceding argument
+                let forceIndentationInheritance = isListItem && (
                     parent.kind === SyntaxKind.CallExpression ||
                     parent.kind === SyntaxKind.NewExpression);
 
                 if (isToken(child) && !outOfTargetRange) {
-                    /*
-                    TODO: tokens should follow last indentation when it is in different line
-                    DynamicIndentation object should be newly generated with new indentation info
-                    New indentation info should be indentation of last list item
-                    Where it should be stored? processChildNodes is the candidate function
-                    if inheritedindentation is not present then it's the first item
-
-                    non-token and token list items should share inherited indentation
-
-                    Issue: newline between list items bypass inheritance method - what can be done here?
-                    token items are affected which don't use computeIndentation
-
-                    Do computeIndentation earlier but don't use it
-                    */
-                    if (fullCallOrNewExpressionIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
+                    // replace indentation with inherited one, ignoring delta to prevent unexpected over-indentation
+                    if (forceIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
                         parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, 0);
                     }
 
@@ -631,8 +619,9 @@ namespace ts.formatting {
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
                     return inheritedIndentation;
                 }
-
-                if (fullCallOrNewExpressionIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
+                
+                // replace indentation with inherited one
+                if (forceIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
                     parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, parentDynamicIndentation.getDelta());
                 }
 
@@ -644,11 +633,13 @@ namespace ts.formatting {
                     childContextNode = node;
                 }
 
-                if (fullCallOrNewExpressionIndentationInheritance) {
+                // prepare indentation for forced inheritance
+                if (forceIndentationInheritance) {
                     let ancesterExpression = (<CallExpression | NewExpression>node).expression;
                     let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
                     let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(child.end).line;
 
+                    // single-line argument should not affect other indentation
                     if (ancesterExpressionEnd.line !== precedingArgumentEnd) {
                         inheritedIndentation = childIndentation.indentation;
                     }
@@ -694,11 +685,6 @@ namespace ts.formatting {
 
                 let inheritedIndentation = Constants.Unknown;
                 for (let child of nodes) {
-                    /*
-                    TODO: indentation should be properly given here for each list item
-                    Previous indentation should be "inherited" for next indentation
-                    */ 
-
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
                 }
 
