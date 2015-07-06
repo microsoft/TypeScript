@@ -13381,7 +13381,7 @@ namespace ts {
                         case SyntaxKind.ClassExpression:
                             let name = (<FunctionExpression|ClassExpression>location).name;
                             if (name) {
-                                copySymbol(location.symbol, meaning, name.text);
+                                copySymbol(name.text, location.symbol, meaning);
                             }
                             break;
                     }
@@ -13396,12 +13396,11 @@ namespace ts {
             /**
              * Copy the given symbol into symbol tables if the symbol has the given meaning
              * and it doesn't already existed in the symbol table
-             *
+             * @param key a key for storing in symbol table; if null, use symbol.name
              * @param symbol the symbol to be added into symbol table
              * @param meaning meaning of symbol to filter by before adding to symbol table
-             * @param key a key for storing in symbol table; if null, use symbol.name
              */
-            function copySymbol(symbol: Symbol, meaning: SymbolFlags, key?: string): void {
+            function copySymbol(key: string, symbol: Symbol, meaning: SymbolFlags): void {
                 if (symbol.flags & meaning) {
                     let id = key || symbol.name;
                     if (!hasProperty(symbols, id)) {
@@ -13413,7 +13412,8 @@ namespace ts {
             function copySymbols(source: SymbolTable, meaning: SymbolFlags): void {
                 if (meaning) {
                     for (let id in source) {
-                        copySymbol(source[id], meaning);
+                        let symbol = source[id];
+                        copySymbol(symbol.name, symbol, meaning);
                     }
                 }
             }
