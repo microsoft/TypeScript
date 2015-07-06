@@ -9,30 +9,30 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(25,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(29,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(30,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(57,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(61,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(57,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(61,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(64,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(65,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(65,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(68,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(69,19): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(73,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(76,40): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(87,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(91,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(69,19): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(73,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(76,40): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(87,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(91,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(94,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(95,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(95,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(98,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(99,19): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(109,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(110,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(99,19): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(109,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(110,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(111,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(113,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(114,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(115,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(114,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(115,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(116,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(119,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(120,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(121,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(120,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(121,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(122,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,16): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,30): error TS2335: 'super' can only be referenced in a derived class.
@@ -119,13 +119,13 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
             super();
             super.publicMember = 1;
                   ~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     
         fn() {
             var x = super.publicMember;
                           ~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     
         get a() {
@@ -133,7 +133,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.publicMember;
                           ~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             return undefined;
         }
         set a(n) {
@@ -141,18 +141,18 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             n = super.publicMember;
                       ~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
         fn2() {
             function inner() {
                 super.publicFunc();
                 ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
             }
             var x = {
                 test: function () { return super.publicFunc(); }
                                            ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
             }
         }
     }
@@ -165,13 +165,13 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
             super();
             super.privateMember = 1;
                   ~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     
         fn() {
             var x = super.privateMember;
                           ~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     
         get a() {
@@ -179,7 +179,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.privateMember;
                           ~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             return undefined;
         }
         set a(n) {
@@ -187,7 +187,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             n = super.privateMember;
                       ~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     }
     
@@ -199,10 +199,10 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
         static fn() {
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
@@ -212,10 +212,10 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
@@ -226,10 +226,10 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.publicStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticMember = 3;
                   ~~~~~~~~~~~~~~~~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticFunc();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.

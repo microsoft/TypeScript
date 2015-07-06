@@ -31,8 +31,8 @@ export { c as c2 } from "server";
 
 export { i, m as instantiatedModule } from "server";
 >i : any
->m : typeof instantiatedModule
->instantiatedModule : typeof instantiatedModule
+>m : typeof m
+>instantiatedModule : typeof m
 
 export { uninstantiated } from "server";
 >uninstantiated : any

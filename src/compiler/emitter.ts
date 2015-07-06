@@ -47,6 +47,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };`;
 
+        const awaiterHelper = `
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
+    return new Promise(function (resolve, reject) {
+        generator = generator.call(thisArg, _arguments);
+        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
+        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
+        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
+        function step(verb, value) {
+            var result = generator[verb](value);
+            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
+        }
+        step("next", void 0);
+    });
+};`;
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -115,7 +129,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             let writeLine = writer.writeLine;
             let increaseIndent = writer.increaseIndent;
             let decreaseIndent = writer.decreaseIndent;
-
+            
             let currentSourceFile: SourceFile;
             // name of an exporter function if file is a System external module
             // System.register([...], function (<exporter>) {...})
@@ -132,6 +146,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             let extendsEmitted = false;
             let decorateEmitted = false;
             let paramEmitted = false;
+            let awaiterEmitted = false;
             let tempFlags = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
@@ -1449,6 +1464,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitExpressionIdentifier(node: Identifier) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
+                    write("_arguments");
+                    return;
+                }
+                
                 let container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -1587,6 +1607,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(" ");
                     emit(node.expression);
                 }
+            }
+            
+            function emitAwaitExpression(node: AwaitExpression) {
+                let needsParenthesis = needsParenthesisForAwaitExpressionAsYield(node);
+                if (needsParenthesis) {
+                    write("(");
+                }
+                write(tokenToString(SyntaxKind.YieldKeyword));
+                write(" ");
+                emit(node.expression);
+                if (needsParenthesis) {
+                    write(")");
+                }
+            }
+
+            function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
+                if (node.parent.kind === SyntaxKind.BinaryExpression && !isAssignmentOperator((<BinaryExpression>node.parent).operatorToken.kind)) {
+                    return true;
+                }
+                else if (node.parent.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>node.parent).condition === node) {
+                    return true;
+                }
+
+                return false;
             }
 
             function needsParenthesisForPropertyAccessOrInvocation(node: Expression) {
@@ -3568,7 +3612,148 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emit(node.parameters[0]);
                     return;
                 }
+                
                 emitSignatureParameters(node);
+            }
+            
+            function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration) {
+                let promiseConstructor = getEntityNameFromTypeNode(node.type);
+                let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
+                let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
+                let args: string;
+
+                // An async function is emit as an outer function that calls an inner
+                // generator function. To preserve lexical bindings, we pass the current
+                // `this` and `arguments` objects to `__awaiter`. The generator function
+                // passed to `__awaiter` is executed inside of the callback to the 
+                // promise constructor.
+                //
+                // The emit for an async arrow without a lexical `arguments` binding might be:
+                //
+                //  // input
+                //  let a = async (b) => { await b; }
+                //
+                //  // output
+                //  let a = (b) => __awaiter(this, void 0, void 0, function* () {
+                //      yield b;
+                //  });
+                //
+                // The emit for an async arrow with a lexical `arguments` binding might be:
+                //
+                //  // input
+                //  let a = async (b) => { await arguments[0]; }
+                //
+                //  // output
+                //  let a = (b) => __awaiter(this, arguments, void 0, function* (arguments) {
+                //      yield arguments[0];
+                //  });
+                //
+                // The emit for an async function expression without a lexical `arguments` binding
+                // might be:
+                //
+                //  // input
+                //  let a = async function (b) {
+                //      await b;
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(this, void 0, void 0, function* () {
+                //          yield b;
+                //      });
+                //  }
+                //
+                // The emit for an async function expression with a lexical `arguments` binding
+                // might be:
+                //
+                //  // input
+                //  let a = async function (b) {
+                //      await arguments[0];
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(this, arguments, void 0, function* (_arguments) {
+                //          yield _arguments[0];
+                //      });
+                //  }
+                //
+                // The emit for an async function expression with a lexical `arguments` binding
+                // and a return type annotation might be:
+                //
+                //  // input
+                //  let a = async function (b): MyPromise<any> {
+                //      await arguments[0];
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(this, arguments, MyPromise, function* (_arguments) {
+                //          yield _arguments[0];
+                //      });
+                //  }
+                //
+                
+                // If this is not an async arrow, emit the opening brace of the function body
+                // and the start of the return statement.
+                if (!isArrowFunction) {
+                    write(" {");
+                    increaseIndent();
+                    writeLine();
+                    write("return");
+                }
+                
+                write(" __awaiter(this");
+                if (hasLexicalArguments) {
+                    write(", arguments");
+                }
+                else {
+                    write(", void 0");
+                }
+
+                if (promiseConstructor) {
+                    write(", ");
+                    emitNodeWithoutSourceMap(promiseConstructor);
+                }
+                else {
+                    write(", Promise");
+                }
+                
+                // Emit the call to __awaiter.
+                if (hasLexicalArguments) {
+                    write(", function* (_arguments)");
+                }
+                else {
+                    write(", function* ()");
+                }
+                
+                // Emit the signature and body for the inner generator function.
+                emitFunctionBody(node);
+                write(")");
+                
+                // If this is not an async arrow, emit the closing brace of the outer function body.
+                if (!isArrowFunction) {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                }
+            }
+            
+            function emitFunctionBody(node: FunctionLikeDeclaration) {
+                if (!node.body) {
+                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // in that case.
+                    write(" { }");
+                }
+                else {
+                    if (node.body.kind === SyntaxKind.Block) {
+                        emitBlockFunctionBody(node, <Block>node.body);
+                    }
+                    else {
+                        emitExpressionFunctionBody(node, <Expression>node.body);
+                    }
+                }            
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
@@ -3587,19 +3772,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 else {
                     emitSignatureParameters(node);
                 }
-
-                if (!node.body) {
-                    // There can be no body when there are parse errors.  Just emit an empty block 
-                    // in that case.
-                    write(" { }");
-                }
-                else if (node.body.kind === SyntaxKind.Block) {
-                    emitBlockFunctionBody(node, <Block>node.body);
+                    
+                let isAsync = isAsyncFunctionLike(node);
+                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                    emitAsyncFunctionBodyForES6(node);
                 }
                 else {
-                    emitExpressionFunctionBody(node, <Expression>node.body);
+                    emitFunctionBody(node);
                 }
-
+                
                 if (!isES6ExportedDeclaration(node)) {
                     emitExportMemberAssignment(node);
                 }
@@ -3617,7 +3798,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6 || node.flags & NodeFlags.Async) {
                     emitDownLevelExpressionFunctionBody(node, body);
                     return;
                 }
@@ -6064,6 +6245,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         writeLines(paramHelper);
                         paramEmitted = true;
                     }
+                    
+                    if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                        writeLines(awaiterHelper);
+                        awaiterEmitted = true;
+                    }
                 }
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
@@ -6246,6 +6432,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTypeOfExpression(<TypeOfExpression>node);
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.AwaitExpression:
+                        return emitAwaitExpression(<AwaitExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
                         return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
                     case SyntaxKind.PostfixUnaryExpression:
