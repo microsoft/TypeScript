@@ -424,7 +424,6 @@ namespace ts.formatting {
                     : parentDynamicIndentation.getIndentation();
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
-
             return {
                 indentation,
                 delta
@@ -635,7 +634,7 @@ namespace ts.formatting {
 
                 // prepare indentation for forced inheritance
                 if (forceIndentationInheritance) {
-                    let ancesterExpression = (<CallExpression | NewExpression>node).expression;
+                    let ancesterExpression = (<CallExpression | NewExpression>parent).expression;
                     let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
                     let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(child.end).line;
 
