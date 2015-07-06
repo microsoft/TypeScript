@@ -11,22 +11,29 @@
 ////import {foo,/*4*/ from "m1"
 ////import {bar as /*5*/, /*6*/ from "m1"
 ////import {foo, bar, baz as b,/*7*/} from "m1"
-function verifyCompletionAtMarker(marker: string, ...completions: string[]) {
+function verifyCompletionAtMarker(marker: string, showBuilder: boolean, ...completions: string[]) {
     goTo.marker(marker);
     if (completions.length) {
-        for (var i = 0; i < completions.length; ++i) {
+        for (let i = 0; i < completions.length; ++i) {
             verify.completionListContains(completions[i]);
         }
     }
     else {
         verify.completionListIsEmpty();
     }
+
+    if (showBuilder) {
+        verify.completionListAllowsNewIdentifier();
+    }
+    else {
+        verify.not.completionListAllowsNewIdentifier();
+    }
 }
 
-verifyCompletionAtMarker("1", "foo", "bar", "baz");
-verifyCompletionAtMarker("2", "foo", "bar", "baz");
-verifyCompletionAtMarker("3", "foo", "bar", "baz");
-verifyCompletionAtMarker("4", "bar", "baz");
-verifyCompletionAtMarker("5");
-verifyCompletionAtMarker("6", "foo", "baz");
-verifyCompletionAtMarker("7");
+verifyCompletionAtMarker("1", /*showBuilder*/ false, "foo", "bar", "baz");
+verifyCompletionAtMarker("2", /*showBuilder*/ false, "foo", "bar", "baz");
+verifyCompletionAtMarker("3", /*showBuilder*/ false, "foo", "bar", "baz");
+verifyCompletionAtMarker("4", /*showBuilder*/ false, "bar", "baz");
+verifyCompletionAtMarker("5", /*showBuilder*/ true);
+verifyCompletionAtMarker("6", /*showBuilder*/ false, "foo", "baz");
+verifyCompletionAtMarker("7", /*showBuilder*/ false);
