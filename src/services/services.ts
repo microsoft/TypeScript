@@ -2847,13 +2847,14 @@ namespace ts {
 
             name = stripQuotes(name);
 
-            // We can simply return name with strip quotes because the name could be an invalid identifier name
-            // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
-            // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (!name) {
                 return undefined;
             }
 
+            // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+            // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+            // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
+            // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
                 if (!isIdentifierStart(name.charCodeAt(0), target)) {
                     return undefined;
@@ -3829,10 +3830,10 @@ namespace ts {
                 }
             }
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
-                // Special case for class expressions because we would like to indicate that
-                // the class name is local to the class body (similar to function expression)
-                //      (local class) class <className>
                 if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
+                    // Special case for class expressions because we would like to indicate that
+                    // the class name is local to the class body (similar to function expression)
+                    //      (local class) class <className>
                     pushTypePart(ScriptElementKind.localClassElement);
                 }
                 else {

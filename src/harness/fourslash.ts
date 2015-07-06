@@ -705,8 +705,14 @@ module FourSlash {
         }
 
         /**
-         * Verfiy that the completion list does NOT contain the given symbol. If text, or documentation, or kind are provided,
-         * the list contains the symbol all given parameters must matched. When any parameter is omitted, the parameters is ignored during comparison.
+         * Verify that the completion list does NOT contain the given symbol.
+         * The symbol is considered matched with the symbol in the list if and only if all given parameters must matched.
+         * When any parameter is omitted, the parameter is ignored during comparison and assumed that the parameter with
+         * that property of the symbol in the list.
+         * @param symbol the name of symbol
+         * @param expectedText the text associated with the symbol
+         * @param expectedDocumentation the documentation text associated with the symbol
+         * @param expectedKind the kind of symbol (see ScriptElementKind)
          */
         public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string) {
             let that = this;

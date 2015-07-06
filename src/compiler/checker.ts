@@ -12680,10 +12680,6 @@ namespace ts {
                             break;
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.ClassExpression:
-                            // The reason we are not using copySymbol for function expression and class expression
-                            // is that copySymbol will not copy a symbol into SymbolTable if the symbol has name prefix
-                            // with "__". Therefore, if class expression or function expression have declared name,
-                            // we will add the symbol into the table using its declared name
                             let name = (<FunctionExpression|ClassExpression>location).name;
                             if (name) {
                                 copySymbol(location.symbol, meaning, name.text);
