@@ -144,7 +144,7 @@ namespace ts {
             return true;
         }
 
-        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.pos === node.end && node.pos >= 0 && node.kind !== SyntaxKind.EndOfFileToken;
     }
 
     export function nodeIsPresent(node: Node) {
@@ -1428,8 +1428,6 @@ namespace ts {
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
         let node = <SynthesizedNode>createNode(kind);
-        node.pos = -1;
-        node.end = -1;
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
