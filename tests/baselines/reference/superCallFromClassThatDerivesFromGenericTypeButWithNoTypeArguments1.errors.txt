@@ -1,8 +1,7 @@
 tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(8,17): error TS2314: Generic type 'A<T1, T2>' requires 2 type argument(s).
-tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(9,21): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts (2 errors) ====
+==== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts (1 errors) ====
     
     class A<T1, T2> {
         constructor(private map: (value: T1) => T2) {
@@ -14,6 +13,4 @@ tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeAr
                     ~
 !!! error TS2314: Generic type 'A<T1, T2>' requires 2 type argument(s).
         constructor() { super(value => String(value)); }
-                        ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
     }

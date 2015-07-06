@@ -17,7 +17,7 @@ class List<T> {
 class DerivedList<U> extends List<U> {
 >DerivedList : DerivedList<U>
 >U : U
->List : List<T>
+>List : List<U>
 >U : U
 
     foo: U;

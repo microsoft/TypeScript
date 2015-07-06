@@ -75,7 +75,7 @@ namespace ts.BreakpointResolver {
                         return span(node);
                     }
 
-                    if (node.parent.kind == SyntaxKind.ArrowFunction && (<FunctionLikeDeclaration>node.parent).body == node) {
+                    if (node.parent.kind === SyntaxKind.ArrowFunction && (<FunctionLikeDeclaration>node.parent).body === node) {
                         // If this is body of arrow function, it is allowed to have the breakpoint
                         return span(node);
                     }

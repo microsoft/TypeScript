@@ -2,7 +2,6 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="session.ts" />
-/// <reference path="node.d.ts" />
 
 namespace ts.server {
     export interface Logger {
@@ -28,7 +27,7 @@ namespace ts.server {
         });
     }
 
-    class ScriptInfo {
+    export class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
@@ -36,7 +35,7 @@ namespace ts.server {
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
-            this.svc = ScriptVersionCache.fromString(content);
+            this.svc = ScriptVersionCache.fromString(host, content);
         }
 
         setFormatOptions(formatOptions: protocol.FormatOptions): void {
@@ -80,7 +79,7 @@ namespace ts.server {
         }
     }
 
-    class LSHost implements ts.LanguageServiceHost {
+    export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
@@ -273,7 +272,7 @@ namespace ts.server {
         }
     }
 
-    interface ProjectOptions {
+    export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
@@ -376,7 +375,7 @@ namespace ts.server {
         }
     }
 
-    interface ProjectOpenResult {
+    export interface ProjectOpenResult {
         success?: boolean;
         errorMsg?: string;
         project?: Project;
@@ -392,11 +391,11 @@ namespace ts.server {
         return copiedList;
     }
 
-    interface ProjectServiceEventHandler {
+    export interface ProjectServiceEventHandler {
         (eventName: string, project: Project, fileName: string): void;
     }
 
-    interface HostConfiguration {
+    export interface HostConfiguration {
         formatCodeOptions: ts.FormatCodeOptions;
         hostInfo: string;
     }
@@ -629,7 +628,7 @@ namespace ts.server {
                 for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                     var f = this.openFilesReferenced[i];
                     // if f was referenced by the removed project, remember it
-                    if (f.defaultProject == removedProject) {
+                    if (f.defaultProject === removedProject) {
                         f.defaultProject = undefined;
                         orphanFiles.push(f);
                     }
@@ -656,7 +655,7 @@ namespace ts.server {
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 var inferredProject = this.inferredProjects[i];
                 inferredProject.updateGraph();
-                if (inferredProject != excludedProject) {
+                if (inferredProject !== excludedProject) {
                     if (inferredProject.getSourceFile(info)) {
                         info.defaultProject = inferredProject;
                         referencingProjects.push(inferredProject);
@@ -710,7 +709,7 @@ namespace ts.server {
                 var rootFile = this.openFileRoots[i];
                 var rootedProject = rootFile.defaultProject;
                 var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
-                if (referencingProjects.length == 0) {
+                if (referencingProjects.length === 0) {
                     rootFile.defaultProject = rootedProject;
                     openFileRoots.push(rootFile);
                 }
@@ -916,7 +915,7 @@ namespace ts.server {
                 return rawConfig.error;
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, ts.sys, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }
@@ -953,7 +952,7 @@ namespace ts.server {
 
     }
 
-    class CompilerService {
+    export class CompilerService {
         host: LSHost;
         languageService: ts.LanguageService;
         classifier: ts.Classifier;
@@ -985,7 +984,7 @@ namespace ts.server {
         static defaultFormatCodeOptions: ts.FormatCodeOptions = {
             IndentSize: 4,
             TabSize: 4,
-            NewLineCharacter: ts.sys.newLine,
+            NewLineCharacter: ts.sys ? ts.sys.newLine : '\n',
             ConvertTabsToSpaces: true,
             InsertSpaceAfterCommaDelimiter: true,
             InsertSpaceAfterSemicolonInForStatements: true,
@@ -999,7 +998,7 @@ namespace ts.server {
 
     }
 
-    interface LineCollection {
+    export interface LineCollection {
         charCount(): number;
         lineCount(): number;
         isLeaf(): boolean;
@@ -1013,7 +1012,7 @@ namespace ts.server {
         leaf?: LineLeaf;
     }
 
-    enum CharRangeSection {
+    export enum CharRangeSection {
         PreStart,
         Start,
         Entire,
@@ -1022,7 +1021,7 @@ namespace ts.server {
         PostEnd
     }
 
-    interface ILineIndexWalker {
+    export interface ILineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -1082,7 +1081,7 @@ namespace ts.server {
 
             for (var k = this.endBranch.length - 1; k >= 0; k--) {
                 (<LineNode>this.endBranch[k]).updateCounts();
-                if (this.endBranch[k].charCount() == 0) {
+                if (this.endBranch[k].charCount() === 0) {
                     lastZeroCount = this.endBranch[k];
                     if (k > 0) {
                         branchParent = <LineNode>this.endBranch[k - 1];
@@ -1147,7 +1146,7 @@ namespace ts.server {
         post(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineCollection, nodeType: CharRangeSection): LineCollection {
             // have visited the path for start of range, now looking for end
             // if range is on single line, we will never make this state transition
-            if (lineCollection == this.lineCollectionAtBranch) {
+            if (lineCollection === this.lineCollectionAtBranch) {
                 this.state = CharRangeSection.End;
             }
             // always pop stack because post only called when child has been visited
@@ -1159,7 +1158,7 @@ namespace ts.server {
             // currentNode corresponds to parent, but in the new tree
             var currentNode = this.stack[this.stack.length - 1];
 
-            if ((this.state == CharRangeSection.Entire) && (nodeType == CharRangeSection.Start)) {
+            if ((this.state === CharRangeSection.Entire) && (nodeType === CharRangeSection.Start)) {
                 // if range is on single line, we will never make this state transition
                 this.state = CharRangeSection.Start;
                 this.branchNode = currentNode;
@@ -1176,12 +1175,12 @@ namespace ts.server {
             switch (nodeType) {
                 case CharRangeSection.PreStart:
                     this.goSubtree = false;
-                    if (this.state != CharRangeSection.End) {
+                    if (this.state !== CharRangeSection.End) {
                         currentNode.add(lineCollection);
                     }
                     break;
                 case CharRangeSection.Start:
-                    if (this.state == CharRangeSection.End) {
+                    if (this.state === CharRangeSection.End) {
                         this.goSubtree = false;
                     }
                     else {
@@ -1191,7 +1190,7 @@ namespace ts.server {
                     }
                     break;
                 case CharRangeSection.Entire:
-                    if (this.state != CharRangeSection.End) {
+                    if (this.state !== CharRangeSection.End) {
                         child = fresh(lineCollection);
                         currentNode.add(child);
                         this.startPath[this.startPath.length] = child;
@@ -1208,7 +1207,7 @@ namespace ts.server {
                     this.goSubtree = false;
                     break;
                 case CharRangeSection.End:
-                    if (this.state != CharRangeSection.End) {
+                    if (this.state !== CharRangeSection.End) {
                         this.goSubtree = false;
                     }
                     else {
@@ -1221,7 +1220,7 @@ namespace ts.server {
                     break;
                 case CharRangeSection.PostEnd:
                     this.goSubtree = false;
-                    if (this.state != CharRangeSection.Start) {
+                    if (this.state !== CharRangeSection.Start) {
                         currentNode.add(lineCollection);
                     }
                     break;
@@ -1233,10 +1232,10 @@ namespace ts.server {
         }
         // just gather text from the leaves
         leaf(relativeStart: number, relativeLength: number, ll: LineLeaf) {
-            if (this.state == CharRangeSection.Start) {
+            if (this.state === CharRangeSection.Start) {
                 this.initialText = ll.text.substring(0, relativeStart);
             }
-            else if (this.state == CharRangeSection.Entire) {
+            else if (this.state === CharRangeSection.Entire) {
                 this.initialText = ll.text.substring(0, relativeStart);
                 this.trailingText = ll.text.substring(relativeStart + relativeLength);
             }
@@ -1248,7 +1247,7 @@ namespace ts.server {
     }
 
     // text change information
-    class TextChange {
+    export class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
 
@@ -1263,6 +1262,7 @@ namespace ts.server {
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
         private currentVersion = 0;
+        private host: ServerHost;
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;
@@ -1290,7 +1290,7 @@ namespace ts.server {
         }
 
         reloadFromFile(filename: string, cb?: () => any) {
-            var content = ts.sys.readFile(filename);
+            var content = this.host.readFile(filename);
             this.reload(content);
             if (cb)
                 cb();
@@ -1360,10 +1360,11 @@ namespace ts.server {
             }
         }
 
-        static fromString(script: string) {
+        static fromString(host: ServerHost, script: string) {
             var svc = new ScriptVersionCache();
             var snap = new LineIndexSnapshot(0, svc);
             svc.versions[svc.currentVersion] = snap;
+            svc.host = host;
             snap.index = new LineIndex();
             var lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
@@ -1371,7 +1372,7 @@ namespace ts.server {
         }
     }
 
-    class LineIndexSnapshot implements ts.IScriptSnapshot {
+    export class LineIndexSnapshot implements ts.IScriptSnapshot {
         index: LineIndex;
         changesSincePreviousVersion: TextChange[] = [];
 
@@ -1499,8 +1500,8 @@ namespace ts.server {
             function editFlat(source: string, s: number, dl: number, nt = "") {
                 return source.substring(0, s) + nt + source.substring(s + dl, source.length);
             }
-            if (this.root.charCount() == 0) {
-                // TODO: assert deleteLength == 0
+            if (this.root.charCount() === 0) {
+                // TODO: assert deleteLength === 0
                 if (newText) {
                     this.load(LineIndex.linesFromText(newText).lines);
                     return this;
@@ -1528,7 +1529,7 @@ namespace ts.server {
                     // check whether last characters deleted are line break
                     var e = pos + deleteLength;
                     var lineInfo = this.charOffsetToLineNumberAndPos(e);
-                    if ((lineInfo && (lineInfo.offset == 0))) {
+                    if ((lineInfo && (lineInfo.offset === 0))) {
                         // move range end just past line that will merge with previous line
                         deleteLength += lineInfo.text.length;
                         // store text by appending to end of insertedText
@@ -1574,7 +1575,7 @@ namespace ts.server {
                 interiorNodes[i].totalChars = charCount;
                 interiorNodes[i].totalLines = lineCount;
             }
-            if (interiorNodes.length == 1) {
+            if (interiorNodes.length === 1) {
                 return interiorNodes[0];
             }
             else {
@@ -1585,7 +1586,7 @@ namespace ts.server {
         static linesFromText(text: string) {
             var lineStarts = ts.computeLineStarts(text);
 
-            if (lineStarts.length == 0) {
+            if (lineStarts.length === 0) {
                 return { lines: <string[]>[], lineMap: lineStarts };
             }
             var lines = <string[]>new Array(lineStarts.length);
@@ -1605,7 +1606,7 @@ namespace ts.server {
         }
     }
 
-    class LineNode implements LineCollection {
+    export class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
         children: LineCollection[] = [];
@@ -1821,7 +1822,7 @@ namespace ts.server {
         findChildIndex(child: LineCollection) {
             var childIndex = 0;
             var clen = this.children.length;
-            while ((this.children[childIndex] != child) && (childIndex < clen)) childIndex++;
+            while ((this.children[childIndex] !== child) && (childIndex < clen)) childIndex++;
             return childIndex;
         }
 
@@ -1830,7 +1831,7 @@ namespace ts.server {
             var clen = this.children.length;
             var nodeCount = nodes.length;
             // if child is last and there is more room and only one node to place, place it
-            if ((clen < lineCollectionCapacity) && (childIndex == (clen - 1)) && (nodeCount == 1)) {
+            if ((clen < lineCollectionCapacity) && (childIndex === (clen - 1)) && (nodeCount === 1)) {
                 this.add(nodes[0]);
                 this.updateCounts();
                 return [];
@@ -1854,13 +1855,13 @@ namespace ts.server {
                     var splitNode = <LineNode>splitNodes[0];
                     while (nodeIndex < nodeCount) {
                         splitNode.add(nodes[nodeIndex++]);
-                        if (splitNode.children.length == lineCollectionCapacity) {
+                        if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
                             splitNode = <LineNode>splitNodes[splitNodeIndex];
                         }
                     }
                     for (i = splitNodes.length - 1; i >= 0; i--) {
-                        if (splitNodes[i].children.length == 0) {
+                        if (splitNodes[i].children.length === 0) {
                             splitNodes.length--;
                         }
                     }
@@ -1891,7 +1892,7 @@ namespace ts.server {
         }
     }
 
-    class LineLeaf implements LineCollection {
+    export class LineLeaf implements LineCollection {
         udata: any;
 
         constructor(public text: string) {

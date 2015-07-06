@@ -713,6 +713,24 @@ module m3 { }\
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
+        it('Do not move constructors from class to object-literal.', () => {
+            var source = "class C { public constructor() { } public constructor() { } public constructor() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class C".length, "var v =");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Do not move methods called "constructor" from object literal to class', () => {
+            var source = "var v = { public constructor() { } public constructor() { } public constructor() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         it('Moving index signatures from class to interface',() => {
             var source = "class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
 
