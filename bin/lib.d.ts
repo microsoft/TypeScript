@@ -15674,6 +15674,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     styleMedia: StyleMedia;
     toolbar: BarProp;
     top: Window;
+    URL: URL;
     window: Window;
     alert(message?: any): void;
     blur(): void;
