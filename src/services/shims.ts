@@ -51,7 +51,7 @@ namespace ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): CancellationToken;
+        getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
@@ -326,7 +326,7 @@ namespace ts {
             }
         }
 
-        public getCancellationToken(): CancellationToken {
+        public getCancellationToken(): HostCancellationToken {
             var hostCancellationToken = this.shimHost.getCancellationToken();
             return new ThrottledCancellationToken(hostCancellationToken);
         }
@@ -348,13 +348,13 @@ namespace ts {
     }
 
     /** A cancellation that throttles calls to the host */
-    class ThrottledCancellationToken implements CancellationToken {
+    class ThrottledCancellationToken implements HostCancellationToken {
         // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
         // to marshall over to the host layer).  So we only bother actually checking once enough
         // time has passed.
         private lastCancellationCheckTime = 0;
 
-        constructor(private hostCancellationToken: CancellationToken) {
+        constructor(private hostCancellationToken: HostCancellationToken) {
         }
 
         public isCancellationRequested(): boolean {

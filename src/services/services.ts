@@ -944,6 +944,10 @@ namespace ts {
         }
     }
 
+    export interface HostCancellationToken {
+        isCancellationRequested(): boolean;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -955,7 +959,7 @@ namespace ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
-        getCancellationToken?(): CancellationToken;
+        getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
         log? (s: string): void;
@@ -1613,25 +1617,6 @@ namespace ts {
             module: ModuleKind.None,
             jsx: JsxEmit.Preserve
         };
-    }
-
-    export class OperationCanceledException { }
-
-    export class CancellationTokenObject {
-        public static None: CancellationTokenObject = new CancellationTokenObject(null)
-
-        constructor(private cancellationToken: CancellationToken) {
-        }
-
-        public isCancellationRequested() {
-            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
-        }
-
-        public throwIfCancellationRequested(): void {
-            if (this.isCancellationRequested()) {
-                throw new OperationCanceledException();
-            }
-        }
     }
 
     // Cache host information about scrip Should be refreshed 
@@ -2400,6 +2385,21 @@ namespace ts {
         return ScriptElementKind.unknown;
     }
 
+    class CancellationTokenObject implements CancellationToken {
+        constructor(private cancellationToken: HostCancellationToken) {
+        }
+
+        public isCancellationRequested() {
+            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
+        }
+
+        public throwIfCancellationRequested(): void {
+            if (this.isCancellationRequested()) {
+                throw new OperationCanceledException();
+            }
+        }
+    }
+
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
@@ -2604,7 +2604,7 @@ namespace ts {
         function getSyntacticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
         }
 
         /**
@@ -2626,13 +2626,13 @@ namespace ts {
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile);
+            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
                 return semanticDiagnostics;
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
+            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
@@ -2795,7 +2795,8 @@ namespace ts {
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+            return program.getOptionsDiagnostics(cancellationToken).concat(
+                   program.getGlobalDiagnostics(cancellationToken));
         }
 
         /// Completion
@@ -5815,7 +5816,7 @@ namespace ts {
                 });
             }
 
-            let emitOutput = program.emit(sourceFile, writeFile);
+            let emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
 
             return {
                 outputFiles,

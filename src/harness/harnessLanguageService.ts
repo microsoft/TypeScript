@@ -103,14 +103,11 @@ module Harness.LanguageService {
         }
     }
 
-    class CancellationToken {
-        public static None: CancellationToken = new CancellationToken(null);
-
-        constructor(private cancellationToken: ts.CancellationToken) {
-        }
+    class DefaultHostCancellationToken implements ts.HostCancellationToken {
+        public static Instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
-            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
+            return false;
         }
     }
 
@@ -124,8 +121,8 @@ module Harness.LanguageService {
     export class LanguageServiceAdapterHost  {
         protected fileNameToScript: ts.Map<ScriptInfo> = {};
         
-        constructor(protected cancellationToken: ts.CancellationToken = CancellationToken.None,
-            protected settings = ts.getDefaultCompilerOptions()) { 
+        constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
+                    protected settings = ts.getDefaultCompilerOptions()) { 
         }
 
         public getNewLine(): string {
@@ -173,8 +170,8 @@ module Harness.LanguageService {
 
     /// Native adapter
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost { 
-        getCompilationSettings(): ts.CompilerOptions { return this.settings; }
-        getCancellationToken(): ts.CancellationToken { return this.cancellationToken; }
+        getCompilationSettings() { return this.settings; }
+        getCancellationToken() { return this.cancellationToken; }
         getCurrentDirectory(): string { return ""; }
         getDefaultLibFileName(): string { return ""; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
@@ -194,7 +191,7 @@ module Harness.LanguageService {
 
     export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: NativeLanguageServiceHost;
-        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) { 
+        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) { 
             this.host = new NativeLanguageServiceHost(cancellationToken, options);
         }
         getHost() { return this.host; }
@@ -206,7 +203,7 @@ module Harness.LanguageService {
     /// Shim adapter
     class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
-        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
+        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
         }
@@ -218,7 +215,7 @@ module Harness.LanguageService {
         positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
-        getCancellationToken(): ts.CancellationToken { return this.nativeHost.getCancellationToken(); }
+        getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
@@ -399,7 +396,7 @@ module Harness.LanguageService {
     export class ShimLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: ShimLanguageServiceHost;
         private factory: ts.TypeScriptServicesFactory;
-        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
+        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new ShimLanguageServiceHost(cancellationToken, options);
             this.factory = new TypeScript.Services.TypeScriptServicesFactory();
         }
@@ -446,7 +443,7 @@ module Harness.LanguageService {
     class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost { 
         private client: ts.server.SessionClient;
 
-        constructor(cancellationToken: ts.CancellationToken, settings: ts.CompilerOptions) {
+        constructor(cancellationToken: ts.HostCancellationToken, settings: ts.CompilerOptions) {
             super(cancellationToken, settings);
         }
 
@@ -575,7 +572,7 @@ module Harness.LanguageService {
     export class ServerLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: SessionClientHost;
         private client: ts.server.SessionClient;
-        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
+        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             // This is the main host that tests use to direct tests
             var clientHost = new SessionClientHost(cancellationToken, options);
             var client = new ts.server.SessionClient(clientHost);
