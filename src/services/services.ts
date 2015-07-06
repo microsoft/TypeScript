@@ -3236,9 +3236,10 @@ namespace ts {
             function tryGetImportClauseCompletionSymbols(importClause: ImportClause): boolean {
                 // cursor is in import clause
                 // try to show exported member for imported module
-                isMemberCompletion = true;
-                isNewIdentifierLocation = true;
                 if (shouldShowCompletionsInImportsClause(contextToken)) {
+                    isMemberCompletion = true;
+                    isNewIdentifierLocation = false;
+
                     let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                     Debug.assert(importDeclaration !== undefined);
 
@@ -3253,6 +3254,11 @@ namespace ts {
                     //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
                     symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                 }
+                else {
+                    isMemberCompletion = false;
+                    isNewIdentifierLocation = true;
+                }
+
                 return true;
             }
 
