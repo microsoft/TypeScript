@@ -587,9 +587,7 @@ namespace ts.formatting {
                 }
 
                 // child node is outside the target range - do not dive inside
-                if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
-                    return inheritedIndentation;
-                }
+                let outOfTargetRange = !rangeOverlapsWithStartEnd(originalRange, child.pos, child.end);
                 
                 if (child.getFullWidth() === 0) {
                     return inheritedIndentation;
@@ -614,7 +612,7 @@ namespace ts.formatting {
                     parent.kind === SyntaxKind.CallExpression ||
                     parent.kind === SyntaxKind.NewExpression);
 
-                if (isToken(child)) {
+                if (isToken(child) && !outOfTargetRange) {
                     /*
                     TODO: tokens should follow last indentation when it is in different line
                     DynamicIndentation object should be newly generated with new indentation info
@@ -623,6 +621,11 @@ namespace ts.formatting {
                     if inheritedindentation is not present then it's the first item
 
                     non-token and token list items should share inherited indentation
+
+                    Issue: newline between list items bypass inheritance method - what can be done here?
+                    token items are affected which don't use computeIndentation
+
+                    Do computeIndentation earlier but don't use it
                     */
                     if (fullCallOrNewExpressionIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
                         parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, 0);
@@ -642,9 +645,10 @@ namespace ts.formatting {
                 let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
                 let childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
-                processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
-
-                childContextNode = node;
+                if (!outOfTargetRange) {
+                    processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
+                    childContextNode = node;
+                }
 
                 if (fullCallOrNewExpressionIndentationInheritance) {
                     inheritedIndentation = childIndentation.indentation;

@@ -80,21 +80,24 @@ namespace ts.formatting {
                 return 0;
             }
 
-            return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+            return getIndentationForNodeWorker(position, current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
             let start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
-            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+            return getIndentationForNodeWorker(Value.Unknown, n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
         }
 
         function getIndentationForNodeWorker(
+            position: number,
             current: Node,
             currentStart: LineAndCharacter,
             ignoreActualIndentationRange: TextRange,
             indentationDelta: number,
             sourceFile: SourceFile,
             options: EditorOptions): number {
+
+            let first = current;
 
             let parent: Node = current.parent;
             let parentStart: LineAndCharacter;
@@ -126,6 +129,12 @@ namespace ts.formatting {
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
+                    // TODO: get previous line actual indentation when in call expression which is in multi-line
+                    actualIndentation = getPrecedingArgumentIndentationInMultiLineExpression(position, current, currentStart, first, sourceFile, options);
+                    if (actualIndentation !== Value.Unknown) {
+                        return actualIndentation;
+                    }
+
                     actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
@@ -185,7 +194,8 @@ namespace ts.formatting {
             // - parent and child are not on the same line
             let useActualIndentation =
                 (isDeclaration(current) || isStatement(current) ||
-                    parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression) &&
+                    parent.kind === SyntaxKind.CallExpression ||
+                    parent.kind === SyntaxKind.NewExpression) &&
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
             if (!useActualIndentation) {
@@ -365,6 +375,56 @@ namespace ts.formatting {
                 lineAndCharacter = getStartLineAndCharacterForNode(list[i], sourceFile);
             }
             return Value.Unknown;
+        }
+
+        function getPrecedingArgumentIndentationInMultiLineExpression(
+            position: number,
+            node: Node,
+            currentLineAndChar: LineAndCharacter,
+            firstNodeInPosition: Node,
+            sourceFile: SourceFile,
+            options: EditorOptions) {
+
+            if (position === Value.Unknown || node !== firstNodeInPosition) {
+                return Value.Unknown;
+            }
+
+            // get previous line actual indentation when in call expression which is in multi-line
+            if (node.kind === SyntaxKind.CallExpression ||
+                node.kind === SyntaxKind.NewExpression) {
+
+                let arguments = (<CallExpression | NewExpression>node).arguments;
+                if (!arguments.length) {
+                    return Value.Unknown;
+                }
+
+                // compare current line and ancester expression end line - get actual indentation when they are different
+                let ancesterExpression = (<CallExpression | NewExpression>node).expression;
+                let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
+
+                let precedingArgument = findPrecedingTokenFromNodeArray(position, arguments);
+                if (!precedingArgument) {
+                    return Value.Unknown;
+                }
+
+                let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(precedingArgument.end);
+                if (precedingArgumentEnd.line === ancesterExpressionEnd.line) {
+                    return Value.Unknown;
+                }
+
+                return findColumnForFirstNonWhitespaceCharacterInLine(precedingArgumentEnd, sourceFile, options);
+            }
+
+            return Value.Unknown;
+
+            function findPrecedingTokenFromNodeArray(position: number, nodeArray: Node[]) {
+                for (let i = nodeArray.length - 1; i >= 0; i--) {
+                    let node = nodeArray[i];
+                    if (node.end <= position)
+                        return node;
+                }
+                return null;
+            }
         }
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
