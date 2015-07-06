@@ -2892,16 +2892,6 @@ namespace ts {
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
-            // Check if this is a valid completion location
-            if (contextToken && isCompletionListBlocker(contextToken)) {
-                log("Returning an empty list because completion was requested in an invalid position.");
-                return undefined;
-            }
-
-            let options = program.getCompilerOptions();
-            let jsx = options.jsx !== JsxEmit.None;
-            let target = options.target;
-
             // Find the node where completion is requested on.
             // Also determine whether we are trying to complete with members of that node
             // or attributes of a JSX tag.
@@ -2911,6 +2901,12 @@ namespace ts {
 
             let location = getTouchingPropertyName(sourceFile, position);
             if (contextToken) {
+                // Bail out if this is a known invalid completion location
+                if (isCompletionListBlocker(contextToken)) {
+                    log("Returning an empty list because completion was requested in an invalid position.");
+                    return undefined;
+                }
+
                 let { parent, kind } = contextToken;
                 if (kind === SyntaxKind.DotToken) {
                     if (parent.kind === SyntaxKind.PropertyAccessExpression) {
@@ -3146,7 +3142,7 @@ namespace ts {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isIdentifierDefinitionLocation(contextToken) ||
-                    isRightOfIllegalDot(contextToken);
+                    isDotOfNumericLiteral(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
@@ -3241,8 +3237,8 @@ namespace ts {
                     }
 
                     if (position === end) {
-                        return !!(<LiteralExpression>contextToken).isUnterminated ||
-                            contextToken.kind === SyntaxKind.RegularExpressionLiteral;
+                        return !!(<LiteralExpression>contextToken).isUnterminated
+                            || contextToken.kind === SyntaxKind.RegularExpressionLiteral;
                     }
                 }
 
@@ -3317,98 +3313,96 @@ namespace ts {
             }
 
             function isIdentifierDefinitionLocation(contextToken: Node): boolean {
-                if (contextToken) {
-                    let containingNodeKind = contextToken.parent.kind;
-                    switch (contextToken.kind) {
-                        case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.VariableDeclaration ||
-                                containingNodeKind === SyntaxKind.VariableDeclarationList ||
-                                containingNodeKind === SyntaxKind.VariableStatement ||
-                                containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
-                                isFunction(containingNodeKind) ||
-                                containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                                containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
+                let containingNodeKind = contextToken.parent.kind;
+                switch (contextToken.kind) {
+                    case SyntaxKind.CommaToken:
+                        return containingNodeKind === SyntaxKind.VariableDeclaration ||
+                            containingNodeKind === SyntaxKind.VariableDeclarationList ||
+                            containingNodeKind === SyntaxKind.VariableStatement ||
+                            containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
+                            isFunction(containingNodeKind) ||
+                            containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
+                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
+                            containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
+                            containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
                                                                                                           
-                        case SyntaxKind.DotToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
+                    case SyntaxKind.DotToken:
+                        return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
                                                                                                           
-                        case SyntaxKind.ColonToken:
-                            return containingNodeKind === SyntaxKind.BindingElement;                        // var {x :html|
+                    case SyntaxKind.ColonToken:
+                        return containingNodeKind === SyntaxKind.BindingElement;                        // var {x :html|
                                                                                                           
-                        case SyntaxKind.OpenBracketToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
+                    case SyntaxKind.OpenBracketToken:
+                        return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
                                                                                                           
-                        case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CatchClause ||
-                                isFunction(containingNodeKind);
+                    case SyntaxKind.OpenParenToken:
+                        return containingNodeKind === SyntaxKind.CatchClause ||
+                            isFunction(containingNodeKind);
 
-                        case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
-                                containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
+                    case SyntaxKind.OpenBraceToken:
+                        return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
+                            containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
+                            containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
 
-                        case SyntaxKind.SemicolonToken:
-                            return containingNodeKind === SyntaxKind.PropertySignature &&
-                                contextToken.parent && contextToken.parent.parent &&
-                                (contextToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                    contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
+                    case SyntaxKind.SemicolonToken:
+                        return containingNodeKind === SyntaxKind.PropertySignature &&
+                            contextToken.parent && contextToken.parent.parent &&
+                            (contextToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
+                                contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
 
-                        case SyntaxKind.LessThanToken:
-                            return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
-                                isFunction(containingNodeKind);
+                    case SyntaxKind.LessThanToken:
+                        return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
+                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
+                            containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
+                            isFunction(containingNodeKind);
 
-                        case SyntaxKind.StaticKeyword:
-                            return containingNodeKind === SyntaxKind.PropertyDeclaration;
+                    case SyntaxKind.StaticKeyword:
+                        return containingNodeKind === SyntaxKind.PropertyDeclaration;
 
-                        case SyntaxKind.DotDotDotToken:
-                            return containingNodeKind === SyntaxKind.Parameter ||
-                                (contextToken.parent && contextToken.parent.parent &&
-                                    contextToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
+                    case SyntaxKind.DotDotDotToken:
+                        return containingNodeKind === SyntaxKind.Parameter ||
+                            (contextToken.parent && contextToken.parent.parent &&
+                                contextToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
 
-                        case SyntaxKind.PublicKeyword:
-                        case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.ProtectedKeyword:
-                            return containingNodeKind === SyntaxKind.Parameter;
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                        return containingNodeKind === SyntaxKind.Parameter;
 
-                        case SyntaxKind.ClassKeyword:
-                        case SyntaxKind.EnumKeyword:
-                        case SyntaxKind.InterfaceKeyword:
-                        case SyntaxKind.FunctionKeyword:
-                        case SyntaxKind.VarKeyword:
-                        case SyntaxKind.GetKeyword:
-                        case SyntaxKind.SetKeyword:
-                        case SyntaxKind.ImportKeyword:
-                        case SyntaxKind.LetKeyword:
-                        case SyntaxKind.ConstKeyword:
-                        case SyntaxKind.YieldKeyword:
-                        case SyntaxKind.TypeKeyword:  // type htm|
-                            return true;
-                    }
+                    case SyntaxKind.ClassKeyword:
+                    case SyntaxKind.EnumKeyword:
+                    case SyntaxKind.InterfaceKeyword:
+                    case SyntaxKind.FunctionKeyword:
+                    case SyntaxKind.VarKeyword:
+                    case SyntaxKind.GetKeyword:
+                    case SyntaxKind.SetKeyword:
+                    case SyntaxKind.ImportKeyword:
+                    case SyntaxKind.LetKeyword:
+                    case SyntaxKind.ConstKeyword:
+                    case SyntaxKind.YieldKeyword:
+                    case SyntaxKind.TypeKeyword:  // type htm|
+                        return true;
+                }
 
-                    // Previous token may have been a keyword that was converted to an identifier.
-                    switch (contextToken.getText()) {
-                        case "class":
-                        case "interface":
-                        case "enum":
-                        case "function":
-                        case "var":
-                        case "static":
-                        case "let":
-                        case "const":
-                        case "yield":
-                            return true;
-                    }
+                // Previous token may have been a keyword that was converted to an identifier.
+                switch (contextToken.getText()) {
+                    case "class":
+                    case "interface":
+                    case "enum":
+                    case "function":
+                    case "var":
+                    case "static":
+                    case "let":
+                    case "const":
+                    case "yield":
+                        return true;
                 }
 
                 return false;
             }
 
-            function isRightOfIllegalDot(contextToken: Node): boolean {
-                if (contextToken && contextToken.kind === SyntaxKind.NumericLiteral) {
+            function isDotOfNumericLiteral(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.NumericLiteral) {
                     let text = contextToken.getFullText();
                     return text.charAt(text.length - 1) === ".";
                 }
