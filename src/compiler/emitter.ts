@@ -47,16 +47,33 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };`;
 
+        const awaiterHelper = `
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
+    return new Promise(function (resolve, reject) {
+        generator = generator.call(thisArg, _arguments);
+        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
+        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
+        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
+        function step(verb, value) {
+            var result = generator[verb](value);
+            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
+        }
+        step("next", void 0);
+    });
+};`;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
+        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
+        let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
+                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -68,7 +85,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, forEach(host.getSourceFiles(), shouldEmitJsx) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
@@ -112,7 +129,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             let writeLine = writer.writeLine;
             let increaseIndent = writer.increaseIndent;
             let decreaseIndent = writer.decreaseIndent;
-
+            
             let currentSourceFile: SourceFile;
             // name of an exporter function if file is a System external module
             // System.register([...], function (<exporter>) {...})
@@ -129,6 +146,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             let extendsEmitted = false;
             let decorateEmitted = false;
             let paramEmitted = false;
+            let awaiterEmitted = false;
             let tempFlags = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
@@ -264,6 +282,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return makeUniqueName("default");
             }
 
+            function generateNameForClassExpression() {
+                return makeUniqueName("class");
+            }
+
             function generateNameForNode(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -276,9 +298,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.ExportAssignment:
                         return generateNameForExportDefault();
+                    case SyntaxKind.ClassExpression:
+                        return generateNameForClassExpression();
                 }
             }
 
@@ -1106,6 +1129,224 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emit(span.literal);
             }
 
+            function jsxEmitReact(node: JsxElement|JsxSelfClosingElement) {
+                /// Emit a tag name, which is either '"div"' for lower-cased names, or
+                /// 'Div' for upper-cased or dotted names
+                function emitTagName(name: Identifier|QualifiedName) {
+                    if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
+                        write('"');
+                        emit(name);
+                        write('"');
+                    }
+                    else {
+                        emit(name);
+                    }
+                }
+
+                /// Emit an attribute name, which is quoted if it needs to be quoted. Because
+                /// these emit into an object literal property name, we don't need to be worried
+                /// about keywords, just non-identifier characters
+                function emitAttributeName(name: Identifier) {
+                    if (/[A-Za-z_]+[\w*]/.test(name.text)) {
+                        write('"');
+                        emit(name);
+                        write('"');
+                    }
+                    else {
+                        emit(name);
+                    }
+                }
+
+                /// Emit an name/value pair for an attribute (e.g. "x: 3")
+                function emitJsxAttribute(node: JsxAttribute) {
+                    emitAttributeName(node.name);
+                    write(": ");
+                    if (node.initializer) {
+                        emit(node.initializer);
+                    }
+                    else {
+                        write("true");
+                    }
+                }
+
+                function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
+                    // Call React.createElement(tag, ...
+                    emitLeadingComments(openingNode);
+                    write("React.createElement(");
+                    emitTagName(openingNode.tagName);
+                    write(", ");
+
+                    // Attribute list
+                    if (openingNode.attributes.length === 0) {
+                        // When there are no attributes, React wants "null"
+                        write("null");
+                    }
+                    else {
+                        // Either emit one big object literal (no spread attribs), or
+                        // a call to React.__spread
+                        let attrs = openingNode.attributes;
+                        if (forEach(attrs, attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
+                            write("React.__spread(");
+
+                            let haveOpenedObjectLiteral = false;
+                            for (let i = 0; i < attrs.length; i++) {
+                                if (attrs[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                                    // If this is the first argument, we need to emit a {} as the first argument
+                                    if (i === 0) {
+                                        write("{}, ");
+                                    }
+
+                                    if (haveOpenedObjectLiteral) {
+                                        write("}");
+                                        haveOpenedObjectLiteral = false;
+                                    }
+                                    if (i > 0) {
+                                        write(", ");
+                                    }
+                                    emit((<JsxSpreadAttribute>attrs[i]).expression);
+                                }
+                                else {
+                                    Debug.assert(attrs[i].kind === SyntaxKind.JsxAttribute);
+                                    if (haveOpenedObjectLiteral) {
+                                        write(", ");
+                                    }
+                                    else {
+                                        haveOpenedObjectLiteral = true;
+                                        if (i > 0) {
+                                            write(", ");
+                                        }
+                                        write("{");
+                                    }
+                                    emitJsxAttribute(<JsxAttribute>attrs[i]);
+                                }
+                            }
+                            if (haveOpenedObjectLiteral) write("}");
+
+                            write(")"); // closing paren to React.__spread(
+                        }
+                        else {
+                            // One object literal with all the attributes in them
+                            write("{");
+                            for (var i = 0; i < attrs.length; i++) {
+                                if (i > 0) {
+                                    write(", ");
+                                }
+                                emitJsxAttribute(<JsxAttribute>attrs[i]);
+                            }
+                            write("}");
+                        }
+                    }
+
+                    // Children
+                    if (children) {
+                        for (var i = 0; i < children.length; i++) {
+                            // Don't emit empty expressions
+                            if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) {
+                                continue;
+                            }
+
+                            // Don't emit empty strings
+                            if (children[i].kind === SyntaxKind.JsxText) {
+                                let text = getTextToEmit(<JsxText>children[i]);
+                                if(text !== undefined) {
+                                    write(', "');
+                                    write(text);
+                                    write('"');
+                                }
+                            }
+                            else {
+                                write(", ");
+                                emit(children[i]);
+                            }
+
+                        }
+                    }
+
+                    // Closing paren
+                    write(")"); // closes "React.createElement("
+                    emitTrailingComments(openingNode);
+                }
+
+                if (node.kind === SyntaxKind.JsxElement) {
+                    emitJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children);
+                }
+                else {
+                    Debug.assert(node.kind === SyntaxKind.JsxSelfClosingElement);
+                    emitJsxElement(<JsxSelfClosingElement>node);
+                }
+            }
+
+            function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
+                function emitJsxAttribute(node: JsxAttribute) {
+                    emit(node.name);
+                    write("=");
+                    emit(node.initializer);
+                }
+
+                function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
+                    write("{...");
+                    emit(node.expression);
+                    write("}");
+                }
+
+                function emitAttributes(attribs: NodeArray<JsxAttribute|JsxSpreadAttribute>) {
+                    for (let i = 0, n = attribs.length; i < n; i++) {
+                        if (i > 0) {
+                            write(" ");
+                        }
+
+                        if (attribs[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                            emitJsxSpreadAttribute(<JsxSpreadAttribute>attribs[i]);
+                        }
+                        else {
+                            Debug.assert(attribs[i].kind === SyntaxKind.JsxAttribute);
+                            emitJsxAttribute(<JsxAttribute>attribs[i]);
+                        }
+                    }
+                }
+
+                function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement|JsxSelfClosingElement) {
+                    write("<");
+                    emit(node.tagName);
+                    if (node.attributes.length > 0 || (node.kind === SyntaxKind.JsxSelfClosingElement)) {
+                        write(" ");
+                    }
+
+                    emitAttributes(node.attributes);
+
+                    if (node.kind === SyntaxKind.JsxSelfClosingElement) {
+                        write("/>");
+                    }
+                    else {
+                        write(">");
+                    }
+                }
+
+                function emitJsxClosingElement(node: JsxClosingElement) {
+                    write("</");
+                    emit(node.tagName);
+                    write(">");
+                }
+
+                function emitJsxElement(node: JsxElement) {
+                    emitJsxOpeningOrSelfClosingElement(node.openingElement);
+
+                    for (var i = 0, n = node.children.length; i < n; i++) {
+                        emit(node.children[i]);
+                    }
+
+                    emitJsxClosingElement(node.closingElement);
+                }
+
+                if (node.kind === SyntaxKind.JsxElement) {
+                    emitJsxElement(<JsxElement>node);
+                }
+                else {
+                    Debug.assert(node.kind === SyntaxKind.JsxSelfClosingElement);
+                    emitJsxOpeningOrSelfClosingElement(<JsxSelfClosingElement>node);
+                }
+            }
+
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
             // For example, this is utilized when feeding in a result to Object.defineProperty.
@@ -1182,6 +1423,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                     case SyntaxKind.IfStatement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                    case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PostfixUnaryExpression:
@@ -1221,6 +1464,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitExpressionIdentifier(node: Identifier) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
+                    write("_arguments");
+                    return;
+                }
+                
                 let container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -1359,6 +1607,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(" ");
                     emit(node.expression);
                 }
+            }
+            
+            function emitAwaitExpression(node: AwaitExpression) {
+                let needsParenthesis = needsParenthesisForAwaitExpressionAsYield(node);
+                if (needsParenthesis) {
+                    write("(");
+                }
+                write(tokenToString(SyntaxKind.YieldKeyword));
+                write(" ");
+                emit(node.expression);
+                if (needsParenthesis) {
+                    write(")");
+                }
+            }
+
+            function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
+                if (node.parent.kind === SyntaxKind.BinaryExpression && !isAssignmentOperator((<BinaryExpression>node.parent).operatorToken.kind)) {
+                    return true;
+                }
+                else if (node.parent.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>node.parent).condition === node) {
+                    return true;
+                }
+
+                return false;
             }
 
             function needsParenthesisForPropertyAccessOrInvocation(node: Expression) {
@@ -1658,8 +1930,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
                 // When diagnosing whether the expression needs parentheses, the decision should be based
                 // on the innermost expression in a chain of nested type assertions.
-                while (expr.kind === SyntaxKind.TypeAssertionExpression) {
-                    expr = (<TypeAssertion>expr).expression;
+                while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
+                    expr = (<AssertionExpression>expr).expression;
                 }
 
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
@@ -1778,7 +2050,21 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                 emit(node.expression);
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
-                write(".");
+                
+                // 1 .toString is a valid property access, emit a space after the literal 
+                let shouldEmitSpace: boolean;
+                if (!indentedBeforeDot && node.expression.kind === SyntaxKind.NumericLiteral) {
+                    let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
+                    shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                }
+
+                if (shouldEmitSpace) {
+                    write(" ."); 
+                }
+                else {
+                    write(".");
+                }
+
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
@@ -1805,8 +2091,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function skipParentheses(node: Expression): Expression {
-                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression) {
-                    node = (<ParenthesizedExpression | TypeAssertion>node).expression;
+                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
+                    node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
                 return node;
             }
@@ -1956,12 +2242,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
                 if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
+                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression || node.expression.kind === SyntaxKind.AsExpression) {
                         let operand = (<TypeAssertion>node.expression).expression;
 
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (operand.kind === SyntaxKind.TypeAssertionExpression) {
+                        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
                             operand = (<TypeAssertion>operand).expression;
                         }
 
@@ -3135,33 +3421,49 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6) {
                     let tempIndex = 0;
-                    forEach(node.parameters, p => {
+                    forEach(node.parameters, parameter => {
                         // A rest parameter cannot have a binding pattern or an initializer,
                         // so let's just ignore it.
-                        if (p.dotDotDotToken) {
+                        if (parameter.dotDotDotToken) {
                             return;
                         }
 
-                        if (isBindingPattern(p.name)) {
-                            writeLine();
-                            write("var ");
-                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
-                            write(";");
-                            tempIndex++;
+                        let { name: paramName, initializer } = parameter;
+                        if (isBindingPattern(paramName)) {
+                            // In cases where a binding pattern is simply '[]' or '{}',
+                            // we usually don't want to emit a var declaration; however, in the presence
+                            // of an initializer, we must emit that expression to preserve side effects.
+                            let hasBindingElements = paramName.elements.length > 0;
+                            if (hasBindingElements || initializer) {
+                                writeLine();
+                                write("var ");
+
+                                if (hasBindingElements) {
+                                    emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                                }
+                                else {
+                                    emit(tempParameters[tempIndex]);
+                                    write(" = ");
+                                    emit(initializer);
+                                }
+
+                                write(";");
+                                tempIndex++;
+                            }
                         }
-                        else if (p.initializer) {
+                        else if (initializer) {
                             writeLine();
-                            emitStart(p);
+                            emitStart(parameter);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitNodeWithoutSourceMap(paramName);
                             write(" === void 0)");
-                            emitEnd(p);
+                            emitEnd(parameter);
                             write(" { ");
-                            emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitStart(parameter);
+                            emitNodeWithoutSourceMap(paramName);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
-                            emitEnd(p);
+                            emitNodeWithoutSourceMap(initializer);
+                            emitEnd(parameter);
                             write("; }");
                         }
                     });
@@ -3310,7 +3612,148 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emit(node.parameters[0]);
                     return;
                 }
+                
                 emitSignatureParameters(node);
+            }
+            
+            function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration) {
+                let promiseConstructor = getEntityNameFromTypeNode(node.type);
+                let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
+                let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
+                let args: string;
+
+                // An async function is emit as an outer function that calls an inner
+                // generator function. To preserve lexical bindings, we pass the current
+                // `this` and `arguments` objects to `__awaiter`. The generator function
+                // passed to `__awaiter` is executed inside of the callback to the 
+                // promise constructor.
+                //
+                // The emit for an async arrow without a lexical `arguments` binding might be:
+                //
+                //  // input
+                //  let a = async (b) => { await b; }
+                //
+                //  // output
+                //  let a = (b) => __awaiter(this, void 0, void 0, function* () {
+                //      yield b;
+                //  });
+                //
+                // The emit for an async arrow with a lexical `arguments` binding might be:
+                //
+                //  // input
+                //  let a = async (b) => { await arguments[0]; }
+                //
+                //  // output
+                //  let a = (b) => __awaiter(this, arguments, void 0, function* (arguments) {
+                //      yield arguments[0];
+                //  });
+                //
+                // The emit for an async function expression without a lexical `arguments` binding
+                // might be:
+                //
+                //  // input
+                //  let a = async function (b) {
+                //      await b;
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(this, void 0, void 0, function* () {
+                //          yield b;
+                //      });
+                //  }
+                //
+                // The emit for an async function expression with a lexical `arguments` binding
+                // might be:
+                //
+                //  // input
+                //  let a = async function (b) {
+                //      await arguments[0];
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(this, arguments, void 0, function* (_arguments) {
+                //          yield _arguments[0];
+                //      });
+                //  }
+                //
+                // The emit for an async function expression with a lexical `arguments` binding
+                // and a return type annotation might be:
+                //
+                //  // input
+                //  let a = async function (b): MyPromise<any> {
+                //      await arguments[0];
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(this, arguments, MyPromise, function* (_arguments) {
+                //          yield _arguments[0];
+                //      });
+                //  }
+                //
+                
+                // If this is not an async arrow, emit the opening brace of the function body
+                // and the start of the return statement.
+                if (!isArrowFunction) {
+                    write(" {");
+                    increaseIndent();
+                    writeLine();
+                    write("return");
+                }
+                
+                write(" __awaiter(this");
+                if (hasLexicalArguments) {
+                    write(", arguments");
+                }
+                else {
+                    write(", void 0");
+                }
+
+                if (promiseConstructor) {
+                    write(", ");
+                    emitNodeWithoutSourceMap(promiseConstructor);
+                }
+                else {
+                    write(", Promise");
+                }
+                
+                // Emit the call to __awaiter.
+                if (hasLexicalArguments) {
+                    write(", function* (_arguments)");
+                }
+                else {
+                    write(", function* ()");
+                }
+                
+                // Emit the signature and body for the inner generator function.
+                emitFunctionBody(node);
+                write(")");
+                
+                // If this is not an async arrow, emit the closing brace of the outer function body.
+                if (!isArrowFunction) {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                }
+            }
+            
+            function emitFunctionBody(node: FunctionLikeDeclaration) {
+                if (!node.body) {
+                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // in that case.
+                    write(" { }");
+                }
+                else {
+                    if (node.body.kind === SyntaxKind.Block) {
+                        emitBlockFunctionBody(node, <Block>node.body);
+                    }
+                    else {
+                        emitExpressionFunctionBody(node, <Expression>node.body);
+                    }
+                }            
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
@@ -3329,19 +3772,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 else {
                     emitSignatureParameters(node);
                 }
-
-                if (!node.body) {
-                    // There can be no body when there are parse errors.  Just emit an empty block 
-                    // in that case.
-                    write(" { }");
-                }
-                else if (node.body.kind === SyntaxKind.Block) {
-                    emitBlockFunctionBody(node, <Block>node.body);
+                    
+                let isAsync = isAsyncFunctionLike(node);
+                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                    emitAsyncFunctionBodyForES6(node);
                 }
                 else {
-                    emitExpressionFunctionBody(node, <Expression>node.body);
+                    emitFunctionBody(node);
                 }
-
+                
                 if (!isES6ExportedDeclaration(node)) {
                     emitExportMemberAssignment(node);
                 }
@@ -3359,7 +3798,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6 || node.flags & NodeFlags.Async) {
                     emitDownLevelExpressionFunctionBody(node, body);
                     return;
                 }
@@ -3807,7 +4246,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emitClassLikeDeclarationForES6AndHigher(node);
                 }
             }
-            
+
             function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
                 let thisNodeIsDecorated = nodeIsDecorated(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -4066,7 +4505,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(".prototype");
                 }
             }
-            
+
             function emitDecoratorsOfClass(node: ClassLikeDeclaration) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
@@ -4978,7 +5417,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 let started = false;
                 for (let importNode of externalImports) {
                     // do not create variable declaration for exports and imports that lack import clause
-                    let skipNode = 
+                    let skipNode =
                         importNode.kind === SyntaxKind.ExportDeclaration ||
                         (importNode.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>importNode).importClause)
 
@@ -5075,7 +5514,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write("};");
 
                 return emitExportStarFunction(exportedNamesStorageRef);
-                
+
                 function emitExportStarFunction(localNames: string): string {
                     const exportStarFunction = makeUniqueName("exportStar");
 
@@ -5102,7 +5541,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                     return exportStarFunction;
                 }
-            
+
                 function writeExportedName(node: Identifier | Declaration): void {
                     // do not record default exports
                     // they are local to module and never overwritten (explicitly skipped) by star export 
@@ -5347,7 +5786,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 decreaseIndent();
                 writeLine();
                 write("}"); // return
-                emitTempDeclarations(/*newLine*/ true)
+                emitTempDeclarations(/*newLine*/ true);
             }
 
             function emitSetters(exportStarFunction: string) {
@@ -5398,7 +5837,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                             if (importNode.kind === SyntaxKind.ImportDeclaration &&
                                 (<ImportDeclaration>importNode).importClause.namedBindings) {
-                                
+
                                 let namedBindings = (<ImportDeclaration>importNode).importClause.namedBindings;
                                 if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                                     // emit re-export for namespace
@@ -5657,6 +6096,99 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
+            function emitJsxElement(node: JsxElement | JsxSelfClosingElement) {
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.React:
+                        jsxEmitReact(node);
+                        break;
+                    case JsxEmit.Preserve:
+                    // Fall back to preserve if None was specified (we'll error earlier)
+                    default:
+                        jsxEmitPreserve(node);
+                        break;
+                }
+            }
+
+            function trimReactWhitespace(node: JsxText): string {
+                let result: string = undefined;
+                let text = getTextOfNode(node);
+                let firstNonWhitespace = 0;
+                let lastNonWhitespace = -1;
+
+                // JSX trims whitespace at the end and beginning of lines, except that the
+                // start/end of a tag is considered a start/end of a line only if that line is
+                // on the same line as the closing tag. See examples in tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
+                for (let i = 0; i < text.length; i++) {
+                    let c = text.charCodeAt(i);
+                    if (isLineBreak(c)) {
+                        if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
+                            let part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
+                            result = (result ? result + '" + \' \' + "' : '') + part;
+                        }
+                        firstNonWhitespace = -1;
+                    }
+                    else if (!isWhiteSpace(c)) {
+                        lastNonWhitespace = i;
+                        if (firstNonWhitespace === -1) {
+                            firstNonWhitespace = i;
+                        }
+                    }
+                }
+                if (firstNonWhitespace !== -1) {
+                    let part = text.substr(firstNonWhitespace);
+                    result = (result ? result + '" + \' \' + "' : '') + part;
+                }
+
+                return result;
+            }
+
+            function getTextToEmit(node: JsxText) {
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.React:
+                        let text = trimReactWhitespace(node);
+                        if (text.length === 0) {
+                            return undefined;
+                        }
+                        else {
+                            return text;
+                        }
+                    case JsxEmit.Preserve:
+                    default:
+                        return getTextOfNode(node, true);
+                }
+            }
+
+            function emitJsxText(node: JsxText) {
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.React:
+                        write('"');
+                        write(trimReactWhitespace(node));
+                        write('"');
+                        break;
+
+                    case JsxEmit.Preserve:
+                    default: // Emit JSX-preserve as default when no --jsx flag is specified
+                        write(getTextOfNode(node, true));
+                        break;
+                }
+            }
+
+            function emitJsxExpression(node: JsxExpression) {
+                if (node.expression) {
+                    switch (compilerOptions.jsx) {
+                        case JsxEmit.Preserve:
+                        default:
+                            write('{');
+                            emit(node.expression);
+                            write('}');
+                            break;
+                        case JsxEmit.React:
+                            emit(node.expression);
+                            break;
+                    }
+                }
+            }
+
             function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
                 for (let i = 0; i < statements.length; ++i) {
                     if (isPrologueDirective(statements[i])) {
@@ -5712,6 +6244,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     if (!paramEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitParam) {
                         writeLines(paramHelper);
                         paramEmitted = true;
+                    }
+                    
+                    if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                        writeLines(awaiterHelper);
+                        awaiterEmitted = true;
                     }
                 }
 
@@ -5799,7 +6336,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 if (node.kind !== SyntaxKind.Block &&
                     node.parent &&
                     node.parent.kind === SyntaxKind.ArrowFunction &&
-                    (<ArrowFunction>node.parent).body === node && 
+                    (<ArrowFunction>node.parent).body === node &&
                     compilerOptions.target <= ScriptTarget.ES5) {
 
                     return false;
@@ -5844,6 +6381,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTemplateExpression(<TemplateExpression>node);
                     case SyntaxKind.TemplateSpan:
                         return emitTemplateSpan(<TemplateSpan>node);
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return emitJsxElement(<JsxElement|JsxSelfClosingElement>node);
+                    case SyntaxKind.JsxText:
+                        return emitJsxText(<JsxText>node);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(<JsxExpression>node);
                     case SyntaxKind.QualifiedName:
                         return emitQualifiedName(<QualifiedName>node);
                     case SyntaxKind.ObjectBindingPattern:
@@ -5874,6 +6418,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
                         return emit((<TypeAssertion>node).expression);
+                    case SyntaxKind.AsExpression:
+                        return emit((<AsExpression>node).expression);
                     case SyntaxKind.ParenthesizedExpression:
                         return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:
@@ -5886,6 +6432,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTypeOfExpression(<TypeOfExpression>node);
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.AwaitExpression:
+                        return emitAwaitExpression(<AwaitExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
                         return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
                     case SyntaxKind.PostfixUnaryExpression:

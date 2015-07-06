@@ -31,6 +31,7 @@ var strOrNum: string | number;
 function isC1(x: any): x is C1 {
 >isC1 : Symbol(isC1, Decl(typeGuardOfFormIsType.ts, 12, 30))
 >x : Symbol(x, Decl(typeGuardOfFormIsType.ts, 14, 14))
+>x : Symbol(x, Decl(typeGuardOfFormIsType.ts, 14, 14))
 >C1 : Symbol(C1, Decl(typeGuardOfFormIsType.ts, 0, 0))
 
     return true;
@@ -39,6 +40,7 @@ function isC1(x: any): x is C1 {
 function isC2(x: any): x is C2 {
 >isC2 : Symbol(isC2, Decl(typeGuardOfFormIsType.ts, 16, 1))
 >x : Symbol(x, Decl(typeGuardOfFormIsType.ts, 18, 14))
+>x : Symbol(x, Decl(typeGuardOfFormIsType.ts, 18, 14))
 >C2 : Symbol(C2, Decl(typeGuardOfFormIsType.ts, 3, 1))
 
     return true;
@@ -46,6 +48,7 @@ function isC2(x: any): x is C2 {
 
 function isD1(x: any): x is D1 {
 >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsType.ts, 20, 1))
+>x : Symbol(x, Decl(typeGuardOfFormIsType.ts, 22, 14))
 >x : Symbol(x, Decl(typeGuardOfFormIsType.ts, 22, 14))
 >D1 : Symbol(D1, Decl(typeGuardOfFormIsType.ts, 6, 1))
 

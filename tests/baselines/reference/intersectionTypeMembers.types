@@ -1,0 +1,116 @@
+=== tests/cases/conformance/types/intersection/intersectionTypeMembers.ts ===
+// An intersection type has those members that are present in any of its constituent types,
+// with types that are intersections of the respective members in the constituent types
+
+interface A { a: string }
+>A : A
+>a : string
+
+interface B { b: string }
+>B : B
+>b : string
+
+interface C { c: string }
+>C : C
+>c : string
+
+var abc: A & B & C;
+>abc : A & B & C
+>A : A
+>B : B
+>C : C
+
+abc.a = "hello";
+>abc.a = "hello" : string
+>abc.a : string
+>abc : A & B & C
+>a : string
+>"hello" : string
+
+abc.b = "hello";
+>abc.b = "hello" : string
+>abc.b : string
+>abc : A & B & C
+>b : string
+>"hello" : string
+
+abc.c = "hello";
+>abc.c = "hello" : string
+>abc.c : string
+>abc : A & B & C
+>c : string
+>"hello" : string
+
+interface X { x: A }
+>X : X
+>x : A
+>A : A
+
+interface Y { x: B }
+>Y : Y
+>x : B
+>B : B
+
+interface Z { x: C }
+>Z : Z
+>x : C
+>C : C
+
+var xyz: X & Y & Z;
+>xyz : X & Y & Z
+>X : X
+>Y : Y
+>Z : Z
+
+xyz.x.a = "hello";
+>xyz.x.a = "hello" : string
+>xyz.x.a : string
+>xyz.x : A & B & C
+>xyz : X & Y & Z
+>x : A & B & C
+>a : string
+>"hello" : string
+
+xyz.x.b = "hello";
+>xyz.x.b = "hello" : string
+>xyz.x.b : string
+>xyz.x : A & B & C
+>xyz : X & Y & Z
+>x : A & B & C
+>b : string
+>"hello" : string
+
+xyz.x.c = "hello";
+>xyz.x.c = "hello" : string
+>xyz.x.c : string
+>xyz.x : A & B & C
+>xyz : X & Y & Z
+>x : A & B & C
+>c : string
+>"hello" : string
+
+type F1 = (x: string) => string;
+>F1 : (x: string) => string
+>x : string
+
+type F2 = (x: number) => number;
+>F2 : (x: number) => number
+>x : number
+
+var f: F1 & F2;
+>f : ((x: string) => string) & ((x: number) => number)
+>F1 : (x: string) => string
+>F2 : (x: number) => number
+
+var s = f("hello");
+>s : string
+>f("hello") : string
+>f : ((x: string) => string) & ((x: number) => number)
+>"hello" : string
+
+var n = f(42);
+>n : number
+>f(42) : number
+>f : ((x: string) => string) & ((x: number) => number)
+>42 : number
+

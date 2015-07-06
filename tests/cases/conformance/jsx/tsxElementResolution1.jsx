@@ -1,0 +1,4 @@
+// OK
+<div />;
+// Fail
+<span />;

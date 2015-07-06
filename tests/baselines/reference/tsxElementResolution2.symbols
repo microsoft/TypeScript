@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsx/tsxElementResolution2.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxElementResolution2.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(tsxElementResolution2.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxElementResolution2.tsx, 1, 22))
+
+	    [x: string]: any;
+>x : Symbol(x, Decl(tsxElementResolution2.tsx, 3, 6))
+	}
+}
+
+// OK
+<div />;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxElementResolution2.tsx, 1, 22))
+
+// OK
+<span />;
+>span : Symbol(JSX.IntrinsicElements, Decl(tsxElementResolution2.tsx, 1, 22))
+
