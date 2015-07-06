@@ -2657,8 +2657,10 @@ namespace ts {
             return result;
         }
 
-        // The full set of type parameters for a generic class or interface type consists of its outer type parameters plus
-        // its locally declared type parameters.
+        /**
+         * The full set of type parameters for a generic class or interface type consists of its 
+         * outer type parameters plus its locally declared type parameters.
+         */
         function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
         }
@@ -2686,11 +2688,13 @@ namespace ts {
             return signatures;
         }
 
-        // The base constructor of a class can resolve to
-        // undefinedType if the class has no extends clause,
-        // unknownType if an error occurred during resolution of the extends expression,
-        // nullType if the extends expression is the null value, or
-        // an object type with at least one construct signature.
+        /**
+         * The base constructor of a class can resolve to:
+         * * undefinedType if the class has no extends clause,
+         * * unknownType if an error occurred during resolution of the extends expression,
+         * * nullType if the extends expression is the null value, or
+         * * an object type with at least one construct signature.
+         */
         function getBaseConstructorTypeOfClass(type: InterfaceType): ObjectType {
             if (!type.resolvedBaseConstructorType) {
                 let baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -3052,9 +3056,11 @@ namespace ts {
             return true;
         }
 
-        // If the lists of call or construct signatures in the given types are all identical except for return types,
-        // and if none of the signatures are generic, return a list of signatures that has substitutes a union of the
-        // return types of the corresponding signatures in each resulting signature.
+        /**
+         * If the lists of call or construct signatures in the given types are all identical except for return types,
+         * and if none of the signatures are generic, return a list of signatures that has substitutes a union of the
+         * return types of the corresponding signatures in each resulting signature.
+         */
         function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
             let signatureLists = map(types, t => getSignaturesOfType(t, kind));
             let signatures = signatureLists[0];
@@ -3165,16 +3171,20 @@ namespace ts {
             return <ResolvedType>type;
         }
 
-        // Return properties of an object type or an empty array for other types
-        function getPropertiesOfObjectType(type: Type): Symbol[] {
+        /**
+         * Return properties of an object type or an empty array for other types
+         */
+         function getPropertiesOfObjectType(type: Type): Symbol[] {
             if (type.flags & TypeFlags.ObjectType) {
                 return resolveObjectOrUnionTypeMembers(<ObjectType>type).properties;
             }
             return emptyArray;
         }
 
-        // If the given type is an object type and that type has a property by the given name, return
-        // the symbol for that property. Otherwise return undefined.
+        /**
+         * If the given type is an object type and that type has a property by the given name, return the symbol 
+         * for that property. Otherwise return undefined.
+         */
         function getPropertyOfObjectType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.ObjectType) {
                 let resolved = resolveObjectOrUnionTypeMembers(<ObjectType>type);
@@ -3280,9 +3290,11 @@ namespace ts {
             return property;
         }
 
-        // Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
-        // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
-        // Object and Function as appropriate.
+        /**
+         * Return the symbol for the property with the given name in the given type. Creates synthetic union
+         * properties when necessary, maps primitive types and type parameters are to their apparent types, and
+         * augments with properties from Object and Function as appropriate.
+         */
         function getPropertyOfType(type: Type, name: string): Symbol {
             type = getApparentType(type);
             if (type.flags & TypeFlags.ObjectType) {
