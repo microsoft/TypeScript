@@ -152,7 +152,7 @@ namespace ts.formatting {
         return current;
     }
     
-    // Returns true if node is a element in some list in parent
+    // Returns true if node is an element in some list in parent
     // i.e. parent is class declaration with the list of members and node is one of members.
     function isListElement(parent: Node, node: Node): boolean {
         switch (parent.kind) {
@@ -419,11 +419,18 @@ namespace ts.formatting {
                 // if node is located on the same line with the parent
                 // - inherit indentation from the parent
                 // - push children if either parent of node itself has non-zero delta
-                indentation = startLine === lastIndentedLine 
-                    ? indentationOnLastIndentedLine 
+                indentation = startLine === lastIndentedLine
+                    ? indentationOnLastIndentedLine
                     : parentDynamicIndentation.getIndentation();
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
+            //else {
+            //    let containingList = SmartIndenter.getContainingList(<Node>node, sourceFile);
+            //    if (containingList) {
+            //        containingList;
+            //    }
+            //}
+
             return {
                 indentation,
                 delta
@@ -603,12 +610,33 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
+                let fullCallOrNewExpressionIndentationInheritance = isListItem && (
+                    parent.kind === SyntaxKind.CallExpression ||
+                    parent.kind === SyntaxKind.NewExpression);
+
                 if (isToken(child)) {
+                    /*
+                    TODO: tokens should follow last indentation when it is in different line
+                    DynamicIndentation object should be newly generated with new indentation info
+                    New indentation info should be indentation of last list item
+                    Where it should be stored? processChildNodes is the candidate function
+                    if inheritedindentation is not present then it's the first item
+
+                    non-token and token list items should share inherited indentation
+                    */
+                    if (fullCallOrNewExpressionIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
+                        parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, 0);
+                    }
+
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
                     return inheritedIndentation;
+                }
+
+                if (fullCallOrNewExpressionIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
+                    parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, parentDynamicIndentation.getDelta());
                 }
 
                 let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
@@ -617,6 +645,10 @@ namespace ts.formatting {
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
                 childContextNode = node;
+
+                if (fullCallOrNewExpressionIndentationInheritance) {
+                    inheritedIndentation = childIndentation.indentation;
+                }
 
                 return inheritedIndentation;
             }
@@ -658,6 +690,11 @@ namespace ts.formatting {
 
                 let inheritedIndentation = Constants.Unknown;
                 for (let child of nodes) {
+                    /*
+                    TODO: indentation should be properly given here for each list item
+                    Previous indentation should be "inherited" for next indentation
+                    */ 
+
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
                 }
 

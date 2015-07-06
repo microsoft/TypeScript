@@ -2,10 +2,13 @@
 
 ////foo({
 ////}, {/*1*/
-////});/*2*/
+/////*2*/
+////});/*3*/
 
 format.document();
 goTo.marker("1");
 verify.currentLineContentIs("}, {");
 goTo.marker("2");
-verify.currentLineContentIs("    });");
+verify.indentationIs(4);
+goTo.marker("3");
+verify.currentLineContentIs("});");
