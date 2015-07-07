@@ -52,8 +52,6 @@ namespace ts {
         let enclosingDeclaration: Node;
         let currentSourceFile: SourceFile;
         let reportedDeclarationError = false;
-        let emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
-        let emit = compilerOptions.stripInternal ? stripInternal : emitNode;
 
         // Contains the reference paths that needs to go in the declaration file.
         // Collecting this separately because reference paths need to be first thing in the declaration file
@@ -83,7 +81,7 @@ namespace ts {
                         shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
                         !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
 
-                        writeReferencePath(referencedFile);
+                        emitReferencePath(referencedFile);
                         if (!isExternalModuleOrDeclarationFile(referencedFile)) {
                             addedGlobalFileReference = true;
                         }
@@ -107,7 +105,7 @@ namespace ts {
                             if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
                                 !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
-                                writeReferencePath(referencedFile);
+                                emitReferencePath(referencedFile);
                                 emittedReferencedFiles.push(referencedFile);
                             }
                         });
@@ -128,17 +126,6 @@ namespace ts {
             let text = currentSourceFile.text;
             let comment = text.substring(range.pos, range.end);
             return comment.indexOf("@internal") >= 0;
-        }
-
-        function stripInternal(node: Node) {
-            if (node) {
-                let leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
-                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
-                    return;
-                }
-
-                emitNode(node);
-            }
         }
 
         function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
@@ -163,90 +150,6 @@ namespace ts {
             decreaseIndent = newWriter.decreaseIndent;
         }
 
-<<<<<<< HEAD
-        function writeAsynchronousModuleElements(nodes: Node[]) {
-            let oldWriter = writer;
-            forEach(nodes, declaration => {
-                let nodeToCheck: Node;
-                if (declaration.kind === SyntaxKind.VariableDeclaration) {
-                    nodeToCheck = declaration.parent.parent;
-                } else if (declaration.kind === SyntaxKind.NamedImports || declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause) {
-                    Debug.fail("We should be getting ImportDeclaration instead to write");
-                } else {
-                    nodeToCheck = declaration;
-                }
-
-                let moduleElementEmitInfo = forEach(moduleElementDeclarationEmitInfo, declEmitInfo => declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined);
-                if (!moduleElementEmitInfo && asynchronousSubModuleDeclarationEmitInfo) {
-                    moduleElementEmitInfo = forEach(asynchronousSubModuleDeclarationEmitInfo, declEmitInfo => declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined);
-                }
-
-                // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
-                // then we don't need to write it at this point. We will write it when we actually see its declaration
-                // Eg.
-                // export function bar(a: foo.Foo) { }
-                // import foo = require("foo");
-                // Writing of function bar would mark alias declaration foo as visible but we haven't yet visited that declaration so do nothing,
-                // we would write alias foo declaration when we visit it since it would now be marked as visible
-                if (moduleElementEmitInfo) {
-                    if (moduleElementEmitInfo.node.kind === SyntaxKind.ImportDeclaration) {
-                        // we have to create asynchronous output only after we have collected complete information
-                        // because it is possible to enable multiple bindings as asynchronously visible
-                        moduleElementEmitInfo.isVisible = true;
-                    }
-                    else {
-                        createAndSetNewTextWriterWithSymbolWriter();
-                        for (let declarationIndent = moduleElementEmitInfo.indent; declarationIndent; declarationIndent--) {
-                            increaseIndent();
-                        }
-
-                        if (nodeToCheck.kind === SyntaxKind.ModuleDeclaration) {
-                            Debug.assert(asynchronousSubModuleDeclarationEmitInfo === undefined);
-                            asynchronousSubModuleDeclarationEmitInfo = [];
-                        }
-                        //writeModuleElement(nodeToCheck);
-                        if (nodeToCheck.kind === SyntaxKind.ModuleDeclaration) {
-                            moduleElementEmitInfo.subModuleElementDeclarationEmitInfo = asynchronousSubModuleDeclarationEmitInfo;
-                            asynchronousSubModuleDeclarationEmitInfo = undefined;
-                        }
-                        moduleElementEmitInfo.asynchronousOutput = writer.getText();
-                    }
-                }
-            });
-            setWriter(oldWriter);
-        }
-
-        function handleSymbolAccessibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-            if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
-                // write the aliases
-                if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
-                    writeAsynchronousModuleElements(symbolAccesibilityResult.aliasesToMakeVisible);
-                }
-            }
-            else {
-                // Report error
-                reportedDeclarationError = true;
-                let errorInfo = writer.getSymbolAccessibilityDiagnostic(symbolAccesibilityResult);
-                if (errorInfo) {
-                    if (errorInfo.typeName) {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
-                            errorInfo.diagnosticMessage,
-                            getSourceTextOfNodeFromSourceFile(currentSourceFile, errorInfo.typeName),
-                            symbolAccesibilityResult.errorSymbolName,
-                            symbolAccesibilityResult.errorModuleName));
-                    }
-                    else {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
-                            errorInfo.diagnosticMessage,
-                            symbolAccesibilityResult.errorSymbolName,
-                            symbolAccesibilityResult.errorModuleName));
-                    }
-                }
-            }
-        }
-
-=======
->>>>>>> remove old diagnostics reporting
         var currentErrorNode: Node;
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             if (currentErrorNode) {
@@ -254,7 +157,7 @@ namespace ts {
             }
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
+        function emitTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
             write(": ");
             if (type) {
                 // Write the type
@@ -265,7 +168,7 @@ namespace ts {
             }
         }
 
-        function writeReturnTypeAtSignature(signature: SignatureDeclaration) {
+        function emitReturnTypeAtSignature(signature: SignatureDeclaration) {
             write(": ");
             if (signature.type) {
                 // Write the type
@@ -291,12 +194,14 @@ namespace ts {
             emitSeparatedList(nodes, ", ", eachNodeEmitFn);
         }
 
-        function writeJsDocComments(declaration: Node) {
-            if (declaration) {
-                let jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
-                // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+        function emitJsDocComments(declaration: Node) {
+            if (!compilerOptions.removeComments) {
+                if (declaration) {
+                    let jsDocComments = getJsDocComments(declaration, currentSourceFile);
+                    emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
+                    // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
+                    emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+                }
             }
         }
 
@@ -352,15 +257,6 @@ namespace ts {
                 }
             }
 
-<<<<<<< HEAD
-            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
-                let visibilityResult = resolver.isEntityNameVisible(entityName,
-                    // Aliases can be written asynchronously so use correct enclosing declaration
-                    entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
-
-                handleSymbolAccessibilityError(visibilityResult);
-                writeEntityName(entityName);
-=======
             function emitEntityName(entityName: EntityName | Expression) {
 
                 if (entityName.kind === SyntaxKind.Identifier) {
@@ -373,7 +269,6 @@ namespace ts {
                     write(".");
                     writeTextOfNode(currentSourceFile, right);
                 }
->>>>>>> remove old diagnostics reporting
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
@@ -449,7 +344,6 @@ namespace ts {
         function emitSourceFile(node: SourceFile) {
             currentSourceFile = node;
             enclosingDeclaration = node;
-            //            emitLines(node.statements);
             emitSourceFileDeclarations(node);
         }
 
@@ -525,8 +419,8 @@ namespace ts {
             }
         }
 
-        function writeImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // note usage of writer. methods instead of aliases created, just to make sure we are using
+        function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
+            // note usage of writer. methods instead of aliases created, just to make sure we are using 
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
@@ -547,7 +441,7 @@ namespace ts {
             writer.writeLine();
         }
 
-        function writeImportDeclaration(node: ImportDeclaration) {
+        function emitImportDeclaration(node: ImportDeclaration) {
             if (!node.importClause && !(node.flags & NodeFlags.Export)) {
                 // do not write non-exported import declarations that don't have import clauses
                 return;
@@ -615,7 +509,7 @@ namespace ts {
             writer.writeLine();
         }
 
-        function writeModuleDeclaration(node: ModuleDeclaration) {
+        function emitModuleDeclaration(node: ModuleDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (node.flags & NodeFlags.Namespace) {
@@ -643,7 +537,7 @@ namespace ts {
             enclosingDeclaration = prevEnclosingDeclaration;
         }
 
-        function writeTypeAliasDeclaration(node: TypeAliasDeclaration) {
+        function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
@@ -654,7 +548,7 @@ namespace ts {
             writeLine();
         }
 
-        function writeEnumDeclaration(node: EnumDeclaration) {
+        function emitEnumDeclaration(node: EnumDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isConst(node)) {
@@ -721,7 +615,7 @@ namespace ts {
             }
         }
 
-        function writeClassDeclaration(node: ClassDeclaration) {
+        function emitClassDeclaration(node: ClassDeclaration) {
             function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
                 if (constructorDeclaration) {
                     forEach(constructorDeclaration.parameters, param => {
@@ -760,7 +654,7 @@ namespace ts {
             enclosingDeclaration = prevEnclosingDeclaration;
         }
 
-        function writeInterfaceDeclaration(node: InterfaceDeclaration) {
+        function emitInterfaceDeclaration(node: InterfaceDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("interface ");
@@ -812,7 +706,7 @@ namespace ts {
                     emitTypeOfVariableDeclarationFromTypeLiteral(node);
                 }
                 else if (!(node.flags & NodeFlags.Private)) {
-                    writeTypeOfDeclaration(node, node.type);
+                    emitTypeOfDeclaration(node, node.type);
                 }
             }
             //}
@@ -839,7 +733,7 @@ namespace ts {
                     }
                     else {
                         writeTextOfNode(currentSourceFile, bindingElement.name);
-                        writeTypeOfDeclaration(bindingElement, /*type*/ undefined);
+                        emitTypeOfDeclaration(bindingElement, /*type*/ undefined);
                     }
                 }
             }
@@ -855,7 +749,7 @@ namespace ts {
             }
         }
 
-        function writeVariableStatement(node: VariableStatement) {
+        function emitVariableStatement(node: VariableStatement) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isLet(node.declarationList)) {
@@ -915,7 +809,7 @@ namespace ts {
                             accessorWithTypeAnnotation = anotherAccessor;
                         }
                     }
-                    writeTypeOfDeclaration(node, type);
+                    emitTypeOfDeclaration(node, type);
                 }
                 write(";");
                 writeLine();
@@ -932,7 +826,7 @@ namespace ts {
             }
         }
 
-        function writeFunctionDeclaration(node: FunctionLikeDeclaration) {
+        function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
             if (hasDynamicName(node)) {
                 return;
             }
@@ -1005,7 +899,7 @@ namespace ts {
                 }
             }
             else if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
-                writeReturnTypeAtSignature(node);
+                emitReturnTypeAtSignature(node);
             }
 
             enclosingDeclaration = prevEnclosingDeclaration;
@@ -1014,75 +908,6 @@ namespace ts {
                 write(";");
                 writeLine();
             }
-<<<<<<< HEAD
-
-            function getReturnTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                let diagnosticMessage: DiagnosticMessage;
-                switch (node.kind) {
-                    case SyntaxKind.ConstructSignature:
-                        // Interfaces cannot have return types that cannot be named
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
-                        break;
-
-                    case SyntaxKind.CallSignature:
-                        // Interfaces cannot have return types that cannot be named
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
-                        break;
-
-                    case SyntaxKind.IndexSignature:
-                        // Interfaces cannot have return types that cannot be named
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
-                        break;
-
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                        if (node.flags & NodeFlags.Static) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                    Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                                    Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
-                        }
-                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                    Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                                    Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
-                        }
-                        else {
-                            // Interfaces cannot have return types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
-                        }
-                        break;
-
-                    case SyntaxKind.FunctionDeclaration:
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                                Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                                Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
-                            Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
-                        break;
-
-                    default:
-                        Debug.fail("This is unknown kind for signature: " + node.kind);
-                }
-
-                return {
-                    diagnosticMessage,
-                    errorNode: <Node>node.name || node
-                };
-            }
-=======
->>>>>>> remove old diagnostics reporting
         }
 
         function emitParameterDeclaration(node: ParameterDeclaration) {
@@ -1111,7 +936,7 @@ namespace ts {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!(node.parent.flags & NodeFlags.Private)) {
-                writeTypeOfDeclaration(node, node.type);
+                emitTypeOfDeclaration(node, node.type);
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {
@@ -1184,36 +1009,43 @@ namespace ts {
         }
 
         function emitNode(node: Node) {
+            if (compilerOptions.stripInternal) {
+                let leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
+                    return;
+                }
+            }
+
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
-                    return writeFunctionDeclaration(<FunctionLikeDeclaration>node);
+                    return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
 
                 case SyntaxKind.VariableStatement:
-                    return writeVariableStatement(<VariableStatement>node);
+                    return emitVariableStatement(<VariableStatement>node);
                 case SyntaxKind.VariableDeclaration:
                     return writeVariableDeclaration(<VariableDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
-                    return writeInterfaceDeclaration(<InterfaceDeclaration>node);
+                    return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.ClassDeclaration:
-                    return writeClassDeclaration(<ClassDeclaration>node);
+                    return emitClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.TypeAliasDeclaration:
-                    return writeTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                    return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
                 case SyntaxKind.EnumDeclaration:
-                    return writeEnumDeclaration(<EnumDeclaration>node);
+                    return emitEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
-                    return writeModuleDeclaration(<ModuleDeclaration>node);
+                    return emitModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return writeImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
-                    return writeImportDeclaration(<ImportDeclaration>node);
+                    return emitImportDeclaration(<ImportDeclaration>node);
 
                 case SyntaxKind.ExportDeclaration:
                     return emitExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.Constructor:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return writeFunctionDeclaration(<FunctionLikeDeclaration>node);
+                    return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.IndexSignature:
@@ -1233,7 +1065,7 @@ namespace ts {
             }
         }
 
-        function writeReferencePath(referencedFile: SourceFile) {
+        function emitReferencePath(referencedFile: SourceFile) {
             let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.fileName // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
