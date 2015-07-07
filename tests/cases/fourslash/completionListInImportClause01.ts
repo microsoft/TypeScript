@@ -14,8 +14,8 @@
 function verifyCompletionAtMarker(marker: string, showBuilder: boolean, ...completions: string[]) {
     goTo.marker(marker);
     if (completions.length) {
-        for (let i = 0; i < completions.length; ++i) {
-            verify.completionListContains(completions[i]);
+        for (let completion of completions) {
+            verify.completionListContains(completion);
         }
     }
     else {

@@ -3204,6 +3204,12 @@ namespace ts {
                 return false;
             }
 
+            /**
+             * Aggregates relevant symbols for completion in object literals and object binding patterns.
+             * Relevant symbols are stored in the captured 'symbols' variable.
+             *
+             * @returns true if 'symbols' was successfully populated; false otherwise.
+             */
             function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | BindingPattern): boolean {
                 // We're looking up possible property names from contextual/inferred/declared type.
                 isMemberCompletion = true;
@@ -3242,6 +3248,15 @@ namespace ts {
                 return true;
             }
 
+            /**
+             * Aggregates relevant symbols for completion in import clauses; for instance,
+             *
+             *      import { $ } from "moduleName";
+             *
+             * Relevant symbols are stored in the captured 'symbols' variable.
+             *
+             * @returns true if 'symbols' was successfully populated; false otherwise.
+             */
             function tryGetImportClauseCompletionSymbols(importClause: ImportClause): boolean {
                 // cursor is in import clause
                 // try to show exported member for imported module
