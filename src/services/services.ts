@@ -3010,68 +3010,21 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
-                let jsxContainer = tryGetContainingJsxElement(contextToken);
-                if (objectLikeContainer) {
-                    // We're looking up possible property names from contextual/inferred/declared type.
-                    isMemberCompletion = true;
+                let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
+                let importClause: ImportClause;
+                let jsxContainer: JsxOpeningLikeElement;
 
-                    let typeForObject: Type;
-                    let existingMembers: Declaration[];
-
-                    if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                        // We are completing on contextual types, but may also include properties
-                        // other than those within the declared type.
-                        isNewIdentifierLocation = true;
-
-                        typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
-                        existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
-                    }
-                    else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
-                        // We are *only* completing on properties from the type being destructured.
-                        isNewIdentifierLocation = false;
-
-                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                        existingMembers = (<BindingPattern>objectLikeContainer).elements;
-                    }
-                    else {
-                        Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
-                    }
-
-                    if (!typeForObject) {
-                        return false;
-                    }
-
-                    let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
-                    if (typeMembers && typeMembers.length > 0) {
-                        // Add filtered items to the completion list
-                        symbols = filterObjectMembersList(typeMembers, existingMembers);
-                    }
-                    return true;
+                if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
+                    return tryGetObjectLikeCompletionSymbols(objectLikeContainer);
                 }
-                else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
-                    // cursor is in import clause
+
+                if (importClause = <ImportClause>getAncestor(contextToken, SyntaxKind.ImportClause)) {
+                    // cursor is in an import clause
                     // try to show exported member for imported module
-                    isMemberCompletion = true;
-                    isNewIdentifierLocation = true;
-                    if (showCompletionsInImportsClause(contextToken)) {
-                        let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
-                        Debug.assert(importDeclaration !== undefined);
-
-                        let exports: Symbol[];
-                        if (importDeclaration.moduleSpecifier) {
-                            let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                            if (moduleSpecifierSymbol) {
-                                exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
-                            }
-                        }
-
-                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
-                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
-                    }
-                    return true;
+                    return tryGetImportClauseCompletionSymbols(importClause);
                 }
-                else if (jsxContainer) {
+
+                if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
                     let attrsType: Type;
                     if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                         // Cursor is inside a JSX self-closing element or opening element
@@ -3153,7 +3106,7 @@ namespace ts {
                 return result;
             }
 
-            function showCompletionsInImportsClause(node: Node): boolean {
+            function shouldShowCompletionsInImportsClause(node: Node): boolean {
                 if (node) {
                     // import {| 
                     // import {a,|
@@ -3249,6 +3202,86 @@ namespace ts {
                 }
 
                 return false;
+            }
+
+            /**
+             * Aggregates relevant symbols for completion in object literals and object binding patterns.
+             * Relevant symbols are stored in the captured 'symbols' variable.
+             *
+             * @returns true if 'symbols' was successfully populated; false otherwise.
+             */
+            function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | BindingPattern): boolean {
+                // We're looking up possible property names from contextual/inferred/declared type.
+                isMemberCompletion = true;
+
+                let typeForObject: Type;
+                let existingMembers: Declaration[];
+
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // We are completing on contextual types, but may also include properties
+                    // other than those within the declared type.
+                    isNewIdentifierLocation = true;
+
+                    typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                    existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
+                }
+                else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
+                    // We are *only* completing on properties from the type being destructured.
+                    isNewIdentifierLocation = false;
+
+                    typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                    existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                }
+                else {
+                    Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
+                }
+
+                if (!typeForObject) {
+                    return false;
+                }
+
+                let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                if (typeMembers && typeMembers.length > 0) {
+                    // Add filtered items to the completion list
+                    symbols = filterObjectMembersList(typeMembers, existingMembers);
+                }
+                return true;
+            }
+
+            /**
+             * Aggregates relevant symbols for completion in import clauses; for instance,
+             *
+             *      import { $ } from "moduleName";
+             *
+             * Relevant symbols are stored in the captured 'symbols' variable.
+             *
+             * @returns true if 'symbols' was successfully populated; false otherwise.
+             */
+            function tryGetImportClauseCompletionSymbols(importClause: ImportClause): boolean {
+                // cursor is in import clause
+                // try to show exported member for imported module
+                if (shouldShowCompletionsInImportsClause(contextToken)) {
+                    isMemberCompletion = true;
+                    isNewIdentifierLocation = false;
+
+                    let importDeclaration = <ImportDeclaration>importClause.parent;
+                    Debug.assert(importDeclaration !== undefined && importDeclaration.kind === SyntaxKind.ImportDeclaration);
+
+                    let exports: Symbol[];
+                    let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                    if (moduleSpecifierSymbol) {
+                        exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
+                    }
+
+                    //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                    symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
+                }
+                else {
+                    isMemberCompletion = false;
+                    isNewIdentifierLocation = true;
+                }
+
+                return true;
             }
 
             /**
