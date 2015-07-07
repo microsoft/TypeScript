@@ -13371,17 +13371,27 @@ namespace ts {
                         case SyntaxKind.EnumDeclaration:
                             copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember);
                             break;
+                        case SyntaxKind.ClassExpression:
+                            let className = (<ClassExpression>location).name;
+                            if (className) {
+                                copySymbol(className.text, location.symbol, meaning);
+                            }
+                            // fall through; this fall-through is necessary because we would like to handle
+                            // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
+                            // If we didn't come from static member of class or interface, add the type parameters into the symbol table 
+                            // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
+                            // jNote: that the memberFlags come from previous iteration.
                             if (!(memberFlags & NodeFlags.Static)) {
                                 copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.ClassExpression:
-                            let name = (<FunctionExpression|ClassExpression>location).name;
-                            if (name) {
-                                copySymbol(name.text, location.symbol, meaning);
+                            let funcName = (<FunctionExpression>location).name;
+                            if (funcName) {
+                                copySymbol(funcName.text, location.symbol, meaning);
                             }
                             break;
                     }
@@ -13396,7 +13406,7 @@ namespace ts {
             /**
              * Copy the given symbol into symbol tables if the symbol has the given meaning
              * and it doesn't already existed in the symbol table
-             * @param key a key for storing in symbol table; if null, use symbol.name
+             * @param key a key for storing in symbol table; if undefined, use symbol.name
              * @param symbol the symbol to be added into symbol table
              * @param meaning meaning of symbol to filter by before adding to symbol table
              */
