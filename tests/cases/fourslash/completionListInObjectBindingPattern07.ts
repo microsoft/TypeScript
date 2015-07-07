@@ -16,3 +16,4 @@ goTo.marker();
 verify.completionListContains("propertyOfI_1");
 verify.completionListContains("propertyOfI_2");
 verify.not.completionListContains("property2");
+verify.not.completionListAllowsNewIdentifier();

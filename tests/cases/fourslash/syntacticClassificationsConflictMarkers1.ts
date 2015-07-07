@@ -7,7 +7,7 @@
 ////    v = 2;
 ////>>>>>>> Branch - a
 ////}
-debugger;
+
 var c = classification;
 verify.syntacticClassificationsAre(
     c.keyword("class"), c.className("C"), c.punctuation("{"),
