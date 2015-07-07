@@ -91,7 +91,7 @@ namespace ts {
             return node;
         }
         export function createParameter(decorators?: Array<Decorator>, modifiers?: Array<Node>, dotDotDotToken?: Node, 
-            name?: Identifier | BindingPattern, questionToken?: Node, type?: TypeNode, initializer?: Expression): ParameterDeclaration {
+            name?: BindingPattern | Identifier, questionToken?: Node, type?: TypeNode, initializer?: Expression): ParameterDeclaration {
             let node = createNode<ParameterDeclaration>(SyntaxKind.Parameter);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
@@ -105,7 +105,7 @@ namespace ts {
             return node;
         }
         export function updateParameter(node: ParameterDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: Identifier | BindingPattern, type: TypeNode, initializer: Expression): ParameterDeclaration {
+            name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): ParameterDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer);
@@ -510,7 +510,7 @@ namespace ts {
             return node;
         }
         export function createBindingElement(decorators?: Array<Decorator>, modifiers?: Array<Node>, propertyName?: Identifier, 
-            dotDotDotToken?: Node, name?: Identifier | BindingPattern, initializer?: Expression): BindingElement {
+            dotDotDotToken?: Node, name?: BindingPattern | Identifier, initializer?: Expression): BindingElement {
             let node = createNode<BindingElement>(SyntaxKind.BindingElement);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
@@ -523,7 +523,7 @@ namespace ts {
             return node;
         }
         export function updateBindingElement(node: BindingElement, decorators: Array<Decorator>, modifiers: Array<Node>, propertyName: Identifier, 
-            name: Identifier | BindingPattern, initializer: Expression): BindingElement {
+            name: BindingPattern | Identifier, initializer: Expression): BindingElement {
             if (decorators !== node.decorators || modifiers !== node.modifiers || propertyName !== node.propertyName || name !== node.name || 
                 initializer !== node.initializer) {
                 let newNode = createBindingElement(decorators, modifiers, propertyName, node.dotDotDotToken, name, initializer);
@@ -984,8 +984,8 @@ namespace ts {
             }
             return node;
         }
-        export function createEmptyStatement(): Statement {
-            return createNode<Statement>(SyntaxKind.EmptyStatement);
+        export function createEmptyStatement(): EmptyStatement {
+            return createNode<EmptyStatement>(SyntaxKind.EmptyStatement);
         }
         export function createExpressionStatement(expression?: Expression): ExpressionStatement {
             let node = createNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
@@ -1046,7 +1046,7 @@ namespace ts {
             }
             return node;
         }
-        export function createForStatement(initializer?: VariableDeclarationList | Expression, condition?: Expression, incrementor?: Expression, 
+        export function createForStatement(initializer?: Expression | VariableDeclarationList, condition?: Expression, incrementor?: Expression, 
             statement?: Statement): ForStatement {
             let node = createNode<ForStatement>(SyntaxKind.ForStatement);
             if (arguments.length) {
@@ -1057,7 +1057,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateForStatement(node: ForStatement, initializer: VariableDeclarationList | Expression, condition: Expression, 
+        export function updateForStatement(node: ForStatement, initializer: Expression | VariableDeclarationList, condition: Expression, 
             incrementor: Expression, statement: Statement): ForStatement {
             if (initializer !== node.initializer || condition !== node.condition || incrementor !== node.incrementor || statement !== node.statement) {
                 let newNode = createForStatement(initializer, condition, incrementor, statement);
@@ -1065,7 +1065,7 @@ namespace ts {
             }
             return node;
         }
-        export function createForInStatement(initializer?: VariableDeclarationList | Expression, expression?: Expression, statement?: Statement
+        export function createForInStatement(initializer?: Expression | VariableDeclarationList, expression?: Expression, statement?: Statement
             ): ForInStatement {
             let node = createNode<ForInStatement>(SyntaxKind.ForInStatement);
             if (arguments.length) {
@@ -1075,7 +1075,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateForInStatement(node: ForInStatement, initializer: VariableDeclarationList | Expression, expression: Expression, 
+        export function updateForInStatement(node: ForInStatement, initializer: Expression | VariableDeclarationList, expression: Expression, 
             statement: Statement): ForInStatement {
             if (initializer !== node.initializer || expression !== node.expression || statement !== node.statement) {
                 let newNode = createForInStatement(initializer, expression, statement);
@@ -1083,7 +1083,7 @@ namespace ts {
             }
             return node;
         }
-        export function createForOfStatement(initializer?: VariableDeclarationList | Expression, expression?: Expression, statement?: Statement
+        export function createForOfStatement(initializer?: Expression | VariableDeclarationList, expression?: Expression, statement?: Statement
             ): ForOfStatement {
             let node = createNode<ForOfStatement>(SyntaxKind.ForOfStatement);
             if (arguments.length) {
@@ -1093,7 +1093,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateForOfStatement(node: ForOfStatement, initializer: VariableDeclarationList | Expression, expression: Expression, 
+        export function updateForOfStatement(node: ForOfStatement, initializer: Expression | VariableDeclarationList, expression: Expression, 
             statement: Statement): ForOfStatement {
             if (initializer !== node.initializer || expression !== node.expression || statement !== node.statement) {
                 let newNode = createForOfStatement(initializer, expression, statement);
@@ -1210,10 +1210,10 @@ namespace ts {
             }
             return node;
         }
-        export function createDebuggerStatement(): Statement {
-            return createNode<Statement>(SyntaxKind.DebuggerStatement);
+        export function createDebuggerStatement(): DebuggerStatement {
+            return createNode<DebuggerStatement>(SyntaxKind.DebuggerStatement);
         }
-        export function createVariableDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier | BindingPattern, 
+        export function createVariableDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: BindingPattern | Identifier, 
             type?: TypeNode, initializer?: Expression): VariableDeclaration {
             let node = createNode<VariableDeclaration>(SyntaxKind.VariableDeclaration);
             if (arguments.length) {
@@ -1226,7 +1226,7 @@ namespace ts {
             return node;
         }
         export function updateVariableDeclaration(node: VariableDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: Identifier | BindingPattern, type: TypeNode, initializer: Expression): VariableDeclaration {
+            name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): VariableDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createVariableDeclaration(decorators, modifiers, name, type, initializer);
@@ -1443,7 +1443,7 @@ namespace ts {
             }
             return node;
         }
-        export function createImportClause(name?: Identifier, namedBindings?: NamespaceImport | NamedImports): ImportClause {
+        export function createImportClause(name?: Identifier, namedBindings?: NamedImports | NamespaceImport): ImportClause {
             let node = createNode<ImportClause>(SyntaxKind.ImportClause);
             if (arguments.length) {
                 node.name = name;
@@ -1451,7 +1451,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamespaceImport | NamedImports): ImportClause {
+        export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImports | NamespaceImport): ImportClause {
             if (name !== node.name || namedBindings !== node.namedBindings) {
                 let newNode = createImportClause(name, namedBindings);
                 return updateFrom(node, newNode);
@@ -2101,6 +2101,21 @@ namespace ts {
     export function isIdentifier(node: Node): node is Identifier {
         return node && node.kind === SyntaxKind.Identifier;
     }
+    export function isFalseKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.FalseKeyword;
+    }
+    export function isNullKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.NullKeyword;
+    }
+    export function isSuperKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.SuperKeyword;
+    }
+    export function isThisKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.ThisKeyword;
+    }
+    export function isTrueKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.TrueKeyword;
+    }
     export function isQualifiedName(node: Node): node is QualifiedName {
         return node && node.kind === SyntaxKind.QualifiedName;
     }
@@ -2278,7 +2293,7 @@ namespace ts {
     export function isVariableStatement(node: Node): node is VariableStatement {
         return node && node.kind === SyntaxKind.VariableStatement;
     }
-    export function isEmptyStatement(node: Node): node is Statement {
+    export function isEmptyStatement(node: Node): node is EmptyStatement {
         return node && node.kind === SyntaxKind.EmptyStatement;
     }
     export function isExpressionStatement(node: Node): node is ExpressionStatement {
@@ -2326,7 +2341,7 @@ namespace ts {
     export function isTryStatement(node: Node): node is TryStatement {
         return node && node.kind === SyntaxKind.TryStatement;
     }
-    export function isDebuggerStatement(node: Node): node is Statement {
+    export function isDebuggerStatement(node: Node): node is DebuggerStatement {
         return node && node.kind === SyntaxKind.DebuggerStatement;
     }
     export function isVariableDeclaration(node: Node): node is VariableDeclaration {
@@ -2505,5 +2520,339 @@ namespace ts {
     }
     export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag {
         return node && node.kind === SyntaxKind.JSDocTemplateTag;
+    }
+    export function isEntityName(node: Node): node is EntityName {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isBindingPatternOrIdentifier(node: Node): node is BindingPattern | Identifier {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.Identifier:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.ClassExpression:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isBlockOrExpression(node: Node): node is Block | Expression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.ClassExpression:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isLiteralExpression(node: Node): node is LiteralExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isLiteralExpressionOrTemplateExpression(node: Node): node is LiteralExpression | TemplateExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isJsxChild(node: Node): node is JsxChild {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JsxText:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isJsxAttributeOrJsxSpreadAttribute(node: Node): node is JsxAttribute | JsxSpreadAttribute {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JsxAttribute:
+                case SyntaxKind.JsxSpreadAttribute:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isExpressionOrVariableDeclarationList(node: Node): node is Expression | VariableDeclarationList {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.VariableDeclarationList:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isClassElement(node: Node): node is ClassElement {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.SemicolonClassElement:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.IndexSignature:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isIdentifierOrLiteralExpression(node: Node): node is Identifier | LiteralExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isModuleBlockOrModuleDeclaration(node: Node): node is ModuleBlock | ModuleDeclaration {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.ModuleDeclaration:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isEntityNameOrExternalModuleReference(node: Node): node is EntityName | ExternalModuleReference {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.ExternalModuleReference:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isNamedImportsOrNamespaceImport(node: Node): node is NamedImports | NamespaceImport {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.NamespaceImport:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isImportOrExportSpecifier(node: Node): node is ImportOrExportSpecifier {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isJSDocType(node: Node): node is JSDocType {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                case SyntaxKind.JSDocArrayType:
+                case SyntaxKind.JSDocUnionType:
+                case SyntaxKind.JSDocTupleType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JSDocTypeReference:
+                case SyntaxKind.JSDocOptionalType:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocVariadicType:
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                    return true;
+            }
+        }
+        return false; 
     }
 }

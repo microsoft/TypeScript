@@ -18,6 +18,8 @@
         "utilities.ts",
         "binder.ts",
         "checker.ts",
+        "transform.ts",
+        "transform.generated.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",

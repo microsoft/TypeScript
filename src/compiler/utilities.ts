@@ -1100,7 +1100,7 @@ namespace ts {
         return false;
     }
 
-    export function isDeclaration(node: Node): boolean {
+    export function isDeclaration(node: Node): node is Declaration {
         switch (node.kind) {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
@@ -1135,7 +1135,7 @@ namespace ts {
         return false;
     }
 
-    export function isStatement(n: Node): boolean {
+    export function isStatement(n: Node): n is Statement {
         switch (n.kind) {
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
@@ -1156,21 +1156,6 @@ namespace ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.ExportAssignment:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    export function isClassElement(n: Node): boolean {
-        switch (n.kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.IndexSignature:
                 return true;
             default:
                 return false;
@@ -1896,7 +1881,7 @@ namespace ts {
         return 0;
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Node): boolean {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:

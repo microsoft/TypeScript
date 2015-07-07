@@ -418,6 +418,19 @@ namespace ts {
         // Used to know if we've computed data from children and cached it in this node.
         HasAggregatedChildData = 1 << 7
     }
+    
+    /* @internal */
+    export const enum TransformFlags {
+        ThisNodeFlags = 0
+    }
+    
+    /* @internal */
+    export interface TransformResolver {
+        getGeneratedNameForNode(node: Node): string;
+        makeTempVariableName(loopVariable: boolean): string;
+        makeUniqueName(baseName: string): string;
+        getEmitResolver(): EmitResolver;
+    }
 
     export const enum JsxFlags {
         None = 0,
@@ -443,12 +456,14 @@ namespace ts {
     // @factoryhidden("jsDocComment", true)
     // @factoryhidden("nextContainer", true)
     // @factoryorder("decorators", "modifiers")
+    // @nofactorynodetest
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         /* @internal */ parserContextFlags?: ParserContextFlags;
+        /* @internal */ transformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
@@ -485,10 +500,12 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
+    // @nofactorynodetest
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
     
     // @factoryhidden("decorators", false)
     // @factoryhidden("modifiers", false)
+    // @nofactorynodetest
     export interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
@@ -569,7 +586,7 @@ namespace ts {
     }
     
     // @kind(SyntaxKind.PropertySignature)
-    export interface PropertySignature extends Declaration, ClassElement {
+    export interface PropertySignature extends Declaration {
         name: DeclarationName;              // Declared property name
         // @factoryparam
         questionToken?: Node;               // Present on optional property
@@ -578,7 +595,8 @@ namespace ts {
 
     // @kind(SyntaxKind.PropertyDeclaration)
     // @factoryorder("decorators", "modifiers", "name", "questionToken", "type", "initializer")
-    export interface PropertyDeclaration extends PropertySignature {
+    export interface PropertyDeclaration extends PropertySignature, ClassElement {
+        name: DeclarationName;              // Declared property name
         initializer?: Expression;           // Optional initializer
     }
 
@@ -664,7 +682,7 @@ namespace ts {
     // @factoryhidden("asteriskToken", true)
     // @factoryhidden("body", true)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "questionToken", "typeParameters", "parameters", "type")
-    export interface MethodSignature extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodSignature extends FunctionLikeDeclaration {
     }
 
     // Note that a MethodDeclaration is considered both a ClassElement and an ObjectLiteralElement.
@@ -680,7 +698,7 @@ namespace ts {
     // @factoryhidden("questionToken", true)
     // @factoryhidden("body", false)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
-    export interface MethodDeclaration extends MethodSignature {
+    export interface MethodDeclaration extends MethodSignature, ClassElement, ObjectLiteralElement {
         body?: Block;
     }
     
@@ -733,6 +751,7 @@ namespace ts {
         _indexSignatureDeclarationBrand: any;
     }
 
+    // @nofactorynodetest
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
@@ -818,6 +837,7 @@ namespace ts {
     // checker actually thinks you have something of the right type.  Note: the brands are
     // never actually given values.  At runtime they have zero cost.
     // @kind(SyntaxKind.OmittedExpression)
+    // @nofactorynodetest
     export interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
@@ -845,6 +865,12 @@ namespace ts {
         _postfixExpressionBrand: any;
     }
 
+    // @kind(SyntaxKind.TrueKeyword, { create: false })
+    // @kind(SyntaxKind.FalseKeyword, { create: false })
+    // @kind(SyntaxKind.NullKeyword, { create: false })
+    // @kind(SyntaxKind.ThisKeyword, { create: false })
+    // @kind(SyntaxKind.SuperKeyword, { create: false })
+    // @nofactorynodetest
     export interface LeftHandSideExpression extends PostfixExpression {
         _leftHandSideExpressionBrand: any;
     }
@@ -1081,11 +1107,16 @@ namespace ts {
 
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
-    // @kind(SyntaxKind.EmptyStatement)
-    // @kind(SyntaxKind.DebuggerStatement);
+    // @nofactorynodetest
     export interface Statement extends Node {
         _statementBrand: any;
     }
+    
+    // @kind(SyntaxKind.EmptyStatement)
+    export type EmptyStatement = Statement;
+    
+    // @kind(SyntaxKind.DebuggerStatement)
+    export type DebuggerStatement = Statement;
 
     // @kind(SyntaxKind.MissingDeclaration)
     // @factoryhidden("name", true)
@@ -1471,7 +1502,7 @@ namespace ts {
     // @factoryhidden("initializer", true)
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
-    export interface JSDocRecordMember extends PropertyDeclaration {
+    export interface JSDocRecordMember extends PropertySignature {
         name: Identifier | LiteralExpression,
         type?: JSDocType
     }

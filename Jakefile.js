@@ -41,6 +41,8 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "transform.ts",
+    "transform.generated.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -60,6 +62,8 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "transform.ts",
+    "transform.generated.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -357,6 +361,7 @@ var processTypesJs = path.join(scriptsDirectory, "processTypes.js");
 var processTypesTs = path.join(scriptsDirectory, "processTypes.ts");
 var typesTs = path.join(compilerDirectory, "types.ts");
 var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
+var transformGeneratedTs = path.join(compilerDirectory, "transform.generated.ts");
 
 file(processTypesTs);
 
@@ -384,8 +389,10 @@ file(factoryGeneratedTs, [processTypesJs, typesTs], function() {
     ex.run();
 }, { async: true });
 
+file(transformGeneratedTs, [factoryGeneratedTs]);
+
 desc("Generates a TypeScript file that contains factory methods to create each Syntax Node.")
-task("generate-factory", [factoryGeneratedTs]);
+task("generate-factory", [factoryGeneratedTs, transformGeneratedTs]);
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);

@@ -12,6 +12,7 @@ import {
     getSymbolId,
     getProperty,
     hasProperty,
+    createSourceFile,
     map,
     SyntaxKind,
     CompilerOptions,
@@ -24,6 +25,7 @@ import {
     SourceFile,
     Declaration,
     ModuleDeclaration,
+    ModuleBlock,
     InterfaceDeclaration,
     TypeAliasDeclaration,
     EnumDeclaration,
@@ -33,6 +35,15 @@ import {
     TypeReferenceNode,
     UnionTypeNode,
     ExpressionWithTypeArguments,
+    ExpressionStatement,
+    Expression,
+    CallExpression,
+    PropertyAccessExpression,
+    ObjectLiteralExpression,
+    ArrayLiteralExpression,
+    PropertyAssignment,
+    LiteralExpression,
+    Identifier,
     SymbolFlags,
     Symbol,
     SymbolTable,
@@ -45,16 +56,17 @@ import {
 
 interface SyntaxNode {
     kind?: SyntaxKind;
-    kindText?: string;
+    kindName?: string;
     typeName?: string;
     members?: SyntaxMember[];
+    options?: KindOptions;
 }
 
 interface SyntaxMember {
-    param?: string;
-    property?: string;
-    type?: string;
-    elementType?: string;
+    paramName?: string;
+    propertyName?: string;
+    typeName?: string;
+    elementTypeName?: string;
     isFactoryParam?: boolean;
     isNode?: boolean;
     isNodeArray?: boolean;
@@ -85,18 +97,27 @@ interface FactoryParamAnnotation extends Annotation {
     propertyName?: string;
 }
 
+interface KindOptions {
+    create: boolean;
+    update: boolean;
+    test: boolean;
+}
+
 interface KindAnnotation extends Annotation {
     kind: SyntaxKind;
+    options: KindOptions;
 }
 
 const columnWrap = 150;
 const emptyArray: any[] = [];
 const kindPattern = /@kind\s*\(\s*SyntaxKind\.(\w+)\s*\)/g;
-const annotationPattern = /@(\w+)\s*(\([^)]*\))?/g;
+const annotationPattern = /@(\w+\s*[^\r\n]*)/g;
 const annotationArgumentPattern = /[(,]([^,)]+)/g;
 const whitespacePattern = /\s/;
 const quotePattern = /["'`]/;
 const numberPattern = /^[+-]?(\d+|\d*\.\d+|\d*e\d+|0x[\da-f]+)$/i;
+const arrayPattern = /^\[.*\]$/;
+const objectPattern = /^\{.*\}$/;
 
 let file: string;
 let options: CompilerOptions;
@@ -104,7 +125,6 @@ let host: CompilerHost;
 let program: Program;
 let checker: TypeChecker;
 let sourceFile: SourceFile;
-let writer: EmitTextWriter;
 let tsModuleSymbol: Symbol;
 let nodeSymbol: Symbol;
 let nodeArraySymbol: Symbol;
@@ -113,6 +133,9 @@ let syntaxKindSymbol: Symbol;
 let syntaxKindValueToSymbol: Symbol[] = [];
 let nodeAnnotations: Annotation[][] = [];
 let syntax: SyntaxNode[] = [];
+let syntaxKindTypeUsages: Map<Symbol[]> = {};
+let memberTypeUsages: Map<boolean> = {};
+let memberTypeUsageRedirects: Map<string> = {};
 
 main();
 
@@ -133,8 +156,11 @@ function main() {
     discover();
     
     let inputDirectory = sys.resolvePath(combinePaths(file, ".."));
-    let output = combinePaths(inputDirectory, "factory.generated.ts");
-    generate(output);
+    let factoryOutputFile = combinePaths(inputDirectory, "factory.generated.ts");
+    generateFactory(factoryOutputFile);
+    
+    let transformOutputFile = combinePaths(inputDirectory, "transform.generated.ts");
+    generateTransform(transformOutputFile);
 }
 
 /**
@@ -147,6 +173,13 @@ function discover() {
     syntax.sort((a, b) => {
         return a.kind - b.kind;
     }); 
+    
+    // Set up member type usage redirects for types with a single kind
+    for (let typeName in syntaxKindTypeUsages) {
+        if (syntaxKindTypeUsages[typeName].length === 1) {
+            memberTypeUsageRedirects[typeName] = syntaxKindTypeUsages[typeName][0].name;
+        }
+    }
     
     function visit(node: Node) {
         switch (node.kind) {
@@ -231,16 +264,19 @@ function discover() {
         }
     }
     
-    function createSyntaxNodes(decl: InterfaceDeclaration | TypeAliasDeclaration, symbol: Symbol, kinds: SyntaxKind[]) {
+    function createSyntaxNodes(decl: InterfaceDeclaration | TypeAliasDeclaration, symbol: Symbol, kinds: KindAnnotation[]) {
         if (getFactoryHiddenStateForSymbol(symbol) === FactoryHiddenState.Hidden) {
             return;
         }
         
         let symbolOrder = getFactoryOrder(symbol, /*inherited*/ true);
-        for (let kind of kinds) {
-            let type = checker.getDeclaredTypeOfSymbol(symbol);
+        for (let kindAnnotation of kinds) {
+            let kind = kindAnnotation.kind;
             let kindSymbol = syntaxKindValueToSymbol[kind];
+            recordTypeUsagesForKind(kindSymbol, symbol);
+            
             let kindOrder = getFactoryOrder(kindSymbol, /*inherited*/ false);
+            let type = checker.getDeclaredTypeOfSymbol(symbol);
             var members: SyntaxMember[] = [];
             for (let property of checker.getPropertiesOfType(type)) {
                 // Skip any hidden properties
@@ -255,16 +291,22 @@ function discover() {
                 let propertyIsNodeArray = typeNode && isNodeArray(typeNode);
                 let propertyIsModifiersArray = typeNode && isModifiersArray(typeNode);
                 if (propertyIsFactoryParam || propertyIsNodeArray || propertyIsModifiersArray || propertyIsNode) {
+                    let typeName = typeNode ? normalizeTypeName(typeNode.getText()) : "any";
+                    let elementTypeName = propertyIsNodeArray ? (<TypeReferenceNode>typeNode).typeArguments[0].getText() : undefined; 
                     members.push(<SyntaxMember>{
-                        property: property.name,
-                        param: property.name === "arguments" ? "_arguments" : property.name,
-                        type: typeNode ? typeNode.getText() : "any",
-                        elementType: propertyIsNodeArray ? (<TypeReferenceNode>typeNode).typeArguments[0].getText() : undefined,
+                        propertyName: property.name,
+                        paramName: property.name === "arguments" ? "_arguments" : property.name,
+                        typeName: typeName,
+                        elementTypeName: elementTypeName,
                         isFactoryParam: propertyIsFactoryParam,
                         isNodeArray: propertyIsNodeArray,
                         isModifiersArray: propertyIsModifiersArray,
                         isNode: propertyIsNode
                     });
+
+                    if (!propertyIsFactoryParam && (propertyIsNodeArray || propertyIsNode)) {
+                        recordTypeUsageForMember(propertyIsNode ? typeName : elementTypeName);
+                    }
                 }
             }
             
@@ -272,8 +314,8 @@ function discover() {
             if (overrides) {
                 let indices = members.map((_, i) => i);
                 indices.sort((a, b) => {
-                    let aOverride = overrides.indexOf(members[a].property);
-                    let bOverride = overrides.indexOf(members[b].property);
+                    let aOverride = overrides.indexOf(members[a].propertyName);
+                    let bOverride = overrides.indexOf(members[b].propertyName);
                     if (aOverride >= 0) {
                         if (bOverride >= 0) {
                             return aOverride - bOverride;
@@ -293,345 +335,52 @@ function discover() {
             
             syntax.push(<SyntaxNode>{ 
                 kind,
-                kindText: kindSymbol.name,
+                kindName: kindSymbol.name,
                 typeName: symbol.name,
-                members
+                members,
+                options: kindAnnotation.options
             });
         }
     }
     
+    function recordTypeUsagesForKind(kindSymbol: Symbol, typeSymbol: Symbol) {
+        memberTypeUsages[kindSymbol.name] = false;
+        recordTypeUsagesForKindWorker(kindSymbol, typeSymbol);
+    }
+    
+    function recordTypeUsagesForKindWorker(kindSymbol: Symbol, typeSymbol: Symbol) {
+        let usages = syntaxKindTypeUsages[typeSymbol.name];
+        if (!usages) {
+            syntaxKindTypeUsages[typeSymbol.name] = usages = [];
+        }
+        
+        if (usages.indexOf(kindSymbol) === -1) {
+            usages.push(kindSymbol);
+        }
+        
+        for (let superType of getSuperTypes(typeSymbol.declarations[0])) {
+            recordTypeUsagesForKindWorker(kindSymbol, superType);
+        }
+    }
+    
+    function recordTypeUsageForMember(typeName: string) {
+        if (!hasProperty(memberTypeUsages, typeName)) {
+            memberTypeUsages[typeName] = true;
+        }
+    }
+    
+    function normalizeTypeName(typeName: string) {
+        let parts = typeName.split(/\s*\|\s*/g);
+        if (parts.length === 0) {
+            return parts[0];
+        }
+        
+        parts.sort();
+        return parts.join(" | ");
+    }
+    
     function getTypeNodeForProperty(property: Symbol) {
         return (<PropertyDeclaration>property.declarations[0]).type;
-    }
-    
-    function isTypeReferenceNode(node: Node): node is TypeReferenceNode {
-        return node ? node.kind === SyntaxKind.TypeReference : false;
-    }
-    
-    function isUnionTypeNode(node: Node): node is UnionTypeNode {
-        return node ? node.kind === SyntaxKind.UnionType : false;
-    }
-    
-    function isInterfaceDeclaration(node: Node): node is InterfaceDeclaration {
-        return node ? node.kind === SyntaxKind.InterfaceDeclaration : false;
-    }
-
-    function isTypeAliasDeclaration(node: Node): node is TypeAliasDeclaration {
-        return node ? node.kind === SyntaxKind.TypeAliasDeclaration : false;
-    }
-    
-    function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
-        return node ? node.kind === SyntaxKind.ExpressionWithTypeArguments : false;
-    }
-    
-    function isNodeArray(typeNode: TypeNode): boolean {
-        return isTypeReferenceNode(typeNode) ? checker.getSymbolAtLocation(typeNode.typeName) === nodeArraySymbol : false;
-    }
-    
-    function isModifiersArray(typeNode: TypeNode): boolean {
-        return isTypeReferenceNode(typeNode) ? checker.getSymbolAtLocation(typeNode.typeName) === modifiersArraySymbol : false;
-    }
-    
-    function getSuperTypes(node: Declaration) {
-        let superTypes: Symbol[] = [];
-        let superTypeSymbolSet: boolean[] = [];
-
-        if (isTypeAliasDeclaration(node)) {
-            fillSuperTypes(node.type);
-        }
-        else if (isInterfaceDeclaration(node) && node.heritageClauses) {
-            for (let superType of node.heritageClauses[0].types) {
-                fillSuperTypes(superType);
-            }
-        }
-
-        return superTypes;
-        
-        function fillSuperTypes(node: TypeNode) {
-            if (isUnionTypeNode(node)) {
-                // Flatten union types
-                for (let constituentType of node.types) {
-                    fillSuperTypes(constituentType);
-                }
-            }
-            else {
-                // Add type references
-                let symbol = isTypeReferenceNode(node) ? checker.getSymbolAtLocation(node.typeName) 
-                    : isExpressionWithTypeArguments(node) ? checker.getSymbolAtLocation(node.expression) 
-                    : undefined;
-                    
-                if (symbol) {
-                    if (superTypeSymbolSet[getSymbolId(symbol)]) {
-                        return;
-                    }
-                    
-                    superTypeSymbolSet[getSymbolId(symbol)] = true;
-                    superTypes.push(symbol);
-                }
-            }
-        }
-    }
-    
-    function isSubtypeOf(node: TypeNode | Declaration, superTypeSymbol: Symbol): boolean {
-        if (isInterfaceDeclaration(node)) {
-            if (node.heritageClauses) {
-                for (let superType of node.heritageClauses[0].types) {
-                    if (isSubtypeOf(superType, superTypeSymbol)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        else if (isTypeAliasDeclaration(node)) {
-            return isSubtypeOf(node.type, superTypeSymbol);
-        }
-        else if (isUnionTypeNode(node)) {
-            for (let constituentType of node.types) {
-                if (isSubtypeOf(constituentType, superTypeSymbol)) {
-                    return true;
-                }
-            }
-        }
-        else {
-            let typeSymbol = isTypeReferenceNode(node) ? checker.getSymbolAtLocation(node.typeName) 
-                : isExpressionWithTypeArguments(node) ? checker.getSymbolAtLocation(node.expression) 
-                : undefined;
-                
-            if (!typeSymbol) {
-                return false;
-            }
-            else if (typeSymbol === superTypeSymbol) {
-                return true;
-            }
-            
-            return isSubtypeOf(typeSymbol.declarations[0], superTypeSymbol);
-        }
-        
-        return false;
-    }
-    
-    function findAnnotation<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation {
-        for (let decl of symbol.declarations) {
-            for (let annotation of getAnnotationsForNode(decl)) {
-                if (match(annotation)) {
-                    return <TAnnotation>annotation;
-                }
-            }
-        }
-        
-        return undefined;
-    }
-    
-    function matchAnnotations<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation[] {
-        let annotations: TAnnotation[];
-        for (let decl of symbol.declarations) {
-            for (let annotation of getAnnotationsForNode(decl)) {
-                if (match(annotation)) {
-                    if (!annotations) {
-                        annotations = [];
-                    }
-                    
-                    annotations.push(<TAnnotation>annotation);
-                }
-            }
-        }
-        
-        return annotations || emptyArray;
-    }
-    
-    function getAnnotations(symbol: Symbol): Annotation[] {
-        let annotations: Annotation[];
-        for (let decl of symbol.declarations) {
-            let declAnnotations = getAnnotationsForNode(decl);
-            if (declAnnotations !== emptyArray) {
-                if (!annotations) {
-                    annotations = [];
-                }
-                for (let annotation of declAnnotations) {
-                    annotations.push(annotation);
-                }
-            }
-        }
-        return annotations;
-    }
-    
-    function getAnnotationsForNode(node: Node): Annotation[] {
-        let annotations = nodeAnnotations[getNodeId(node)];
-        if (annotations) {
-            return annotations;
-        }
-
-        let leadingCommentRanges = getLeadingCommentRanges(sourceFile.text, node.pos);
-        if (leadingCommentRanges) {
-            for (let range of leadingCommentRanges) {
-                parseAnnotations(range);
-            }
-        }
-        
-        if (!annotations) {
-            annotations = emptyArray;
-        }
-        
-        nodeAnnotations[getNodeId(node)] = annotations;
-        return annotations;
-        
-        function parseAnnotations(range: CommentRange) {
-            let text = sourceFile.text;
-            let comment = text.substring(range.pos, range.end);
-            let annotationMatch: RegExpExecArray;
-            while (annotationMatch = annotationPattern.exec(comment)) {
-                let name = annotationMatch[1];
-                let _arguments: (string | number | boolean)[] = [];
-                if (annotationMatch[2]) {
-                    let argumentMatch: RegExpExecArray;
-                    let unterminatedStringLiteral: string;
-                    let quoteToken: string;
-                    while (argumentMatch = annotationArgumentPattern.exec(annotationMatch[2].trim())) {
-                        let argumentText = argumentMatch[1];
-                        let pos = 0;
-                        let end = argumentText.length - 1;
-                        let ch: string;
-                        if (unterminatedStringLiteral) {
-                            unterminatedStringLiteral += ",";
-                            while (end >= 0 && whitespacePattern.test(ch = argumentText.charAt(end))) {
-                                end--;
-                            }
-                            
-                            if (ch === quoteToken) {
-                                if (end > 0) {
-                                    unterminatedStringLiteral += argumentText.substring(0, end);
-                                }
-                                
-                                _arguments.push(unterminatedStringLiteral);
-                                unterminatedStringLiteral = undefined;
-                                quoteToken = undefined;
-                            }
-                            else {
-                                unterminatedStringLiteral += "," + argumentText;
-                            }
-                            
-                            continue;
-                        }
-                        
-                        while (pos <= end && whitespacePattern.test(ch = argumentText.charAt(pos))) {
-                            pos++;
-                        }
-
-                        while (end >= pos && whitespacePattern.test(argumentText.charAt(end))) {
-                            end--;
-                        }
-                        
-                        if (end < pos || end < 0) {
-                            _arguments.push(undefined);
-                            continue;
-                        }
-                        
-                        if (isQuote(ch)) {
-                            if (argumentText.charAt(end) === ch) {
-                                _arguments.push(argumentText.substring(pos + 1, end));
-                            }
-                            else {
-                                quoteToken = ch;
-                                unterminatedStringLiteral = argumentText.substring(pos + 1);
-                            }
-                            
-                            continue;
-                        }
-
-                        argumentText = argumentText.substring(pos, end + 1);
-                        if (argumentText === "null") {
-                            _arguments.push(null);
-                        }
-                        else if (argumentText === "undefined") {
-                            _arguments.push(undefined);
-                        }
-                        else if (argumentText === "true") {
-                            _arguments.push(true);
-                        }
-                        else if (argumentText === "false") {
-                            _arguments.push(false);
-                        }
-                        else if (numberPattern.test(argumentText)) {
-                            _arguments.push(Number(argumentText));
-                        }
-                        else {
-                            _arguments.push(getConstantValue(node, argumentText));
-                        }
-                    }
-                }
-                
-                if (!annotations) {
-                    annotations = [];
-                }
-                
-                annotations.push(createAnnotation(name, _arguments));
-            }
-        }
-    }
-    
-    function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags) {
-        if (symbols && meaning && hasProperty(symbols, name)) {
-            let symbol = symbols[name];
-            if (symbol.flags & meaning) {
-                return symbol;
-            }
-        }
-        
-        return undefined;
-    }
-    
-    function resolveName(location: Node, name: string, meaning: SymbolFlags) {
-        let symbols = checker.getSymbolsInScope(location, meaning);
-        for (let symbol of symbols) {
-            if (symbol.name === name) {
-                return symbol;
-            }
-        }
-        
-        return undefined;
-    }
-    
-    function getConstantValue(location: Node, name: string) {
-        let qn = name.split(".");
-        if (qn.length === 1) {
-            return undefined;
-        }
-        
-        let namespace: Symbol;
-        if (qn.length > 2) { 
-            for (let i = 0; i < qn.length - 2; i++) {
-                namespace = i === 0 
-                    ? resolveName(location, qn[i], SymbolFlags.Namespace)
-                    : getSymbol(namespace.exports, qn[i], SymbolFlags.Namespace);
-                
-                if (!namespace) {
-                    return undefined;
-                }
-            }
-        }
-        
-        let container = qn.length > 2
-            ? getSymbol(namespace.exports, qn[qn.length - 2], SymbolFlags.Enum)
-            : resolveName(location, qn[qn.length - 2], SymbolFlags.Enum);
-             
-        if (!container) {
-            return undefined;
-        }
-        
-        let member = getSymbol(container.exports, qn[qn.length - 1], SymbolFlags.EnumMember);
-        if (!member) {
-            return undefined;
-        }
-        
-        return checker.getConstantValue(<EnumMember>member.declarations[0]);
-    }
-    
-    function isWhiteSpace(ch: string) {
-        return whitespacePattern.test(ch);
-    }
-    
-    function isQuote(ch: string) {
-        return quotePattern.test(ch);
     }
     
     function getFactoryHiddenStateForSymbol(symbol: Symbol): FactoryHiddenState {
@@ -776,16 +525,13 @@ function discover() {
         return propertyNames;
     }
     
-    function getKindsForSymbol(symbol: Symbol): SyntaxKind[] {
-        let annotations = matchAnnotations<KindAnnotation>(symbol, isKindAnnotation);
-        return annotations.length > 0 
-            ? map(annotations, annotation => annotation.kind)
-            : emptyArray;
+    function getKindsForSymbol(symbol: Symbol): KindAnnotation[] {
+        return matchAnnotations<KindAnnotation>(symbol, isKindAnnotation);
     }
 }
 
-function generate(outputFile: string) {
-    writer = createTextWriter(host.getNewLine());
+function generateFactory(outputFile: string) {
+    let writer = createTextWriter(host.getNewLine());
     writer.write(`// <auto-generated />`);
     writer.writeLine();
     writer.write(`/// <reference path="parser.ts" />`);
@@ -808,235 +554,418 @@ function generate(outputFile: string) {
     writer.writeLine();
     
     sys.writeFile(outputFile, writer.getText());
-}
 
-function writeCreateAndUpdateFunctions() {
-    for (let syntaxNode of syntax) {
-        writeCreateFunction(syntaxNode);
-        writeUpdateFunction(syntaxNode);
+    function writeCreateAndUpdateFunctions() {
+        for (let syntaxNode of syntax) {
+            writeCreateFunction(syntaxNode);
+            writeUpdateFunction(syntaxNode);
+        }
     }
-}
-
-function writeIsNodeFunctions() {
-    for (let syntaxNode of syntax) {
-        writeIsNodeFunction(syntaxNode);
-    }
-}
-
-function writeCreateFunction(syntaxNode: SyntaxNode) {
-    writer.write(`export function create${syntaxNode.kindText}(`);
     
-    let indented = false;
-    for (let i = 0; i < syntaxNode.members.length; ++i) {
-        if (i > 0) {
-            writer.write(`, `);
+    function writeIsNodeFunctions() {
+        for (let syntaxNode of syntax) {
+            writeIsNodeFunction(syntaxNode);
         }
         
-        let member = syntaxNode.members[i];
-        let paramText = 
-            member.isNodeArray ? `${member.param}?: Array<${member.elementType}>` :
-            member.isModifiersArray ? `${member.param}?: Array<Node>` :
-            `${member.param}?: ${member.type}`;
-        
-        if (writer.getColumn() >= columnWrap - paramText.length) {
-            writer.writeLine();
-            if (!indented) {
-                indented = true;
-                writer.increaseIndent();
+        for (let typeName in memberTypeUsages) {
+            if (getProperty(memberTypeUsages, typeName) && !hasProperty(memberTypeUsageRedirects, typeName)) {
+                writeIsAnyNodeFunction(typeName);
             }
         }
-        
-        writer.write(paramText);
     }
     
-    let returnTypeText = `): ${syntaxNode.typeName} {`;
-    
-    if (writer.getColumn() >= columnWrap - returnTypeText.length) {
-        writer.writeLine();
-        if (!indented) {
-            indented = true;
-            writer.increaseIndent();
-        }
-    }
-    
-    writer.write(returnTypeText);
-    writer.writeLine();
-    if (indented) {
-        writer.decreaseIndent();
-        indented = false;
-    }
-    
-    writer.increaseIndent();
-    if (syntaxNode.members.length) {
-        writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindText});`);
-        writer.writeLine();
-        if (syntaxNode.members.length > 1) {
-            writer.write(`if (arguments.length) {`);
-            writer.writeLine();
-            writer.increaseIndent();
+    function writeCreateFunction(syntaxNode: SyntaxNode) {
+        if (!syntaxNode.options.create) {
+            return;
         }
         
-        for (let member of syntaxNode.members) {
-            if (member.isModifiersArray) {
-                writer.write(`setModifiers(node, modifiers);`);
-            }
-            else if (member.isNodeArray) {
-                writer.write(`node.${member.property} = ${member.param} && createNodeArray(${member.param})`);
-            }
-            else {
-                writer.write(`node.${member.property} = ${member.param};`);
+        writer.write(`export function create${syntaxNode.kindName}(`);
+        
+        let indented = false;
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            if (i > 0) {
+                writer.write(`, `);
             }
             
-            writer.writeLine();
+            let member = syntaxNode.members[i];
+            let paramText = 
+                member.isNodeArray ? `${member.paramName}?: Array<${member.elementTypeName}>` :
+                member.isModifiersArray ? `${member.paramName}?: Array<Node>` :
+                `${member.paramName}?: ${member.typeName}`;
+            
+            if (writer.getColumn() >= columnWrap - paramText.length) {
+                writer.writeLine();
+                if (!indented) {
+                    indented = true;
+                    writer.increaseIndent();
+                }
+            }
+            
+            writer.write(paramText);
         }
         
-        if (syntaxNode.members.length > 1) {
+        let returnTypeText = `): ${syntaxNode.typeName} {`;
+        
+        if (writer.getColumn() >= columnWrap - returnTypeText.length) {
+            writer.writeLine();
+            if (!indented) {
+                indented = true;
+                writer.increaseIndent();
+            }
+        }
+        
+        writer.write(returnTypeText);
+        writer.writeLine();
+        if (indented) {
             writer.decreaseIndent();
-            writer.write(`}`);
+            indented = false;
+        }
+        
+        writer.increaseIndent();
+        if (syntaxNode.members.length) {
+            writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
+            writer.writeLine();
+            if (syntaxNode.members.length > 1) {
+                writer.write(`if (arguments.length) {`);
+                writer.writeLine();
+                writer.increaseIndent();
+            }
+            
+            for (let member of syntaxNode.members) {
+                if (member.isModifiersArray) {
+                    writer.write(`setModifiers(node, modifiers);`);
+                }
+                else if (member.isNodeArray) {
+                    writer.write(`node.${member.propertyName} = ${member.paramName} && createNodeArray(${member.paramName})`);
+                }
+                else {
+                    writer.write(`node.${member.propertyName} = ${member.paramName};`);
+                }
+                
+                writer.writeLine();
+            }
+            
+            if (syntaxNode.members.length > 1) {
+                writer.decreaseIndent();
+                writer.write(`}`);
+                writer.writeLine();
+            }
+        
+            writer.write(`return node;`);
+            writer.writeLine();
+        }
+        else {
+            writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
             writer.writeLine();
         }
     
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+    
+    function writeIsNodeFunction(syntaxNode: SyntaxNode) {
+        if (!syntaxNode.options.test) {
+            return;
+        }
+        
+        writer.write(`export function is${syntaxNode.kindName}(node: Node): node is ${syntaxNode.typeName} {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        writer.write(`return node && node.kind === SyntaxKind.${syntaxNode.kindName};`);
+        writer.writeLine();
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+    
+    function fillKindsForType(typeSymbol: Symbol, kinds: Symbol[]) {
+        let usages = getProperty(syntaxKindTypeUsages, typeSymbol.name);
+        if (usages) {
+            for (let usage of usages) {
+                if (kinds.indexOf(usage) === -1) {
+                    kinds.push(usage);
+                }
+            }
+        }
+        else if (typeSymbol.declarations[0].kind === SyntaxKind.TypeAliasDeclaration) {
+            for (let superType of getSuperTypes(typeSymbol.declarations[0])) {
+                fillKindsForType(superType, kinds);
+            }
+        }
+    }
+    
+    function writeIsAnyNodeFunction(typeName: string) {
+        let typeNames = typeName.split(/\s*\|\s*/g);
+        if (typeNames.length === 1) {
+            let typeSymbol = resolveName(tsModuleSymbol.declarations[0], typeName, SymbolFlags.Type);
+            if (typeSymbol && findAnnotation(typeSymbol, annotation => annotation.name === "nofactorynodetest")) {
+                return;
+            }
+        }
+        
+        writer.write(`export function is${typeNames.join("Or")}(node: Node): node is ${typeNames.join(" | ")} {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        writer.write(`if (node) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        writer.write(`switch (node.kind) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        let kinds: Symbol[] = [];
+        for (let typeName of typeNames) {
+            let typeSymbol = resolveName(tsModuleSymbol.declarations[0], typeName, SymbolFlags.Type);
+            if (typeSymbol) {
+                fillKindsForType(typeSymbol, kinds);
+            }
+        }
+
+        for (let kind of kinds) {
+            writer.write(`case SyntaxKind.${kind.name}:`);
+            writer.writeLine();
+        }
+        
+        if (kinds.length > 0) {
+            writer.increaseIndent();
+            writer.write(`return true;`);
+            writer.writeLine();
+            writer.decreaseIndent();
+        }
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
+        writer.write(`return false; `);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+    
+    function writeUpdateFunction(syntaxNode: SyntaxNode) {
+        if (!syntaxNode.options.update || !hasChildNodes(syntaxNode)) {
+            return;
+        }
+        
+        writer.write(`export function update${syntaxNode.kindName}(node: ${syntaxNode.typeName}`);
+    
+        let indented = false;
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            let member = syntaxNode.members[i];
+            if (member.isFactoryParam) {
+                continue;
+            }
+            
+            writer.write(`, `);
+            
+            let paramText = 
+                member.isNodeArray ? `${member.paramName}: Array<${member.elementTypeName}>` :
+                member.isModifiersArray ? `${member.paramName}: Array<Node>` :
+                `${member.paramName}: ${member.typeName}`;
+    
+            if (writer.getColumn() >= columnWrap - paramText.length) {
+                writer.writeLine();
+                if (!indented) {
+                    indented = true;
+                    writer.increaseIndent();
+                }
+            }
+    
+            writer.write(paramText);
+        }
+    
+        let returnTypeText = `): ${syntaxNode.typeName} {`;
+        if (writer.getColumn() >= columnWrap - returnTypeText.length) {
+            writer.writeLine();
+            if (!indented) {
+                indented = true;
+                writer.increaseIndent();
+            }
+        }
+        
+        writer.write(returnTypeText);
+        writer.writeLine();
+        if (indented) {
+            writer.decreaseIndent();
+            indented = false;
+        }
+        
+        writer.increaseIndent();
+        
+        writer.write(`if (`);
+        let first = true;
+        for (let member of syntaxNode.members) {
+            if (member.isFactoryParam) {
+                continue;
+            }
+            
+            if (first) {
+                first = false;
+            }
+            else {
+                writer.write(` || `);
+            }
+            
+            let conditionText = `${member.paramName} !== node.${member.propertyName}`;
+            if (writer.getColumn() >= columnWrap - conditionText.length) {
+                writer.writeLine();
+                if (!indented) {
+                    indented = true;
+                    writer.increaseIndent();
+                }
+            }
+    
+            writer.write(conditionText);
+        }
+    
+        writer.write(`) {`);
+        writer.writeLine();
+        if (indented) {
+            writer.decreaseIndent();
+            indented = false;
+        }
+        
+        writer.increaseIndent();
+        
+        writer.write(`let newNode = create${syntaxNode.kindName}(`);
+        
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            if (i > 0) {
+                writer.write(`, `);
+            }
+            
+            let member = syntaxNode.members[i];
+            if (member.isFactoryParam) {
+                writer.write(`node.${member.propertyName}`);
+            }
+            else {
+                writer.write(member.paramName);
+            }
+        }
+    
+        writer.write(`);`);
+        writer.writeLine();
+        
+        writer.write(`return updateFrom(node, newNode);`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
         writer.write(`return node;`);
         writer.writeLine();
-    }
-    else {
-        writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindText});`);
+    
+        writer.decreaseIndent();
+        writer.write(`}`);
         writer.writeLine();
     }
-
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
 }
 
-function writeIsNodeFunction(syntaxNode: SyntaxNode) {
-    writer.write(`export function is${syntaxNode.kindText}(node: Node): node is ${syntaxNode.typeName} {`);
+function generateTransform(outputFile: string) {
+    let writer = createTextWriter(host.getNewLine());
+    writer.write(`// <auto-generated />`);
+    writer.writeLine();
+    writer.write(`/// <reference path="factory.ts" />`);
+    writer.writeLine();
+    writer.write(`/// <reference path="transform.ts" />`);
+    writer.writeLine();
+    writer.write(`/* @internal */`);
+    writer.writeLine();
+    writer.write(`namespace ts.transform {`);
     writer.writeLine();
     writer.increaseIndent();
-    writer.write(`return node && node.kind === SyntaxKind.${syntaxNode.kindText};`);
-    writer.writeLine();
+    writeVisitChildrenFunction();
     writer.decreaseIndent();
     writer.write(`}`);
     writer.writeLine();
-}
-
-function writeUpdateFunction(syntaxNode: SyntaxNode) {
-    if (!hasChildNodes(syntaxNode)) {
-        return;
-    }
+   
+    sys.writeFile(outputFile, writer.getText());
     
-    writer.write(`export function update${syntaxNode.kindText}(node: ${syntaxNode.typeName}`);
-
-    let indented = false;
-    for (let i = 0; i < syntaxNode.members.length; ++i) {
-        let member = syntaxNode.members[i];
-        if (member.isFactoryParam) {
-            continue;
-        }
-        
-        writer.write(`, `);
-        
-        let paramText = 
-            member.isNodeArray ? `${member.param}: Array<${member.elementType}>` :
-            member.isModifiersArray ? `${member.param}: Array<Node>` :
-            `${member.param}: ${member.type}`;
-
-        if (writer.getColumn() >= columnWrap - paramText.length) {
-            writer.writeLine();
-            if (!indented) {
-                indented = true;
-                writer.increaseIndent();
-            }
-        }
-
-        writer.write(paramText);
-    }
-
-    let returnTypeText = `): ${syntaxNode.typeName} {`;
-    if (writer.getColumn() >= columnWrap - returnTypeText.length) {
+    function writeVisitChildrenFunction() {
+        writer.write(`export function visitChildren<TNode extends Node>(node: TNode, transformer: Transformer): TNode;`);
         writer.writeLine();
-        if (!indented) {
-            indented = true;
+        writer.write(`export function visitChildren(node: Node, transformer: Transformer): Node {`);
+        writer.writeLine();
+        writer.increaseIndent();
+    
+        writer.write(`if (!node || !transformer) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        writer.write(`return node;`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
+        writer.write(`switch (node.kind) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        for (let syntaxNode of syntax) {
+            if (!hasChildNodes(syntaxNode)) {
+                continue;
+            }
+            
+            writer.write(`case SyntaxKind.${syntaxNode.kindName}:`);
+            writer.writeLine();
             writer.increaseIndent();
-        }
-    }
-    
-    writer.write(returnTypeText);
-    writer.writeLine();
-    if (indented) {
-        writer.decreaseIndent();
-        indented = false;
-    }
-    
-    writer.increaseIndent();
-    
-    writer.write(`if (`);
-    let first = true;
-    for (let member of syntaxNode.members) {
-        if (member.isFactoryParam) {
-            continue;
-        }
-        
-        if (first) {
-            first = false;
-        }
-        else {
-            writer.write(` || `);
-        }
-        
-        let conditionText = `${member.param} !== node.${member.property}`;
-        if (writer.getColumn() >= columnWrap - conditionText.length) {
+            
+            writer.write(`return factory.update${syntaxNode.kindName}(`);
             writer.writeLine();
-            if (!indented) {
-                indented = true;
-                writer.increaseIndent();
+            writer.increaseIndent();
+            writer.write(`<${syntaxNode.typeName}>node`);
+            
+            for (let member of syntaxNode.members) {
+                if (member.isFactoryParam) {
+                    continue;
+                }
+                
+                writer.write(`, `);
+                writer.writeLine();
+                if (member.isNodeArray) {
+                    writer.write(`visitNodes((<${syntaxNode.typeName}>node).${member.propertyName}, transformer)`);
+                }
+                else if (member.isModifiersArray) {
+                    writer.write(`<ModifiersArray>visitNodes((<${syntaxNode.typeName}>node).${member.propertyName}, transformer)`);
+                }
+                else {
+                    writer.write(`visit((<${syntaxNode.typeName}>node).${member.propertyName}, transformer)`);
+                }
             }
-        }
-
-        writer.write(conditionText);
-    }
-
-    writer.write(`) {`);
-    writer.writeLine();
-    if (indented) {
-        writer.decreaseIndent();
-        indented = false;
-    }
-    
-    writer.increaseIndent();
-    
-    writer.write(`let newNode = create${syntaxNode.kindText}(`);
-    
-    for (let i = 0; i < syntaxNode.members.length; ++i) {
-        if (i > 0) {
-            writer.write(`, `);
+            
+            writer.write(`);`);
+            writer.writeLine();
+            writer.decreaseIndent();
+            writer.decreaseIndent();
         }
         
-        let member = syntaxNode.members[i];
-        if (member.isFactoryParam) {
-            writer.write(`node.${member.property}`);
-        }
-        else {
-            writer.write(member.param);
-        }
+        writer.write(`default:`);
+        writer.writeLine();
+        writer.increaseIndent();
+        writer.write(`return node;`);
+        writer.writeLine();
+        writer.decreaseIndent();
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write('}');
+        writer.writeLine();
     }
-
-    writer.write(`);`);
-    writer.writeLine();
-    
-    writer.write(`return updateFrom(node, newNode);`);
-    writer.writeLine();
-    
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
-    
-    writer.write(`return node;`);
-    writer.writeLine();
-
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
 }
 
 function hasChildNodes(syntaxNode: SyntaxNode) {
@@ -1053,6 +982,112 @@ function hasChildNodes(syntaxNode: SyntaxNode) {
     return false;
 }
 
+function isTypeReferenceNode(node: Node): node is TypeReferenceNode {
+    return node ? node.kind === SyntaxKind.TypeReference : false;
+}
+
+function isUnionTypeNode(node: Node): node is UnionTypeNode {
+    return node ? node.kind === SyntaxKind.UnionType : false;
+}
+
+function isInterfaceDeclaration(node: Node): node is InterfaceDeclaration {
+    return node ? node.kind === SyntaxKind.InterfaceDeclaration : false;
+}
+
+function isTypeAliasDeclaration(node: Node): node is TypeAliasDeclaration {
+    return node ? node.kind === SyntaxKind.TypeAliasDeclaration : false;
+}
+
+function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
+    return node ? node.kind === SyntaxKind.ExpressionWithTypeArguments : false;
+}
+
+function isNodeArray(typeNode: TypeNode): boolean {
+    return isTypeReferenceNode(typeNode) ? checker.getSymbolAtLocation(typeNode.typeName) === nodeArraySymbol : false;
+}
+
+function isModifiersArray(typeNode: TypeNode): boolean {
+    return isTypeReferenceNode(typeNode) ? checker.getSymbolAtLocation(typeNode.typeName) === modifiersArraySymbol : false;
+}
+
+function isSubtypeOf(node: TypeNode | Declaration, superTypeSymbol: Symbol): boolean {
+    if (isInterfaceDeclaration(node)) {
+        if (node.heritageClauses) {
+            for (let superType of node.heritageClauses[0].types) {
+                if (isSubtypeOf(superType, superTypeSymbol)) {
+                    return true;
+                }
+            }
+        }
+    }
+    else if (isTypeAliasDeclaration(node)) {
+        return isSubtypeOf(node.type, superTypeSymbol);
+    }
+    else if (isUnionTypeNode(node)) {
+        for (let constituentType of node.types) {
+            if (isSubtypeOf(constituentType, superTypeSymbol)) {
+                return true;
+            }
+        }
+    }
+    else {
+        let typeSymbol = isTypeReferenceNode(node) ? checker.getSymbolAtLocation(node.typeName) 
+            : isExpressionWithTypeArguments(node) ? checker.getSymbolAtLocation(node.expression) 
+            : undefined;
+            
+        if (!typeSymbol) {
+            return false;
+        }
+        else if (typeSymbol === superTypeSymbol) {
+            return true;
+        }
+        
+        return isSubtypeOf(typeSymbol.declarations[0], superTypeSymbol);
+    }
+    
+    return false;
+}
+    
+function getSuperTypes(node: Declaration) {
+    let superTypes: Symbol[] = [];
+    let superTypeSymbolSet: boolean[] = [];
+
+    if (isTypeAliasDeclaration(node)) {
+        fillSuperTypes(node.type);
+    }
+    else if (isInterfaceDeclaration(node) && node.heritageClauses) {
+        for (let superType of node.heritageClauses[0].types) {
+            fillSuperTypes(superType);
+        }
+    }
+
+    return superTypes;
+    
+    function fillSuperTypes(node: TypeNode) {
+        if (isUnionTypeNode(node)) {
+            // Flatten union types
+            for (let constituentType of node.types) {
+                fillSuperTypes(constituentType);
+            }
+        }
+        else {
+            // Add type references
+            let symbol = isTypeReferenceNode(node) ? checker.getSymbolAtLocation(node.typeName) 
+                : isExpressionWithTypeArguments(node) ? checker.getSymbolAtLocation(node.expression) 
+                : undefined;
+                
+            if (symbol) {
+                if (superTypeSymbolSet[getSymbolId(symbol)]) {
+                    return;
+                }
+                
+                superTypeSymbolSet[getSymbolId(symbol)] = true;
+                superTypes.push(symbol);
+            }
+        }
+    }
+}
+    
 function isFactoryHiddenAnnotation(annotation: Annotation): annotation is FactoryHiddenAnnotation {
     return annotation.name === "factoryhidden";
 }
@@ -1069,10 +1104,206 @@ function isKindAnnotation(annotation: Annotation): annotation is KindAnnotation 
     return annotation.name === "kind";
 }
 
+function findAnnotation<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation {
+    for (let decl of symbol.declarations) {
+        for (let annotation of getAnnotationsForNode(decl)) {
+            if (match(annotation)) {
+                return <TAnnotation>annotation;
+            }
+        }
+    }
+    
+    return undefined;
+}
+
+function matchAnnotations<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation[] {
+    let annotations: TAnnotation[];
+    for (let decl of symbol.declarations) {
+        for (let annotation of getAnnotationsForNode(decl)) {
+            if (match(annotation)) {
+                if (!annotations) {
+                    annotations = [];
+                }
+                
+                annotations.push(<TAnnotation>annotation);
+            }
+        }
+    }
+    
+    return annotations || emptyArray;
+}
+
+function getAnnotations(symbol: Symbol): Annotation[] {
+    let annotations: Annotation[];
+    for (let decl of symbol.declarations) {
+        let declAnnotations = getAnnotationsForNode(decl);
+        if (declAnnotations !== emptyArray) {
+            if (!annotations) {
+                annotations = [];
+            }
+            for (let annotation of declAnnotations) {
+                annotations.push(annotation);
+            }
+        }
+    }
+    return annotations;
+}
+
+function getAnnotationsForNode(node: Node): Annotation[] {
+    let annotations = nodeAnnotations[getNodeId(node)];
+    if (annotations) {
+        return annotations;
+    }
+
+    let leadingCommentRanges = getLeadingCommentRanges(sourceFile.text, node.pos);
+    if (leadingCommentRanges) {
+        for (let range of leadingCommentRanges) {
+            parseAnnotations(range);
+        }
+    }
+    
+    if (!annotations) {
+        annotations = emptyArray;
+    }
+    
+    nodeAnnotations[getNodeId(node)] = annotations;
+    return annotations;
+    
+    function getLiteralValue(expr: Expression): any {
+        switch (expr.kind) {
+            case SyntaxKind.TrueKeyword: return true;
+            case SyntaxKind.FalseKeyword: return false;
+            case SyntaxKind.NullKeyword: return null;
+            case SyntaxKind.VoidExpression: return undefined;
+            case SyntaxKind.StringLiteral: return (<LiteralExpression>expr).text;
+            case SyntaxKind.NoSubstitutionTemplateLiteral: return (<LiteralExpression>expr).text;
+            case SyntaxKind.NumericLiteral: return Number((<LiteralExpression>expr).text);
+            case SyntaxKind.PropertyAccessExpression:
+                return getEnumValue(node, expr.getText());
+            case SyntaxKind.ArrayLiteralExpression:
+                return (<ArrayLiteralExpression>expr).elements.map(getLiteralValue);
+            case SyntaxKind.ObjectLiteralExpression:
+                let obj: Map<any> = {};
+                for (let element of (<ObjectLiteralExpression>expr).properties) {
+                    if (element.kind !== SyntaxKind.PropertyAssignment
+                        || (<PropertyAssignment>element).name.kind !== SyntaxKind.Identifier) {
+                        continue;
+                    }
+                    
+                    obj[(<Identifier>(<PropertyAssignment>element).name).text] =
+                        getLiteralValue((<PropertyAssignment>element).initializer);
+                }
+                return obj;
+        }
+    }
+    
+    function parseAnnotation(annotationSource: string) {
+        let evalSourceFile = createSourceFile("eval.ts", annotationSource, options.target, true);
+        let statements = evalSourceFile.statements;
+        if (statements.length === 0) {
+            return undefined;
+        }
+        
+        let stmt = statements[0];
+        if (stmt.kind !== SyntaxKind.ExpressionStatement) {
+            return undefined;
+        }
+        
+        let expr = (<ExpressionStatement>stmt).expression;
+        if (expr.kind === SyntaxKind.Identifier) {
+            return createAnnotation((<Identifier>expr).text, emptyArray);
+        }
+        else if (expr.kind === SyntaxKind.CallExpression) {
+            let call = <CallExpression>expr;
+            if (call.expression.kind !== SyntaxKind.Identifier) {
+                return undefined;
+            }
+            
+            let _arguments: any[] = [];
+            for (let argument of call.arguments) {
+                _arguments.push(getLiteralValue(argument));
+            }
+            
+            return createAnnotation((<Identifier>call.expression).text, _arguments);
+        }
+        else {
+            return undefined;
+        }
+    }
+    
+    function parseAnnotations(range: CommentRange) {
+        let text = sourceFile.text;
+        let comment = text.substring(range.pos, range.end);
+        let annotationMatch: RegExpExecArray;
+        while (annotationMatch = annotationPattern.exec(comment)) {
+            let annotation = parseAnnotation(annotationMatch[1]);
+            if (annotation) {
+                if (!annotations) {
+                    annotations = [];
+                }
+                
+                annotations.push(annotation);
+            }
+        }
+    }
+}
+
+function getEnumValue(location: Node, name: string) {
+    let qn = name.split(".");
+    if (qn.length === 1) {
+        return undefined;
+    }
+    
+    let namespace: Symbol;
+    if (qn.length > 2) { 
+        for (let i = 0; i < qn.length - 2; i++) {
+            namespace = i === 0 
+                ? resolveName(location, qn[i], SymbolFlags.Namespace)
+                : getSymbol(namespace.exports, qn[i], SymbolFlags.Namespace);
+            
+            if (!namespace) {
+                return undefined;
+            }
+        }
+    }
+    
+    let container = qn.length > 2
+        ? getSymbol(namespace.exports, qn[qn.length - 2], SymbolFlags.Enum)
+        : resolveName(location, qn[qn.length - 2], SymbolFlags.Enum);
+         
+    if (!container) {
+        return undefined;
+    }
+    
+    let member = getSymbol(container.exports, qn[qn.length - 1], SymbolFlags.EnumMember);
+    if (!member) {
+        return undefined;
+    }
+    
+    return checker.getConstantValue(<EnumMember>member.declarations[0]);
+}
+
+function isWhiteSpace(ch: string) {
+    return whitespacePattern.test(ch);
+}
+
+function isQuote(ch: string) {
+    return quotePattern.test(ch);
+}
+
 function createAnnotation(name: string, _arguments: any[]): Annotation {
     switch (name) {
         case "kind":
-            return <KindAnnotation>{ name, arguments: _arguments, kind: <SyntaxKind>_arguments[0] };
+            let options: KindOptions = { create: true, update: true, test: true };
+            for (var p in _arguments[1]) {
+                (<any>options)[p] = _arguments[1][p];
+            }
+            return <KindAnnotation>{ 
+                name, 
+                arguments: _arguments, 
+                kind: _arguments[0], 
+                options 
+            };
             
         case "factoryhidden":
             if (_arguments.length >= 2 && typeof _arguments[0] === "string" && typeof _arguments[1] === "boolean") {
@@ -1109,4 +1340,26 @@ function getCompilerOptions() {
     options.noResolve = true;
     options.noLib = true;
     return options;
+}
+
+function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags) {
+    if (symbols && meaning && hasProperty(symbols, name)) {
+        let symbol = symbols[name];
+        if (symbol.flags & meaning) {
+            return symbol;
+        }
+    }
+    
+    return undefined;
+}
+
+function resolveName(location: Node, name: string, meaning: SymbolFlags) {
+    let symbols = checker.getSymbolsInScope(location, meaning);
+    for (let symbol of symbols) {
+        if (symbol.name === name) {
+            return symbol;
+        }
+    }
+    
+    return undefined;
 }
