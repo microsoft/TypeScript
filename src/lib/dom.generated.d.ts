@@ -2711,6 +2711,8 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     scrollTop: number;
     scrollWidth: number;
     tagName: string;
+    id: string;
+    className: string;
     getAttribute(name?: string): string;
     getAttributeNS(namespaceURI: string, localName: string): string;
     getAttributeNode(name: string): Attr;
@@ -3809,14 +3811,12 @@ declare var HTMLDocument: {
 interface HTMLElement extends Element {
     accessKey: string;
     children: HTMLCollection;
-    className: string;
     contentEditable: string;
     dataset: DOMStringMap;
     dir: string;
     draggable: boolean;
     hidden: boolean;
     hideFocus: boolean;
-    id: string;
     innerHTML: string;
     innerText: string;
     isContentEditable: boolean;
@@ -12535,7 +12535,6 @@ interface SVGLocatable {
 }
 
 interface SVGStylable {
-    className: SVGAnimatedString;
     style: CSSStyleDeclaration;
 }
 
