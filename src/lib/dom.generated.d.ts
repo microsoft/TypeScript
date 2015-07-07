@@ -11984,6 +11984,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     toolbar: BarProp;
     top: Window;
     window: Window;
+    URL: URL;
     alert(message?: any): void;
     blur(): void;
     cancelAnimationFrame(handle: number): void;
@@ -12798,6 +12799,7 @@ declare var styleMedia: StyleMedia;
 declare var toolbar: BarProp;
 declare var top: Window;
 declare var window: Window;
+declare var URL: URL;
 declare function alert(message?: any): void;
 declare function blur(): void;
 declare function cancelAnimationFrame(handle: number): void;
