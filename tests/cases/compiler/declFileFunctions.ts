@@ -28,6 +28,10 @@ export function fooWithSingleOverload(a: any) {
     return a;
 }
 
+export function fooWithTypePredicate(a: any): a is number {
+    return true;
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
