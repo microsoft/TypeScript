@@ -143,9 +143,9 @@ namespace ts {
 
         var currentErrorNode: Node;
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            if (currentErrorNode) {
-                collectDeclarations(symbol, currentErrorNode);
-            }
+            //if (currentErrorNode) {
+            //    collectDeclarations(symbol, currentErrorNode);
+            //}
         }
 
         function emitTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
@@ -1075,6 +1075,8 @@ namespace ts {
 
 
         function visitNode(node: Node): void {
+            if (!node) return;
+
             switch (node.kind) {
                 // import/export aliases
                 case SyntaxKind.ExportDeclaration:
@@ -1272,12 +1274,17 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                    // TODO: handel ambient context
-                    return (node.flags & NodeFlags.Export) !== 0;
+                    if (node.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent)) {
+                        return true;
+                    }
+                    else {
+                        // TODO: handel ambient context
+                        return (node.flags & NodeFlags.Export) !== 0;
+                    }
 
                 case SyntaxKind.VariableDeclaration:
                     // TODO: do we need this
-                    return (node.parent.parent.flags & NodeFlags.Export) !== 0;
+                    return isDeclarationVisible(node.parent.parent);
             }
 
             return false;
