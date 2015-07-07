@@ -1752,6 +1752,9 @@ namespace ts {
             }
             else if (node.kind !== SyntaxKind.Constructor) {
                 // TODO: handel infered type
+                let signature = resolver.getSignatureFromDeclaration(node);
+                Debug.assert(!!signature);
+                visitType(resolver.getReturnTypeOfSignature(signature), node);
             }
         }
 
@@ -1765,7 +1768,102 @@ namespace ts {
             }
             else {
                 // TODO: handel infered type
+                let symbol = resolver.getSymbolAtLocation(node);
+                Debug.assert(!!symbol);
+                if (symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))) {
+                    visitType(resolver.getTypeOfSymbol(symbol), node);
+                }
             }
+        }
+
+        function visitType(type: Type, referenceNode: Node, symbolStack?: Symbol[]): void {
+            if (type.flags & TypeFlags.Reference) {
+                // TODO: handel array
+                visitType((<TypeReference>type).target, referenceNode);
+                forEach((<TypeReference>type).typeArguments, t => visitType(t, referenceNode));
+           }
+            else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
+                visitTypePart(type.symbol, referenceNode);
+            }
+            else if (type.flags & TypeFlags.Tuple) {
+                forEach((<TupleType>type).elementTypes, t => visitType(t, referenceNode));
+            }
+            else if (type.flags & TypeFlags.Union) {
+                forEach((<UnionType>type).types, t => visitType(t, referenceNode));
+            }
+            else if (type.flags & TypeFlags.Anonymous) {
+                visitAnonymousType(type, referenceNode, symbolStack);
+            }
+        }
+
+        function visitAnonymousType(type: Type, referenceNode: Node, symbolStack: Symbol[]): void {
+            let symbol = type.symbol;
+            if (symbol) {
+                if (contains(symbolStack, symbol)) {
+                    return;
+                }
+
+                // Always use 'typeof T' for type of class, enum, and module objects
+                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
+                    visitTypePart(type.symbol, referenceNode);
+                }
+                else {
+                    // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
+                    // of types allows us to catch circular references to instantiations of the same anonymous type
+                    if (!symbolStack) {
+                        symbolStack = [];
+                    }
+                    symbolStack.push(symbol);
+                    visitTypeLiteral(type, referenceNode, symbolStack);
+                    symbolStack.pop();
+                }
+            }
+            else {
+                // Anonymous types with no symbol are never circular
+                visitTypeLiteral(type, referenceNode, /*symbolStack*/ undefined);
+            }
+        }
+
+        function visitTypeLiteral(type: ObjectType, referenceNode: Node, symbolStack: Symbol[]): void {
+            let resolved = resolver.resolveObjectOrUnionTypeMembers(type);
+            forEach(resolved.callSignatures, s => visitSignatureType(s, referenceNode, symbolStack));
+            forEach(resolved.constructSignatures, s => visitSignatureType(s, referenceNode, symbolStack));
+            if (resolved.stringIndexType) visitType(resolved.stringIndexType, referenceNode, symbolStack);
+            if (resolved.numberIndexType) visitType(resolved.numberIndexType, referenceNode, symbolStack);
+            forEach(resolved.properties, p => {
+                let t = resolver.getTypeOfSymbol(p);
+                if (p.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+                    let signatures = resolver.getSignaturesOfType(t, SignatureKind.Call);
+                    for (let signature of signatures) {
+                        visitSignatureType(signature, referenceNode, symbolStack);
+                    }
+                }
+                else {
+                    visitType(t, referenceNode, symbolStack);
+                }
+            });
+        }
+
+        function visitSignatureType(signature: Signature, referenceNode: Node, symbolStack: Symbol[]) {
+            if (signature.target) {
+                // Instantiated signature, write type arguments instead
+                // This is achieved by passing in the mapper separately
+                forEach(signature.target.typeParameters, p => visitType(p, referenceNode, symbolStack));
+            }
+            else {
+                forEach(signature.typeParameters, p => visitType(p, referenceNode, symbolStack));
+            }
+
+            forEach(signature.parameters, p => {
+                let t = resolver.getTypeOfSymbol(p);
+                visitType(t, referenceNode, symbolStack);
+            });
+            visitType(resolver.getReturnTypeOfSignature(signature), referenceNode, symbolStack);
+        }
+
+        function visitTypePart(symbol: Symbol, referenceNode: Node): void {
+            // if the symbol can be accessided by its name
+            collectDeclarations(symbol, referenceNode);
         }
 
         function visitTypeName(node: Identifier|QualifiedName): void {
@@ -1891,7 +1989,7 @@ namespace ts {
 
 
             referencedDeclarationName = "---" + referencedDeclarationName +"---";
-            let container = errorNode.parent;
+            let container = errorNode;
             while (true) {
                 switch (container.kind) {
                     case SyntaxKind.ClassDeclaration:

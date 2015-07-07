@@ -13731,7 +13731,7 @@ namespace ts {
                     }
                     break;
             }
-            return undefined;
+            return getSymbolOfNode(node);
         }
 
         function getShorthandAssignmentValueSymbol(location: Node): Symbol {
@@ -14177,6 +14177,11 @@ namespace ts {
                 getSymbolAtLocation,
                 resolveAlias,
                 getLocalTargetOfAliasDeclaration,
+                getTypeOfSymbol,
+                getReturnTypeOfSignature,
+                getSignatureFromDeclaration,
+                getSignaturesOfType,
+                resolveObjectOrUnionTypeMembers
             };
         }
 

@@ -1578,6 +1578,11 @@ namespace ts {
         getSymbolAtLocation(node: Node): Symbol;
         resolveAlias(symbol: Symbol): Symbol;
         getLocalTargetOfAliasDeclaration(node: Declaration): Symbol;
+        getTypeOfSymbol(symbol: Symbol): Type;
+        getReturnTypeOfSignature(signature: Signature): Type;
+        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
+        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+        resolveObjectOrUnionTypeMembers(type: ObjectType): ResolvedType;
     }
 
     export const enum SymbolFlags {
@@ -1751,8 +1756,11 @@ namespace ts {
         Void                    = 0x00000010,
         Undefined               = 0x00000020,
         Null                    = 0x00000040,
+        
         Enum                    = 0x00000080,  // Enum type
+        
         StringLiteral           = 0x00000100,  // String literal type
+
         TypeParameter           = 0x00000200,  // Type parameter
         Class                   = 0x00000400,  // Class
         Interface               = 0x00000800,  // Interface
