@@ -1252,7 +1252,10 @@ namespace ts {
 
         function isDeclarationVisible(node: Node): boolean {
             if (compilerOptions.stripInternal && isInternal(node)) {
-                return false;
+                // TODO: this is the correct place for this check, enable this 
+                // after updating the code to make internal on local declarations instead
+                // of containers
+                //return false;
             }
 
             switch (node.kind) {
