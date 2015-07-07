@@ -1527,14 +1527,6 @@ namespace ts {
                     appendSymbolNameOnly(symbol, writer);
                 }
 
-                // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses
-                // this to determine if an import it has previously seen (and not written out) needs
-                // to be written to the file once the walk of the tree is complete.
-                //
-                // NOTE(cyrusn): This approach feels somewhat unfortunate.  A simple pass over the tree
-                // up front (for example, during checking) could determine if we need to emit the imports
-                // and we could then access that data during declaration emit.
-                writer.trackSymbol(symbol, enclosingDeclaration, meaning);
                 function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
                     if (symbol) {
                         let accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, !!(flags & SymbolFormatFlags.UseOnlyExternalAliasing));
@@ -1598,6 +1590,7 @@ namespace ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
+                        writer.trackSymbol(type.symbol);
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
                     }
@@ -1641,6 +1634,7 @@ namespace ts {
                     // Unnamed function expressions, arrow functions, and unnamed class expressions have reserved names that
                     // we don't want to display
                     if (!isReservedMemberName(symbol.name)) {
+                        writer.trackSymbol(symbol);
                         buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type);
                     }
                     if (pos < end) {
@@ -1761,6 +1755,7 @@ namespace ts {
                 function writeTypeofSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
+                    writer.trackSymbol(type.symbol);
                     buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
                 }
 

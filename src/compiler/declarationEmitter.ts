@@ -147,9 +147,9 @@ namespace ts {
 
         var currentErrorNode: Node;
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            //if (currentErrorNode) {
-            //    collectDeclarations(symbol, currentErrorNode);
-            //}
+            if (currentErrorNode) {
+                collectDeclarations(symbol, currentErrorNode);
+            }
         }
 
         function emitTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
@@ -1199,9 +1199,10 @@ namespace ts {
                 // TODO: handel infered type
                 // TODO: Cache the result
                 let writer = createNewTextWriterWithSymbolWriter();
+                let previousErrorNode = currentErrorNode;
                 currentErrorNode = node;
                 resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                currentErrorNode = undefined;
+                currentErrorNode = previousErrorNode;
             }
         }
 
@@ -1217,9 +1218,10 @@ namespace ts {
                 // TODO: handel infered type
                 // TODO: Cache the result
                 let writer = createNewTextWriterWithSymbolWriter();
+                let previousErrorNode = currentErrorNode;
                 currentErrorNode = node;
                 resolver.writeTypeOfDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                currentErrorNode = undefined;
+                currentErrorNode = previousErrorNode;
             }
         }
 
@@ -1227,9 +1229,10 @@ namespace ts {
             // TODO: handel infered type
             // TODO: Cache the result
             let writer = createNewTextWriterWithSymbolWriter();
+            let previousErrorNode = currentErrorNode;
             currentErrorNode = node;
             resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-            currentErrorNode = undefined;
+            currentErrorNode = previousErrorNode;
 
             visitNodes(node.typeArguments);
         }
