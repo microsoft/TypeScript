@@ -14181,7 +14181,6 @@ namespace ts {
                 getReturnTypeOfSignature,
                 getSignatureFromDeclaration,
                 getSignaturesOfType,
-                resolveObjectOrUnionTypeMembers
             };
         }
 

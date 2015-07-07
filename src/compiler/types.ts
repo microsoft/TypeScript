@@ -1573,7 +1573,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
         resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol;
         getSymbolAtLocation(node: Node): Symbol;
         resolveAlias(symbol: Symbol): Symbol;
@@ -1582,7 +1582,6 @@ namespace ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
-        resolveObjectOrUnionTypeMembers(type: ObjectType): ResolvedType;
     }
 
     export const enum SymbolFlags {
