@@ -13414,7 +13414,7 @@ namespace ts {
                         case SyntaxKind.ClassExpression:
                             let className = (<ClassExpression>location).name;
                             if (className) {
-                                copySymbol(className.text, location.symbol, meaning);
+                                copySymbol(location.symbol, meaning);
                             }
                             // fall through; this fall-through is necessary because we would like to handle
                             // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
@@ -13432,7 +13432,7 @@ namespace ts {
                         case SyntaxKind.ClassExpression:
                             let funcName = (<FunctionExpression>location).name;
                             if (funcName) {
-                                copySymbol(funcName.text, location.symbol, meaning);
+                                copySymbol(location.symbol, meaning);
                             }
                             break;
                     }
@@ -13451,9 +13451,12 @@ namespace ts {
              * @param symbol the symbol to be added into symbol table
              * @param meaning meaning of symbol to filter by before adding to symbol table
              */
-            function copySymbol(key: string, symbol: Symbol, meaning: SymbolFlags): void {
+            function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
                 if (symbol.flags & meaning) {
-                    let id = key || symbol.name;
+                    let id = symbol.name;
+                    // We will copy all symbol regardless of its reserved name because
+                    // symbolsToArray will check whether the key is a reserved name and
+                    // it will not copy symbol with reserved name to the array
                     if (!hasProperty(symbols, id)) {
                         symbols[id] = symbol;
                     }
@@ -13464,7 +13467,7 @@ namespace ts {
                 if (meaning) {
                     for (let id in source) {
                         let symbol = source[id];
-                        copySymbol(symbol.name, symbol, meaning);
+                        copySymbol(symbol, meaning);
                     }
                 }
             }

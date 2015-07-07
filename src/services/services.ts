@@ -2808,30 +2808,23 @@ namespace ts {
          * @return undefined if the name is of external module otherwise a name with striped of any quote
          */
         function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
-            let displayName: string;
+            let displayName: string = symbol.getName();
 
-            // In the case of default export, function expression and class expression,
-            // the binder bind them with "default", "__function", "__class" respectively.
-            // However, for completion entry, we want to display its declared name rather than binder name.
-            if (getLocalSymbolForExportDefault(symbol) ||
-                getDeclarationOfKind(symbol, SyntaxKind.FunctionExpression) ||
-                getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
-                let typeChecker = program.getTypeChecker();
-                displayName = getDeclaredName(typeChecker, symbol, location);
-
-                // At this point, we expect that all completion list entries have declared name including function expression and class expression
-                // because when we gather all relevant symbols, we check that the function expression and class expression must have declared name
-                // before adding the symbol into our symbols table. (see: getSymbolsInScope)
-                Debug.assert(displayName !== undefined, "Expected displayed name from declaration to existed in this symbol: " + symbol.getName());
-            }
-            else {
-                displayName = symbol.getName();
-                let firstCharCode = displayName.charCodeAt(0);
-                // First check of the displayName is not external module; if it is an external module, it is not valid entry
-                if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                    // If the symbol is external module, don't show it in the completion list
-                    // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
-                    return undefined;
+            if (displayName) {
+                if (displayName === "default") {
+                    // In the case of default export, the binder bind them with "default".
+                    // However, for completion entry, we want to display its declared name rather than binder name.
+                    let typeChecker = program.getTypeChecker();
+                    displayName = getDeclaredName(typeChecker, symbol, location);
+                }
+                else {
+                    let firstCharCode = displayName.charCodeAt(0);
+                    // First check of the displayName is not external module; if it is an external module, it is not valid entry
+                    if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                        // If the symbol is external module, don't show it in the completion list
+                        // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
+                        return undefined;
+                    }
                 }
             }
 
