@@ -11444,9 +11444,10 @@ namespace ts {
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
-        function checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node: Node) {
+        function checkGrammarDisallowedModifiersOnMethodInObjectLiteralExpression(node: Node) {
             if (node.modifiers) {
-                if (inObjectLiteralExpression(node)) {
+                if (node.parent.kind === SyntaxKind.ObjectLiteralExpression){
+                    // If this method declaration is a property of object-literal-expression
                     if (isAsyncFunctionLike(node)) {
                         if (node.modifiers.length > 1) {
                             return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here); 
@@ -11457,18 +11458,6 @@ namespace ts {
                     }
                 }
             }
-        }
-
-        function inObjectLiteralExpression(node: Node) {
-            while (node) {
-                if (node.kind === SyntaxKind.ObjectLiteralExpression) {
-                    return true;
-                }
-
-                node = node.parent;
-            }
-            
-            return false;
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -15026,7 +15015,7 @@ namespace ts {
         }
 
         function checkGrammarMethod(node: MethodDeclaration) {
-            if (checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) ||
+            if (checkGrammarDisallowedModifiersOnMethodInObjectLiteralExpression(node) ||
                 checkGrammarFunctionLikeDeclaration(node) ||
                 checkGrammarForGenerator(node)) {
                 return true;
