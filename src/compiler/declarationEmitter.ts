@@ -119,6 +119,10 @@ namespace ts {
             return comment.indexOf("@internal") >= 0;
         }
 
+        function isInternal(node: Node) {
+            return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
+        }
+
         function createNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
             let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
@@ -1000,11 +1004,8 @@ namespace ts {
         }
 
         function emitNode(node: Node) {
-            if (compilerOptions.stripInternal) {
-                let leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
-                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
-                    return;
-                }
+            if (compilerOptions.stripInternal && isInternal(node)) {
+                return;
             }
 
             switch (node.kind) {
@@ -1247,6 +1248,10 @@ namespace ts {
 
 
         function isDeclarationVisible(node: Node): boolean {
+            if (compilerOptions.stripInternal && isInternal(node)) {
+                return false;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.Parameter:
@@ -1263,7 +1268,6 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ExportDeclaration:
-                    // TODO: filter on @internal
                     return true;
 
                 case SyntaxKind.VariableStatement:
