@@ -1246,6 +1246,11 @@ namespace ts {
             return isIdentifier();
         }
 
+        function nextTokenIsIdentifierOrKeyword() {
+            nextToken();
+            return isIdentifierOrKeyword();
+        }
+
         function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
             if (token === SyntaxKind.ImplementsKeyword ||
                 token === SyntaxKind.ExtendsKeyword) {
@@ -3172,7 +3177,7 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return parseTypeAssertion();
                     }
-                    if(lookAhead(nextTokenIsIdentifier)) {
+                    if(lookAhead(nextTokenIsIdentifierOrKeyword)) {
                         return parseJsxElementOrSelfClosingElement();
                     }
                     // Fall through
@@ -3390,7 +3395,7 @@ namespace ts {
         
         function parseJsxElementName(): EntityName {
             scanJsxIdentifier();
-            let elementName: EntityName = parseIdentifier();
+            let elementName: EntityName = parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 scanJsxIdentifier();
                 let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
