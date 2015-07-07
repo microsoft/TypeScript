@@ -12,6 +12,8 @@
         "sys.ts",
         "types.ts",
         "scanner.ts",
+        "factory.ts",
+        "factory.generated.ts",
         "parser.ts",
         "utilities.ts",
         "binder.ts",

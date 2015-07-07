@@ -704,9 +704,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             // Create a temporary variable with a unique unused name.
             function createTempVariable(flags: TempFlags): Identifier {
-                let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                result.text = makeTempVariableName(flags);
-                return result;
+                return factory.createIdentifier(makeTempVariableName(flags));
             }
 
             function recordTempDeclaration(name: Identifier): void {
@@ -1900,59 +1898,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // or we're compiling with an ES6+ target.
                 emitObjectLiteralBody(node, properties.length);
             }
-
-            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression, startsOnNewLine?: boolean): BinaryExpression {
-                let result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression, startsOnNewLine);
-                result.operatorToken = createSynthesizedNode(operator);
-                result.left = left;
-                result.right = right;
-
-                return result;
-            }
-
-            function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
-                let result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-                result.expression = parenthesizeForAccess(expression);
-                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
-                result.name = name;
-
-                return result;
-            }
-
-            function createElementAccessExpression(expression: Expression, argumentExpression: Expression): ElementAccessExpression {
-                let result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-                result.expression = parenthesizeForAccess(expression);
-                result.argumentExpression = argumentExpression;
-
-                return result;
-            }
-
-            function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-                // When diagnosing whether the expression needs parentheses, the decision should be based
-                // on the innermost expression in a chain of nested type assertions.
-                while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
-                    expr = (<AssertionExpression>expr).expression;
-                }
-
-                // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
-                // to parenthesize the expression before a dot. The known exceptions are:
-                //
-                //    NewExpression:
-                //       new C.x        -> not the same as (new C).x
-                //    NumberLiteral
-                //       1.x            -> not the same as (1).x
-                //
-                if (isLeftHandSideExpression(expr) &&
-                    expr.kind !== SyntaxKind.NewExpression &&
-                    expr.kind !== SyntaxKind.NumericLiteral) {
-
-                    return <LeftHandSideExpression>expr;
-                }
-                let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
-                node.expression = expr;
-                return node;
-            }
-
+            
             function emitComputedPropertyName(node: ComputedPropertyName) {
                 write("[");
                 emitExpressionForPropertyName(node);
@@ -2767,7 +2713,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 
                 // Initialize LHS
                 // let v = _a[_i];
-                let rhsIterationValue = createElementAccessExpression(rhsReference, counter);
+                let rhsIterationValue = factory.createElementAccessExpression(rhsReference, counter);
                 emitStart(node.initializer);
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
@@ -2798,7 +2744,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     // Initializer is an expression. Emit the expression in the body, so that it's
                     // evaluated on every iteration.
-                    let assignmentExpression = createBinaryExpression(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue, /*startsOnNewLine*/ false);
+                    let assignmentExpression = factory.createBinaryExpression2(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue);
                     if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
@@ -2965,14 +2911,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitEnd(node.name);
             }
 
-            function createVoidZero(): Expression {
-                let zero = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
-                zero.text = "0";
-                let result = <VoidExpression>createSynthesizedNode(SyntaxKind.VoidExpression);
-                result.expression = zero;
-                return result;
-            }
-
             function emitExportMemberAssignment(node: FunctionLikeDeclaration | ClassDeclaration) {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
@@ -3112,48 +3050,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // we need to generate a temporary variable
                     value = ensureIdentifier(value);
                     // Return the expression 'value === void 0 ? defaultValue : value'
-                    let equals = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
-                    equals.left = value;
-                    equals.operatorToken = createSynthesizedNode(SyntaxKind.EqualsEqualsEqualsToken);
-                    equals.right = createVoidZero();
-                    return createConditionalExpression(equals, defaultValue, value);
-                }
-
-                function createConditionalExpression(condition: Expression, whenTrue: Expression, whenFalse: Expression) {
-                    let cond = <ConditionalExpression>createSynthesizedNode(SyntaxKind.ConditionalExpression);
-                    cond.condition = condition;
-                    cond.questionToken = createSynthesizedNode(SyntaxKind.QuestionToken);
-                    cond.whenTrue = whenTrue;
-                    cond.colonToken = createSynthesizedNode(SyntaxKind.ColonToken);
-                    cond.whenFalse = whenFalse;
-                    return cond;
-                }
-
-                function createNumericLiteral(value: number) {
-                    let node = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
-                    node.text = "" + value;
-                    return node;
+                    return factory.createConditionalExpression2(
+                        factory.createBinaryExpression2(
+                            value,
+                            SyntaxKind.EqualsEqualsEqualsToken,
+                            factory.createVoidZeroExpression()
+                        ),
+                        defaultValue,
+                        value
+                    );
                 }
 
                 function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier | LiteralExpression): Expression {
                     // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                     // otherwise occur when the identifier is emitted.
-                    let syntheticName = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
-                    syntheticName.text = propName.text;
-                    if (syntheticName.kind !== SyntaxKind.Identifier) {
-                        return createElementAccessExpression(object, syntheticName);
-                    }
-                    return createPropertyAccessExpression(object, syntheticName);
-                }
-
-                function createSliceCall(value: Expression, sliceIndex: number): CallExpression {
-                    let call = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
-                    let sliceIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                    sliceIdentifier.text = "slice";
-                    call.expression = createPropertyAccessExpression(value, sliceIdentifier);
-                    call.arguments = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
-                    call.arguments[0] = createNumericLiteral(sliceIndex);
-                    return call;
+                    return factory.createPropertyOrElementAccessExpression(
+                        factory.parenthesizeForAccess(object),
+                        factory.cloneIdentifierOrLiteralExpression(propName)
+                    );
                 }
 
                 function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
@@ -3166,7 +3080,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             let propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
+                            let expr = factory.createPropertyOrElementAccessExpression(value, propName);
+                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, expr);
                         }
                     }
                 }
@@ -3182,10 +3097,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         let e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
+                                emitDestructuringAssignment(e, factory.createElementAccessExpression3(value, i));
                             }
                             else if (i === elements.length - 1) {
-                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i));
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, factory.createSliceCall(value, i));
                             }
                         }
                     }
@@ -3234,7 +3149,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else if (!value) {
                         // Use 'void 0' in absence of value and initializer
-                        value = createVoidZero();
+                        value = factory.createVoidZeroExpression();
                     }
                     if (isBindingPattern(target.name)) {
                         let pattern = <BindingPattern>target.name;
@@ -3249,15 +3164,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 let propName = element.propertyName || <Identifier>element.name;
-                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
+                                emitBindingElement(element, factory.createPropertyOrElementAccessExpression(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
+                                    emitBindingElement(element, factory.createElementAccessExpression3(value, i));
                                 }
                                 else if (i === elements.length - 1) {
-                                    emitBindingElement(element, createSliceCall(value, i));
+                                    emitBindingElement(element, factory.createSliceCall(value, i));
                                 }
                             }
                         }
@@ -3296,7 +3211,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (isUninitializedLet &&
                             node.parent.parent.kind !== SyntaxKind.ForInStatement &&
                             node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
-                            initializer = createVoidZero();
+                            initializer = factory.createVoidZeroExpression();
                         }
                     }
 

@@ -330,6 +330,8 @@ namespace ts {
                     return writeTextOfNode(currentSourceFile, type);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
+                case SyntaxKind.TypePredicate:
+                    return emitTypePredicate(<TypePredicateNode>type);
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>type);
                 case SyntaxKind.TypeQuery:
@@ -385,6 +387,12 @@ namespace ts {
                         write(">");
                     }
                 }
+            }
+            
+            function emitTypePredicate(type: TypePredicateNode) {
+                writeTextOfNode(currentSourceFile, type.parameterName);
+                write(" is ");
+                emitType(type.type);
             }
 
             function emitTypeReference(type: TypeReferenceNode) {

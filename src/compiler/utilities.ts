@@ -1423,20 +1423,7 @@ namespace ts {
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
-        return node.pos === -1;
-    }
-
-    export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind);
-        node.startsOnNewLine = startsOnNewLine;
-        return node;
-    }
-
-    export function createSynthesizedNodeArray(): NodeArray<any> {
-        var array = <NodeArray<any>>[];
-        array.pos = -1;
-        array.end = -1;
-        return array;
+        return node && node.pos === -1;
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {

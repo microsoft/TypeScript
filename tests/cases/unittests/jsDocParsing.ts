@@ -10,7 +10,7 @@ module ts {
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
                 let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
-                assert.equal(result, expected);
+                assert.deepEqual(JSON.parse(result), JSON.parse(expected));
             }
 
             function parsesIncorrectly(content: string) {
@@ -993,7 +993,7 @@ module ts {
                         : v;
                 }, "    ");
                 
-                assert.equal(result, expected);
+                assert.deepEqual(JSON.parse(result), JSON.parse(expected));
             }
 
             function parsesIncorrectly(content: string) {
