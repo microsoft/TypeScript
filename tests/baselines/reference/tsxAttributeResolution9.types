@@ -1,4 +1,5 @@
-=== tests/cases/conformance/jsx/tsxAttributeResolution9.tsx ===
+=== tests/cases/conformance/jsx/react.d.ts ===
+
 declare module JSX {
 >JSX : any
 
@@ -23,6 +24,7 @@ interface Props {
 >foo : string
 }
 
+=== tests/cases/conformance/jsx/file.tsx ===
 export class MyComponent {  
 >MyComponent : MyComponent
 
@@ -36,12 +38,12 @@ export class MyComponent {
 }
 
 <MyComponent foo="bar" />; // ok  
-><MyComponent foo="bar" /> : any
+><MyComponent foo="bar" /> : JSX.Element
 >MyComponent : typeof MyComponent
 >foo : any
 
 <MyComponent foo={0} />; // should be an error
-><MyComponent foo={0} /> : any
+><MyComponent foo={0} /> : JSX.Element
 >MyComponent : typeof MyComponent
 >foo : any
 

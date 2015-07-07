@@ -7096,18 +7096,18 @@ namespace ts {
                 // Look up the value in the current scope
                 if (node.tagName.kind === SyntaxKind.Identifier) {
                     let tag = <Identifier>node.tagName;
-                    valueSymbol = resolveName(tag, tag.text, SymbolFlags.Value, Diagnostics.Cannot_find_name_0, tag.text);
+                    let maybeExportSymbol = getResolvedSymbol(<Identifier>node.tagName);
+                    let valueDecl = maybeExportSymbol.valueDeclaration;
+
+                    valueSymbol = (valueDecl && valueDecl.localSymbol) || maybeExportSymbol;
                 }
                 else {
                     valueSymbol = checkQualifiedName(<QualifiedName>node.tagName).symbol;
                 }
 
                 if (valueSymbol && valueSymbol !== unknownSymbol) {
-                    let symbolLinks = getSymbolLinks(valueSymbol);
-                    if (symbolLinks) {
-                        symbolLinks.referenced = true;
-                    }
                     links.jsxFlags |= JsxFlags.ClassElement;
+                    getSymbolLinks(valueSymbol).referenced = true;
                 }
 
                 return valueSymbol || unknownSymbol;
