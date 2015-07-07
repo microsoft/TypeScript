@@ -12,12 +12,14 @@ declare module JSX {
 >s : Symbol(s, Decl(tsxReactEmitWhitespace.tsx, 3, 3))
 	}
 }
+declare var React: any;
+>React : Symbol(React, Decl(tsxReactEmitWhitespace.tsx, 6, 11))
 
 // THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
 // WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
 
 var p = 0;
->p : Symbol(p, Decl(tsxReactEmitWhitespace.tsx, 10, 3))
+>p : Symbol(p, Decl(tsxReactEmitWhitespace.tsx, 11, 3))
 
 // Emit "   "
 <div>   </div>;
