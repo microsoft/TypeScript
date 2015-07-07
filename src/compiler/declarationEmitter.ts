@@ -17,16 +17,7 @@ namespace ts {
         referencePathsOutput: string;
     }
 
-    type GetSymbolAccessibilityDiagnostic = (symbolAccesibilityResult: SymbolAccessiblityResult) => SymbolAccessibilityDiagnostic;
-
     interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
-        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
-    }
-
-    interface SymbolAccessibilityDiagnostic {
-        errorNode: Node;
-        diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName;
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
@@ -46,7 +37,7 @@ namespace ts {
         let decreaseIndent: () => void;
         let writeTextOfNode: (sourceFile: SourceFile, node: Node) => void;
 
-        let writer = createAndSetNewTextWriterWithSymbolWriter();
+        let writer = createNewTextWriterWithSymbolWriter();
         setWriter(writer);
 
         let enclosingDeclaration: Node;
@@ -128,7 +119,7 @@ namespace ts {
             return comment.indexOf("@internal") >= 0;
         }
 
-        function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
+        function createNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
             let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
             writer.writeKeyword = writer.write;
@@ -767,7 +758,7 @@ namespace ts {
         }
 
         // TODO: we only should have either statement or declaration
-        function writeVariableDeclaration(node: VariableDeclaration) {
+        function emitVariableDeclarationWithoutStatement(node: VariableDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             var declarationList = node.parent;
@@ -1023,7 +1014,7 @@ namespace ts {
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
                 case SyntaxKind.VariableDeclaration:
-                    return writeVariableDeclaration(<VariableDeclaration>node);
+                    return emitVariableDeclarationWithoutStatement(<VariableDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
                     return emitInterfaceDeclaration(<InterfaceDeclaration>node);
@@ -1204,7 +1195,7 @@ namespace ts {
             else if (node.kind !== SyntaxKind.Constructor) {
                 // TODO: handel infered type
                 // TODO: Cache the result
-                let writer = createAndSetNewTextWriterWithSymbolWriter();
+                let writer = createNewTextWriterWithSymbolWriter();
                 currentErrorNode = node;
                 resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = undefined;
@@ -1222,7 +1213,7 @@ namespace ts {
             else {
                 // TODO: handel infered type
                 // TODO: Cache the result
-                let writer = createAndSetNewTextWriterWithSymbolWriter();
+                let writer = createNewTextWriterWithSymbolWriter();
                 currentErrorNode = node;
                 resolver.writeTypeOfDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = undefined;
@@ -1232,7 +1223,7 @@ namespace ts {
         function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): void {
             // TODO: handel infered type
             // TODO: Cache the result
-            let writer = createAndSetNewTextWriterWithSymbolWriter();
+            let writer = createNewTextWriterWithSymbolWriter();
             currentErrorNode = node;
             resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
             currentErrorNode = undefined;
@@ -1363,6 +1354,7 @@ namespace ts {
             Debug.assert(referencedDeclaration.name && referencedDeclaration.name.kind === SyntaxKind.Identifier);
             let referencedDeclarationName = (<Identifier>referencedDeclaration.name).text;
 
+            reportedDeclarationError = true;
 
             referencedDeclarationName = "---" + referencedDeclarationName +"---";
             let container = errorNode;
