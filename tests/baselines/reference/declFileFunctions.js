@@ -26,6 +26,10 @@ export function fooWithSingleOverload(a: any) {
     return a;
 }
 
+export function fooWithTypePredicate(a: any): a is number {
+    return true;
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
@@ -92,6 +96,10 @@ function fooWithSingleOverload(a) {
     return a;
 }
 exports.fooWithSingleOverload = fooWithSingleOverload;
+function fooWithTypePredicate(a) {
+    return true;
+}
+exports.fooWithTypePredicate = fooWithTypePredicate;
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
@@ -144,6 +152,7 @@ export declare function fooWithRestParameters(a: string, ...rests: string[]): st
 export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
 export declare function fooWithSingleOverload(a: string): string;
+export declare function fooWithTypePredicate(a: any): a is number;
 //// [declFileFunctions_1.d.ts]
 /** This comment should appear for foo*/
 declare function globalfoo(): void;
