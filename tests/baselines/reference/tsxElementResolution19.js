@@ -31,6 +31,6 @@ define(["require", "exports"], function (require, exports) {
     exports.MyClass = MyClass;
 });
 //// [file2.js]
-define(["require", "exports", './file1'], function (require, exports, file1_1) {
+define(["require", "exports", 'react', './file1'], function (require, exports, React, file1_1) {
     React.createElement(file1_1.MyClass, null);
 });
