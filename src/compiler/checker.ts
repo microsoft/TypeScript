@@ -11446,7 +11446,7 @@ namespace ts {
 
         function checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node: Node) {
             if (node.modifiers) {
-                if (inBlockOrObjectLiteralExpression(node)) {
+                if (inObjectLiteralExpression(node)) {
                     if (isAsyncFunctionLike(node)) {
                         if (node.modifiers.length > 1) {
                             return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here); 
@@ -11459,9 +11459,9 @@ namespace ts {
             }
         }
 
-        function inBlockOrObjectLiteralExpression(node: Node) {
+        function inObjectLiteralExpression(node: Node) {
             while (node) {
-                if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (node.kind === SyntaxKind.ObjectLiteralExpression) {
                     return true;
                 }
 
