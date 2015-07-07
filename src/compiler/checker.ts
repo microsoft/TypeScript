@@ -13380,9 +13380,10 @@ namespace ts {
                             // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
-                            // If we didn't come from static member of class or interface, add the type parameters into the symbol table 
+                            // If we didn't come from static member of class or interface,
+                            // add the type parameters into the symbol table 
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
-                            // jNote: that the memberFlags come from previous iteration.
+                            // Note: that the memberFlags come from previous iteration.
                             if (!(memberFlags & NodeFlags.Static)) {
                                 copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
                             }
