@@ -252,7 +252,6 @@ namespace ts {
             if (currentErrorNode) {
                 collectDeclarations(symbol, currentErrorNode);
             }
-            //   handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
@@ -277,27 +276,19 @@ namespace ts {
             }
         }
 
-        function emitLines(nodes: Node[]) {
-            for (let node of nodes) {
-                emit(node);
-            }
-        }
-
-        function emitSeparatedList(nodes: Node[], separator: string, eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
+        function emitSeparatedList(nodes: Node[], separator: string, eachNodeEmitFn: (node: Node) => void) {
             let currentWriterPos = writer.getTextPos();
             for (let node of nodes) {
-                if (!canEmitFn || canEmitFn(node)) {
-                    if (currentWriterPos !== writer.getTextPos()) {
-                        write(separator);
-                    }
-                    currentWriterPos = writer.getTextPos();
-                    eachNodeEmitFn(node);
+                if (currentWriterPos !== writer.getTextPos()) {
+                    write(separator);
                 }
+                currentWriterPos = writer.getTextPos();
+                eachNodeEmitFn(node);
             }
         }
 
-        function emitCommaList(nodes: Node[], eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
-            emitSeparatedList(nodes, ", ", eachNodeEmitFn, canEmitFn);
+        function emitCommaList(nodes: Node[], eachNodeEmitFn: (node: Node) => void) {
+            emitSeparatedList(nodes, ", ", eachNodeEmitFn);
         }
 
         function writeJsDocComments(declaration: Node) {
@@ -448,7 +439,7 @@ namespace ts {
                     writeLine();
                     increaseIndent();
                     // write members
-                    emitLines(type.members);
+                    forEach(type.members, emitNode);
                     decreaseIndent();
                 }
                 write("}");
@@ -568,7 +559,7 @@ namespace ts {
             write("import ");
             if (node.importClause) {
                 let currentWriterPos = writer.getTextPos();
-                if (node.importClause.name && resolver.isDeclarationVisible(node.importClause)) {
+                if (node.importClause.name) {
                     writeTextOfNode(currentSourceFile, node.importClause.name);
                 }
                 if (node.importClause.namedBindings) {
@@ -582,7 +573,7 @@ namespace ts {
                     }
                     else {
                         write("{ ");
-                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportOrExportSpecifier, resolver.isDeclarationVisible);
+                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportOrExportSpecifier);
                         write(" }");
                     }
                 }
@@ -876,7 +867,7 @@ namespace ts {
             else {
                 write("var ");
             }
-            emitCommaList(node.declarationList.declarations, emitVariableDeclaration/*, resolver.isDeclarationVisible*/);
+            emitCommaList(node.declarationList.declarations, emitVariableDeclaration);
             write(";");
             writeLine();
         }
