@@ -22,6 +22,17 @@ namespace ts {
     }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
+        // Cancellation that controls whether or not we can cancel in the middle of type checking.
+        // In general cancelling is *not* safe for the type checker.  We might be in the middle of
+        // computing something, and we will leave our internals in an inconsistent state.  Callers
+        // who set the cancellation token should catch if a cancellation exception occurs, and 
+        // should throw away and create a new TypeChecker.
+        //
+        // Currently we only support setting the cancellation token when getting diagnostics.  This
+        // is because diagnostics can be quite expensive, and we want to allow hosts to bail out if
+        // they no longer need the information (for example, if the user started editing again).  
+        let cancellationToken: CancellationToken;
+
         let Symbol = objectAllocator.getSymbolConstructor();
         let Type = objectAllocator.getTypeConstructor();
         let Signature = objectAllocator.getSignatureConstructor();
@@ -194,10 +205,10 @@ namespace ts {
 
         return checker;
 
-        function getEmitResolver(sourceFile?: SourceFile) {
+        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
-            getDiagnostics(sourceFile);
+            getDiagnostics(sourceFile, cancellationToken);
             return emitResolver;
         }
 
@@ -13028,8 +13039,24 @@ namespace ts {
         }
 
         function checkSourceElement(node: Node): void {
-            if (!node) return;
-            switch (node.kind) {
+            if (!node) {
+                return;
+            }
+
+            let kind = node.kind;
+            if (cancellationToken) {
+                // Only bother checking on a few construct kinds.  We don't want to be excessivly
+                // hitting the cancellation token on every node we check.
+                switch (kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        cancellationToken.throwIfCancellationRequested();
+                }
+            }
+
+            switch (kind) {
                 case SyntaxKind.TypeParameter:
                     return checkTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.Parameter:
@@ -13305,7 +13332,20 @@ namespace ts {
             }
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+        function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): Diagnostic[] {
+            try {
+                // Record the cancellation token so it can be checked later on during checkSourceElement.
+                // Do this in a finally block so we can ensure that it gets reset back to nothing after
+                // this call is done.
+                cancellationToken = ct;
+                return getDiagnosticsWorker(sourceFile);
+            }
+            finally {
+                cancellationToken = undefined;
+            }
+        }
+
+        function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);

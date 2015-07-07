@@ -892,7 +892,8 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     checkStrictModeFunctionName(<FunctionExpression>node);
-                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function");
+                    let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
+                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
@@ -964,7 +965,8 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                bindAnonymousDeclaration(node, SymbolFlags.Class, "__class");
+                let bindingName = node.name ? node.name.text : "__class";
+                bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
             }
 
             let symbol = node.symbol;

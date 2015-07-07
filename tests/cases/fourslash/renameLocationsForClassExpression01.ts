@@ -3,7 +3,6 @@
 ////class Foo {
 ////}
 ////
-//////The class expression Foo
 ////var x = class [|Foo|] {
 ////    doIt() {
 ////        return [|Foo|];

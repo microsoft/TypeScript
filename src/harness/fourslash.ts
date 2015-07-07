@@ -190,14 +190,14 @@ module FourSlash {
         return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
     }
 
-    export class TestCancellationToken implements ts.CancellationToken {
+    export class TestCancellationToken implements ts.HostCancellationToken {
         // 0 - cancelled
         // >0 - not cancelled 
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static NotCancelled: number = -1;
-        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCancelled;
-        public isCancellationRequested(): boolean {
+        private static NotCanceled: number = -1;
+        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
 
+        public isCancellationRequested(): boolean {
             if (this.numberOfCallsBeforeCancellation < 0) {
                 return false;
             }
@@ -216,7 +216,7 @@ module FourSlash {
         }
 
         public resetCancelled(): void {
-            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCancelled;
+            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCanceled;
         }
     }
 

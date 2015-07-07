@@ -1290,6 +1290,15 @@ namespace ts {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
+    export class OperationCanceledException { }
+
+    export interface CancellationToken {
+        isCancellationRequested(): boolean;
+   
+        /** @throws OperationCanceledException if isCancellationRequested is true */
+        throwIfCancellationRequested(): void;
+    }
+
     export interface Program extends ScriptReferenceHost {
         /**
          * Get a list of files in the program
@@ -1306,13 +1315,13 @@ namespace ts {
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
 
-        getOptionsDiagnostics(): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
-        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1423,9 +1432,9 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
-        /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
-        /* @internal */ getEmitResolver(sourceFile?: SourceFile): EmitResolver;
+        /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2178,14 +2187,9 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
-    export interface CancellationToken {
-        isCancellationRequested(): boolean;
-    }
-
     export interface CompilerHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFileName(options: CompilerOptions): string;
-        getCancellationToken? (): CancellationToken;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
