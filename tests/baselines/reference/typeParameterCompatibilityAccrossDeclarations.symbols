@@ -1,9 +1,11 @@
 === tests/cases/compiler/typeParameterCompatibilityAccrossDeclarations.ts ===
 var a = {
 >a : Symbol(a, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 3))
+>{   x: function <T>(y: T): T { return null; }} : Symbol(, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 7))
 
    x: function <T>(y: T): T { return null; }
 >x : Symbol(x, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 9))
+>function <T>(y: T): T { return null; } : Symbol((Anonymous function), Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 5))
 >T : Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 16))
 >y : Symbol(y, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 19))
 >T : Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 16))
@@ -11,9 +13,11 @@ var a = {
 }
 var a2 = {
 >a2 : Symbol(a2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 3))
+>{   x: function (y: any): any { return null; }} : Symbol(, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 8))
 
    x: function (y: any): any { return null; }
 >x : Symbol(x, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 10))
+>function (y: any): any { return null; } : Symbol((Anonymous function), Decl(typeParameterCompatibilityAccrossDeclarations.ts, 4, 5))
 >y : Symbol(y, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 4, 16))
 }
 export interface I {

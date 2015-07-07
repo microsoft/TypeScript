@@ -26,6 +26,8 @@ class FooIterator {
 >next : Symbol(next, Decl(iterableArrayPattern4.ts, 4, 19))
 
         return {
+>{            value: new Foo,            done: false        } : Symbol(, Decl(iterableArrayPattern4.ts, 6, 14))
+
             value: new Foo,
 >value : Symbol(value, Decl(iterableArrayPattern4.ts, 6, 16))
 >Foo : Symbol(Foo, Decl(iterableArrayPattern4.ts, 2, 15))

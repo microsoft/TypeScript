@@ -1,6 +1,7 @@
 === tests/cases/compiler/varInFunctionInVarInitializer.ts ===
 var a = function () {
 >a : Symbol(a, Decl(varInFunctionInVarInitializer.ts, 0, 3))
+>function () {    var c = 1;    return c;} : Symbol((Anonymous function), Decl(varInFunctionInVarInitializer.ts, 0, 7))
 
     var c = 1;
 >c : Symbol(c, Decl(varInFunctionInVarInitializer.ts, 1, 7))

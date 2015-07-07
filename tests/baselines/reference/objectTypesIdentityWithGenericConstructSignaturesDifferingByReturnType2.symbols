@@ -55,6 +55,7 @@ var a: { new<T extends Date>(x: T): T }
 
 var b = { new<T extends Date>(x: T) { return null; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 3))
+>{ new<T extends Date>(x: T) { return null; } } : Symbol(, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 7))
 >new : Symbol(new, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 14))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))

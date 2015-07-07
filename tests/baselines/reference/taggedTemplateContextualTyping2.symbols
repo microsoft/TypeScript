@@ -51,6 +51,7 @@ function tempTag2(...rest: any[]): any {
 // so this test will error.
 tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 >tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 2, 52), Decl(taggedTemplateContextualTyping2.ts, 4, 87), Decl(taggedTemplateContextualTyping2.ts, 5, 101))
+>x => { x<number>(undefined); return x; } : Symbol((Anonymous function), Decl(taggedTemplateContextualTyping2.ts, 14, 12))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 14, 12))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 14, 12))
 >undefined : Symbol(undefined)
@@ -58,16 +59,19 @@ tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }`;
 >tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 2, 52), Decl(taggedTemplateContextualTyping2.ts, 4, 87), Decl(taggedTemplateContextualTyping2.ts, 5, 101))
+>x => { x<number, string>(undefined); return x; } : Symbol((Anonymous function), Decl(taggedTemplateContextualTyping2.ts, 15, 12))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 15, 12))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 15, 12))
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 15, 12))
+>y => { y<string, number>(null); return y; } : Symbol((Anonymous function), Decl(taggedTemplateContextualTyping2.ts, 15, 65))
 >y : Symbol(y, Decl(taggedTemplateContextualTyping2.ts, 15, 65))
 >y : Symbol(y, Decl(taggedTemplateContextualTyping2.ts, 15, 65))
 >y : Symbol(y, Decl(taggedTemplateContextualTyping2.ts, 15, 65))
 
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
 >tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 2, 52), Decl(taggedTemplateContextualTyping2.ts, 4, 87), Decl(taggedTemplateContextualTyping2.ts, 5, 101))
+>x => { x<number, string>(undefined); return x; } : Symbol((Anonymous function), Decl(taggedTemplateContextualTyping2.ts, 16, 12))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 16, 12))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 16, 12))
 >undefined : Symbol(undefined)

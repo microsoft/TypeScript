@@ -26,6 +26,7 @@ class BaseCollection<T extends Base> {
 >T : Symbol(T, Decl(complexClassRelationships.ts, 7, 21))
 
         (item: Thing) => { return [item.Components]; };
+>(item: Thing) => { return [item.Components]; } : Symbol((Anonymous function), Decl(complexClassRelationships.ts, 8, 29))
 >item : Symbol(item, Decl(complexClassRelationships.ts, 9, 9))
 >Thing : Symbol(Thing, Decl(complexClassRelationships.ts, 14, 1))
 >item.Components : Symbol(Thing.Components, Decl(complexClassRelationships.ts, 16, 13))

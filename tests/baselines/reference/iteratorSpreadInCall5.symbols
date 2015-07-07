@@ -15,6 +15,8 @@ class SymbolIterator {
 >next : Symbol(next, Decl(iteratorSpreadInCall5.ts, 3, 22))
 
         return {
+>{            value: Symbol(),            done: false        } : Symbol(, Decl(iteratorSpreadInCall5.ts, 5, 14))
+
             value: Symbol(),
 >value : Symbol(value, Decl(iteratorSpreadInCall5.ts, 5, 16))
 >Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
@@ -42,6 +44,8 @@ class StringIterator {
 >next : Symbol(next, Decl(iteratorSpreadInCall5.ts, 16, 22))
 
         return {
+>{            value: "",            done: false        } : Symbol(, Decl(iteratorSpreadInCall5.ts, 18, 14))
+
             value: "",
 >value : Symbol(value, Decl(iteratorSpreadInCall5.ts, 18, 16))
 

@@ -19,6 +19,7 @@ function fn5<T extends { x: string }>(n: T) { }
 
 fn5({ x: null });
 >fn5 : Symbol(fn5, Decl(typeArgInferenceWithNull.ts, 3, 10))
+>{ x: null } : Symbol(, Decl(typeArgInferenceWithNull.ts, 6, 4))
 >x : Symbol(x, Decl(typeArgInferenceWithNull.ts, 6, 5))
 
 function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
@@ -35,7 +36,10 @@ function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
 
 fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally would have type { x: string }
 >fn6 : Symbol(fn6, Decl(typeArgInferenceWithNull.ts, 6, 17))
+>{ x: null } : Symbol(, Decl(typeArgInferenceWithNull.ts, 9, 4))
 >x : Symbol(x, Decl(typeArgInferenceWithNull.ts, 9, 5))
+>y => { } : Symbol((Anonymous function), Decl(typeArgInferenceWithNull.ts, 9, 16))
 >y : Symbol(y, Decl(typeArgInferenceWithNull.ts, 9, 16))
+>{ x: "" } : Symbol(, Decl(typeArgInferenceWithNull.ts, 9, 26))
 >x : Symbol(x, Decl(typeArgInferenceWithNull.ts, 9, 28))
 

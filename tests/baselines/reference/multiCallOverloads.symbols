@@ -14,11 +14,13 @@ function load(f: ICallback) {}
 var f1: ICallback = function(z?) {}
 >f1 : Symbol(f1, Decl(multiCallOverloads.ts, 6, 3))
 >ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
+>function(z?) {} : Symbol((Anonymous function), Decl(multiCallOverloads.ts, 6, 19))
 >z : Symbol(z, Decl(multiCallOverloads.ts, 6, 29))
 
 var f2: ICallback = function(z?) {}
 >f2 : Symbol(f2, Decl(multiCallOverloads.ts, 7, 3))
 >ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
+>function(z?) {} : Symbol((Anonymous function), Decl(multiCallOverloads.ts, 7, 19))
 >z : Symbol(z, Decl(multiCallOverloads.ts, 7, 29))
 
 load(f1) // ok
@@ -31,8 +33,10 @@ load(f2) // ok
 
 load(function() {}) // this shouldn’t be an error
 >load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+>function() {} : Symbol((Anonymous function), Decl(multiCallOverloads.ts, 10, 5))
 
 load(function(z?) {}) // this shouldn't be an error
 >load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+>function(z?) {} : Symbol((Anonymous function), Decl(multiCallOverloads.ts, 11, 5))
 >z : Symbol(z, Decl(multiCallOverloads.ts, 11, 14))
 

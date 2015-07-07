@@ -46,6 +46,7 @@ var rb1 = x in b1;
 var rb2 = x in {};
 >rb2 : Symbol(rb2, Decl(inOperatorWithValidOperands.ts, 18, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
+>{} : Symbol(, Decl(inOperatorWithValidOperands.ts, 18, 14))
 
 function foo<T>(t: T) {
 >foo : Symbol(foo, Decl(inOperatorWithValidOperands.ts, 18, 18))

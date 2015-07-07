@@ -21,6 +21,7 @@ class D {
 
 var x = {
 >x : Symbol(x, Decl(accessorWithES5.ts, 12, 3))
+>{    get a() { return 1 }} : Symbol(, Decl(accessorWithES5.ts, 12, 7))
 
     get a() { return 1 }
 >a : Symbol(a, Decl(accessorWithES5.ts, 12, 9))
@@ -28,6 +29,7 @@ var x = {
 
 var y = {
 >y : Symbol(y, Decl(accessorWithES5.ts, 16, 3))
+>{    set b(v) { }} : Symbol(, Decl(accessorWithES5.ts, 16, 7))
 
     set b(v) { }
 >b : Symbol(b, Decl(accessorWithES5.ts, 16, 9))

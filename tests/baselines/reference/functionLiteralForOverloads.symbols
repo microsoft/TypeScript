@@ -11,6 +11,7 @@ var f: {
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 4, 5))
 
 } = (x) => x;
+>(x) => x : Symbol((Anonymous function), Decl(functionLiteralForOverloads.ts, 5, 3))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 5, 5))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 5, 5))
 
@@ -26,6 +27,7 @@ var f2: {
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 9, 8))
 
 } = (x) => x;
+>(x) => x : Symbol((Anonymous function), Decl(functionLiteralForOverloads.ts, 10, 3))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 10, 5))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 10, 5))
 
@@ -43,6 +45,7 @@ var f3: {
 >T : Symbol(T, Decl(functionLiteralForOverloads.ts, 14, 5))
 
 } = (x) => x;
+>(x) => x : Symbol((Anonymous function), Decl(functionLiteralForOverloads.ts, 15, 3))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 15, 5))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 15, 5))
 
@@ -60,6 +63,7 @@ var f4: {
 >T : Symbol(T, Decl(functionLiteralForOverloads.ts, 19, 5))
 
 } = (x) => x;
+>(x) => x : Symbol((Anonymous function), Decl(functionLiteralForOverloads.ts, 20, 3))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 20, 5))
 >x : Symbol(x, Decl(functionLiteralForOverloads.ts, 20, 5))
 

@@ -10,10 +10,12 @@ class CDoc {
         }
         doSomething(() => undefined);
 >doSomething : Symbol(doSomething, Decl(functionExpressionAndLambdaMatchesFunction.ts, 1, 23))
+>() => undefined : Symbol((Anonymous function), Decl(functionExpressionAndLambdaMatchesFunction.ts, 4, 20))
 >undefined : Symbol(undefined)
 
         doSomething(function () { });
 >doSomething : Symbol(doSomething, Decl(functionExpressionAndLambdaMatchesFunction.ts, 1, 23))
+>function () { } : Symbol((Anonymous function), Decl(functionExpressionAndLambdaMatchesFunction.ts, 5, 20))
     }
 }
 

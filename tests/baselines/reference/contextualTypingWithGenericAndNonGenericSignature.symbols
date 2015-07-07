@@ -21,6 +21,7 @@ var f2: {
 
 f2 = (x, y) => { return x }
 >f2 : Symbol(f2, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 2, 3))
+>(x, y) => { return x } : Symbol((Anonymous function), Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 7, 4))
 >x : Symbol(x, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 7, 6))
 >y : Symbol(y, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 7, 8))
 >x : Symbol(x, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 7, 6))
@@ -45,6 +46,7 @@ var f3: {
 
 f3 = (x, y) => { return x }
 >f3 : Symbol(f3, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 9, 3))
+>(x, y) => { return x } : Symbol((Anonymous function), Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 14, 4))
 >x : Symbol(x, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 14, 6))
 >y : Symbol(y, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 14, 8))
 >x : Symbol(x, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 14, 6))

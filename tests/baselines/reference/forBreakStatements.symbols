@@ -34,6 +34,7 @@ EIGHT:
 for (; ;) {
     var fn = function () { }
 >fn : Symbol(fn, Decl(forBreakStatements.ts, 33, 7))
+>function () { } : Symbol((Anonymous function), Decl(forBreakStatements.ts, 33, 12))
 
     break EIGHT;
 }

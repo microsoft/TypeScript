@@ -18,6 +18,7 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >C : Symbol(C, Decl(genericTypeParameterEquivalence2.ts, 1, 22))
 
     return function (a:A) : C {
+>function (a:A) : C {        return f(g.apply(null, a));    } : Symbol((Anonymous function), Decl(genericTypeParameterEquivalence2.ts, 2, 10))
 >a : Symbol(a, Decl(genericTypeParameterEquivalence2.ts, 2, 21))
 >A : Symbol(A, Decl(genericTypeParameterEquivalence2.ts, 1, 17))
 >C : Symbol(C, Decl(genericTypeParameterEquivalence2.ts, 1, 22))
@@ -76,6 +77,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
     forEach(ar, (el) => {
 >forEach : Symbol(forEach, Decl(genericTypeParameterEquivalence2.ts, 5, 1))
 >ar : Symbol(ar, Decl(genericTypeParameterEquivalence2.ts, 15, 40))
+>(el) => {        if (f(el)) {            ret.push(el);        }    } : Symbol((Anonymous function), Decl(genericTypeParameterEquivalence2.ts, 17, 15))
 >el : Symbol(el, Decl(genericTypeParameterEquivalence2.ts, 17, 17))
 
         if (f(el)) {
@@ -126,10 +128,12 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 >C : Symbol(C, Decl(genericTypeParameterEquivalence2.ts, 32, 21))
 
     return function (ay: A) {
+>function (ay: A) {        return function (by: B) {            return f(ay, by);        };    } : Symbol((Anonymous function), Decl(genericTypeParameterEquivalence2.ts, 33, 10))
 >ay : Symbol(ay, Decl(genericTypeParameterEquivalence2.ts, 33, 21))
 >A : Symbol(A, Decl(genericTypeParameterEquivalence2.ts, 32, 16))
 
         return function (by: B) {
+>function (by: B) {            return f(ay, by);        } : Symbol((Anonymous function), Decl(genericTypeParameterEquivalence2.ts, 34, 14))
 >by : Symbol(by, Decl(genericTypeParameterEquivalence2.ts, 34, 25))
 >B : Symbol(B, Decl(genericTypeParameterEquivalence2.ts, 32, 18))
 

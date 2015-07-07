@@ -4,6 +4,7 @@ var greetings = 0;
 
 var greet = (greeting: string): number => {
 >greet : Symbol(greet, Decl(sourceMapValidationFunctionExpressions.ts, 1, 3))
+>(greeting: string): number => {    greetings++;    return greetings;} : Symbol((Anonymous function), Decl(sourceMapValidationFunctionExpressions.ts, 1, 11))
 >greeting : Symbol(greeting, Decl(sourceMapValidationFunctionExpressions.ts, 1, 13))
 
     greetings++;
@@ -17,5 +18,6 @@ greet("Hello");
 
 var incrGreetings = () => greetings++;
 >incrGreetings : Symbol(incrGreetings, Decl(sourceMapValidationFunctionExpressions.ts, 6, 3))
+>() => greetings++ : Symbol((Anonymous function), Decl(sourceMapValidationFunctionExpressions.ts, 6, 19))
 >greetings : Symbol(greetings, Decl(sourceMapValidationFunctionExpressions.ts, 0, 3))
 

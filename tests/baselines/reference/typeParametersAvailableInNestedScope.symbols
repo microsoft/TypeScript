@@ -9,6 +9,7 @@ class C<T> {
 
     x = <U>(a: U) => {
 >x : Symbol(x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+><U>(a: U) => {        var y: T;        return y;    } : Symbol((Anonymous function), Decl(typeParametersAvailableInNestedScope.ts, 3, 7))
 >U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
 >a : Symbol(a, Decl(typeParametersAvailableInNestedScope.ts, 3, 12))
 >U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))

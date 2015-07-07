@@ -9,6 +9,7 @@ enum E2 { x }
 
 var o = {
 >o : Symbol(o, Decl(computedPropertyNames47_ES5.ts, 2, 3))
+>{    [E1.x || E2.x]: 0} : Symbol(, Decl(computedPropertyNames47_ES5.ts, 2, 7))
 
     [E1.x || E2.x]: 0
 >E1.x : Symbol(E1.x, Decl(computedPropertyNames47_ES5.ts, 0, 9))

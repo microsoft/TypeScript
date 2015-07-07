@@ -9,6 +9,7 @@ interface I {
 var x: I = {
 >x : Symbol(x, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 3))
 >I : Symbol(I, Decl(objectLiteralIndexerNoImplicitAny.ts, 0, 0))
+>{    p: null} : Symbol(, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 10))
 
     p: null
 >p : Symbol(p, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 12))

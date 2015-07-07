@@ -30,6 +30,7 @@ var elements = names.map(function (name) {
 >names.map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >names : Symbol(names, Decl(genericMethodOverspecialization.ts, 0, 3))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>function (name) {    return document.getElementById(name);} : Symbol((Anonymous function), Decl(genericMethodOverspecialization.ts, 12, 25))
 >name : Symbol(name, Decl(genericMethodOverspecialization.ts, 12, 35))
 
     return document.getElementById(name);
@@ -46,6 +47,7 @@ var xxx = elements.filter(function (e) {
 >elements.filter : Symbol(Array.filter, Decl(lib.d.ts, 1122, 87))
 >elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
 >filter : Symbol(Array.filter, Decl(lib.d.ts, 1122, 87))
+>function (e) {    return !e.isDisabled;} : Symbol((Anonymous function), Decl(genericMethodOverspecialization.ts, 17, 26))
 >e : Symbol(e, Decl(genericMethodOverspecialization.ts, 17, 36))
 
     return !e.isDisabled;
@@ -60,6 +62,7 @@ var widths:number[] = elements.map(function (e) { // should not error
 >elements.map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>function (e) { // should not error    return e.clientWidth;} : Symbol((Anonymous function), Decl(genericMethodOverspecialization.ts, 21, 35))
 >e : Symbol(e, Decl(genericMethodOverspecialization.ts, 21, 45))
 
     return e.clientWidth;

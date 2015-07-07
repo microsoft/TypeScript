@@ -47,6 +47,7 @@ var r5 = a.reduce((x, y) => x + y);
 >a.reduce : Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >a : Symbol(a, Decl(duplicateOverloadInTypeAugmentation1.ts, 6, 3))
 >reduce : Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>(x, y) => x + y : Symbol((Anonymous function), Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 18))
 >x : Symbol(x, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 19))
 >y : Symbol(y, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 21))
 >x : Symbol(x, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 19))

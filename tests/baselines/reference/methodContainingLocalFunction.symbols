@@ -70,6 +70,7 @@ class C {
 
         var funcExpr = <U>(u?: U) => { };
 >funcExpr : Symbol(funcExpr, Decl(methodContainingLocalFunction.ts, 28, 11))
+><U>(u?: U) => { } : Symbol((Anonymous function), Decl(methodContainingLocalFunction.ts, 28, 22))
 >U : Symbol(U, Decl(methodContainingLocalFunction.ts, 28, 24))
 >u : Symbol(u, Decl(methodContainingLocalFunction.ts, 28, 27))
 >U : Symbol(U, Decl(methodContainingLocalFunction.ts, 28, 24))
@@ -106,6 +107,7 @@ enum E {
 
     A = (() => {
 >A : Symbol(E.A, Decl(methodContainingLocalFunction.ts, 42, 8))
+>() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    } : Symbol((Anonymous function), Decl(methodContainingLocalFunction.ts, 43, 9))
 
         function localFunction() { }
 >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 43, 16))

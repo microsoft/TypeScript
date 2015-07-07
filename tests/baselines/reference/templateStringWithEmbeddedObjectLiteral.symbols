@@ -1,6 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedObjectLiteral.ts ===
 var x = `abc${ { x: 10, y: 20 } }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedObjectLiteral.ts, 0, 3))
+>{ x: 10, y: 20 } : Symbol(, Decl(templateStringWithEmbeddedObjectLiteral.ts, 0, 14))
 >x : Symbol(x, Decl(templateStringWithEmbeddedObjectLiteral.ts, 0, 16))
 >y : Symbol(y, Decl(templateStringWithEmbeddedObjectLiteral.ts, 0, 23))
 

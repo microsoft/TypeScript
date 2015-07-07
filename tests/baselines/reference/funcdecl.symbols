@@ -126,6 +126,7 @@ m2.foo(() =>  {
 >m2.foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 11))
 >m2 : Symbol(m2, Decl(funcdecl.ts, 48, 29))
 >foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 11))
+>() =>  {    var b = 30;    return b;} : Symbol((Anonymous function), Decl(funcdecl.ts, 56, 7))
 
     var b = 30;
 >b : Symbol(b, Decl(funcdecl.ts, 58, 7))
@@ -150,6 +151,7 @@ declare function overloadAmbient(s: string): string;
 
 var f2 = () => {
 >f2 : Symbol(f2, Decl(funcdecl.ts, 68, 3))
+>() => {    return "string";} : Symbol((Anonymous function), Decl(funcdecl.ts, 68, 8))
 
     return "string";
 }

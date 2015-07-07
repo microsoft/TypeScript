@@ -35,16 +35,19 @@ var strRepresentation4 = MyEmusEnum["emu"];
 // Should be okay, as we suppress implicit 'any' property access checks
 var x = {}["hi"];
 >x : Symbol(x, Decl(noImplicitAnyIndexingSuppressed.ts, 19, 3))
+>{} : Symbol(, Decl(noImplicitAnyIndexingSuppressed.ts, 19, 7))
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
 >y : Symbol(y, Decl(noImplicitAnyIndexingSuppressed.ts, 22, 3))
+>{} : Symbol(, Decl(noImplicitAnyIndexingSuppressed.ts, 22, 7))
 
 var hi: any = "hi";
 >hi : Symbol(hi, Decl(noImplicitAnyIndexingSuppressed.ts, 24, 3))
 
 var emptyObj = {};
 >emptyObj : Symbol(emptyObj, Decl(noImplicitAnyIndexingSuppressed.ts, 26, 3))
+>{} : Symbol(, Decl(noImplicitAnyIndexingSuppressed.ts, 26, 14))
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var z1 = emptyObj[hi];
@@ -69,6 +72,7 @@ interface MyMap<T> {
 var m: MyMap<number> = {
 >m : Symbol(m, Decl(noImplicitAnyIndexingSuppressed.ts, 36, 3))
 >MyMap : Symbol(MyMap, Decl(noImplicitAnyIndexingSuppressed.ts, 30, 29))
+>{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : Symbol(, Decl(noImplicitAnyIndexingSuppressed.ts, 36, 22))
 
     "0": 0,
     "1": 1,

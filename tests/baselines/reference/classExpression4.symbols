@@ -1,6 +1,7 @@
 === tests/cases/conformance/classes/classExpressions/classExpression4.ts ===
 let C = class {
 >C : Symbol(C, Decl(classExpression4.ts, 0, 3))
+>class {    foo() {        return new C();    }} : Symbol((Anonymous class), Decl(classExpression4.ts, 0, 7))
 
     foo() {
 >foo : Symbol((Anonymous class).foo, Decl(classExpression4.ts, 0, 15))

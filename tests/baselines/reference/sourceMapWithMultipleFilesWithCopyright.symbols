@@ -15,6 +15,7 @@ Copyright
 
 var x = {
 >x : Symbol(x, Decl(a.ts, 4, 3))
+>{    a: 10,    b: 20} : Symbol(, Decl(a.ts, 4, 7))
 
     a: 10,
 >a : Symbol(a, Decl(a.ts, 4, 9))

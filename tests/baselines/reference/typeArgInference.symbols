@@ -37,6 +37,7 @@ interface I {
 }
 var o = { a: 3, b: "test" };
 >o : Symbol(o, Decl(typeArgInference.ts, 4, 3))
+>{ a: 3, b: "test" } : Symbol(, Decl(typeArgInference.ts, 4, 7))
 >a : Symbol(a, Decl(typeArgInference.ts, 4, 9))
 >b : Symbol(b, Decl(typeArgInference.ts, 4, 15))
 

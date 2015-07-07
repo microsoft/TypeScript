@@ -12,6 +12,7 @@ class bar {
 
   public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
 >g : Symbol(g, Decl(declInput3.ts, 5, 27))
+>{a: <bar>null, b: undefined, c: void 4 } : Symbol(, Decl(declInput3.ts, 6, 21))
 >a : Symbol(a, Decl(declInput3.ts, 6, 23))
 >bar : Symbol(bar, Decl(declInput3.ts, 2, 1))
 >b : Symbol(b, Decl(declInput3.ts, 6, 36))

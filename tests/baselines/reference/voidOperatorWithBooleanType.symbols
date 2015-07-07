@@ -37,6 +37,7 @@ var ResultIsAny2 = void true;
 
 var ResultIsAny3 = void { x: true, y: false };
 >ResultIsAny3 : Symbol(ResultIsAny3, Decl(voidOperatorWithBooleanType.ts, 20, 3))
+>{ x: true, y: false } : Symbol(, Decl(voidOperatorWithBooleanType.ts, 20, 23))
 >x : Symbol(x, Decl(voidOperatorWithBooleanType.ts, 20, 25))
 >y : Symbol(y, Decl(voidOperatorWithBooleanType.ts, 20, 34))
 

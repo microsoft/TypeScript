@@ -45,6 +45,7 @@ EIGHT:
 while (true) {
     var fn = function () { }
 >fn : Symbol(fn, Decl(whileContinueStatements.ts, 44, 7))
+>function () { } : Symbol((Anonymous function), Decl(whileContinueStatements.ts, 44, 12))
 
     continue EIGHT;
 }

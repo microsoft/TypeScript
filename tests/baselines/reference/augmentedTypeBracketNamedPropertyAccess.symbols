@@ -13,9 +13,11 @@ interface Function {
 }
 var o = {};
 >o : Symbol(o, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 6, 3))
+>{} : Symbol(, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 6, 7))
 
 var f = function () { };
 >f : Symbol(f, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 7, 3))
+>function () { } : Symbol((Anonymous function), Decl(augmentedTypeBracketNamedPropertyAccess.ts, 7, 7))
 
 var r1 = o['data']; // Should be number
 >r1 : Symbol(r1, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 9, 3))

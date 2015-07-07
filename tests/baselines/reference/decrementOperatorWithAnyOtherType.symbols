@@ -12,6 +12,7 @@ var ANY2: any[] = ["", ""];
 
 var obj = {x:1,y:null};
 >obj : Symbol(obj, Decl(decrementOperatorWithAnyOtherType.ts, 5, 3))
+>{x:1,y:null} : Symbol(, Decl(decrementOperatorWithAnyOtherType.ts, 5, 9))
 >x : Symbol(x, Decl(decrementOperatorWithAnyOtherType.ts, 5, 11))
 >y : Symbol(y, Decl(decrementOperatorWithAnyOtherType.ts, 5, 15))
 

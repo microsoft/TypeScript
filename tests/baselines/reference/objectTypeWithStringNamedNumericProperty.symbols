@@ -320,6 +320,7 @@ var r13 = i[-01]
 
 var b = {
 >b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : Symbol(, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 7))
 
     "0.1": <void>null,
     ".1": new Object(),

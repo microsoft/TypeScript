@@ -22,6 +22,8 @@ declare function identity<V>(y: V): V;
 var s = map("", () => { return { x: identity }; });
 >s : Symbol(s, Decl(inferentialTypingWithFunctionTypeNested.ts, 3, 3))
 >map : Symbol(map, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 0))
+>() => { return { x: identity }; } : Symbol((Anonymous function), Decl(inferentialTypingWithFunctionTypeNested.ts, 3, 15))
+>{ x: identity } : Symbol(, Decl(inferentialTypingWithFunctionTypeNested.ts, 3, 30))
 >x : Symbol(x, Decl(inferentialTypingWithFunctionTypeNested.ts, 3, 32))
 >identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 65))
 

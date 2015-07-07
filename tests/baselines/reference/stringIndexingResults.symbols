@@ -79,6 +79,7 @@ var r9 = a[1];
 var b: { [x: string]: string } = { y: '' }
 >b : Symbol(b, Decl(stringIndexingResults.ts, 29, 3))
 >x : Symbol(x, Decl(stringIndexingResults.ts, 29, 10))
+>{ y: '' } : Symbol(, Decl(stringIndexingResults.ts, 29, 32))
 >y : Symbol(y, Decl(stringIndexingResults.ts, 29, 34))
 
 var r10 = b['y'];

@@ -4,10 +4,13 @@ class class1 {
 
     public prop1 = {
 >prop1 : Symbol(prop1, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 0, 14))
+>{        doStuff: (callback) => () => {            var _this = 2;            return callback(_this);        }    } : Symbol(, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 1, 18))
 
         doStuff: (callback) => () => {
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 1, 20))
+>(callback) => () => {            var _this = 2;            return callback(_this);        } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 2, 16))
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 2, 18))
+>() => {            var _this = 2;            return callback(_this);        } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 2, 30))
 
             var _this = 2;
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 3, 15))
@@ -28,10 +31,13 @@ class class2 {
     }
     public prop1 = {
 >prop1 : Symbol(prop1, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 12, 5))
+>{        doStuff: (callback) => () => {            return callback(10);        }    } : Symbol(, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 13, 18))
 
         doStuff: (callback) => () => {
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 13, 20))
+>(callback) => () => {            return callback(10);        } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 14, 16))
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 14, 18))
+>() => {            return callback(10);        } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 14, 30))
 
             return callback(10);
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInProperty.ts, 14, 18))

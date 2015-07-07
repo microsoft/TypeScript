@@ -5,6 +5,7 @@ var __proto__ = 10;
 
 var o = {
 >o : Symbol(o, Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 3))
+>{    "__proto__": 0} : Symbol(, Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 7))
 
     "__proto__": 0
 };
@@ -15,6 +16,7 @@ var b = o["__proto__"];
 
 var o1 = {
 >o1 : Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
+>{    __proto__: 0} : Symbol(, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 8))
 
     __proto__: 0
 >__proto__ : Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 10))
@@ -31,6 +33,7 @@ var ___proto__ = 10;
 
 var o2 = {
 >o2 : Symbol(o2, Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 3))
+>{    "___proto__": 0} : Symbol(, Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 8))
 
     "___proto__": 0
 };
@@ -41,6 +44,7 @@ var b2 = o2["___proto__"];
 
 var o3 = {
 >o3 : Symbol(o3, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 3))
+>{    ___proto__: 0} : Symbol(, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 8))
 
     ___proto__: 0
 >___proto__ : Symbol(___proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 10))
@@ -57,6 +61,7 @@ var _proto__ = 10;
 
 var o4 = {
 >o4 : Symbol(o4, Decl(escapedReservedCompilerNamedIdentifier.ts, 22, 3))
+>{    "_proto__": 0} : Symbol(, Decl(escapedReservedCompilerNamedIdentifier.ts, 22, 8))
 
     "_proto__": 0
 };
@@ -67,6 +72,7 @@ var b4 = o4["_proto__"];
 
 var o5 = {
 >o5 : Symbol(o5, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 3))
+>{    _proto__: 0} : Symbol(, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 8))
 
     _proto__: 0
 >_proto__ : Symbol(_proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 10))

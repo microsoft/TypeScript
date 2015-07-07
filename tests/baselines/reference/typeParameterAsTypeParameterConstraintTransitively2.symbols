@@ -49,9 +49,12 @@ foo(1, 2, '');
 
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true });
 >foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>{ x: 1 } : Symbol(, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 4))
 >x : Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 5))
+>{ x: 1, y: '' } : Symbol(, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 13))
 >x : Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 15))
 >y : Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 21))
+>{ x: 2, y: 2, z: true } : Symbol(, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 30))
 >x : Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 32))
 >y : Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 38))
 >z : Symbol(z, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 44))
@@ -65,6 +68,7 @@ foo(a, b, a);
 foo(a, { foo: 1, bar: '', hm: true }, b);
 >foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
 >a : Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
+>{ foo: 1, bar: '', hm: true } : Symbol(, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 6))
 >foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 8))
 >bar : Symbol(bar, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 16))
 >hm : Symbol(hm, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 25))
@@ -72,10 +76,13 @@ foo(a, { foo: 1, bar: '', hm: true }, b);
 
 foo((x: number, y: string) => { }, (x, y: boolean) => { }, () => { });
 >foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>(x: number, y: string) => { } : Symbol((Anonymous function), Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 4))
 >x : Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 5))
 >y : Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 15))
+>(x, y: boolean) => { } : Symbol((Anonymous function), Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 34))
 >x : Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 36))
 >y : Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 38))
+>() => { } : Symbol((Anonymous function), Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 58))
 
 function foo2<T extends A, U extends A, V extends A>(x: T, y: U, z: V): V { return z; }
 >foo2 : Symbol(foo2, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 70))

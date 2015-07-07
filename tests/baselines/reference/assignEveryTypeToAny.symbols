@@ -119,10 +119,12 @@ x = i;
 
 x = { f() { return 1; } }
 >x : Symbol(x, Decl(assignEveryTypeToAny.ts, 2, 3))
+>{ f() { return 1; } } : Symbol(, Decl(assignEveryTypeToAny.ts, 49, 3))
 >f : Symbol(f, Decl(assignEveryTypeToAny.ts, 49, 5))
 
 x = { f<T>(x: T) { return x; } }
 >x : Symbol(x, Decl(assignEveryTypeToAny.ts, 2, 3))
+>{ f<T>(x: T) { return x; } } : Symbol(, Decl(assignEveryTypeToAny.ts, 50, 3))
 >f : Symbol(f, Decl(assignEveryTypeToAny.ts, 50, 5))
 >T : Symbol(T, Decl(assignEveryTypeToAny.ts, 50, 8))
 >x : Symbol(x, Decl(assignEveryTypeToAny.ts, 50, 11))

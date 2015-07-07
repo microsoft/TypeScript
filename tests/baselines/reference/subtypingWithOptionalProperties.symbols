@@ -20,6 +20,7 @@ function f<T>(a: T) {
 var r = f({ s: new Object() }); // ok
 >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
 >f : Symbol(f, Decl(subtypingWithOptionalProperties.ts, 0, 0))
+>{ s: new Object() } : Symbol(, Decl(subtypingWithOptionalProperties.ts, 8, 10))
 >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 8, 11))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 

@@ -14,6 +14,7 @@ var r = f(1);
 
 var f2 = <T>(x: T): T => { return null; }
 >f2 : Symbol(f2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 3))
+><T>(x: T): T => { return null; } : Symbol((Anonymous function), Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 8))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
 >x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 13))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))

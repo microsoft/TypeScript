@@ -53,20 +53,25 @@ var r5 = true ? null : /1/;
 
 var r6 = true ? { foo: 1 } : null;
 >r6 : Symbol(r6, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 3))
+>{ foo: 1 } : Symbol(, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 15))
 >foo : Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 17))
 
 var r6 = true ? null : { foo: 1 };
 >r6 : Symbol(r6, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 3))
+>{ foo: 1 } : Symbol(, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 22))
 >foo : Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 24))
 
 var r7 = true ? () => { } : null;
 >r7 : Symbol(r7, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 27, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 28, 3))
+>() => { } : Symbol((Anonymous function), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 27, 15))
 
 var r7 = true ? null : () => { };
 >r7 : Symbol(r7, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 27, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 28, 3))
+>() => { } : Symbol((Anonymous function), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 28, 22))
 
 var r8 = true ? <T>(x: T) => { return x } : null;
 >r8 : Symbol(r8, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 3))
+><T>(x: T) => { return x } : Symbol((Anonymous function), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 15))
 >T : Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 17))
 >x : Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 20))
 >T : Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 17))
@@ -74,6 +79,7 @@ var r8 = true ? <T>(x: T) => { return x } : null;
 
 var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identical across declarations
 >r8b : Symbol(r8b, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 3))
+><T>(x: T) => { return x } : Symbol((Anonymous function), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 23))
 >T : Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 25))
 >x : Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 28))
 >T : Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 25))
@@ -241,7 +247,9 @@ var r19 = true ? null : new Object();
 
 var r20 = true ? {} : null;
 >r20 : Symbol(r20, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 88, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 89, 3))
+>{} : Symbol(, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 88, 16))
 
 var r20 = true ? null : {};
 >r20 : Symbol(r20, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 88, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 89, 3))
+>{} : Symbol(, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 89, 23))
 

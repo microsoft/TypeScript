@@ -13,6 +13,7 @@ function x() {
 >x : Symbol(x, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 3, 14))
 
     x => { console.log(this); };
+>x => { console.log(this); } : Symbol((Anonymous function), Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 4, 14))
 >x : Symbol(x, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 4, 14))
 >console.log : Symbol(log, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 14))
 >console : Symbol(console, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 3))

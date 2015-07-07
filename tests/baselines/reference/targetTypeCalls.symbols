@@ -2,22 +2,32 @@
 var fra1: (v:any)=>string = function() { return function (v:string) {return v;}; }() // should work
 >fra1 : Symbol(fra1, Decl(targetTypeCalls.ts, 0, 3))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 0, 11))
+>function() { return function (v:string) {return v;}; } : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 0, 27))
+>function (v:string) {return v;} : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 0, 47))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 0, 58))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 0, 58))
 
 var fra2: (v:any)=>number = function() { return function () { return 0; } }() // should work
 >fra2 : Symbol(fra2, Decl(targetTypeCalls.ts, 1, 3))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 1, 11))
+>function() { return function () { return 0; } } : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 1, 27))
+>function () { return 0; } : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 1, 47))
 
 var fra3: (v:any)=>string = function() { return function() { return function(v) {return v;};}(); }() // should work
 >fra3 : Symbol(fra3, Decl(targetTypeCalls.ts, 3, 3))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 3, 11))
+>function() { return function() { return function(v) {return v;};}(); } : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 3, 27))
+>function() { return function(v) {return v;};} : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 3, 47))
+>function(v) {return v;} : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 3, 67))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 3, 77))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 3, 77))
 
 var fra4: (v:any)=>void = function() { return function() { return function(v) {return v;};}(); }() // should work
 >fra4 : Symbol(fra4, Decl(targetTypeCalls.ts, 4, 3))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 4, 11))
+>function() { return function() { return function(v) {return v;};}(); } : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 4, 25))
+>function() { return function(v) {return v;};} : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 4, 45))
+>function(v) {return v;} : Symbol((Anonymous function), Decl(targetTypeCalls.ts, 4, 65))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 4, 75))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 4, 75))
 

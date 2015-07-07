@@ -26,6 +26,7 @@ module A {
 >Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 10))
 
             return { x: p.x, y: p.y };
+>{ x: p.x, y: p.y } : Symbol(, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 10, 18))
 >x : Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 10, 20))
 >p.x : Symbol(Point.x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
 >p : Symbol(p, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 9, 23))

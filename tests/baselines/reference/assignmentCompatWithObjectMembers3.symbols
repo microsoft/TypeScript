@@ -51,11 +51,13 @@ var b: { foo: string; baz?: string }
 var a2: S2 = { foo: '' };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
 >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
+>{ foo: '' } : Symbol(, Decl(assignmentCompatWithObjectMembers3.ts, 16, 12))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 16, 14))
 
 var b2: T2 = { foo: '' };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembers3.ts, 17, 3))
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
+>{ foo: '' } : Symbol(, Decl(assignmentCompatWithObjectMembers3.ts, 17, 12))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 17, 14))
 
 s = t;

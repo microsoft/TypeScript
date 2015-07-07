@@ -2,5 +2,6 @@
 
 var { as } = { as: 1 }
 >as : Symbol(as, Decl(objectBindingPatternKeywordIdentifiers05.ts, 1, 5))
+>{ as: 1 } : Symbol(, Decl(objectBindingPatternKeywordIdentifiers05.ts, 1, 12))
 >as : Symbol(as, Decl(objectBindingPatternKeywordIdentifiers05.ts, 1, 14))
 

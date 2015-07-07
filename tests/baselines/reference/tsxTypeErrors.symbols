@@ -13,6 +13,7 @@ var a2 = <img srce="foo.jpg" />
 // A built-in element with a badly-typed attribute value (error)
 var thing = { oops: 100 };
 >thing : Symbol(thing, Decl(tsxTypeErrors.tsx, 8, 3))
+>{ oops: 100 } : Symbol(, Decl(tsxTypeErrors.tsx, 8, 11))
 >oops : Symbol(oops, Decl(tsxTypeErrors.tsx, 8, 13))
 
 var a3 = <div id={thing} />
@@ -59,6 +60,7 @@ var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
 >b2 : Symbol(b2, Decl(tsxTypeErrors.tsx, 31, 3))
 >MyClass : Symbol(MyClass, Decl(tsxTypeErrors.tsx, 12, 31))
 >pt : Symbol(unknown)
+>{x: 4, y: 'oops'} : Symbol(, Decl(tsxTypeErrors.tsx, 31, 22))
 >x : Symbol(x, Decl(tsxTypeErrors.tsx, 31, 23))
 >y : Symbol(y, Decl(tsxTypeErrors.tsx, 31, 28))
 

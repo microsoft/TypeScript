@@ -7,6 +7,7 @@ class Greeter {
 
     public returnA = () => this.a;
 >returnA : Symbol(returnA, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 1, 18))
+>() => this.a : Symbol((Anonymous function), Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 2, 20))
 >this.a : Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
 >this : Symbol(Greeter, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 0))
 >a : Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))

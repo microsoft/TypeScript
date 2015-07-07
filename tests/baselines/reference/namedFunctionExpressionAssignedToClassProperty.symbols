@@ -4,6 +4,7 @@ class Foo{
 
        a = function bar(){
 >a : Symbol(a, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 0, 10))
+>function bar(){       } : Symbol(bar, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 2, 10))
 >bar : Symbol(bar, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 2, 10))
 
        }; // this shouldn't crash the compiler...

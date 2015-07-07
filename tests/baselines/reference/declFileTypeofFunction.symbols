@@ -55,12 +55,14 @@ var foo2 = foo;
 
 var foo3 = function () {
 >foo3 : Symbol(foo3, Decl(declFileTypeofFunction.ts, 20, 3))
+>function () {    return foo3;} : Symbol((Anonymous function), Decl(declFileTypeofFunction.ts, 20, 10))
 
     return foo3;
 >foo3 : Symbol(foo3, Decl(declFileTypeofFunction.ts, 20, 3))
 }
 var x = () => {
 >x : Symbol(x, Decl(declFileTypeofFunction.ts, 23, 3))
+>() => {    return x;} : Symbol((Anonymous function), Decl(declFileTypeofFunction.ts, 23, 7))
 
     return x;
 >x : Symbol(x, Decl(declFileTypeofFunction.ts, 23, 3))

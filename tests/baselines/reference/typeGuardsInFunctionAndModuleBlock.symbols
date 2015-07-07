@@ -12,6 +12,7 @@ function foo(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 
         : function f() {
+>function f() {            var b = x; // number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 5, 9))
 >f : Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 5, 9))
 
             var b = x; // number | boolean
@@ -44,6 +45,7 @@ function foo2(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 
         : function f(a: number | boolean) {
+>function f(a: number | boolean) {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 9))
 >f : Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 9))
 >a : Symbol(a, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 21))
 
@@ -78,6 +80,8 @@ function foo3(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 
         : (() => {
+>() => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : Symbol((Anonymous function), Decl(typeGuardsInFunctionAndModuleBlock.ts, 25, 11))
+
             var b = x; // new scope - number | boolean
 >b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 26, 15))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
@@ -108,6 +112,7 @@ function foo4(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 
         : ((a: number | boolean) => {
+>(a: number | boolean) => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : Symbol((Anonymous function), Decl(typeGuardsInFunctionAndModuleBlock.ts, 35, 11))
 >a : Symbol(a, Decl(typeGuardsInFunctionAndModuleBlock.ts, 35, 12))
 
             var b = x; // new scope - number | boolean

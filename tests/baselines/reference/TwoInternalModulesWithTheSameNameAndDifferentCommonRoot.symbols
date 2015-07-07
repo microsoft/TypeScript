@@ -26,6 +26,7 @@ module Root {
 >T : Symbol(T, Decl(part1.ts, 8, 35))
 
                 return { x: p.y, y: p.x };
+>{ x: p.y, y: p.x } : Symbol(, Decl(part1.ts, 9, 22))
 >x : Symbol(x, Decl(part1.ts, 9, 24))
 >p.y : Symbol(Point.y, Decl(part1.ts, 3, 22))
 >p : Symbol(p, Decl(part1.ts, 8, 52))
@@ -52,6 +53,7 @@ module otherRoot {
 >Root : Symbol(Root, Decl(part1.ts, 0, 0))
 >A : Symbol(Root.A, Decl(part1.ts, 0, 13))
 >Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
+>{ x: 0, y: 0 } : Symbol(, Decl(part2.ts, 3, 41))
 >x : Symbol(x, Decl(part2.ts, 3, 43))
 >y : Symbol(y, Decl(part2.ts, 3, 49))
 

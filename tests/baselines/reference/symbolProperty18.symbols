@@ -1,6 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty18.ts ===
 var i = {
 >i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
+>{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : Symbol(, Decl(symbolProperty18.ts, 0, 7))
 
     [Symbol.iterator]: 0,
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))

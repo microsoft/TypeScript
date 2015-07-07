@@ -6,6 +6,7 @@ var a, b, c;
 
 var x1 = {
 >x1 : Symbol(x1, Decl(objectLiteralShorthandPropertiesES6.ts, 2, 3))
+>{    a} : Symbol(, Decl(objectLiteralShorthandPropertiesES6.ts, 2, 8))
 
     a
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 2, 10))
@@ -14,6 +15,7 @@ var x1 = {
 
 var x2 = {
 >x2 : Symbol(x2, Decl(objectLiteralShorthandPropertiesES6.ts, 6, 3))
+>{    a,} : Symbol(, Decl(objectLiteralShorthandPropertiesES6.ts, 6, 8))
 
     a,
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 6, 10))
@@ -21,6 +23,7 @@ var x2 = {
 
 var x3 = {
 >x3 : Symbol(x3, Decl(objectLiteralShorthandPropertiesES6.ts, 10, 3))
+>{    a: 0,    b,    c,    d() { },    x3,    parent: x3} : Symbol(, Decl(objectLiteralShorthandPropertiesES6.ts, 10, 8))
 
     a: 0,
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 10, 10))

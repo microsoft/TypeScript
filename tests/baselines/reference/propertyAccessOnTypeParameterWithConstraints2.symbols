@@ -197,9 +197,11 @@ var r3d = a(aB, aB)['foo']();
 
 var b = {
 >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 3))
+>{    foo: <U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    }} : Symbol(, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 7))
 
     foo: <U extends A, T extends A>(x: U, y: T) => {
 >foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 9))
+><U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    } : Symbol((Anonymous function), Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 8))
 >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 10))
 >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 22))

@@ -7,18 +7,21 @@ declare function setTimeout(expression: any, msec?: number, language?: any): num
 
 var messenger = {
 >messenger : Symbol(messenger, Decl(fatarrowfunctionsInFunctions.ts, 2, 3))
+>{    message: "Hello World",    start: function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     }} : Symbol(, Decl(fatarrowfunctionsInFunctions.ts, 2, 15))
 
     message: "Hello World",
 >message : Symbol(message, Decl(fatarrowfunctionsInFunctions.ts, 2, 17))
 
     start: function() {
 >start : Symbol(start, Decl(fatarrowfunctionsInFunctions.ts, 3, 27))
+>function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     } : Symbol((Anonymous function), Decl(fatarrowfunctionsInFunctions.ts, 4, 10))
 
         var _self = this;
 >_self : Symbol(_self, Decl(fatarrowfunctionsInFunctions.ts, 5, 11))
 
         setTimeout(function() {
 >setTimeout : Symbol(setTimeout, Decl(fatarrowfunctionsInFunctions.ts, 0, 0))
+>function() {            _self.message.toString();         } : Symbol((Anonymous function), Decl(fatarrowfunctionsInFunctions.ts, 6, 19))
 
             _self.message.toString(); 
 >_self : Symbol(_self, Decl(fatarrowfunctionsInFunctions.ts, 5, 11))

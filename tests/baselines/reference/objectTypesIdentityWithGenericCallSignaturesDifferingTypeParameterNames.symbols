@@ -66,6 +66,7 @@ var a: { foo<Z>(x: Z): Z }
 
 var b = { foo<A>(x: A) { return x; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 23, 3))
+>{ foo<A>(x: A) { return x; } } : Symbol(, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 23, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 23, 9))
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 23, 14))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 23, 17))

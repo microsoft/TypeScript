@@ -47,6 +47,7 @@ module M {
 
             var f = (newValue: A<T>) => { };
 >f : Symbol(f, Decl(genericCallbacksAndClassHierarchy.ts, 13, 15))
+>(newValue: A<T>) => { } : Symbol((Anonymous function), Decl(genericCallbacksAndClassHierarchy.ts, 13, 19))
 >newValue : Symbol(newValue, Decl(genericCallbacksAndClassHierarchy.ts, 13, 21))
 >A : Symbol(A, Decl(genericCallbacksAndClassHierarchy.ts, 6, 5))
 >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 11, 19))
@@ -71,6 +72,7 @@ module M {
 >v.subscribe : Symbol(I.subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
 >v : Symbol(v, Decl(genericCallbacksAndClassHierarchy.ts, 15, 15))
 >subscribe : Symbol(I.subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
+>(newValue: A<T>) => { } : Symbol((Anonymous function), Decl(genericCallbacksAndClassHierarchy.ts, 19, 24))
 >newValue : Symbol(newValue, Decl(genericCallbacksAndClassHierarchy.ts, 19, 25))
 >A : Symbol(A, Decl(genericCallbacksAndClassHierarchy.ts, 6, 5))
 >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 11, 19))

@@ -17,7 +17,10 @@ class JQuery {
 var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >jq : Symbol(jq, Decl(indexerA.ts, 8, 3))
 >JQuery : Symbol(JQuery, Decl(indexerA.ts, 2, 1))
+>{ 0: { id : "a" }, 1: { id : "b" } } : Symbol(, Decl(indexerA.ts, 8, 14))
+>{ id : "a" } : Symbol(, Decl(indexerA.ts, 8, 18))
 >id : Symbol(id, Decl(indexerA.ts, 8, 20))
+>{ id : "b" } : Symbol(, Decl(indexerA.ts, 8, 35))
 >id : Symbol(id, Decl(indexerA.ts, 8, 37))
 
 jq[0].id;

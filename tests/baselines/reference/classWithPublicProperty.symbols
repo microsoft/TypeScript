@@ -16,6 +16,7 @@ class C {
 
     public d = () => '';
 >d : Symbol(d, Decl(classWithPublicProperty.ts, 4, 28))
+>() => '' : Symbol((Anonymous function), Decl(classWithPublicProperty.ts, 5, 14))
 
     public static e;
 >e : Symbol(C.e, Decl(classWithPublicProperty.ts, 5, 24))
@@ -25,6 +26,7 @@ class C {
 
     public static g = () => '';
 >g : Symbol(C.g, Decl(classWithPublicProperty.ts, 7, 35))
+>() => '' : Symbol((Anonymous function), Decl(classWithPublicProperty.ts, 8, 21))
 }
 
 // all of these are valid

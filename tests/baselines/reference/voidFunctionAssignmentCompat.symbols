@@ -1,15 +1,19 @@
 === tests/cases/compiler/voidFunctionAssignmentCompat.ts ===
 var fa = function(): any { return 3; }
 >fa : Symbol(fa, Decl(voidFunctionAssignmentCompat.ts, 0, 3))
+>function(): any { return 3; } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 0, 8))
 
 fa = function() { } // should not work
 >fa : Symbol(fa, Decl(voidFunctionAssignmentCompat.ts, 0, 3))
+>function() { } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 1, 4))
 
 var fv = function(): void {}
 >fv : Symbol(fv, Decl(voidFunctionAssignmentCompat.ts, 3, 3))
+>function(): void {} : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 3, 8))
 
 fv = function() { return 0; } // should work
 >fv : Symbol(fv, Decl(voidFunctionAssignmentCompat.ts, 3, 3))
+>function() { return 0; } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 4, 4))
 
 function execAny(callback:(val:any)=>any) { return callback(0) }
 >execAny : Symbol(execAny, Decl(voidFunctionAssignmentCompat.ts, 4, 29))
@@ -19,6 +23,7 @@ function execAny(callback:(val:any)=>any) { return callback(0) }
 
 execAny(function () {}); // should work
 >execAny : Symbol(execAny, Decl(voidFunctionAssignmentCompat.ts, 4, 29))
+>function () {} : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 7, 8))
 
 function execVoid(callback:(val:any)=>void) { callback(0); }
 >execVoid : Symbol(execVoid, Decl(voidFunctionAssignmentCompat.ts, 7, 24))
@@ -28,23 +33,32 @@ function execVoid(callback:(val:any)=>void) { callback(0); }
 
 execVoid(function () {return 0;}); // should work
 >execVoid : Symbol(execVoid, Decl(voidFunctionAssignmentCompat.ts, 7, 24))
+>function () {return 0;} : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 10, 9))
 
 var fra: (v:any)=>any = function() { return function () {}; } // should work
 >fra : Symbol(fra, Decl(voidFunctionAssignmentCompat.ts, 12, 3))
 >v : Symbol(v, Decl(voidFunctionAssignmentCompat.ts, 12, 10))
+>function() { return function () {}; } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 12, 23))
+>function () {} : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 12, 43))
 
 var frv: (v:any)=>void = function() { return function () { return 0; } } // should work
 >frv : Symbol(frv, Decl(voidFunctionAssignmentCompat.ts, 13, 3))
 >v : Symbol(v, Decl(voidFunctionAssignmentCompat.ts, 13, 10))
+>function() { return function () { return 0; } } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 13, 24))
+>function () { return 0; } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 13, 44))
 
 var fra3: (v:any)=>string = (function() { return function (v:string) {return v;}; })() // should work
 >fra3 : Symbol(fra3, Decl(voidFunctionAssignmentCompat.ts, 15, 3))
 >v : Symbol(v, Decl(voidFunctionAssignmentCompat.ts, 15, 11))
+>function() { return function (v:string) {return v;}; } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 15, 29))
+>function (v:string) {return v;} : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 15, 48))
 >v : Symbol(v, Decl(voidFunctionAssignmentCompat.ts, 15, 59))
 >v : Symbol(v, Decl(voidFunctionAssignmentCompat.ts, 15, 59))
 
 var frv3: (v:any)=>number = (function() { return function () { return 0; } })() // should work
 >frv3 : Symbol(frv3, Decl(voidFunctionAssignmentCompat.ts, 16, 3))
 >v : Symbol(v, Decl(voidFunctionAssignmentCompat.ts, 16, 11))
+>function() { return function () { return 0; } } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 16, 29))
+>function () { return 0; } : Symbol((Anonymous function), Decl(voidFunctionAssignmentCompat.ts, 16, 48))
 
 

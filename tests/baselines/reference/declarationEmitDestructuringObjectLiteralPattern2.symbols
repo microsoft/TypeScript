@@ -4,10 +4,13 @@ var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: tr
 >x11 : Symbol(x11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 5))
 >y11 : Symbol(y11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 18))
 >z11 : Symbol(z11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 31))
+>{ a: 1, b: { a: "hello", b: { a: true } } } : Symbol(, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 44))
 >a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 46))
 >b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 52))
+>{ a: "hello", b: { a: true } } : Symbol(, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 55))
 >a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 57))
 >b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 69))
+>{ a: true } : Symbol(, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 72))
 >a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 74))
 
 function f15() {
@@ -23,6 +26,7 @@ function f15() {
 >c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 7))
 
     return { a4, b4, c4 };
+>{ a4, b4, c4 } : Symbol(, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 7, 10))
 >a4 : Symbol(a4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 7, 12))
 >b4 : Symbol(b4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 7, 16))
 >c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 7, 20))

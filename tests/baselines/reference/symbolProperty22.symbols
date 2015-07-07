@@ -27,9 +27,17 @@ declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 
 foo("", { [Symbol.unscopables]: s => s.length });
 >foo : Symbol(foo, Decl(symbolProperty22.ts, 2, 1))
+<<<<<<< HEAD
 >Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1297, 24))
 >Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
 >unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1297, 24))
+=======
+>{ [Symbol.unscopables]: s => s.length } : Symbol(, Decl(symbolProperty22.ts, 6, 7))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1284, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1292, 11))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1284, 24))
+>s => s.length : Symbol((Anonymous function), Decl(symbolProperty22.ts, 6, 31))
+>>>>>>> Accept symbol baselines
 >s : Symbol(s, Decl(symbolProperty22.ts, 6, 31))
 >s.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >s : Symbol(s, Decl(symbolProperty22.ts, 6, 31))

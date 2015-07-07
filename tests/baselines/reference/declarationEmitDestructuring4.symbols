@@ -16,6 +16,7 @@ function baz3({}) { }
 
 function baz4({} = { x: 10 }) { }
 >baz4 : Symbol(baz4, Decl(declarationEmitDestructuring4.ts, 7, 21))
+>{ x: 10 } : Symbol(, Decl(declarationEmitDestructuring4.ts, 8, 18))
 >x : Symbol(x, Decl(declarationEmitDestructuring4.ts, 8, 20))
 
 

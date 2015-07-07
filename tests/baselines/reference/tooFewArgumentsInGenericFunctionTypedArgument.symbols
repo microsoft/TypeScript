@@ -72,6 +72,7 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 >_ : Symbol(_, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 10, 3))
 >map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
 >c2 : Symbol(c2, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 9, 3))
+>(x) => { return x.toFixed() } : Symbol((Anonymous function), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 19))
 >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 21))
 >x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 21))
@@ -79,6 +80,7 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 
 var rf1 = (x: number) => { return x.toFixed() };
 >rf1 : Symbol(rf1, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 3))
+>(x: number) => { return x.toFixed() } : Symbol((Anonymous function), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 9))
 >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 11))
 >x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 11))

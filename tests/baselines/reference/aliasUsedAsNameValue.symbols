@@ -9,6 +9,7 @@ import b = require("aliasUsedAsNameValue_1");
  
 export var a = function () {
 >a : Symbol(a, Decl(aliasUsedAsNameValue_2.ts, 5, 10))
+>function () {    //var x = mod.id; // TODO needed hack that mod is loaded    b.b(mod);} : Symbol((Anonymous function), Decl(aliasUsedAsNameValue_2.ts, 5, 14))
 
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);

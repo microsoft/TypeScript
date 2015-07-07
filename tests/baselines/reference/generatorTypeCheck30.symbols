@@ -6,7 +6,10 @@ function* g2(): Iterator<Iterable<(x: string) => number>> {
 >x : Symbol(x, Decl(generatorTypeCheck30.ts, 0, 35))
 
     yield function* () {
+>function* () {        yield x => x.length;    } : Symbol((Anonymous function), Decl(generatorTypeCheck30.ts, 1, 9))
+
         yield x => x.length;
+>x => x.length : Symbol((Anonymous function), Decl(generatorTypeCheck30.ts, 2, 13))
 >x : Symbol(x, Decl(generatorTypeCheck30.ts, 2, 13))
 >x : Symbol(x, Decl(generatorTypeCheck30.ts, 2, 13))
 

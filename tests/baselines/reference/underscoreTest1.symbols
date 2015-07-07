@@ -12,6 +12,7 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >_.each : Symbol(Underscore.Static.each, Decl(underscoreTest1_underscore.ts, 394, 43), Decl(underscoreTest1_underscore.ts, 396, 77))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >each : Symbol(Underscore.Static.each, Decl(underscoreTest1_underscore.ts, 394, 43), Decl(underscoreTest1_underscore.ts, 396, 77))
+>(num) => alert(num.toString()) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 5, 17))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 5, 19))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 >num.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
@@ -22,9 +23,11 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >_.each : Symbol(Underscore.Static.each, Decl(underscoreTest1_underscore.ts, 394, 43), Decl(underscoreTest1_underscore.ts, 396, 77))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >each : Symbol(Underscore.Static.each, Decl(underscoreTest1_underscore.ts, 394, 43), Decl(underscoreTest1_underscore.ts, 396, 77))
+>{ one: 1, two: 2, three: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 6, 7))
 >one : Symbol(one, Decl(underscoreTest1_underscoreTests.ts, 6, 8))
 >two : Symbol(two, Decl(underscoreTest1_underscoreTests.ts, 6, 16))
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 6, 24))
+>(value: number, key?: string) => alert(value.toString()) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 6, 36))
 >value : Symbol(value, Decl(underscoreTest1_underscoreTests.ts, 6, 38))
 >key : Symbol(key, Decl(underscoreTest1_underscoreTests.ts, 6, 52))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
@@ -36,6 +39,7 @@ _.map([1, 2, 3], (num) => num * 3);
 >_.map : Symbol(Underscore.Static.map, Decl(underscoreTest1_underscore.ts, 399, 90), Decl(underscoreTest1_underscore.ts, 401, 75))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >map : Symbol(Underscore.Static.map, Decl(underscoreTest1_underscore.ts, 399, 90), Decl(underscoreTest1_underscore.ts, 401, 75))
+>(num) => num * 3 : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 8, 16))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 8, 18))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 8, 18))
 
@@ -43,9 +47,11 @@ _.map({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => value * 3);
 >_.map : Symbol(Underscore.Static.map, Decl(underscoreTest1_underscore.ts, 399, 90), Decl(underscoreTest1_underscore.ts, 401, 75))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >map : Symbol(Underscore.Static.map, Decl(underscoreTest1_underscore.ts, 399, 90), Decl(underscoreTest1_underscore.ts, 401, 75))
+>{ one: 1, two: 2, three: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 9, 6))
 >one : Symbol(one, Decl(underscoreTest1_underscoreTests.ts, 9, 7))
 >two : Symbol(two, Decl(underscoreTest1_underscoreTests.ts, 9, 15))
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 9, 23))
+>(value: number, key?: string) => value * 3 : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 9, 35))
 >value : Symbol(value, Decl(underscoreTest1_underscoreTests.ts, 9, 37))
 >key : Symbol(key, Decl(underscoreTest1_underscoreTests.ts, 9, 51))
 >value : Symbol(value, Decl(underscoreTest1_underscoreTests.ts, 9, 37))
@@ -55,6 +61,7 @@ var sum = _.reduce([1, 2, 3], (memo, num) => memo + num, 0);
 >_.reduce : Symbol(Underscore.Static.reduce, Decl(underscoreTest1_underscore.ts, 404, 89), Decl(underscoreTest1_underscore.ts, 406, 90), Decl(underscoreTest1_underscore.ts, 407, 92), Decl(underscoreTest1_underscore.ts, 408, 100))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >reduce : Symbol(Underscore.Static.reduce, Decl(underscoreTest1_underscore.ts, 404, 89), Decl(underscoreTest1_underscore.ts, 406, 90), Decl(underscoreTest1_underscore.ts, 407, 92), Decl(underscoreTest1_underscore.ts, 408, 100))
+>(memo, num) => memo + num : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 11, 29))
 >memo : Symbol(memo, Decl(underscoreTest1_underscoreTests.ts, 11, 31))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 11, 36))
 >memo : Symbol(memo, Decl(underscoreTest1_underscoreTests.ts, 11, 31))
@@ -69,6 +76,7 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >reduceRight : Symbol(Underscore.Static.reduceRight, Decl(underscoreTest1_underscore.ts, 417, 102), Decl(underscoreTest1_underscore.ts, 419, 95), Decl(underscoreTest1_underscore.ts, 420, 97), Decl(underscoreTest1_underscore.ts, 421, 105))
 >list : Symbol(list, Decl(underscoreTest1_underscoreTests.ts, 13, 3))
+>(a, b) => a.concat(b) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 14, 30))
 >a : Symbol(a, Decl(underscoreTest1_underscoreTests.ts, 14, 32))
 >b : Symbol(b, Decl(underscoreTest1_underscoreTests.ts, 14, 34))
 >a.concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
@@ -81,6 +89,7 @@ var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >_.find : Symbol(Underscore.Static.find, Decl(underscoreTest1_underscore.ts, 426, 101), Decl(underscoreTest1_underscore.ts, 428, 77))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >find : Symbol(Underscore.Static.find, Decl(underscoreTest1_underscore.ts, 426, 101), Decl(underscoreTest1_underscore.ts, 428, 77))
+>(num) => num % 2 == 0 : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 16, 37))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 16, 39))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 16, 39))
 
@@ -89,17 +98,21 @@ var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >_.filter : Symbol(Underscore.Static.filter, Decl(underscoreTest1_underscore.ts, 431, 89), Decl(underscoreTest1_underscore.ts, 433, 81))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >filter : Symbol(Underscore.Static.filter, Decl(underscoreTest1_underscore.ts, 431, 89), Decl(underscoreTest1_underscore.ts, 433, 81))
+>(num) => num % 2 == 0 : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 18, 40))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 18, 42))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 18, 42))
 
 var listOfPlays = [{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }];
 >listOfPlays : Symbol(listOfPlays, Decl(underscoreTest1_underscoreTests.ts, 20, 3))
+>{ title: "Cymbeline", author: "Shakespeare", year: 1611 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 20, 19))
 >title : Symbol(title, Decl(underscoreTest1_underscoreTests.ts, 20, 20))
 >author : Symbol(author, Decl(underscoreTest1_underscoreTests.ts, 20, 40))
 >year : Symbol(year, Decl(underscoreTest1_underscoreTests.ts, 20, 63))
+>{ title: "The Tempest", author: "Shakespeare", year: 1611 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 20, 77))
 >title : Symbol(title, Decl(underscoreTest1_underscoreTests.ts, 20, 79))
 >author : Symbol(author, Decl(underscoreTest1_underscoreTests.ts, 20, 101))
 >year : Symbol(year, Decl(underscoreTest1_underscoreTests.ts, 20, 124))
+>{ title: "Other", author: "Not Shakespeare", year: 2012 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 20, 138))
 >title : Symbol(title, Decl(underscoreTest1_underscoreTests.ts, 20, 140))
 >author : Symbol(author, Decl(underscoreTest1_underscoreTests.ts, 20, 156))
 >year : Symbol(year, Decl(underscoreTest1_underscoreTests.ts, 20, 183))
@@ -109,6 +122,7 @@ _.where(listOfPlays, { author: "Shakespeare", year: 1611 });
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >where : Symbol(Underscore.Static.where, Decl(underscoreTest1_underscore.ts, 436, 91), Decl(underscoreTest1_underscore.ts, 438, 53))
 >listOfPlays : Symbol(listOfPlays, Decl(underscoreTest1_underscoreTests.ts, 20, 3))
+>{ author: "Shakespeare", year: 1611 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 21, 20))
 >author : Symbol(author, Decl(underscoreTest1_underscoreTests.ts, 21, 22))
 >year : Symbol(year, Decl(underscoreTest1_underscoreTests.ts, 21, 45))
 
@@ -117,6 +131,7 @@ var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >_.reject : Symbol(Underscore.Static.reject, Decl(underscoreTest1_underscore.ts, 442, 65), Decl(underscoreTest1_underscore.ts, 444, 81))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >reject : Symbol(Underscore.Static.reject, Decl(underscoreTest1_underscore.ts, 442, 65), Decl(underscoreTest1_underscore.ts, 444, 81))
+>(num) => num % 2 == 0 : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 23, 39))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 23, 41))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 23, 41))
 
@@ -145,10 +160,13 @@ _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 
 var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
 >stooges : Symbol(stooges, Decl(underscoreTest1_underscoreTests.ts, 33, 3))
+>{ name: 'moe', age: 40 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 33, 15))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 33, 16))
 >age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 29))
+>{ name: 'larry', age: 50 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 33, 40))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 33, 42))
 >age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 57))
+>{ name: 'curly', age: 60 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 33, 68))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 33, 70))
 >age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 85))
 
@@ -163,6 +181,7 @@ _.max(stooges, (stooge) => stooge.age);
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >max : Symbol(Underscore.Static.max, Decl(underscoreTest1_underscore.ts, 466, 66), Decl(underscoreTest1_underscore.ts, 468, 73))
 >stooges : Symbol(stooges, Decl(underscoreTest1_underscoreTests.ts, 33, 3))
+>(stooge) => stooge.age : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 36, 14))
 >stooge : Symbol(stooge, Decl(underscoreTest1_underscoreTests.ts, 36, 16))
 >stooge.age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 29))
 >stooge : Symbol(stooge, Decl(underscoreTest1_underscoreTests.ts, 36, 16))
@@ -181,6 +200,7 @@ _.sortBy([1, 2, 3, 4, 5, 6], (num) => Math.sin(num));
 >_.sortBy : Symbol(Underscore.Static.sortBy, Decl(underscoreTest1_underscore.ts, 472, 83), Decl(underscoreTest1_underscore.ts, 474, 77), Decl(underscoreTest1_underscore.ts, 475, 87), Decl(underscoreTest1_underscore.ts, 476, 56))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >sortBy : Symbol(Underscore.Static.sortBy, Decl(underscoreTest1_underscore.ts, 472, 83), Decl(underscoreTest1_underscore.ts, 474, 77), Decl(underscoreTest1_underscore.ts, 475, 87), Decl(underscoreTest1_underscore.ts, 476, 56))
+>(num) => Math.sin(num) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 41, 28))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 41, 30))
 >Math.sin : Symbol(Math.sin, Decl(lib.d.ts, 615, 29))
 >Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
@@ -193,6 +213,7 @@ _([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floo
 >_([1.3, 2.1, 2.4]).groupBy : Symbol(Underscore.WrappedArray.groupBy, Decl(underscoreTest1_underscore.ts, 112, 42), Decl(underscoreTest1_underscore.ts, 113, 77))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >groupBy : Symbol(Underscore.WrappedArray.groupBy, Decl(underscoreTest1_underscore.ts, 112, 42), Decl(underscoreTest1_underscore.ts, 113, 77))
+>(e: number, i?: number, list?: number[]) => Math.floor(e) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 45, 27))
 >e : Symbol(e, Decl(underscoreTest1_underscoreTests.ts, 45, 28))
 >i : Symbol(i, Decl(underscoreTest1_underscoreTests.ts, 45, 38))
 >list : Symbol(list, Decl(underscoreTest1_underscoreTests.ts, 45, 50))
@@ -205,6 +226,7 @@ _.groupBy([1.3, 2.1, 2.4], (num: number) => Math.floor(num));
 >_.groupBy : Symbol(Underscore.Static.groupBy, Decl(underscoreTest1_underscore.ts, 477, 66), Decl(underscoreTest1_underscore.ts, 479, 91), Decl(underscoreTest1_underscore.ts, 480, 101), Decl(underscoreTest1_underscore.ts, 481, 69))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >groupBy : Symbol(Underscore.Static.groupBy, Decl(underscoreTest1_underscore.ts, 477, 66), Decl(underscoreTest1_underscore.ts, 479, 91), Decl(underscoreTest1_underscore.ts, 480, 101), Decl(underscoreTest1_underscore.ts, 481, 69))
+>(num: number) => Math.floor(num) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 46, 26))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 46, 28))
 >Math.floor : Symbol(Math.floor, Decl(lib.d.ts, 582, 27))
 >Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
@@ -220,6 +242,7 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >_.countBy : Symbol(Underscore.Static.countBy, Decl(underscoreTest1_underscore.ts, 482, 79), Decl(underscoreTest1_underscore.ts, 484, 94), Decl(underscoreTest1_underscore.ts, 485, 104), Decl(underscoreTest1_underscore.ts, 486, 72))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >countBy : Symbol(Underscore.Static.countBy, Decl(underscoreTest1_underscore.ts, 482, 79), Decl(underscoreTest1_underscore.ts, 484, 94), Decl(underscoreTest1_underscore.ts, 485, 104), Decl(underscoreTest1_underscore.ts, 486, 72))
+>(num) => num % 2 == 0 ? 'even' : 'odd' : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 49, 26))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 49, 28))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 49, 28))
 
@@ -234,6 +257,7 @@ _.size({ one: 1, two: 2, three: 3 });
 >_.size : Symbol(Underscore.Static.size, Decl(underscoreTest1_underscore.ts, 493, 45), Decl(underscoreTest1_underscore.ts, 495, 35))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >size : Symbol(Underscore.Static.size, Decl(underscoreTest1_underscore.ts, 493, 45), Decl(underscoreTest1_underscore.ts, 495, 35))
+>{ one: 1, two: 2, three: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 55, 7))
 >one : Symbol(one, Decl(underscoreTest1_underscoreTests.ts, 55, 8))
 >two : Symbol(two, Decl(underscoreTest1_underscoreTests.ts, 55, 16))
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 55, 24))
@@ -370,6 +394,7 @@ _.range(0);
 
 var func = function (greeting) { return greeting + ': ' + this.name };
 >func : Symbol(func, Decl(underscoreTest1_underscoreTests.ts, 90, 3))
+>function (greeting) { return greeting + ': ' + this.name } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 90, 10))
 >greeting : Symbol(greeting, Decl(underscoreTest1_underscoreTests.ts, 90, 21))
 >greeting : Symbol(greeting, Decl(underscoreTest1_underscoreTests.ts, 90, 21))
 
@@ -381,6 +406,7 @@ var func2 = _.bind(func, { name: 'moe' }, 'hi');
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >bind : Symbol(Underscore.Static.bind, Decl(underscoreTest1_underscore.ts, 547, 68), Decl(underscoreTest1_underscore.ts, 549, 58))
 >func : Symbol(func, Decl(underscoreTest1_underscoreTests.ts, 90, 3))
+>{ name: 'moe' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 93, 24))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 93, 26))
 
 func2();
@@ -388,16 +414,19 @@ func2();
 
 var buttonView = {
 >buttonView : Symbol(buttonView, Decl(underscoreTest1_underscoreTests.ts, 96, 3))
+>{    label: 'underscore',    onClick: function () { alert('clicked: ' + this.label); },    onHover: function () { alert('hovering: ' + this.label); }} : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 96, 16))
 
     label: 'underscore',
 >label : Symbol(label, Decl(underscoreTest1_underscoreTests.ts, 96, 18))
 
     onClick: function () { alert('clicked: ' + this.label); },
 >onClick : Symbol(onClick, Decl(underscoreTest1_underscoreTests.ts, 97, 24))
+>function () { alert('clicked: ' + this.label); } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 98, 12))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
     onHover: function () { alert('hovering: ' + this.label); }
 >onHover : Symbol(onHover, Decl(underscoreTest1_underscoreTests.ts, 98, 62))
+>function () { alert('hovering: ' + this.label); } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 99, 12))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 };
@@ -418,6 +447,7 @@ var fibonacci = _.memoize(function (n) {
 >_.memoize : Symbol(Underscore.Static.memoize, Decl(underscoreTest1_underscore.ts, 554, 58))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >memoize : Symbol(Underscore.Static.memoize, Decl(underscoreTest1_underscore.ts, 554, 58))
+>function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);} : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 104, 26))
 >n : Symbol(n, Decl(underscoreTest1_underscoreTests.ts, 104, 36))
 
     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
@@ -435,6 +465,7 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >_.bind : Symbol(Underscore.Static.bind, Decl(underscoreTest1_underscore.ts, 547, 68), Decl(underscoreTest1_underscore.ts, 549, 58))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >bind : Symbol(Underscore.Static.bind, Decl(underscoreTest1_underscore.ts, 547, 68), Decl(underscoreTest1_underscore.ts, 549, 58))
+>(message?: string, ...rest: string[]) => { } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 108, 17))
 >message : Symbol(message, Decl(underscoreTest1_underscoreTests.ts, 108, 18))
 >rest : Symbol(rest, Decl(underscoreTest1_underscoreTests.ts, 108, 35))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
@@ -449,10 +480,12 @@ _.defer(function () { alert('deferred'); });
 >_.defer : Symbol(Underscore.Static.defer, Decl(underscoreTest1_underscore.ts, 558, 68))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >defer : Symbol(Underscore.Static.defer, Decl(underscoreTest1_underscore.ts, 558, 68))
+>function () { alert('deferred'); } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 111, 8))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : Symbol(updatePosition, Decl(underscoreTest1_underscoreTests.ts, 113, 3))
+>() => alert('updating position...') : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 113, 20))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var throttled = _.throttle(updatePosition, 100);
@@ -468,6 +501,7 @@ $(null).scroll(throttled);
 
 var calculateLayout = () => alert('calculating layout...');
 >calculateLayout : Symbol(calculateLayout, Decl(underscoreTest1_underscoreTests.ts, 117, 3))
+>() => alert('calculating layout...') : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 117, 21))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var lazyLayout = _.debounce(calculateLayout, 300);
@@ -483,6 +517,7 @@ $(null).resize(lazyLayout);
 
 var createApplication = () => alert('creating application...');
 >createApplication : Symbol(createApplication, Decl(underscoreTest1_underscoreTests.ts, 121, 3))
+>() => alert('creating application...') : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 121, 23))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var initialize = _.once(createApplication);
@@ -503,6 +538,7 @@ var notes: any[];
 
 var render = () => alert("rendering...");
 >render : Symbol(render, Decl(underscoreTest1_underscoreTests.ts, 127, 3))
+>() => alert("rendering...") : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 127, 12))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
 
 var renderNotes = _.after(notes.length, render);
@@ -520,13 +556,16 @@ _.each(notes, (note) => note.asyncSave({ success: renderNotes }));
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >each : Symbol(Underscore.Static.each, Decl(underscoreTest1_underscore.ts, 394, 43), Decl(underscoreTest1_underscore.ts, 396, 77))
 >notes : Symbol(notes, Decl(underscoreTest1_underscoreTests.ts, 126, 3))
+>(note) => note.asyncSave({ success: renderNotes }) : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 129, 13))
 >note : Symbol(note, Decl(underscoreTest1_underscoreTests.ts, 129, 15))
 >note : Symbol(note, Decl(underscoreTest1_underscoreTests.ts, 129, 15))
+>{ success: renderNotes } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 129, 39))
 >success : Symbol(success, Decl(underscoreTest1_underscoreTests.ts, 129, 40))
 >renderNotes : Symbol(renderNotes, Decl(underscoreTest1_underscoreTests.ts, 128, 3))
 
 var hello = function (name) { return "hello: " + name; };
 >hello : Symbol(hello, Decl(underscoreTest1_underscoreTests.ts, 131, 3))
+>function (name) { return "hello: " + name; } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 131, 11))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 131, 22))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 131, 22))
 
@@ -536,6 +575,7 @@ hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >wrap : Symbol(Underscore.Static.wrap, Decl(underscoreTest1_underscore.ts, 568, 61))
 >hello : Symbol(hello, Decl(underscoreTest1_underscoreTests.ts, 131, 3))
+>(func, arg) => { return "before, " + func(arg) + ", after"; } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 132, 21))
 >func : Symbol(func, Decl(underscoreTest1_underscoreTests.ts, 132, 23))
 >arg : Symbol(arg, Decl(underscoreTest1_underscoreTests.ts, 132, 28))
 >func : Symbol(func, Decl(underscoreTest1_underscoreTests.ts, 132, 23))
@@ -546,11 +586,13 @@ hello("moe");
 
 var greet = function (name) { return "hi: " + name; };
 >greet : Symbol(greet, Decl(underscoreTest1_underscoreTests.ts, 135, 3))
+>function (name) { return "hi: " + name; } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 135, 11))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 135, 22))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 135, 22))
 
 var exclaim = function (statement) { return statement + "!"; };
 >exclaim : Symbol(exclaim, Decl(underscoreTest1_underscoreTests.ts, 136, 3))
+>function (statement) { return statement + "!"; } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 136, 13))
 >statement : Symbol(statement, Decl(underscoreTest1_underscoreTests.ts, 136, 24))
 >statement : Symbol(statement, Decl(underscoreTest1_underscoreTests.ts, 136, 24))
 
@@ -571,6 +613,7 @@ _.keys({ one: 1, two: 2, three: 3 });
 >_.keys : Symbol(Underscore.Static.keys, Decl(underscoreTest1_underscore.ts, 572, 48))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >keys : Symbol(Underscore.Static.keys, Decl(underscoreTest1_underscore.ts, 572, 48))
+>{ one: 1, two: 2, three: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 142, 7))
 >one : Symbol(one, Decl(underscoreTest1_underscoreTests.ts, 142, 8))
 >two : Symbol(two, Decl(underscoreTest1_underscoreTests.ts, 142, 16))
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 142, 24))
@@ -579,6 +622,7 @@ _.values({ one: 1, two: 2, three: 3 });
 >_.values : Symbol(Underscore.Static.values, Decl(underscoreTest1_underscore.ts, 574, 36))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >values : Symbol(Underscore.Static.values, Decl(underscoreTest1_underscore.ts, 574, 36))
+>{ one: 1, two: 2, three: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 143, 9))
 >one : Symbol(one, Decl(underscoreTest1_underscoreTests.ts, 143, 10))
 >two : Symbol(two, Decl(underscoreTest1_underscoreTests.ts, 143, 18))
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 143, 26))
@@ -587,6 +631,7 @@ _.pairs({ one: 1, two: 2, three: 3 });
 >_.pairs : Symbol(Underscore.Static.pairs, Decl(underscoreTest1_underscore.ts, 576, 35))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >pairs : Symbol(Underscore.Static.pairs, Decl(underscoreTest1_underscore.ts, 576, 35))
+>{ one: 1, two: 2, three: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 144, 8))
 >one : Symbol(one, Decl(underscoreTest1_underscoreTests.ts, 144, 9))
 >two : Symbol(two, Decl(underscoreTest1_underscoreTests.ts, 144, 17))
 >three : Symbol(three, Decl(underscoreTest1_underscoreTests.ts, 144, 25))
@@ -595,6 +640,7 @@ _.invert({ Moe: "Moses", Larry: "Louis", Curly: "Jerome" });
 >_.invert : Symbol(Underscore.Static.invert, Decl(underscoreTest1_underscore.ts, 578, 36))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >invert : Symbol(Underscore.Static.invert, Decl(underscoreTest1_underscore.ts, 578, 36))
+>{ Moe: "Moses", Larry: "Louis", Curly: "Jerome" } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 145, 9))
 >Moe : Symbol(Moe, Decl(underscoreTest1_underscoreTests.ts, 145, 10))
 >Larry : Symbol(Larry, Decl(underscoreTest1_underscoreTests.ts, 145, 24))
 >Curly : Symbol(Curly, Decl(underscoreTest1_underscoreTests.ts, 145, 40))
@@ -609,13 +655,16 @@ _.extend({ name: 'moe' }, { age: 50 });
 >_.extend : Symbol(Underscore.Static.extend, Decl(underscoreTest1_underscore.ts, 583, 39))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >extend : Symbol(Underscore.Static.extend, Decl(underscoreTest1_underscore.ts, 583, 39))
+>{ name: 'moe' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 147, 9))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 147, 10))
+>{ age: 50 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 147, 25))
 >age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 147, 27))
 
 _.pick({ name: 'moe', age: 50, userid: 'moe1' }, 'name', 'age');
 >_.pick : Symbol(Underscore.Static.pick, Decl(underscoreTest1_underscore.ts, 585, 56))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >pick : Symbol(Underscore.Static.pick, Decl(underscoreTest1_underscore.ts, 585, 56))
+>{ name: 'moe', age: 50, userid: 'moe1' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 148, 7))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 148, 8))
 >age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 148, 21))
 >userid : Symbol(userid, Decl(underscoreTest1_underscoreTests.ts, 148, 30))
@@ -624,12 +673,14 @@ _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 >_.omit : Symbol(Underscore.Static.omit, Decl(underscoreTest1_underscore.ts, 587, 49))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >omit : Symbol(Underscore.Static.omit, Decl(underscoreTest1_underscore.ts, 587, 49))
+>{ name: 'moe', age: 50, userid: 'moe1' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 149, 7))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 149, 8))
 >age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 149, 21))
 >userid : Symbol(userid, Decl(underscoreTest1_underscoreTests.ts, 149, 30))
 
 var iceCream = { flavor: "chocolate" };
 >iceCream : Symbol(iceCream, Decl(underscoreTest1_underscoreTests.ts, 151, 3))
+>{ flavor: "chocolate" } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 151, 14))
 >flavor : Symbol(flavor, Decl(underscoreTest1_underscoreTests.ts, 151, 16))
 
 _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
@@ -637,6 +688,7 @@ _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >defaults : Symbol(Underscore.Static.defaults, Decl(underscoreTest1_underscore.ts, 589, 49))
 >iceCream : Symbol(iceCream, Decl(underscoreTest1_underscoreTests.ts, 151, 3))
+>{ flavor: "vanilla", sprinkles: "lots" } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 152, 20))
 >flavor : Symbol(flavor, Decl(underscoreTest1_underscoreTests.ts, 152, 22))
 >sprinkles : Symbol(sprinkles, Decl(underscoreTest1_underscoreTests.ts, 152, 41))
 
@@ -644,6 +696,7 @@ _.clone({ name: 'moe' });
 >_.clone : Symbol(Underscore.Static.clone, Decl(underscoreTest1_underscore.ts, 591, 54))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >clone : Symbol(Underscore.Static.clone, Decl(underscoreTest1_underscore.ts, 591, 54))
+>{ name: 'moe' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 154, 8))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 154, 9))
 
 _.chain([1, 2, 3, 200])
@@ -657,6 +710,7 @@ _.chain([1, 2, 3, 200])
 
     .filter(function (num) { return num % 2 == 0; })
 >filter : Symbol(Underscore.ChainedArray.filter, Decl(underscoreTest1_underscore.ts, 254, 80))
+>function (num) { return num % 2 == 0; } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 157, 12))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 157, 22))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 157, 22))
 
@@ -666,6 +720,7 @@ _.chain([1, 2, 3, 200])
 
     .map(function (num) { return num * num })
 >map : Symbol(Underscore.ChainedArray.map, Decl(underscoreTest1_underscore.ts, 240, 81))
+>function (num) { return num * num } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 159, 9))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 159, 19))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 159, 19))
 >num : Symbol(num, Decl(underscoreTest1_underscoreTests.ts, 159, 19))
@@ -677,17 +732,20 @@ _.has({ a: 1, b: 2, c: 3 }, "b");
 >_.has : Symbol(Underscore.Static.has, Decl(underscoreTest1_underscore.ts, 595, 63))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >has : Symbol(Underscore.Static.has, Decl(underscoreTest1_underscore.ts, 595, 63))
+>{ a: 1, b: 2, c: 3 } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 162, 6))
 >a : Symbol(a, Decl(underscoreTest1_underscoreTests.ts, 162, 7))
 >b : Symbol(b, Decl(underscoreTest1_underscoreTests.ts, 162, 13))
 >c : Symbol(c, Decl(underscoreTest1_underscoreTests.ts, 162, 19))
 
 var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 >moe : Symbol(moe, Decl(underscoreTest1_underscoreTests.ts, 164, 3))
+>{ name: 'moe', luckyNumbers: [13, 27, 34] } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 164, 9))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 164, 11))
 >luckyNumbers : Symbol(luckyNumbers, Decl(underscoreTest1_underscoreTests.ts, 164, 24))
 
 var clone = { name: 'moe', luckyNumbers: [13, 27, 34] };
 >clone : Symbol(clone, Decl(underscoreTest1_underscoreTests.ts, 165, 3))
+>{ name: 'moe', luckyNumbers: [13, 27, 34] } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 165, 11))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 165, 13))
 >luckyNumbers : Symbol(luckyNumbers, Decl(underscoreTest1_underscoreTests.ts, 165, 26))
 
@@ -711,6 +769,7 @@ _.isEmpty({});
 >_.isEmpty : Symbol(Underscore.Static.isEmpty, Decl(underscoreTest1_underscore.ts, 599, 49))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >isEmpty : Symbol(Underscore.Static.isEmpty, Decl(underscoreTest1_underscore.ts, 599, 49))
+>{} : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 170, 10))
 
 _.isElement($('body')[0]);
 >_.isElement : Symbol(Underscore.Static.isElement, Decl(underscoreTest1_underscore.ts, 601, 38))
@@ -719,6 +778,7 @@ _.isElement($('body')[0]);
 >$ : Symbol($, Decl(underscoreTest1_underscoreTests.ts, 2, 11))
 
 (function () { return _.isArray(arguments); })();
+>function () { return _.isArray(arguments); } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 174, 1))
 >_.isArray : Symbol(Underscore.Static.isArray, Decl(underscoreTest1_underscore.ts, 602, 40))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >isArray : Symbol(Underscore.Static.isArray, Decl(underscoreTest1_underscore.ts, 602, 40))
@@ -733,6 +793,7 @@ _.isObject({});
 >_.isObject : Symbol(Underscore.Static.isObject, Decl(underscoreTest1_underscore.ts, 603, 38))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >isObject : Symbol(Underscore.Static.isObject, Decl(underscoreTest1_underscore.ts, 603, 38))
+>{} : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 177, 11))
 
 _.isObject(1);
 >_.isObject : Symbol(Underscore.Static.isObject, Decl(underscoreTest1_underscore.ts, 603, 38))
@@ -831,6 +892,7 @@ var underscore = _.noConflict();
 
 var moe2 = { name: 'moe' };
 >moe2 : Symbol(moe2, Decl(underscoreTest1_underscoreTests.ts, 213, 3))
+>{ name: 'moe' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 213, 10))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 213, 12))
 
 moe2 === _.identity(moe);
@@ -847,6 +909,7 @@ _.times(3, function (n) { genie.grantWishNumber(n); });
 >_.times : Symbol(Underscore.Static.times, Decl(underscoreTest1_underscore.ts, 619, 33))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >times : Symbol(Underscore.Static.times, Decl(underscoreTest1_underscore.ts, 619, 33))
+>function (n) { genie.grantWishNumber(n); } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 218, 10))
 >n : Symbol(n, Decl(underscoreTest1_underscoreTests.ts, 218, 21))
 >genie : Symbol(genie, Decl(underscoreTest1_underscoreTests.ts, 216, 3))
 >n : Symbol(n, Decl(underscoreTest1_underscoreTests.ts, 218, 21))
@@ -860,9 +923,11 @@ _.mixin({
 >_.mixin : Symbol(Underscore.Static.mixin, Decl(underscoreTest1_underscore.ts, 624, 49))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >mixin : Symbol(Underscore.Static.mixin, Decl(underscoreTest1_underscore.ts, 624, 49))
+>{    capitalize: function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    }} : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 222, 8))
 
     capitalize: function (string) {
 >capitalize : Symbol(capitalize, Decl(underscoreTest1_underscoreTests.ts, 222, 9))
+>function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 223, 15))
 >string : Symbol(string, Decl(underscoreTest1_underscoreTests.ts, 223, 26))
 
         return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
@@ -885,8 +950,10 @@ _.escape('Curly, Larry & Moe');
 
 var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
 >object : Symbol(object, Decl(underscoreTest1_underscoreTests.ts, 233, 3))
+>{ cheese: 'crumpets', stuff: function () { return 'nonsense'; } } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 233, 12))
 >cheese : Symbol(cheese, Decl(underscoreTest1_underscoreTests.ts, 233, 14))
 >stuff : Symbol(stuff, Decl(underscoreTest1_underscoreTests.ts, 233, 34))
+>function () { return 'nonsense'; } : Symbol((Anonymous function), Decl(underscoreTest1_underscoreTests.ts, 233, 41))
 
 _.result(object, 'cheese');
 >_.result : Symbol(Underscore.Static.result, Decl(underscoreTest1_underscore.ts, 633, 36))
@@ -908,6 +975,7 @@ var compiled = _.template("hello: <%= name %>");
 
 compiled({ name: 'moe' });
 >compiled : Symbol(compiled, Decl(underscoreTest1_underscoreTests.ts, 238, 3))
+>{ name: 'moe' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 239, 9))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 239, 10))
 
 var list2 = "<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>";
@@ -918,6 +986,7 @@ _.template(list2, { people: ['moe', 'curly', 'larry'] });
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >template : Symbol(Underscore.Static.template, Decl(underscoreTest1_underscore.ts, 637, 43), Decl(underscoreTest1_underscore.ts, 639, 64))
 >list2 : Symbol(list2, Decl(underscoreTest1_underscoreTests.ts, 240, 3))
+>{ people: ['moe', 'curly', 'larry'] } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 241, 17))
 >people : Symbol(people, Decl(underscoreTest1_underscoreTests.ts, 241, 19))
 
 var template = _.template("<b><%- value %></b>");
@@ -928,6 +997,7 @@ var template = _.template("<b><%- value %></b>");
 
 template({ value: '<script>' });
 >template : Symbol(template, Decl(underscoreTest1_underscoreTests.ts, 242, 3))
+>{ value: '<script>' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 243, 9))
 >value : Symbol(value, Decl(underscoreTest1_underscoreTests.ts, 243, 10))
 
 var compiled2 = _.template("<% print('Hello ' + epithet); %>");
@@ -938,12 +1008,14 @@ var compiled2 = _.template("<% print('Hello ' + epithet); %>");
 
 compiled2({ epithet: "stooge" });
 >compiled2 : Symbol(compiled2, Decl(underscoreTest1_underscoreTests.ts, 244, 3))
+>{ epithet: "stooge" } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 245, 10))
 >epithet : Symbol(epithet, Decl(underscoreTest1_underscoreTests.ts, 245, 11))
 
 _.templateSettings = {
 >_.templateSettings : Symbol(Underscore.Static.templateSettings, Decl(underscoreTest1_underscore.ts, 635, 51))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >templateSettings : Symbol(Underscore.Static.templateSettings, Decl(underscoreTest1_underscore.ts, 635, 51))
+>{    interpolate: /\{\{(.+?)\}\}/g} : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 246, 20))
 
     interpolate: /\{\{(.+?)\}\}/g
 >interpolate : Symbol(interpolate, Decl(underscoreTest1_underscoreTests.ts, 246, 22))
@@ -957,13 +1029,16 @@ var template2 = _.template("Hello {{ name }}!");
 
 template2({ name: "Mustache" });
 >template2 : Symbol(template2, Decl(underscoreTest1_underscoreTests.ts, 249, 3))
+>{ name: "Mustache" } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 250, 10))
 >name : Symbol(name, Decl(underscoreTest1_underscoreTests.ts, 250, 11))
 
 _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
 >_.template : Symbol(Underscore.Static.template, Decl(underscoreTest1_underscore.ts, 637, 43), Decl(underscoreTest1_underscore.ts, 639, 64))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 644, 11))
 >template : Symbol(Underscore.Static.template, Decl(underscoreTest1_underscore.ts, 637, 43), Decl(underscoreTest1_underscore.ts, 639, 64))
+>{ answer: 'no' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 251, 46))
 >answer : Symbol(answer, Decl(underscoreTest1_underscoreTests.ts, 251, 48))
+>{ variable: 'data' } : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 251, 64))
 >variable : Symbol(variable, Decl(underscoreTest1_underscoreTests.ts, 251, 66))
 
 === tests/cases/compiler/underscoreTest1_underscore.ts ===

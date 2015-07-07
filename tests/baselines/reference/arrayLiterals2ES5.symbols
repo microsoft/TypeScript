@@ -24,6 +24,7 @@ var a3 = [,, ...a0]
 
 var a4 = [() => 1, ];
 >a4 : Symbol(a4, Decl(arrayLiterals2ES5.ts, 13, 3))
+>() => 1 : Symbol((Anonymous function), Decl(arrayLiterals2ES5.ts, 13, 10))
 
 var a5 = [...a0, , ]
 >a5 : Symbol(a5, Decl(arrayLiterals2ES5.ts, 14, 3))

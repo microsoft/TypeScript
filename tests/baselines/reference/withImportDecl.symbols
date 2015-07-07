@@ -17,6 +17,7 @@ var varWithInitialValue = 30;
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : Symbol(withComplicatedValue, Decl(withImportDecl_1.ts, 9, 3))
+>{ x: 30, y: 70, desc: "position" } : Symbol(, Decl(withImportDecl_1.ts, 9, 26))
 >x : Symbol(x, Decl(withImportDecl_1.ts, 9, 28))
 >y : Symbol(y, Decl(withImportDecl_1.ts, 9, 35))
 >desc : Symbol(desc, Decl(withImportDecl_1.ts, 9, 42))
@@ -41,6 +42,8 @@ function simpleFunction() {
 >simpleFunction : Symbol(simpleFunction, Decl(withImportDecl_1.ts, 17, 36))
 
     return {
+>{        x: "Hello",        y: "word",        n: 2    } : Symbol(, Decl(withImportDecl_1.ts, 21, 10))
+
         x: "Hello",
 >x : Symbol(x, Decl(withImportDecl_1.ts, 21, 12))
 

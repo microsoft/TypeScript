@@ -13,11 +13,13 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Symbol(Origin, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 14))
 >Point : Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
+>{ x: 0, y: 0 } : Symbol(, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 30))
 >x : Symbol(x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 32))
 >y : Symbol(y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 38))
 
     export var Unity = { start: new Point(0, 0), end: new Point(1, 0) };
 >Unity : Symbol(Unity, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 14))
+>{ start: new Point(0, 0), end: new Point(1, 0) } : Symbol(, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 22))
 >start : Symbol(start, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 24))
 >Point : Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
 >end : Symbol(end, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 48))

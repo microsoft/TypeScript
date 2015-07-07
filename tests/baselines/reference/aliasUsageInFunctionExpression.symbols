@@ -16,12 +16,14 @@ interface IHasVisualizationModel {
 }
 var f = (x: IHasVisualizationModel) => x;
 >f : Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
+>(x: IHasVisualizationModel) => x : Symbol((Anonymous function), Decl(aliasUsageInFunctionExpression_main.ts, 5, 7))
 >x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 5, 9))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 1, 67))
 >x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 5, 9))
 
 f = (x) => moduleA;
 >f : Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
+>(x) => moduleA : Symbol((Anonymous function), Decl(aliasUsageInFunctionExpression_main.ts, 6, 3))
 >x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 6, 5))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInFunctionExpression_main.ts, 0, 69))
 

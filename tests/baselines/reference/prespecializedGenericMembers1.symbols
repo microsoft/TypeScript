@@ -32,6 +32,7 @@ var cat = new Cat<IKitty>();
 
 var catThing = {
 >catThing : Symbol(catThing, Decl(prespecializedGenericMembers1.ts, 16, 3))
+>{    barry: cat} : Symbol(, Decl(prespecializedGenericMembers1.ts, 16, 14))
 
     barry: cat
 >barry : Symbol(barry, Decl(prespecializedGenericMembers1.ts, 16, 16))

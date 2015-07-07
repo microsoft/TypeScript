@@ -16,6 +16,7 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Symbol(Origin, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 14))
 >Point : Symbol(Point, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 10))
+>{ x: 0, y: 0 } : Symbol(, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 30))
 >x : Symbol(x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 32))
 >y : Symbol(y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 38))
 }

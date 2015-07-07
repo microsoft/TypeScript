@@ -13,6 +13,7 @@ function Point() {
 >Point : Symbol(Point, Decl(module.d.ts, 0, 0), Decl(function.ts, 0, 0))
 
     return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : Symbol(, Decl(function.ts, 1, 10))
 >x : Symbol(x, Decl(function.ts, 1, 12))
 >y : Symbol(y, Decl(function.ts, 1, 18))
 }

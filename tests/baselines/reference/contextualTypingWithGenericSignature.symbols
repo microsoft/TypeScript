@@ -17,6 +17,7 @@ var f2: {
 
 f2 = (x, y) => { return x }
 >f2 : Symbol(f2, Decl(contextualTypingWithGenericSignature.ts, 2, 3))
+>(x, y) => { return x } : Symbol((Anonymous function), Decl(contextualTypingWithGenericSignature.ts, 6, 4))
 >x : Symbol(x, Decl(contextualTypingWithGenericSignature.ts, 6, 6))
 >y : Symbol(y, Decl(contextualTypingWithGenericSignature.ts, 6, 8))
 >x : Symbol(x, Decl(contextualTypingWithGenericSignature.ts, 6, 6))

@@ -32,6 +32,7 @@ declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
 
 foo({
 >foo : Symbol(foo, Decl(symbolProperty21.ts, 3, 1))
+>{    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true} : Symbol(, Decl(symbolProperty21.ts, 7, 4))
 
     [Symbol.isConcatSpreadable]: "",
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1243, 24))

@@ -22,6 +22,7 @@ var a: {
 
 var b = {
 >b : Symbol(b, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 3))
+>{    foo: null} : Symbol(, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 7))
 
     foo: null
 >foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 9))

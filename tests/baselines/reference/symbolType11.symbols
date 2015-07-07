@@ -23,5 +23,6 @@ s || 1;
 >s : Symbol(s, Decl(symbolType11.ts, 0, 3))
 
 ({}) || s;
+>{} : Symbol(, Decl(symbolType11.ts, 6, 1))
 >s : Symbol(s, Decl(symbolType11.ts, 0, 3))
 

@@ -28,6 +28,7 @@ c.m(function(n) { return "hello: "+n; },18);
 >c.m : Symbol(M.C.m, Decl(anonterface.ts, 1, 20))
 >c : Symbol(c, Decl(anonterface.ts, 8, 3))
 >m : Symbol(M.C.m, Decl(anonterface.ts, 1, 20))
+>function(n) { return "hello: "+n; } : Symbol((Anonymous function), Decl(anonterface.ts, 9, 4))
 >n : Symbol(n, Decl(anonterface.ts, 9, 13))
 >n : Symbol(n, Decl(anonterface.ts, 9, 13))
 

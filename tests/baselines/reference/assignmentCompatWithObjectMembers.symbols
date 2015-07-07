@@ -47,10 +47,12 @@ module SimpleTypes {
 
     var a2 = { foo: '' };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembers.ts, 17, 7))
+>{ foo: '' } : Symbol(, Decl(assignmentCompatWithObjectMembers.ts, 17, 12))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers.ts, 17, 14))
 
     var b2 = { foo: '' };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembers.ts, 18, 7))
+>{ foo: '' } : Symbol(, Decl(assignmentCompatWithObjectMembers.ts, 18, 12))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers.ts, 18, 14))
 
     s = t;
@@ -181,11 +183,13 @@ module ObjectTypes {
 
     var a2 = { foo: a2 };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembers.ts, 58, 7))
+>{ foo: a2 } : Symbol(, Decl(assignmentCompatWithObjectMembers.ts, 58, 12))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers.ts, 58, 14))
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembers.ts, 58, 7))
 
     var b2 = { foo: b2 };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembers.ts, 59, 7))
+>{ foo: b2 } : Symbol(, Decl(assignmentCompatWithObjectMembers.ts, 59, 12))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers.ts, 59, 14))
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembers.ts, 59, 7))
 

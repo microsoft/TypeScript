@@ -79,6 +79,7 @@ interface Foo {
 var a: Foo = {
 >a : Symbol(a, Decl(interfaceWithPropertyOfEveryType.ts, 25, 3))
 >Foo : Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+>{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : Symbol(, Decl(interfaceWithPropertyOfEveryType.ts, 25, 12))
 
     a: 1,
 >a : Symbol(a, Decl(interfaceWithPropertyOfEveryType.ts, 25, 14))
@@ -91,6 +92,7 @@ var a: Foo = {
 
     d: {},
 >d : Symbol(d, Decl(interfaceWithPropertyOfEveryType.ts, 28, 12))
+>{} : Symbol(, Decl(interfaceWithPropertyOfEveryType.ts, 29, 6))
 
     e: null ,
 >e : Symbol(e, Decl(interfaceWithPropertyOfEveryType.ts, 29, 10))
@@ -100,13 +102,16 @@ var a: Foo = {
 
     g: {},
 >g : Symbol(g, Decl(interfaceWithPropertyOfEveryType.ts, 31, 11))
+>{} : Symbol(, Decl(interfaceWithPropertyOfEveryType.ts, 32, 6))
 
     h: (x: number) => 1,
 >h : Symbol(h, Decl(interfaceWithPropertyOfEveryType.ts, 32, 10))
+>(x: number) => 1 : Symbol((Anonymous function), Decl(interfaceWithPropertyOfEveryType.ts, 33, 6))
 >x : Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 33, 8))
 
     i: <T>(x: T) => x,
 >i : Symbol(i, Decl(interfaceWithPropertyOfEveryType.ts, 33, 24))
+><T>(x: T) => x : Symbol((Anonymous function), Decl(interfaceWithPropertyOfEveryType.ts, 34, 6))
 >T : Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 34, 8))
 >x : Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 34, 11))
 >T : Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 34, 8))
@@ -130,6 +135,7 @@ var a: Foo = {
 
     n: {},
 >n : Symbol(n, Decl(interfaceWithPropertyOfEveryType.ts, 38, 9))
+>{} : Symbol(, Decl(interfaceWithPropertyOfEveryType.ts, 39, 6))
 
     o: E.A
 >o : Symbol(o, Decl(interfaceWithPropertyOfEveryType.ts, 39, 10))

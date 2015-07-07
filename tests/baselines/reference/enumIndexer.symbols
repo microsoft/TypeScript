@@ -8,7 +8,9 @@ enum MyEnumType {
 }
 var _arr = [{ key: 'foo' }, { key: 'bar' }]
 >_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
+>{ key: 'foo' } : Symbol(, Decl(enumIndexer.ts, 3, 12))
 >key : Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>{ key: 'bar' } : Symbol(, Decl(enumIndexer.ts, 3, 27))
 >key : Symbol(key, Decl(enumIndexer.ts, 3, 29))
 
 var enumValue = MyEnumType.foo;
@@ -22,6 +24,7 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 >_arr.map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>o => MyEnumType[o.key] === enumValue : Symbol((Anonymous function), Decl(enumIndexer.ts, 5, 17))
 >o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
 >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
 >o.key : Symbol(key, Decl(enumIndexer.ts, 3, 13))

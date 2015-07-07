@@ -54,6 +54,7 @@ var a: { foo(x: string): string }
 
 var b = { foo(x: string) { return ''; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithCallSignatures.ts, 23, 3))
+>{ foo(x: string) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithCallSignatures.ts, 23, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignatures.ts, 23, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignatures.ts, 23, 14))
 

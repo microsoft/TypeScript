@@ -27,6 +27,7 @@ var a: { c: m1.c; };
 
 var b = {
 >b : Symbol(b, Decl(declFileTypeofInAnonymousType.ts, 11, 3))
+>{    c: m1.c,    m1: m1} : Symbol(, Decl(declFileTypeofInAnonymousType.ts, 11, 7))
 
     c: m1.c,
 >c : Symbol(c, Decl(declFileTypeofInAnonymousType.ts, 11, 9))
@@ -41,19 +42,23 @@ var b = {
 };
 var c = { m1: m1 };
 >c : Symbol(c, Decl(declFileTypeofInAnonymousType.ts, 15, 3))
+>{ m1: m1 } : Symbol(, Decl(declFileTypeofInAnonymousType.ts, 15, 7))
 >m1 : Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 15, 9))
 >m1 : Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 
 var d = {
 >d : Symbol(d, Decl(declFileTypeofInAnonymousType.ts, 16, 3))
+>{    m: { mod: m1 },    mc: { cl: m1.c },    me: { en: m1.e },    mh: m1.e.holiday} : Symbol(, Decl(declFileTypeofInAnonymousType.ts, 16, 7))
 
     m: { mod: m1 },
 >m : Symbol(m, Decl(declFileTypeofInAnonymousType.ts, 16, 9))
+>{ mod: m1 } : Symbol(, Decl(declFileTypeofInAnonymousType.ts, 17, 6))
 >mod : Symbol(mod, Decl(declFileTypeofInAnonymousType.ts, 17, 8))
 >m1 : Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 
     mc: { cl: m1.c },
 >mc : Symbol(mc, Decl(declFileTypeofInAnonymousType.ts, 17, 19))
+>{ cl: m1.c } : Symbol(, Decl(declFileTypeofInAnonymousType.ts, 18, 7))
 >cl : Symbol(cl, Decl(declFileTypeofInAnonymousType.ts, 18, 9))
 >m1.c : Symbol(m1.c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
 >m1 : Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
@@ -61,6 +66,7 @@ var d = {
 
     me: { en: m1.e },
 >me : Symbol(me, Decl(declFileTypeofInAnonymousType.ts, 18, 21))
+>{ en: m1.e } : Symbol(, Decl(declFileTypeofInAnonymousType.ts, 19, 7))
 >en : Symbol(en, Decl(declFileTypeofInAnonymousType.ts, 19, 9))
 >m1.e : Symbol(m1.e, Decl(declFileTypeofInAnonymousType.ts, 3, 5))
 >m1 : Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))

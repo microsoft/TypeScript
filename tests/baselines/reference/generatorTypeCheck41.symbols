@@ -4,6 +4,7 @@ function* g() {
 
     let x = {
 >x : Symbol(x, Decl(generatorTypeCheck41.ts, 1, 7))
+>{        [yield 0]: 0    } : Symbol(, Decl(generatorTypeCheck41.ts, 1, 11))
 
         [yield 0]: 0
     }

@@ -24,10 +24,13 @@ class C extends A {
 
 var xs = [(x: A) => { }, (x: B) => { }, (x: C) => { }];
 >xs : Symbol(xs, Decl(contextualTypingArrayOfLambdas.ts, 12, 3))
+>(x: A) => { } : Symbol((Anonymous function), Decl(contextualTypingArrayOfLambdas.ts, 12, 10))
 >x : Symbol(x, Decl(contextualTypingArrayOfLambdas.ts, 12, 11))
 >A : Symbol(A, Decl(contextualTypingArrayOfLambdas.ts, 0, 0))
+>(x: B) => { } : Symbol((Anonymous function), Decl(contextualTypingArrayOfLambdas.ts, 12, 24))
 >x : Symbol(x, Decl(contextualTypingArrayOfLambdas.ts, 12, 26))
 >B : Symbol(B, Decl(contextualTypingArrayOfLambdas.ts, 2, 1))
+>(x: C) => { } : Symbol((Anonymous function), Decl(contextualTypingArrayOfLambdas.ts, 12, 39))
 >x : Symbol(x, Decl(contextualTypingArrayOfLambdas.ts, 12, 41))
 >C : Symbol(C, Decl(contextualTypingArrayOfLambdas.ts, 6, 1))
 

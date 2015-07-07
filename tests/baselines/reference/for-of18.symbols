@@ -13,6 +13,8 @@ class StringIterator {
 >next : Symbol(next, Decl(for-of18.ts, 3, 22))
 
         return {
+>{            value: "",            done: false        } : Symbol(, Decl(for-of18.ts, 5, 14))
+
             value: "",
 >value : Symbol(value, Decl(for-of18.ts, 5, 16))
 

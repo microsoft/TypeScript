@@ -12,6 +12,7 @@ module __test1__ {
 >U : Symbol(U, Decl(assignmentCompatability5.ts, 1, 54))
 >obj4 : Symbol(obj4, Decl(assignmentCompatability5.ts, 1, 83))
 >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability5.ts, 0, 18))
+>{ one: 1 } : Symbol(, Decl(assignmentCompatability5.ts, 1, 137))
 >one : Symbol(one, Decl(assignmentCompatability5.ts, 1, 139))
 
     export var __val__obj4 = obj4;
@@ -28,6 +29,7 @@ module __test2__ {
 >T : Symbol(T, Decl(assignmentCompatability5.ts, 5, 52))
 >obj1 : Symbol(obj1, Decl(assignmentCompatability5.ts, 5, 86))
 >interfaceOne : Symbol(interfaceOne, Decl(assignmentCompatability5.ts, 4, 18))
+>{ one: 1 } : Symbol(, Decl(assignmentCompatability5.ts, 5, 115))
 >one : Symbol(one, Decl(assignmentCompatability5.ts, 5, 117))
 
     export var __val__obj1 = obj1;

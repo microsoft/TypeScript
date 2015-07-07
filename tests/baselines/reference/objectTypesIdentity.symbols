@@ -37,6 +37,7 @@ var a: { foo: string; }
 
 var b = { foo: '' };
 >b : Symbol(b, Decl(objectTypesIdentity.ts, 19, 3))
+>{ foo: '' } : Symbol(, Decl(objectTypesIdentity.ts, 19, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentity.ts, 19, 9))
 
 function foo1(x: A);

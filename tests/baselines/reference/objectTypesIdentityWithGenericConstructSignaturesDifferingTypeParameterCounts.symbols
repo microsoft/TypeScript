@@ -69,6 +69,7 @@ var a: { new <Z, A, B, CC, D>(x: Z): C<Z, A, B>; }
 
 var b = { new<A, B, C, D, E, F>(x: A) { return x; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 3))
+>{ new<A, B, C, D, E, F>(x: A) { return x; } } : Symbol(, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 7))
 >new : Symbol(new, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 9))
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 14))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 16))

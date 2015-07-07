@@ -124,6 +124,7 @@ var r6 = a[3];
 var b: { [x: number]: string } = { 1: '', "2": '' }
 >b : Symbol(b, Decl(numericIndexingResults.ts, 41, 3))
 >x : Symbol(x, Decl(numericIndexingResults.ts, 41, 10))
+>{ 1: '', "2": '' } : Symbol(, Decl(numericIndexingResults.ts, 41, 32))
 
 var r1a = b['1'];
 >r1a : Symbol(r1a, Decl(numericIndexingResults.ts, 42, 3))
@@ -152,6 +153,7 @@ var r6 = b[3];
 var b2: { [x: number]: string; 1: string; "2": string; } = { 1: '', "2": '' }
 >b2 : Symbol(b2, Decl(numericIndexingResults.ts, 49, 3))
 >x : Symbol(x, Decl(numericIndexingResults.ts, 49, 11))
+>{ 1: '', "2": '' } : Symbol(, Decl(numericIndexingResults.ts, 49, 58))
 
 var r1b = b2['1'];
 >r1b : Symbol(r1b, Decl(numericIndexingResults.ts, 50, 3))

@@ -2,6 +2,7 @@
 
 var v = {
 >v : Symbol(v, Decl(commentsOnObjectLiteral4.ts, 1, 3))
+>{ /**  * @type {number}  */ get bar(): number {  return this._bar; }} : Symbol(, Decl(commentsOnObjectLiteral4.ts, 1, 7))
 
  /**
   * @type {number}

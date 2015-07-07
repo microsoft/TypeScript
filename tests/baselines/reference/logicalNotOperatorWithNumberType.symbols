@@ -44,13 +44,16 @@ var ResultIsBoolean3 = !1;
 
 var ResultIsBoolean4 = !{ x: 1, y: 2};
 >ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(logicalNotOperatorWithNumberType.ts, 22, 3))
+>{ x: 1, y: 2} : Symbol(, Decl(logicalNotOperatorWithNumberType.ts, 22, 24))
 >x : Symbol(x, Decl(logicalNotOperatorWithNumberType.ts, 22, 25))
 >y : Symbol(y, Decl(logicalNotOperatorWithNumberType.ts, 22, 31))
 
 var ResultIsBoolean5 = !{ x: 1, y: (n: number) => { return n; } };
 >ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(logicalNotOperatorWithNumberType.ts, 23, 3))
+>{ x: 1, y: (n: number) => { return n; } } : Symbol(, Decl(logicalNotOperatorWithNumberType.ts, 23, 24))
 >x : Symbol(x, Decl(logicalNotOperatorWithNumberType.ts, 23, 25))
 >y : Symbol(y, Decl(logicalNotOperatorWithNumberType.ts, 23, 31))
+>(n: number) => { return n; } : Symbol((Anonymous function), Decl(logicalNotOperatorWithNumberType.ts, 23, 34))
 >n : Symbol(n, Decl(logicalNotOperatorWithNumberType.ts, 23, 36))
 >n : Symbol(n, Decl(logicalNotOperatorWithNumberType.ts, 23, 36))
 

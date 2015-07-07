@@ -179,9 +179,11 @@ var i3_i: i3;
 
 i3_i = {
 >i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>{    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,    l: this.f,    /** own x*/    x: this.f(10),    nc_x: this.l(this.x),    nc_f: this.f,    nc_l: this.l} : Symbol(, Decl(commentsInterface.ts, 55, 6))
 
     f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,
 >f : Symbol(f, Decl(commentsInterface.ts, 55, 8))
+>(/**i3_i a*/a: number) => "Hello" + a : Symbol((Anonymous function), Decl(commentsInterface.ts, 56, 6))
 >a : Symbol(a, Decl(commentsInterface.ts, 56, 19))
 >a : Symbol(a, Decl(commentsInterface.ts, 56, 19))
 

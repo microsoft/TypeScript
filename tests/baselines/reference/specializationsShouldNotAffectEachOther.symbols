@@ -17,6 +17,7 @@ function foo() {
 
     var seriesExtent = (series) => null;
 >seriesExtent : Symbol(seriesExtent, Decl(specializationsShouldNotAffectEachOther.ts, 10, 7))
+>(series) => null : Symbol((Anonymous function), Decl(specializationsShouldNotAffectEachOther.ts, 10, 22))
 >series : Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 10, 24))
 
     var series2: number[];
@@ -39,6 +40,7 @@ var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 >series : Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 5, 3))
 >data : Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 1, 19))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>function (d: string) { return d; } : Symbol((Anonymous function), Decl(specializationsShouldNotAffectEachOther.ts, 19, 40))
 >d : Symbol(d, Decl(specializationsShouldNotAffectEachOther.ts, 19, 50))
 >d : Symbol(d, Decl(specializationsShouldNotAffectEachOther.ts, 19, 50))
 

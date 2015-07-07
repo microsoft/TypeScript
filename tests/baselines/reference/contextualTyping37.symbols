@@ -2,5 +2,7 @@
 var foo = <{ id: number; }[]>[{ foo: "s" }, {  }];
 >foo : Symbol(foo, Decl(contextualTyping37.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping37.ts, 0, 12))
+>{ foo: "s" } : Symbol(, Decl(contextualTyping37.ts, 0, 30))
 >foo : Symbol(foo, Decl(contextualTyping37.ts, 0, 31))
+>{  } : Symbol(, Decl(contextualTyping37.ts, 0, 43))
 

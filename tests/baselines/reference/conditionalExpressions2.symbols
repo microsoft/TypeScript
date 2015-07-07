@@ -21,13 +21,16 @@ var f = false ? null : undefined;
 
 var g = true ? {g:5} : null;
 >g : Symbol(g, Decl(conditionalExpressions2.ts, 6, 3))
+>{g:5} : Symbol(, Decl(conditionalExpressions2.ts, 6, 14))
 >g : Symbol(g, Decl(conditionalExpressions2.ts, 6, 16))
 
 var h = [{h:5}, null];
 >h : Symbol(h, Decl(conditionalExpressions2.ts, 7, 3))
+>{h:5} : Symbol(, Decl(conditionalExpressions2.ts, 7, 9))
 >h : Symbol(h, Decl(conditionalExpressions2.ts, 7, 10))
 
 function i() { if (true) { return { x: 5 }; } else { return null; } }
 >i : Symbol(i, Decl(conditionalExpressions2.ts, 7, 22))
+>{ x: 5 } : Symbol(, Decl(conditionalExpressions2.ts, 8, 33))
 >x : Symbol(x, Decl(conditionalExpressions2.ts, 8, 35))
 

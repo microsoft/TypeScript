@@ -17,6 +17,7 @@ class CalcButton2
 {
     public b() { () => this.onClick(); }
 >b : Symbol(b, Decl(missingSelf.ts, 7, 1))
+>() => this.onClick() : Symbol((Anonymous function), Decl(missingSelf.ts, 8, 16))
 >this.onClick : Symbol(onClick, Decl(missingSelf.ts, 8, 40))
 >this : Symbol(CalcButton2, Decl(missingSelf.ts, 4, 1))
 >onClick : Symbol(onClick, Decl(missingSelf.ts, 8, 40))

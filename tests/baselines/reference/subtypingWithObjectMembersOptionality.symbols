@@ -78,6 +78,7 @@ var a: { Foo?: Base; };
 
 var b = { Foo: <Derived>null };
 >b : Symbol(b, Decl(subtypingWithObjectMembersOptionality.ts, 40, 3))
+>{ Foo: <Derived>null } : Symbol(, Decl(subtypingWithObjectMembersOptionality.ts, 40, 7))
 >Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality.ts, 40, 9))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality.ts, 2, 31))
 
@@ -144,6 +145,7 @@ module TwoLevels {
 
     var b = { Foo: <Derived2>null };
 >b : Symbol(b, Decl(subtypingWithObjectMembersOptionality.ts, 70, 7))
+>{ Foo: <Derived2>null } : Symbol(, Decl(subtypingWithObjectMembersOptionality.ts, 70, 11))
 >Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality.ts, 70, 13))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembersOptionality.ts, 3, 47))
 

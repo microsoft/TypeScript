@@ -101,6 +101,7 @@ for(var aGenericClass: D<string> = new D<string>();;){}
 for(var anObjectLiteral: I = { id: 12 };;){}
 >anObjectLiteral : Symbol(anObjectLiteral, Decl(forStatements.ts, 36, 7))
 >I : Symbol(I, Decl(forStatements.ts, 0, 0))
+>{ id: 12 } : Symbol(, Decl(forStatements.ts, 36, 28))
 >id : Symbol(id, Decl(forStatements.ts, 36, 30))
 
 for(var anOtherObjectLiteral: { id: number } = new C();;){}
@@ -121,6 +122,7 @@ for(var anOtherFunction: (x: string) => number = F;;){}
 for(var aLambda: typeof F = (x) => 2;;){}
 >aLambda : Symbol(aLambda, Decl(forStatements.ts, 41, 7))
 >F : Symbol(F, Decl(forStatements.ts, 12, 1))
+>(x) => 2 : Symbol((Anonymous function), Decl(forStatements.ts, 41, 27))
 >x : Symbol(x, Decl(forStatements.ts, 41, 29))
 
 for(var aModule: typeof M = M;;){}
@@ -141,5 +143,6 @@ for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
 >M.F2 : Symbol(M.F2, Decl(forStatements.ts, 19, 5))
 >M : Symbol(M, Decl(forStatements.ts, 14, 44))
 >F2 : Symbol(M.F2, Decl(forStatements.ts, 19, 5))
+>(x) => 'this is a string' : Symbol((Anonymous function), Decl(forStatements.ts, 45, 40))
 >x : Symbol(x, Decl(forStatements.ts, 45, 42))
 

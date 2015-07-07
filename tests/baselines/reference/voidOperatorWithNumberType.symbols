@@ -44,13 +44,16 @@ var ResultIsAny3 = void 1;
 
 var ResultIsAny4 = void { x: 1, y: 2};
 >ResultIsAny4 : Symbol(ResultIsAny4, Decl(voidOperatorWithNumberType.ts, 22, 3))
+>{ x: 1, y: 2} : Symbol(, Decl(voidOperatorWithNumberType.ts, 22, 23))
 >x : Symbol(x, Decl(voidOperatorWithNumberType.ts, 22, 25))
 >y : Symbol(y, Decl(voidOperatorWithNumberType.ts, 22, 31))
 
 var ResultIsAny5 = void { x: 1, y: (n: number) => { return n; } };
 >ResultIsAny5 : Symbol(ResultIsAny5, Decl(voidOperatorWithNumberType.ts, 23, 3))
+>{ x: 1, y: (n: number) => { return n; } } : Symbol(, Decl(voidOperatorWithNumberType.ts, 23, 23))
 >x : Symbol(x, Decl(voidOperatorWithNumberType.ts, 23, 25))
 >y : Symbol(y, Decl(voidOperatorWithNumberType.ts, 23, 31))
+>(n: number) => { return n; } : Symbol((Anonymous function), Decl(voidOperatorWithNumberType.ts, 23, 34))
 >n : Symbol(n, Decl(voidOperatorWithNumberType.ts, 23, 36))
 >n : Symbol(n, Decl(voidOperatorWithNumberType.ts, 23, 36))
 

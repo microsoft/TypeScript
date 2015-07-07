@@ -9,14 +9,17 @@ module m1 {
 }
 var d = {
 >d : Symbol(d, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 5, 3))
+>{    m1: { m: m1 },    m2: { c: m1.c },} : Symbol(, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 5, 7))
 
     m1: { m: m1 },
 >m1 : Symbol(m1, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 5, 9))
+>{ m: m1 } : Symbol(, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 6, 7))
 >m : Symbol(m, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 6, 9))
 >m1 : Symbol(m1, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 0))
 
     m2: { c: m1.c },
 >m2 : Symbol(m2, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 6, 18))
+>{ c: m1.c } : Symbol(, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 7, 7))
 >c : Symbol(c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 7, 9))
 >m1.c : Symbol(m1.c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 1, 11))
 >m1 : Symbol(m1, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 0))

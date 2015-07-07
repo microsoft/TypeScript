@@ -8,6 +8,7 @@ class C1T5 {
 >s : Symbol(s, Decl(es6ClassTest5.ts, 1, 20))
 
 	   	(i) => {
+>(i) => {	        return i;	    } : Symbol((Anonymous function), Decl(es6ClassTest5.ts, 1, 43))
 >i : Symbol(i, Decl(es6ClassTest5.ts, 2, 6))
 
 	        return i;

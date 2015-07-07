@@ -1,6 +1,7 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments01_ES6.ts ===
 var a = () => {
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 0, 3))
+>() => {    var arg = arguments[0];  // error} : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 0, 7))
 
     var arg = arguments[0];  // error
 >arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 1, 7))
@@ -9,9 +10,11 @@ var a = () => {
 
 var b = function () {
 >b : Symbol(b, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 4, 3))
+>function () {    var a = () => {        var arg = arguments[0];  // error    }} : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 4, 7))
 
     var a = () => {
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 5, 7))
+>() => {        var arg = arguments[0];  // error    } : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 5, 11))
 
         var arg = arguments[0];  // error
 >arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 6, 11))
@@ -23,6 +26,8 @@ function baz() {
 >baz : Symbol(baz, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 8, 1))
 
 	() => {
+>() => {		var arg = arguments[0];	} : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 10, 16))
+
 		var arg = arguments[0];
 >arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 12, 5))
 >arguments : Symbol(arguments)
@@ -35,6 +40,7 @@ function foo(inputFunc: () => void) { }
 
 foo(() => {
 >foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 14, 1))
+>() => {    var arg = arguments[0];  // error} : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 17, 4))
 
     var arg = arguments[0];  // error
 >arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 18, 7))
@@ -52,6 +58,8 @@ function bar() {
 
 
 () => {
+>() => {	function foo() {		var arg = arguments[0];  // no error	}} : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 23, 1))
+
 	function foo() {
 >foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 26, 7))
 

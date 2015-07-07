@@ -8,6 +8,7 @@ class C1 {
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1291, 24))
 
         return { x: "" };
+>{ x: "" } : Symbol(, Decl(symbolProperty28.ts, 2, 14))
 >x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
     }
 }

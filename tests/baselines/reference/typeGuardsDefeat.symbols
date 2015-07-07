@@ -42,6 +42,7 @@ function foo2(x: number | string) {
     else {
         var f = function () {
 >f : Symbol(f, Decl(typeGuardsDefeat.ts, 19, 11))
+>function () {            return x * x;        } : Symbol((Anonymous function), Decl(typeGuardsDefeat.ts, 19, 15))
 
             return x * x;
 >x : Symbol(x, Decl(typeGuardsDefeat.ts, 14, 14))
@@ -70,6 +71,7 @@ function foo3(x: number | string) {
     else {
         var f = () => x * x;
 >f : Symbol(f, Decl(typeGuardsDefeat.ts, 31, 11))
+>() => x * x : Symbol((Anonymous function), Decl(typeGuardsDefeat.ts, 31, 15))
 >x : Symbol(x, Decl(typeGuardsDefeat.ts, 26, 14))
 >x : Symbol(x, Decl(typeGuardsDefeat.ts, 26, 14))
     }

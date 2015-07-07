@@ -21,6 +21,7 @@ function f() {
 >tokens : Symbol(tokens, Decl(uncaughtCompilerError1.ts, 0, 37))
 
             return { appendText: '\"\"', advanceCount: 1 };
+>{ appendText: '\"\"', advanceCount: 1 } : Symbol(, Decl(uncaughtCompilerError1.ts, 5, 18))
 >appendText : Symbol(appendText, Decl(uncaughtCompilerError1.ts, 5, 20))
 >advanceCount : Symbol(advanceCount, Decl(uncaughtCompilerError1.ts, 5, 40))
         }
@@ -31,6 +32,7 @@ function f() {
 >index : Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 
             return { appendText: '\"\"', advanceCount: 1 };
+>{ appendText: '\"\"', advanceCount: 1 } : Symbol(, Decl(uncaughtCompilerError1.ts, 8, 18))
 >appendText : Symbol(appendText, Decl(uncaughtCompilerError1.ts, 8, 20))
 >advanceCount : Symbol(advanceCount, Decl(uncaughtCompilerError1.ts, 8, 40))
         }

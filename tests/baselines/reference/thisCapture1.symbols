@@ -14,6 +14,7 @@ class X {
 
         return ret.always(() => {
 >ret : Symbol(ret, Decl(thisCapture1.ts, 3, 11))
+>() => {            this.y = 0;        } : Symbol((Anonymous function), Decl(thisCapture1.ts, 4, 26))
 
             this.y = 0;
 >this.y : Symbol(y, Decl(thisCapture1.ts, 0, 9))

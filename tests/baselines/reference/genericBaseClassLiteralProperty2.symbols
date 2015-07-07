@@ -17,6 +17,7 @@ class BaseCollection2<TItem extends CollectionItem2> {
 >this._itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
 >this : Symbol(BaseCollection2, Decl(genericBaseClassLiteralProperty2.ts, 0, 25))
 >_itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+>{} : Symbol(, Decl(genericBaseClassLiteralProperty2.ts, 5, 26))
     }
 }
 

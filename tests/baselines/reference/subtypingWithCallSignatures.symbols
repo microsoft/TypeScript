@@ -15,11 +15,13 @@ module CallSignature {
     var r = foo1((x: number) => 1); // ok because base returns void
 >r : Symbol(r, Decl(subtypingWithCallSignatures.ts, 3, 7))
 >foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>(x: number) => 1 : Symbol((Anonymous function), Decl(subtypingWithCallSignatures.ts, 3, 17))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 3, 18))
 
     var r2 = foo1(<T>(x: T) => ''); // ok because base returns void
 >r2 : Symbol(r2, Decl(subtypingWithCallSignatures.ts, 4, 7))
 >foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+><T>(x: T) => '' : Symbol((Anonymous function), Decl(subtypingWithCallSignatures.ts, 4, 18))
 >T : Symbol(T, Decl(subtypingWithCallSignatures.ts, 4, 19))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 4, 22))
 >T : Symbol(T, Decl(subtypingWithCallSignatures.ts, 4, 19))
@@ -38,12 +40,14 @@ module CallSignature {
     var r3 = foo2((x: number, y: number) => 1); // ok because base returns void
 >r3 : Symbol(r3, Decl(subtypingWithCallSignatures.ts, 8, 7))
 >foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures.ts, 4, 35), Decl(subtypingWithCallSignatures.ts, 6, 73))
+>(x: number, y: number) => 1 : Symbol((Anonymous function), Decl(subtypingWithCallSignatures.ts, 8, 18))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 8, 19))
 >y : Symbol(y, Decl(subtypingWithCallSignatures.ts, 8, 29))
 
     var r4 = foo2(<T>(x: T) => ''); // ok because base returns void
 >r4 : Symbol(r4, Decl(subtypingWithCallSignatures.ts, 9, 7))
 >foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures.ts, 4, 35), Decl(subtypingWithCallSignatures.ts, 6, 73))
+><T>(x: T) => '' : Symbol((Anonymous function), Decl(subtypingWithCallSignatures.ts, 9, 18))
 >T : Symbol(T, Decl(subtypingWithCallSignatures.ts, 9, 19))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 9, 22))
 >T : Symbol(T, Decl(subtypingWithCallSignatures.ts, 9, 19))

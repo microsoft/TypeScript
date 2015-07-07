@@ -25,6 +25,7 @@ module A {
 >Point : Symbol(Point, Decl(nestedModules.ts, 9, 11))
 >C : Symbol(C, Decl(nestedModules.ts, 0, 11))
 >Point : Symbol(C.Point, Decl(nestedModules.ts, 0, 14))
+>{ x: 0, y: 0 } : Symbol(, Decl(nestedModules.ts, 9, 28))
 >x : Symbol(x, Decl(nestedModules.ts, 9, 30))
 >y : Symbol(y, Decl(nestedModules.ts, 9, 36))
     }

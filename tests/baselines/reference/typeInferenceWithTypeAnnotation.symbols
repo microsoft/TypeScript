@@ -10,6 +10,7 @@ declare function f<T>(p: (t: T) => T): T;
 
 f((n: number) => n); 
 >f : Symbol(f, Decl(typeInferenceWithTypeAnnotation.ts, 0, 0))
+>(n: number) => n : Symbol((Anonymous function), Decl(typeInferenceWithTypeAnnotation.ts, 2, 2))
 >n : Symbol(n, Decl(typeInferenceWithTypeAnnotation.ts, 2, 3))
 >n : Symbol(n, Decl(typeInferenceWithTypeAnnotation.ts, 2, 3))
 

@@ -43,6 +43,7 @@ var r = true ? 1 : 2;
 
 var r3 = true ? 1 : {};
 >r3 : Symbol(r3, Decl(bestCommonTypeOfConditionalExpressions.ts, 14, 3))
+>{} : Symbol(, Decl(bestCommonTypeOfConditionalExpressions.ts, 14, 19))
 
 var r4 = true ? a : b; // typeof a
 >r4 : Symbol(r4, Decl(bestCommonTypeOfConditionalExpressions.ts, 15, 3))
@@ -56,7 +57,9 @@ var r5 = true ? b : a; // typeof b
 
 var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
 >r6 : Symbol(r6, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 3))
+>(x: number) => { } : Symbol((Anonymous function), Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 15))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 17))
+>(x: Object) => { } : Symbol((Anonymous function), Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 36))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 38))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
@@ -64,14 +67,18 @@ var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { };
 >r7 : Symbol(r7, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 3))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 9))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>(x: number) => { } : Symbol((Anonymous function), Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 36))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 38))
+>(x: Object) => { } : Symbol((Anonymous function), Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 57))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 59))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
 >r8 : Symbol(r8, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 3))
+>(x: Object) => { } : Symbol((Anonymous function), Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 15))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 17))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>(x: number) => { } : Symbol((Anonymous function), Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 36))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 38))
 
 var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT

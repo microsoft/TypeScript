@@ -1,6 +1,7 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit5_ES6.ts ===
 var v = {
 >v : Symbol(v, Decl(computedPropertyNamesDeclarationEmit5_ES6.ts, 0, 3))
+>{    ["" + ""]: 0,    ["" + ""]() { },    get ["" + ""]() { return 0; },    set ["" + ""](x) { }} : Symbol(, Decl(computedPropertyNamesDeclarationEmit5_ES6.ts, 0, 7))
 
     ["" + ""]: 0,
     ["" + ""]() { },

@@ -17,6 +17,7 @@ var q = f["v"];
 
 var o = {v:"Yo2"};
 >o : Symbol(o, Decl(defaultIndexProps1.ts, 8, 3))
+>{v:"Yo2"} : Symbol(, Decl(defaultIndexProps1.ts, 8, 7))
 >v : Symbol(v, Decl(defaultIndexProps1.ts, 8, 9))
 
 var q2 = o["v"];

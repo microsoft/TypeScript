@@ -6,17 +6,20 @@ function foo(x) { return x; }
 
 var f = function foo(x) { return x; }
 >f : Symbol(f, Decl(parametersWithNoAnnotationAreAny.ts, 1, 3))
+>function foo(x) { return x; } : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 1, 7))
 >foo : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 1, 7))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 1, 21))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 1, 21))
 
 var f2 = (x) => x;
 >f2 : Symbol(f2, Decl(parametersWithNoAnnotationAreAny.ts, 2, 3))
+>(x) => x : Symbol((Anonymous function), Decl(parametersWithNoAnnotationAreAny.ts, 2, 8))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 2, 10))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 2, 10))
 
 var f3 = <T>(x) => x;
 >f3 : Symbol(f3, Decl(parametersWithNoAnnotationAreAny.ts, 3, 3))
+><T>(x) => x : Symbol((Anonymous function), Decl(parametersWithNoAnnotationAreAny.ts, 3, 8))
 >T : Symbol(T, Decl(parametersWithNoAnnotationAreAny.ts, 3, 10))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 3, 13))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 3, 13))
@@ -56,6 +59,7 @@ var a: {
 
 var b = {
 >b : Symbol(b, Decl(parametersWithNoAnnotationAreAny.ts, 20, 3))
+>{    foo(x) {        return x;    },    a: function foo(x) {        return x;    },    b: (x) => x} : Symbol(, Decl(parametersWithNoAnnotationAreAny.ts, 20, 7))
 
     foo(x) {
 >foo : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 20, 9))
@@ -67,6 +71,7 @@ var b = {
     },
     a: function foo(x) {
 >a : Symbol(a, Decl(parametersWithNoAnnotationAreAny.ts, 23, 6))
+>function foo(x) {        return x;    } : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 24, 6))
 >foo : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 24, 6))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 24, 20))
 
@@ -76,6 +81,7 @@ var b = {
     },
     b: (x) => x
 >b : Symbol(b, Decl(parametersWithNoAnnotationAreAny.ts, 26, 6))
+>(x) => x : Symbol((Anonymous function), Decl(parametersWithNoAnnotationAreAny.ts, 27, 6))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 27, 8))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 27, 8))
 }

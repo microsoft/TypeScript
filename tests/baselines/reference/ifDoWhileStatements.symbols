@@ -133,24 +133,37 @@ while ([1, 2]) { }
 do { }while([1, 2])
 
 if ({}) { }
+>{} : Symbol(, Decl(ifDoWhileStatements.ts, 75, 4))
+
 while ({}) { }
+>{} : Symbol(, Decl(ifDoWhileStatements.ts, 76, 7))
+
 do { }while({})
+>{} : Symbol(, Decl(ifDoWhileStatements.ts, 77, 12))
 
 if ({ x: 1, y: 'a' }) { }
+>{ x: 1, y: 'a' } : Symbol(, Decl(ifDoWhileStatements.ts, 79, 4))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 79, 5))
 >y : Symbol(y, Decl(ifDoWhileStatements.ts, 79, 11))
 
 while ({ x: 1, y: 'a' }) { }
+>{ x: 1, y: 'a' } : Symbol(, Decl(ifDoWhileStatements.ts, 80, 7))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 80, 8))
 >y : Symbol(y, Decl(ifDoWhileStatements.ts, 80, 14))
 
 do { }while({ x: 1, y: 'a' })
+>{ x: 1, y: 'a' } : Symbol(, Decl(ifDoWhileStatements.ts, 81, 12))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 81, 13))
 >y : Symbol(y, Decl(ifDoWhileStatements.ts, 81, 19))
 
 if (() => 43) { }
+>() => 43 : Symbol((Anonymous function), Decl(ifDoWhileStatements.ts, 83, 4))
+
 while (() => 43) { }
+>() => 43 : Symbol((Anonymous function), Decl(ifDoWhileStatements.ts, 84, 7))
+
 do { }while(() => 43)
+>() => 43 : Symbol((Anonymous function), Decl(ifDoWhileStatements.ts, 85, 12))
 
 if (new C()) { }
 >C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
@@ -285,6 +298,7 @@ do { }while(i)
 
 var j = {};
 >j : Symbol(j, Decl(ifDoWhileStatements.ts, 141, 3))
+>{} : Symbol(, Decl(ifDoWhileStatements.ts, 141, 7))
 
 if (j) { }
 >j : Symbol(j, Decl(ifDoWhileStatements.ts, 141, 3))
@@ -297,6 +311,7 @@ do { }while(j)
 
 var k = { x: 1, y: 'a' };
 >k : Symbol(k, Decl(ifDoWhileStatements.ts, 146, 3))
+>{ x: 1, y: 'a' } : Symbol(, Decl(ifDoWhileStatements.ts, 146, 7))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 146, 9))
 >y : Symbol(y, Decl(ifDoWhileStatements.ts, 146, 15))
 

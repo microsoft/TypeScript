@@ -11,6 +11,7 @@ function foo(x:any) {
 
 foo((x:number,y,z)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x:number,y,z)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 6, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 6, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 6, 14))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 6, 16))
@@ -20,6 +21,7 @@ foo((x:number,y,z)=>{return x+y+z;});
 
 foo((x,y,z)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y,z)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 7, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 7, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 7, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 7, 9))
@@ -29,6 +31,7 @@ foo((x,y,z)=>{return x+y+z;});
 
 foo((x,y:number,z)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y:number,z)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 8, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 8, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 8, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 8, 16))
@@ -38,6 +41,7 @@ foo((x,y:number,z)=>{return x+y+z;});
 
 foo((x,y:number,z:number)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y:number,z:number)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 9, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 9, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 9, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 9, 16))
@@ -47,6 +51,7 @@ foo((x,y:number,z:number)=>{return x+y+z;});
 
 foo((x,y,z:number)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y,z:number)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 10, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 10, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 10, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 10, 9))
@@ -56,9 +61,11 @@ foo((x,y,z:number)=>{return x+y+z;});
 
 foo(()=>{return 0;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>()=>{return 0;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 11, 4))
 
 foo((x:number,y,z)=>x+y+z);
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x:number,y,z)=>x+y+z : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 13, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 13, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 13, 14))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 13, 16))
@@ -68,6 +75,7 @@ foo((x:number,y,z)=>x+y+z);
 
 foo((x,y,z)=>x+y+z);
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y,z)=>x+y+z : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 14, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 14, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 14, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 14, 9))
@@ -77,6 +85,7 @@ foo((x,y,z)=>x+y+z);
 
 foo((x,y:number,z)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y:number,z)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 15, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 15, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 15, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 15, 16))
@@ -86,6 +95,7 @@ foo((x,y:number,z)=>{return x+y+z;});
 
 foo((x,y:number,z:number)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y:number,z:number)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 16, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 16, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 16, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 16, 16))
@@ -95,6 +105,7 @@ foo((x,y:number,z:number)=>{return x+y+z;});
 
 foo((x,y,z:number)=>{return x+y+z;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x,y,z:number)=>{return x+y+z;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 17, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 17, 5))
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 17, 7))
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 17, 9))
@@ -104,33 +115,39 @@ foo((x,y,z:number)=>{return x+y+z;});
 
 foo(()=>{return 0;});
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>()=>{return 0;} : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 18, 4))
 
 
 foo(((x) => x));
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>(x) => x : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 21, 5))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 21, 6))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 21, 6))
 
 foo(x => x*x);
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x => x*x : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 23, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 23, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 23, 4))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 23, 4))
 
 var y = x => x*x;
 >y : Symbol(y, Decl(fatarrowfunctions.ts, 25, 3))
+>x => x*x : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 25, 7))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 25, 7))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 25, 7))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 25, 7))
 
 var z = (x:number) => x*x;
 >z : Symbol(z, Decl(fatarrowfunctions.ts, 26, 3))
+>(x:number) => x*x : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 26, 7))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 26, 9))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 26, 9))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 26, 9))
 
 var w = () => 3;
 >w : Symbol(w, Decl(fatarrowfunctions.ts, 28, 3))
+>() => 3 : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 28, 7))
 
 function ternaryTest(isWhile:boolean) {
 >ternaryTest : Symbol(ternaryTest, Decl(fatarrowfunctions.ts, 28, 16))
@@ -139,8 +156,10 @@ function ternaryTest(isWhile:boolean) {
                 var f = isWhile ? function (n) { return n > 0; } : function (n) { return n === 0; };
 >f : Symbol(f, Decl(fatarrowfunctions.ts, 32, 19))
 >isWhile : Symbol(isWhile, Decl(fatarrowfunctions.ts, 30, 21))
+>function (n) { return n > 0; } : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 32, 33))
 >n : Symbol(n, Decl(fatarrowfunctions.ts, 32, 44))
 >n : Symbol(n, Decl(fatarrowfunctions.ts, 32, 44))
+>function (n) { return n === 0; } : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 32, 66))
 >n : Symbol(n, Decl(fatarrowfunctions.ts, 32, 77))
 >n : Symbol(n, Decl(fatarrowfunctions.ts, 32, 77))
 
@@ -154,15 +173,18 @@ declare function setTimeout(expression: any, msec?: number, language?: any): num
 
 var messenger = {
 >messenger : Symbol(messenger, Decl(fatarrowfunctions.ts, 38, 3))
+>{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : Symbol(, Decl(fatarrowfunctions.ts, 38, 15))
 
     message: "Hello World",
 >message : Symbol(message, Decl(fatarrowfunctions.ts, 38, 17))
 
     start: function() {
 >start : Symbol(start, Decl(fatarrowfunctions.ts, 39, 27))
+>function() {        setTimeout(() => { this.message.toString(); }, 3000);    } : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 40, 10))
 
         setTimeout(() => { this.message.toString(); }, 3000);
 >setTimeout : Symbol(setTimeout, Decl(fatarrowfunctions.ts, 34, 1))
+>() => { this.message.toString(); } : Symbol((Anonymous function), Decl(fatarrowfunctions.ts, 41, 19))
     }
 };
 

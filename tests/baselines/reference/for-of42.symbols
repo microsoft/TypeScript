@@ -1,6 +1,7 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of42.ts ===
 var array = [{ x: "", y: 0 }]
 >array : Symbol(array, Decl(for-of42.ts, 0, 3))
+>{ x: "", y: 0 } : Symbol(, Decl(for-of42.ts, 0, 13))
 >x : Symbol(x, Decl(for-of42.ts, 0, 14))
 >y : Symbol(y, Decl(for-of42.ts, 0, 21))
 

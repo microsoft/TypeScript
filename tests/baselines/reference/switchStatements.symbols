@@ -32,7 +32,10 @@ switch (x) {
     case /[a-z]/:
     case[]:
     case {}:
+>{} : Symbol(, Decl(switchStatements.ts, 17, 8))
+
     case { id: 12 }:
+>{ id: 12 } : Symbol(, Decl(switchStatements.ts, 18, 8))
 >id : Symbol(id, Decl(switchStatements.ts, 18, 10))
 
     case['a']:
@@ -48,10 +51,12 @@ switch (x) {
 >fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
 
     case <T>(x: number) => '':
+><T>(x: number) => '' : Symbol((Anonymous function), Decl(switchStatements.ts, 23, 8))
 >T : Symbol(T, Decl(switchStatements.ts, 23, 10))
 >x : Symbol(x, Decl(switchStatements.ts, 23, 13))
 
     case (<T>(x: number) => '')(2):
+><T>(x: number) => '' : Symbol((Anonymous function), Decl(switchStatements.ts, 24, 10))
 >T : Symbol(T, Decl(switchStatements.ts, 24, 11))
 >x : Symbol(x, Decl(switchStatements.ts, 24, 14))
 
@@ -75,6 +80,7 @@ switch (new C()) {
 >D : Symbol(D, Decl(switchStatements.ts, 29, 23))
 
     case { id: 12, name: '' }:
+>{ id: 12, name: '' } : Symbol(, Decl(switchStatements.ts, 34, 8))
 >id : Symbol(id, Decl(switchStatements.ts, 34, 10))
 >name : Symbol(name, Decl(switchStatements.ts, 34, 18))
 
@@ -98,15 +104,20 @@ switch (new Object()) { }
 switch (/[a-z]/) { }
 switch ([]) { }
 switch ({}) { }
+>{} : Symbol(, Decl(switchStatements.ts, 47, 8))
+
 switch ({ id: 12 }) { }
+>{ id: 12 } : Symbol(, Decl(switchStatements.ts, 48, 8))
 >id : Symbol(id, Decl(switchStatements.ts, 48, 9))
 
 switch (['a']) { }
 switch (<T>(x: number) => '') { }
+><T>(x: number) => '' : Symbol((Anonymous function), Decl(switchStatements.ts, 50, 8))
 >T : Symbol(T, Decl(switchStatements.ts, 50, 9))
 >x : Symbol(x, Decl(switchStatements.ts, 50, 12))
 
 switch ((<T>(x: T) => '')(1)) { }
+><T>(x: T) => '' : Symbol((Anonymous function), Decl(switchStatements.ts, 51, 9))
 >T : Symbol(T, Decl(switchStatements.ts, 51, 10))
 >x : Symbol(x, Decl(switchStatements.ts, 51, 13))
 >T : Symbol(T, Decl(switchStatements.ts, 51, 10))

@@ -97,6 +97,7 @@ function foo8(x: number) {
 >x : Symbol(x, Decl(callSignatureWithoutReturnTypeAnnotationInference.ts, 50, 14))
 
     return { x: x };
+>{ x: x } : Symbol(, Decl(callSignatureWithoutReturnTypeAnnotationInference.ts, 51, 10))
 >x : Symbol(x, Decl(callSignatureWithoutReturnTypeAnnotationInference.ts, 51, 12))
 >x : Symbol(x, Decl(callSignatureWithoutReturnTypeAnnotationInference.ts, 50, 14))
 }

@@ -36,6 +36,7 @@ module A {
 
                 return new Line({ x: 0, y: 0 }, p);
 >Line : Symbol(Line, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 7, 51))
+>{ x: 0, y: 0 } : Symbol(, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 15, 32))
 >x : Symbol(x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 15, 33))
 >y : Symbol(y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 15, 39))
 >p : Symbol(p, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 14, 30))

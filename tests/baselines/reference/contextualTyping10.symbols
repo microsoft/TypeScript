@@ -3,6 +3,8 @@ class foo { public bar:{id:number;}[] = [{id:1}, {id:2}]; }
 >foo : Symbol(foo, Decl(contextualTyping10.ts, 0, 0))
 >bar : Symbol(bar, Decl(contextualTyping10.ts, 0, 11))
 >id : Symbol(id, Decl(contextualTyping10.ts, 0, 24))
+>{id:1} : Symbol(, Decl(contextualTyping10.ts, 0, 41))
 >id : Symbol(id, Decl(contextualTyping10.ts, 0, 42))
+>{id:2} : Symbol(, Decl(contextualTyping10.ts, 0, 48))
 >id : Symbol(id, Decl(contextualTyping10.ts, 0, 50))
 

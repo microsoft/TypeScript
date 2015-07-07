@@ -10,11 +10,13 @@ function fn(cb: IResultCallback) { }
 
 fn((a, b) => true);
 >fn : Symbol(fn, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 46))
+>(a, b) => true : Symbol((Anonymous function), Decl(inheritedFunctionAssignmentCompatibility.ts, 4, 3))
 >a : Symbol(a, Decl(inheritedFunctionAssignmentCompatibility.ts, 4, 4))
 >b : Symbol(b, Decl(inheritedFunctionAssignmentCompatibility.ts, 4, 6))
 
 fn(function (a, b) { return true; })
 >fn : Symbol(fn, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 46))
+>function (a, b) { return true; } : Symbol((Anonymous function), Decl(inheritedFunctionAssignmentCompatibility.ts, 5, 3))
 >a : Symbol(a, Decl(inheritedFunctionAssignmentCompatibility.ts, 5, 13))
 >b : Symbol(b, Decl(inheritedFunctionAssignmentCompatibility.ts, 5, 15))
 

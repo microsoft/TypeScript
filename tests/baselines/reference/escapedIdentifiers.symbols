@@ -131,6 +131,7 @@ interface interfaceType\u0032 {
 var interfaceType1Object1 = <interfaceType1>{ bar1: 0 };
 >interfaceType1Object1 : Symbol(interfaceType1Object1, Decl(escapedIdentifiers.ts, 59, 3))
 >interfaceType1 : Symbol(interfaceType1, Decl(escapedIdentifiers.ts, 49, 27))
+>{ bar1: 0 } : Symbol(, Decl(escapedIdentifiers.ts, 59, 44))
 >bar1 : Symbol(bar1, Decl(escapedIdentifiers.ts, 59, 45))
 
 interfaceType1Object1.bar1 = 2;
@@ -141,6 +142,7 @@ interfaceType1Object1.bar1 = 2;
 var interfaceType1Object2 = <interfaceType\u0031>{ bar1: 0 };
 >interfaceType1Object2 : Symbol(interfaceType1Object2, Decl(escapedIdentifiers.ts, 61, 3))
 >interfaceType\u0031 : Symbol(interfaceType1, Decl(escapedIdentifiers.ts, 49, 27))
+>{ bar1: 0 } : Symbol(, Decl(escapedIdentifiers.ts, 61, 49))
 >bar1 : Symbol(bar1, Decl(escapedIdentifiers.ts, 61, 50))
 
 interfaceType1Object2.bar1 = 2;
@@ -151,6 +153,7 @@ interfaceType1Object2.bar1 = 2;
 var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
 >interfaceType2Object1 : Symbol(interfaceType2Object1, Decl(escapedIdentifiers.ts, 63, 3))
 >interfaceType2 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
+>{ bar2: 0 } : Symbol(, Decl(escapedIdentifiers.ts, 63, 44))
 >bar2 : Symbol(bar2, Decl(escapedIdentifiers.ts, 63, 45))
 
 interfaceType2Object1.bar2 = 2;
@@ -161,6 +164,7 @@ interfaceType2Object1.bar2 = 2;
 var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
 >interfaceType2Object2 : Symbol(interfaceType2Object2, Decl(escapedIdentifiers.ts, 65, 3))
 >interfaceType\u0032 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
+>{ bar2: 0 } : Symbol(, Decl(escapedIdentifiers.ts, 65, 49))
 >bar2 : Symbol(bar2, Decl(escapedIdentifiers.ts, 65, 50))
 
 interfaceType2Object2.bar2 = 2;

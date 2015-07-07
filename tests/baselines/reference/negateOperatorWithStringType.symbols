@@ -44,13 +44,16 @@ var ResultIsNumber3 = -"";
 
 var ResultIsNumber4 = -{ x: "", y: "" };
 >ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(negateOperatorWithStringType.ts, 22, 3))
+>{ x: "", y: "" } : Symbol(, Decl(negateOperatorWithStringType.ts, 22, 23))
 >x : Symbol(x, Decl(negateOperatorWithStringType.ts, 22, 24))
 >y : Symbol(y, Decl(negateOperatorWithStringType.ts, 22, 31))
 
 var ResultIsNumber5 = -{ x: "", y: (s: string) => { return s; } };
 >ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(negateOperatorWithStringType.ts, 23, 3))
+>{ x: "", y: (s: string) => { return s; } } : Symbol(, Decl(negateOperatorWithStringType.ts, 23, 23))
 >x : Symbol(x, Decl(negateOperatorWithStringType.ts, 23, 24))
 >y : Symbol(y, Decl(negateOperatorWithStringType.ts, 23, 31))
+>(s: string) => { return s; } : Symbol((Anonymous function), Decl(negateOperatorWithStringType.ts, 23, 34))
 >s : Symbol(s, Decl(negateOperatorWithStringType.ts, 23, 36))
 >s : Symbol(s, Decl(negateOperatorWithStringType.ts, 23, 36))
 

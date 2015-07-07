@@ -1,4 +1,5 @@
 === tests/cases/compiler/topLevelLambda3.ts ===
 var f = () => {this.window;}
 >f : Symbol(f, Decl(topLevelLambda3.ts, 0, 3))
+>() => {this.window;} : Symbol((Anonymous function), Decl(topLevelLambda3.ts, 0, 7))
 

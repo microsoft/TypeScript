@@ -9,11 +9,13 @@ if (true) {
 
     var obj1 = { x0: x0 };
 >obj1 : Symbol(obj1, Decl(initializePropertiesWithRenamedLet.ts, 4, 7))
+>{ x0: x0 } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 4, 14))
 >x0 : Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 4, 16))
 >x0 : Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 3, 7))
 
     var obj2 = { x0 };
 >obj2 : Symbol(obj2, Decl(initializePropertiesWithRenamedLet.ts, 5, 7))
+>{ x0 } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 5, 14))
 >x0 : Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 5, 16))
 }
 
@@ -25,21 +27,27 @@ var x, y, z;
 if (true) {
     let { x: x } = { x: 0 };
 >x : Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 10, 9))
+>{ x: 0 } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 10, 18))
 >x : Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 10, 20))
 
     let { y } = { y: 0 };
 >y : Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 11, 9))
+>{ y: 0 } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 11, 15))
 >y : Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 11, 17))
 
     let z;
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 7))
 
     ({ z: z } = { z: 0 });
+>{ z: z } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 13, 5))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 6))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 7))
+>{ z: 0 } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 13, 15))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 17))
 
     ({ z } = { z: 0 });
+>{ z } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 14, 5))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 14, 6))
+>{ z: 0 } : Symbol(, Decl(initializePropertiesWithRenamedLet.ts, 14, 12))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 14, 14))
 }

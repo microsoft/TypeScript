@@ -36,6 +36,7 @@ function f<T extends Base>(x: { foo: T; bar: T }) {
 var r = f({ foo: new Base(), bar: new Derived() });
 >r : Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 3))
 >f : Symbol(f, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 8, 1))
+>{ foo: new Base(), bar: new Derived() } : Symbol(, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 10))
 >foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 11))
 >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
 >bar : Symbol(bar, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 28))
@@ -44,6 +45,7 @@ var r = f({ foo: new Base(), bar: new Derived() });
 var r2 = f({ foo: new Derived(), bar: new Derived() });
 >r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 3))
 >f : Symbol(f, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 8, 1))
+>{ foo: new Derived(), bar: new Derived() } : Symbol(, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 11))
 >foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 12))
 >Derived : Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
 >bar : Symbol(bar, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 32))
@@ -102,6 +104,7 @@ var r4 = f3(new Base(), x => x);
 >r4 : Symbol(r4, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 3))
 >f3 : Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
 >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+>x => x : Symbol((Anonymous function), Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 23))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 23))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 23))
 
@@ -109,6 +112,7 @@ var r5 = f3(new Derived(), x => x);
 >r5 : Symbol(r5, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 3))
 >f3 : Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
 >Derived : Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
+>x => x : Symbol((Anonymous function), Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 26))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 26))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 26))
 
@@ -119,6 +123,7 @@ var r6 = f3(null, null); // any
 var r7 = f3(null, x => x); // any
 >r7 : Symbol(r7, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 3))
 >f3 : Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
+>x => x : Symbol((Anonymous function), Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 17))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 17))
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 17))
 

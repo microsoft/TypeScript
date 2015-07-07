@@ -191,6 +191,7 @@ function f5() {
 
     var z1 = function () {
 >z1 : Symbol(z1, Decl(localTypes1.ts, 69, 7))
+>function () {        enum E {            A, B, C        }        class C {            x: E;        }        return new C();    } : Symbol((Anonymous function), Decl(localTypes1.ts, 69, 12))
 
         enum E {
 >E : Symbol(E, Decl(localTypes1.ts, 69, 26))
@@ -212,6 +213,7 @@ function f5() {
     }
     var z2 = () => {
 >z2 : Symbol(z2, Decl(localTypes1.ts, 78, 7))
+>() => {        enum E {            A, B, C        }        class C {            x: E;        }        return new C();    } : Symbol((Anonymous function), Decl(localTypes1.ts, 78, 12))
 
         enum E {
 >E : Symbol(E, Decl(localTypes1.ts, 78, 20))

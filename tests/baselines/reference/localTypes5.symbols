@@ -12,6 +12,7 @@ function foo<A>() {
 >C : Symbol(C, Decl(localTypes5.ts, 2, 12))
 
             return (function <D>() {
+>function <D>() {                class Y<E> {                }                return new Y<string>();            } : Symbol((Anonymous function), Decl(localTypes5.ts, 3, 20))
 >D : Symbol(D, Decl(localTypes5.ts, 3, 30))
 
                 class Y<E> {

@@ -98,6 +98,7 @@ function fn3<T extends { a: string; b: string }, U extends { a: string; b: numbe
     var r3 = t || { a: '' };
 >r3 : Symbol(r3, Decl(logicalOrOperatorWithTypeParameters.ts, 20, 7))
 >t : Symbol(t, Decl(logicalOrOperatorWithTypeParameters.ts, 17, 85))
+>{ a: '' } : Symbol(, Decl(logicalOrOperatorWithTypeParameters.ts, 20, 17))
 >a : Symbol(a, Decl(logicalOrOperatorWithTypeParameters.ts, 20, 19))
 
     var r4: { a: string } = t || u;

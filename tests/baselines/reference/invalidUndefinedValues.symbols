@@ -60,6 +60,7 @@ x = M;
 
 x = { f() { } }
 >x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>{ f() { } } : Symbol(, Decl(invalidUndefinedValues.ts, 21, 3))
 >f : Symbol(f, Decl(invalidUndefinedValues.ts, 21, 5))
 
 function f<T>(a: T) {

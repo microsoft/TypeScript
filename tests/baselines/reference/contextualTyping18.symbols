@@ -3,6 +3,8 @@ var foo: {id:number;} = <{id:number;}>({ }); foo = {id: 5};
 >foo : Symbol(foo, Decl(contextualTyping18.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping18.ts, 0, 10))
 >id : Symbol(id, Decl(contextualTyping18.ts, 0, 26))
+>{ } : Symbol(, Decl(contextualTyping18.ts, 0, 39))
 >foo : Symbol(foo, Decl(contextualTyping18.ts, 0, 3))
+>{id: 5} : Symbol(, Decl(contextualTyping18.ts, 0, 50))
 >id : Symbol(id, Decl(contextualTyping18.ts, 0, 52))
 

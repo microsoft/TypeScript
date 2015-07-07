@@ -49,6 +49,7 @@ switch ('') {
                             case 'a':
                                 var fn = function () { }
 >fn : Symbol(fn, Decl(switchBreakStatements.ts, 48, 35))
+>function () { } : Symbol((Anonymous function), Decl(switchBreakStatements.ts, 48, 40))
 
                                 break EIGHT;
                         }

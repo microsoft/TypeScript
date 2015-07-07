@@ -58,6 +58,7 @@ module A {
 
     var fn = (s: string) => {
 >fn : Symbol(fn, Decl(moduleWithStatementsOfEveryKind.ts, 19, 7))
+>(s: string) => {        return 'hello ' + s;    } : Symbol((Anonymous function), Decl(moduleWithStatementsOfEveryKind.ts, 19, 12))
 >s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 19, 14))
 
         return 'hello ' + s;
@@ -65,6 +66,7 @@ module A {
     }
     var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : Symbol(ol, Decl(moduleWithStatementsOfEveryKind.ts, 22, 7))
+>{ s: 'hello', id: 2, isvalid: true } : Symbol(, Decl(moduleWithStatementsOfEveryKind.ts, 22, 12))
 >s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 22, 14))
 >id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 22, 26))
 >isvalid : Symbol(isvalid, Decl(moduleWithStatementsOfEveryKind.ts, 22, 33))
@@ -136,6 +138,7 @@ module Y {
 
     export var fn = (s: string) => {
 >fn : Symbol(fn, Decl(moduleWithStatementsOfEveryKind.ts, 48, 14))
+>(s: string) => {        return 'hello ' + s;    } : Symbol((Anonymous function), Decl(moduleWithStatementsOfEveryKind.ts, 48, 19))
 >s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 48, 21))
 
         return 'hello ' + s;
@@ -143,6 +146,7 @@ module Y {
     }
     export var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : Symbol(ol, Decl(moduleWithStatementsOfEveryKind.ts, 51, 14))
+>{ s: 'hello', id: 2, isvalid: true } : Symbol(, Decl(moduleWithStatementsOfEveryKind.ts, 51, 19))
 >s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 51, 21))
 >id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 51, 33))
 >isvalid : Symbol(isvalid, Decl(moduleWithStatementsOfEveryKind.ts, 51, 40))

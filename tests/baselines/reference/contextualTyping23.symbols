@@ -4,5 +4,6 @@ var foo:(a:{():number; (i:number):number; })=>number; foo = function(a){return 5
 >a : Symbol(a, Decl(contextualTyping23.ts, 0, 9))
 >i : Symbol(i, Decl(contextualTyping23.ts, 0, 24))
 >foo : Symbol(foo, Decl(contextualTyping23.ts, 0, 3))
+>function(a){return 5} : Symbol((Anonymous function), Decl(contextualTyping23.ts, 0, 59))
 >a : Symbol(a, Decl(contextualTyping23.ts, 0, 69))
 

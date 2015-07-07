@@ -5,6 +5,7 @@ var x: any;
 var obj: { [s: string]: number } = { p: "", q: x };
 >obj : Symbol(obj, Decl(contextualTypeAny.ts, 2, 3))
 >s : Symbol(s, Decl(contextualTypeAny.ts, 2, 12))
+>{ p: "", q: x } : Symbol(, Decl(contextualTypeAny.ts, 2, 34))
 >p : Symbol(p, Decl(contextualTypeAny.ts, 2, 36))
 >q : Symbol(q, Decl(contextualTypeAny.ts, 2, 43))
 >x : Symbol(x, Decl(contextualTypeAny.ts, 0, 3))

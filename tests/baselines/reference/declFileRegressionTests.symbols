@@ -3,9 +3,11 @@
 // function types not piped through correctly
 var n = { w: null, x: '', y: () => { }, z: 32 };
 >n : Symbol(n, Decl(declFileRegressionTests.ts, 2, 3))
+>{ w: null, x: '', y: () => { }, z: 32 } : Symbol(, Decl(declFileRegressionTests.ts, 2, 7))
 >w : Symbol(w, Decl(declFileRegressionTests.ts, 2, 9))
 >x : Symbol(x, Decl(declFileRegressionTests.ts, 2, 18))
 >y : Symbol(y, Decl(declFileRegressionTests.ts, 2, 25))
+>() => { } : Symbol((Anonymous function), Decl(declFileRegressionTests.ts, 2, 28))
 >z : Symbol(z, Decl(declFileRegressionTests.ts, 2, 39))
 
 

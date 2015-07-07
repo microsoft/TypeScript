@@ -20,6 +20,7 @@ module M {
 
     f({salt:2,pepper:0});
 >f : Symbol(f, Decl(structural1.ts, 4, 5))
+>{salt:2,pepper:0} : Symbol(, Decl(structural1.ts, 9, 6))
 >salt : Symbol(salt, Decl(structural1.ts, 9, 7))
 >pepper : Symbol(pepper, Decl(structural1.ts, 9, 14))
 }

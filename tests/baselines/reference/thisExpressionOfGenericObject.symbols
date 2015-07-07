@@ -9,6 +9,7 @@ class MyClass1<T> {
 
     constructor() {
         () => this;
+>() => this : Symbol((Anonymous function), Decl(thisExpressionOfGenericObject.ts, 2, 19))
 >this : Symbol(MyClass1, Decl(thisExpressionOfGenericObject.ts, 0, 0))
     }
 }

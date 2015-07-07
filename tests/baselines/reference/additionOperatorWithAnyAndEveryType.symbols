@@ -133,11 +133,13 @@ var r18 = a + 123;
 var r19 = a + { a: '' };
 >r19 : Symbol(r19, Decl(additionOperatorWithAnyAndEveryType.ts, 37, 3))
 >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 8, 3))
+>{ a: '' } : Symbol(, Decl(additionOperatorWithAnyAndEveryType.ts, 37, 13))
 >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 37, 15))
 
 var r20 = a + ((a: string) => { return a });
 >r20 : Symbol(r20, Decl(additionOperatorWithAnyAndEveryType.ts, 38, 3))
 >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 8, 3))
+>(a: string) => { return a } : Symbol((Anonymous function), Decl(additionOperatorWithAnyAndEveryType.ts, 38, 15))
 >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 38, 16))
 >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 38, 16))
 

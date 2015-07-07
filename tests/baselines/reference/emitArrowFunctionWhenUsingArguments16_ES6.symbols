@@ -12,6 +12,7 @@ function f() {
 >random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
 
         return () => arguments[0];
+>() => arguments[0] : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments16_ES6.ts, 4, 14))
 >arguments : Symbol(arguments)
     }
     var arguments = "world";

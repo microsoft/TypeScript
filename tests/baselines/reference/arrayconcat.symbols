@@ -44,6 +44,7 @@ class parser {
 >this : Symbol(parser, Decl(arrayconcat.ts, 8, 1))
 >options : Symbol(options, Decl(arrayconcat.ts, 10, 14))
 >sort : Symbol(Array.sort, Decl(lib.d.ts, 1054, 45))
+>function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        } : Symbol((Anonymous function), Decl(arrayconcat.ts, 14, 35))
 >a : Symbol(a, Decl(arrayconcat.ts, 14, 44))
 >b : Symbol(b, Decl(arrayconcat.ts, 14, 46))
 

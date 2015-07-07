@@ -1,9 +1,11 @@
 === tests/cases/compiler/commentsBeforeFunctionExpression1.ts ===
 var v = {
 >v : Symbol(v, Decl(commentsBeforeFunctionExpression1.ts, 0, 3))
+>{    f: /**own f*/ (a) => 0} : Symbol(, Decl(commentsBeforeFunctionExpression1.ts, 0, 7))
 
     f: /**own f*/ (a) => 0
 >f : Symbol(f, Decl(commentsBeforeFunctionExpression1.ts, 0, 9))
+>(a) => 0 : Symbol((Anonymous function), Decl(commentsBeforeFunctionExpression1.ts, 1, 6))
 >a : Symbol(a, Decl(commentsBeforeFunctionExpression1.ts, 1, 19))
 }
 

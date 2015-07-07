@@ -10,6 +10,7 @@ var c: <T>(x: T) => void = function <T>(x: T) { return 42; }
 >T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 8))
 >x : Symbol(x, Decl(fatArrowfunctionAsType.ts, 2, 11))
 >T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 8))
+>function <T>(x: T) { return 42; } : Symbol((Anonymous function), Decl(fatArrowfunctionAsType.ts, 2, 26))
 >T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 37))
 >x : Symbol(x, Decl(fatArrowfunctionAsType.ts, 2, 40))
 >T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 37))

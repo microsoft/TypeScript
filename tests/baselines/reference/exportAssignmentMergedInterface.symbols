@@ -25,6 +25,7 @@ if(!!x.c){ }
 
 var z = {x: 1, y: 2};
 >z : Symbol(z, Decl(foo_1.ts, 6, 3))
+>{x: 1, y: 2} : Symbol(, Decl(foo_1.ts, 6, 7))
 >x : Symbol(x, Decl(foo_1.ts, 6, 9))
 >y : Symbol(y, Decl(foo_1.ts, 6, 14))
 

@@ -12,6 +12,7 @@ var f: {
 
 f = (a) => { return a.asdf }
 >f : Symbol(f, Decl(contextualTypingOfLambdaWithMultipleSignatures2.ts, 0, 3))
+>(a) => { return a.asdf } : Symbol((Anonymous function), Decl(contextualTypingOfLambdaWithMultipleSignatures2.ts, 5, 3))
 >a : Symbol(a, Decl(contextualTypingOfLambdaWithMultipleSignatures2.ts, 5, 5))
 >a : Symbol(a, Decl(contextualTypingOfLambdaWithMultipleSignatures2.ts, 5, 5))
 

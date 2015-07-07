@@ -43,6 +43,7 @@ enum E { A }
 
 var b = { foo: E.A };
 >b : Symbol(b, Decl(objectTypesIdentity2.ts, 20, 3))
+>{ foo: E.A } : Symbol(, Decl(objectTypesIdentity2.ts, 20, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 20, 9))
 >E.A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
 >E : Symbol(E, Decl(objectTypesIdentity2.ts, 18, 23))

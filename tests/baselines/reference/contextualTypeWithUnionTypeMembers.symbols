@@ -76,22 +76,26 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1
 >i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
 >I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
 >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>{ // Like i1    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI1: a => a,    propertyOnlyInI1: "Hello",} : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 25, 37))
 
     commonPropertyType: "hello",
 >commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 25, 39))
 
     commonMethodType: a=> a,
 >commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 26, 32))
+>a=> a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 27, 21))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 27, 21))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 27, 21))
 
     commonMethodWithTypeParameter: a => a,
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 27, 28))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 28, 34))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 28, 34))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 28, 34))
 
     methodOnlyInI1: a => a,
 >methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 28, 42))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 30, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 30, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 30, 19))
 
@@ -103,22 +107,26 @@ var i1Ori2: I1<number> | I2<number> = { // Like i2
 >i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
 >I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
 >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>{ // Like i2    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI2: a => a,    propertyOnlyInI2: "Hello",} : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 33, 37))
 
     commonPropertyType: "hello",
 >commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 33, 39))
 
     commonMethodType: a=> a,
 >commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 34, 32))
+>a=> a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 35, 21))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 35, 21))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 35, 21))
 
     commonMethodWithTypeParameter: a => a,
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 35, 28))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 36, 34))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 36, 34))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 36, 34))
 
     methodOnlyInI2: a => a,
 >methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 36, 42))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 38, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 38, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 38, 19))
 
@@ -130,22 +138,26 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
 >I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
 >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>{ // Like i1 and i2 both    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI1: a => a,    propertyOnlyInI1: "Hello",    methodOnlyInI2: a => a,    propertyOnlyInI2: "Hello",} : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 41, 37))
 
     commonPropertyType: "hello",
 >commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 41, 39))
 
     commonMethodType: a=> a,
 >commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 42, 32))
+>a=> a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 43, 21))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 43, 21))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 43, 21))
 
     commonMethodWithTypeParameter: a => a,
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 43, 28))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 44, 34))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 44, 34))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 44, 34))
 
     methodOnlyInI1: a => a,
 >methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 44, 42))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 45, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 45, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 45, 19))
 
@@ -154,6 +166,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 
     methodOnlyInI2: a => a,
 >methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 46, 30))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 47, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 47, 19))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 47, 19))
 
@@ -169,22 +182,26 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
 >i1 : Symbol(i1, Decl(contextualTypeWithUnionTypeMembers.ts, 21, 3))
 >i2 : Symbol(i2, Decl(contextualTypeWithUnionTypeMembers.ts, 22, 3))
+>{ // Like i1        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",    } : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 51, 58))
 
         commonPropertyType: "hello",
 >commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 51, 60))
 
         commonMethodType: a=> a,
 >commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 52, 36))
+>a=> a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 53, 25))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 53, 25))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 53, 25))
 
         commonMethodWithTypeParameter: a => a,
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 53, 32))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 54, 38))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 54, 38))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 54, 38))
 
         methodOnlyInI1: a => a,
 >methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 54, 46))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 56, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 56, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 56, 23))
 
@@ -193,21 +210,26 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 
     },
     { // Like i2
+>{ // Like i2        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    } : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 58, 6))
+
         commonPropertyType: "hello",
 >commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 59, 5))
 
         commonMethodType: a=> a,
 >commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 60, 36))
+>a=> a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 61, 25))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 61, 25))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 61, 25))
 
         commonMethodWithTypeParameter: a => a,
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 61, 32))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 62, 38))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 62, 38))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 62, 38))
 
         methodOnlyInI2: a => a,
 >methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 62, 46))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 64, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 64, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 64, 23))
 
@@ -215,21 +237,26 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 64, 31))
 
     }, { // Like i1 and i2 both
+>{ // Like i1 and i2 both        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    } : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 66, 6))
+
         commonPropertyType: "hello",
 >commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 66, 8))
 
         commonMethodType: a=> a,
 >commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 67, 36))
+>a=> a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 68, 25))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 68, 25))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 68, 25))
 
         commonMethodWithTypeParameter: a => a,
 >commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 68, 32))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 69, 38))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 69, 38))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 69, 38))
 
         methodOnlyInI1: a => a,
 >methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 69, 46))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 70, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 70, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 70, 23))
 
@@ -238,6 +265,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 
         methodOnlyInI2: a => a,
 >methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 71, 34))
+>a => a : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 72, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 72, 23))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 72, 23))
 
@@ -292,10 +320,12 @@ var i11Ori21: I11 | I21 = {
 >i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeMembers.ts, 86, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 87, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 88, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 96, 3))
 >I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
 >I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+>{     // Like i1    commonMethodDifferentReturnType: (a, b) => {        var z = a.charAt(b);        return z;      },    commonPropertyDifferentType: "hello",  } : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 88, 25))
 
     // Like i1
     commonMethodDifferentReturnType: (a, b) => {
 >commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 88, 27))
+>(a, b) => {        var z = a.charAt(b);        return z;      } : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 90, 36))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 38))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 40))
 
@@ -318,10 +348,12 @@ var i11Ori21: I11 | I21 = {
 >i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeMembers.ts, 86, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 87, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 88, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 96, 3))
 >I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
 >I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+>{     // Like i2    commonMethodDifferentReturnType: (a, b) => {        var z = a.charCodeAt(b);        return z;    },    commonPropertyDifferentType: 10,} : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 96, 25))
 
     // Like i2
     commonMethodDifferentReturnType: (a, b) => {
 >commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 96, 27))
+>(a, b) => {        var z = a.charCodeAt(b);        return z;    } : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 98, 36))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 38))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 40))
 
@@ -349,10 +381,12 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeMembers.ts, 85, 3))
 >i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
 >i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeMembers.ts, 85, 3))
+>{         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    } : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 104, 62))
 
         // Like i1
         commonMethodDifferentReturnType: (a, b) => {
 >commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 104, 64))
+>(a, b) => {            var z = a.charAt(b);            return z;        } : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 106, 40))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 42))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 44))
 
@@ -371,9 +405,12 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 109, 10))
 
     }, { 
+>{         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    } : Symbol(, Decl(contextualTypeWithUnionTypeMembers.ts, 111, 6))
+
         // Like i2
         commonMethodDifferentReturnType: (a, b) => {
 >commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 111, 8))
+>(a, b) => {            var z = a.charCodeAt(b);            return z;        } : Symbol((Anonymous function), Decl(contextualTypeWithUnionTypeMembers.ts, 113, 40))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 42))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 44))
 

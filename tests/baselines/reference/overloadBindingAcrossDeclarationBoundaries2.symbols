@@ -107,12 +107,15 @@ var a1 = a.a({});
 >a.a : Symbol(A.a, Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 13, 13), Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 14, 21), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 0, 13), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 1, 21))
 >a : Symbol(a, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 9, 3))
 >a : Symbol(A.a, Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 13, 13), Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 14, 21), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 0, 13), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 1, 21))
+>{} : Symbol(, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 11, 13))
 
 var a1 = a({});
 >a1 : Symbol(a1, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 11, 3), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 12, 3), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 13, 3))
 >a : Symbol(a, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 9, 3))
+>{} : Symbol(, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 12, 11))
 
 var a1 = new a({});
 >a1 : Symbol(a1, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 11, 3), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 12, 3), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 13, 3))
 >a : Symbol(a, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 9, 3))
+>{} : Symbol(, Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 13, 15))
 

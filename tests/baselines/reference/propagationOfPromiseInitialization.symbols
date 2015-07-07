@@ -26,12 +26,14 @@ foo.then((x) => {
 >foo.then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
 >foo : Symbol(foo, Decl(propagationOfPromiseInitialization.ts, 4, 3))
 >then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+>(x) => {    // x is inferred to be a number    return "asdf";} : Symbol((Anonymous function), Decl(propagationOfPromiseInitialization.ts, 5, 9))
 >x : Symbol(x, Decl(propagationOfPromiseInitialization.ts, 5, 10))
 
     // x is inferred to be a number
     return "asdf";
 }).then((x) => {
 >then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+>(x) => {    // x is inferred to be string    x.length;    return 123;} : Symbol((Anonymous function), Decl(propagationOfPromiseInitialization.ts, 8, 8))
 >x : Symbol(x, Decl(propagationOfPromiseInitialization.ts, 8, 9))
 
     // x is inferred to be string

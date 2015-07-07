@@ -1,5 +1,7 @@
 === tests/cases/compiler/arrowFunctionWithObjectLiteralBody1.ts ===
 var v = a => <any>{}
 >v : Symbol(v, Decl(arrowFunctionWithObjectLiteralBody1.ts, 0, 3))
+>a => <any>{} : Symbol((Anonymous function), Decl(arrowFunctionWithObjectLiteralBody1.ts, 0, 7))
 >a : Symbol(a, Decl(arrowFunctionWithObjectLiteralBody1.ts, 0, 7))
+>{} : Symbol(, Decl(arrowFunctionWithObjectLiteralBody1.ts, 0, 18))
 

@@ -50,6 +50,7 @@ module clodule {
     var Point: Point = { x: 0, y: 0 };
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16), Decl(importAliasIdentifiers.ts, 20, 7))
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
+>{ x: 0, y: 0 } : Symbol(, Decl(importAliasIdentifiers.ts, 20, 22))
 >x : Symbol(x, Decl(importAliasIdentifiers.ts, 20, 24))
 >y : Symbol(y, Decl(importAliasIdentifiers.ts, 20, 30))
 }
@@ -78,6 +79,7 @@ function fundule() {
 >fundule : Symbol(fundule, Decl(importAliasIdentifiers.ts, 27, 33), Decl(importAliasIdentifiers.ts, 32, 1))
 
     return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : Symbol(, Decl(importAliasIdentifiers.ts, 31, 10))
 >x : Symbol(x, Decl(importAliasIdentifiers.ts, 31, 12))
 >y : Symbol(y, Decl(importAliasIdentifiers.ts, 31, 18))
 }
@@ -95,6 +97,7 @@ module fundule {
     var Point: Point = { x: 0, y: 0 };
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16), Decl(importAliasIdentifiers.ts, 38, 7))
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
+>{ x: 0, y: 0 } : Symbol(, Decl(importAliasIdentifiers.ts, 38, 22))
 >x : Symbol(x, Decl(importAliasIdentifiers.ts, 38, 24))
 >y : Symbol(y, Decl(importAliasIdentifiers.ts, 38, 30))
 }

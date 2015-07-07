@@ -26,6 +26,7 @@ class Emitter {
 >this.listeners : Symbol(listeners, Decl(objectIndexer.ts, 8, 15))
 >this : Symbol(Emitter, Decl(objectIndexer.ts, 6, 1))
 >listeners : Symbol(listeners, Decl(objectIndexer.ts, 8, 15))
+>{} : Symbol(, Decl(objectIndexer.ts, 11, 24))
     }
 }
 

@@ -70,6 +70,7 @@ class C2 {
 
     protected get y() { () => this.x; return null; }
 >y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
+>() => this.x : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 23))
 >this.x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
@@ -77,6 +78,7 @@ class C2 {
     protected set y(x) { () => { this.y = this.x; } }
 >y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
 >x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 20))
+>() => { this.y = this.x; } : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 24))
 >this.y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
@@ -86,6 +88,7 @@ class C2 {
 
     protected foo() { () => this.foo; }
 >foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
+>() => this.foo : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 20, 21))
 >this.foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
@@ -95,6 +98,7 @@ class C2 {
 
     protected static get y() { () => this.x; return null; }
 >y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 22, 31), Decl(protectedClassPropertyAccessibleWithinClass.ts, 23, 59))
+>() => this.x : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 23, 30))
 >this.x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 20, 39))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 20, 39))
@@ -104,6 +108,7 @@ class C2 {
 >x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 24, 27))
 
         () => { this.y = this.x; }
+>() => { this.y = this.x; } : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 24, 31))
 >this.y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 22, 31), Decl(protectedClassPropertyAccessibleWithinClass.ts, 23, 59))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 22, 31), Decl(protectedClassPropertyAccessibleWithinClass.ts, 23, 59))
@@ -113,12 +118,14 @@ class C2 {
      }
     protected static foo() { () => this.foo; }
 >foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 26, 6))
+>() => this.foo : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 27, 28))
 >this.foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 26, 6))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 26, 6))
 
     protected static bar() { () => this.foo(); }
 >bar : Symbol(C2.bar, Decl(protectedClassPropertyAccessibleWithinClass.ts, 27, 46))
+>() => this.foo() : Symbol((Anonymous function), Decl(protectedClassPropertyAccessibleWithinClass.ts, 28, 28))
 >this.foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 26, 6))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 >foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 26, 6))

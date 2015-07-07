@@ -52,6 +52,7 @@ var a: { new<T extends Array<string>>(x: T): string }
 
 var b = { new<T extends RegExp>(x: T) { return ''; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 3))
+>{ new<T extends RegExp>(x: T) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 7))
 >new : Symbol(new, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 14))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))

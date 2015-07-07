@@ -19,7 +19,10 @@ declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescr
 
 defineMyProperty({}, "name", { get: function () { return 5; } });
 >defineMyProperty : Symbol(defineMyProperty, Decl(optionalAccessorsInInterface1.ts, 3, 1))
+>{} : Symbol(, Decl(optionalAccessorsInInterface1.ts, 6, 17))
+>{ get: function () { return 5; } } : Symbol(, Decl(optionalAccessorsInInterface1.ts, 6, 28))
 >get : Symbol(get, Decl(optionalAccessorsInInterface1.ts, 6, 30))
+>function () { return 5; } : Symbol((Anonymous function), Decl(optionalAccessorsInInterface1.ts, 6, 35))
 
 interface MyPropertyDescriptor2 {
 >MyPropertyDescriptor2 : Symbol(MyPropertyDescriptor2, Decl(optionalAccessorsInInterface1.ts, 6, 65))
@@ -41,5 +44,8 @@ declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDesc
 
 defineMyProperty2({}, "name", { get: function () { return 5; } });
 >defineMyProperty2 : Symbol(defineMyProperty2, Decl(optionalAccessorsInInterface1.ts, 11, 1))
+>{} : Symbol(, Decl(optionalAccessorsInInterface1.ts, 14, 18))
+>{ get: function () { return 5; } } : Symbol(, Decl(optionalAccessorsInInterface1.ts, 14, 29))
 >get : Symbol(get, Decl(optionalAccessorsInInterface1.ts, 14, 31))
+>function () { return 5; } : Symbol((Anonymous function), Decl(optionalAccessorsInInterface1.ts, 14, 36))
 

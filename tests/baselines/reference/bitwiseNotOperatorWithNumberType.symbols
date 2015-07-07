@@ -44,13 +44,16 @@ var ResultIsNumber3 = ~1;
 
 var ResultIsNumber4 = ~{ x: 1, y: 2};
 >ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(bitwiseNotOperatorWithNumberType.ts, 22, 3))
+>{ x: 1, y: 2} : Symbol(, Decl(bitwiseNotOperatorWithNumberType.ts, 22, 23))
 >x : Symbol(x, Decl(bitwiseNotOperatorWithNumberType.ts, 22, 24))
 >y : Symbol(y, Decl(bitwiseNotOperatorWithNumberType.ts, 22, 30))
 
 var ResultIsNumber5 = ~{ x: 1, y: (n: number) => { return n; } };
 >ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(bitwiseNotOperatorWithNumberType.ts, 23, 3))
+>{ x: 1, y: (n: number) => { return n; } } : Symbol(, Decl(bitwiseNotOperatorWithNumberType.ts, 23, 23))
 >x : Symbol(x, Decl(bitwiseNotOperatorWithNumberType.ts, 23, 24))
 >y : Symbol(y, Decl(bitwiseNotOperatorWithNumberType.ts, 23, 30))
+>(n: number) => { return n; } : Symbol((Anonymous function), Decl(bitwiseNotOperatorWithNumberType.ts, 23, 33))
 >n : Symbol(n, Decl(bitwiseNotOperatorWithNumberType.ts, 23, 35))
 >n : Symbol(n, Decl(bitwiseNotOperatorWithNumberType.ts, 23, 35))
 

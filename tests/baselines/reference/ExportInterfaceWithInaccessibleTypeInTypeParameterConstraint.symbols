@@ -15,6 +15,7 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Symbol(Origin, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 14))
 >Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+>{ x: 0, y: 0 } : Symbol(, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 30))
 >x : Symbol(x, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 32))
 >y : Symbol(y, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 38))
 
@@ -29,6 +30,7 @@ module A {
     export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
 >Origin3d : Symbol(Origin3d, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 14))
 >Point3d : Symbol(Point3d, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 46))
+>{ x: 0, y: 0, z: 0 } : Symbol(, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 34))
 >x : Symbol(x, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 36))
 >y : Symbol(y, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 42))
 >z : Symbol(z, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 48))
