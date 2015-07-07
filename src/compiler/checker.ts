@@ -7095,13 +7095,18 @@ namespace ts {
 
                 // Look up the value in the current scope
                 if (node.tagName.kind === SyntaxKind.Identifier) {
-                    valueSymbol = getResolvedSymbol(<Identifier>node.tagName);
+                    let tag = <Identifier>node.tagName;
+                    valueSymbol = resolveName(tag, tag.text, SymbolFlags.Value, Diagnostics.Cannot_find_name_0, tag.text);
                 }
                 else {
                     valueSymbol = checkQualifiedName(<QualifiedName>node.tagName).symbol;
                 }
 
-                if (valueSymbol !== unknownSymbol) {
+                if (valueSymbol && valueSymbol !== unknownSymbol) {
+                    let symbolLinks = getSymbolLinks(valueSymbol);
+                    if (symbolLinks) {
+                        symbolLinks.referenced = true;
+                    }
                     links.jsxFlags |= JsxFlags.ClassElement;
                 }
 
@@ -7300,15 +7305,6 @@ namespace ts {
             checkJsxPreconditions(node);
 
             let targetAttributesType = getJsxElementAttributesType(node);
-
-            if (getNodeLinks(node).jsxFlags & JsxFlags.ClassElement) {
-                if (node.tagName.kind === SyntaxKind.Identifier) {
-                    checkIdentifier(<Identifier>node.tagName);
-                }
-                else {
-                    checkQualifiedName(<QualifiedName>node.tagName);
-                }
-            }
 
             let nameTable: Map<boolean> = {};
             // Process this array in right-to-left order so we know which

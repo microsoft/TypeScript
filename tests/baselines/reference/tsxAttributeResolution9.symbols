@@ -1,0 +1,45 @@
+=== tests/cases/conformance/jsx/tsxAttributeResolution9.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxAttributeResolution9.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(tsxAttributeResolution9.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxAttributeResolution9.tsx, 1, 22))
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(tsxAttributeResolution9.tsx, 3, 2))
+
+		props;
+>props : Symbol(props, Decl(tsxAttributeResolution9.tsx, 4, 38))
+	}
+}
+
+interface Props {  
+>Props : Symbol(Props, Decl(tsxAttributeResolution9.tsx, 7, 1))
+
+  foo: string;
+>foo : Symbol(foo, Decl(tsxAttributeResolution9.tsx, 9, 17))
+}
+
+export class MyComponent {  
+>MyComponent : Symbol(MyComponent, Decl(tsxAttributeResolution9.tsx, 11, 1))
+
+  render() {
+>render : Symbol(render, Decl(tsxAttributeResolution9.tsx, 13, 26))
+  }
+
+  props: { foo: string; }
+>props : Symbol(props, Decl(tsxAttributeResolution9.tsx, 15, 3))
+>foo : Symbol(foo, Decl(tsxAttributeResolution9.tsx, 17, 10))
+}
+
+<MyComponent foo="bar" />; // ok  
+>MyComponent : Symbol(MyComponent, Decl(tsxAttributeResolution9.tsx, 11, 1))
+>foo : Symbol(unknown)
+
+<MyComponent foo={0} />; // should be an error
+>MyComponent : Symbol(MyComponent, Decl(tsxAttributeResolution9.tsx, 11, 1))
+>foo : Symbol(unknown)
+
