@@ -7096,9 +7096,8 @@ namespace ts {
                 // Look up the value in the current scope
                 if (node.tagName.kind === SyntaxKind.Identifier) {
                     let tag = <Identifier>node.tagName;
-                    let maybeExportSymbol = getResolvedSymbol(tag);
-                    let valueDecl = maybeExportSymbol.valueDeclaration;
-                    valueSymbol = (valueDecl && valueDecl.localSymbol) || maybeExportSymbol;
+                    let sym = getResolvedSymbol(tag);
+                    valueSymbol = sym.exportSymbol || sym;
                 }
                 else {
                     valueSymbol = checkQualifiedName(<QualifiedName>node.tagName).symbol;
