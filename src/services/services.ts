@@ -944,6 +944,10 @@ namespace ts {
         }
     }
 
+    export interface HostCancellationToken {
+        isCancellationRequested(): boolean;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -955,7 +959,7 @@ namespace ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
-        getCancellationToken?(): CancellationToken;
+        getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
         log? (s: string): void;
@@ -1613,26 +1617,6 @@ namespace ts {
             module: ModuleKind.None,
             jsx: JsxEmit.Preserve
         };
-    }
-
-    export class OperationCanceledException { }
-
-    export class CancellationTokenObject {
-
-        public static None: CancellationTokenObject = new CancellationTokenObject(null)
-
-        constructor(private cancellationToken: CancellationToken) {
-        }
-
-        public isCancellationRequested() {
-            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
-        }
-
-        public throwIfCancellationRequested(): void {
-            if (this.isCancellationRequested()) {
-                throw new OperationCanceledException();
-            }
-        }
     }
 
     // Cache host information about scrip Should be refreshed 
@@ -2401,6 +2385,21 @@ namespace ts {
         return ScriptElementKind.unknown;
     }
 
+    class CancellationTokenObject implements CancellationToken {
+        constructor(private cancellationToken: HostCancellationToken) {
+        }
+
+        public isCancellationRequested() {
+            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
+        }
+
+        public throwIfCancellationRequested(): void {
+            if (this.isCancellationRequested()) {
+                throw new OperationCanceledException();
+            }
+        }
+    }
+
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
@@ -2605,7 +2604,7 @@ namespace ts {
         function getSyntacticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
         }
 
         /**
@@ -2627,13 +2626,13 @@ namespace ts {
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile);
+            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
                 return semanticDiagnostics;
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
+            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
@@ -2796,7 +2795,8 @@ namespace ts {
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+            return program.getOptionsDiagnostics(cancellationToken).concat(
+                   program.getGlobalDiagnostics(cancellationToken));
         }
 
         /// Completion
@@ -3013,20 +3013,29 @@ namespace ts {
                 let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
                 let jsxContainer = tryGetContainingJsxElement(contextToken);
                 if (objectLikeContainer) {
-                    // Object literal expression, look up possible property names from contextual type
+                    // We're looking up possible property names from contextual/inferred/declared type.
                     isMemberCompletion = true;
-                    isNewIdentifierLocation = true;
 
                     let typeForObject: Type;
                     let existingMembers: Declaration[];
 
                     if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                        // We are completing on contextual types, but may also include properties
+                        // other than those within the declared type.
+                        isNewIdentifierLocation = true;
+
                         typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
                         existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
                     }
-                    else {
+                    else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
+                        // We are *only* completing on properties from the type being destructured.
+                        isNewIdentifierLocation = false;
+
                         typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                         existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                    }
+                    else {
+                        Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
                     }
 
                     if (!typeForObject) {
@@ -3689,7 +3698,7 @@ namespace ts {
             if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
 
             if (flags & SymbolFlags.Property) {
-                if (flags & SymbolFlags.UnionProperty) {
+                if (flags & SymbolFlags.SyntheticProperty) {
                     // If union property is result of union of non method (property/accessors/variables), it is labeled as property
                     let unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                         let rootSymbolFlags = rootSymbol.getFlags();
@@ -5159,7 +5168,7 @@ namespace ts {
 
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
                 // if symbol correspond to the union property - bail out
-                if (symbol.parent || (symbol.flags & SymbolFlags.UnionProperty)) {
+                if (symbol.parent || (symbol.flags & SymbolFlags.SyntheticProperty)) {
                     return undefined;
                 }
 
@@ -5816,7 +5825,7 @@ namespace ts {
                 });
             }
 
-            let emitOutput = program.emit(sourceFile, writeFile);
+            let emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
 
             return {
                 outputFiles,
@@ -6064,6 +6073,26 @@ namespace ts {
             return convertClassifications(getEncodedSemanticClassifications(fileName, span));
         }
 
+        function checkForClassificationCancellation(kind: SyntaxKind) {
+            // We don't want to actually call back into our host on every node to find out if we've
+            // been canceled.  That would be an enormous amount of chattyness, along with the all
+            // the overhead of marshalling the data to/from the host.  So instead we pick a few
+            // reasonable node kinds to bother checking on.  These node kinds represent high level
+            // constructs that we would expect to see commonly, but just at a far less frequent 
+            // interval.
+            //
+            // For example, in checker.ts (around 750k) we only have around 600 of these constructs.
+            // That means we're calling back into the host around every 1.2k of the file we process.
+            // Lib.d.ts has similar numbers.
+            switch (kind) {
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    cancellationToken.throwIfCancellationRequested();
+            }
+        }
+
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             synchronizeHostData();
 
@@ -6131,7 +6160,10 @@ namespace ts {
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
                 if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
-                    if (node.kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
+                    let kind = node.kind;
+                    checkForClassificationCancellation(kind);
+
+                    if (kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
                         let identifier = <Identifier>node;
 
                         // Only bother calling into the typechecker if this is an identifier that
@@ -6498,6 +6530,8 @@ namespace ts {
 
                 // Ignore nodes that don't intersect the original span to classify.
                 if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
+                    checkForClassificationCancellation(element.kind);
+
                     let children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         let child = children[i];

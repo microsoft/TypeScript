@@ -461,6 +461,18 @@ namespace ts {
             }
             return node;
         }
+        export function createIntersectionType(types?: Array<TypeNode>): IntersectionTypeNode {
+            let node = createNode<IntersectionTypeNode>(SyntaxKind.IntersectionType);
+            node.types = types && createNodeArray(types)
+            return node;
+        }
+        export function updateIntersectionType(node: IntersectionTypeNode, types: Array<TypeNode>): IntersectionTypeNode {
+            if (types !== node.types) {
+                let newNode = createIntersectionType(types);
+                return updateFrom(node, newNode);
+            }
+            return node;
+        }
         export function createParenthesizedType(type?: TypeNode): ParenthesizedTypeNode {
             let node = createNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType);
             node.type = type;
@@ -2160,6 +2172,9 @@ namespace ts {
     }
     export function isUnionType(node: Node): node is UnionTypeNode {
         return node && node.kind === SyntaxKind.UnionType;
+    }
+    export function isIntersectionType(node: Node): node is IntersectionTypeNode {
+        return node && node.kind === SyntaxKind.IntersectionType;
     }
     export function isParenthesizedType(node: Node): node is ParenthesizedTypeNode {
         return node && node.kind === SyntaxKind.ParenthesizedType;

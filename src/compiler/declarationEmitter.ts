@@ -342,6 +342,8 @@ namespace ts {
                     return emitTupleType(<TupleTypeNode>type);
                 case SyntaxKind.UnionType:
                     return emitUnionType(<UnionTypeNode>type);
+                case SyntaxKind.IntersectionType:
+                    return emitIntersectionType(<IntersectionTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.FunctionType:
@@ -422,6 +424,10 @@ namespace ts {
 
             function emitUnionType(type: UnionTypeNode) {
                 emitSeparatedList(type.types, " | ", emitType);
+            }
+
+            function emitIntersectionType(type: IntersectionTypeNode) {
+                emitSeparatedList(type.types, " & ", emitType);
             }
 
             function emitParenType(type: ParenthesizedTypeNode) {

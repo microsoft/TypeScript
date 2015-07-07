@@ -17,3 +17,4 @@ goTo.marker();
 verify.completionListContains("x");
 verify.completionListContains("y");
 verify.not.completionListContains("z");
+verify.not.completionListAllowsNewIdentifier();

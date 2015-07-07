@@ -107,7 +107,8 @@ namespace ts {
             case SyntaxKind.TupleType:
                 return visitNodes(cbNodes, (<TupleTypeNode>node).elementTypes);
             case SyntaxKind.UnionType:
-                return visitNodes(cbNodes, (<UnionTypeNode>node).types);
+            case SyntaxKind.IntersectionType:
+                return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
                 return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
             case SyntaxKind.ObjectBindingPattern:
@@ -1236,6 +1237,11 @@ namespace ts {
             return isIdentifier();
         }
 
+        function nextTokenIsIdentifierOrKeyword() {
+            nextToken();
+            return isIdentifierOrKeyword();
+        }
+
         function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
             if (token === SyntaxKind.ImplementsKeyword ||
                 token === SyntaxKind.ExtendsKeyword) {
@@ -1970,8 +1976,8 @@ namespace ts {
         function parseParameter(): ParameterDeclaration {
             let node = beginNode(factory.createParameter());
             node.decorators = parseDecorators();
-            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             setModifiers(node, parseModifiers());
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
@@ -2392,20 +2398,28 @@ namespace ts {
             return type;
         }
 
-        function parseUnionTypeOrHigher(): TypeNode {
-            let type = parseArrayTypeOrHigher();
-            if (token === SyntaxKind.BarToken) {
+        function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
+            let type = parseConstituentType();
+            if (token === operator) {
                 let types = <NodeArray<TypeNode>>[type];
                 types.pos = type.pos;
-                while (parseOptional(SyntaxKind.BarToken)) {
-                    types.push(parseArrayTypeOrHigher());
+                while (parseOptional(operator)) {
+                    types.push(parseConstituentType());
                 }
                 types.end = getNodeEnd();
-                let node = beginNode(factory.createUnionType(), type.pos);
+                let node = beginNode(factory.createNode<UnionOrIntersectionTypeNode>(kind), type.pos);
                 node.types = types;
                 type = finishNode(node);
             }
             return type;
+        }
+
+        function parseIntersectionTypeOrHigher(): TypeNode {
+            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseArrayTypeOrHigher, SyntaxKind.AmpersandToken);
+        }
+
+        function parseUnionTypeOrHigher(): TypeNode {
+            return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
         }
 
         function isStartOfFunctionType(): boolean {
@@ -3152,7 +3166,7 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return parseTypeAssertion();
                     }
-                    if(lookAhead(nextTokenIsIdentifier)) {
+                    if(lookAhead(nextTokenIsIdentifierOrKeyword)) {
                         return parseJsxElementOrSelfClosingElement();
                     }
                     // Fall through
@@ -3370,7 +3384,7 @@ namespace ts {
         
         function parseJsxElementName(): EntityName {
             scanJsxIdentifier();
-            let elementName: EntityName = parseIdentifier();
+            let elementName: EntityName = parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 scanJsxIdentifier();
                 let node = beginNode(factory.createQualifiedName(), elementName.pos);

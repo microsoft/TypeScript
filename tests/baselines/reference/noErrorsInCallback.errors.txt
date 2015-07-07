@@ -1,5 +1,5 @@
-tests/cases/compiler/noErrorsInCallback.ts(4,19): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-tests/cases/compiler/noErrorsInCallback.ts(6,23): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+tests/cases/compiler/noErrorsInCallback.ts(4,19): error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'string'.
+tests/cases/compiler/noErrorsInCallback.ts(6,23): error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/noErrorsInCallback.ts (2 errors) ====
@@ -8,10 +8,10 @@ tests/cases/compiler/noErrorsInCallback.ts(6,23): error TS2345: Argument of type
     }
     var one = new Bar({}); // Error
                       ~~
-!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'string'.
     [].forEach(() => {
         var two = new Bar({}); // No error?
                           ~~
-!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'string'.
     });
      
