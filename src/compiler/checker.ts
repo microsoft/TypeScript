@@ -7299,6 +7299,16 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
+            // If we're compiling under --jsx react, the symbol 'React' should
+            // be marked as 'used' so we don't incorrectly elide its import. And if there
+            // is no 'React' symbol in scope, we should issue an error.
+            if (compilerOptions.jsx === JsxEmit.React) {
+                let reactSym = resolveName(node.tagName, 'React', SymbolFlags.Value, Diagnostics.Cannot_find_name_0, 'React');
+                if (reactSym) {
+                    getSymbolLinks(reactSym).referenced = true;
+                }
+            }
+
             let targetAttributesType = getJsxElementAttributesType(node);
 
             if (getNodeLinks(node).jsxFlags & JsxFlags.ClassElement) {
