@@ -3305,7 +3305,7 @@ namespace ts {
             let declarations: Declaration[] = [];
             for (let prop of props) {
                 if (prop.declarations) {
-                    declarations.push.apply(declarations, prop.declarations);
+                    addRange(declarations, prop.declarations);
                 }
                 propTypes.push(getTypeOfSymbol(prop));
             }

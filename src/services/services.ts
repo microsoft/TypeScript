@@ -345,7 +345,7 @@ namespace ts {
                         ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
                             let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedParamJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                                addRange(jsDocCommentParts, cleanedParamJsDocComment);
                             }
                         });
                     }
@@ -365,7 +365,7 @@ namespace ts {
                         declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
                             let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                                addRange(jsDocCommentParts, cleanedJsDocComment);
                             }
                         });
                 }
@@ -3854,7 +3854,7 @@ namespace ts {
                                         displayParts.push(spacePart());
                                     }
                                     if (!(type.flags & TypeFlags.Anonymous)) {
-                                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                        addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                                     }
                                     addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
                                     break;
@@ -3915,7 +3915,7 @@ namespace ts {
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
+                addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -3961,7 +3961,7 @@ namespace ts {
                     else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
                         addFullSymbolName(signatureDeclaration.symbol);
                     }
-                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -4022,10 +4022,10 @@ namespace ts {
                                 let typeParameterParts = mapToDisplayParts(writer => {
                                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
-                                displayParts.push.apply(displayParts, typeParameterParts);
+                                addRange(displayParts, typeParameterParts);
                             }
                             else {
-                                displayParts.push.apply(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                                addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                             }
                         }
                         else if (symbolFlags & SymbolFlags.Function ||
@@ -4059,7 +4059,7 @@ namespace ts {
             function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
                 let fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                     SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
-                displayParts.push.apply(displayParts, fullSymbolDisplayParts);
+                addRange(displayParts, fullSymbolDisplayParts);
             }
 
             function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
@@ -4089,7 +4089,7 @@ namespace ts {
             }
 
             function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
-                displayParts.push.apply(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 if (allSignatures.length > 1) {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -4106,7 +4106,7 @@ namespace ts {
                 let typeParameterParts = mapToDisplayParts(writer => {
                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
                 });
-                displayParts.push.apply(displayParts, typeParameterParts);
+                addRange(displayParts, typeParameterParts);
             }
         }
 
@@ -5620,7 +5620,7 @@ namespace ts {
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
-                        result.push.apply(result, typeChecker.getRootSymbols(contextualSymbol));
+                        addRange(result, typeChecker.getRootSymbols(contextualSymbol));
                     });
 
                     /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
