@@ -4239,17 +4239,6 @@ namespace ts {
             return mapper;
         }
 
-        function fixTypeParametersAfterInferringFromContextualParameterTypes(context: InferenceContext): void {
-            for (let i = 0; i < context.typeParameters.length; i++) {
-                let typeParameterInfo = context.inferences[i];
-                if (typeParameterInfo.fixAfterInferringFromContextualParameterType) {
-                    typeParameterInfo.fixAfterInferringFromContextualParameterType = false;
-                    typeParameterInfo.isFixed = true;
-                    getInferredType(context, i);
-                }
-            }
-        }
-
         function identityMapper(type: Type): Type {
             return type;
         }
@@ -5412,8 +5401,7 @@ namespace ts {
             let inferences: TypeInferences[] = [];
             for (let unused of typeParameters) {
                 inferences.push({
-                    primary: undefined, secondary: undefined,
-                    isFixed: false, fixAfterInferringFromContextualParameterType: false
+                    primary: undefined, secondary: undefined, isFixed: false
                 });
             }
             return {
@@ -5424,7 +5412,7 @@ namespace ts {
             };
         }
 
-        function inferTypes(context: InferenceContext, source: Type, target: Type, inferringFromContextuallyTypedParameter: boolean) {
+        function inferTypes(context: InferenceContext, source: Type, target: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
             let depth = 0;
@@ -5462,9 +5450,6 @@ namespace ts {
                                     inferences.primary || (inferences.primary = []);
                                 if (!contains(candidates, source)) {
                                     candidates.push(source);
-                                }
-                                if (inferringFromContextuallyTypedParameter) {
-                                    inferences.fixAfterInferringFromContextualParameterType = true;
                                 }
                             }
                             return;
@@ -7854,7 +7839,7 @@ namespace ts {
             let context = createInferenceContext(signature.typeParameters, /*inferUnionTypes*/ true);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypes(context, instantiateType(source, contextualMapper), target, false);
+                inferTypes(context, instantiateType(source, contextualMapper), target);
             });
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
@@ -7904,7 +7889,7 @@ namespace ts {
                         argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     }
 
-                    inferTypes(context, argType, paramType, false);
+                    inferTypes(context, argType, paramType);
                 }
             }
 
@@ -7919,7 +7904,7 @@ namespace ts {
                     if (excludeArgument[i] === false) {
                         let arg = args[i];
                         let paramType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType, false);
+                        inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
                     }
                 }
             }
@@ -8823,8 +8808,7 @@ namespace ts {
                 parameterLinks.type = instantiateType(contextualType, mapper);
             }
             else if (isInferentialContext(mapper)) {
-                inferTypes(mapper.context, parameterLinks.type, contextualType, true);
-                fixTypeParametersAfterInferringFromContextualParameterTypes(mapper.context);
+                inferTypes(mapper.context, parameterLinks.type, instantiateType(contextualType, mapper));
             }
         }
         
