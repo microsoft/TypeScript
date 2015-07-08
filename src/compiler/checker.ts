@@ -371,7 +371,8 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return indexOf(sourceFiles, file1) <= indexOf(sourceFiles, file2);        }
+            return indexOf(sourceFiles, file1) <= indexOf(sourceFiles, file2);
+        }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
@@ -783,12 +784,28 @@ namespace ts {
         }
 
 
-
+        // TODO: this needs to be rewriteen
         function getLocalTargetOfAliasDeclaration(node: Declaration): Symbol {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) ? undefined :
-                        getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>(<ImportEqualsDeclaration>node).moduleReference, <ImportEqualsDeclaration>node);
+                    //return ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) ? undefined :
+                    //    getSymbolOfPartOfRightHandSideOfImportEquals(, <ImportEqualsDeclaration>node);
+
+                    let entityName = <EntityName>(<ImportEqualsDeclaration>node).moduleReference
+                    if (entityName.kind === SyntaxKind.Identifier && isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
+                        entityName = <QualifiedName>entityName.parent;
+                    }
+                    // Check for case 1 and 3 in the above example
+                    if (entityName.kind === SyntaxKind.Identifier || entityName.parent.kind === SyntaxKind.QualifiedName) {
+                        return resolveEntityName(entityName, SymbolFlags.Namespace | SymbolFlags.Alias);
+                    }
+                    else {
+                        // Case 2 in above example
+                        // entityName.kind could be a QualifiedName or a Missing identifier
+                        Debug.assert(entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration);
+                        return resolveEntityName(entityName, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                    }
+
                 case SyntaxKind.ExportSpecifier:
                     return (<ExportDeclaration>(<ExportSpecifier>node).parent.parent).moduleSpecifier ? undefined :
                         resolveEntityName((<ExportSpecifier>node).propertyName || (<ExportSpecifier>node).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
@@ -1521,6 +1538,7 @@ namespace ts {
                             }
                         }
                         writePunctuation(writer, SyntaxKind.DotToken);
+                        writer.trackSymbol(symbol);
                     }
                     parentSymbol = symbol;
                     appendSymbolNameOnly(symbol, writer);

@@ -52,6 +52,7 @@ namespace ts {
         interface NodeLinks {
             visibleChildren?: Node[];
             visited?: boolean;
+            hasExportDeclarations?: boolean;
         }
 
         let nodeLinks: NodeLinks[] = [];
@@ -1116,6 +1117,7 @@ namespace ts {
                 case SyntaxKind.VariableStatement:
                     return visitNodes((<VariableStatement>node).declarationList.declarations);
 
+                case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -1201,7 +1203,7 @@ namespace ts {
                 let writer = createNewTextWriterWithSymbolWriter();
                 let previousErrorNode = currentErrorNode;
                 currentErrorNode = node;
-                resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                resolver.writeReturnTypeOfSignatureDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = previousErrorNode;
             }
         }
@@ -1220,7 +1222,7 @@ namespace ts {
                 let writer = createNewTextWriterWithSymbolWriter();
                 let previousErrorNode = currentErrorNode;
                 currentErrorNode = node;
-                resolver.writeTypeOfDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = previousErrorNode;
             }
         }
@@ -1231,7 +1233,7 @@ namespace ts {
             let writer = createNewTextWriterWithSymbolWriter();
             let previousErrorNode = currentErrorNode;
             currentErrorNode = node;
-            resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+            resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
             currentErrorNode = previousErrorNode;
 
             visitNodes(node.typeArguments);
@@ -1287,10 +1289,13 @@ namespace ts {
                     if (node.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent)) {
                         return true;
                     }
-                    else {
-                        // TODO: handel ambient context
-                        return (node.flags & NodeFlags.Export) !== 0;
+                    else if ((node.flags & NodeFlags.Export) !== 0) {
+                        return true;
                     }
+                    else if (node.parent.kind === SyntaxKind.ModuleBlock && isInAmbientContext(node.parent)) {
+                        return !hasExportDeclatations(node.parent);
+                    }
+                    break;
 
                 case SyntaxKind.VariableDeclaration:
                     // TODO: do we need this
@@ -1342,21 +1347,33 @@ namespace ts {
             forEach(symbol.declarations, d => collectDeclaration(d, errorNode));
         }
 
+        function hasExportDeclatations(node: Node): boolean {
+            let links = getNodeLinks(node);
+            if (typeof links.hasExportDeclarations === undefined) {
+                let foundExportDeclarations = false;
+                /// TODO: swithc this to return a value if truthy
+                forEachTopLevelDeclaration(node, n => {
+                    if (n.kind === SyntaxKind.ExportAssignment || n.kind === SyntaxKind.ExportDeclaration) {
+                        foundExportDeclarations = true;
+                    }
+                });
+                links.hasExportDeclarations = foundExportDeclarations
+            }
+            return links.hasExportDeclarations;
+        }
+
+        // TODO: find a better name
         function isDeclarationAccessible(node: Node) {
             if (isDeclarationVisible(node)) {
                 return true;
             }
 
-            let hasScopeAlteringExport = false;
             let parent = getEnclosingDeclaration(node);
-            if (parent) {
-                forEachTopLevelDeclaration(parent, (n) => {
-                    if (n.kind === SyntaxKind.ExportAssignment || n.kind === SyntaxKind.ExportDeclaration) {
-                        hasScopeAlteringExport = true;
-                    }
-                });
+            if (parent && parent.kind === SyntaxKind.ModuleDeclaration) {
+                return hasExportDeclatations(parent);
             }
-            return hasScopeAlteringExport
+
+            return false;
         }
 
         // TODO: remove this and update error messages to not use names
@@ -1369,12 +1386,12 @@ namespace ts {
 
         function reportDeclarationAccessiblityMessage(referencedDeclaration: Declaration, errorNode: Node): void {
             Debug.assert(referencedDeclaration.name && referencedDeclaration.name.kind === SyntaxKind.Identifier);
-            let referencedDeclarationName = (<Identifier>referencedDeclaration.name).text;
 
             reportedDeclarationError = true;
 
-            referencedDeclarationName = "---" + referencedDeclarationName +"---";
+            let referencedDeclarationName = (<Identifier>referencedDeclaration.name).text;
             let container = errorNode;
+
             while (true) {
                 switch (container.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -1558,7 +1575,7 @@ namespace ts {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
         // or should we just not write this file like we are doing now
-        //if (!emitDeclarationResult.reportedDeclarationError) {
+       // if (!emitDeclarationResult.reportedDeclarationError) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + emitDeclarationResult.synchronousDeclarationOutput;
             writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
