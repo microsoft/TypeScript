@@ -45,16 +45,16 @@ import {
 
 interface SyntaxNode {
     kind?: SyntaxKind;
-    kindText?: string;
+    kindName?: string;
     typeName?: string;
     members?: SyntaxMember[];
 }
 
 interface SyntaxMember {
-    param?: string;
-    property?: string;
-    type?: string;
-    elementType?: string;
+    paramName?: string;
+    propertyName?: string;
+    typeName?: string;
+    elementTypeName?: string;
     isFactoryParam?: boolean;
     isNode?: boolean;
     isNodeArray?: boolean;
@@ -256,10 +256,10 @@ function discover() {
                 let propertyIsModifiersArray = typeNode && isModifiersArray(typeNode);
                 if (propertyIsFactoryParam || propertyIsNodeArray || propertyIsModifiersArray || propertyIsNode) {
                     members.push(<SyntaxMember>{
-                        property: property.name,
-                        param: property.name === "arguments" ? "_arguments" : property.name,
-                        type: typeNode ? typeNode.getText() : "any",
-                        elementType: propertyIsNodeArray ? (<TypeReferenceNode>typeNode).typeArguments[0].getText() : undefined,
+                        propertyName: property.name,
+                        paramName: property.name === "arguments" ? "_arguments" : property.name,
+                        typeName: typeNode ? typeNode.getText() : "any",
+                        elementTypeName: propertyIsNodeArray ? (<TypeReferenceNode>typeNode).typeArguments[0].getText() : undefined,
                         isFactoryParam: propertyIsFactoryParam,
                         isNodeArray: propertyIsNodeArray,
                         isModifiersArray: propertyIsModifiersArray,
@@ -272,8 +272,8 @@ function discover() {
             if (overrides) {
                 let indices = members.map((_, i) => i);
                 indices.sort((a, b) => {
-                    let aOverride = overrides.indexOf(members[a].property);
-                    let bOverride = overrides.indexOf(members[b].property);
+                    let aOverride = overrides.indexOf(members[a].propertyName);
+                    let bOverride = overrides.indexOf(members[b].propertyName);
                     if (aOverride >= 0) {
                         if (bOverride >= 0) {
                             return aOverride - bOverride;
@@ -293,7 +293,7 @@ function discover() {
             
             syntax.push(<SyntaxNode>{ 
                 kind,
-                kindText: kindSymbol.name,
+                kindName: kindSymbol.name,
                 typeName: symbol.name,
                 members
             });
@@ -808,177 +808,177 @@ function generate(outputFile: string) {
     writer.writeLine();
     
     sys.writeFile(outputFile, writer.getText());
-}
 
-function writeCreateAndUpdateFunctions() {
-    for (let syntaxNode of syntax) {
-        writeCreateFunction(syntaxNode);
-        writeUpdateFunction(syntaxNode);
-    }
-}
-
-function writeIsNodeFunctions() {
-    for (let syntaxNode of syntax) {
-        writeIsNodeFunction(syntaxNode);
-    }
-}
-
-function writeCreateFunction(syntaxNode: SyntaxNode) {
-    writer.write(`export function create${syntaxNode.kindText}(`);
-    
-    let first = true;
-    for (let member of syntaxNode.members) {
-        if (!first) {
-            writer.write(`, `);
+    function writeCreateAndUpdateFunctions() {
+        for (let syntaxNode of syntax) {
+            writeCreateFunction(syntaxNode);
+            writeUpdateFunction(syntaxNode);
         }
-        else {
-            first = false;
-        }
-
-        let type = 
-            member.isNodeArray ? `Array<${member.elementType}>` :
-            member.isModifiersArray ? `Array<Node>` :
-            member.type; 
-        
-        writer.write(`${member.param}?: ${type}`);
     }
     
-    writer.write(`): ${syntaxNode.typeName} {`);
-    writer.writeLine();
-
-    writer.increaseIndent();
-    if (syntaxNode.members.length) {
-        writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindText});`);
-        writer.writeLine();
-        if (syntaxNode.members.length > 1) {
-            writer.write(`if (arguments.length) {`);
-            writer.writeLine();
-            writer.increaseIndent();
+    function writeIsNodeFunctions() {
+        for (let syntaxNode of syntax) {
+            writeIsNodeFunction(syntaxNode);
         }
+    }
+    
+    function writeCreateFunction(syntaxNode: SyntaxNode) {
+        writer.write(`export function create${syntaxNode.kindName}(`);
         
+        let first = true;
         for (let member of syntaxNode.members) {
-            if (member.isModifiersArray) {
-                writer.write(`setModifiers(node, modifiers);`);
-            }
-            else if (member.isNodeArray) {
-                writer.write(`node.${member.property} = ${member.param} && createNodeArray(${member.param})`);
+            if (!first) {
+                writer.write(`, `);
             }
             else {
-                writer.write(`node.${member.property} = ${member.param};`);
+                first = false;
+            }
+    
+            let type = 
+                member.isNodeArray ? `Array<${member.elementTypeName}>` :
+                member.isModifiersArray ? `Array<Node>` :
+                member.typeName; 
+            
+            writer.write(`${member.paramName}?: ${type}`);
+        }
+        
+        writer.write(`): ${syntaxNode.typeName} {`);
+        writer.writeLine();
+    
+        writer.increaseIndent();
+        if (syntaxNode.members.length) {
+            writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
+            writer.writeLine();
+            if (syntaxNode.members.length > 1) {
+                writer.write(`if (arguments.length) {`);
+                writer.writeLine();
+                writer.increaseIndent();
             }
             
+            for (let member of syntaxNode.members) {
+                if (member.isModifiersArray) {
+                    writer.write(`setModifiers(node, modifiers);`);
+                }
+                else if (member.isNodeArray) {
+                    writer.write(`node.${member.propertyName} = ${member.paramName} && createNodeArray(${member.paramName})`);
+                }
+                else {
+                    writer.write(`node.${member.propertyName} = ${member.paramName};`);
+                }
+                
+                writer.writeLine();
+            }
+            
+            if (syntaxNode.members.length > 1) {
+                writer.decreaseIndent();
+                writer.write(`}`);
+                writer.writeLine();
+            }
+        
+            writer.write(`return node;`);
             writer.writeLine();
         }
-        
-        if (syntaxNode.members.length > 1) {
-            writer.decreaseIndent();
-            writer.write(`}`);
+        else {
+            writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
             writer.writeLine();
         }
     
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+    
+    function writeIsNodeFunction(syntaxNode: SyntaxNode) {
+        writer.write(`export function is${syntaxNode.kindName}(node: Node): node is ${syntaxNode.typeName} {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        writer.write(`return node && node.kind === SyntaxKind.${syntaxNode.kindName};`);
+        writer.writeLine();
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+    
+    function writeUpdateFunction(syntaxNode: SyntaxNode) {
+        if (!hasChildNodes(syntaxNode)) {
+            return;
+        }
+        
+        writer.write(`export function update${syntaxNode.kindName}(node: ${syntaxNode.typeName}`);
+    
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            let member = syntaxNode.members[i];
+            if (member.isFactoryParam) {
+                continue;
+            }
+            
+            let type = 
+                member.isNodeArray ? `Array<${member.elementTypeName}>` :
+                member.isModifiersArray ? `Array<Node>` :
+                member.typeName;
+            
+            writer.write(`, ${member.paramName}: ${type}`);
+        }
+    
+        writer.write(`): ${syntaxNode.typeName} {`);
+        writer.writeLine();
+        
+        writer.increaseIndent();
+        
+        writer.write(`if (`);
+        let first = true;
+        for (let member of syntaxNode.members) {
+            if (member.isFactoryParam) {
+                continue;
+            }
+            
+            if (first) {
+                first = false;
+            }
+            else {
+                writer.write(` || `);
+            }
+            
+            writer.write(`${member.paramName} !== node.${member.propertyName}`);
+        }
+    
+        writer.write(`) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        writer.write(`let newNode = create${syntaxNode.kindName}(`);
+        
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            if (i > 0) {
+                writer.write(`, `);
+            }
+            
+            let member = syntaxNode.members[i];
+            if (member.isFactoryParam) {
+                writer.write(`node.${member.propertyName}`);
+            }
+            else {
+                writer.write(member.paramName);
+            }
+        }
+    
+        writer.write(`);`);
+        writer.writeLine();
+        
+        writer.write(`return updateFrom(node, newNode);`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
         writer.write(`return node;`);
         writer.writeLine();
-    }
-    else {
-        writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindText});`);
+    
+        writer.decreaseIndent();
+        writer.write(`}`);
         writer.writeLine();
     }
-
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
-}
-
-function writeIsNodeFunction(syntaxNode: SyntaxNode) {
-    writer.write(`export function is${syntaxNode.kindText}(node: Node): node is ${syntaxNode.typeName} {`);
-    writer.writeLine();
-    writer.increaseIndent();
-    writer.write(`return node && node.kind === SyntaxKind.${syntaxNode.kindText};`);
-    writer.writeLine();
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
-}
-
-function writeUpdateFunction(syntaxNode: SyntaxNode) {
-    if (!hasChildNodes(syntaxNode)) {
-        return;
-    }
-    
-    writer.write(`export function update${syntaxNode.kindText}(node: ${syntaxNode.typeName}`);
-
-    for (let i = 0; i < syntaxNode.members.length; ++i) {
-        let member = syntaxNode.members[i];
-        if (member.isFactoryParam) {
-            continue;
-        }
-        
-        let type = 
-            member.isNodeArray ? `Array<${member.elementType}>` :
-            member.isModifiersArray ? `Array<Node>` :
-            member.type;
-        
-        writer.write(`, ${member.param}: ${type}`);
-    }
-
-    writer.write(`): ${syntaxNode.typeName} {`);
-    writer.writeLine();
-    
-    writer.increaseIndent();
-    
-    writer.write(`if (`);
-    let first = true;
-    for (let member of syntaxNode.members) {
-        if (member.isFactoryParam) {
-            continue;
-        }
-        
-        if (first) {
-            first = false;
-        }
-        else {
-            writer.write(` || `);
-        }
-        
-        writer.write(`${member.param} !== node.${member.property}`);
-    }
-
-    writer.write(`) {`);
-    writer.writeLine();
-    writer.increaseIndent();
-    
-    writer.write(`let newNode = create${syntaxNode.kindText}(`);
-    
-    for (let i = 0; i < syntaxNode.members.length; ++i) {
-        if (i > 0) {
-            writer.write(`, `);
-        }
-        
-        let member = syntaxNode.members[i];
-        if (member.isFactoryParam) {
-            writer.write(`node.${member.property}`);
-        }
-        else {
-            writer.write(member.param);
-        }
-    }
-
-    writer.write(`);`);
-    writer.writeLine();
-    
-    writer.write(`return updateFrom(node, newNode);`);
-    writer.writeLine();
-    
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
-    
-    writer.write(`return node;`);
-    writer.writeLine();
-
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
 }
 
 function hasChildNodes(syntaxNode: SyntaxNode) {
