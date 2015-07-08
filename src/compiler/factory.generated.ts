@@ -104,8 +104,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateParameter(node: ParameterDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): ParameterDeclaration {
+        export function updateParameter(node: ParameterDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): ParameterDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer);
@@ -137,8 +137,8 @@ namespace ts {
             }
             return node;
         }
-        export function updatePropertySignature(node: PropertySignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName, 
-            type: TypeNode): PropertySignature {
+        export function updatePropertySignature(node: PropertySignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+            , type: TypeNode): PropertySignature {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type) {
                 let newNode = createPropertySignature(decorators, modifiers, name, node.questionToken, type);
                 return updateFrom(node, newNode);
@@ -158,8 +158,8 @@ namespace ts {
             }
             return node;
         }
-        export function updatePropertyDeclaration(node: PropertyDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: DeclarationName, type: TypeNode, initializer: Expression): PropertyDeclaration {
+        export function updatePropertyDeclaration(node: PropertyDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , name: DeclarationName, type: TypeNode, initializer: Expression): PropertyDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createPropertyDeclaration(decorators, modifiers, name, node.questionToken, type, initializer);
@@ -181,8 +181,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateMethodSignature(node: MethodSignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName, 
-            typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): MethodSignature {
+        export function updateMethodSignature(node: MethodSignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+            , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): MethodSignature {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type) {
                 let newNode = createMethodSignature(decorators, modifiers, name, node.questionToken, typeParameters, parameters, type);
@@ -205,8 +205,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateMethodDeclaration(node: MethodDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName, 
-            typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block
+        export function updateMethodDeclaration(node: MethodDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+            , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block
             ): MethodDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type || body !== node.body) {
@@ -227,8 +227,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateConstructor(node: ConstructorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): ConstructorDeclaration {
+        export function updateConstructor(node: ConstructorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): ConstructorDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || parameters !== node.parameters || type !== node.type || 
                 body !== node.body) {
                 let newNode = createConstructor(decorators, modifiers, parameters, type, body);
@@ -249,8 +249,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateGetAccessor(node: GetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): GetAccessorDeclaration {
+        export function updateGetAccessor(node: GetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+            , parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): GetAccessorDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || parameters !== node.parameters || 
                 type !== node.type || body !== node.body) {
                 let newNode = createGetAccessor(decorators, modifiers, name, parameters, type, body);
@@ -271,8 +271,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateSetAccessor(node: SetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): SetAccessorDeclaration {
+        export function updateSetAccessor(node: SetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+            , parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): SetAccessorDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || parameters !== node.parameters || 
                 type !== node.type || body !== node.body) {
                 let newNode = createSetAccessor(decorators, modifiers, name, parameters, type, body);
@@ -290,8 +290,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateCallSignature(node: CallSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode): CallSignatureDeclaration {
+        export function updateCallSignature(node: CallSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>
+            , parameters: Array<ParameterDeclaration>, type: TypeNode): CallSignatureDeclaration {
             if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
                 let newNode = createCallSignature(typeParameters, parameters, type);
                 return updateFrom(node, newNode);
@@ -308,8 +308,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructSignatureDeclaration {
+        export function updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>
+            , parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructSignatureDeclaration {
             if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
                 let newNode = createConstructSignature(typeParameters, parameters, type);
                 return updateFrom(node, newNode);
@@ -327,8 +327,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateIndexSignature(node: IndexSignatureDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration {
+        export function updateIndexSignature(node: IndexSignatureDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , parameters: Array<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || parameters !== node.parameters || type !== node.type) {
                 let newNode = createIndexSignature(decorators, modifiers, parameters, type);
                 return updateFrom(node, newNode);
@@ -375,8 +375,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateFunctionType(node: FunctionTypeNode, typeParameters: Array<TypeParameterDeclaration>, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode): FunctionTypeNode {
+        export function updateFunctionType(node: FunctionTypeNode, typeParameters: Array<TypeParameterDeclaration>
+            , parameters: Array<ParameterDeclaration>, type: TypeNode): FunctionTypeNode {
             if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
                 let newNode = createFunctionType(typeParameters, parameters, type);
                 return updateFrom(node, newNode);
@@ -393,8 +393,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateConstructorType(node: ConstructorTypeNode, typeParameters: Array<TypeParameterDeclaration>, 
-            parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode {
+        export function updateConstructorType(node: ConstructorTypeNode, typeParameters: Array<TypeParameterDeclaration>
+            , parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode {
             if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
                 let newNode = createConstructorType(typeParameters, parameters, type);
                 return updateFrom(node, newNode);
@@ -509,8 +509,8 @@ namespace ts {
             }
             return node;
         }
-        export function createBindingElement(decorators?: Array<Decorator>, modifiers?: Array<Node>, propertyName?: Identifier, 
-            dotDotDotToken?: Node, name?: BindingPattern | Identifier, initializer?: Expression): BindingElement {
+        export function createBindingElement(decorators?: Array<Decorator>, modifiers?: Array<Node>, propertyName?: Identifier, dotDotDotToken?: Node
+            , name?: BindingPattern | Identifier, initializer?: Expression): BindingElement {
             let node = createNode<BindingElement>(SyntaxKind.BindingElement);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
@@ -522,8 +522,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateBindingElement(node: BindingElement, decorators: Array<Decorator>, modifiers: Array<Node>, propertyName: Identifier, 
-            name: BindingPattern | Identifier, initializer: Expression): BindingElement {
+        export function updateBindingElement(node: BindingElement, decorators: Array<Decorator>, modifiers: Array<Node>, propertyName: Identifier
+            , name: BindingPattern | Identifier, initializer: Expression): BindingElement {
             if (decorators !== node.decorators || modifiers !== node.modifiers || propertyName !== node.propertyName || name !== node.name || 
                 initializer !== node.initializer) {
                 let newNode = createBindingElement(decorators, modifiers, propertyName, node.dotDotDotToken, name, initializer);
@@ -553,8 +553,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateObjectLiteralExpression(node: ObjectLiteralExpression, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            properties: Array<ObjectLiteralElement>): ObjectLiteralExpression {
+        export function updateObjectLiteralExpression(node: ObjectLiteralExpression, decorators: Array<Decorator>, modifiers: Array<Node>
+            , properties: Array<ObjectLiteralElement>): ObjectLiteralExpression {
             if (decorators !== node.decorators || modifiers !== node.modifiers || properties !== node.properties) {
                 let newNode = createObjectLiteralExpression(decorators, modifiers, properties);
                 return updateFrom(node, newNode);
@@ -588,8 +588,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateElementAccessExpression(node: ElementAccessExpression, expression: LeftHandSideExpression, 
-            argumentExpression: Expression): ElementAccessExpression {
+        export function updateElementAccessExpression(node: ElementAccessExpression, expression: LeftHandSideExpression
+            , argumentExpression: Expression): ElementAccessExpression {
             if (expression !== node.expression || argumentExpression !== node.argumentExpression) {
                 let newNode = createElementAccessExpression(expression, argumentExpression);
                 return updateFrom(node, newNode);
@@ -606,8 +606,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateCallExpression(node: CallExpression, expression: LeftHandSideExpression, typeArguments: Array<TypeNode>, 
-            _arguments: Array<Expression>): CallExpression {
+        export function updateCallExpression(node: CallExpression, expression: LeftHandSideExpression, typeArguments: Array<TypeNode>
+            , _arguments: Array<Expression>): CallExpression {
             if (expression !== node.expression || typeArguments !== node.typeArguments || _arguments !== node.arguments) {
                 let newNode = createCallExpression(expression, typeArguments, _arguments);
                 return updateFrom(node, newNode);
@@ -624,8 +624,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateNewExpression(node: NewExpression, expression: LeftHandSideExpression, typeArguments: Array<TypeNode>, 
-            _arguments: Array<Expression>): NewExpression {
+        export function updateNewExpression(node: NewExpression, expression: LeftHandSideExpression, typeArguments: Array<TypeNode>
+            , _arguments: Array<Expression>): NewExpression {
             if (expression !== node.expression || typeArguments !== node.typeArguments || _arguments !== node.arguments) {
                 let newNode = createNewExpression(expression, typeArguments, _arguments);
                 return updateFrom(node, newNode);
@@ -641,8 +641,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: LeftHandSideExpression, 
-            template: LiteralExpression | TemplateExpression): TaggedTemplateExpression {
+        export function updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: LeftHandSideExpression
+            , template: LiteralExpression | TemplateExpression): TaggedTemplateExpression {
             if (tag !== node.tag || template !== node.template) {
                 let newNode = createTaggedTemplateExpression(tag, template);
                 return updateFrom(node, newNode);
@@ -692,8 +692,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateFunctionExpression(node: FunctionExpression, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier, 
-            typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block | Expression
+        export function updateFunctionExpression(node: FunctionExpression, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block | Expression
             ): FunctionExpression {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type || body !== node.body) {
@@ -716,8 +716,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateArrowFunction(node: ArrowFunction, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block | Expression
+        export function updateArrowFunction(node: ArrowFunction, decorators: Array<Decorator>, modifiers: Array<Node>
+            , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block | Expression
             ): ArrowFunction {
             if (decorators !== node.decorators || modifiers !== node.modifiers || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type || body !== node.body) {
@@ -897,8 +897,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateClassExpression(node: ClassExpression, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier, 
-            typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<ClassElement>
+        export function updateClassExpression(node: ClassExpression, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<ClassElement>
             ): ClassExpression {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 heritageClauses !== node.heritageClauses || members !== node.members) {
@@ -919,8 +919,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: LeftHandSideExpression, 
-            typeArguments: Array<TypeNode>): ExpressionWithTypeArguments {
+        export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: LeftHandSideExpression
+            , typeArguments: Array<TypeNode>): ExpressionWithTypeArguments {
             if (expression !== node.expression || typeArguments !== node.typeArguments) {
                 let newNode = createExpressionWithTypeArguments(expression, typeArguments);
                 return updateFrom(node, newNode);
@@ -1057,9 +1057,10 @@ namespace ts {
             }
             return node;
         }
-        export function updateForStatement(node: ForStatement, initializer: Expression | VariableDeclarationList, condition: Expression, 
-            incrementor: Expression, statement: Statement): ForStatement {
-            if (initializer !== node.initializer || condition !== node.condition || incrementor !== node.incrementor || statement !== node.statement) {
+        export function updateForStatement(node: ForStatement, initializer: Expression | VariableDeclarationList, condition: Expression
+            , incrementor: Expression, statement: Statement): ForStatement {
+            if (initializer !== node.initializer || condition !== node.condition || incrementor !== node.incrementor || statement !== node.statement
+                ) {
                 let newNode = createForStatement(initializer, condition, incrementor, statement);
                 return updateFrom(node, newNode);
             }
@@ -1075,8 +1076,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateForInStatement(node: ForInStatement, initializer: Expression | VariableDeclarationList, expression: Expression, 
-            statement: Statement): ForInStatement {
+        export function updateForInStatement(node: ForInStatement, initializer: Expression | VariableDeclarationList, expression: Expression
+            , statement: Statement): ForInStatement {
             if (initializer !== node.initializer || expression !== node.expression || statement !== node.statement) {
                 let newNode = createForInStatement(initializer, expression, statement);
                 return updateFrom(node, newNode);
@@ -1093,8 +1094,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateForOfStatement(node: ForOfStatement, initializer: Expression | VariableDeclarationList, expression: Expression, 
-            statement: Statement): ForOfStatement {
+        export function updateForOfStatement(node: ForOfStatement, initializer: Expression | VariableDeclarationList, expression: Expression
+            , statement: Statement): ForOfStatement {
             if (initializer !== node.initializer || expression !== node.expression || statement !== node.statement) {
                 let newNode = createForOfStatement(initializer, expression, statement);
                 return updateFrom(node, newNode);
@@ -1225,8 +1226,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateVariableDeclaration(node: VariableDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): VariableDeclaration {
+        export function updateVariableDeclaration(node: VariableDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): VariableDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createVariableDeclaration(decorators, modifiers, name, type, initializer);
@@ -1263,8 +1264,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier, 
-            typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block
+        export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block
             ): FunctionDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type || body !== node.body) {
@@ -1287,8 +1288,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateClassDeclaration(node: ClassDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier, 
-            typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<ClassElement>
+        export function updateClassDeclaration(node: ClassDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<ClassElement>
             ): ClassDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 heritageClauses !== node.heritageClauses || members !== node.members) {
@@ -1311,8 +1312,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: Identifier, typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<Declaration>
+        export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<Declaration>
             ): InterfaceDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 heritageClauses !== node.heritageClauses || members !== node.members) {
@@ -1333,8 +1334,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: Identifier, typeParameters: Array<TypeParameterDeclaration>, type: TypeNode): TypeAliasDeclaration {
+        export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , typeParameters: Array<TypeParameterDeclaration>, type: TypeNode): TypeAliasDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 type !== node.type) {
                 let newNode = createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type);
@@ -1353,8 +1354,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateEnumDeclaration(node: EnumDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier, 
-            members: Array<EnumMember>): EnumDeclaration {
+        export function updateEnumDeclaration(node: EnumDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
+            , members: Array<EnumMember>): EnumDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || members !== node.members) {
                 let newNode = createEnumDeclaration(decorators, modifiers, name, members);
                 return updateFrom(node, newNode);
@@ -1372,8 +1373,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateModuleDeclaration(node: ModuleDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: Identifier | LiteralExpression, body: ModuleBlock | ModuleDeclaration): ModuleDeclaration {
+        export function updateModuleDeclaration(node: ModuleDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , name: Identifier | LiteralExpression, body: ModuleBlock | ModuleDeclaration): ModuleDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || body !== node.body) {
                 let newNode = createModuleDeclaration(decorators, modifiers, name, body);
                 return updateFrom(node, newNode);
@@ -1415,8 +1416,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            name: Identifier, moduleReference: EntityName | ExternalModuleReference): ImportEqualsDeclaration {
+        export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , name: Identifier, moduleReference: EntityName | ExternalModuleReference): ImportEqualsDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || moduleReference !== node.moduleReference) {
                 let newNode = createImportEqualsDeclaration(decorators, modifiers, name, moduleReference);
                 return updateFrom(node, newNode);
@@ -1434,8 +1435,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateImportDeclaration(node: ImportDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            importClause: ImportClause, moduleSpecifier: Expression): ImportDeclaration {
+        export function updateImportDeclaration(node: ImportDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , importClause: ImportClause, moduleSpecifier: Expression): ImportDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || importClause !== node.importClause || 
                 moduleSpecifier !== node.moduleSpecifier) {
                 let newNode = createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier);
@@ -1525,8 +1526,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateExportDeclaration(node: ExportDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, 
-            exportClause: NamedExports, moduleSpecifier: Expression): ExportDeclaration {
+        export function updateExportDeclaration(node: ExportDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
+            , exportClause: NamedExports, moduleSpecifier: Expression): ExportDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || exportClause !== node.exportClause || 
                 moduleSpecifier !== node.moduleSpecifier) {
                 let newNode = createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier);
@@ -1599,8 +1600,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: Array<JsxChild>, 
-            closingElement: JsxClosingElement): JsxElement {
+        export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: Array<JsxChild>
+            , closingElement: JsxClosingElement): JsxElement {
             if (openingElement !== node.openingElement || children !== node.children || closingElement !== node.closingElement) {
                 let newNode = createJsxElement(openingElement, children, closingElement);
                 return updateFrom(node, newNode);
@@ -1616,8 +1617,8 @@ namespace ts {
             }
             return node;
         }
-        export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: EntityName, 
-            attributes: Array<JsxAttribute | JsxSpreadAttribute>): JsxSelfClosingElement {
+        export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: EntityName
+            , attributes: Array<JsxAttribute | JsxSpreadAttribute>): JsxSelfClosingElement {
             if (tagName !== node.tagName || attributes !== node.attributes) {
                 let newNode = createJsxSelfClosingElement(tagName, attributes);
                 return updateFrom(node, newNode);
@@ -2017,10 +2018,10 @@ namespace ts {
             }
             return node;
         }
-        export function updateJSDocParameterTag(node: JSDocParameterTag, preParameterName: Identifier, typeExpression: JSDocTypeExpression, 
-            postParameterName: Identifier, tagName: Identifier): JSDocParameterTag {
-            if (preParameterName !== node.preParameterName || typeExpression !== node.typeExpression || postParameterName !== node.postParameterName || 
-                tagName !== node.tagName) {
+        export function updateJSDocParameterTag(node: JSDocParameterTag, preParameterName: Identifier, typeExpression: JSDocTypeExpression
+            , postParameterName: Identifier, tagName: Identifier): JSDocParameterTag {
+            if (preParameterName !== node.preParameterName || typeExpression !== node.typeExpression || postParameterName !== node.postParameterName
+                || tagName !== node.tagName) {
                 let newNode = createJSDocParameterTag(preParameterName, typeExpression, postParameterName, node.atToken, tagName);
                 return updateFrom(node, newNode);
             }
