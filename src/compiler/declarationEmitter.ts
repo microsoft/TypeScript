@@ -765,7 +765,7 @@ namespace ts {
         // TODO: we only should have either statement or declaration
         function emitVariableDeclarationWithoutStatement(node: VariableDeclaration) {
             emitJsDocComments(node);
-            emitModuleElementDeclarationFlags(node);
+            emitModuleElementDeclarationFlags(node.parent.parent);
             var declarationList = node.parent;
             if (isLet(declarationList)) {
                 write("let ");
@@ -1184,6 +1184,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 collectAliasDeclaration(node);
             }
+            // TODO handle expression type
         }
 
         function visitSignatureDeclaration(node: SignatureDeclaration): void {
@@ -1252,7 +1253,7 @@ namespace ts {
         }
 
 
-        function isDeclarationVisible(node: Node): boolean {
+        function isDeclarationExported(node: Node): boolean {
             if (compilerOptions.stripInternal && isInternal(node)) {
                 // TODO: this is the correct place for this check, enable this 
                 // after updating the code to make internal on local declarations instead
@@ -1299,7 +1300,7 @@ namespace ts {
 
                 case SyntaxKind.VariableDeclaration:
                     // TODO: do we need this
-                    return isDeclarationVisible(node.parent.parent);
+                    return isDeclarationExported(node.parent.parent);
             }
 
             return false;
@@ -1349,7 +1350,7 @@ namespace ts {
 
         function hasExportDeclatations(node: Node): boolean {
             let links = getNodeLinks(node);
-            if (typeof links.hasExportDeclarations === undefined) {
+            if (typeof links.hasExportDeclarations === "undefined") {
                 let foundExportDeclarations = false;
                 /// TODO: swithc this to return a value if truthy
                 forEachTopLevelDeclaration(node, n => {
@@ -1362,15 +1363,30 @@ namespace ts {
             return links.hasExportDeclarations;
         }
 
-        // TODO: find a better name
-        function isDeclarationAccessible(node: Node) {
-            if (isDeclarationVisible(node)) {
+        /**
+         * Can the the declaration of this node be emitted without causing it 
+         * to be exported from its parent in the .d.ts where it was not in the .ts
+         *
+         * This is caused by the scoping rules withen an ambient module or namespace
+         * declaration where *all* top-level declarations are considered exported wether
+         * they have an export modifier or not.
+         *
+         */
+        function canWriteDeclaration(node: Node) : boolean{
+            // If the declaration is exported from its parent, we can
+            // safelly write a declaration for it
+            if (isDeclarationExported(node)) {
                 return true;
             }
 
+            // If the parent module has an export declaration  or export
+            // assingment, then the scoping rules change, and only declarations
+            // with export modifier are visible, so we can safely write 
+            // a declaration of a non-exported entity without exposing it
             let parent = getEnclosingDeclaration(node);
-            if (parent && parent.kind === SyntaxKind.ModuleDeclaration) {
-                return hasExportDeclatations(parent);
+            if (parent) {
+                return (parent.kind === SyntaxKind.ModuleDeclaration || parent.kind === SyntaxKind.SourceFile) &&
+                    hasExportDeclatations(parent);
             }
 
             return false;
@@ -1503,7 +1519,7 @@ namespace ts {
             }
 
             if (errorNode) {
-                if (!isDeclarationAccessible(node)) {
+                if (!canWriteDeclaration(node)) {
                     reportDeclarationAccessiblityMessage(<Declaration>node, errorNode);
                 }
             }
@@ -1514,14 +1530,18 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                    forEachTopLevelDeclaration(node, child => {
-                        if (isDeclarationVisible(child)) {
-                            collectDeclaration(child);
-                        }
-                    });
+                    collectTopLevelChildDeclarations(node);
                     break;
             }
 
+        }
+
+        function collectTopLevelChildDeclarations(node: Node): void {
+            forEachTopLevelDeclaration(node, child => {
+                if (isDeclarationExported(child)) {
+                    collectDeclaration(child);
+                }
+            });
         }
 
         function ensureDeclarationVisible(node: Node): void {
@@ -1559,11 +1579,7 @@ namespace ts {
 
         function emitSourceFileDeclarations(sourceFile: SourceFile): void {
             // Collect all visible declarations
-            forEachTopLevelDeclaration(sourceFile, child => {
-                if (isDeclarationVisible(child)) {
-                    collectDeclaration(child);
-                }
-            });
+            collectTopLevelChildDeclarations(sourceFile);
 
             // write the declarations
             writeChildDeclarations(sourceFile);
@@ -1575,10 +1591,10 @@ namespace ts {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
         // or should we just not write this file like we are doing now
-       // if (!emitDeclarationResult.reportedDeclarationError) {
+        if (!emitDeclarationResult.reportedDeclarationError) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + emitDeclarationResult.synchronousDeclarationOutput;
             writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
-        //}
+        }
     }
 }
