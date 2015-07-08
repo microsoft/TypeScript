@@ -1893,6 +1893,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        context?: InferenceContext;
     }
 
     /* @internal */
@@ -1901,6 +1902,8 @@ namespace ts {
         secondary: Type[];  // Inferences made to a type parameter in a union type
         isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
                             // If a type parameter is fixed, no more inferences can be made for the type parameter
+
+        fixAfterInferringFromContextualParameterType: boolean;
     }
 
     /* @internal */

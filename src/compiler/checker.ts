@@ -4225,7 +4225,7 @@ namespace ts {
         }
 
         function createInferenceMapper(context: InferenceContext): TypeMapper {
-            return t => {
+            let mapper: TypeMapper = t => {
                 for (let i = 0; i < context.typeParameters.length; i++) {
                     if (t === context.typeParameters[i]) {
                         context.inferences[i].isFixed = true;
@@ -4233,6 +4233,20 @@ namespace ts {
                     }
                 }
                 return t;
+            }
+            
+            mapper.context = context;
+            return mapper;
+        }
+
+        function fixTypeParametersAfterInferringFromContextualParameterTypes(context: InferenceContext): void {
+            for (let i = 0; i < context.typeParameters.length; i++) {
+                let typeParameterInfo = context.inferences[i];
+                if (typeParameterInfo.fixAfterInferringFromContextualParameterType) {
+                    typeParameterInfo.fixAfterInferringFromContextualParameterType = false;
+                    typeParameterInfo.isFixed = true;
+                    getInferredType(context, i);
+                }
             }
         }
 
@@ -5397,7 +5411,10 @@ namespace ts {
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             let inferences: TypeInferences[] = [];
             for (let unused of typeParameters) {
-                inferences.push({ primary: undefined, secondary: undefined, isFixed: false });
+                inferences.push({
+                    primary: undefined, secondary: undefined,
+                    isFixed: false, fixAfterInferringFromContextualParameterType: false
+                });
             }
             return {
                 typeParameters,
@@ -5407,7 +5424,7 @@ namespace ts {
             };
         }
 
-        function inferTypes(context: InferenceContext, source: Type, target: Type) {
+        function inferTypes(context: InferenceContext, source: Type, target: Type, inferringFromContextuallyTypedParameter: boolean) {
             let sourceStack: Type[];
             let targetStack: Type[];
             let depth = 0;
@@ -5445,6 +5462,9 @@ namespace ts {
                                     inferences.primary || (inferences.primary = []);
                                 if (!contains(candidates, source)) {
                                     candidates.push(source);
+                                }
+                                if (inferringFromContextuallyTypedParameter) {
+                                    inferences.fixAfterInferringFromContextualParameterType = true;
                                 }
                             }
                             return;
@@ -6698,7 +6718,7 @@ namespace ts {
         // Presence of a contextual type mapper indicates inferential typing, except the identityMapper object is
         // used as a special marker for other purposes.
         function isInferentialContext(mapper: TypeMapper) {
-            return mapper && mapper !== identityMapper;
+            return mapper && mapper.context;
         }
 
         // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
@@ -7834,7 +7854,7 @@ namespace ts {
             let context = createInferenceContext(signature.typeParameters, /*inferUnionTypes*/ true);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypes(context, instantiateType(source, contextualMapper), target);
+                inferTypes(context, instantiateType(source, contextualMapper), target, false);
             });
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
@@ -7884,7 +7904,7 @@ namespace ts {
                         argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     }
 
-                    inferTypes(context, argType, paramType);
+                    inferTypes(context, argType, paramType, false);
                 }
             }
 
@@ -7899,7 +7919,7 @@ namespace ts {
                     if (excludeArgument[i] === false) {
                         let arg = args[i];
                         let paramType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
+                        inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType, false);
                     }
                 }
             }
@@ -8788,13 +8808,23 @@ namespace ts {
             let len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 let parameter = signature.parameters[i];
-                let links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeAtPosition(context, i), mapper);
+                let contextualParameterType = getTypeAtPosition(context, i);
+                assignTypeToParameterAndFixTypeParameters(getSymbolLinks(parameter), contextualParameterType, mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
                 let parameter = lastOrUndefined(signature.parameters);
-                let links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeOfSymbol(lastOrUndefined(context.parameters)), mapper);
+                let contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
+                assignTypeToParameterAndFixTypeParameters(getSymbolLinks(parameter), contextualParameterType, mapper);
+            }
+        }
+
+        function assignTypeToParameterAndFixTypeParameters(parameterLinks: SymbolLinks, contextualType: Type, mapper: TypeMapper) {
+            if (!parameterLinks.type) {
+                parameterLinks.type = instantiateType(contextualType, mapper);
+            }
+            else if (isInferentialContext(mapper)) {
+                inferTypes(mapper.context, parameterLinks.type, contextualType, true);
+                fixTypeParametersAfterInferringFromContextualParameterTypes(mapper.context);
             }
         }
         
@@ -9014,27 +9044,34 @@ namespace ts {
             
             let links = getNodeLinks(node);
             let type = getTypeOfSymbol(node.symbol);
+            let contextSensitive = isContextSensitive(node);
+            let mightFixTypeParameters = contextSensitive && isInferentialContext(contextualMapper);
+
             // Check if function expression is contextually typed and assign parameter types if so
-            if (!(links.flags & NodeCheckFlags.ContextChecked)) {
+            if (mightFixTypeParameters || !(links.flags & NodeCheckFlags.ContextChecked)) {
                 let contextualSignature = getContextualSignature(node);
                 // If a type check is started at a function expression that is an argument of a function call, obtaining the
                 // contextual type may recursively get back to here during overload resolution of the call. If so, we will have
                 // already assigned contextual types.
-                if (!(links.flags & NodeCheckFlags.ContextChecked)) {
+                let contextChecked = !!(links.flags & NodeCheckFlags.ContextChecked);
+                if (mightFixTypeParameters || !contextChecked) {
                     links.flags |= NodeCheckFlags.ContextChecked;
                     if (contextualSignature) {
                         let signature = getSignaturesOfType(type, SignatureKind.Call)[0];
-                        if (isContextSensitive(node)) {
+                        if (contextSensitive) {
                             assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
                         }
-                        if (!node.type && !signature.resolvedReturnType) {
+                        if (mightFixTypeParameters || !node.type && !signature.resolvedReturnType) {
                             let returnType = getReturnTypeFromBody(node, contextualMapper);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
                         }
                     }
-                    checkSignatureDeclaration(node);
+
+                    if (!contextChecked) {
+                        checkSignatureDeclaration(node);
+                    }
                 }
             }
 
@@ -9724,7 +9761,7 @@ namespace ts {
         }
 
         function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration, type: Type, contextualMapper?: TypeMapper) {
-            if (contextualMapper && contextualMapper !== identityMapper) {
+            if (isInferentialContext(contextualMapper)) {
                 let signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
                     let contextualType = getContextualType(<Expression>node);
