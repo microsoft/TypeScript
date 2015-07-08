@@ -82,7 +82,7 @@ namespace ts {
 
     function reportDiagnostic(diagnostic: Diagnostic) {
         var output = "";
-        
+
         if (diagnostic.file) {
             var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
@@ -257,7 +257,7 @@ namespace ts {
             var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName, removed) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -279,9 +279,15 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile) {
+        function sourceFileChanged(sourceFile: SourceFile, removed: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
+            if (removed){
+                var index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index !== -1){
+                    rootFileNames.splice(index, 1);
+                }
+            }
             startTimer();
         }
 
@@ -354,11 +360,11 @@ namespace ts {
         return { program, exitStatus };
 
         function compileProgram(): ExitStatus {
-            // First get any syntactic errors. 
+            // First get any syntactic errors.
             var diagnostics = program.getSyntacticDiagnostics();
             reportDiagnostics(diagnostics);
 
-            // If we didn't have any syntactic errors, then also try getting the global and 
+            // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
                 var diagnostics = program.getGlobalDiagnostics();
