@@ -178,7 +178,7 @@ namespace ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems {
         let typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help

@@ -10,3 +10,4 @@
 
 goTo.marker();
 verify.completionListContains("property1");
+verify.not.completionListAllowsNewIdentifier();

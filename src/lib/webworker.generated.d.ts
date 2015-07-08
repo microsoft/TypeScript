@@ -571,8 +571,7 @@ interface WebSocket extends EventTarget {
 
 declare var WebSocket: {
     prototype: WebSocket;
-    new(url: string, protocols?: string): WebSocket;
-    new(url: string, protocols?: any): WebSocket;
+    new(url: string, protocols?: string | string[]): WebSocket;
     CLOSED: number;
     CLOSING: number;
     CONNECTING: number;
@@ -807,8 +806,7 @@ interface EventListenerObject {
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
-    (event: Event, source?: string, fileno?: number, columnNumber?: number): void;
-    (event: string, source?: string, fileno?: number, columnNumber?: number): void;
+    (event: Event | string, source?: string, fileno?: number, columnNumber?: number): void;
 }
 interface PositionCallback {
     (position: Position): void;

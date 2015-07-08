@@ -191,7 +191,8 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        if (commandLine.options.watch) {
+        // Firefox has Object.prototype.watch
+        if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);

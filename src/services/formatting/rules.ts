@@ -318,7 +318,7 @@ namespace ts.formatting {
             this.NoSpaceAfterModuleImport = new Rule(RuleDescriptor.create2(Shared.TokenRange.FromTokens([SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword]), SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Add a space around certain TypeScript keywords
-            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceBeforeCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
@@ -344,7 +344,7 @@ namespace ts.formatting {
             // decorators
             this.SpaceBeforeAt = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.AtToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterAt = new Rule(RuleDescriptor.create3(SyntaxKind.AtToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.SpaceAfterDecorator = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.ExportKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.ClassKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PublicKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword, SyntaxKind.OpenBracketToken, SyntaxKind.AsteriskToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsEndOfDecoratorContextOnSameLine), RuleAction.Space));
+            this.SpaceAfterDecorator = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.Identifier, SyntaxKind.ExportKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.ClassKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PublicKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword, SyntaxKind.OpenBracketToken, SyntaxKind.AsteriskToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsEndOfDecoratorContextOnSameLine), RuleAction.Space));
 
             this.NoSpaceBetweenFunctionKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Delete));
             this.SpaceAfterStarInGeneratorDeclaration = new Rule(RuleDescriptor.create3(SyntaxKind.AsteriskToken, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Space));
@@ -470,6 +470,7 @@ namespace ts.formatting {
             switch (context.contextNode.kind) {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.TypePredicate:
                     return true;
 
