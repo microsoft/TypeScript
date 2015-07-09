@@ -273,7 +273,7 @@ namespace ts {
         // Module references
         ExternalModuleReference,
 
-        //JSX
+        // JSX
         JsxElement,
         JsxSelfClosingElement,
         JsxOpeningElement,

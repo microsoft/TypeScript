@@ -600,20 +600,20 @@ namespace ts {
 
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/foler2/
-        // In this example the root is:  http://www.website.com/ 
+        // In this example the root is:  http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
         let urlLength = url.length;
         // Initial root length is http:// part
         let rootLength = url.indexOf("://") + "://".length;
         while (rootLength < urlLength) {
-            // Consume all immediate slashes in the protocol 
+            // Consume all immediate slashes in the protocol
             // eg.initial rootlength is just file:// but it needs to consume another "/" in file:///
             if (url.charCodeAt(rootLength) === CharacterCodes.slash) {
                 rootLength++;
             }
             else {
-                // non slash character means we continue proceeding to next component of root search 
+                // non slash character means we continue proceeding to next component of root search
                 break;
             }
         }
@@ -626,15 +626,15 @@ namespace ts {
         // Find the index of "/" after website.com so the root can be http://www.website.com/ (from existing http://)
         let indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
-            // Found the "/" after the website.com so the root is length of http://www.website.com/ 
+            // Found the "/" after the website.com so the root is length of http://www.website.com/
             // and get components afetr the root normally like any other folder components
             rootLength = indexOfNextSlash + 1;
             return normalizedPathComponents(url, rootLength);
         }
         else {
-            // Can't find the host assume the rest of the string as component 
+            // Can't find the host assume the rest of the string as component
             // but make sure we append "/"  to it as root is not joined using "/"
-            // eg. if url passed in was http://website.com we want to use root as [http://website.com/] 
+            // eg. if url passed in was http://website.com we want to use root as [http://website.com/]
             // so that other path manipulations will be correct and it can be merged with relative paths correctly
             return [url + directorySeparator];
         }

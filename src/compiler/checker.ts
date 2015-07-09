@@ -3874,8 +3874,8 @@ namespace ts {
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
-            var namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            var typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            let typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
         }
 
@@ -4697,7 +4697,6 @@ namespace ts {
                 }
                 let id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 let related = relation[id];
-                //let related: RelationComparisonResult = undefined; // relation[id];
                 if (related !== undefined) {
                     // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
                     // errors, we can use the cached value. Otherwise, recompute the relation
@@ -7214,7 +7213,7 @@ namespace ts {
                         return links.resolvedJsxType = anyType;
                     }
 
-                    var propsName = getJsxElementPropertiesName();
+                    let propsName = getJsxElementPropertiesName();
                     if (propsName === undefined) {
                         // There is no type ElementAttributesProperty, return 'any'
                         return links.resolvedJsxType = anyType;
@@ -7224,7 +7223,7 @@ namespace ts {
                         return links.resolvedJsxType = elemInstanceType;
                     }
                     else {
-                        var attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
+                        let attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
 
                         if (!attributesType) {
                             // There is no property named 'props' on this instance type
@@ -7381,7 +7380,7 @@ namespace ts {
          */
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             let flags = getDeclarationFlagsFromSymbol(prop);
-            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);;
+            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
             if (left.kind === SyntaxKind.SuperKeyword) {
                 let errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
@@ -10121,7 +10120,7 @@ namespace ts {
 
             // Abstract methods cannot have an implementation.
             // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
-            if(node.flags & NodeFlags.Abstract && node.body) {
+            if (node.flags & NodeFlags.Abstract && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
         }
@@ -10895,7 +10894,7 @@ namespace ts {
             let promiseConstructor = getMergedSymbol(promiseType.symbol);
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
                 error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
-                return unknownType
+                return unknownType;
             }
 
             // Validate the promise constructor type.
@@ -12177,7 +12176,7 @@ namespace ts {
 
             // Interfaces cannot be merged with non-ambient classes.
             if (getSymbolOfNode(node).flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
-                error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface)
+                error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
             }
 
             forEach(node.members, checkSourceElement);

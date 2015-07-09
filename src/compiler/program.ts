@@ -346,7 +346,7 @@ namespace ts {
                 if (!isDeclarationFile(sourceFile)) {
                     let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                     // Don't actually write any files since we're just getting diagnostics.
-                    var writeFile: WriteFileCallback = () => { };
+                    let writeFile: WriteFileCallback = () => { };
                     return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
                 }
             });

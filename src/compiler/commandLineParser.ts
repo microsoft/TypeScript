@@ -436,7 +436,7 @@ namespace ts {
                     }
                     else if (fileExtensionIs(name, ".ts")) {
                         if (!contains(sysFiles, name + "x")) {
-                            fileNames.push(name)
+                            fileNames.push(name);
                         }
                     }
                     else {
