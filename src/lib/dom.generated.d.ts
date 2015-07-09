@@ -12536,6 +12536,7 @@ interface SVGLocatable {
 }
 
 interface SVGStylable {
+    className: any;
     style: CSSStyleDeclaration;
 }
 
