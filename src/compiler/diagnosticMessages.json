@@ -1645,6 +1645,10 @@
         "category": "Error",
         "code": 2524
     },
+    "Property '{0}' does not exist in contextual type '{1}'.": {
+        "category": "Error",
+        "code": 2525
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600

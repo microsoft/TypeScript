@@ -414,6 +414,7 @@ namespace ts {
         The_arguments_object_cannot_be_referenced_in_an_async_arrow_function_Consider_using_a_standard_async_function_expression: { code: 2522, category: DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression." },
         yield_expressions_cannot_be_used_in_a_parameter_initializer: { code: 2523, category: DiagnosticCategory.Error, key: "'yield' expressions cannot be used in a parameter initializer." },
         await_expressions_cannot_be_used_in_a_parameter_initializer: { code: 2524, category: DiagnosticCategory.Error, key: "'await' expressions cannot be used in a parameter initializer." },
+        Property_0_does_not_exist_in_contextual_type_1: { code: 2525, category: DiagnosticCategory.Error, key: "Property '{0}' does not exist in contextual type '{1}'." },
         JSX_element_attributes_type_0_must_be_an_object_type: { code: 2600, category: DiagnosticCategory.Error, key: "JSX element attributes type '{0}' must be an object type." },
         The_return_type_of_a_JSX_element_constructor_must_return_an_object_type: { code: 2601, category: DiagnosticCategory.Error, key: "The return type of a JSX element constructor must return an object type." },
         JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist: { code: 2602, category: DiagnosticCategory.Error, key: "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist." },

@@ -6830,6 +6830,18 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function isPermittedProperty(contextualType: Type, propName: string): boolean {
+            if (contextualType.flags & TypeFlags.ObjectType) {
+                let resolved = resolveStructuredTypeMembers(<ObjectType>contextualType);
+                return !!(resolved.properties.length === 0 || resolved.stringIndexType ||
+                    resolved.numberIndexType || getPropertyOfObjectType(contextualType, propName));
+            }
+            if (contextualType.flags & TypeFlags.UnionOrIntersection) {
+                return !forEach((<UnionOrIntersectionType>contextualType).types, type => !isPermittedProperty(type, propName));
+            }
+            return true;
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
@@ -6879,6 +6891,9 @@ namespace ts {
 
                 if (!hasDynamicName(memberDecl)) {
                     propertiesTable[member.name] = member;
+                    if (contextualType && !isPermittedProperty(contextualType, member.name)) {
+                        error(memberDecl.name, Diagnostics.Property_0_does_not_exist_in_contextual_type_1, member.name, typeToString(contextualType));
+                    }
                 }
                 propertiesArray.push(member);
             }
