@@ -158,6 +158,7 @@ namespace ts {
         let emitParam = false;
         let emitAwaiter = false;
         let emitGenerator = false;
+        let emitBind = false;
         
         let resolutionTargets: Object[] = [];
         let resolutionResults: boolean[] = [];
@@ -6178,14 +6179,14 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-
+            
             if (isClassLike(container.parent)) {
                 let symbol = getSymbolOfNode(container.parent);
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
         }
-
+        
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
             for (let n = node; n && n !== constructorDecl; n = n.parent) {
                 if (n.kind === SyntaxKind.Parameter) {
@@ -8765,6 +8766,33 @@ namespace ts {
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
+        
+        function checkBindExpression(node: BindExpression): Type {
+            emitBind = true;
+            
+            if (!node.baseExpression 
+                && node.targetExpression.kind !== SyntaxKind.PropertyAccessExpression 
+                && node.targetExpression.kind !== SyntaxKind.ElementAccessExpression) {
+                error(node, Diagnostics.The_target_of_a_bind_expression_without_a_left_hand_side_must_be_a_property_or_element_access);
+                return unknownType;
+            }
+            
+            let baseType = node.baseExpression ? checkExpression(node.baseExpression) : undefined;
+            let targetType = checkExpression(node.targetExpression);
+            let apparentType = getApparentType(targetType);
+            if (apparentType === unknownType) {
+                return unknownType;
+            }
+            
+            let callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            let constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (!isTypeAny(targetType) && callSignatures.length === 0 && constructSignatures.length === 0) {
+                error(node, Diagnostics.Cannot_bind_an_expression_whose_type_lacks_a_call_or_construct_signature);
+                return unknownType;
+            }
+            
+            return targetType;
+        }
 
         function checkAssertion(node: AssertionExpression) {
             let exprType = checkExpression(node.expression);
@@ -9813,6 +9841,8 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
+                case SyntaxKind.BindExpression:
+                    return checkBindExpression(<BindExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:
@@ -13235,6 +13265,7 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.SpreadElementExpression:
                 case SyntaxKind.YieldExpression:
+                case SyntaxKind.BindExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
@@ -13298,6 +13329,9 @@ namespace ts {
                 emitExtends = false;
                 emitDecorate = false;
                 emitParam = false;
+                emitAwaiter = false;
+                emitGenerator = false;
+                emitBind = false;
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
@@ -13330,6 +13364,10 @@ namespace ts {
                 
                 if (emitGenerator || (emitAwaiter && languageVersion < ScriptTarget.ES6)) {
                     links.flags |= NodeCheckFlags.EmitGenerator;
+                }
+                
+                if (emitBind) {
+                    links.flags |= NodeCheckFlags.EmitBind;
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;

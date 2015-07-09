@@ -1,0 +1,179 @@
+=== tests/cases/conformance/expressions/bindOperator/bindOperator1.ts ===
+declare var a: { b(): number; c(): { b(): boolean; }; };
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+>c : () => { b(): boolean; }
+>b : () => boolean
+
+declare function b(): string;
+>b : () => string
+
+declare class C { b(): boolean; }
+>C : C
+>b : () => boolean
+
+let z = a::b;
+>z : () => string
+>a::b : () => string
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => string
+
+let y = a::b();
+>y : string
+>a::b() : string
+>a::b : () => string
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => string
+
+let x = a::a.b;
+>x : () => number
+>a::a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+
+let w = a::a.b();
+>w : number
+>a::a.b() : number
+>a::a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+
+let v = a::a["b"];
+>v : () => number
+>a::a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>"b" : string
+
+let u = a::a["b"]();
+>u : number
+>a::a["b"]() : number
+>a::a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>"b" : string
+
+let t = a.b::b;
+>t : () => string
+>a.b::b : () => string
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+>b : () => string
+
+let s = a.b::b();
+>s : string
+>a.b::b() : string
+>a.b::b : () => string
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+>b : () => string
+
+let r = a["b"]::b;
+>r : () => string
+>a["b"]::b : () => string
+>a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>"b" : string
+>b : () => string
+
+let q = a["b"]::b();
+>q : string
+>a["b"]::b() : string
+>a["b"]::b : () => string
+>a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>"b" : string
+>b : () => string
+
+let p = ::a.b;
+>p : () => number
+>::a.b : () => number
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+
+let o = ::a.b();
+>o : number
+>::a.b() : number
+>::a.b : () => number
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+
+let n = ::a["b"];
+>n : () => number
+>::a["b"] : () => number
+>a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>"b" : string
+
+let m = ::a["b"]();
+>m : number
+>::a["b"]() : number
+>::a["b"] : () => number
+>a["b"] : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>"b" : string
+
+let l = a.c()::b;
+>l : () => string
+>a.c()::b : () => string
+>a.c() : { b(): boolean; }
+>a.c : () => { b(): boolean; }
+>a : { b(): number; c(): { b(): boolean; }; }
+>c : () => { b(): boolean; }
+>b : () => string
+
+let k = a.c()::b();
+>k : string
+>a.c()::b() : string
+>a.c()::b : () => string
+>a.c() : { b(): boolean; }
+>a.c : () => { b(): boolean; }
+>a : { b(): number; c(): { b(): boolean; }; }
+>c : () => { b(): boolean; }
+>b : () => string
+
+let j = a.c()::a.b;
+>j : () => number
+>a.c()::a.b : () => number
+>a.c() : { b(): boolean; }
+>a.c : () => { b(): boolean; }
+>a : { b(): number; c(): { b(): boolean; }; }
+>c : () => { b(): boolean; }
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+
+let i = a.c()::a.b();
+>i : number
+>a.c()::a.b() : number
+>a.c()::a.b : () => number
+>a.c() : { b(): boolean; }
+>a.c : () => { b(): boolean; }
+>a : { b(): number; c(): { b(): boolean; }; }
+>c : () => { b(): boolean; }
+>a.b : () => number
+>a : { b(): number; c(): { b(): boolean; }; }
+>b : () => number
+
+let h = a.c()::new C().b;
+>h : () => boolean
+>a.c()::new C().b : () => boolean
+>a.c() : { b(): boolean; }
+>a.c : () => { b(): boolean; }
+>a : { b(): number; c(): { b(): boolean; }; }
+>c : () => { b(): boolean; }
+>new C().b : () => boolean
+>new C() : C
+>C : typeof C
+>b : () => boolean
+

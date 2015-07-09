@@ -149,6 +149,7 @@ namespace ts {
         "||": SyntaxKind.BarBarToken,
         "?": SyntaxKind.QuestionToken,
         ":": SyntaxKind.ColonToken,
+        "::": SyntaxKind.ColonColonToken,
         "=": SyntaxKind.EqualsToken,
         "+=": SyntaxKind.PlusEqualsToken,
         "-=": SyntaxKind.MinusEqualsToken,
@@ -1292,6 +1293,9 @@ namespace ts {
                         tokenValue = "" + scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     case CharacterCodes.colon:
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.colon) {
+                            return pos += 2, token = SyntaxKind.ColonColonToken;
+                        }
                         return pos++, token = SyntaxKind.ColonToken;
                     case CharacterCodes.semicolon:
                         return pos++, token = SyntaxKind.SemicolonToken;

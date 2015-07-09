@@ -23,6 +23,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };`;
+        
+        // emit output for the __bind helper function
+        const bindHelper = `
+var __bind = (this && this.__bind) || function (b, t) {
+    var d;
+    return d = function() { return b.apply(t, arguments); }, d.prototype = b.prototype, d;
+};`;
 
         // emit output for the __decorate helper function
         const decorateHelper = `
@@ -147,6 +154,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let decorateEmitted = false;
             let paramEmitted = false;
             let awaiterEmitted = false;
+            let bindEmitted = false;
             let tempFlags = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
@@ -1442,6 +1450,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.WithStatement:
                     case SyntaxKind.YieldExpression:
+                    case SyntaxKind.BindExpression:
                         return true;
                     case SyntaxKind.BindingElement:
                     case SyntaxKind.EnumMember:
@@ -2156,22 +2165,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCallExpression(node: CallExpression) {
-                if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
+                let expression = node.expression;
+                if (expression.kind === SyntaxKind.BindExpression) {
+                    if ((<BindExpression>expression).baseExpression !== undefined) {
+                        emitBindExpression(<BindExpression>expression, node.arguments);
+                        return;
+                    }
+                    else {
+                        expression = (<BindExpression>expression).targetExpression;
+                    }
+                }
+                else if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
                     emitCallWithSpread(node);
                     return;
                 }
                 let superCall = false;
-                if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    emitSuper(node.expression);
+                if (expression.kind === SyntaxKind.SuperKeyword) {
+                    emitSuper(expression);
                     superCall = true;
                 }
                 else {
-                    emit(node.expression);
-                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
+                    emit(expression);
+                    superCall = expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
                 if (superCall && languageVersion < ScriptTarget.ES6) {
                     write(".call(");
-                    emitThis(node.expression);
+                    emitThis(expression);
                     if (node.arguments.length) {
                         write(", ");
                         emitCommaList(node.arguments);
@@ -2235,6 +2254,108 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitDownlevelTaggedTemplate(node);
                 }
+            }
+            
+            function createCallCall(expression: Expression, thisArgument: Expression, _arguments: NodeArray<Expression>) {
+                let callIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                callIdentifier.text = "call";
+                
+                let callExpr = createCallExpression(
+                    createPropertyAccessExpression(expression, callIdentifier), 
+                    [thisArgument, ..._arguments]);
+
+                return callExpr;
+            }
+            
+            function createBindCall(expression: Expression, thisArgument: Expression) {
+                if (languageVersion < ScriptTarget.ES5) {
+                    let bindIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    bindIdentifier.text = "__bind";
+                    
+                    let callExpr = createCallExpression(
+                        bindIdentifier,
+                        [parenthesizeForAccess(expression), thisArgument]);
+                        
+                    return callExpr;
+                }
+                else {
+                    let bindIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    bindIdentifier.text = "bind";
+                    
+                    let callExpr = createCallExpression(
+                        createPropertyAccessExpression(expression, bindIdentifier),
+                        [thisArgument]);
+                        
+                    return callExpr;
+                }
+            }
+            
+            function createCallExpression(expression: Expression, _arguments: Expression[]) {
+                let callExpr = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+                callExpr.expression = parenthesizeForAccess(expression);
+                callExpr.arguments = <NodeArray<Expression>>createSynthesizedNodeArray();
+                for (let argument of _arguments) {
+                    callExpr.arguments.push(argument);
+                }
+                return callExpr;
+            }
+            
+            function createAssignmentExpression(left: Expression, right: Expression): BinaryExpression {
+                let assignExpression = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
+                assignExpression.left = left;
+                assignExpression.operatorToken = createSynthesizedNode(SyntaxKind.EqualsToken);
+                assignExpression.right = right;
+                return assignExpression;
+            }
+            
+            function createCommaExpression(left: Expression, right: Expression): BinaryExpression {
+                let commaExpression = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
+                commaExpression.left = left;
+                commaExpression.operatorToken = createSynthesizedNode(SyntaxKind.CommaToken);
+                commaExpression.right = right;
+                return commaExpression;
+            }
+            
+            function emitBindExpression(node: BindExpression, _arguments?: NodeArray<Expression>): void {
+                let { baseExpression, targetExpression } = node;
+                let boundExpression: Expression;
+                let thisArgument: Expression;
+                if (baseExpression) {
+                    let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    boundExpression = createCommaExpression(
+                        createAssignmentExpression(tempVariable, baseExpression),
+                        targetExpression
+                    );
+                    thisArgument = tempVariable;
+                }
+                else if (targetExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                    let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    let { expression, name } = <PropertyAccessExpression>targetExpression;
+                    boundExpression = createPropertyAccessExpression(
+                        createAssignmentExpression(tempVariable, expression),
+                        name
+                    );
+                    thisArgument = tempVariable;
+                }
+                else if (targetExpression.kind === SyntaxKind.ElementAccessExpression) {
+                    let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    let { expression, argumentExpression } = <ElementAccessExpression>targetExpression;
+                    boundExpression = createElementAccessExpression(
+                        createAssignmentExpression(tempVariable, expression),
+                        argumentExpression
+                    );
+                    thisArgument = tempVariable;
+                }
+                else {
+                    emit(targetExpression);
+                    return;
+                }
+
+                let callExpression = _arguments
+                    ? createCallCall(boundExpression, thisArgument, _arguments)
+                    : createBindCall(boundExpression, thisArgument);
+
+                emit(callExpression);
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
@@ -6232,6 +6353,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         writeLines(extendsHelper);
                         extendsEmitted = true;
                     }
+                    
+                    if ((languageVersion < ScriptTarget.ES5) && (!bindEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitBind)) {
+                        writeLines(bindHelper);
+                        bindEmitted = true;
+                    }
 
                     if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
                         writeLines(decorateHelper);
@@ -6416,6 +6542,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return emitNewExpression(<NewExpression>node);
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                    case SyntaxKind.BindExpression:
+                        return emitBindExpression(<BindExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
                         return emit((<TypeAssertion>node).expression);
                     case SyntaxKind.AsExpression:

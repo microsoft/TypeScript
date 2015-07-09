@@ -1,0 +1,139 @@
+=== tests/cases/conformance/expressions/bindOperator/bindOperator1.ts ===
+declare var a: { b(): number; c(): { b(): boolean; }; };
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 36))
+
+declare function b(): string;
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+declare class C { b(): boolean; }
+>C : Symbol(C, Decl(bindOperator1.ts, 1, 29))
+>b : Symbol(b, Decl(bindOperator1.ts, 2, 17))
+
+let z = a::b;
+>z : Symbol(z, Decl(bindOperator1.ts, 4, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let y = a::b();
+>y : Symbol(y, Decl(bindOperator1.ts, 5, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let x = a::a.b;
+>x : Symbol(x, Decl(bindOperator1.ts, 6, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let w = a::a.b();
+>w : Symbol(w, Decl(bindOperator1.ts, 7, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let v = a::a["b"];
+>v : Symbol(v, Decl(bindOperator1.ts, 8, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>"b" : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let u = a::a["b"]();
+>u : Symbol(u, Decl(bindOperator1.ts, 9, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>"b" : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let t = a.b::b;
+>t : Symbol(t, Decl(bindOperator1.ts, 10, 3))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let s = a.b::b();
+>s : Symbol(s, Decl(bindOperator1.ts, 11, 3))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let r = a["b"]::b;
+>r : Symbol(r, Decl(bindOperator1.ts, 12, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>"b" : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let q = a["b"]::b();
+>q : Symbol(q, Decl(bindOperator1.ts, 13, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>"b" : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let p = ::a.b;
+>p : Symbol(p, Decl(bindOperator1.ts, 14, 3))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let o = ::a.b();
+>o : Symbol(o, Decl(bindOperator1.ts, 15, 3))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let n = ::a["b"];
+>n : Symbol(n, Decl(bindOperator1.ts, 16, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>"b" : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let m = ::a["b"]();
+>m : Symbol(m, Decl(bindOperator1.ts, 17, 3))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>"b" : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let l = a.c()::b;
+>l : Symbol(l, Decl(bindOperator1.ts, 18, 3))
+>a.c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let k = a.c()::b();
+>k : Symbol(k, Decl(bindOperator1.ts, 19, 3))
+>a.c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 56))
+
+let j = a.c()::a.b;
+>j : Symbol(j, Decl(bindOperator1.ts, 20, 3))
+>a.c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let i = a.c()::a.b();
+>i : Symbol(i, Decl(bindOperator1.ts, 21, 3))
+>a.c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a.b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>b : Symbol(b, Decl(bindOperator1.ts, 0, 16))
+
+let h = a.c()::new C().b;
+>h : Symbol(h, Decl(bindOperator1.ts, 22, 3))
+>a.c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>a : Symbol(a, Decl(bindOperator1.ts, 0, 11))
+>c : Symbol(c, Decl(bindOperator1.ts, 0, 29))
+>new C().b : Symbol(C.b, Decl(bindOperator1.ts, 2, 17))
+>C : Symbol(C, Decl(bindOperator1.ts, 1, 29))
+>b : Symbol(C.b, Decl(bindOperator1.ts, 2, 17))
+

@@ -46,6 +46,10 @@ namespace ts.formatting {
         public NoSpaceAfterOpenBracket: Rule;
         public NoSpaceBeforeCloseBracket: Rule;
         public NoSpaceAfterCloseBracket: Rule;
+        
+        // No space for bind
+        public NoSpaceBeforeColonColon: Rule;
+        public NoSpaceAfterColonColon: Rule;
 
         // Insert a space after { and before } in single-line contexts, but remove space from empty object literals {}.
         public SpaceAfterOpenBrace: Rule;
@@ -238,6 +242,10 @@ namespace ts.formatting {
             this.NoSpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext), RuleAction.Delete));
+            
+            // No space for bind
+            this.NoSpaceBeforeColonColon = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.ColonColonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterColonColon = new Rule(RuleDescriptor.create3(SyntaxKind.ColonColonToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
@@ -358,6 +366,7 @@ namespace ts.formatting {
                 this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQuestionMark, this.SpaceAfterQuestionMarkInConditionalOperator,
                 this.NoSpaceAfterQuestionMark,
                 this.NoSpaceBeforeDot, this.NoSpaceAfterDot,
+                this.NoSpaceBeforeColonColon, this.NoSpaceAfterColonColon,
                 this.NoSpaceAfterUnaryPrefixOperator,
                 this.NoSpaceAfterUnaryPreincrementOperator, this.NoSpaceAfterUnaryPredecrementOperator,
                 this.NoSpaceBeforeUnaryPostincrementOperator, this.NoSpaceBeforeUnaryPostdecrementOperator,

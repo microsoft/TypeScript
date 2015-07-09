@@ -1645,6 +1645,14 @@
         "category": "Error",
         "code": 2524
     },
+    "Cannot bind an expression whose type lacks a call or construct signature.": {
+        "category": "Error",
+        "code": 2525
+    },
+    "The target of a bind expression without a left-hand side must be a property or element access.": {
+        "category": "Error",
+        "code": 2526
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600

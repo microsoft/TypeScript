@@ -168,6 +168,9 @@ namespace ts {
             case SyntaxKind.AsExpression:
                 return visitNode(cbNode, (<AsExpression>node).expression) ||
                     visitNode(cbNode, (<AsExpression>node).type);
+            case SyntaxKind.BindExpression:
+                return visitNode(cbNode, (<BindExpression>node).baseExpression) ||
+                    visitNode(cbNode, (<BindExpression>node).targetExpression);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -2526,6 +2529,7 @@ namespace ts {
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
                 case SyntaxKind.ExclamationToken:
+                case SyntaxKind.ColonColonToken:
                 case SyntaxKind.DeleteKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
@@ -3232,15 +3236,25 @@ namespace ts {
             // the last two CallExpression productions.  Or we have a MemberExpression which either
             // completes the LeftHandSideExpression, or starts the beginning of the first four
             // CallExpression productions.
-            let expression = token === SyntaxKind.SuperKeyword
-                ? parseSuperExpression()
-                : parseMemberExpressionOrHigher();
+            let expression = 
+                token === SyntaxKind.ColonColonToken ? parseBindExpressionRest(/*baseExpression*/ undefined) :
+                token === SyntaxKind.SuperKeyword ? parseSuperExpression() :
+                parseMemberExpressionOrHigher();
 
             // Now, we *may* be complete.  However, we might have consumed the start of a
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
             return parseCallExpressionRest(expression);
         }
-
+        
+        function parseBindExpressionRest(baseExpression: LeftHandSideExpression) {
+            let fullStart = baseExpression ? baseExpression.pos : scanner.getStartPos();
+            let node = <BindExpression>createNode(SyntaxKind.BindExpression, fullStart);
+            node.baseExpression = baseExpression;
+            nextToken();
+            node.targetExpression = parseMemberExpressionOrHigher();
+            return finishNode(node);
+        }
+        
         function parseMemberExpressionOrHigher(): MemberExpression {
             // Note: to make our lives simpler, we decompose the the NewExpression productions and
             // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
@@ -3506,7 +3520,7 @@ namespace ts {
                     expression = finishNode(tagExpression);
                     continue;
                 }
-
+                
                 return <MemberExpression>expression;
             }
         }
@@ -3536,6 +3550,10 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
                     expression = finishNode(callExpr);
+                    continue;
+                }
+                else if (token === SyntaxKind.ColonColonToken) {
+                    expression = parseBindExpressionRest(expression);
                     continue;
                 }
 

@@ -76,6 +76,7 @@ namespace ts {
         BarBarToken,
         QuestionToken,
         ColonToken,
+        ColonColonToken,
         AtToken,
         // Assignments
         EqualsToken,
@@ -224,6 +225,7 @@ namespace ts {
         OmittedExpression,
         ExpressionWithTypeArguments,
         AsExpression,
+        BindExpression,
 
         // Misc
         TemplateSpan,
@@ -852,6 +854,11 @@ namespace ts {
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
+    
+    export interface BindExpression extends LeftHandSideExpression {
+        baseExpression?: LeftHandSideExpression;
+        targetExpression?: MemberExpression;
+    }
 
     /// A JSX expression of the form <TagName attrs>...</TagName>
     export interface JsxElement extends PrimaryExpression {
@@ -1689,16 +1696,17 @@ namespace ts {
         EmitParam                   = 0x00000020,  // Emit __param helper for decorators
         EmitAwaiter                 = 0x00000040,  // Emit __awaiter
         EmitGenerator               = 0x00000080,  // Emit __generator
-        SuperInstance               = 0x00000100,  // Instance 'super' reference
-        SuperStatic                 = 0x00000200,  // Static 'super' reference
-        ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        LexicalArguments            = 0x00000800,
-        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
+        EmitBind                    = 0x00000100,  // Emit __bind
+        SuperInstance               = 0x00000200,  // Instance 'super' reference
+        SuperStatic                 = 0x00000400,  // Static 'super' reference
+        ContextChecked              = 0x00000800,  // Contextual types have been assigned
+        LexicalArguments            = 0x00001000,
+        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00002000,
-        BlockScopedBindingInLoop    = 0x00004000,
-        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00004000,
+        BlockScopedBindingInLoop    = 0x00008000,
+        LexicalModuleMergesWithClass= 0x00010000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
