@@ -8794,21 +8794,51 @@ namespace ts {
             for (let i = 0; i < len; i++) {
                 let parameter = signature.parameters[i];
                 let contextualParameterType = getTypeAtPosition(context, i);
-                assignTypeToParameterAndFixTypeParameters(getSymbolLinks(parameter), contextualParameterType, mapper);
+                assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
                 let parameter = lastOrUndefined(signature.parameters);
                 let contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
-                assignTypeToParameterAndFixTypeParameters(getSymbolLinks(parameter), contextualParameterType, mapper);
+                assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
             }
         }
 
-        function assignTypeToParameterAndFixTypeParameters(parameterLinks: SymbolLinks, contextualType: Type, mapper: TypeMapper) {
-            if (!parameterLinks.type) {
-                parameterLinks.type = instantiateType(contextualType, mapper);
+        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper) {
+            let links = getSymbolLinks(parameter);
+            if (!links.type) {
+                links.type = instantiateType(contextualType, mapper);
             }
             else if (isInferentialContext(mapper)) {
-                inferTypes(mapper.context, parameterLinks.type, instantiateType(contextualType, mapper));
+                // Even if the parameter already has a type, it might be because it was given a type while
+                // processing the function as an argument to a prior signature during overload resolution.
+                // If this was the case, it may have caused some type parameters to be fixed. So here,
+                // we need to ensure that type parameters at the same positions get fixed again. This is
+                // done by calling instantiateType to attach the mapper to the contextualType, and then
+                // calling inferTypes to force a walk of contextualType so that all the correct fixing
+                // happens. The choice to pass in links.type may seem kind of arbitrary, but it serves
+                // to make sure that all the correct positions in contextualType are reached by the walk.
+                // Here is an example:
+                //
+                //      interface Base {
+                //          baseProp;
+                //      }
+                //      interface Derived extends Base {
+                //          toBase(): Base;
+                //      }
+                //
+                //      var derived: Derived;
+                //
+                //      declare function foo<T>(x: T, func: (p: T) => T): T;
+                //      declare function foo<T>(x: T, func: (p: T) => T): T;
+                //
+                //      var result = foo(derived, d => d.toBase());
+                //
+                // We are typing d while checking the second overload. But we've already given d
+                // a type (Derived) from the first overload. However, we still want to fix the
+                // T in the second overload so that we do not infer Base as a candidate for T
+                // (inferring Base would make type argument inference inconsistent between the two
+                // overloads).
+                inferTypes(mapper.context, links.type, instantiateType(contextualType, mapper));
             }
         }
         
@@ -9031,7 +9061,9 @@ namespace ts {
             let contextSensitive = isContextSensitive(node);
             let mightFixTypeParameters = contextSensitive && isInferentialContext(contextualMapper);
 
-            // Check if function expression is contextually typed and assign parameter types if so
+            // Check if function expression is contextually typed and assign parameter types if so.
+            // See the comment in assignTypeToParameterAndFixTypeParameters to understand why we need to
+            // check mightFixTypeParameters.
             if (mightFixTypeParameters || !(links.flags & NodeCheckFlags.ContextChecked)) {
                 let contextualSignature = getContextualSignature(node);
                 // If a type check is started at a function expression that is an argument of a function call, obtaining the
