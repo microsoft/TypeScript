@@ -730,7 +730,8 @@ task("update-sublime", [serverFile], function() {
 // run this task automatically
 desc("Runs tslint on the compiler sources");
 task("lint", [], function() {
-    for(var f of compilerSources) {
+    for(var i in compilerSources) {
+        var f = compilerSources[i];
         var cmd = 'tslint -f ' + f;
         exec(cmd,
             function() { console.log('SUCCESS: No linter errors'); },
