@@ -247,6 +247,8 @@ module ts {
         }
 
         public dispose(): void {
+            // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
+            // 'in' does not have this effect
             if ("dispose" in this.scriptSnapshotShim) {
                 this.scriptSnapshotShim.dispose();
             }
