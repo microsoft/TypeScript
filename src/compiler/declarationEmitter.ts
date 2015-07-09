@@ -745,43 +745,45 @@ namespace ts {
             }
         }
 
-        function emitVariableStatement(node: VariableStatement) {
-            emitJsDocComments(node);
-            emitModuleElementDeclarationFlags(node);
-            if (isLet(node.declarationList)) {
-                write("let ");
-            }
-            else if (isConst(node.declarationList)) {
-                write("const ");
-            }
-            else {
-                write("var ");
-            }
-            let children = sortDeclarations(getNodeLinks(node).visibleChildren);
-            Debug.assert(children && children.length > 0);
-            emitCommaList(children, emitVariableDeclaration);
-            write(";");
-            writeLine();
+        function hasChildDeclaration(node: VariableStatement): boolean{
+            return forEach(<VariableDeclaration[]>getNodeLinks(node).visibleChildren, child => {
+                if (isBindingPattern(child.name)) {
+                    return forEach((<BindingPattern>child.name).elements, e => {
+                        return e.kind !== SyntaxKind.OmittedExpression;
+                    });
+                }
+                return true;
+            });
         }
 
-        //// TODO: we only should have either statement or declaration
-        //function emitVariableDeclarationWithoutStatement(node: VariableDeclaration) {
-        //    emitJsDocComments(node);
-        //    emitModuleElementDeclarationFlags(node.parent.parent);
-        //    var declarationList = node.parent;
-        //    if (isLet(declarationList)) {
-        //        write("let ");
-        //    }
-        //    else if (isConst(declarationList)) {
-        //        write("const ");
-        //    }
-        //    else {
-        //        write("var ");
-        //    }
-        //    emitVariableDeclaration(node);
-        //    write(";");
-        //    writeLine();
-        //}
+        function emitVariableStatement(node: VariableStatement) {
+            let children = sortDeclarations(getNodeLinks(node).visibleChildren);
+            if (hasChildDeclaration(node)) {
+                emitJsDocComments(node);
+                emitModuleElementDeclarationFlags(node);
+                if (isLet(node.declarationList)) {
+                    write("let ");
+                }
+                else if (isConst(node.declarationList)) {
+                    write("const ");
+                }
+                else {
+                    write("var ");
+                }
+                emitCommaList(children, emitVariableDeclaration);
+                write(";");
+                writeLine();
+            }
+        }
+
+        function getTypeAnnotationFromAccessor(getAccessor: AccessorDeclaration, setAccessor: AccessorDeclaration): TypeNode {
+            if (getAccessor) {
+                return getAccessor.type // Getter - return type
+            }
+            if (setAccessor && setAccessor.parameters.length > 0) {
+                return setAccessor.parameters[0].type;
+            }
+        }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
             if (hasDynamicName(node)) {
@@ -789,7 +791,6 @@ namespace ts {
             }
 
             let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
-            let accessorWithTypeAnnotation: AccessorDeclaration;
 
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
@@ -797,30 +798,11 @@ namespace ts {
                 emitClassMemberDeclarationFlags(node);
                 writeTextOfNode(currentSourceFile, node.name);
                 if (!(node.flags & NodeFlags.Private)) {
-                    accessorWithTypeAnnotation = node;
-                    let type = getTypeAnnotationFromAccessor(node);
-                    if (!type) {
-                        // couldn't get type for the first accessor, try the another one
-                        let anotherAccessor = node.kind === SyntaxKind.GetAccessor ? accessors.setAccessor : accessors.getAccessor;
-                        type = getTypeAnnotationFromAccessor(anotherAccessor);
-                        if (type) {
-                            accessorWithTypeAnnotation = anotherAccessor;
-                        }
-                    }
+                    let type = getTypeAnnotationFromAccessor(accessors.getAccessor, accessors.setAccessor);
                     emitTypeOfDeclaration(node, type);
                 }
                 write(";");
                 writeLine();
-            }
-
-            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode {
-                if (accessor) {
-                    return accessor.kind === SyntaxKind.GetAccessor
-                        ? accessor.type // Getter - return type
-                        : accessor.parameters.length > 0
-                            ? accessor.parameters[0].type // Setter parameter type
-                            : undefined;
-                }
             }
         }
 
@@ -1014,14 +996,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
-
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.VariableDeclaration:
-                    Debug.fail("should not be here");
-                    //  return emitVariableDeclarationWithoutStatement(<VariableDeclaration>node);
-                    return;
-
                 case SyntaxKind.InterfaceDeclaration:
                     return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.ClassDeclaration:
@@ -1036,7 +1012,6 @@ namespace ts {
                     return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
                     return emitImportDeclaration(<ImportDeclaration>node);
-
                 case SyntaxKind.ExportDeclaration:
                     return emitExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.Constructor:
@@ -1059,6 +1034,8 @@ namespace ts {
                     return emitExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
                     return emitSourceFile(<SourceFile>node);
+               // default:
+                   // Debug.fail(`unknown SyntaxKind: ${node.kind} (${ (<any>ts).SyntaxKind ? (<any>ts).SyntaxKind[node.kind] : ""})`);
             }
         }
 
@@ -1102,9 +1079,9 @@ namespace ts {
                 case SyntaxKind.IndexSignature:
                     return visitSignatureDeclaration(<FunctionLikeDeclaration>node);
 
-                //case SyntaxKind.GetAccessor:
-                //case SyntaxKind.SetAccessor:
-                //    return emitAccessorDeclaration(<AccessorDeclaration>node);
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return visitAccessorDeclaration(<AccessorDeclaration>node);
 
                 case SyntaxKind.TypeParameter:
                     return visitNode((<TypeParameterDeclaration>node).constraint);
@@ -1118,14 +1095,16 @@ namespace ts {
                     return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
                         visitNode((<TypeAliasDeclaration>node).type);
 
-                //case SyntaxKind.VariableStatement:
-                //    return visitNodes((<VariableStatement>node).declarationList.declarations);
-
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
+                case SyntaxKind.BindingElement:
                     return visitPropertyDeclaration(<PropertyDeclaration>node);
+
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                    return visitNodes((<BindingPattern>node).elements);
 
                 // TypeNodes
                 case SyntaxKind.AnyKeyword:
@@ -1221,9 +1200,37 @@ namespace ts {
             }
         }
 
+        function visitAccessorDeclaration(node: AccessorDeclaration) {
+            if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
+                return;
+            }
+
+            let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
+
+            if (accessors.firstAccessor === node) {
+                let type = getTypeAnnotationFromAccessor(accessors.getAccessor, accessors.setAccessor);
+                if (type) {
+                    visitNode(type);
+                }
+                else {
+                    // TODO: handel infered type
+                    // TODO: Cache the result
+                    let writer = createNewTextWriterWithSymbolWriter();
+                    let previousErrorNode = currentErrorNode;
+                    currentErrorNode = node;
+                    resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    currentErrorNode = previousErrorNode;
+                }
+            }
+        }
+
         function visitPropertyDeclaration(node: PropertyDeclaration): void {
             if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
                 return;
+            }
+
+            if (isBindingPattern(node.name)) {
+                return visitNode(node.name);
             }
 
             if (node.type) {
@@ -1391,7 +1398,7 @@ namespace ts {
          *
          */
         function canWriteDeclaration(node: Node): boolean{
-            if (node.kind === SyntaxKind.VariableDeclaration) {
+            if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                 node = node.parent.parent;
             }
 
@@ -1418,12 +1425,8 @@ namespace ts {
             return false;
         }
 
-        // TODO: remove this and update error messages to not use names
-        function getNameText(node: ParameterDeclaration|PropertyDeclaration|VariableDeclaration):string {
-            if (node.name.kind === SyntaxKind.Identifier) {
-                return (<Identifier>node.name).text;
-            }
-            return "__bindingpattern";
+        function getNameText(node: ParameterDeclaration|PropertyDeclaration|VariableDeclaration): string {
+            return (<Identifier>node.name).text;
         }
 
         function reportDeclarationAccessiblityMessage(referencedDeclaration: Declaration, errorNode: Node): void {
@@ -1446,6 +1449,7 @@ namespace ts {
                             Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1,
                             (<InterfaceDeclaration>container).name.text, referencedDeclarationName));
                         return;
+                    case SyntaxKind.BindingElement:
                     case SyntaxKind.VariableDeclaration:
                         diagnostics.push(createDiagnosticForNode(errorNode,
                             Diagnostics.Exported_variable_0_has_or_is_using_private_name_1,
@@ -1470,6 +1474,11 @@ namespace ts {
                         diagnostics.push(createDiagnosticForNode(errorNode,
                             Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0,
                             referencedDeclarationName));
+                        return;
+                    case SyntaxKind.SetAccessor:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1,
+                            getNameText(<ParameterDeclaration>container), referencedDeclarationName));
                         return;
                     case SyntaxKind.ConstructSignature:
                         diagnostics.push(createDiagnosticForNode(errorNode,
