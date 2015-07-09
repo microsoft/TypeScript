@@ -401,7 +401,7 @@ namespace ts {
             }
 
             function emitTypePredicate(type: TypePredicateNode) {
-                writeEntityName(type.parameterName);
+                writeTextOfNode(currentSourceFile, type.parameterName);
                 write(" is ");
                 emitType(type.type);
             }
