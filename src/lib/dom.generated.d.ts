@@ -2254,12 +2254,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param elementId String that specifies the ID value. Case-insensitive.
       */
     getElementById(elementId: string): HTMLElement;
-    getElementsByClassName(classNames: string): NodeList;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     /**
       * Gets a collection of objects based on the value of the NAME or ID attribute.
       * @param elementName Gets a collection of objects based on the value of the NAME or ID attribute.
       */
-    getElementsByName(elementName: string): NodeList;
+    getElementsByName(elementName: string): NodeListOf<Element>;
     /**
       * Retrieves a collection of objects based on the specified element name.
       * @param name Specifies the name of an element.
@@ -2437,8 +2437,8 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     getElementsByTagName(tagname: "wbr"): NodeListOf<HTMLElement>;
     getElementsByTagName(tagname: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(tagname: "xmp"): NodeListOf<HTMLBlockElement>;
-    getElementsByTagName(tagname: string): NodeList;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeList;
+    getElementsByTagName(tagname: string): NodeListOf<Element>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
     /**
       * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
       */
@@ -2892,8 +2892,8 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByTagName(name: "wbr"): NodeListOf<HTMLElement>;
     getElementsByTagName(name: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(name: "xmp"): NodeListOf<HTMLBlockElement>;
-    getElementsByTagName(name: string): NodeList;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeList;
+    getElementsByTagName(name: string): NodeListOf<Element>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
     hasAttribute(name: string): boolean;
     hasAttributeNS(namespaceURI: string, localName: string): boolean;
     msGetRegionContent(): MSRangeCollection;
@@ -3903,7 +3903,7 @@ interface HTMLElement extends Element {
     contains(child: HTMLElement): boolean;
     dragDrop(): boolean;
     focus(): void;
-    getElementsByClassName(classNames: string): NodeList;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     insertAdjacentElement(position: string, insertedElement: Element): Element;
     insertAdjacentHTML(where: string, html: string): void;
     insertAdjacentText(where: string, text: string): void;
@@ -12487,7 +12487,7 @@ interface NavigatorStorageUtils {
 
 interface NodeSelector {
     querySelector(selectors: string): Element;
-    querySelectorAll(selectors: string): NodeList;
+    querySelectorAll(selectors: string): NodeListOf<Element>;
 }
 
 interface RandomSource {
