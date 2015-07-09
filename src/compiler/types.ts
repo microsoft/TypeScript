@@ -1244,6 +1244,8 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+
+        // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
 

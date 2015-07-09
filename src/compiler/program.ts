@@ -164,6 +164,8 @@ namespace ts {
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
         
         if (oldProgram) {
+            // check properties that can affect structure of the program or module resolution strategy
+            // if any of these properties has changed - structure cannot be reused
             let oldOptions = oldProgram.getCompilerOptions();
             if ((oldOptions.module !== options.module) || 
                 (oldOptions.noResolve !== options.noResolve) || 
@@ -246,7 +248,13 @@ namespace ts {
                     return false;
                 }
 
-                if (oldSourceFile !== newSourceFile) {
+                if (oldSourceFile !== newSourceFile) {                    
+                    if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
+                        // value of no-default-lib has changed
+                        // this will affect if default library is injected into the list of files
+                        return false;
+                    }
+
                     // check tripleslash references
                     if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                         // tripleslash references has changed

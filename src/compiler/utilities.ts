@@ -102,7 +102,7 @@ namespace ts {
     }
 
     export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
-        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText]: undefined;
+        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
     export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
