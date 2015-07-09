@@ -438,37 +438,37 @@ namespace ts {
         }
 
         function emitImportDeclaration(node: ImportDeclaration) {
-            if (!node.importClause && !(node.flags & NodeFlags.Export)) {
-                // do not write non-exported import declarations that don't have import clauses
+            var children = sortDeclarations(getNodeLinks(node).visibleChildren);
+            if (!children) {
                 return;
             }
+
             emitJsDocComments(node);
-            if (node.flags & NodeFlags.Export) {
-                write("export ");
-            }
             write("import ");
-            if (node.importClause) {
-                let currentWriterPos = writer.getTextPos();
-                if (node.importClause.name) {
-                    writeTextOfNode(currentSourceFile, node.importClause.name);
+
+
+            let index: number;
+            if ((index = indexOf(children, node.importClause)) === 0) {
+                children.shift(); // remove it
+                writeTextOfNode(currentSourceFile, node.importClause.name);
+                if (children.length) {
+                    // If the default binding was emitted, write the separated
+                    write(", ");
                 }
-                if (node.importClause.namedBindings) {
-                    if (currentWriterPos !== writer.getTextPos()) {
-                        // If the default binding was emitted, write the separated
-                        write(", ");
-                    }
-                    if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                        write("* as ");
-                        writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
-                    }
-                    else {
-                        write("{ ");
-                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportOrExportSpecifier);
-                        write(" }");
-                    }
-                }
-                write(" from ");
             }
+
+            if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
+                indexOf(children, node.importClause.namedBindings) >= 0) {
+                write("* as ");
+                writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
+            }
+            else if (children.length) {
+                write("{ ");
+                emitCommaList(children, emitImportOrExportSpecifier);
+                write(" }");
+            }
+
+            write(" from ");
             writeTextOfNode(currentSourceFile, node.moduleSpecifier);
             write(";");
             writer.writeLine();
@@ -1184,7 +1184,15 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 collectAliasDeclaration(node);
             }
-            // TODO handle expression type
+            else if (!node.isExportEquals) { 
+                // TODO: handel expressions
+                // TODO: Cache the result
+                let writer = createNewTextWriterWithSymbolWriter();
+                let previousErrorNode = currentErrorNode;
+                currentErrorNode = node;
+                resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                currentErrorNode = previousErrorNode;
+            }
         }
 
         function visitSignatureDeclaration(node: SignatureDeclaration): void {
@@ -1262,6 +1270,7 @@ namespace ts {
             }
 
             switch (node.kind) {
+                case SyntaxKind.SourceFile:
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.PropertySignature:
@@ -1277,6 +1286,9 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.ImportSpecifier:
                     return true;
 
                 case SyntaxKind.VariableStatement:
@@ -1335,6 +1347,7 @@ namespace ts {
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ImportDeclaration:
                         return node.parent;
                     default:
                         node = node.parent;
@@ -1376,6 +1389,10 @@ namespace ts {
             // If the declaration is exported from its parent, we can
             // safelly write a declaration for it
             if (isDeclarationExported(node)) {
+                return true;
+            }
+
+            if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
                 return true;
             }
 
@@ -1511,7 +1528,7 @@ namespace ts {
                 // declaration
                 let parent = getEnclosingDeclaration(node);
                 if (parent) {
-                    ensureDeclarationVisible(parent);
+                    ensureDeclarationVisible(parent, errorNode);
                     attachVisibleChild(parent, node);
                 }
 
@@ -1544,15 +1561,21 @@ namespace ts {
             });
         }
 
-        function ensureDeclarationVisible(node: Node): void {
+        function ensureDeclarationVisible(node: Node, errorNode: Node): void {
             let links = getNodeLinks(node);
             if (!links.visited) {
                 links.visited = true;
 
                 var parent = getEnclosingDeclaration(node);
                 if (parent) {
-                    ensureDeclarationVisible(parent);
+                    ensureDeclarationVisible(parent, errorNode);
                     attachVisibleChild(parent, node);
+                }
+            }
+
+            if (errorNode) {
+                if (!canWriteDeclaration(node)) {
+                    reportDeclarationAccessiblityMessage(<Declaration>node, errorNode);
                 }
             }
         }
