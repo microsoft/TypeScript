@@ -241,7 +241,7 @@ namespace ts {
 
             var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
             return createTextChangeRange(
-                createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+                createSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
     }
 
@@ -511,7 +511,7 @@ namespace ts {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length));
+                    var classifications = this.languageService.getSyntacticClassifications(fileName, createSpan(start, length));
                     return classifications;
                 });
         }
@@ -520,7 +520,7 @@ namespace ts {
             return this.forwardJSONCall(
                 "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
+                    var classifications = this.languageService.getSemanticClassifications(fileName, createSpan(start, length));
                     return classifications;
                 });
         }
@@ -531,7 +531,7 @@ namespace ts {
                 () => {
                     // directly serialize the spans out to a string.  This is much faster to decode
                     // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)));
+                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createSpan(start, length)));
                 });
         }
 
@@ -541,7 +541,7 @@ namespace ts {
                 () => {
                     // directly serialize the spans out to a string.  This is much faster to decode
                     // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
+                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createSpan(start, length)));
                 });
         }
 
@@ -896,16 +896,16 @@ namespace ts {
                     forEach(result.referencedFiles, refFile => {
                         convertResult.referencedFiles.push({
                             path: normalizePath(refFile.fileName),
-                            position: refFile.pos,
-                            length: refFile.end - refFile.pos
+                            position: refFile.start,
+                            length: refFile.length
                         });
                     });
 
                     forEach(result.importedFiles, importedFile => {
                         convertResult.importedFiles.push({
                             path: normalizeSlashes(importedFile.fileName),
-                            position: importedFile.pos,
-                            length: importedFile.end - importedFile.pos
+                            position: importedFile.start,
+                            length: importedFile.length
                         });
                     });
                     return convertResult;

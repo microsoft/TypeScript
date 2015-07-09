@@ -489,7 +489,7 @@ describe('PatternMatcher', function () {
         return matches ? matches[0] : undefined;
     }
 
-    function spanListToSubstrings(identifier: string, spans: ts.TextSpan[]) {
+    function spanListToSubstrings(identifier: string, spans: ts.Span[]) {
         return ts.map(spans, s => identifier.substr(s.start, s.length));
     }
 

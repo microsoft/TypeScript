@@ -173,7 +173,7 @@ namespace ts.SignatureHelp {
     interface ArgumentListInfo {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
-        argumentsSpan: TextSpan;
+        argumentsSpan: Span;
         argumentIndex?: number;
         argumentCount: number;
     }
@@ -279,7 +279,7 @@ namespace ts.SignatureHelp {
                     // Find the list that starts right *after* the < or ( token.
                     // If the user has just opened a list, consider this item 0.
                     let list = getChildListThatStartsWithOpenerToken(callExpression, node, sourceFile);
-                    let isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    let isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.start === list.start;
                     Debug.assert(list !== undefined);
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
@@ -299,7 +299,7 @@ namespace ts.SignatureHelp {
                 let listItemInfo = findListItemInfo(node);
                 if (listItemInfo) {
                     let list = listItemInfo.list;
-                    let isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    let isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.start === list.start;
 
                     let argumentIndex = getArgumentIndex(list, node);
                     let argumentCount = getArgumentCount(list);
@@ -441,7 +441,7 @@ namespace ts.SignatureHelp {
             };
         }
 
-        function getApplicableSpanForArguments(argumentsList: Node): TextSpan {
+        function getApplicableSpanForArguments(argumentsList: Node): Span {
             // We use full start and skip trivia on the end because we want to include trivia on
             // both sides. For example,
             //
@@ -452,10 +452,10 @@ namespace ts.SignatureHelp {
             // but not including parentheses)
             let applicableSpanStart = argumentsList.getFullStart();
             let applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
-            return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return createSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
-        function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): TextSpan {
+        function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): Span {
             let template = taggedTemplate.template;
             let applicableSpanStart = template.getStart();
             let applicableSpanEnd = template.getEnd();
@@ -476,7 +476,7 @@ namespace ts.SignatureHelp {
                 }
             }
 
-            return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return createSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
         function getContainingArgumentInfo(node: Node): ArgumentListInfo {
@@ -487,7 +487,7 @@ namespace ts.SignatureHelp {
 
                 // If the node is not a subspan of its parent, this is a big problem.
                 // There have been crashes that might be caused by this violation.
-                if (n.pos < n.parent.pos || n.end > n.parent.end) {
+                if (n.start < n.parent.start || spanEnd(n) > spanEnd(n.parent)) {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 

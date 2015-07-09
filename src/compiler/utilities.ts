@@ -9,8 +9,8 @@ namespace ts {
     }
 
     export interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
+        leadingCommentSpans?: CommentSpan[];
+        trailingCommentSpans?: CommentSpan[];
         startsOnNewLine: boolean;
     }
 
@@ -75,7 +75,7 @@ namespace ts {
     }
 
     export function getFullWidth(node: Node) {
-        return node.end - node.pos;
+        return node.length;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
@@ -119,12 +119,12 @@ namespace ts {
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         let file = getSourceFileOfNode(node);
-        let loc = getLineAndCharacterOfPosition(file, node.pos);
+        let loc = getLineAndCharacterOfPosition(file, node.start);
         return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
     export function getStartPosOfNode(node: Node): number {
-        return node.pos;
+        return node.start;
     }
 
     // Returns true if this node is missing from the actual source code.  'missing' is different
@@ -144,7 +144,7 @@ namespace ts {
             return true;
         }
 
-        return node.pos === node.end && node.pos >= 0 && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.length === 0 && node.start >= 0 && node.kind !== SyntaxKind.EndOfFileToken;
     }
 
     export function nodeIsPresent(node: Node) {
@@ -155,10 +155,10 @@ namespace ts {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
         if (nodeIsMissing(node)) {
-            return node.pos;
+            return node.start;
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.start);
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
@@ -166,7 +166,7 @@ namespace ts {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, nodeArrayEnd(node.decorators));        
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
@@ -175,7 +175,7 @@ namespace ts {
         }
 
         let text = sourceFile.text;
-        return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
+        return text.substring(includeTrivia ? node.start : skipTrivia(text, node.start), spanEnd(node));
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -183,7 +183,7 @@ namespace ts {
             return "";
         }
 
-        return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+        return sourceText.substring(skipTrivia(sourceText, node.start), spanEnd(node));
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
@@ -273,21 +273,22 @@ namespace ts {
         };
     }
 
-    export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
+    /* @internal */
+    export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): Span {
         let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
-        return createTextSpanFromBounds(start, scanner.getTextPos());
+        return createSpanFromBounds(start, scanner.getTextPos());
     }
 
-    export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+    export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): Span {
         let errorNode = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
                 if (pos === sourceFile.text.length) {
                     // file is empty - return span for the beginning of the file
-                    return createTextSpan(0, 0);
+                    return createSpan(0, 0);
                 }
                 return getSpanOfTokenAtPosition(sourceFile, pos);
             // This list is a work in progress. Add missing node kinds to improve their error
@@ -309,14 +310,14 @@ namespace ts {
         if (errorNode === undefined) {
             // If we don't have a better node, then just set the error on the first token of 
             // construct.
-            return getSpanOfTokenAtPosition(sourceFile, node.pos);
+            return getSpanOfTokenAtPosition(sourceFile, node.start);
         }
 
         let pos = nodeIsMissing(errorNode)
-            ? errorNode.pos
-            : skipTrivia(sourceFile.text, errorNode.pos);
+            ? errorNode.start
+            : skipTrivia(sourceFile.text, errorNode.start);
 
-        return createTextSpanFromBounds(pos, errorNode.end);
+        return createSpanFromBounds(pos, spanEnd(errorNode));
     }
 
     export function isExternalModule(file: SourceFile): boolean {
@@ -387,22 +388,22 @@ namespace ts {
             //            /** blah */ a,
             //            /** blah */ b);
             return concatenate(
-                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
+                getTrailingCommentSpans(sourceFileOfNode.text, node.start),
+                getLeadingCommentSpans(sourceFileOfNode.text, node.start));
         }
         else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
+            return getLeadingCommentSpans(sourceFileOfNode.text, node.start);
         }
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
         return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
 
-        function isJsDocComment(comment: CommentRange) {
+        function isJsDocComment(comment: CommentSpan) {
             // True if the comment starts with '/**' but not if it is '/**/'
-            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
-                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+            return sourceFileOfNode.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.start + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.start + 3) !== CharacterCodes.slash;
         }
     }
 
@@ -1294,7 +1295,7 @@ namespace ts {
         return undefined;
     }
 
-    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentSpan): ReferencePathMatchResult {
         let simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
         let isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
         if (simpleReferenceRegEx.exec(comment)) {
@@ -1306,12 +1307,10 @@ namespace ts {
             else {
                 let matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 if (matchResult) {
-                    let start = commentRange.pos;
-                    let end = commentRange.end;
                     return {
                         fileReference: {
-                            pos: start,
-                            end: end,
+                            start: commentRange.start,
+                            length: commentRange.length,
                             fileName: matchResult[3]
                         },
                         isNoDefaultLib: false
@@ -1406,6 +1405,25 @@ namespace ts {
         return false;
     }
 
+    export function nodeArrayEnd(array: NodeArray<Node>, sourceText?: string) {
+        let end = array.length === 0 ? array.start : spanEnd(lastOrUndefined(array));
+        if (!array.hasTrailingComma) {
+            return end;
+        }
+        Debug.assert(array.length > 0);
+
+        if (!sourceText) {
+            let sourceFile = getSourceFileOfNode(array[0]);
+            sourceText = sourceFile.text;
+        }
+
+        let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true, LanguageVariant.Standard, sourceText);
+        scanner.setTextPos(end);
+        var kind = scanner.scan();
+        Debug.assert(kind === SyntaxKind.CommaToken);
+        return scanner.getTextPos();
+    }
+
     export function isParameterDeclaration(node: VariableLikeDeclaration) {
         let root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
@@ -1423,19 +1441,20 @@ namespace ts {
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
-        return node.pos === -1;
+        return node.start === -1;
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
         let node = <SynthesizedNode>createNode(kind);
+        node.start = -1;
+        node.length = 0;
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
 
     export function createSynthesizedNodeArray(): NodeArray<any> {
-        var array = <NodeArray<any>>[];
-        array.pos = -1;
-        array.end = -1;
+        let array = <NodeArray<any>>[];
+        array.start = -1;
         return array;
     }
 
@@ -1766,16 +1785,16 @@ namespace ts {
         };
     }
 
-    export function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
+    export function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, start: number, leadingComments: CommentSpan[]) {
         // If the leading comments start on different line than the start of node, write new line
-        if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+        if (leadingComments && leadingComments.length && start !== leadingComments[0].start &&
+            getLineOfLocalPosition(currentSourceFile, start) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].start)) {
             writer.writeLine();
         }
     }
 
-    export function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
-        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+    export function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentSpan[], trailingSeparator: boolean, newLine: string,
+        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentSpan, newLine: string) => void) {
         let emitLeadingSpace = !trailingSeparator;
         forEach(comments, comment => {
             if (emitLeadingSpace) {
@@ -1796,20 +1815,20 @@ namespace ts {
         });
     }
 
-    export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-        if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-            let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
+    export function writeCommentSpan(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentSpan, newLine: string) {
+        if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
+            let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.start);
             let lineCount = getLineStarts(currentSourceFile).length;
             let firstCommentLineIndent: number;
-            for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+            for (let pos = comment.start, currentLine = firstCommentLineAndCharacter.line; pos < spanEnd(comment); currentLine++) {
                 let nextLineStart = (currentLine + 1) === lineCount
                     ? currentSourceFile.text.length + 1
                     : getStartPositionOfLine(currentLine + 1, currentSourceFile);
 
-                if (pos !== comment.pos) {
+                if (pos !== comment.start) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
+                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.start);
                     }
 
                     // These are number of spaces writer is going to write at current indent
@@ -1857,16 +1876,16 @@ namespace ts {
         }
         else {
             // Single line comment of style //....
-            writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+            writer.write(currentSourceFile.text.substring(comment.start, spanEnd(comment)));
         }
 
         function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-            let end = Math.min(comment.end, nextLineStart - 1);
+            let end = Math.min(spanEnd(comment), nextLineStart - 1);
             let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
             if (currentLineText) {
                 // trimmed forward and ending spaces text
                 writer.write(currentLineText);
-                if (end !== comment.end) {
+                if (end !== spanEnd(comment)) {
                     writer.writeLine();
                 }
             }
@@ -2084,45 +2103,45 @@ namespace ts {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
 
-    export function textSpanEnd(span: TextSpan) {
+    export function spanEnd(span: Span) {
         return span.start + span.length
     }
 
-    export function textSpanIsEmpty(span: TextSpan) {
+    export function spanIsEmpty(span: Span) {
         return span.length === 0
     }
 
-    export function textSpanContainsPosition(span: TextSpan, position: number) {
-        return position >= span.start && position < textSpanEnd(span);
+    export function spanContainsPosition(span: Span, position: number) {
+        return position >= span.start && position < spanEnd(span);
     }
 
     // Returns true if 'span' contains 'other'.
-    export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
+    export function spanContainsSpan(span: Span, other: Span) {
+        return other.start >= span.start && spanEnd(other) <= spanEnd(span);
     }
 
-    export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
+    export function spanOverlapsWith(span: Span, other: Span) {
         let overlapStart = Math.max(span.start, other.start);
-        let overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
+        let overlapEnd = Math.min(spanEnd(span), spanEnd(other));
         return overlapStart < overlapEnd;
     }
 
-    export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
+    export function spanOverlap(span1: Span, span2: Span) {
         let overlapStart = Math.max(span1.start, span2.start);
-        let overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        let overlapEnd = Math.min(spanEnd(span1), spanEnd(span2));
         if (overlapStart < overlapEnd) {
-            return createTextSpanFromBounds(overlapStart, overlapEnd);
+            return createSpanFromBounds(overlapStart, overlapEnd);
         }
         return undefined;
     }
 
-    export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
+    export function spanIntersectsWithSpan(span: Span, other: Span) {
+        return other.start <= spanEnd(span) && spanEnd(other) >= span.start
     }
 
-    export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
+    export function spanIntersectsWith(span: Span, start: number, length: number) {
         let end = start + length;
-        return start <= textSpanEnd(span) && end >= span.start;
+        return start <= spanEnd(span) && end >= span.start;
     }
 
     export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
@@ -2131,20 +2150,20 @@ namespace ts {
         return start2 <= end1 && end2 >= start1;
     }
 
-    export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
-        return position <= textSpanEnd(span) && position >= span.start;
+    export function spanIntersectsWithPosition(span: Span, position: number) {
+        return position <= spanEnd(span) && position >= span.start;
     }
 
-    export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
+    export function spanIntersection(span1: Span, span2: Span) {
         let intersectStart = Math.max(span1.start, span2.start);
-        let intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        let intersectEnd = Math.min(spanEnd(span1), spanEnd(span2));
         if (intersectStart <= intersectEnd) {
-            return createTextSpanFromBounds(intersectStart, intersectEnd);
+            return createSpanFromBounds(intersectStart, intersectEnd);
         }
         return undefined;
     }
 
-    export function createTextSpan(start: number, length: number): TextSpan {
+    export function createSpan(start: number, length: number): Span {
         if (start < 0) {
             throw new Error("start < 0");
         }
@@ -2155,19 +2174,19 @@ namespace ts {
         return { start, length };
     }
 
-    export function createTextSpanFromBounds(start: number, end: number) {
-        return createTextSpan(start, end - start);
+    export function createSpanFromBounds(start: number, end: number) {
+        return createSpan(start, end - start);
     }
 
     export function textChangeRangeNewSpan(range: TextChangeRange) {
-        return createTextSpan(range.span.start, range.newLength);
+        return createSpan(range.span.start, range.newLength);
     }
 
     export function textChangeRangeIsUnchanged(range: TextChangeRange) {
-        return textSpanIsEmpty(range.span) && range.newLength === 0;
+        return spanIsEmpty(range.span) && range.newLength === 0;
     }
 
-    export function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange {
+    export function createTextChangeRange(span: Span, newLength: number): TextChangeRange {
         if (newLength < 0) {
             throw new Error("newLength < 0");
         }
@@ -2175,7 +2194,7 @@ namespace ts {
         return { span, newLength };
     }
 
-    export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
+    export let unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
 
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot 
@@ -2199,7 +2218,7 @@ namespace ts {
         let change0 = changes[0];
 
         let oldStartN = change0.span.start;
-        let oldEndN = textSpanEnd(change0.span);
+        let oldEndN = spanEnd(change0.span);
         let newEndN = oldStartN + change0.newLength;
 
         for (let i = 1; i < changes.length; i++) {
@@ -2290,7 +2309,7 @@ namespace ts {
             let newEnd1 = newEndN;
 
             let oldStart2 = nextChange.span.start;
-            let oldEnd2 = textSpanEnd(nextChange.span);
+            let oldEnd2 = spanEnd(nextChange.span);
             let newEnd2 = oldStart2 + nextChange.newLength;
 
             oldStartN = Math.min(oldStart1, oldStart2);
@@ -2298,7 +2317,7 @@ namespace ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+        return createTextChangeRange(createSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
     }
 
     export function getTypeParameterOwner(d: Declaration): Declaration {

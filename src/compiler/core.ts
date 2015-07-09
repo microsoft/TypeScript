@@ -764,8 +764,8 @@ namespace ts {
             }
             Node.prototype = {
                 kind: kind,
-                pos: -1,
-                end: -1,
+                start: -1,
+                length: 0,
                 flags: 0,
                 parent: undefined,
             };

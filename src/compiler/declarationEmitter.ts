@@ -132,15 +132,15 @@ namespace ts {
             referencePathsOutput,
         }
 
-        function hasInternalAnnotation(range: CommentRange) {
+        function hasInternalAnnotation(range: CommentSpan) {
             let text = currentSourceFile.text;
-            let comment = text.substring(range.pos, range.end);
+            let comment = text.substring(range.start, spanEnd(range));
             return comment.indexOf("@internal") >= 0;
         }
 
         function stripInternal(node: Node) {
             if (node) {
-                let leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                let leadingCommentRanges = getLeadingCommentSpans(currentSourceFile.text, node.start);
                 if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
                     return;
                 }
@@ -307,9 +307,9 @@ namespace ts {
         function writeJsDocComments(declaration: Node) {
             if (declaration) {
                 let jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration.start, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentSpan);
             }
         }
 

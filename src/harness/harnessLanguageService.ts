@@ -6,7 +6,7 @@
 module Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
-        public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
+        public textChangeRanges: ts.TextChangeRange[] = [];
         public lineMap: number[] = null;
 
         constructor(public fileName: string, public content: string) {
@@ -19,7 +19,7 @@ module Harness.LanguageService {
         }
 
         public updateContent(content: string): void {
-            this.editRanges = [];
+            this.textChangeRanges = [];
             this.setContent(content);
             this.version++;
         }
@@ -32,11 +32,7 @@ module Harness.LanguageService {
             this.setContent(prefix + middle + suffix);
 
             // Store edit range + new length of script
-            this.editRanges.push({
-                length: this.content.length,
-                textChangeRange: ts.createTextChangeRange(
-                    ts.createTextSpanFromBounds(start, end), newText.length)
-            });
+            this.textChangeRanges.push(ts.createTextChangeRange(ts.createSpanFromBounds(start, end), newText.length));
 
             // Update version #
             this.version++;
@@ -48,11 +44,11 @@ module Harness.LanguageService {
                 return ts.unchangedTextChangeRange;
             }
 
-            var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
-            var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
+            var initialEditRangeIndex = this.textChangeRanges.length - (this.version - startVersion);
+            var lastEditRangeIndex = this.textChangeRanges.length - (this.version - endVersion);
 
-            var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-            return ts.collapseTextChangeRangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
+            var entries = this.textChangeRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
+            return ts.collapseTextChangeRangesAcrossMultipleVersions(entries);
         }
     }
 
@@ -300,16 +296,16 @@ module Harness.LanguageService {
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
         }
-        getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
+        getSyntacticClassifications(fileName: string, span: ts.Span): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
         }
-        getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
+        getSemanticClassifications(fileName: string, span: ts.Span): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
         }
-        getEncodedSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
+        getEncodedSyntacticClassifications(fileName: string, span: ts.Span): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSyntacticClassifications(fileName, span.start, span.length));
         }
-        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
+        getEncodedSemanticClassifications(fileName: string, span: ts.Span): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
         }
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
@@ -321,10 +317,10 @@ module Harness.LanguageService {
         getQuickInfoAtPosition(fileName: string, position: number): ts.QuickInfo {
             return unwrapJSONCallResult(this.shim.getQuickInfoAtPosition(fileName, position));
         }
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): ts.TextSpan {
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): ts.Span {
             return unwrapJSONCallResult(this.shim.getNameOrDottedNameSpan(fileName, startPos, endPos));
         }
-        getBreakpointStatementAtPosition(fileName: string, position: number): ts.TextSpan {
+        getBreakpointStatementAtPosition(fileName: string, position: number): ts.Span {
             return unwrapJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
         }
         getSignatureHelpItems(fileName: string, position: number): ts.SignatureHelpItems {
@@ -366,7 +362,7 @@ module Harness.LanguageService {
         getTodoComments(fileName: string, descriptors: ts.TodoCommentDescriptor[]): ts.TodoComment[] {
             return unwrapJSONCallResult(this.shim.getTodoComments(fileName, JSON.stringify(descriptors)));
         }
-        getBraceMatchingAtPosition(fileName: string, position: number): ts.TextSpan[] {
+        getBraceMatchingAtPosition(fileName: string, position: number): ts.Span[] {
             return unwrapJSONCallResult(this.shim.getBraceMatchingAtPosition(fileName, position));
         }
         getIndentationAtPosition(fileName: string, position: number, options: ts.EditorOptions): number {
@@ -422,16 +418,16 @@ module Harness.LanguageService {
             ts.forEach(shimResult.referencedFiles, refFile => {
                 convertResult.referencedFiles.push({
                     fileName: refFile.path,
-                    pos: refFile.position,
-                    end: refFile.position + refFile.length
+                    start: refFile.position,
+                    length: refFile.length
                 });
             });
 
             ts.forEach(shimResult.importedFiles, importedFile => {
                 convertResult.importedFiles.push({
                     fileName: importedFile.path,
-                    pos: importedFile.position,
-                    end: importedFile.position + importedFile.length
+                    start: importedFile.position,
+                    length: importedFile.length
                 });
             });
 

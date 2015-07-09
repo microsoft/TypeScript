@@ -160,7 +160,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             let detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
 
-            let writeComment = writeCommentRange;
+            let writeComment = writeCommentSpan;
 
             /** Emit a node */
             let emit = emitNodeWithoutSourceMap;
@@ -453,11 +453,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function recordEmitNodeStartSpan(node: Node) {
                     // Get the token pos after skipping to the token (ignoring the leading trivia)
-                    recordSourceMapSpan(skipTrivia(currentSourceFile.text, node.pos));
+                    recordSourceMapSpan(skipTrivia(currentSourceFile.text, node.start));
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
-                    recordSourceMapSpan(node.end);
+                    recordSourceMapSpan(spanEnd(node));
                 }
 
                 function writeTextWithSpanRecord(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -555,10 +555,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-                    recordSourceMapSpan(comment.pos);
-                    writeCommentRange(currentSourceFile, writer, comment, newLine);
-                    recordSourceMapSpan(comment.end);
+                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentSpan, newLine: string) {
+                    recordSourceMapSpan(comment.start);
+                    writeCommentSpan(currentSourceFile, writer, comment, newLine);
+                    recordSourceMapSpan(spanEnd(comment));
                 }
 
                 function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string, sourcesContent?: string[]) {
@@ -2482,13 +2482,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitBlock(node: Block) {
                 if (isSingleLineEmptyBlock(node)) {
-                    emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                    emitToken(SyntaxKind.OpenBraceToken, node.start);
                     write(" ");
-                    emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.statements));
                     return;
                 }
 
-                emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                emitToken(SyntaxKind.OpenBraceToken, node.start);
                 increaseIndent();
                 scopeEmitStart(node.parent);
                 if (node.kind === SyntaxKind.ModuleBlock) {
@@ -2501,7 +2501,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.statements));
                 scopeEmitEnd();
             }
 
@@ -2524,15 +2524,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitIfStatement(node: IfStatement) {
-                let endPos = emitToken(SyntaxKind.IfKeyword, node.pos);
+                let endPos = emitToken(SyntaxKind.IfKeyword, node.start);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 emit(node.expression);
-                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                emitToken(SyntaxKind.CloseParenToken, spanEnd(node.expression));
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    emitToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
+                    emitToken(SyntaxKind.ElseKeyword, spanEnd(node.thenStatement));
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);
@@ -2627,7 +2627,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitForStatement(node: ForStatement) {
-                let endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
+                let endPos = emitToken(SyntaxKind.ForKeyword, node.start);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
@@ -2655,8 +2655,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.ForOfStatement) {
                     return emitDownLevelForOfStatement(node);
                 }
-
-                let endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
+                
+                let endPos = emitToken(SyntaxKind.ForKeyword, node.start);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
@@ -2677,7 +2677,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(" of ");
                 }
                 emit(node.expression);
-                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                emitToken(SyntaxKind.CloseParenToken, spanEnd(node.expression));
                 emitEmbeddedStatement(node.statement);
             }
 
@@ -2703,7 +2703,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Note also that because an extra statement is needed to assign to the LHS,
                 // for-of bodies are always emitted as blocks.
                 
-                let endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
+                let endPos = emitToken(SyntaxKind.ForKeyword, node.start);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 
@@ -2758,7 +2758,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitNodeWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
-                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                emitToken(SyntaxKind.CloseParenToken, spanEnd(node.expression));
                 
                 // Body
                 write(" {");
@@ -2825,13 +2825,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitBreakOrContinueStatement(node: BreakOrContinueStatement) {
-                emitToken(node.kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword, node.pos);
+                emitToken(node.kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword, node.start);
                 emitOptional(" ", node.label);
                 write(";");
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                emitToken(SyntaxKind.ReturnKeyword, node.pos);
+                emitToken(SyntaxKind.ReturnKeyword, node.start);
                 emitOptional(" ", node.expression);
                 write(";");
             }
@@ -2844,11 +2844,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitSwitchStatement(node: SwitchStatement) {
-                let endPos = emitToken(SyntaxKind.SwitchKeyword, node.pos);
+                let endPos = emitToken(SyntaxKind.SwitchKeyword, node.start);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
                 emit(node.expression);
-                endPos = emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                endPos = emitToken(SyntaxKind.CloseParenToken, spanEnd(node.expression));
                 write(" ");
                 emitCaseBlock(node.caseBlock, endPos)
             }
@@ -2859,22 +2859,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitLines(node.clauses);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.clauses));
             }
 
             function nodeStartPositionsAreOnSameLine(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
-                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.start)) ===
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.start));
             }
 
             function nodeEndPositionsAreOnSameLine(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
-                    getLineOfLocalPosition(currentSourceFile, node2.end);
+                return getLineOfLocalPosition(currentSourceFile, spanEnd(node1)) ===
+                    getLineOfLocalPosition(currentSourceFile, spanEnd(node2));
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
-                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return getLineOfLocalPosition(currentSourceFile, spanEnd(node1)) ===
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.start));
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -2917,17 +2917,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitCatchClause(node: CatchClause) {
                 writeLine();
-                let endPos = emitToken(SyntaxKind.CatchKeyword, node.pos);
+                let endPos = emitToken(SyntaxKind.CatchKeyword, node.start);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
                 emit(node.variableDeclaration);
-                emitToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : endPos);
+                emitToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? spanEnd(node.variableDeclaration) : endPos);
                 write(" ");
                 emitBlock(node.block);
             }
 
             function emitDebuggerStatement(node: Node) {
-                emitToken(SyntaxKind.DebuggerKeyword, node.pos);
+                emitToken(SyntaxKind.DebuggerKeyword, node.start);
                 write(";");
             }
 
@@ -3608,7 +3608,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitSignatureParametersForArrow(node: FunctionLikeDeclaration) {
                 // Check whether the parameter list needs parentheses and preserve no-parenthesis
-                if (node.parameters.length === 1 && node.pos === node.parameters[0].pos) {
+                if (node.parameters.length === 1 && node.start === node.parameters[0].start) {
                     emit(node.parameters[0]);
                     return;
                 }
@@ -3824,7 +3824,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 increaseIndent();
                 let outPos = writer.getTextPos();
-                emitDetachedComments(node.body);
+                emitDetachedComments(node.body.start);
                 emitFunctionBodyPreamble(node);
                 let preambleEmitted = writer.getTextPos() !== outPos;
                 decreaseIndent();
@@ -3869,7 +3869,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let initialTextPos = writer.getTextPos();
 
                 increaseIndent();
-                emitDetachedComments(body.statements);
+                emitDetachedComments(body.statements.start);
 
                 // Emit all the directive prologues (like "use strict").  These have to come before
                 // any other preamble code we write (like parameter initializers).
@@ -3886,7 +3886,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     emitTempDeclarations(/*newLine*/ false);
                     write(" ");
-                    emitLeadingCommentsOfPosition(body.statements.end);
+                    emitLeadingCommentsOfPosition(nodeArrayEnd(body.statements));
                 }
                 else {
                     increaseIndent();
@@ -3894,11 +3894,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitTempDeclarations(/*newLine*/ true);
 
                     writeLine();
-                    emitLeadingCommentsOfPosition(body.statements.end);
+                    emitLeadingCommentsOfPosition(nodeArrayEnd(body.statements));
                     decreaseIndent();
                 }
 
-                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(body.statements));
                 scopeEmitEnd();
             }
 
@@ -4180,7 +4180,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
-                    emitDetachedComments(ctor.body.statements);
+                    emitDetachedComments(ctor.body.statements.start);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
                 if (ctor) {
@@ -4219,10 +4219,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitTempDeclarations(/*newLine*/ true);
                 writeLine();
                 if (ctor) {
-                    emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                    emitLeadingCommentsOfPosition(nodeArrayEnd((<Block>ctor.body).statements));
                 }
                 decreaseIndent();
-                emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                emitToken(SyntaxKind.CloseBraceToken, ctor ? nodeArrayEnd((<Block>ctor.body).statements) : nodeArrayEnd(node.members));
                 scopeEmitEnd();
                 emitEnd(<Node>ctor || node);
                 if (ctor) {
@@ -4364,7 +4364,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitMemberFunctionsForES6AndHigher(node);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members));
                 scopeEmitEnd();
 
                 // TODO(rbuckton): Need to go back to `let _a = class C {}` approach, removing the defineProperty call for now.
@@ -4465,7 +4465,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 emitDecoratorsOfClass(node);
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members), () => {
                     write("return ");
                     emitDeclarationName(node);
                 });
@@ -4477,7 +4477,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 computedPropertyNamesToGeneratedNames = saveComputedPropertyNamesToGeneratedNames;
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members));
                 scopeEmitEnd();
                 emitStart(node);
                 write(")(");
@@ -4867,7 +4867,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitLines(node.members);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members));
                 scopeEmitEnd();
                 write(")(");
                 emitModuleMemberName(node);
@@ -4994,7 +4994,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     decreaseIndent();
                     writeLine();
                     let moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
-                    emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
+                    emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(moduleBlock.statements));
                     scopeEmitEnd();
                 }
                 write(")(");
@@ -5027,7 +5027,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitStart(moduleName);
                     emitLiteral(<LiteralExpression>moduleName);
                     emitEnd(moduleName);
-                    emitToken(SyntaxKind.CloseParenToken, moduleName.end);
+                    emitToken(SyntaxKind.CloseParenToken, spanEnd(moduleName));
                 }
                 else {
                     write("require()");
@@ -6219,7 +6219,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSourceFileNode(node: SourceFile) {
                 // Start new file on new line
                 writeLine();
-                emitDetachedComments(node);
+                emitDetachedComments(node.start);
 
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
@@ -6523,8 +6523,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
-                let leadingComments = getLeadingCommentRanges(currentSourceFile.text,
+                let leadingComments = getLeadingCommentSpans(currentSourceFile.text,
                     lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
+
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -6535,7 +6536,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
+            function filterComments(ranges: CommentSpan[], onlyPinnedOrTripleSlashComments: boolean): CommentSpan[] {
                 // If we're removing comments, then we want to strip out all but the pinned or
                 // triple slash comments.
                 if (ranges && onlyPinnedOrTripleSlashComments) {
@@ -6551,8 +6552,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
-                    if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                        if (hasDetachedComments(node.pos)) {
+                    if (node.parent.kind === SyntaxKind.SourceFile || node.start !== node.parent.start) {
+                        if (hasDetachedComments(node.start)) {
                             // get comments without detached comments
                             return getLeadingCommentsWithoutDetachedComments();
                         }
@@ -6567,8 +6568,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getTrailingCommentsToEmit(node: Node) {
                 // Emit the trailing comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
-                    if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                        return getTrailingCommentRanges(currentSourceFile.text, node.end);
+                    if (node.parent.kind === SyntaxKind.SourceFile || spanEnd(node) !== spanEnd(node.parent)) {
+                        return getTrailingCommentSpans(currentSourceFile.text, spanEnd(node));
                     }
                 }
             }
@@ -6586,7 +6587,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // down to that set.  Otherwise, filter based on the current compiler options.
                 let leadingComments = filterComments(getLeadingCommentsToEmit(node), onlyPinnedOrTripleSlashComments);
 
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node.start, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
@@ -6601,33 +6602,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitLeadingCommentsOfPosition(pos: number) {
-                let leadingComments: CommentRange[];
+                let leadingComments: CommentSpan[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
                     leadingComments = getLeadingCommentsWithoutDetachedComments();
                 }
                 else {
                     // get the leading comments from the node
-                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
+                    leadingComments = getLeadingCommentSpans(currentSourceFile.text, pos);
                 }
 
                 leadingComments = filterComments(leadingComments, compilerOptions.removeComments);
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitDetachedComments(node: TextRange) {
-                let leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+            function emitDetachedComments(pos: number) {
+                let leadingComments = getLeadingCommentSpans(currentSourceFile.text, pos);
                 if (leadingComments) {
-                    let detachedComments: CommentRange[] = [];
-                    let lastComment: CommentRange;
+                    var detachedComments: CommentSpan[] = [];
+                    var lastComment: CommentSpan;
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
-                            let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
-                            let commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
+                            let lastCommentLine = getLineOfLocalPosition(currentSourceFile, spanEnd(lastComment));
+                            let commentLine = getLineOfLocalPosition(currentSourceFile, comment.start);
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
@@ -6645,13 +6646,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
-                        let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, spanEnd(lastOrUndefined(detachedComments)));
+                        let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, pos));
+
                         if (nodeLine >= lastCommentLine + 2) {
                             // Valid detachedComments
-                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
+                            let currentDetachedCommentInfo = { nodePos: pos, detachedCommentEndPos: spanEnd(lastOrUndefined(detachedComments)) };
+
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
@@ -6663,16 +6666,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function isPinnedOrTripleSlashComment(comment: CommentRange) {
-                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-                    return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+            function isPinnedOrTripleSlashComment(comment: CommentSpan) {
+                if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
+                    return currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.exclamation;
                 }
                 // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
                 // so that we don't end up computing comment string and doing match for all // comments
-                else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
-                    comment.pos + 2 < comment.end &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
-                    currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
+                else if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.slash &&
+                    comment.start + 2 < spanEnd(comment) &&
+                    currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.slash &&
+                    currentSourceFile.text.substring(comment.start, spanEnd(comment)).match(fullTripleSlashReferencePathRegEx)) {
                     return true;
                 }
             }

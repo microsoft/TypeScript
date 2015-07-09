@@ -205,7 +205,7 @@ namespace ts.server {
         /**
          *  @param line 1 based index
          */
-        lineToTextSpan(filename: string, line: number): ts.TextSpan {
+        lineToTextSpan(filename: string, line: number): ts.Span {
             var script: ScriptInfo = this.filenameToScript[filename];
             var index = script.snap().index;
 
@@ -218,7 +218,7 @@ namespace ts.server {
                 var nextLineInfo = index.lineNumberToInfo(line + 2);
                 len = nextLineInfo.offset - lineInfo.offset;
             }
-            return ts.createTextSpan(lineInfo.offset, len);
+            return ts.createSpan(lineInfo.offset, len);
         }
 
         /**
@@ -1252,7 +1252,7 @@ namespace ts.server {
         }
 
         getTextChangeRange() {
-            return ts.createTextChangeRange(ts.createTextSpan(this.pos, this.deleteLen),
+            return ts.createTextChangeRange(ts.createSpan(this.pos, this.deleteLen),
                 this.insertedText ? this.insertedText.length : 0);
         }
     }

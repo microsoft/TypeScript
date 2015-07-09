@@ -23,8 +23,8 @@ module ts {
                     parsesCorrectly("{?}",
                         `{
     "kind": "JSDocUnknownType",
-    "pos": 1,
-    "end": 2
+    "start": 1,
+    "length": 1
 }`);
                 });
 
@@ -32,8 +32,8 @@ module ts {
                     parsesCorrectly("{*}",
                         `{
     "kind": "JSDocAllType",
-    "pos": 1,
-    "end": 2
+    "start": 1,
+    "length": 1
 }`);
                 });
 
@@ -41,12 +41,12 @@ module ts {
                     parsesCorrectly("{?number}",
                         `{
     "kind": "JSDocNullableType",
-    "pos": 1,
-    "end": 8,
+    "start": 1,
+    "length": 7,
     "type": {
         "kind": "NumberKeyword",
-        "pos": 2,
-        "end": 8
+        "start": 2,
+        "length": 6
     }
 }`)
                 });
@@ -55,12 +55,12 @@ module ts {
                     parsesCorrectly("{number?}",
                         `{
     "kind": "JSDocNullableType",
-    "pos": 1,
-    "end": 8,
+    "start": 1,
+    "length": 7,
     "type": {
         "kind": "NumberKeyword",
-        "pos": 1,
-        "end": 7
+        "start": 1,
+        "length": 6
     }
 }`)
                 });
@@ -69,12 +69,12 @@ module ts {
                     parsesCorrectly("{!number}",
                         `{
     "kind": "JSDocNonNullableType",
-    "pos": 1,
-    "end": 8,
+    "start": 1,
+    "length": 7,
     "type": {
         "kind": "NumberKeyword",
-        "pos": 2,
-        "end": 8
+        "start": 2,
+        "length": 6
     }
 }`)
                 });
@@ -83,12 +83,12 @@ module ts {
                     parsesCorrectly("{number!}",
                         `{
     "kind": "JSDocNonNullableType",
-    "pos": 1,
-    "end": 8,
+    "start": 1,
+    "length": 7,
     "type": {
         "kind": "NumberKeyword",
-        "pos": 1,
-        "end": 7
+        "start": 1,
+        "length": 6
     }
 }`)
                 });
@@ -97,12 +97,11 @@ module ts {
                     parsesCorrectly("{{}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 3,
+    "start": 1,
+    "length": 2,
     "members": {
-        "length": 0,
-        "pos": 2,
-        "end": 2
+        "start": 2,
+        "length": 0
     }
 }`)
                 });
@@ -111,23 +110,22 @@ module ts {
                     parsesCorrectly("{{foo}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 6,
+    "start": 1,
+    "length": 5,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 5,
+            "start": 2,
+            "length": 3,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 5,
+                "start": 2,
+                "length": 3,
                 "text": "foo"
             }
         },
-        "length": 1,
-        "pos": 2,
-        "end": 5
+        "start": 2,
+        "length": 1
     }
 }`)
                 });
@@ -136,28 +134,27 @@ module ts {
                     parsesCorrectly("{{foo: number}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 14,
+    "start": 1,
+    "length": 13,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 13,
+            "start": 2,
+            "length": 11,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 5,
+                "start": 2,
+                "length": 3,
                 "text": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
-                "pos": 6,
-                "end": 13
+                "start": 6,
+                "length": 7
             }
         },
-        "length": 1,
-        "pos": 2,
-        "end": 13
+        "start": 2,
+        "length": 1
     }
 }`)
                 });
@@ -166,34 +163,33 @@ module ts {
                     parsesCorrectly("{{foo, bar}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 11,
+    "start": 1,
+    "length": 10,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 5,
+            "start": 2,
+            "length": 3,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 5,
+                "start": 2,
+                "length": 3,
                 "text": "foo"
             }
         },
         "1": {
             "kind": "JSDocRecordMember",
-            "pos": 6,
-            "end": 10,
+            "start": 6,
+            "length": 4,
             "name": {
                 "kind": "Identifier",
-                "pos": 6,
-                "end": 10,
+                "start": 6,
+                "length": 4,
                 "text": "bar"
             }
         },
-        "length": 2,
-        "pos": 2,
-        "end": 10
+        "start": 2,
+        "length": 2
     }
 }`)
                 });
@@ -202,39 +198,38 @@ module ts {
                     parsesCorrectly("{{foo: number, bar}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 19,
+    "start": 1,
+    "length": 18,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 13,
+            "start": 2,
+            "length": 11,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 5,
+                "start": 2,
+                "length": 3,
                 "text": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
-                "pos": 6,
-                "end": 13
+                "start": 6,
+                "length": 7
             }
         },
         "1": {
             "kind": "JSDocRecordMember",
-            "pos": 14,
-            "end": 18,
+            "start": 14,
+            "length": 4,
             "name": {
                 "kind": "Identifier",
-                "pos": 14,
-                "end": 18,
+                "start": 14,
+                "length": 4,
                 "text": "bar"
             }
         },
-        "length": 2,
-        "pos": 2,
-        "end": 18
+        "start": 2,
+        "length": 2
     }
 }`)
                 });
@@ -243,39 +238,38 @@ module ts {
                     parsesCorrectly("{{foo, bar: number}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 19,
+    "start": 1,
+    "length": 18,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 5,
+            "start": 2,
+            "length": 3,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 5,
+                "start": 2,
+                "length": 3,
                 "text": "foo"
             }
         },
         "1": {
             "kind": "JSDocRecordMember",
-            "pos": 6,
-            "end": 18,
+            "start": 6,
+            "length": 12,
             "name": {
                 "kind": "Identifier",
-                "pos": 6,
-                "end": 10,
+                "start": 6,
+                "length": 4,
                 "text": "bar"
             },
             "type": {
                 "kind": "NumberKeyword",
-                "pos": 11,
-                "end": 18
+                "start": 11,
+                "length": 7
             }
         },
-        "length": 2,
-        "pos": 2,
-        "end": 18
+        "start": 2,
+        "length": 2
     }
 }`)
                 });
@@ -284,44 +278,43 @@ module ts {
                     parsesCorrectly("{{foo: number, bar: number}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 27,
+    "start": 1,
+    "length": 26,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 13,
+            "start": 2,
+            "length": 11,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 5,
+                "start": 2,
+                "length": 3,
                 "text": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
-                "pos": 6,
-                "end": 13
+                "start": 6,
+                "length": 7
             }
         },
         "1": {
             "kind": "JSDocRecordMember",
-            "pos": 14,
-            "end": 26,
+            "start": 14,
+            "length": 12,
             "name": {
                 "kind": "Identifier",
-                "pos": 14,
-                "end": 18,
+                "start": 14,
+                "length": 4,
                 "text": "bar"
             },
             "type": {
                 "kind": "NumberKeyword",
-                "pos": 19,
-                "end": 26
+                "start": 19,
+                "length": 7
             }
         },
-        "length": 2,
-        "pos": 2,
-        "end": 26
+        "start": 2,
+        "length": 2
     }
 }`)
                 });
@@ -330,24 +323,23 @@ module ts {
                     parsesCorrectly("{{function}}",
                         `{
     "kind": "JSDocRecordType",
-    "pos": 1,
-    "end": 11,
+    "start": 1,
+    "length": 10,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
-            "pos": 2,
-            "end": 10,
+            "start": 2,
+            "length": 8,
             "name": {
                 "kind": "Identifier",
-                "pos": 2,
-                "end": 10,
+                "start": 2,
+                "length": 8,
                 "originalKeywordKind": "FunctionKeyword",
                 "text": "function"
             }
         },
-        "length": 1,
-        "pos": 2,
-        "end": 10
+        "start": 2,
+        "length": 1
     }
 }`)
                 });
@@ -356,22 +348,21 @@ module ts {
                     parsesCorrectly("{(number|string)}",
                         `{
     "kind": "JSDocUnionType",
-    "pos": 1,
-    "end": 16,
+    "start": 1,
+    "length": 15,
     "types": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 2,
-            "end": 8
+            "start": 2,
+            "length": 6
         },
         "1": {
             "kind": "StringKeyword",
-            "pos": 9,
-            "end": 15
+            "start": 9,
+            "length": 6
         },
-        "length": 2,
-        "pos": 2,
-        "end": 15
+        "start": 2,
+        "length": 2
     }
 }`);
                 });
@@ -380,22 +371,21 @@ module ts {
                     parsesCorrectly("{number|string}",
                         `{
     "kind": "JSDocUnionType",
-    "pos": 1,
-    "end": 14,
+    "start": 1,
+    "length": 13,
     "types": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 1,
-            "end": 7
+            "start": 1,
+            "length": 6
         },
         "1": {
             "kind": "StringKeyword",
-            "pos": 8,
-            "end": 14
+            "start": 8,
+            "length": 6
         },
-        "length": 2,
-        "pos": 1,
-        "end": 14
+        "start": 1,
+        "length": 2
     }
 }`);
                 });
@@ -404,12 +394,11 @@ module ts {
                     parsesCorrectly("{function()}",
                         `{
     "kind": "JSDocFunctionType",
-    "pos": 1,
-    "end": 11,
+    "start": 1,
+    "length": 10,
     "parameters": {
-        "length": 0,
-        "pos": 10,
-        "end": 10
+        "start": 10,
+        "length": 0
     }
 }`);
                 });
@@ -418,32 +407,31 @@ module ts {
                     parsesCorrectly("{function(string, boolean)}",
                         `{
     "kind": "JSDocFunctionType",
-    "pos": 1,
-    "end": 26,
+    "start": 1,
+    "length": 25,
     "parameters": {
         "0": {
             "kind": "Parameter",
-            "pos": 10,
-            "end": 16,
+            "start": 10,
+            "length": 6,
             "type": {
                 "kind": "StringKeyword",
-                "pos": 10,
-                "end": 16
+                "start": 10,
+                "length": 6
             }
         },
         "1": {
             "kind": "Parameter",
-            "pos": 17,
-            "end": 25,
+            "start": 17,
+            "length": 8,
             "type": {
                 "kind": "BooleanKeyword",
-                "pos": 17,
-                "end": 25
+                "start": 17,
+                "length": 8
             }
         },
-        "length": 2,
-        "pos": 10,
-        "end": 25
+        "start": 10,
+        "length": 2
     }
 }`);
                 });
@@ -452,32 +440,31 @@ module ts {
                     parsesCorrectly("{function(string, boolean)}",
                         `{
     "kind": "JSDocFunctionType",
-    "pos": 1,
-    "end": 26,
+    "start": 1,
+    "length": 25,
     "parameters": {
         "0": {
             "kind": "Parameter",
-            "pos": 10,
-            "end": 16,
+            "start": 10,
+            "length": 6,
             "type": {
                 "kind": "StringKeyword",
-                "pos": 10,
-                "end": 16
+                "start": 10,
+                "length": 6
             }
         },
         "1": {
             "kind": "Parameter",
-            "pos": 17,
-            "end": 25,
+            "start": 17,
+            "length": 8,
             "type": {
                 "kind": "BooleanKeyword",
-                "pos": 17,
-                "end": 25
+                "start": 17,
+                "length": 8
             }
         },
-        "length": 2,
-        "pos": 10,
-        "end": 25
+        "start": 10,
+        "length": 2
     }
 }`);
                 });
@@ -486,26 +473,26 @@ module ts {
                     parsesCorrectly("{this:a.b}",
                         `{
     "kind": "JSDocThisType",
-    "pos": 1,
-    "end": 9,
+    "start": 1,
+    "length": 8,
     "type": {
         "kind": "JSDocTypeReference",
-        "pos": 6,
-        "end": 9,
+        "start": 6,
+        "length": 3,
         "name": {
             "kind": "FirstNode",
-            "pos": 6,
-            "end": 9,
+            "start": 6,
+            "length": 3,
             "left": {
                 "kind": "Identifier",
-                "pos": 6,
-                "end": 7,
+                "start": 6,
+                "length": 1,
                 "text": "a"
             },
             "right": {
                 "kind": "Identifier",
-                "pos": 8,
-                "end": 9,
+                "start": 8,
+                "length": 1,
                 "text": "b"
             }
         }
@@ -517,26 +504,26 @@ module ts {
                     parsesCorrectly("{new:a.b}",
                         `{
     "kind": "JSDocConstructorType",
-    "pos": 1,
-    "end": 8,
+    "start": 1,
+    "length": 7,
     "type": {
         "kind": "JSDocTypeReference",
-        "pos": 5,
-        "end": 8,
+        "start": 5,
+        "length": 3,
         "name": {
             "kind": "FirstNode",
-            "pos": 5,
-            "end": 8,
+            "start": 5,
+            "length": 3,
             "left": {
                 "kind": "Identifier",
-                "pos": 5,
-                "end": 6,
+                "start": 5,
+                "length": 1,
                 "text": "a"
             },
             "right": {
                 "kind": "Identifier",
-                "pos": 7,
-                "end": 8,
+                "start": 7,
+                "length": 1,
                 "text": "b"
             }
         }
@@ -548,12 +535,12 @@ module ts {
                     parsesCorrectly("{...number}",
                         `{
     "kind": "JSDocVariadicType",
-    "pos": 1,
-    "end": 10,
+    "start": 1,
+    "length": 9,
     "type": {
         "kind": "NumberKeyword",
-        "pos": 4,
-        "end": 10
+        "start": 4,
+        "length": 6
     }
 }`);
                 });
@@ -562,12 +549,12 @@ module ts {
                     parsesCorrectly("{number=}",
                         `{
     "kind": "JSDocOptionalType",
-    "pos": 1,
-    "end": 8,
+    "start": 1,
+    "length": 7,
     "type": {
         "kind": "NumberKeyword",
-        "pos": 1,
-        "end": 7
+        "start": 1,
+        "length": 6
     }
 }`);
                 });
@@ -576,12 +563,12 @@ module ts {
                     parsesCorrectly("{?=}",
                         `{
     "kind": "JSDocOptionalType",
-    "pos": 1,
-    "end": 3,
+    "start": 1,
+    "length": 2,
     "type": {
         "kind": "JSDocUnknownType",
-        "pos": 1,
-        "end": 2
+        "start": 1,
+        "length": 1
     }
 }`);
                 });
@@ -590,23 +577,22 @@ module ts {
                     parsesCorrectly("{a.<number>}",
                         `{
     "kind": "JSDocTypeReference",
-    "pos": 1,
-    "end": 11,
+    "start": 1,
+    "length": 10,
     "name": {
         "kind": "Identifier",
-        "pos": 1,
-        "end": 2,
+        "start": 1,
+        "length": 1,
         "text": "a"
     },
     "typeArguments": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 4,
-            "end": 10
+            "start": 4,
+            "length": 6
         },
-        "length": 1,
-        "pos": 4,
-        "end": 10
+        "start": 4,
+        "length": 1
     }
 }`);
                 });
@@ -615,28 +601,27 @@ module ts {
                     parsesCorrectly("{a.<number,string>}",
                         `{
     "kind": "JSDocTypeReference",
-    "pos": 1,
-    "end": 18,
+    "start": 1,
+    "length": 17,
     "name": {
         "kind": "Identifier",
-        "pos": 1,
-        "end": 2,
+        "start": 1,
+        "length": 1,
         "text": "a"
     },
     "typeArguments": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 4,
-            "end": 10
+            "start": 4,
+            "length": 6
         },
         "1": {
             "kind": "StringKeyword",
-            "pos": 11,
-            "end": 17
+            "start": 11,
+            "length": 6
         },
-        "length": 2,
-        "pos": 4,
-        "end": 17
+        "start": 4,
+        "length": 2
     }
 }`);
                 });
@@ -645,22 +630,22 @@ module ts {
                     parsesCorrectly("{a.function}",
                         `{
     "kind": "JSDocTypeReference",
-    "pos": 1,
-    "end": 11,
+    "start": 1,
+    "length": 10,
     "name": {
         "kind": "FirstNode",
-        "pos": 1,
-        "end": 11,
+        "start": 1,
+        "length": 10,
         "left": {
             "kind": "Identifier",
-            "pos": 1,
-            "end": 2,
+            "start": 1,
+            "length": 1,
             "text": "a"
         },
         "right": {
             "kind": "Identifier",
-            "pos": 3,
-            "end": 11,
+            "start": 3,
+            "length": 8,
             "originalKeywordKind": "FunctionKeyword",
             "text": "function"
         }
@@ -673,16 +658,16 @@ module ts {
                         "{a[]}",
                         `{
     "kind": "JSDocArrayType",
-    "pos": 1,
-    "end": 4,
+    "start": 1,
+    "length": 3,
     "elementType": {
         "kind": "JSDocTypeReference",
-        "pos": 1,
-        "end": 2,
+        "start": 1,
+        "length": 1,
         "name": {
             "kind": "Identifier",
-            "pos": 1,
-            "end": 2,
+            "start": 1,
+            "length": 1,
             "text": "a"
         }
     }
@@ -694,20 +679,20 @@ module ts {
                         "{a[][]}",
                         `{
     "kind": "JSDocArrayType",
-    "pos": 1,
-    "end": 6,
+    "start": 1,
+    "length": 5,
     "elementType": {
         "kind": "JSDocArrayType",
-        "pos": 1,
-        "end": 4,
+        "start": 1,
+        "length": 3,
         "elementType": {
             "kind": "JSDocTypeReference",
-            "pos": 1,
-            "end": 2,
+            "start": 1,
+            "length": 1,
             "name": {
                 "kind": "Identifier",
-                "pos": 1,
-                "end": 2,
+                "start": 1,
+                "length": 1,
                 "text": "a"
             }
         }
@@ -720,24 +705,24 @@ module ts {
                         "{a[][]=}",
                         `{
     "kind": "JSDocOptionalType",
-    "pos": 1,
-    "end": 7,
+    "start": 1,
+    "length": 6,
     "type": {
         "kind": "JSDocArrayType",
-        "pos": 1,
-        "end": 6,
+        "start": 1,
+        "length": 5,
         "elementType": {
             "kind": "JSDocArrayType",
-            "pos": 1,
-            "end": 4,
+            "start": 1,
+            "length": 3,
             "elementType": {
                 "kind": "JSDocTypeReference",
-                "pos": 1,
-                "end": 2,
+                "start": 1,
+                "length": 1,
                 "name": {
                     "kind": "Identifier",
-                    "pos": 1,
-                    "end": 2,
+                    "start": 1,
+                    "length": 1,
                     "text": "a"
                 }
             }
@@ -751,12 +736,12 @@ module ts {
                         "{var}",
                         `{
     "kind": "JSDocTypeReference",
-    "pos": 1,
-    "end": 4,
+    "start": 1,
+    "length": 3,
     "name": {
         "kind": "Identifier",
-        "pos": 1,
-        "end": 4,
+        "start": 1,
+        "length": 3,
         "originalKeywordKind": "VarKeyword",
         "text": "var"
     }
@@ -768,12 +753,12 @@ module ts {
                         "{null}",
                         `{
     "kind": "JSDocTypeReference",
-    "pos": 1,
-    "end": 5,
+    "start": 1,
+    "length": 4,
     "name": {
         "kind": "Identifier",
-        "pos": 1,
-        "end": 5,
+        "start": 1,
+        "length": 4,
         "originalKeywordKind": "NullKeyword",
         "text": "null"
     }
@@ -785,12 +770,12 @@ module ts {
                         "{undefined}",
                         `{
     "kind": "JSDocTypeReference",
-    "pos": 1,
-    "end": 10,
+    "start": 1,
+    "length": 9,
     "name": {
         "kind": "Identifier",
-        "pos": 1,
-        "end": 10,
+        "start": 1,
+        "length": 9,
         "text": "undefined"
     }
 }`);
@@ -801,12 +786,11 @@ module ts {
                         "{[]}",
                         `{
     "kind": "JSDocTupleType",
-    "pos": 1,
-    "end": 3,
+    "start": 1,
+    "length": 2,
     "types": {
-        "length": 0,
-        "pos": 2,
-        "end": 2
+        "start": 2,
+        "length": 0
     }
 }`);
                 });
@@ -816,17 +800,16 @@ module ts {
                         "{[number]}",
                         `{
     "kind": "JSDocTupleType",
-    "pos": 1,
-    "end": 9,
+    "start": 1,
+    "length": 8,
     "types": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 2,
-            "end": 8
+            "start": 2,
+            "length": 6
         },
-        "length": 1,
-        "pos": 2,
-        "end": 8
+        "start": 2,
+        "length": 1
     }
 }`);
                 });
@@ -836,22 +819,21 @@ module ts {
                         "{[number,string]}",
                         `{
     "kind": "JSDocTupleType",
-    "pos": 1,
-    "end": 16,
+    "start": 1,
+    "length": 15,
     "types": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 2,
-            "end": 8
+            "start": 2,
+            "length": 6
         },
         "1": {
             "kind": "StringKeyword",
-            "pos": 9,
-            "end": 15
+            "start": 9,
+            "length": 6
         },
-        "length": 2,
-        "pos": 2,
-        "end": 15
+        "start": 2,
+        "length": 2
     }
 }`);
                 });
@@ -861,27 +843,26 @@ module ts {
                         "{[number,string,boolean]}",
                         `{
     "kind": "JSDocTupleType",
-    "pos": 1,
-    "end": 24,
+    "start": 1,
+    "length": 23,
     "types": {
         "0": {
             "kind": "NumberKeyword",
-            "pos": 2,
-            "end": 8
+            "start": 2,
+            "length": 6
         },
         "1": {
             "kind": "StringKeyword",
-            "pos": 9,
-            "end": 15
+            "start": 9,
+            "length": 6
         },
         "2": {
             "kind": "BooleanKeyword",
-            "pos": 16,
-            "end": 23
+            "start": 16,
+            "length": 7
         },
-        "length": 3,
-        "pos": 2,
-        "end": 23
+        "start": 2,
+        "length": 3
     }
 }`);
                 });
@@ -988,7 +969,7 @@ module ts {
                 Debug.assert(comment && comment.diagnostics.length === 0);
 
                 let result = JSON.stringify(comment.jsDocComment, (k, v) => {
-                    return v && v.pos !== undefined
+                    return v && v.start !== undefined
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
                 }, "    ");
@@ -1067,38 +1048,37 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 27,
+    "start": 0,
+    "length": 27,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
-            "pos": 8,
-            "end": 22,
+            "start": 8,
+            "length": 14,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 13,
+                "start": 9,
+                "length": 4,
                 "text": "type"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 14,
-                "end": 22,
+                "start": 14,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 15,
-                    "end": 21
+                    "start": 15,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 22
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1110,28 +1090,27 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 18,
+    "start": 0,
+    "length": 18,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
-            "pos": 8,
-            "end": 13,
+            "start": 8,
+            "length": 5,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 13,
+                "start": 9,
+                "length": 4,
                 "text": "type"
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 13
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1143,28 +1122,27 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 20,
+    "start": 0,
+    "length": 20,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
-            "pos": 8,
-            "end": 15,
+            "start": 8,
+            "length": 7,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 15,
+                "start": 9,
+                "length": 6,
                 "text": "return"
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 15
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1176,38 +1154,37 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 27,
+    "start": 0,
+    "length": 27,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
-            "pos": 8,
-            "end": 22,
+            "start": 8,
+            "length": 14,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 13,
+                "start": 9,
+                "length": 4,
                 "text": "type"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 14,
-                "end": 22,
+                "start": 14,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 15,
-                    "end": 21
+                    "start": 15,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 22
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1219,38 +1196,37 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 27,
+    "start": 0,
+    "length": 27,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
-            "pos": 8,
-            "end": 22,
+            "start": 8,
+            "length": 14,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 13,
+                "start": 9,
+                "length": 4,
                 "text": "type"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 14,
-                "end": 22,
+                "start": 14,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 15,
-                    "end": 21
+                    "start": 15,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 22
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1262,38 +1238,37 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 29,
+    "start": 0,
+    "length": 29,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
-            "pos": 8,
-            "end": 24,
+            "start": 8,
+            "length": 16,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 15,
+                "start": 9,
+                "length": 6,
                 "text": "return"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 16,
-                "end": 24,
+                "start": 16,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 17,
-                    "end": 23
+                    "start": 17,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 24
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1305,38 +1280,37 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 54,
+    "start": 0,
+    "length": 54,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
-            "pos": 8,
-            "end": 24,
+            "start": 8,
+            "length": 16,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 15,
+                "start": 9,
+                "length": 6,
                 "text": "return"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 16,
-                "end": 24,
+                "start": 16,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 17,
-                    "end": 23
+                    "start": 17,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 24
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1348,38 +1322,37 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 30,
+    "start": 0,
+    "length": 30,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
-            "pos": 8,
-            "end": 25,
+            "start": 8,
+            "length": 17,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 16,
+                "start": 9,
+                "length": 7,
                 "text": "returns"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 17,
-                "end": 25,
+                "start": 17,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 18,
-                    "end": 24
+                    "start": 18,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 25
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1391,44 +1364,43 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 34,
+    "start": 0,
+    "length": 34,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 29,
+            "start": 8,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 15,
-                "end": 23,
+                "start": 15,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 16,
-                    "end": 22
+                    "start": 16,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
+                "start": 24,
+                "length": 5,
                 "text": "name1"
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 29
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1441,76 +1413,75 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 60,
+    "start": 0,
+    "length": 60,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 29,
+            "start": 8,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 15,
-                "end": 23,
+                "start": 15,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 16,
-                    "end": 22
+                    "start": 16,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
+                "start": 24,
+                "length": 5,
                 "text": "name1"
             }
         },
         "1": {
             "kind": "JSDocParameterTag",
-            "pos": 34,
-            "end": 55,
+            "start": 34,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 34,
-                "end": 35
+                "start": 34,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 35,
-                "end": 40,
+                "start": 35,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 41,
-                "end": 49,
+                "start": 41,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 42,
-                    "end": 48
+                    "start": 42,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 50,
-                "end": 55,
+                "start": 50,
+                "length": 5,
                 "text": "name2"
             }
         },
-        "length": 2,
-        "pos": 8,
-        "end": 55
+        "start": 8,
+        "length": 2
     }
 }`);
                 });
@@ -1522,44 +1493,43 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 59,
+    "start": 0,
+    "length": 59,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 29,
+            "start": 8,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 15,
-                "end": 23,
+                "start": 15,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 16,
-                    "end": 22
+                    "start": 16,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
+                "start": 24,
+                "length": 5,
                 "text": "name1"
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 29
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1571,45 +1541,44 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 61,
+    "start": 0,
+    "length": 61,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 30,
+            "start": 8,
+            "length": 22,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 15,
-                "end": 23,
+                "start": 15,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 16,
-                    "end": 22
+                    "start": 16,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 25,
-                "end": 30,
+                "start": 25,
+                "length": 5,
                 "text": "name1"
             },
             "isBracketed": true
         },
-        "length": 1,
-        "pos": 8,
-        "end": 30
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1621,45 +1590,44 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 66,
+    "start": 0,
+    "length": 66,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 31,
+            "start": 8,
+            "length": 23,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 15,
-                "end": 23,
+                "start": 15,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 16,
-                    "end": 22
+                    "start": 16,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 26,
-                "end": 31,
+                "start": 26,
+                "length": 5,
                 "text": "name1"
             },
             "isBracketed": true
         },
-        "length": 1,
-        "pos": 8,
-        "end": 31
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1671,44 +1639,43 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 56,
+    "start": 0,
+    "length": 56,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 29,
+            "start": 8,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 15,
-                "end": 23,
+                "start": 15,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 16,
-                    "end": 22
+                    "start": 16,
+                    "length": 6
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
+                "start": 24,
+                "length": 5,
                 "text": "name1"
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 29
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1720,44 +1687,43 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 34,
+    "start": 0,
+    "length": 34,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 29,
+            "start": 8,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
-                "pos": 15,
-                "end": 20,
+                "start": 15,
+                "length": 5,
                 "text": "name1"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 21,
-                "end": 29,
+                "start": 21,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 22,
-                    "end": 28
+                    "start": 22,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 29
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1769,44 +1735,43 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 46,
+    "start": 0,
+    "length": 46,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 29,
+            "start": 8,
+            "length": 21,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
-                "pos": 15,
-                "end": 20,
+                "start": 15,
+                "length": 5,
                 "text": "name1"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
-                "pos": 21,
-                "end": 29,
+                "start": 21,
+                "length": 8,
                 "type": {
                     "kind": "NumberKeyword",
-                    "pos": 22,
-                    "end": 28
+                    "start": 22,
+                    "length": 6
                 }
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 29
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1818,44 +1783,42 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 24,
+    "start": 0,
+    "length": 24,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
-            "pos": 8,
-            "end": 19,
+            "start": 8,
+            "length": 11,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 17,
+                "start": 9,
+                "length": 8,
                 "text": "template"
             },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
-                    "end": 19,
+                    "start": 18,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 18,
-                        "end": 19,
+                        "start": 18,
+                        "length": 1,
                         "text": "T"
                     }
                 },
-                "length": 1,
-                "pos": 17,
-                "end": 19
+                "start": 17,
+                "length": 1
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 19
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1867,55 +1830,53 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 26,
+    "start": 0,
+    "length": 26,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
-            "pos": 8,
-            "end": 21,
+            "start": 8,
+            "length": 13,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 17,
+                "start": 9,
+                "length": 8,
                 "text": "template"
             },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
-                    "end": 19,
+                    "start": 18,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 18,
-                        "end": 19,
+                        "start": 18,
+                        "length": 1,
                         "text": "K"
                     }
                 },
                 "1": {
                     "kind": "TypeParameter",
-                    "pos": 20,
-                    "end": 21,
+                    "start": 20,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 20,
-                        "end": 21,
+                        "start": 20,
+                        "length": 1,
                         "text": "V"
                     }
                 },
-                "length": 2,
-                "pos": 17,
-                "end": 21
+                "start": 17,
+                "length": 2
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 21
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1927,55 +1888,53 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 27,
+    "start": 0,
+    "length": 27,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
-            "pos": 8,
-            "end": 22,
+            "start": 8,
+            "length": 14,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 17,
+                "start": 9,
+                "length": 8,
                 "text": "template"
             },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
-                    "end": 19,
+                    "start": 18,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 18,
-                        "end": 19,
+                        "start": 18,
+                        "length": 1,
                         "text": "K"
                     }
                 },
                 "1": {
                     "kind": "TypeParameter",
-                    "pos": 21,
-                    "end": 22,
+                    "start": 21,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 21,
-                        "end": 22,
+                        "start": 21,
+                        "length": 1,
                         "text": "V"
                     }
                 },
-                "length": 2,
-                "pos": 17,
-                "end": 22
+                "start": 17,
+                "length": 2
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 22
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -1987,55 +1946,53 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 27,
+    "start": 0,
+    "length": 27,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
-            "pos": 8,
-            "end": 22,
+            "start": 8,
+            "length": 14,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 17,
+                "start": 9,
+                "length": 8,
                 "text": "template"
             },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
-                    "end": 19,
+                    "start": 18,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 18,
-                        "end": 19,
+                        "start": 18,
+                        "length": 1,
                         "text": "K"
                     }
                 },
                 "1": {
                     "kind": "TypeParameter",
-                    "pos": 21,
-                    "end": 22,
+                    "start": 21,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 21,
-                        "end": 22,
+                        "start": 21,
+                        "length": 1,
                         "text": "V"
                     }
                 },
-                "length": 2,
-                "pos": 17,
-                "end": 22
+                "start": 17,
+                "length": 2
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 22
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -2047,55 +2004,53 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 28,
+    "start": 0,
+    "length": 28,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
-            "pos": 8,
-            "end": 23,
+            "start": 8,
+            "length": 15,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 17,
+                "start": 9,
+                "length": 8,
                 "text": "template"
             },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
-                    "end": 19,
+                    "start": 18,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 18,
-                        "end": 19,
+                        "start": 18,
+                        "length": 1,
                         "text": "K"
                     }
                 },
                 "1": {
                     "kind": "TypeParameter",
-                    "pos": 22,
-                    "end": 23,
+                    "start": 22,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 22,
-                        "end": 23,
+                        "start": 22,
+                        "length": 1,
                         "text": "V"
                     }
                 },
-                "length": 2,
-                "pos": 17,
-                "end": 23
+                "start": 17,
+                "length": 2
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 23
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -2107,55 +2062,53 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 60,
+    "start": 0,
+    "length": 60,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
-            "pos": 8,
-            "end": 24,
+            "start": 8,
+            "length": 16,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 17,
+                "start": 9,
+                "length": 8,
                 "text": "template"
             },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
-                    "end": 19,
+                    "start": 18,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 18,
-                        "end": 19,
+                        "start": 18,
+                        "length": 1,
                         "text": "K"
                     }
                 },
                 "1": {
                     "kind": "TypeParameter",
-                    "pos": 22,
-                    "end": 23,
+                    "start": 22,
+                    "length": 1,
                     "name": {
                         "kind": "Identifier",
-                        "pos": 22,
-                        "end": 23,
+                        "start": 22,
+                        "length": 1,
                         "text": "V"
                     }
                 },
-                "length": 2,
-                "pos": 17,
-                "end": 24
+                "start": 17,
+                "length": 2
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 24
+        "start": 8,
+        "length": 1
     }
 }`);
                 });
@@ -2167,34 +2120,33 @@ module ts {
   */`,
                         `{
     "kind": "JSDocComment",
-    "pos": 0,
-    "end": 23,
+    "start": 0,
+    "length": 23,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
-            "pos": 8,
-            "end": 18,
+            "start": 8,
+            "length": 10,
             "atToken": {
                 "kind": "AtToken",
-                "pos": 8,
-                "end": 9
+                "start": 8,
+                "length": 1
             },
             "tagName": {
                 "kind": "Identifier",
-                "pos": 9,
-                "end": 14,
+                "start": 9,
+                "length": 5,
                 "text": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
-                "pos": 15,
-                "end": 18,
+                "start": 15,
+                "length": 3,
                 "text": "foo"
             }
         },
-        "length": 1,
-        "pos": 8,
-        "end": 18
+        "start": 8,
+        "length": 1
     }
 }`);
                 });

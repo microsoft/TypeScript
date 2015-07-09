@@ -8,7 +8,7 @@ module ts {
         var contents = text.getText(0, text.getLength());
         var newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
-        return { text: ScriptSnapshot.fromString(newContents), textChangeRange: createTextChangeRange(createTextSpan(start, length), newText.length) }
+        return { text: ScriptSnapshot.fromString(newContents), textChangeRange: createTextChangeRange(createSpan(start, length), newText.length) }
     }
 
     function withInsert(text: IScriptSnapshot, start: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {

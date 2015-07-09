@@ -8,8 +8,8 @@ namespace ts {
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
                     let span: OutliningSpan = {
-                        textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
-                        hintSpan: createTextSpanFromBounds(hintSpanNode.getStart(), hintSpanNode.end),
+                        textSpan: createSpanFromBounds(startElement.start, spanEnd(endElement)),
+                        hintSpan: createSpanFromBounds(hintSpanNode.getStart(), spanEnd(hintSpanNode)),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse
                     };
@@ -17,11 +17,11 @@ namespace ts {
                 }
             }
 
-            function addOutliningSpanComments(commentSpan: CommentRange, autoCollapse: boolean) {
+            function addOutliningSpanComments(commentSpan: CommentSpan, autoCollapse: boolean) {
                 if (commentSpan) {
                     let span: OutliningSpan = {
-                        textSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
-                        hintSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
+                        textSpan: createSpanFromBounds(commentSpan.start, spanEnd(commentSpan)),
+                        hintSpan: createSpanFromBounds(commentSpan.start, spanEnd(commentSpan)),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse
                     };
@@ -44,10 +44,10 @@ namespace ts {
                         // a single span from the start of the first till the end of the last
                         if (currentComment.kind === SyntaxKind.SingleLineCommentTrivia) {
                             if (isFirstSingleLineComment) {
-                                firstSingleLineCommentStart = currentComment.pos;
+                                firstSingleLineCommentStart = currentComment.start;
                             }
                             isFirstSingleLineComment = false;
-                            lastSingleLineCommentEnd = currentComment.end;
+                            lastSingleLineCommentEnd = spanEnd(currentComment);
                             singleLineCommentCount++;
                         }
                         else if (currentComment.kind === SyntaxKind.MultiLineCommentTrivia) {
@@ -68,8 +68,8 @@ namespace ts {
                 // Only outline spans of two or more consecutive single line comments
                 if (count > 1) {
                     let multipleSingleLineComments = {
-                        pos: start,
-                        end: end,
+                        start,
+                        length: end - start,
                         kind: SyntaxKind.SingleLineCommentTrivia
                     }
 
@@ -135,7 +135,8 @@ namespace ts {
 
                             // Block was a standalone block.  In this case we want to only collapse
                             // the span of the block, independent of any parent span.
-                            let span = createTextSpanFromBounds(n.getStart(), n.end);
+                            let span = createSpanFromBounds(n.getStart(), spanEnd(n));
+
                             elements.push({
                                 textSpan: span,
                                 hintSpan: span,

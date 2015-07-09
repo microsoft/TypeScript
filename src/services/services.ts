@@ -128,10 +128,10 @@ namespace ts {
 
     let emptyArray: any[] = [];
 
-    function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        let node = <NodeObject> new (getNodeConstructor(kind))();
-        node.pos = pos;
-        node.end = end;
+    function createNode(kind: SyntaxKind, start: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
+        var node = <NodeObject> new (getNodeConstructor(kind))();
+        node.start = start;
+        node.length = end - start;
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -139,8 +139,8 @@ namespace ts {
 
     class NodeObject implements Node {
         public kind: SyntaxKind;
-        public pos: number;
-        public end: number;
+        public start: number;
+        public length: number;
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
@@ -154,11 +154,11 @@ namespace ts {
         }
 
         public getFullStart(): number {
-            return this.pos;
+            return this.start;
         }
 
         public getEnd(): number {
-            return this.end;
+            return this.start + this.length;
         }
 
         public getWidth(sourceFile?: SourceFile): number {
@@ -166,15 +166,15 @@ namespace ts {
         }
 
         public getFullWidth(): number {
-            return this.end - this.pos;
+            return this.length;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-            return this.getStart(sourceFile) - this.pos;
+            return this.getStart(sourceFile) - this.start;
         }
 
         public getFullText(sourceFile?: SourceFile): string {
-            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+            return (sourceFile || this.getSourceFile()).text.substring(this.start, spanEnd(this));
         }
 
         public getText(sourceFile?: SourceFile): string {
@@ -193,22 +193,21 @@ namespace ts {
         }
 
         private createSyntaxList(nodes: NodeArray<Node>): Node {
-            let list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
+            let list = createNode(SyntaxKind.SyntaxList, nodes.start, nodeArrayEnd(nodes), NodeFlags.Synthetic, this);
             list._children = [];
-            let pos = nodes.pos;
-
-
+            let pos = nodes.start;
 
             for (let node of nodes) {
-                if (pos < node.pos) {
-                    pos = this.addSyntheticNodes(list._children, pos, node.pos);
+                if (pos < node.start) {
+                    pos = this.addSyntheticNodes(list._children, pos, node.start);
                 }
                 list._children.push(node);
-                pos = node.end;
+                pos = spanEnd(node);
             }
-            if (pos < nodes.end) {
-                this.addSyntheticNodes(list._children, pos, nodes.end);
+            if (pos < nodeArrayEnd(nodes)) {
+                this.addSyntheticNodes(list._children, pos, nodeArrayEnd(nodes));
             }
+
             return list;
         }
 
@@ -217,24 +216,25 @@ namespace ts {
             if (this.kind >= SyntaxKind.FirstNode) {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 children = [];
-                let pos = this.pos;
+                let pos = this.start;
                 let processNode = (node: Node) => {
-                    if (pos < node.pos) {
-                        pos = this.addSyntheticNodes(children, pos, node.pos);
+                    if (pos < node.start) {
+                        pos = this.addSyntheticNodes(children, pos, node.start);
                     }
                     children.push(node);
-                    pos = node.end;
+                    pos = spanEnd(node);
                 };
+
                 let processNodes = (nodes: NodeArray<Node>) => {
-                    if (pos < nodes.pos) {
-                        pos = this.addSyntheticNodes(children, pos, nodes.pos);
+                    if (pos < nodes.start) {
+                        pos = this.addSyntheticNodes(children, pos, nodes.start);
                     }
                     children.push(this.createSyntaxList(<NodeArray<Node>>nodes));
-                    pos = nodes.end;
+                    pos = nodeArrayEnd(nodes);
                 };
                 forEachChild(this, processNode, processNodes);
-                if (pos < this.end) {
-                    this.addSyntheticNodes(children, pos, this.end);
+                if (pos < spanEnd(this)) {
+                    this.addSyntheticNodes(children, pos, spanEnd(this));
                 }
                 scanner.setText(undefined);
             }
@@ -342,8 +342,8 @@ namespace ts {
                     let sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                        ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        ts.forEach(getJsDocCommentSpans(declaration.parent, sourceFileOfDeclaration), jsDocComment => {
+                            let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocComment.start, spanEnd(jsDocComment), sourceFileOfDeclaration);
                             if (cleanedParamJsDocComment) {
                                 addRange(jsDocCommentParts, cleanedParamJsDocComment);
                             }
@@ -361,9 +361,9 @@ namespace ts {
                     } 
 
                     // Get the cleaned js doc comment text from the declaration
-                    ts.forEach(getJsDocCommentTextRange(
-                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                    ts.forEach(getJsDocCommentSpans(
+                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocComment => {
+                            let cleanedJsDocComment = getCleanedJsDocComment(jsDocComment.start, spanEnd(jsDocComment), sourceFileOfDeclaration);
                             if (cleanedJsDocComment) {
                                 addRange(jsDocCommentParts, cleanedJsDocComment);
                             }
@@ -373,13 +373,13 @@ namespace ts {
 
             return jsDocCommentParts;
 
-            function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
+            function getJsDocCommentSpans(node: Node, sourceFile: SourceFile): Span[] {
                 return ts.map(getJsDocComments(node, sourceFile),
                     jsDocComment => {
-                        return {
-                            pos: jsDocComment.pos + "/*".length, // Consume /* from the comment
-                            end: jsDocComment.end - "*/".length // Trim off comment end indicator 
-                        };
+                        return createSpanFromBounds(
+                            jsDocComment.start + "/*".length, // Consume /* from the comment
+                            spanEnd(jsDocComment) - "*/".length // Trim off comment end indicator
+                        );
                     });
             }
 
@@ -985,25 +985,25 @@ namespace ts {
         /** 
          * @deprecated Use getEncodedSyntacticClassifications instead.
          */
-        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: Span): ClassifiedSpan[];
 
         /** 
          * @deprecated Use getEncodedSemanticClassifications instead.
          */
-        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: Span): ClassifiedSpan[];
 
         // Encoded as triples of [start, length, ClassificationType].  
-        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
+        getEncodedSyntacticClassifications(fileName: string, span: Span): Classifications;
+        getEncodedSemanticClassifications(fileName: string, span: Span): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): Span;
 
-        getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
+        getBreakpointStatementAtPosition(fileName: string, position: number): Span;
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
 
@@ -1025,7 +1025,7 @@ namespace ts {
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
-        getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
+        getBraceMatchingAtPosition(fileName: string, position: number): Span[];
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
 
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
@@ -1047,7 +1047,7 @@ namespace ts {
     }
 
     export interface ClassifiedSpan {
-        textSpan: TextSpan;
+        textSpan: Span;
         classificationType: string; // ClassificationTypeNames
     }
 
@@ -1055,7 +1055,7 @@ namespace ts {
         text: string;
         kind: string;
         kindModifiers: string;
-        spans: TextSpan[];
+        spans: Span[];
         childItems: NavigationBarItem[];
         indent: number;
         bolded: boolean;
@@ -1074,17 +1074,17 @@ namespace ts {
     }
 
     export class TextChange {
-        span: TextSpan;
+        span: Span;
         newText: string;
     }
 
     export interface RenameLocation {
-        textSpan: TextSpan;
+        textSpan: Span;
         fileName: string;
     }
 
     export interface ReferenceEntry {
-        textSpan: TextSpan;
+        textSpan: Span;
         fileName: string;
         isWriteAccess: boolean;
     }
@@ -1102,7 +1102,7 @@ namespace ts {
     }
 
     export interface HighlightSpan {
-        textSpan: TextSpan;
+        textSpan: Span;
         kind: string;
     }
 
@@ -1113,7 +1113,7 @@ namespace ts {
         matchKind: string;
         isCaseSensitive: boolean;
         fileName: string;
-        textSpan: TextSpan;
+        textSpan: Span;
         containerName: string;
         containerKind: string;
     }
@@ -1139,7 +1139,7 @@ namespace ts {
 
     export interface DefinitionInfo {
         fileName: string;
-        textSpan: TextSpan;
+        textSpan: Span;
         kind: string;
         name: string;
         containerKind: string;
@@ -1184,7 +1184,7 @@ namespace ts {
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
-        textSpan: TextSpan;
+        textSpan: Span;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
     }
@@ -1196,7 +1196,7 @@ namespace ts {
         fullDisplayName: string;
         kind: string;
         kindModifiers: string;
-        triggerSpan: TextSpan;
+        triggerSpan: Span;
     }
 
     export interface SignatureHelpParameter {
@@ -1227,7 +1227,7 @@ namespace ts {
      */
     export interface SignatureHelpItems {
         items: SignatureHelpItem[];
-        applicableSpan: TextSpan;
+        applicableSpan: Span;
         selectedItemIndex: number;
         argumentIndex: number;
         argumentCount: number;
@@ -1256,10 +1256,10 @@ namespace ts {
 
     export interface OutliningSpan {
         /** The span of the document to actually collapse. */
-        textSpan: TextSpan;
+        textSpan: Span;
 
         /** The span of the document to display when the user hovers over the collapsed span. */
-        hintSpan: TextSpan;
+        hintSpan: Span;
 
         /** The text to display in the editor for the collapsed region. */
         bannerText: string;
@@ -1836,8 +1836,8 @@ namespace ts {
                         : "";
                     
                     // grab the fragment from the end of the span till the end of the original text
-                    let suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
-                        ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
+                    let suffix = spanEnd(textChangeRange.span) !== sourceFile.text.length
+                        ? sourceFile.text.substr(spanEnd(textChangeRange.span))
                         : "";
 
                     if (textChangeRange.newLength === 0) {
@@ -1995,9 +1995,9 @@ namespace ts {
         let isNoDefaultLib = false;
 
         function processTripleSlashDirectives(): void {
-            let commentRanges = getLeadingCommentRanges(sourceText, 0);
+            let commentRanges = getLeadingCommentSpans(sourceText, 0);
             forEach(commentRanges, commentRange => {
-                let comment = sourceText.substring(commentRange.pos, commentRange.end);
+                let comment = sourceText.substr(commentRange.start, commentRange.length);
                 let referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
                 if (referencePathMatchResult) {
                     isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
@@ -2014,8 +2014,8 @@ namespace ts {
             let pos = scanner.getTokenPos();
             importedFiles.push({
                 fileName: importPath,
-                pos: pos,
-                end: pos + importPath.length
+                start: pos,
+                length: importPath.length
             });
         }
 
@@ -2270,26 +2270,26 @@ namespace ts {
     function isInsideComment(sourceFile: SourceFile, token: Node, position: number): boolean {
         // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
         return position <= token.getStart(sourceFile) &&
-            (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-                isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
+            (isInsideCommentSpan(getTrailingCommentSpans(sourceFile.text, token.getFullStart())) ||
+                isInsideCommentSpan(getLeadingCommentSpans(sourceFile.text, token.getFullStart())));
 
-        function isInsideCommentRange(comments: CommentRange[]): boolean {
+        function isInsideCommentSpan(comments: CommentSpan[]): boolean {
             return forEach(comments, comment => {
                 // either we are 1. completely inside the comment, or 2. at the end of the comment
-                if (comment.pos < position && position < comment.end) {
+                if (comment.start < position && position < spanEnd(comment)) {
                     return true;
                 }
-                else if (position === comment.end) {
+                else if (position === spanEnd(comment)) {
                     let text = sourceFile.text;
-                    let width = comment.end - comment.pos;
+                    let width = comment.length;
                     // is single line comment or just /*
-                    if (width <= 2 || text.charCodeAt(comment.pos + 1) === CharacterCodes.slash) {
+                    if (width <= 2 || text.charCodeAt(comment.start + 1) === CharacterCodes.slash) {
                         return true;
                     }
                     else {
                         // is unterminated multi-line comment
-                        return !(text.charCodeAt(comment.end - 1) === CharacterCodes.slash &&
-                            text.charCodeAt(comment.end - 2) === CharacterCodes.asterisk);
+                        return !(text.charCodeAt(spanEnd(comment) - 1) === CharacterCodes.slash &&
+                            text.charCodeAt(spanEnd(comment) - 2) === CharacterCodes.asterisk);
                     }
                 }
                 return false;
@@ -2709,8 +2709,8 @@ namespace ts {
                     case SyntaxKind.NewExpression:
                         let expression = <CallExpression>node;
                         if (expression.typeArguments && expression.typeArguments.length > 0) {
-                            let start = expression.typeArguments.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
+                            let start = expression.typeArguments.start;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, nodeArrayEnd(expression.typeArguments) - start,
                                 Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
                             return true;
                         }
@@ -2718,8 +2718,8 @@ namespace ts {
                     case SyntaxKind.Parameter:
                         let parameter = <ParameterDeclaration>node;
                         if (parameter.modifiers) {
-                            let start = parameter.modifiers.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
+                            let start = parameter.modifiers.start;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, nodeArrayEnd(parameter.modifiers) - start,
                                 Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
                             return true;
                         }
@@ -2752,8 +2752,8 @@ namespace ts {
 
             function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
                 if (typeParameters) {
-                    let start = typeParameters.pos;
-                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
+                    let start = typeParameters.start;
+                    diagnostics.push(createFileDiagnostic(sourceFile, start, nodeArrayEnd(typeParameters) - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                     return true;
                 }
                 return false;
@@ -2886,7 +2886,7 @@ namespace ts {
 
             // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier and adjust the contextToken to the token that precedes it.
-            if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
+            if (contextToken && position <= spanEnd(contextToken) && isWord(contextToken.kind)) {
                 let start = new Date().getTime();
                 contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
@@ -4140,7 +4140,7 @@ namespace ts {
                             return {
                                 kind: ScriptElementKind.unknown,
                                 kindModifiers: ScriptElementKindModifier.none,
-                                textSpan: createTextSpan(node.getStart(), node.getWidth()),
+                                textSpan: createSpan(node.getStart(), node.getWidth()),
                                 displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
                                 documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
                             };
@@ -4154,7 +4154,7 @@ namespace ts {
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
-                textSpan: createTextSpan(node.getStart(), node.getWidth()),
+                textSpan: createSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
                 documentation: displayPartsDocumentationsAndKind.documentation
             };
@@ -4163,7 +4163,7 @@ namespace ts {
         function createDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
             return {
                 fileName: node.getSourceFile().fileName,
-                textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                textSpan: createSpanFromBounds(node.getStart(), node.getEnd()),
                 kind: symbolKind,
                 name: symbolName,
                 containerKind: undefined,
@@ -4255,13 +4255,13 @@ namespace ts {
             }
 
             /// Triple slash reference comments
-            let comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            let comment = forEach(sourceFile.referencedFiles, r => (r.start <= position && position < spanEnd(r)) ? r : undefined);
             if (comment) {
                 let referenceFile = tryResolveScriptReference(program, sourceFile, comment);
                 if (referenceFile) {
                     return [{
                         fileName: referenceFile.fileName,
-                        textSpan: createTextSpanFromBounds(0, 0),
+                        textSpan: createSpanFromBounds(0, 0),
                         kind: ScriptElementKind.scriptElement,
                         name: comment.fileName,
                         containerName: undefined,
@@ -4387,7 +4387,7 @@ namespace ts {
 
                 return {
                     fileName: sourceFile.fileName,
-                    textSpan: createTextSpanFromBounds(start, end),
+                    textSpan: createSpanFromBounds(start, end),
                     kind: HighlightSpanKind.none
                 };
             }
@@ -4947,7 +4947,7 @@ namespace ts {
                             let shouldCombindElseAndIf = true;
 
                             // Avoid recalculating getStart() by iterating backwards.
-                            for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                            for (let j = ifKeyword.getStart() - 1; j >= spanEnd(elseKeyword); j--) {
                                 if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
                                     shouldCombindElseAndIf = false;
                                     break;
@@ -4957,7 +4957,7 @@ namespace ts {
                             if (shouldCombindElseAndIf) {
                                 result.push({
                                     fileName: fileName,
-                                    textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                    textSpan: createSpanFromBounds(elseKeyword.getStart(), spanEnd(ifKeyword)),
                                     kind: HighlightSpanKind.reference
                                 });
                                 i++; // skip the next keyword
@@ -5144,7 +5144,7 @@ namespace ts {
                     name,
                     kind: info.symbolKind,
                     fileName: declarations[0].getSourceFile().fileName,
-                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                    textSpan: createSpan(declarations[0].getStart(), 0)
                 };
             }
 
@@ -5298,7 +5298,7 @@ namespace ts {
                     fileName: targetLabel.getSourceFile().fileName,
                     kind: ScriptElementKind.label,
                     name: labelName,
-                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                    textSpan: createSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
                 }
 
                 return [{ definition, references }];
@@ -5372,7 +5372,7 @@ namespace ts {
                                     definition: undefined,
                                     references: [{
                                         fileName: sourceFile.fileName,
-                                        textSpan: createTextSpan(position, searchText.length),
+                                        textSpan: createSpan(position, searchText.length),
                                         isWriteAccess: false
                                     }]
                                 });
@@ -5435,13 +5435,13 @@ namespace ts {
                     let token = getTokenAtPosition(sourceFile, position);
                     if (token && position < token.getStart()) {
                         // First, we have to see if this position actually landed in a comment.
-                        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+                        let commentRanges = getLeadingCommentSpans(sourceFile.text, token.start);
 
                         // Then we want to make sure that it wasn't in a "///<" directive comment
                         // We don't want to unintentionally update a file name.
                         return forEach(commentRanges, c => {
-                            if (c.pos < position && position < c.end) {
-                                let commentText = sourceFile.text.substring(c.pos, c.end);
+                            if (c.start < position && position < spanEnd(c)) {
+                                let commentText = sourceFile.text.substring(c.start, spanEnd(c));
                                 if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
                                     return true;
                                 }
@@ -5560,7 +5560,7 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: "this",
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createSpanFromBounds(node.getStart(), node.getEnd())
                     },
                     references: references
                 }];
@@ -5808,7 +5808,7 @@ namespace ts {
 
             return {
                 fileName: node.getSourceFile().fileName,
-                textSpan: createTextSpanFromBounds(start, end),
+                textSpan: createSpanFromBounds(start, end),
                 isWriteAccess: isWriteAccess(node)
             };
         }
@@ -6033,7 +6033,7 @@ namespace ts {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
-        function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+        function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): Span {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
@@ -6086,7 +6086,7 @@ namespace ts {
                 }
             }
 
-            return createTextSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
+            return createSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
         function getBreakpointStatementAtPosition(fileName: string, position: number) {
@@ -6102,7 +6102,7 @@ namespace ts {
             return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications(fileName: string, span: Span): ClassifiedSpan[] {
             return convertClassifications(getEncodedSemanticClassifications(fileName, span));
         }
 
@@ -6126,7 +6126,7 @@ namespace ts {
             }
         }
 
-        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassifications(fileName: string, span: Span): Classifications {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -6139,6 +6139,7 @@ namespace ts {
             return { spans: result, endOfLineState: EndOfLineState.None };
 
             function pushClassification(start: number, length: number, type: ClassificationType) {
+                Debug.assert(length >= 0);
                 result.push(start);
                 result.push(length);
                 result.push(type);
@@ -6192,7 +6193,7 @@ namespace ts {
 
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
-                if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
+                if (node && spanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
                     let kind = node.kind;
                     checkForClassificationCancellation(kind);
 
@@ -6246,7 +6247,7 @@ namespace ts {
             let result: ClassifiedSpan[] = [];
             for (let i = 0, n = dense.length; i < n; i += 3) {
                 result.push({
-                    textSpan: createTextSpan(dense[i], dense[i + 1]),
+                    textSpan: createSpan(dense[i], dense[i + 1]),
                     classificationType: getClassificationTypeName(dense[i + 2])
                 });
             }
@@ -6254,11 +6255,11 @@ namespace ts {
             return result;
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSyntacticClassifications(fileName: string, span: Span): ClassifiedSpan[] {
             return convertClassifications(getEncodedSyntacticClassifications(fileName, span));
         }
 
-        function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSyntacticClassifications(fileName: string, span: Span): Classifications {
             // doesn't use compiler - no need to synchronize with host
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             let spanStart = span.start;
@@ -6274,13 +6275,15 @@ namespace ts {
             return { spans: result, endOfLineState: EndOfLineState.None };
 
             function pushClassification(start: number, length: number, type: ClassificationType) {
+                Debug.assert(length >= 0);
                 result.push(start);
                 result.push(length);
                 result.push(type);
             }
 
             function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
-                triviaScanner.setTextPos(token.pos);
+                triviaScanner.setTextPos(token.start);
+
                 while (true) {
                     let start = triviaScanner.getTextPos();
                     // only bother scanning if we have something that could be trivia.
@@ -6302,7 +6305,6 @@ namespace ts {
                         continue;
                     }
 
-                    // Only bother with the trivia if it at least intersects the span of interest.
                     if (isComment(kind)) {
                         classifyComment(token, kind, start, width);
                             
@@ -6353,19 +6355,19 @@ namespace ts {
             }
 
             function classifyJSDocComment(docComment: JSDocComment) {
-                let pos = docComment.pos;
+                let pos = docComment.start;
 
                 for (let tag of docComment.tags) {
                     // As we walk through each tag, classify the portion of text from the end of
                     // the last tag (or the start of the entire doc comment) as 'comment'.  
-                    if (tag.pos !== pos) {
-                        pushCommentRange(pos, tag.pos - pos);
+                    if (tag.start !== pos) {
+                        pushCommentRange(pos, tag.start - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
-                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
+                    pushClassification(tag.atToken.start, tag.atToken.length, ClassificationType.punctuation);
+                    pushClassification(tag.tagName.start, tag.tagName.length, ClassificationType.docCommentTagName);
 
-                    pos = tag.tagName.end;
+                    pos = spanEnd(tag.tagName);
 
                     switch (tag.kind) {
                         case SyntaxKind.JSDocParameterTag:
@@ -6382,32 +6384,32 @@ namespace ts {
                             break;
                     }
 
-                    pos = tag.end;
+                    pos = spanEnd(tag);
                 }
 
-                if (pos !== docComment.end) {
-                    pushCommentRange(pos, docComment.end - pos);
+                if (pos !== spanEnd(docComment)) {
+                    pushCommentRange(pos, spanEnd(docComment) - pos);
                 }
 
                 return;
 
                 function processJSDocParameterTag(tag: JSDocParameterTag) {
                     if (tag.preParameterName) {
-                        pushCommentRange(pos, tag.preParameterName.pos - pos);
-                        pushClassification(tag.preParameterName.pos, tag.preParameterName.end - tag.preParameterName.pos, ClassificationType.parameterName);
-                        pos = tag.preParameterName.end;
+                        pushCommentRange(pos, tag.preParameterName.start - pos);
+                        pushClassification(tag.preParameterName.start, tag.preParameterName.length, ClassificationType.parameterName);
+                        pos = spanEnd(tag.preParameterName);
                     }
 
                     if (tag.typeExpression) {
-                        pushCommentRange(pos, tag.typeExpression.pos - pos);
+                        pushCommentRange(pos, tag.typeExpression.start - pos);
                         processElement(tag.typeExpression);
-                        pos = tag.typeExpression.end;
+                        pos = spanEnd(tag.typeExpression);
                     }
 
                     if (tag.postParameterName) {
-                        pushCommentRange(pos, tag.postParameterName.pos - pos);
-                        pushClassification(tag.postParameterName.pos, tag.postParameterName.end - tag.postParameterName.pos, ClassificationType.parameterName);
-                        pos = tag.postParameterName.end;
+                        pushCommentRange(pos, tag.postParameterName.start - pos);
+                        pushClassification(tag.postParameterName.start, tag.postParameterName.length, ClassificationType.parameterName);
+                        pos = spanEnd(tag.postParameterName);
                     }
                 }
             }
@@ -6426,6 +6428,7 @@ namespace ts {
                         break;
                     }
                 }
+
                 pushClassification(start, i - start, ClassificationType.comment);
                 mergeConflictScanner.setTextPos(i);
 
@@ -6452,7 +6455,7 @@ namespace ts {
 
                 let tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
 
-                let tokenWidth = token.end - tokenStart;
+                let tokenWidth = spanEnd(token) - tokenStart;
                 Debug.assert(tokenWidth >= 0);
                 if (tokenWidth > 0) {
                     let type = classifyTokenType(token.kind, token);
@@ -6562,12 +6565,13 @@ namespace ts {
                 }
 
                 // Ignore nodes that don't intersect the original span to classify.
-                if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
+                if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.getFullStart(), element.getFullWidth())) {
                     checkForClassificationCancellation(element.kind);
 
                     let children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         let child = children[i];
+
                         if (isToken(child)) {
                             classifyToken(child);
                         }
@@ -6588,7 +6592,7 @@ namespace ts {
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            let result: TextSpan[] = [];
+            let result: Span[] = [];
 
             let token = getTouchingToken(sourceFile, position);
 
@@ -6602,8 +6606,8 @@ namespace ts {
                     let childNodes = parentElement.getChildren(sourceFile);
                     for (let current of childNodes) {
                         if (current.kind === matchKind) {
-                            let range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            let range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+                            let range1 = createSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            let range2 = createSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
 
                             // We want to order the braces when we return the result.
                             if (range1.start < range2.start) {
@@ -6862,7 +6866,7 @@ namespace ts {
                                 fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
                                 kind: kind,
                                 kindModifiers: getSymbolModifiers(symbol),
-                                triggerSpan: createTextSpan(node.getStart(), node.getWidth())
+                                triggerSpan: createSpan(node.getStart(), node.getWidth())
                             };
                         }
                     }
@@ -7454,8 +7458,10 @@ namespace ts {
                 }
                 let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
                 proto.kind = kind;
-                proto.pos = -1;
-                proto.end = -1;
+
+                proto.start = -1;
+                proto.length = 0;
+
                 proto.flags = 0;
                 proto.parent = undefined;
                 Node.prototype = proto;

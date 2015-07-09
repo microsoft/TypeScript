@@ -749,7 +749,7 @@ namespace ts {
         }
 
         function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
-            let span = getSpanOfTokenAtPosition(file, node.pos);
+            let span = getSpanOfTokenAtPosition(file, node.start);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 

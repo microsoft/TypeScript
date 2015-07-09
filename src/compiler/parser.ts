@@ -377,16 +377,27 @@ namespace ts {
                     visitNode(cbNode, (<JSDocRecordMember>node).type);
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNodes, (<JSDocComment>node).tags);
+            case SyntaxKind.JSDocTag:
+                return visitNode(cbNode, (<JSDocTag>node).atToken) ||
+                    visitNode(cbNode, (<JSDocTag>node).tagName);
             case SyntaxKind.JSDocParameterTag:
-                return visitNode(cbNode, (<JSDocParameterTag>node).preParameterName) ||
+                return visitNode(cbNode, (<JSDocTag>node).atToken) ||
+                    visitNode(cbNode, (<JSDocTag>node).tagName) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).preParameterName) ||
                     visitNode(cbNode, (<JSDocParameterTag>node).typeExpression) ||
                     visitNode(cbNode, (<JSDocParameterTag>node).postParameterName);
             case SyntaxKind.JSDocReturnTag:
-                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
+                return visitNode(cbNode, (<JSDocTag>node).atToken) ||
+                    visitNode(cbNode, (<JSDocTag>node).tagName) ||
+                    visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
             case SyntaxKind.JSDocTypeTag:
-                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+                return visitNode(cbNode, (<JSDocTag>node).atToken) ||
+                    visitNode(cbNode, (<JSDocTag>node).tagName) ||
+                    visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
-                return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
+                return visitNode(cbNode, (<JSDocTag>node).atToken) ||
+                    visitNode(cbNode, (<JSDocTag>node).tagName) ||
+                    visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
         }
     }
 
@@ -617,7 +628,7 @@ namespace ts {
             let comments = getLeadingCommentRangesOfNode(node, sourceFile);
             if (comments) {
                 for (let comment of comments) {
-                    let jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
+                    let jsDocComment = JSDocParser.parseJSDocComment(node, comment.start, comment.length);
                     if (jsDocComment) {
                         node.jsDocComment = jsDocComment;
                     }
@@ -653,8 +664,8 @@ namespace ts {
         function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
             let sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
-            sourceFile.pos = 0;
-            sourceFile.end = sourceText.length;
+            sourceFile.start = 0;
+            sourceFile.length = sourceText.length;
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
@@ -986,13 +997,15 @@ namespace ts {
                 pos = scanner.getStartPos();
             }
 
-            node.pos = pos;
-            node.end = pos;
+            node.start = pos;
             return node;
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
-            node.end = end === undefined ? scanner.getStartPos() : end;
+            if (end === undefined) {
+                end = scanner.getStartPos();
+            }
+            node.length = end - node.start;
 
             if (contextFlags) {
                 node.parserContextFlags = contextFlags;
@@ -1365,7 +1378,7 @@ namespace ts {
             let saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             let result = <NodeArray<T>>[];
-            result.pos = getNodePos();
+            result.start = getNodePos();
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
@@ -1380,7 +1393,6 @@ namespace ts {
                 }
             }
 
-            result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
         }
@@ -1456,7 +1468,7 @@ namespace ts {
 
         function consumeNode(node: Node) {
             // Move the scanner so it is after the node we just consumed.
-            scanner.setTextPos(node.end);
+            scanner.setTextPos(spanEnd(node));
             nextToken();
             return node;
         }
@@ -1713,7 +1725,7 @@ namespace ts {
             let saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             let result = <NodeArray<T>>[];
-            result.pos = getNodePos();
+            result.start = getNodePos();
 
             let commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
@@ -1763,7 +1775,6 @@ namespace ts {
                 result.hasTrailingComma = true;
             }
 
-            result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
         }
@@ -1771,8 +1782,7 @@ namespace ts {
         function createMissingList<T>(): NodeArray<T> {
             let pos = getNodePos();
             let result = <NodeArray<T>>[];
-            result.pos = pos;
-            result.end = pos;
+            result.start = pos;
             return result;
         }
 
@@ -1790,7 +1800,7 @@ namespace ts {
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             let entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
-                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
+                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.start);
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -1839,16 +1849,14 @@ namespace ts {
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             let templateSpans = <NodeArray<TemplateSpan>>[];
-            templateSpans.pos = getNodePos();
+            templateSpans.start = getNodePos();
 
             do {
                 templateSpans.push(parseTemplateSpan());
             }
             while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle)
 
-            templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
-
             return finishNode(template);
         }
 
@@ -1909,12 +1917,12 @@ namespace ts {
             let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                 nextToken();
-                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.start);
                 node.parameterName = <Identifier>typeName;
                 node.type = parseType();
                 return finishNode(node);
             }
-            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
+            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.start);
             node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
@@ -2400,7 +2408,7 @@ namespace ts {
             let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 parseExpected(SyntaxKind.CloseBracketToken);
-                let node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
+                let node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.start);
                 node.elementType = type;
                 type = finishNode(node);
             }
@@ -2411,12 +2419,11 @@ namespace ts {
             let type = parseConstituentType();
             if (token === operator) {
                 let types = <NodeArray<TypeNode>>[type];
-                types.pos = type.pos;
+                types.start = type.start;
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                types.end = getNodeEnd();
-                let node = <UnionOrIntersectionTypeNode>createNode(kind, type.pos);
+                let node = <UnionOrIntersectionTypeNode>createNode(kind, type.start);
                 node.types = types;
                 type = finishNode(node);
             }
@@ -2726,15 +2733,14 @@ namespace ts {
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
-            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.start);
 
-            let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
+            let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.start);
             parameter.name = identifier;
             finishNode(parameter);
 
             node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
-            node.parameters.pos = parameter.pos;
-            node.parameters.end = parameter.end;
+            node.parameters.start = parameter.start;
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>");
             node.body = parseArrowFunctionExpressionBody(/*isAsync*/ false);
@@ -2979,9 +2985,9 @@ namespace ts {
                 return leftOperand;
             }
 
-            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and
-            // we do not that for the 'whenFalse' part.
-            let node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
+            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
+            // we do not that for the 'whenFalse' part.  
+            let node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.start);
             node.condition = leftOperand;
             node.questionToken = questionToken;
             node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
@@ -3091,7 +3097,7 @@ namespace ts {
         }
 
         function makeBinaryExpression(left: Expression, operatorToken: Node, right: Expression): BinaryExpression {
-            let node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
+            let node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.start);
             node.left = left;
             node.operatorToken = operatorToken;
             node.right = right;
@@ -3099,7 +3105,7 @@ namespace ts {
         }
 
         function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
-            let node = <AsExpression>createNode(SyntaxKind.AsExpression, left.pos);
+            let node = <AsExpression>createNode(SyntaxKind.AsExpression, left.start);
             node.expression = left;
             node.type = right;
             return finishNode(node);
@@ -3191,7 +3197,7 @@ namespace ts {
 
             Debug.assert(isLeftHandSideExpression(expression));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
+                let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.start);
                 node.operand = expression;
                 node.operator = token;
                 nextToken();
@@ -3301,7 +3307,7 @@ namespace ts {
 
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
-            let node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+            let node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.start);
             node.expression = expression;
             node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
@@ -3311,7 +3317,7 @@ namespace ts {
         function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
             let opening = parseJsxOpeningOrSelfClosingElement();
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
-                let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
+                let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.start);
                 node.openingElement = opening;
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
@@ -3345,7 +3351,7 @@ namespace ts {
 
         function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
             let result = <NodeArray<JsxChild>>[];
-            result.pos = scanner.getStartPos();
+            result.start = scanner.getStartPos();
             let saveParsingContext = parsingContext;
             parsingContext |= 1 << ParsingContext.JsxChildren;
 
@@ -3360,8 +3366,6 @@ namespace ts {
                 }
                 result.push(parseJsxChild());
             }
-
-            result.end = scanner.getTokenPos();
 
             parsingContext = saveParsingContext;
 
@@ -3398,7 +3402,7 @@ namespace ts {
             let elementName: EntityName = parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 scanJsxIdentifier();
-                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.start);
                 node.left = elementName;
                 node.right = parseIdentifierName();
                 elementName = finishNode(node);
@@ -3469,7 +3473,7 @@ namespace ts {
             while (true) {
                 let dotToken = parseOptionalToken(SyntaxKind.DotToken);
                 if (dotToken) {
-                    let propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                    let propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.start);
                     propertyAccess.expression = expression;
                     propertyAccess.dotToken = dotToken;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
@@ -3479,7 +3483,7 @@ namespace ts {
 
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName                
                 if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
-                    let indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                    let indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.start);
                     indexedAccess.expression = expression;
 
                     // It's not uncommon for a user to write: "new Type[]".
@@ -3498,7 +3502,7 @@ namespace ts {
                 }
 
                 if (token === SyntaxKind.NoSubstitutionTemplateLiteral || token === SyntaxKind.TemplateHead) {
-                    let tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
+                    let tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.start);
                     tagExpression.tag = expression;
                     tagExpression.template = token === SyntaxKind.NoSubstitutionTemplateLiteral
                         ? parseLiteralNode()
@@ -3524,7 +3528,7 @@ namespace ts {
                         return expression;
                     }
 
-                    let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.start);
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
@@ -3532,7 +3536,7 @@ namespace ts {
                     continue;
                 }
                 else if (token === SyntaxKind.OpenParenToken) {
-                    let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.start);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
                     expression = finishNode(callExpr);
@@ -3546,7 +3550,9 @@ namespace ts {
         function parseArgumentList() {
             parseExpected(SyntaxKind.OpenParenToken);
             let result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            if (!parseExpected(SyntaxKind.CloseParenToken)) {
+                result.closeTokenIsMissing = true;
+            }
             return result;
         }
 
@@ -4337,7 +4343,7 @@ namespace ts {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.                        
                         let node = <Statement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-                        node.pos = fullStart;
+                        node.start = fullStart;
                         node.decorators = decorators;
                         setModifiers(node, modifiers);
                         return finishNode(node);
@@ -4666,15 +4672,12 @@ namespace ts {
 
                 if (!decorators) {
                     decorators = <NodeArray<Decorator>>[];
-                    decorators.pos = scanner.getStartPos();
+                    decorators.start = scanner.getStartPos();
                 }
 
                 let decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
                 decorators.push(finishNode(decorator));
-            }
-            if (decorators) {
-                decorators.end = getNodeEnd();
             }
             return decorators;
         }
@@ -4692,7 +4695,7 @@ namespace ts {
 
                 if (!modifiers) {
                     modifiers = <ModifiersArray>[];
-                    modifiers.pos = modifierStart;
+                    modifiers.start = modifierStart;
                 }
                 
                 flags |= modifierToFlag(modifierKind);
@@ -4700,7 +4703,6 @@ namespace ts {
             }
             if (modifiers) {
                 modifiers.flags = flags;
-                modifiers.end = scanner.getStartPos();
             }
             return modifiers;
         }
@@ -4713,11 +4715,10 @@ namespace ts {
                 let modifierKind = token;
                 nextToken();
                 modifiers = <ModifiersArray>[];
-                modifiers.pos = modifierStart;
+                modifiers.start = modifierStart;
                 flags |= modifierToFlag(modifierKind);
                 modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
                 modifiers.flags = flags;
-                modifiers.end = scanner.getStartPos();
             }
             
             return modifiers;
@@ -5158,6 +5159,71 @@ namespace ts {
             return finishNode(node);
         }
 
+        function isDeclarationStart(followsModifier?: boolean): boolean {
+            switch (token) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.FunctionKeyword:
+                    return true;
+                case SyntaxKind.LetKeyword:
+                    return isLetDeclaration();
+                case SyntaxKind.ClassKeyword:
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.TypeKeyword:
+                    // Not true keywords so ensure an identifier follows
+                    return lookAhead(nextTokenIsIdentifierOrKeyword);
+                case SyntaxKind.ImportKeyword:
+                    // Not true keywords so ensure an identifier follows or is string literal or asterisk or open brace
+                    return lookAhead(nextTokenCanFollowImportKeyword);
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                    // Not a true keyword so ensure an identifier or string literal follows
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
+                case SyntaxKind.ExportKeyword:
+                    // Check for export assignment or modifier on source element
+                    return lookAhead(nextTokenCanFollowExportKeyword);
+                case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.StaticKeyword:
+                    // Check for modifier on source element
+                    return lookAhead(nextTokenIsDeclarationStart);
+                case SyntaxKind.AtToken:
+                    // a lookahead here is too costly, and decorators are only valid on a declaration. 
+                    // We will assume we are parsing a declaration here and report an error later
+                    return !followsModifier;
+            }
+        }
+
+        function nextTokenIsIdentifierOrKeyword() {
+            nextToken();
+            return isIdentifierOrKeyword();
+        }
+
+        function nextTokenIsIdentifierOrKeywordOrStringLiteral() {
+            nextToken();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
+        }
+
+        function nextTokenCanFollowImportKeyword() {
+            nextToken();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
+        }
+
+        function nextTokenCanFollowExportKeyword() {
+            nextToken();
+            return token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword || isDeclarationStart(/*followsModifier*/ true);
+        }
+
+        function nextTokenIsDeclarationStart() {
+            nextToken();
+            return isDeclarationStart(/*followsModifier*/ true);
+        }
+
         function processReferenceComments(sourceFile: SourceFile): void {
             let triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
             let referencedFiles: FileReference[] = [];
@@ -5176,9 +5242,9 @@ namespace ts {
                     break;
                 }
 
-                let range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
+                let range = { start: triviaScanner.getTokenPos(), length: triviaScanner.getTextPos() - triviaScanner.getTokenPos(), kind: triviaScanner.getToken() };
 
-                let comment = sourceText.substring(range.pos, range.end);
+                let comment = sourceText.substr(range.start, range.length);
                 let referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
                     let fileReference = referencePathMatchResult.fileReference;
@@ -5188,7 +5254,7 @@ namespace ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.length, diagnosticMessage));
                     }
                 }
                 else {
@@ -5196,7 +5262,7 @@ namespace ts {
                     let amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.length, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
@@ -5318,13 +5384,13 @@ namespace ts {
             function parseJSDocTopLevelType(): JSDocType {
                 var type = parseJSDocType();
                 if (token === SyntaxKind.BarToken) {
-                    var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
+                    var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.start);
                     unionType.types = parseJSDocTypeList(type);
                     type = finishNode(unionType);
                 }
 
                 if (token === SyntaxKind.EqualsToken) {
-                    var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                    var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.start);
                     nextToken();
                     optionalType.type = type;
                     type = finishNode(optionalType);
@@ -5338,7 +5404,7 @@ namespace ts {
 
                 while (true) {
                     if (token === SyntaxKind.OpenBracketToken) {
-                        let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.pos);
+                        let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.start);
                         arrayType.elementType = type;
 
                         nextToken();
@@ -5347,14 +5413,14 @@ namespace ts {
                         type = finishNode(arrayType);
                     }
                     else if (token === SyntaxKind.QuestionToken) {
-                        let nullableType = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, type.pos);
+                        let nullableType = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, type.start);
                         nullableType.type = type;
 
                         nextToken();
                         type = finishNode(nullableType);
                     }
                     else if (token === SyntaxKind.ExclamationToken) {
-                        let nonNullableType = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType, type.pos);
+                        let nonNullableType = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType, type.start);
                         nonNullableType.type = type;
 
                         nextToken();
@@ -5449,7 +5515,7 @@ namespace ts {
             }
 
             function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
-                let result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                let result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.start);
                 nextToken();
                 result.type = type;
                 return finishNode(result);
@@ -5484,15 +5550,15 @@ namespace ts {
             }
 
             function checkForEmptyTypeArgumentList(typeArguments: NodeArray<Node>) {
-                if (parseDiagnostics.length === 0 &&  typeArguments && typeArguments.length === 0) {
-                    let start = typeArguments.pos - "<".length;
-                    let end = skipTrivia(sourceText, typeArguments.end) + ">".length;
+                if (parseDiagnostics.length === 0 && typeArguments && typeArguments.length === 0) {
+                    let start = typeArguments.start - "<".length;
+                    let end = skipTrivia(sourceText, typeArguments.start) + ">".length;
                     return parseErrorAtPosition(start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
                 }
             }
 
             function parseQualifiedName(left: EntityName): QualifiedName {
-                let result = <QualifiedName>createNode(SyntaxKind.QualifiedName, left.pos);
+                let result = <QualifiedName>createNode(SyntaxKind.QualifiedName, left.start);
                 result.left = left;
                 result.right = parseIdentifierName();
 
@@ -5539,7 +5605,7 @@ namespace ts {
 
             function checkForTrailingComma(list: NodeArray<Node>) {
                 if (parseDiagnostics.length === 0 && list.hasTrailingComma) {
-                    let start = list.end - ",".length;
+                    let start = nodeArrayEnd(list, sourceText) - ",".length;
                     parseErrorAtPosition(start, ",".length, Diagnostics.Trailing_comma_not_allowed);
                 }
             }
@@ -5558,14 +5624,13 @@ namespace ts {
                 Debug.assert(!!firstType);
 
                 let types = <NodeArray<JSDocType>>[];
-                types.pos = firstType.pos;
+                types.start = firstType.start;
 
                 types.push(firstType);
                 while (parseOptional(SyntaxKind.BarToken)) {
                     types.push(parseJSDocType());
                 }
 
-                types.end = scanner.getStartPos();
                 return types;
             }
 
@@ -5720,7 +5785,7 @@ namespace ts {
                 function parseTag(): void {
                     Debug.assert(content.charCodeAt(pos - 1) === CharacterCodes.at);
                     let atToken = createNode(SyntaxKind.AtToken, pos - 1);
-                    atToken.end = pos;
+                    atToken.length = 1;
 
                     let tagName = scanIdentifier();
                     if (!tagName) {
@@ -5750,7 +5815,7 @@ namespace ts {
                 }
 
                 function handleUnknownTag(atToken: Node, tagName: Identifier) {
-                    let result = <JSDocTag>createNode(SyntaxKind.JSDocTag, atToken.pos);
+                    let result = <JSDocTag>createNode(SyntaxKind.JSDocTag, atToken.start);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     return finishNode(result, pos);
@@ -5760,11 +5825,10 @@ namespace ts {
                     if (tag) {
                         if (!tags) {
                             tags = <NodeArray<JSDocTag>>[];
-                            tags.pos = tag.pos;
+                            tags.start = tag.start;
                         }
 
                         tags.push(tag);
-                        tags.end = tag.end;
                     }
                 }
 
@@ -5776,7 +5840,7 @@ namespace ts {
                     }
 
                     let typeExpression = parseJSDocTypeExpression(pos, end - pos);
-                    pos = typeExpression.end;
+                    pos = spanEnd(typeExpression);
                     return typeExpression;
                 }
 
@@ -5813,7 +5877,7 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
+                    let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.start);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.preParameterName = preName;
@@ -5825,10 +5889,10 @@ namespace ts {
 
                 function handleReturnTag(atToken: Node, tagName: Identifier): JSDocReturnTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
-                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                        parseErrorAtPosition(tagName.start, tagName.length, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
+                    let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.start);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
@@ -5837,10 +5901,10 @@ namespace ts {
 
                 function handleTypeTag(atToken: Node, tagName: Identifier): JSDocTypeTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
-                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                        parseErrorAtPosition(tagName.start, tagName.length, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
+                    let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.start);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
@@ -5849,11 +5913,11 @@ namespace ts {
 
                 function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
-                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                        parseErrorAtPosition(tagName.start, tagName.length, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
                     let typeParameters = <NodeArray<TypeParameterDeclaration>>[];
-                    typeParameters.pos = pos;
+                    typeParameters.start = pos;
 
                     while (true) {
                         skipWhitespace();
@@ -5865,7 +5929,7 @@ namespace ts {
                             return undefined;
                         }
 
-                        let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.pos);
+                        let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.start);
                         typeParameter.name = name;
                         finishNode(typeParameter, pos);
 
@@ -5879,9 +5943,7 @@ namespace ts {
                         pos++;
                     }
 
-                    typeParameters.end = pos;
-
-                    let result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
+                    let result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.start);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeParameters = typeParameters;
@@ -5951,8 +6013,8 @@ namespace ts {
             // Ensure that extending the affected range only moved the start of the change range
             // earlier in the file.
             Debug.assert(changeRange.span.start <= textChangeRange.span.start);
-            Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
-            Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
+            Debug.assert(spanEnd(changeRange.span) === spanEnd(textChangeRange.span));
+            Debug.assert(spanEnd(textChangeRangeNewSpan(changeRange)) === spanEnd(textChangeRangeNewSpan(textChangeRange)));
 
             // The is the amount the nodes after the edit range need to be adjusted.  It can be
             // positive (if the edit added characters), negative (if the edit deleted characters)
@@ -5979,7 +6041,7 @@ namespace ts {
             // Also, mark any syntax elements that intersect the changed span.  We know, up front,
             // that we cannot reuse these elements.
             updateTokenPositionsAndMarkElements(incrementalSourceFile,
-                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
+                changeRange.span.start, spanEnd(changeRange.span), spanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
 
             // Now that we've set up our internal incremental state just proceed and parse the
             // source file in the normal fashion.  When possible the parser will retrieve and
@@ -6007,7 +6069,7 @@ namespace ts {
 
             function visitNode(node: IncrementalNode) {
                 if (aggressiveChecks && shouldCheckNode(node)) {
-                    var text = oldText.substring(node.pos, node.end);
+                    var text = oldText.substr(node.start, node.length);
                 }
 
                 // Ditch any existing LS children we may have created.  This way we can avoid
@@ -6020,11 +6082,10 @@ namespace ts {
                     node.jsDocComment = undefined;
                 }
 
-                node.pos += delta;
-                node.end += delta;
+                node.start += delta;
 
                 if (aggressiveChecks && shouldCheckNode(node)) {
-                    Debug.assert(text === newText.substring(node.pos, node.end));
+                    Debug.assert(text === newText.substr(node.start, node.length));
                 }
 
                 forEachChild(node, visitNode, visitArray);
@@ -6033,8 +6094,7 @@ namespace ts {
 
             function visitArray(array: IncrementalNodeArray) {
                 array._children = undefined;
-                array.pos += delta;
-                array.end += delta;
+                array.start += delta;
 
                 for (let node of array) {
                     visitNode(node);
@@ -6053,15 +6113,14 @@ namespace ts {
             return false;
         }
 
-        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
-            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
-            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
-            Debug.assert(element.pos <= element.end);
-
+        function adjustIntersectingElement(element: IncrementalElement, end: number, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number, isArray: boolean) {
+            Debug.assert(end >= changeStart, "Adjusting an element that was entirely before the change range");
+            Debug.assert(element.start <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+ 
             // We have an element that intersects the change range in some way.  It may have its
             // start, or its end (or both) in the changed range.  We want to adjust any part
             // that intersects such that the final tree is in a consistent state.  i.e. all
-            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // children have spans within the span of their parent, and all siblings are ordered
             // properly.
 
             // We may need to update both the 'pos' and the 'end' of the element.
@@ -6089,53 +6148,57 @@ namespace ts {
             //
             // The element will keep its position if possible.  Or Move backward to the new-end
             // if it's in the 'Y' range.
-            element.pos = Math.min(element.pos, changeRangeNewEnd);
+            element.start = Math.min(element.start, changeRangeNewEnd);
 
-            // If the 'end' is after the change range, then we always adjust it by the delta
-            // amount.  However, if the end is in the change range, then how we adjust it
-            // will depend on if delta is  positive or negative.  If delta is positive then we
-            // have something like:
-            //
-            //  -------------------AAA-----------------
-            //  -------------------BBBCCCCCCC-----------------
-            //
-            // In this case, we consider any node that ended inside the change range to keep its
-            // end position.
-            //
-            // however, if the delta is negative, then we instead have something like this:
-            //
-            //  -------------------XXXYYYYYYY-----------------
-            //  -------------------ZZZ-----------------
-            //
-            // In this case, any element that ended in the 'X' range will keep its position.
-            // However any element htat ended after that will have their pos adjusted to be
-            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
-            // be adjusted to have their end at the end of the 'Z' range.
-            if (element.end >= changeRangeOldEnd) {
-                // Element ends after the change range.  Always adjust the end pos.
-                element.end += delta;
-            }
-            else {
-                // Element ends in the change range.  The element will keep its position if
-                // possible. Or Move backward to the new-end if it's in the 'Y' range.
-                element.end = Math.min(element.end, changeRangeNewEnd);
+            if (!isArray) {
+                // If the 'end' is after the change range, then we always adjust it by the delta
+                // amount.  However, if the end is in the change range, then how we adjust it 
+                // will depend on if delta is  positive or negative.  If delta is positive then we
+                // have something like:
+                //
+                //  -------------------AAA-----------------
+                //  -------------------BBBCCCCCCC-----------------
+                //
+                // In this case, we consider any node that ended inside the change range to keep its
+                // end position.
+                //
+                // however, if the delta is negative, then we instead have something like this:
+                //
+                //  -------------------XXXYYYYYYY-----------------
+                //  -------------------ZZZ-----------------
+                //
+                // In this case, any element that ended in the 'X' range will keep its position.  
+                // However any element htat ended after that will have their pos adjusted to be
+                // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+                // be adjusted to have their end at the end of the 'Z' range.
+                if (end >= changeRangeOldEnd) {
+                    // Element ends after the change range.  Always adjust the end pos.
+                    var newEnd = end + delta;
+                }
+                else {
+                    // Element ends in the change range.  The element will keep its position if 
+                    // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                    var newEnd = Math.min(end, changeRangeNewEnd);
+                }
+
+                let incrementalNode = <IncrementalNode>element;
+                incrementalNode.length = newEnd - incrementalNode.start;
+                Debug.assert(incrementalNode.length >= 0);
             }
 
-            Debug.assert(element.pos <= element.end);
             if (element.parent) {
-                Debug.assert(element.pos >= element.parent.pos);
-                Debug.assert(element.end <= element.parent.end);
+                Debug.assert(element.start >= element.parent.start);
             }
         }
 
         function checkNodePositions(node: Node, aggressiveChecks: boolean) {
             if (aggressiveChecks) {
-                let pos = node.pos;
+                let pos = node.start;
                 forEachChild(node, child => {
-                    Debug.assert(child.pos >= pos);
-                    pos = child.end;
+                    Debug.assert(child.start >= pos);
+                    pos = spanEnd(child);
                 });
-                Debug.assert(pos <= node.end);
+                Debug.assert(pos <= spanEnd(node));
             }
         }
 
@@ -6153,9 +6216,9 @@ namespace ts {
             return;
 
             function visitNode(child: IncrementalNode) {
-                Debug.assert(child.pos <= child.end);
-                if (child.pos > changeRangeOldEnd) {
-                    // Node is entirely past the change range.  We need to move both its pos and
+                Debug.assert(child.start <= spanEnd(child));
+                if (child.start > changeRangeOldEnd) {
+                    // Node is entirely past the change range.  We need to move both its pos and 
                     // end, forward or backward appropriately.
                     moveElementEntirelyPastChangeRange(child, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
                     return;
@@ -6164,13 +6227,13 @@ namespace ts {
                 // Check if the element intersects the change range.  If it does, then it is not
                 // reusable.  Also, we'll need to recurse to see what constituent portions we may
                 // be able to use.
-                let fullEnd = child.end;
+                let fullEnd = spanEnd(child);
                 if (fullEnd >= changeStart) {
                     child.intersectsChange = true;
                     child._children = undefined;
 
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
-                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    adjustIntersectingElement(child, spanEnd(child), changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ false);
                     forEachChild(child, visitNode, visitArray);
 
                     checkNodePositions(child, aggressiveChecks);
@@ -6182,8 +6245,8 @@ namespace ts {
             }
 
             function visitArray(array: IncrementalNodeArray) {
-                Debug.assert(array.pos <= array.end);
-                if (array.pos > changeRangeOldEnd) {
+                Debug.assert(array.start <= nodeArrayEnd(array));
+                if (array.start > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
                     // its children.
                     moveElementEntirelyPastChangeRange(array, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
@@ -6193,13 +6256,13 @@ namespace ts {
                 // Check if the element intersects the change range.  If it does, then it is not
                 // reusable.  Also, we'll need to recurse to see what constituent portions we may
                 // be able to use.
-                let fullEnd = array.end;
+                let fullEnd = nodeArrayEnd(array);
                 if (fullEnd >= changeStart) {
                     array.intersectsChange = true;
                     array._children = undefined;
 
                     // Adjust the pos or end (or both) of the intersecting array accordingly.
-                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    adjustIntersectingElement(array, fullEnd, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ true);
                     for (let node of array) {
                         visitNode(node);
                     }
@@ -6231,13 +6294,13 @@ namespace ts {
             // start of the tree.
             for (let i = 0; start > 0 && i <= maxLookahead; i++) {
                 let nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
-                Debug.assert(nearestNode.pos <= start);
-                let position = nearestNode.pos;
+                Debug.assert(nearestNode.start <= start);
+                let position = nearestNode.start;
 
                 start = Math.max(0, position - 1);
             }
 
-            let finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
+            let finalSpan = createSpanFromBounds(start, spanEnd(changeRange.span));
             let finalLength = changeRange.newLength + (changeRange.span.start - start);
 
             return createTextChangeRange(finalSpan, finalLength);
@@ -6251,7 +6314,7 @@ namespace ts {
 
             if (lastNodeEntirelyBeforePosition) {
                 let lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
-                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                if (lastChildOfLastEntireNodeBeforePosition.start > bestResult.start) {
                     bestResult = lastChildOfLastEntireNodeBeforePosition;
                 }
             }
@@ -6289,8 +6352,8 @@ namespace ts {
 
                 // If the child intersects this position, then this node is currently the nearest
                 // node that starts before the position.
-                if (child.pos <= position) {
-                    if (child.pos >= bestResult.pos) {
+                if (child.start <= position) {
+                    if (child.start >= bestResult.start) {
                         // This node starts before the position, and is closer to the position than
                         // the previous best node we found.  It is now the new best node.
                         bestResult = child;
@@ -6300,7 +6363,7 @@ namespace ts {
                     // position.  If it overlaps with the position, then either it, or one of its
                     // children must be the nearest node before the position.  So we can just
                     // recurse into this child to see if we can find something better.
-                    if (position < child.end) {
+                    if (position < spanEnd(child)) {
                         // The nearest node is either this child, or one of the children inside
                         // of it.  We've already marked this child as the best so far.  Recurse
                         // in case one of the children is better.
@@ -6311,7 +6374,7 @@ namespace ts {
                         return true;
                     }
                     else {
-                        Debug.assert(child.end <= position);
+                        Debug.assert(spanEnd(child) <= position);
                         // The child ends entirely before this position.  Say you have the following
                         // (where $ is the position)
                         //
@@ -6329,7 +6392,7 @@ namespace ts {
                     }
                 }
                 else {
-                    Debug.assert(child.pos > position);
+                    Debug.assert(child.start > position);
                     // We're now at a node that is entirely past the position we're searching for.
                     // This node (and all following nodes) could never contribute to the result,
                     // so just skip them by returning 'true' here.
@@ -6348,17 +6411,17 @@ namespace ts {
                     let newTextPrefix = newText.substr(0, textChangeRange.span.start);
                     Debug.assert(oldTextPrefix === newTextPrefix);
 
-                    let oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
-                    let newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
+                    let oldTextSuffix = oldText.substring(spanEnd(textChangeRange.span), oldText.length);
+                    let newTextSuffix = newText.substring(spanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
                     Debug.assert(oldTextSuffix === newTextSuffix);
                 }
             }
         }
 
-        interface IncrementalElement extends TextRange {
+        interface IncrementalElement {
+            start: number;
             parent?: Node;
             intersectsChange: boolean
-            length?: number;
             _children: Node[];
         }
 
@@ -6395,14 +6458,14 @@ namespace ts {
                         // Much of the time the parser will need the very next node in the array that
                         // we just returned a node from.So just simply check for that case and move
                         // forward in the array instead of searching for the node again.
-                        if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
+                        if (current && spanEnd(current) === position && currentArrayIndex < (currentArray.length - 1)) {
                             currentArrayIndex++;
                             current = currentArray[currentArrayIndex];
                         }
 
                         // If we don't have a node, or the node we have isn't in the right position,
                         // then try to find a viable node at the position requested.
-                        if (!current || current.pos !== position) {
+                        if (!current || current.start !== position) {
                             findHighestListElementThatStartsAtPosition(position);
                         }
                     }
@@ -6414,8 +6477,8 @@ namespace ts {
                     // is called immediately after.
                     lastQueriedPosition = position;
 
-                    // Either we don'd have a node, or we have a node at the position being asked for.
-                    Debug.assert(!current || current.pos === position);
+                    // Either we don't have a node, or we have a node at the position being asked for.
+                    Debug.assert(!current || current.start === position);
                     return <IncrementalNode>current;
                 }
             };
@@ -6434,7 +6497,7 @@ namespace ts {
                 return;
 
                 function visitNode(node: Node) {
-                    if (position >= node.pos && position < node.end) {
+                    if (position >= node.start && position < spanEnd(node)) {
                         // Position was within this node.  Keep searching deeper to find the node.
                         forEachChild(node, visitNode, visitArray);
 
@@ -6447,13 +6510,13 @@ namespace ts {
                 }
 
                 function visitArray(array: NodeArray<Node>) {
-                    if (position >= array.pos && position < array.end) {
+                    if (array.length > 0 && position >= array.start && position < spanEnd(lastOrUndefined(array))) {
                         // position was in this array.  Search through this array to see if we find a
                         // viable element.
                         for (let i = 0, n = array.length; i < n; i++) {
                             let child = array[i];
                             if (child) {
-                                if (child.pos === position) {
+                                if (child.start === position) {
                                     // Found the right node.  We're done.
                                     currentArray = array;
                                     currentArrayIndex = i;
@@ -6461,8 +6524,8 @@ namespace ts {
                                     return true;
                                 }
                                 else {
-                                    if (child.pos < position && position < child.end) {
-                                        // Position in somewhere within this child.  Search in it and
+                                    if (child.start < position && position < spanEnd(child)) {
+                                        // Position in somewhere within this child.  Search in it and 
                                         // stop searching in this array.
                                         forEachChild(child, visitNode, visitArray);
                                         return true;

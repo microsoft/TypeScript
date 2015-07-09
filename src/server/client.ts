@@ -63,7 +63,7 @@ namespace ts.server {
             var end = this.lineOffsetToPosition(fileName, codeEdit.end);
 
             return {
-                span: ts.createTextSpanFromBounds(start, end),
+                span: ts.createSpanFromBounds(start, end),
                 newText: codeEdit.newText
             };
         }
@@ -166,7 +166,7 @@ namespace ts.server {
             return {
                 kind: response.body.kind,
                 kindModifiers: response.body.kindModifiers,
-                textSpan: ts.createTextSpanFromBounds(start, end),
+                textSpan: ts.createSpanFromBounds(start, end),
                 displayParts: [{ kind: "text", text: response.body.displayString }],
                 documentation: [{ kind: "text", text: response.body.documentation }]
             };
@@ -246,7 +246,7 @@ namespace ts.server {
                     matchKind: entry.matchKind,
                     isCaseSensitive: entry.isCaseSensitive,
                     fileName: fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end)
+                    textSpan: ts.createSpanFromBounds(start, end)
                 };
             });
         }
@@ -308,7 +308,7 @@ namespace ts.server {
                     containerKind: "",
                     containerName: "",
                     fileName: fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    textSpan: ts.createSpanFromBounds(start, end),
                     kind: "",
                     name: ""
                 };
@@ -334,7 +334,7 @@ namespace ts.server {
                     containerKind: "",
                     containerName: "",
                     fileName: fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    textSpan: ts.createSpanFromBounds(start, end),
                     kind: "",
                     name: ""
                 };
@@ -363,7 +363,7 @@ namespace ts.server {
                 var end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     fileName: fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    textSpan: ts.createSpanFromBounds(start, end),
                     isWriteAccess: entry.isWriteAccess,
                 };
             });
@@ -404,7 +404,7 @@ namespace ts.server {
                     var start = this.lineOffsetToPosition(fileName, loc.start);
                     var end = this.lineOffsetToPosition(fileName, loc.end);
                     locations.push({
-                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        textSpan: ts.createSpanFromBounds(start, end),
                         fileName: fileName
                     });
                 });
@@ -416,7 +416,7 @@ namespace ts.server {
                 kind: response.body.info.kind,
                 kindModifiers: response.body.info.kindModifiers,
                 localizedErrorMessage: response.body.info.localizedErrorMessage,
-                triggerSpan: ts.createTextSpanFromBounds(position, position),
+                triggerSpan: ts.createSpanFromBounds(position, position),
                 fileName: fileName,
                 position: position,
                 findInStrings: findInStrings,
@@ -446,7 +446,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers || "",
-                spans: item.spans.map(span=> createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
+                spans: item.spans.map(span=> createSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
                 childItems: this.decodeNavigationBarItems(item.childItems, fileName),
                 indent: 0,
                 bolded: false,
@@ -465,11 +465,11 @@ namespace ts.server {
             return this.decodeNavigationBarItems(response.body, fileName);
         }
 
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): Span {
             throw new Error("Not Implemented Yet.");
         }
 
-        getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan {
+        getBreakpointStatementAtPosition(fileName: string, position: number): Span {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -523,7 +523,7 @@ namespace ts.server {
                 var end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    textSpan: ts.createSpanFromBounds(start, end),
                     isWriteAccess: entry.isWriteAccess,
                 };
             });
@@ -541,7 +541,7 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
 
-        getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
+        getBraceMatchingAtPosition(fileName: string, position: number): Span[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
                 file: fileName,
@@ -566,19 +566,19 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
-        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        getSyntacticClassifications(fileName: string, span: Span): ClassifiedSpan[] {
             throw new Error("Not Implemented Yet.");
         }
 
-        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        getSemanticClassifications(fileName: string, span: Span): ClassifiedSpan[] {
             throw new Error("Not Implemented Yet.");
         }
 
-        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+        getEncodedSyntacticClassifications(fileName: string, span: Span): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        getEncodedSemanticClassifications(fileName: string, span: Span): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 

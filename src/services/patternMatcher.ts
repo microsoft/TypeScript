@@ -96,7 +96,7 @@ namespace ts {
         // independently.  For example, if the chunk is for "UIElement" the the spans of interest
         // correspond to "U", "I" and "Element".  If "UIElement" isn't found as an exaxt, prefix.
         // or substring match, then the character spans will be used to attempt a camel case match.
-        characterSpans: TextSpan[];
+        characterSpans: Span[];
     }
 
     function createPatternMatch(kind: PatternMatchKind, punctuationStripped: boolean, isCaseSensitive: boolean, camelCaseWeight?: number): PatternMatch {
@@ -113,7 +113,7 @@ namespace ts {
         // we see the name of a module that is used everywhere, or the name of an overload).  As 
         // such, we cache the information we compute about the candidate for the life of this 
         // pattern matcher so we don't have to compute it multiple times.
-        let stringToWordSpans: Map<TextSpan[]> = {};
+        let stringToWordSpans: Map<Span[]> = {};
 
         pattern = pattern.trim();
 
@@ -188,7 +188,7 @@ namespace ts {
             return totalMatch;
         }
 
-        function getWordSpans(word: string): TextSpan[] {
+        function getWordSpans(word: string): Span[] {
             if (!hasProperty(stringToWordSpans, word)) {
                 stringToWordSpans[word] = breakIntoWordSpans(word);
             }
@@ -353,7 +353,7 @@ namespace ts {
             return matches;
         }
 
-        function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan?: TextSpan): boolean {
+        function partStartsWith(candidate: string, candidateSpan: Span, pattern: string, ignoreCase: boolean, patternSpan?: Span): boolean {
             let patternPartStart = patternSpan ? patternSpan.start : 0;
             let patternPartLength = patternSpan ? patternSpan.length : pattern.length;
 
@@ -384,7 +384,7 @@ namespace ts {
             return true;
         }
 
-        function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number {
+        function tryCamelCaseMatch(candidate: string, candidateParts: Span[], chunk: TextChunk, ignoreCase: boolean): number {
             let chunkCharacterSpans = chunk.characterSpans;
 
             // Note: we may have more pattern parts than candidate parts.  This is because multiple
@@ -453,7 +453,7 @@ namespace ts {
                     // obviously contiguous.
                     contiguous = contiguous === undefined ? true : contiguous;
 
-                    candidatePart = createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
+                    candidatePart = createSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
                 }
 
                 // Check if we matched anything at all.  If we didn't, then we need to unset the
@@ -665,16 +665,16 @@ namespace ts {
         }
     }
 
-    /* @internal */ export function breakIntoCharacterSpans(identifier: string): TextSpan[] {
+    /* @internal */ export function breakIntoCharacterSpans(identifier: string): Span[] {
         return breakIntoSpans(identifier, /*word:*/ false);
     }
 
-    /* @internal */ export function breakIntoWordSpans(identifier: string): TextSpan[] {
+    /* @internal */ export function breakIntoWordSpans(identifier: string): Span[] {
         return breakIntoSpans(identifier, /*word:*/ true);
     }
 
-    function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
-        let result: TextSpan[] = [];
+    function breakIntoSpans(identifier: string, word: boolean): Span[] {
+        let result: Span[] = [];
 
         let wordStart = 0;
         for (let i = 1, n = identifier.length; i < n; i++) {
@@ -691,7 +691,7 @@ namespace ts {
                 hasTransitionFromUpperToLower) {
 
                 if (!isAllPunctuation(identifier, wordStart, i)) {
-                    result.push(createTextSpan(wordStart, i - wordStart));
+                    result.push(createSpan(wordStart, i - wordStart));
                 }
 
                 wordStart = i;
@@ -699,7 +699,7 @@ namespace ts {
         }
 
         if (!isAllPunctuation(identifier, wordStart, identifier.length)) {
-            result.push(createTextSpan(wordStart, identifier.length - wordStart));
+            result.push(createSpan(wordStart, identifier.length - wordStart));
         }
 
         return result;

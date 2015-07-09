@@ -484,7 +484,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 let referencedFileName = isRootedDiskPath(ref.fileName) ? ref.fileName : combinePaths(basePath, ref.fileName);
-                processSourceFile(normalizePath(referencedFileName), /* isDefaultLib */ false, file, ref.pos, ref.end);
+                processSourceFile(normalizePath(referencedFileName), /* isDefaultLib */ false, file, ref.start, spanEnd(ref));
             });
         }
 
@@ -536,7 +536,7 @@ namespace ts {
             });
 
             function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
-                return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
+                return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.start, nameLiteral.length);
             }
         }
 

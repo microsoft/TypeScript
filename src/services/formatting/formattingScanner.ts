@@ -26,8 +26,8 @@ namespace ts.formatting {
         scanner.setTextPos(startPos);
 
         let wasNewLine: boolean = true;
-        let leadingTrivia: TextRangeWithKind[];
-        let trailingTrivia: TextRangeWithKind[];
+        let leadingTrivia: SpanWithKind[];
+        let trailingTrivia: SpanWithKind[];
         
         let savedPos: number;
         let lastScanAction: ScanAction;
@@ -78,8 +78,8 @@ namespace ts.formatting {
                 // consume leading trivia
                 scanner.scan();
                 let item = {
-                    pos: pos,
-                    end: scanner.getStartPos(),
+                    start: pos,
+                    length: scanner.getStartPos() - pos,
                     kind: t
                 }
 
@@ -180,9 +180,9 @@ namespace ts.formatting {
                 lastScanAction = ScanAction.Scan;
             }
 
-            let token: TextRangeWithKind = {
-                pos: scanner.getStartPos(),
-                end: scanner.getTextPos(),
+            let token: SpanWithKind = {
+                start: scanner.getStartPos(),
+                length: scanner.getTextPos() - scanner.getStartPos(),
                 kind: currentToken
             }
 
@@ -195,9 +195,10 @@ namespace ts.formatting {
                 if (!isTrivia(currentToken)) {
                     break;
                 }
+
                 let trivia = {
-                    pos: scanner.getStartPos(),
-                    end: scanner.getTextPos(),
+                    start: scanner.getStartPos(),
+                    length: scanner.getTextPos() - scanner.getStartPos(),
                     kind: currentToken
                 };
 
@@ -225,7 +226,7 @@ namespace ts.formatting {
 
         function isOnToken(): boolean {
             let current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
-            let startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            let startPos = (lastTokenInfo && lastTokenInfo.token.start) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 

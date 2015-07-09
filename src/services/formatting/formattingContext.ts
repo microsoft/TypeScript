@@ -3,8 +3,8 @@
 /* @internal */
 namespace ts.formatting {
     export class FormattingContext {
-        public currentTokenSpan: TextRangeWithKind;
-        public nextTokenSpan: TextRangeWithKind;
+        public currentTokenSpan: SpanWithKind;
+        public nextTokenSpan: SpanWithKind;
         public contextNode: Node;
         public currentTokenParent: Node;
         public nextTokenParent: Node;
@@ -18,16 +18,16 @@ namespace ts.formatting {
         constructor(public sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
         }
 
-        public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
-            Debug.assert(currentRange !== undefined, "currentTokenSpan is null");
+        public updateContext(currentSpan: SpanWithKind, currentTokenParent: Node, nextSpan: SpanWithKind, nextTokenParent: Node, commonParent: Node) {
+            Debug.assert(currentSpan !== undefined, "currentTokenSpan is null");
             Debug.assert(currentTokenParent !== undefined, "currentTokenParent is null");
-            Debug.assert(nextRange !== undefined, "nextTokenSpan is null");
+            Debug.assert(nextSpan !== undefined, "nextTokenSpan is null");
             Debug.assert(nextTokenParent !== undefined, "nextTokenParent is null");
             Debug.assert(commonParent !== undefined, "commonParent is null");
 
-            this.currentTokenSpan = currentRange;
+            this.currentTokenSpan = currentSpan;
             this.currentTokenParent = currentTokenParent;
-            this.nextTokenSpan = nextRange;
+            this.nextTokenSpan = nextSpan;
             this.nextTokenParent = nextTokenParent;
             this.contextNode = commonParent;
 
@@ -57,8 +57,8 @@ namespace ts.formatting {
 
         public TokensAreOnSameLine(): boolean {
             if (this.tokensAreOnSameLine === undefined) {
-                let startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.pos).line;
-                let endLine = this.sourceFile.getLineAndCharacterOfPosition(this.nextTokenSpan.pos).line;
+                let startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.start).line;
+                let endLine = this.sourceFile.getLineAndCharacterOfPosition(this.nextTokenSpan.start).line;
                 this.tokensAreOnSameLine = (startLine === endLine);
             }
 

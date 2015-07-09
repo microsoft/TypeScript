@@ -37,7 +37,7 @@ class TypeWriterWalker {
     }
 
     private logTypeAndSymbol(node: ts.Node): void {
-        var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
+        var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.start);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
 
@@ -56,7 +56,7 @@ class TypeWriterWalker {
                 for (let declaration of symbol.declarations) {
                     symbolString += ", ";
                     let declSourceFile = declaration.getSourceFile();
-                    let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
+                    let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.start);
                     symbolString += `Decl(${ ts.getBaseFileName(declSourceFile.fileName) }, ${ declLineAndCharacter.line }, ${ declLineAndCharacter.character })`
                 }
             }

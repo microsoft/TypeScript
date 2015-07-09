@@ -124,15 +124,14 @@ module Utils {
 
     export function assertInvariants(node: ts.Node, parent: ts.Node): void {
         if (node) {
-            assert.isFalse(node.pos < 0, "node.pos < 0");
-            assert.isFalse(node.end < 0, "node.end < 0");
-            assert.isFalse(node.end < node.pos, "node.end < node.pos");
+            assert.isFalse(node.start < 0, "node.start < 0");
+            assert.isFalse(node.length < 0, "node.length < 0");
             assert.equal(node.parent, parent, "node.parent !== parent");
 
             if (parent) {
                 // Make sure each child is contained within the parent.
-                assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
-                assert.isFalse(node.end > parent.end, "node.end > parent.end");
+                assert.isFalse(node.start < parent.start, "node.start < parent.start");
+                assert.isFalse(node.length > parent.length, "node.length > parent.length");
             }
 
             ts.forEachChild(node, child => {
@@ -143,20 +142,20 @@ module Utils {
             var currentPos = 0;
             ts.forEachChild(node,
                 child => {
-                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
-                    currentPos = child.end;
+                    assert.isFalse(child.start < currentPos, "child.start < currentPos");
+                    currentPos = ts.spanEnd(child);
                 },
                 (array: ts.NodeArray<ts.Node>) => {
-                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
-                    assert.isFalse(array.end > node.end, "array.end > node.end");
-                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
+                    assert.isFalse(array.start < node.start, "array.start < node.start");
+                    assert.isFalse(ts.nodeArrayEnd(array) > ts.spanEnd(node), "array.end > node.end");
+                    assert.isFalse(array.start < currentPos, "array.start < currentPos");
 
                     for (var i = 0, n = array.length; i < n; i++) {
-                        assert.isFalse(array[i].pos < currentPos, "array[i].pos < currentPos");
-                        currentPos = array[i].end
+                        assert.isFalse(array[i].start < currentPos, "array[i].start < currentPos");
+                        currentPos = ts.spanEnd(array[i]);
                     }
 
-                    currentPos = array.end;
+                    currentPos = ts.nodeArrayEnd(array);
                 });
 
             var childNodesAndArrays: any[] = [];
@@ -176,7 +175,7 @@ module Utils {
     }
 
     function isNodeOrArray(a: any): boolean {
-        return a !== undefined && typeof a.pos === "number";
+        return a !== undefined && typeof a.start === "number";
     }
 
     export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
@@ -195,7 +194,7 @@ module Utils {
 
     export function sourceFileToJSON(file: ts.Node): string {
         return JSON.stringify(file,(k, v) => {
-            return isNodeOrArray(v) ? serializeNode(v) : v;
+            return isNodeOrArray(v) ? serializeNodeOrArray(v) : v;
         }, "    ");
 
         function getKindName(k: number | string): string {
@@ -233,8 +232,9 @@ module Utils {
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
         function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
 
-        function serializeNode(n: ts.Node): any {
-            var o: any = { kind: getKindName(n.kind) };
+        function serializeNodeOrArray(n: ts.Node): any {
+            var o: any = { kind: getKindName(n.kind), start: n.start, length: n.length };
+
             if (ts.containsParseError(n)) {
                 o.containsParseError = true;
             }
@@ -252,6 +252,8 @@ module Utils {
                     case "symbolCount":
                     case "identifierCount":
                     case "scriptSnapshot":
+                    case "start":
+                    case "length":
                         // Blacklist of items we never put in the baseline file.
                         break;
 
@@ -281,7 +283,7 @@ module Utils {
 
                     case "nextContainer":
                         if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.start, end: ts.spanEnd(n.nextContainer) };
                         }
                         break;
 
@@ -334,8 +336,8 @@ module Utils {
 
         assert(node1, "node1");
         assert(node2, "node2");
-        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
-        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
+        assert.equal(node1.start, node2.start, "node1.start !== node2.start");
+        assert.equal(node1.length, node2.length, "node1.length !== node2.length");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
         assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 
@@ -366,8 +368,8 @@ module Utils {
 
         assert(array1, "array1");
         assert(array2, "array2");
-        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
-        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
+        assert.equal(array1.start, array2.start, "array1.start !== array2.start");
+        assert.equal(array1.hasTrailingComma, array2.hasTrailingComma, "array1.hasTrailingComma !== array2.hasTrailingComma");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
         for (var i = 0, n = array1.length; i < n; i++) {
@@ -1337,7 +1339,7 @@ module Harness {
                     outputLines.push('    ' + line);
                     fileErrors.forEach(err => {
                         // Does any error start or continue on to this line? Emit squiggles
-                        let end = ts.textSpanEnd(err);
+                        let end = ts.spanEnd(err);
                         if ((end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
                             // How many characters from the start of this line the error starts at (could be positive or negative)
                             var relativeOffset = err.start - thisLineStart;

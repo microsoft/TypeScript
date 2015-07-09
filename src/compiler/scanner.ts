@@ -535,8 +535,8 @@ namespace ts {
     // TextRange for each comment. Single-line comment ranges include the beginning '//' characters 
     // but not the ending line break. Multi - line comment ranges include the beginning '/* and 
     // ending '*/' characters.The return value is undefined if no comments were found.
-    function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
-        let result: CommentRange[];
+    function getCommentSpans(text: string, pos: number, trailing: boolean): CommentSpan[] {
+        let result: CommentSpan[];
         let collecting = trailing || pos === 0;
         while (true) {
             let ch = text.charCodeAt(pos);
@@ -591,7 +591,7 @@ namespace ts {
                                 result = [];
                             }
 
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
+                            result.push({ start: startPos, length: pos - startPos, hasTrailingNewLine, kind });
                         }
                         continue;
                     }
@@ -610,12 +610,12 @@ namespace ts {
         }
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
-        return getCommentRanges(text, pos, /*trailing*/ false);
+    export function getLeadingCommentSpans(text: string, pos: number): CommentSpan[] {
+        return getCommentSpans(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
-        return getCommentRanges(text, pos, /*trailing*/ true);
+    export function getTrailingCommentSpans(text: string, pos: number): CommentSpan[] {
+        return getCommentSpans(text, pos, /*trailing*/ true);
     }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {

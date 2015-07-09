@@ -3,17 +3,17 @@ namespace ts {
         [index: string]: T;
     }
 
+    export interface Span {
+        start: number;
+        length: number;
+    }
+
     export interface FileMap<T> {
         get(fileName: string): T;
         set(fileName: string, value: T): void;
         contains(fileName: string): boolean;
         remove(fileName: string): void;
         forEachValue(f: (v: T) => void): void;
-    }
-
-    export interface TextRange {
-        pos: number;
-        end: number;
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
@@ -437,7 +437,7 @@ namespace ts {
         FailedAndReported = 3
     }
 
-    export interface Node extends TextRange {
+    export interface Node extends Span {
         kind: SyntaxKind;
         flags: NodeFlags;
         // Specific context the parser was in when this node was created.  Normally undefined.
@@ -454,8 +454,10 @@ namespace ts {
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export interface NodeArray<T> extends Array<T>, TextRange {
+    export interface NodeArray<T> extends Array<T> {
+        start: number;
         hasTrailingComma?: boolean;
+        closeTokenIsMissing?: boolean;
     }
 
     export interface ModifiersArray extends NodeArray<Node> {
@@ -1119,11 +1121,11 @@ namespace ts {
         expression: Expression;
     }
 
-    export interface FileReference extends TextRange {
+    export interface FileReference extends Span {
         fileName: string;
     }
 
-    export interface CommentRange extends TextRange {
+    export interface CommentSpan extends Span {
         hasTrailingNewLine?: boolean;
         kind: SyntaxKind;
     }
@@ -2197,13 +2199,8 @@ namespace ts {
         getNewLine(): string;
     }
 
-    export interface TextSpan {
-        start: number;
-        length: number;
-    }
-
     export interface TextChangeRange {
-        span: TextSpan;
+        span: Span;
         newLength: number;
     }
 

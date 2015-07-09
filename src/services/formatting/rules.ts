@@ -689,7 +689,7 @@ namespace ts.formatting {
 
         static IsStartOfVariableDeclarationList(context: FormattingContext): boolean {
             return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList && 
-                context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
+                context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.start;
         }
 
         static IsNotFormatOnEnter(context: FormattingContext): boolean {
@@ -704,7 +704,7 @@ namespace ts.formatting {
             return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
-        static IsTypeArgumentOrParameter(token: TextRangeWithKind, parent: Node): boolean {
+        static IsTypeArgumentOrParameter(token: SpanWithKind, parent: Node): boolean {
             if (token.kind !== SyntaxKind.LessThanToken && token.kind !== SyntaxKind.GreaterThanToken) {
                 return false;
             }

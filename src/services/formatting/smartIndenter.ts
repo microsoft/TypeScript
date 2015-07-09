@@ -26,7 +26,7 @@ namespace ts.formatting {
                 precedingToken.kind === SyntaxKind.TemplateHead ||
                 precedingToken.kind === SyntaxKind.TemplateMiddle ||
                 precedingToken.kind === SyntaxKind.TemplateTail;
-            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && spanEnd(precedingToken) > position) {
                 return 0;
             }
 
@@ -83,15 +83,15 @@ namespace ts.formatting {
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
-        export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
+        export function getIndentationForNode(n: Node, ignoreActualIndentationSpan: Span, sourceFile: SourceFile, options: FormatCodeOptions): number {
             let start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
-            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+            return getIndentationForNodeWorker(n, start, ignoreActualIndentationSpan, /*indentationDelta*/ 0, sourceFile, options);
         }
 
         function getIndentationForNodeWorker(
             current: Node,
             currentStart: LineAndCharacter,
-            ignoreActualIndentationRange: TextRange,
+            ignoreActualIndentationSpan: Span,
             indentationDelta: number,
             sourceFile: SourceFile,
             options: EditorOptions): number {
@@ -103,9 +103,9 @@ namespace ts.formatting {
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
                 let useActualIndentation = true;
-                if (ignoreActualIndentationRange) {
+                if (ignoreActualIndentationSpan) {
                     let start = current.getStart(sourceFile);
-                    useActualIndentation = start < ignoreActualIndentationRange.pos || start > ignoreActualIndentationRange.end;
+                    useActualIndentation = start < ignoreActualIndentationSpan.start || start > spanEnd(ignoreActualIndentationSpan);
                 }
 
                 if (useActualIndentation) {
@@ -149,7 +149,7 @@ namespace ts.formatting {
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             let containingList = getContainingList(child, sourceFile);
             if (containingList) {
-                return sourceFile.getLineAndCharacterOfPosition(containingList.pos);
+                return sourceFile.getLineAndCharacterOfPosition(containingList.start);
             }
 
             return sourceFile.getLineAndCharacterOfPosition(parent.getStart(sourceFile));
@@ -225,7 +225,7 @@ namespace ts.formatting {
             return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
         
-        export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
+        export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: SpanWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 let elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword !== undefined);
@@ -242,7 +242,7 @@ namespace ts.formatting {
                 switch (node.parent.kind) {
                     case SyntaxKind.TypeReference:
                         if ((<TypeReferenceNode>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
+                            nodeArrayContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
                             return (<TypeReferenceNode>node.parent).typeArguments;
                         }
                         break;
@@ -259,10 +259,10 @@ namespace ts.formatting {
                     case SyntaxKind.ConstructSignature: {
                         let start = node.getStart(sourceFile);
                         if ((<SignatureDeclaration>node.parent).typeParameters &&
-                            rangeContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
+                            nodeArrayContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
                             return (<SignatureDeclaration>node.parent).typeParameters;
                         }
-                        if (rangeContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
+                        if (nodeArrayContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
                             return (<SignatureDeclaration>node.parent).parameters;
                         }
                         break;
@@ -271,11 +271,11 @@ namespace ts.formatting {
                     case SyntaxKind.CallExpression: {
                         let start = node.getStart(sourceFile);
                         if ((<CallExpression>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
+                            nodeArrayContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).typeArguments;
                         }
                         if ((<CallExpression>node.parent).arguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
+                            nodeArrayContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).arguments;
                         }
                         break;
@@ -314,8 +314,8 @@ namespace ts.formatting {
                     return Value.Unknown;
                 }
 
-                let fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(fullCallOrNewExpression.end);
-                let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
+                let fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(spanEnd(fullCallOrNewExpression));
+                let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(spanEnd(startingExpression));
 
                 if (fullCallOrNewExpressionEnd.line === startingExpressionEnd.line) {
                     return Value.Unknown;
@@ -356,7 +356,7 @@ namespace ts.formatting {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                let prevEndLine = sourceFile.getLineAndCharacterOfPosition(list[i].end).line;
+                let prevEndLine = sourceFile.getLineAndCharacterOfPosition(spanEnd(list[i])).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }

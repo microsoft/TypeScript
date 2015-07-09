@@ -67,7 +67,7 @@ namespace ts.server {
 
     function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
         for (var i = 0, len = edits.length; i < len; i++) {
-            if (ts.textSpanEnd(edits[i].span) >= pos) {
+            if (ts.spanEnd(edits[i].span) >= pos) {
                 return false;
             }
         }
@@ -287,7 +287,7 @@ namespace ts.server {
             return definitions.map(def => ({
                 file: def.fileName,
                 start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
-                end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
+                end: compilerService.host.positionToLineOffset(def.fileName, ts.spanEnd(def.textSpan))
             }));
         }
 
@@ -309,7 +309,7 @@ namespace ts.server {
             return definitions.map(def => ({
                 file: def.fileName,
                 start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
-                end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
+                end: compilerService.host.positionToLineOffset(def.fileName, ts.spanEnd(def.textSpan))
             }));
         }
 
@@ -333,7 +333,7 @@ namespace ts.server {
             return occurrences.map(occurrence => {
                 let { fileName, isWriteAccess, textSpan } = occurrence;
                 let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
-                let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                let end = compilerService.host.positionToLineOffset(fileName, ts.spanEnd(textSpan));
                 return {
                     start,
                     end,
@@ -387,7 +387,7 @@ namespace ts.server {
             var bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
                 file: location.fileName,
                 start: compilerService.host.positionToLineOffset(location.fileName, location.textSpan.start),
-                end: compilerService.host.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
+                end: compilerService.host.positionToLineOffset(location.fileName, ts.spanEnd(location.textSpan)),
             })).sort((a, b) => {
                 if (a.file < b.file) {
                     return -1;
@@ -451,17 +451,17 @@ namespace ts.server {
             var displayString = ts.displayPartsToString(nameInfo.displayParts);
             var nameSpan = nameInfo.textSpan;
             var nameColStart = compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
-            var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+            var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.spanEnd(nameSpan));
             var bakedRefs: protocol.ReferencesResponseItem[] = references.map(ref => {
                 var start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
                 var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
-                var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                var lineText = snap.getText(refLineSpan.start, ts.spanEnd(refLineSpan)).replace(/\r|\n/g, "");
                 return {
                     file: ref.fileName,
                     start: start,
                     lineText: lineText,
-                    end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                    end: compilerService.host.positionToLineOffset(ref.fileName, ts.spanEnd(ref.textSpan)),
                     isWriteAccess: ref.isWriteAccess
                 };
             }).sort(compareFileStart);
@@ -498,7 +498,7 @@ namespace ts.server {
                 kind: quickInfo.kind,
                 kindModifiers: quickInfo.kindModifiers,
                 start: compilerService.host.positionToLineOffset(file, quickInfo.textSpan.start),
-                end: compilerService.host.positionToLineOffset(file, ts.textSpanEnd(quickInfo.textSpan)),
+                end: compilerService.host.positionToLineOffset(file, ts.spanEnd(quickInfo.textSpan)),
                 displayString: displayString,
                 documentation: docString,
             };
@@ -525,7 +525,7 @@ namespace ts.server {
             return edits.map((edit) => {
                 return {
                     start: compilerService.host.positionToLineOffset(file, edit.span.start),
-                    end: compilerService.host.positionToLineOffset(file, ts.textSpanEnd(edit.span)),
+                    end: compilerService.host.positionToLineOffset(file, ts.spanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
@@ -579,11 +579,11 @@ namespace ts.server {
                             }
                             if (indentPosition > 0) {
                                 var spaces = generateSpaces(indentPosition);
-                                edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                                edits.push({ span: ts.createSpanFromBounds(position, position), newText: spaces });
                             }
                             else if (indentPosition < 0) {
                                 edits.push({
-                                    span: ts.createTextSpanFromBounds(position, position - indentPosition),
+                                    span: ts.createSpanFromBounds(position, position - indentPosition),
                                     newText: ""
                                 });
                             }
@@ -598,10 +598,8 @@ namespace ts.server {
 
             return edits.map((edit) => {
                 return {
-                    start: compilerService.host.positionToLineOffset(file,
-                        edit.span.start),
-                    end: compilerService.host.positionToLineOffset(file,
-                        ts.textSpanEnd(edit.span)),
+                    start: compilerService.host.positionToLineOffset(file, edit.span.start),
+                    end: compilerService.host.positionToLineOffset(file, ts.spanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
@@ -753,7 +751,7 @@ namespace ts.server {
                 kindModifiers: item.kindModifiers,
                 spans: item.spans.map(span => ({
                     start: compilerService.host.positionToLineOffset(fileName, span.start),
-                    end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span))
+                    end: compilerService.host.positionToLineOffset(fileName, ts.spanEnd(span))
                 })),
                 childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
             }));
@@ -790,7 +788,7 @@ namespace ts.server {
 
             return navItems.map((navItem) => {
                 var start = compilerService.host.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
-                var end = compilerService.host.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                var end = compilerService.host.positionToLineOffset(navItem.fileName, ts.spanEnd(navItem.textSpan));
                 var bakedItem: protocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,

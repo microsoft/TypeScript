@@ -38,20 +38,24 @@ namespace ts {
         return lineStarts[line];
     }
 
-    export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
-        return startEndContainsRange(r1.pos, r1.end, r2);
+    export function nodeArrayContainsSpan(array: NodeArray<Node>, r2: Span): boolean {
+        return startEndContainsSpan(array.start, nodeArrayEnd(array), r2);
     }
 
-    export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
-        return start <= range.pos && end >= range.end;
+    export function startEndContainsSpan(start: number, end: number, span: Span): boolean {
+        return start <= span.start && end >= spanEnd(span);
     }
 
-    export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {
-        return range.pos <= start && range.end >= end;
+    export function nodeArrayContainsStartEnd(array: NodeArray<Node>, start: number, end: number): boolean {
+        return array.start <= start && nodeArrayEnd(array) >= end;
     }
 
-    export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
-        return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
+    export function rangeContainsStartEnd(span: Span, start: number, end: number): boolean {
+        return span.start <= start && spanEnd(span) >= end;
+    }
+
+    export function rangeOverlapsWithStartEnd(r1: Span, start: number, end: number) {
+        return startEndOverlapsWithStartEnd(r1.start, spanEnd(r1), start, end);
     }
 
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
@@ -61,7 +65,7 @@ namespace ts {
     }
 
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
-        return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+        return spanEnd(candidate) > position || !isCompletedNode(candidate, sourceFile);
     }
 
     export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
@@ -246,7 +250,7 @@ namespace ts {
         // for the position of the relevant node (or comma).
         let syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+            if (c.kind === SyntaxKind.SyntaxList && c.start <= node.start && spanEnd(c) >= spanEnd(node)) {
                 return c;
             }
         });
@@ -334,7 +338,7 @@ namespace ts {
         return find(parent);
 
         function find(n: Node): Node {
-            if (isToken(n) && n.pos === previousToken.end) {
+            if (isToken(n) && n.start === spanEnd(previousToken)) {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
@@ -343,9 +347,9 @@ namespace ts {
             for (let child of children) {
                 let shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
-                    (child.pos <= previousToken.pos && child.end > previousToken.end) ||
+                    (child.start <= previousToken.start && spanEnd(child) > spanEnd(previousToken)) ||
                     // previous token ends exactly at the beginning of child
-                    (child.pos === previousToken.end);
+                    (child.start === spanEnd(previousToken));
 
                 if (shouldDiveInChildNode && nodeHasTokens(child)) {
                     return find(child);
@@ -379,7 +383,7 @@ namespace ts {
             for (let i = 0, len = children.length; i < len; i++) {
                 let child = children[i];
                 if (nodeHasTokens(child)) {
-                    if (position <= child.end) {
+                    if (position <= spanEnd(child)) {
                         if (child.getStart(sourceFile) >= position) {
                             // actual start of the node is past the position - previous token should be at the end of previous child
                             let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
