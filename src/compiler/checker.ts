@@ -1958,7 +1958,7 @@ namespace ts {
                     returnType = signature.typePredicate.type;
                 }
                 else {
-                   returnType = getReturnTypeOfSignature(signature);
+                    returnType = getReturnTypeOfSignature(signature);
                 }
                 buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
             }
