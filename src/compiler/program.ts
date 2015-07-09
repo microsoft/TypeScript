@@ -188,6 +188,9 @@ namespace ts {
 
         verifyCompilerOptions();
 
+        // unconditionally set oldProgram to undefined to prevent it from being captured in closure
+        oldProgram = undefined;
+
         programTime += new Date().getTime() - start;
 
         program = {
