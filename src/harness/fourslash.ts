@@ -190,14 +190,14 @@ module FourSlash {
         return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
     }
 
-    export class TestCancellationToken implements ts.CancellationToken {
+    export class TestCancellationToken implements ts.HostCancellationToken {
         // 0 - cancelled
         // >0 - not cancelled 
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static NotCancelled: number = -1;
-        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCancelled;
-        public isCancellationRequested(): boolean {
+        private static NotCanceled: number = -1;
+        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
 
+        public isCancellationRequested(): boolean {
             if (this.numberOfCallsBeforeCancellation < 0) {
                 return false;
             }
@@ -216,7 +216,7 @@ module FourSlash {
         }
 
         public resetCancelled(): void {
-            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCancelled;
+            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCanceled;
         }
     }
 
@@ -660,8 +660,7 @@ module FourSlash {
                 }
                 errorMsg += "]\n";
 
-                Harness.IO.log(errorMsg);
-                this.raiseError("Member list is not empty at Caret");
+                this.raiseError("Member list is not empty at Caret: " + errorMsg);
 
             }
         }
@@ -744,7 +743,7 @@ module FourSlash {
                 var reference = references[i];
                 if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
                     if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
-                        this.raiseError('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
+                        this.raiseError('verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }
                     return;
                 }
@@ -885,8 +884,16 @@ module FourSlash {
                     this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
 
                 var ranges = this.getRanges();
+
+                if (!references) {
+                    if (ranges.length !== 0) {
+                        this.raiseError(`Expected ${ranges.length} rename locations; got none.`);
+                    }
+                    return;
+                }
+
                 if (ranges.length !== references.length) {
-                    this.raiseError(this.assertionMessage("Rename locations", references.length, ranges.length));
+                    this.raiseError("Rename location count does not match result.\n\nExpected: " + JSON.stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                 }
 
                 ranges = ranges.sort((r1, r2) => r1.start - r2.start);
@@ -899,9 +906,7 @@ module FourSlash {
                     if (reference.textSpan.start !== range.start ||
                         ts.textSpanEnd(reference.textSpan) !== range.end) {
 
-                        this.raiseError(this.assertionMessage("Rename location",
-                            "[" + reference.textSpan.start + "," + ts.textSpanEnd(reference.textSpan) + ")",
-                            "[" + range.start + "," + range.end + ")"));
+                        this.raiseError("Rename location results do not match.\n\nExpected: " + JSON.stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                     }
                 }
             }

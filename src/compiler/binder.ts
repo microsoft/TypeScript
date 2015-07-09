@@ -173,6 +173,14 @@ namespace ts {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
+        /**
+         * Declares a Symbol for the node and adds it to symbols. Reports errors for conflicting identifier names.
+         * @param symbolTable - The symbol table which node will be added to.
+         * @param parent - node's parent declaration.
+         * @param node - The declaration to be added to the symbol table
+         * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
+         * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations. 
+         */
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
@@ -181,10 +189,11 @@ namespace ts {
 
             let symbol: Symbol;
             if (name !== undefined) {
+
                 // Check and see if the symbol table already has a symbol with this name.  If not,
                 // create a new symbol with this name and add it to the table.  Note that we don't
                 // give the new symbol any flags *yet*.  This ensures that it will not conflict 
-                // witht he 'excludes' flags we pass in.
+                // with the 'excludes' flags we pass in.
                 //
                 // If we do get an existing symbol, see if it conflicts with the new symbol we're
                 // creating.  For example, a 'var' symbol and a 'class' symbol will conflict within
@@ -202,10 +211,10 @@ namespace ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
-                
+
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;   
-                } 
+                    classifiableNames[name] = name;
+                }
 
                 if (symbol.flags & excludes) {
                     if (node.name) {
@@ -314,6 +323,7 @@ namespace ts {
 
                 addToContainerChain(container);
             }
+
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
                 blockScopeContainer.locals = undefined;
@@ -882,7 +892,8 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     checkStrictModeFunctionName(<FunctionExpression>node);
-                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function");
+                    let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
+                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
@@ -954,7 +965,8 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                bindAnonymousDeclaration(node, SymbolFlags.Class, "__class");
+                let bindingName = node.name ? node.name.text : "__class";
+                bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
             }
 
             let symbol = node.symbol;
