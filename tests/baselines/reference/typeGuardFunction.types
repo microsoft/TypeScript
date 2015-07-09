@@ -23,19 +23,19 @@ class C extends A {
 }
 
 declare function isA(p1: any): p1 is A;
->isA : (p1: any) => boolean
+>isA : (p1: any) => p1 is A
 >p1 : any
 >p1 : any
 >A : A
 
 declare function isB(p1: any): p1 is B;
->isB : (p1: any) => boolean
+>isB : (p1: any) => p1 is B
 >p1 : any
 >p1 : any
 >B : B
 
 declare function isC(p1: any): p1 is C;
->isC : (p1: any) => boolean
+>isC : (p1: any) => p1 is C
 >p1 : any
 >p1 : any
 >C : C
@@ -55,7 +55,7 @@ var b: B;
 // Basic
 if (isC(a)) {
 >isC(a) : boolean
->isC : (p1: any) => boolean
+>isC : (p1: any) => p1 is C
 >a : A
 
     a.propC;
@@ -71,7 +71,7 @@ var subType: C;
 
 if(isA(subType)) {
 >isA(subType) : boolean
->isA : (p1: any) => boolean
+>isA : (p1: any) => p1 is A
 >subType : C
 
     subType.propC;
@@ -88,7 +88,7 @@ var union: A | B;
 
 if(isA(union)) {
 >isA(union) : boolean
->isA : (p1: any) => boolean
+>isA : (p1: any) => p1 is A
 >union : A | B
 
     union.propA;
@@ -111,7 +111,7 @@ interface I1 {
 // The parameter index and argument index for the type guard target is matching.
 // The type predicate type is assignable to the parameter type.
 declare function isC_multipleParams(p1, p2): p1 is C;
->isC_multipleParams : (p1: any, p2: any) => boolean
+>isC_multipleParams : (p1: any, p2: any) => p1 is C
 >p1 : any
 >p2 : any
 >p1 : any
@@ -119,7 +119,7 @@ declare function isC_multipleParams(p1, p2): p1 is C;
 
 if (isC_multipleParams(a, 0)) {
 >isC_multipleParams(a, 0) : boolean
->isC_multipleParams : (p1: any, p2: any) => boolean
+>isC_multipleParams : (p1: any, p2: any) => p1 is C
 >a : A
 >0 : number
 
@@ -131,10 +131,10 @@ if (isC_multipleParams(a, 0)) {
 
 // Methods
 var obj: {
->obj : { func1(p1: A): boolean; }
+>obj : { func1(p1: A): p1 is C; }
 
     func1(p1: A): p1 is C;
->func1 : (p1: A) => boolean
+>func1 : (p1: A) => p1 is C
 >p1 : A
 >A : A
 >p1 : any
@@ -144,7 +144,7 @@ class D {
 >D : D
 
     method1(p1: A): p1 is C {
->method1 : (p1: A) => boolean
+>method1 : (p1: A) => p1 is C
 >p1 : A
 >A : A
 >p1 : any
@@ -157,8 +157,8 @@ class D {
 
 // Arrow function
 let f1 = (p1: A): p1 is C => false;
->f1 : (p1: A) => boolean
->(p1: A): p1 is C => false : (p1: A) => boolean
+>f1 : (p1: A) => p1 is C
+>(p1: A): p1 is C => false : (p1: A) => p1 is C
 >p1 : A
 >A : A
 >p1 : any
@@ -167,8 +167,8 @@ let f1 = (p1: A): p1 is C => false;
 
 // Function type
 declare function f2(p1: (p1: A) => p1 is C);
->f2 : (p1: (p1: A) => boolean) => any
->p1 : (p1: A) => boolean
+>f2 : (p1: (p1: A) => p1 is C) => any
+>p1 : (p1: A) => p1 is C
 >p1 : A
 >A : A
 >p1 : any
@@ -177,8 +177,8 @@ declare function f2(p1: (p1: A) => p1 is C);
 // Function expressions
 f2(function(p1: A): p1 is C {
 >f2(function(p1: A): p1 is C {    return true;}) : any
->f2 : (p1: (p1: A) => boolean) => any
->function(p1: A): p1 is C {    return true;} : (p1: A) => boolean
+>f2 : (p1: (p1: A) => p1 is C) => any
+>function(p1: A): p1 is C {    return true;} : (p1: A) => p1 is C
 >p1 : A
 >A : A
 >p1 : any
@@ -198,21 +198,21 @@ acceptingBoolean(isA(a));
 >acceptingBoolean(isA(a)) : any
 >acceptingBoolean : (a: boolean) => any
 >isA(a) : boolean
->isA : (p1: any) => boolean
+>isA : (p1: any) => p1 is A
 >a : A
 
 // Type predicates with different parameter name.
 declare function acceptingTypeGuardFunction(p1: (item) => item is A);
->acceptingTypeGuardFunction : (p1: (item: any) => boolean) => any
->p1 : (item: any) => boolean
+>acceptingTypeGuardFunction : (p1: (item: any) => item is A) => any
+>p1 : (item: any) => item is A
 >item : any
 >item : any
 >A : A
 
 acceptingTypeGuardFunction(isA);
 >acceptingTypeGuardFunction(isA) : any
->acceptingTypeGuardFunction : (p1: (item: any) => boolean) => any
->isA : (p1: any) => boolean
+>acceptingTypeGuardFunction : (p1: (item: any) => item is A) => any
+>isA : (p1: any) => p1 is A
 
 // Binary expressions
 let union2: C | B;
@@ -225,7 +225,7 @@ let union3: boolean | B = isA(union2) || union2;
 >B : B
 >isA(union2) || union2 : boolean | B
 >isA(union2) : boolean
->isA : (p1: any) => boolean
+>isA : (p1: any) => p1 is A
 >union2 : B | C
 >union2 : B
 
