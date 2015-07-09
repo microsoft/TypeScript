@@ -86,6 +86,7 @@ namespace ts.server {
         export const Format = "format";
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
+        export const GeterrForProject = "geterrForProject";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
@@ -344,15 +345,15 @@ namespace ts.server {
         }
 
         getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
-            fileName = ts.normalizePath(fileName)
-            let project = this.projectService.getProjectForFile(fileName)
+            fileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(fileName);
 
             let projectInfo: protocol.ProjectInfo = {
                 configFileName: project.projectFilename
             }
 
             if (needFileNameList) {
-                projectInfo.fileNameList = project.getFileNameList();
+                projectInfo.fileNames = project.getFileNames();
             }
 
             return projectInfo;
@@ -836,6 +837,51 @@ namespace ts.server {
             }));
         }
 
+        getDiagnosticsForProject(delay: number, fileName: string) {
+            let { configFileName, fileNames: fileNamesInProject } = this.getProjectInfo(fileName, true);
+            // No need to analyze lib.d.ts
+            fileNamesInProject = fileNamesInProject.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+
+            // Sort the file name list to make the recently touched files come first
+            let highPriorityFiles: string[] = [];
+            let mediumPriorityFiles: string[] = [];
+            let lowPriorityFiles: string[] = [];
+            let veryLowPriorityFiles: string[] = [];
+            let normalizedFileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(normalizedFileName);
+            for (let fileNameInProject of fileNamesInProject) {
+                if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
+                    highPriorityFiles.push(fileNameInProject);
+                else {
+                    let info = this.projectService.getScriptInfo(fileNameInProject);
+                    if (!info || !info.isOpen) {
+                        if (fileNameInProject.indexOf(".d.ts") > 0)
+                            veryLowPriorityFiles.push(fileNameInProject);
+                        else
+                            lowPriorityFiles.push(fileNameInProject);
+                    }
+                    else
+                        mediumPriorityFiles.push(fileNameInProject);
+                }
+            }
+
+            fileNamesInProject = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
+
+            if (fileNamesInProject.length > 0) {
+                let checkList = fileNamesInProject.map<PendingErrorCheck>((fileName: string) => {
+                    let normalizedFileName = ts.normalizePath(fileName);
+                    return { fileName: normalizedFileName, project };
+                });
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay);
+            }
+        }
+
+        getCanonicalFileName(fileName: string) {
+            let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            this.logger.info(ts.normalizePath(name));
+            return ts.normalizePath(name);
+        }
+
         exit() {
         }
 
@@ -916,6 +962,13 @@ namespace ts.server {
                     case CommandNames.Geterr: {
                         var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                         response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
+                        responseRequired = false;
+                        break;
+                    }
+                    case CommandNames.GeterrForProject: {
+                        this.logger.info(request.arguments);
+                        let { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
+                        response = this.getDiagnosticsForProject(delay, file);
                         responseRequired = false;
                         break;
                     }
