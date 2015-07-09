@@ -1515,15 +1515,19 @@ namespace ts {
              * Writes only the name of the symbol out to the writer. Uses the original source text
              * for the name of the symbol if it is available to match how the user inputted the name.
              */
-            function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
+            function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter, isTypeSymbol: boolean): void {
                 writer.writeSymbol(getNameOfSymbol(symbol), symbol);
+
+                if (isTypeSymbol) {
+                    writer.trackSymbol(symbol);
+                }
             }
 
             /**
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
              * Meaning needs to be specified if the enclosing declaration is given
              */
-            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
+            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags, isTypeSymbol?: boolean): void {
                 let parentSymbol: Symbol;
                 function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
@@ -1538,10 +1542,10 @@ namespace ts {
                             }
                         }
                         writePunctuation(writer, SyntaxKind.DotToken);
-                        writer.trackSymbol(symbol);
                     }
+
                     parentSymbol = symbol;
-                    appendSymbolNameOnly(symbol, writer);
+                    appendSymbolNameOnly(symbol, writer, isTypeSymbol);
                 }
 
                 function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
@@ -1607,9 +1611,8 @@ namespace ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                        writer.trackSymbol(type.symbol);
                         // The specified symbol flags need to be reinterpreted as type flags
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags, /*isTypeSymbol*/true);
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
@@ -1651,8 +1654,7 @@ namespace ts {
                     // Unnamed function expressions, arrow functions, and unnamed class expressions have reserved names that
                     // we don't want to display
                     if (!isReservedMemberName(symbol.name)) {
-                        writer.trackSymbol(symbol);
-                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type, undefined, undefined, /*isTypeSymbol*/true);
                     }
                     if (pos < end) {
                         writePunctuation(writer, SyntaxKind.LessThanToken);
@@ -1731,7 +1733,7 @@ namespace ts {
                             let typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
+                                buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags, /*isTypeSymbol*/true);
                             }
                             else {
                                 // Recursive usage, use any
@@ -1772,8 +1774,7 @@ namespace ts {
                 function writeTypeofSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
-                    writer.trackSymbol(type.symbol);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags, /*isTypeSymbol*/true);
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
@@ -1903,7 +1904,7 @@ namespace ts {
             }
 
             function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                appendSymbolNameOnly(tp.symbol, writer);
+                appendSymbolNameOnly(tp.symbol, writer, false);
                 let constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
                     writeSpace(writer);
@@ -1918,7 +1919,7 @@ namespace ts {
                 if (isRestParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
-                appendSymbolNameOnly(p, writer);
+                appendSymbolNameOnly(p, writer, false);
                 if (isOptionalParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
