@@ -9,9 +9,9 @@ namespace ts {
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
-        Auto = 0x00000000,  // No preferred name
+        Auto =      0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
-        _i = 0x10000000,  // Use/preference flag for '_i'
+        _i =        0x10000000,  // Use/preference flag for '_i'
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
@@ -129,7 +129,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let writeLine = writer.writeLine;
             let increaseIndent = writer.increaseIndent;
             let decreaseIndent = writer.decreaseIndent;
-            
+
             let currentSourceFile: SourceFile;
             // name of an exporter function if file is a System external module
             // System.register([...], function (<exporter>) {...})
@@ -166,10 +166,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let emit = emitNodeWithoutSourceMap;
 
             /** Called just before starting emit of a node */
-            let emitStart = function(node: Node) { };
+            let emitStart = function (node: Node) { };
 
             /** Called once the emit of the node is done */
-            let emitEnd = function(node: Node) { };
+            let emitEnd = function (node: Node) { };
 
             /** Emit the text for the given token that comes after startPos
               * This by default writes the text provided with the given tokenKind
@@ -1358,7 +1358,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 else if (node.kind === SyntaxKind.ComputedPropertyName) {
                     // if this is a decorated computed property, we will need to capture the result
-                    // of the property expression so that we can apply decorators later. This is to ensure 
+                    // of the property expression so that we can apply decorators later. This is to ensure
                     // we don't introduce unintended side effects:
                     //
                     //   class C {
@@ -1468,7 +1468,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("_arguments");
                     return;
                 }
-                
+
                 let container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -1608,7 +1608,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emit(node.expression);
                 }
             }
-            
+
             function emitAwaitExpression(node: AwaitExpression) {
                 let needsParenthesis = needsParenthesisForAwaitExpressionAsYield(node);
                 if (needsParenthesis) {
@@ -2021,8 +2021,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return false;
             }
 
-            // Returns 'true' if the code was actually indented, false otherwise. 
-            // If the code is not indented, an optional valueToWriteWhenNotIndenting will be 
+            // Returns 'true' if the code was actually indented, false otherwise.
+            // If the code is not indented, an optional valueToWriteWhenNotIndenting will be
             // emitted instead.
             function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string): boolean {
                 let realNodesAreOnDifferentLines = !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
@@ -2051,7 +2051,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.expression);
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
-                // 1 .toString is a valid property access, emit a space after the literal 
+                // 1 .toString is a valid property access, emit a space after the literal
                 let shouldEmitSpace: boolean;
                 if (!indentedBeforeDot && node.expression.kind === SyntaxKind.NumericLiteral) {
                     let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
@@ -2384,14 +2384,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ false);
             }
 
-            /* 
+            /*
              * Checks if given node is a source file level declaration (not nested in module/function).
              * If 'isExported' is true - then declaration must also be exported.
              * This function is used in two cases:
-             * - check if node is a exported source file level value to determine 
+             * - check if node is a exported source file level value to determine
              *   if we should also export the value after its it changed
-             * - check if node is a source level declaration to emit it differently, 
-             *   i.e non-exported variable statement 'var x = 1' is hoisted so 
+             * - check if node is a source level declaration to emit it differently,
+             *   i.e non-exported variable statement 'var x = 1' is hoisted so
              *   we we emit variable statement 'var' should be dropped.
              */
             function isSourceFileLevelDeclarationInSystemJsModule(node: Node, isExported: boolean): boolean {
@@ -2460,7 +2460,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 decreaseIndentIf(indentedBeforeColon, indentedAfterColon);
             }
 
-            // Helper function to decrease the indent if we previously indented.  Allows multiple 
+            // Helper function to decrease the indent if we previously indented.  Allows multiple
             // previous indent values to be considered at a time.  This also allows caller to just
             // call this once, passing in all their appropriate indent values, instead of needing
             // to call this helper function multiple times.
@@ -3612,10 +3612,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emit(node.parameters[0]);
                     return;
                 }
-                
+
                 emitSignatureParameters(node);
             }
-            
+
             function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration) {
                 let promiseConstructor = getEntityNameFromTypeNode(node.type);
                 let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
@@ -3625,7 +3625,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // An async function is emit as an outer function that calls an inner
                 // generator function. To preserve lexical bindings, we pass the current
                 // `this` and `arguments` objects to `__awaiter`. The generator function
-                // passed to `__awaiter` is executed inside of the callback to the 
+                // passed to `__awaiter` is executed inside of the callback to the
                 // promise constructor.
                 //
                 // The emit for an async arrow without a lexical `arguments` binding might be:
@@ -3693,7 +3693,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //      });
                 //  }
                 //
-                
+
                 // If this is not an async arrow, emit the opening brace of the function body
                 // and the start of the return statement.
                 if (!isArrowFunction) {
@@ -3702,7 +3702,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     write("return");
                 }
-                
+
                 write(" __awaiter(this");
                 if (hasLexicalArguments) {
                     write(", arguments");
@@ -3718,7 +3718,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write(", Promise");
                 }
-                
+
                 // Emit the call to __awaiter.
                 if (hasLexicalArguments) {
                     write(", function* (_arguments)");
@@ -3726,11 +3726,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write(", function* ()");
                 }
-                
+
                 // Emit the signature and body for the inner generator function.
                 emitFunctionBody(node);
                 write(")");
-                
+
                 // If this is not an async arrow, emit the closing brace of the outer function body.
                 if (!isArrowFunction) {
                     write(";");
@@ -3739,10 +3739,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("}");
                 }
             }
-            
+
             function emitFunctionBody(node: FunctionLikeDeclaration) {
                 if (!node.body) {
-                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // There can be no body when there are parse errors.  Just emit an empty block
                     // in that case.
                     write(" { }");
                 }
@@ -3753,7 +3753,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         emitExpressionFunctionBody(node, <Expression>node.body);
                     }
-                }            
+                }
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
@@ -3772,7 +3772,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitSignatureParameters(node);
                 }
-                    
+
                 let isAsync = isAsyncFunctionLike(node);
                 if (isAsync && languageVersion === ScriptTarget.ES6) {
                     emitAsyncFunctionBodyForES6(node);
@@ -3780,7 +3780,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitFunctionBody(node);
                 }
-                
+
                 if (!isES6ExportedDeclaration(node)) {
                     emitExportMemberAssignment(node);
                 }
@@ -3803,7 +3803,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
-                // For es6 and higher we can emit the expression as is.  However, in the case 
+                // For es6 and higher we can emit the expression as is.  However, in the case
                 // where the expression might end up looking like a block when emitted, we'll
                 // also wrap it in parentheses first.  For example if you have: a => <foo>{}
                 // then we need to generate: a => ({})
@@ -4320,9 +4320,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 // If the class has static properties, and it's a class expression, then we'll need
-                // to specialize the emit a bit.  for a class expression of the form: 
+                // to specialize the emit a bit.  for a class expression of the form:
                 //
-                //      class C { static a = 1; static b = 2; ... } 
+                //      class C { static a = 1; static b = 2; ... }
                 //
                 // We'll emit:
                 //
@@ -4613,7 +4613,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //
                     // The emit for a method is:
                     //
-                    //   Object.defineProperty(C.prototype, "method", 
+                    //   Object.defineProperty(C.prototype, "method",
                     //       __decorate([
                     //           dec,
                     //           __param(0, dec2),
@@ -4621,10 +4621,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //           __metadata("design:paramtypes", [Object]),
                     //           __metadata("design:returntype", void 0)
                     //       ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
-                    // 
+                    //
                     // The emit for an accessor is:
                     //
-                    //   Object.defineProperty(C.prototype, "accessor", 
+                    //   Object.defineProperty(C.prototype, "accessor",
                     //       __decorate([
                     //           dec
                     //       ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
@@ -4714,7 +4714,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function shouldEmitTypeMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:type" metadata based on the node's kind.
-                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
                 // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.MethodDeclaration:
@@ -4729,7 +4729,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function shouldEmitReturnTypeMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:returntype" metadata based on the node's kind.
-                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
                 // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.MethodDeclaration:
@@ -4740,7 +4740,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function shouldEmitParamTypesMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:paramtypes" metadata based on the node's kind.
-                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
                 // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -5544,7 +5544,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function writeExportedName(node: Identifier | Declaration): void {
                     // do not record default exports
-                    // they are local to module and never overwritten (explicitly skipped) by star export 
+                    // they are local to module and never overwritten (explicitly skipped) by star export
                     if (node.kind !== SyntaxKind.Identifier && node.flags & NodeFlags.Default) {
                         return;
                     }
@@ -5570,7 +5570,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function processTopLevelVariableAndFunctionDeclarations(node: SourceFile): (Identifier | Declaration)[] {
-                // per ES6 spec: 
+                // per ES6 spec:
                 // 15.2.1.16.4 ModuleDeclarationInstantiation() Concrete Method
                 // - var declarations are initialized to undefined - 14.a.ii
                 // - function/generator declarations are instantiated - 16.a.iv
@@ -5725,7 +5725,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // hoist variable if
                 // - it is not block scoped
                 // - it is top level block scoped
-                // if block scoped variables are nested in some another block then 
+                // if block scoped variables are nested in some another block then
                 // no other functions can use them except ones that are defined at least in the same block
                 return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0 ||
                     getEnclosingBlockScopeContainer(node).kind === SyntaxKind.SourceFile;
@@ -5925,10 +5925,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
                 // 'exports' here is a function 'exports<T>(name: string, value: T): T' that is used to publish exported values.
-                // 'exports' returns its 'value' argument so in most cases expressions 
+                // 'exports' returns its 'value' argument so in most cases expressions
                 // that mutate exported values can be rewritten as:
-                // expr -> exports('name', expr). 
-                // The only exception in this rule is postfix unary operators, 
+                // expr -> exports('name', expr).
+                // The only exception in this rule is postfix unary operators,
                 // see comment to 'emitPostfixUnaryExpression' for more details
                 Debug.assert(!exportFunctionForFile);
                 // make sure that  name of 'exports' function does not conflict with existing identifiers
@@ -5968,12 +5968,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
 
-                let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the
-                // factory function.
-                let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
-                // factory function.
-                let importAliasNames: string[] = [];     // names of the parameters in the factory function; these 
-                // parameters need to match the indexes of the corresponding 
+                // names of modules with corresponding parameter in the factory function
+                let aliasedModuleNames: string[] = [];
+                // names of modules with no corresponding parameters in factory function
+                let unaliasedModuleNames: string[] = [];
+                let importAliasNames: string[] = [];     // names of the parameters in the factory function; these
+                // parameters need to match the indexes of the corresponding
                 // module names in aliasedModuleNames.
 
                 // Fill in amd-dependency tags
@@ -6081,7 +6081,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                // Emit exportDefault if it exists will happen as part 
+                // Emit exportDefault if it exists will happen as part
                 // or normal statement emit.
             }
 
@@ -6245,7 +6245,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         writeLines(paramHelper);
                         paramEmitted = true;
                     }
-                    
+
                     if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
                         writeLines(awaiterHelper);
                         awaiterEmitted = true;
@@ -6329,7 +6329,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
 
-                // If this is the expression body of an arrow function that we're down-leveling, 
+                // If this is the expression body of an arrow function that we're down-leveling,
                 // then we don't want to emit comments when we emit the body.  It will have already
                 // been taken care of when we emitted the 'return' statement for the function
                 // expression body.
