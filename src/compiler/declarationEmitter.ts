@@ -757,29 +757,31 @@ namespace ts {
             else {
                 write("var ");
             }
-            emitCommaList(node.declarationList.declarations, emitVariableDeclaration);
+            let children = sortDeclarations(getNodeLinks(node).visibleChildren);
+            Debug.assert(children && children.length > 0);
+            emitCommaList(children, emitVariableDeclaration);
             write(";");
             writeLine();
         }
 
-        // TODO: we only should have either statement or declaration
-        function emitVariableDeclarationWithoutStatement(node: VariableDeclaration) {
-            emitJsDocComments(node);
-            emitModuleElementDeclarationFlags(node.parent.parent);
-            var declarationList = node.parent;
-            if (isLet(declarationList)) {
-                write("let ");
-            }
-            else if (isConst(declarationList)) {
-                write("const ");
-            }
-            else {
-                write("var ");
-            }
-            emitVariableDeclaration(node);
-            write(";");
-            writeLine();
-        }
+        //// TODO: we only should have either statement or declaration
+        //function emitVariableDeclarationWithoutStatement(node: VariableDeclaration) {
+        //    emitJsDocComments(node);
+        //    emitModuleElementDeclarationFlags(node.parent.parent);
+        //    var declarationList = node.parent;
+        //    if (isLet(declarationList)) {
+        //        write("let ");
+        //    }
+        //    else if (isConst(declarationList)) {
+        //        write("const ");
+        //    }
+        //    else {
+        //        write("var ");
+        //    }
+        //    emitVariableDeclaration(node);
+        //    write(";");
+        //    writeLine();
+        //}
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
             if (hasDynamicName(node)) {
@@ -1016,7 +1018,9 @@ namespace ts {
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
                 case SyntaxKind.VariableDeclaration:
-                    return emitVariableDeclarationWithoutStatement(<VariableDeclaration>node);
+                    Debug.fail("should not be here");
+                    //  return emitVariableDeclarationWithoutStatement(<VariableDeclaration>node);
+                    return;
 
                 case SyntaxKind.InterfaceDeclaration:
                     return emitInterfaceDeclaration(<InterfaceDeclaration>node);
@@ -1114,8 +1118,8 @@ namespace ts {
                     return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
                         visitNode((<TypeAliasDeclaration>node).type);
 
-                case SyntaxKind.VariableStatement:
-                    return visitNodes((<VariableStatement>node).declarationList.declarations);
+                //case SyntaxKind.VariableStatement:
+                //    return visitNodes((<VariableStatement>node).declarationList.declarations);
 
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
@@ -1289,6 +1293,7 @@ namespace ts {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportClause:
                 case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.VariableDeclaration:
                     return true;
 
                 case SyntaxKind.VariableStatement:
@@ -1309,10 +1314,6 @@ namespace ts {
                         return !hasExportDeclatations(node.parent);
                     }
                     break;
-
-                case SyntaxKind.VariableDeclaration:
-                    // TODO: do we need this
-                    return isDeclarationExported(node.parent.parent);
             }
 
             return false;
@@ -1327,6 +1328,9 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     forEach((<InterfaceDeclaration|EnumDeclaration|ClassDeclaration>node).members, action);
+                    break;
+                case SyntaxKind.VariableStatement: 
+                    forEach((<VariableStatement>node).declarationList.declarations, action);
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     if ((<ModuleDeclaration>node).body.kind === SyntaxKind.ModuleBlock) {
@@ -1348,6 +1352,7 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.VariableStatement:
                         return node.parent;
                     default:
                         node = node.parent;
@@ -1385,7 +1390,11 @@ namespace ts {
          * they have an export modifier or not.
          *
          */
-        function canWriteDeclaration(node: Node) : boolean{
+        function canWriteDeclaration(node: Node): boolean{
+            if (node.kind === SyntaxKind.VariableDeclaration) {
+                node = node.parent.parent;
+            }
+
             // If the declaration is exported from its parent, we can
             // safelly write a declaration for it
             if (isDeclarationExported(node)) {
@@ -1547,10 +1556,10 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.VariableStatement:
                     collectTopLevelChildDeclarations(node);
                     break;
             }
-
         }
 
         function collectTopLevelChildDeclarations(node: Node): void {
