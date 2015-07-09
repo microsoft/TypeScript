@@ -14718,10 +14718,10 @@ namespace ts {
                 checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
-        function checkGrammarForOmittedArgument(node: CallExpression, arguments: NodeArray<Expression>): boolean {
-            if (arguments) {
+        function checkGrammarForOmittedArgument(node: CallExpression, args: NodeArray<Expression>): boolean {
+            if (args) {
                 let sourceFile = getSourceFileOfNode(node);
-                for (let arg of arguments) {
+                for (let arg of args) {
                     if (arg.kind === SyntaxKind.OmittedExpression) {
                         return grammarErrorAtPos(sourceFile, arg.pos, 0, Diagnostics.Argument_expression_expected);
                     }
@@ -14729,9 +14729,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarArguments(node: CallExpression, arguments: NodeArray<Expression>): boolean {
-            return checkGrammarForDisallowedTrailingComma(arguments) ||
-                checkGrammarForOmittedArgument(node, arguments);
+        function checkGrammarArguments(node: CallExpression, args: NodeArray<Expression>): boolean {
+            return checkGrammarForDisallowedTrailingComma(args) ||
+                checkGrammarForOmittedArgument(node, args);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
