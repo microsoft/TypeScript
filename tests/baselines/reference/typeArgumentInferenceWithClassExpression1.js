@@ -1,11 +1,11 @@
-//// [typeArgumentInferenceWithClassExpression.ts]
+//// [typeArgumentInferenceWithClassExpression1.ts]
 function foo<T>(x = class { static prop: T }): T {
     return undefined;
 }
 
 foo(class { static prop = "hello" }).length;
 
-//// [typeArgumentInferenceWithClassExpression.js]
+//// [typeArgumentInferenceWithClassExpression1.js]
 function foo(x) {
     if (x === void 0) { x = (function () {
         function class_1() {
