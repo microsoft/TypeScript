@@ -121,7 +121,7 @@ namespace ts.server {
 
             fs.stat(watchedFile.fileName,(err, stats) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName, false);
+                    watchedFile.callback(watchedFile.fileName, /* removed */ false);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);

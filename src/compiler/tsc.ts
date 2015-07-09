@@ -282,9 +282,9 @@ namespace ts {
         function sourceFileChanged(sourceFile: SourceFile, removed: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
-            if (removed){
+            if (removed) {
                 var index = rootFileNames.indexOf(sourceFile.fileName);
-                if (index !== -1){
+                if (index >= 0) {
                     rootFileNames.splice(index, 1);
                 }
             }

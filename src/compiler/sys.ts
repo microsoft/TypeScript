@@ -284,14 +284,14 @@ namespace ts {
                     function fileChanged(curr: any, prev: any) {
                         // mtime.getTime() equals 0 if file was removed
                         if (curr.mtime.getTime() === 0) {
-                            callback(fileName, true);
+                            callback(fileName, /* removed */ true);
                             return;
                         }
                         if (+curr.mtime <= +prev.mtime) {
                             return;
                         }
 
-                        callback(fileName, false);
+                        callback(fileName, /* removed */ false);
                     };
                 },
                 resolvePath: function (path: string): string {
