@@ -13429,7 +13429,6 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ClassExpression:
                             let funcName = (<FunctionExpression>location).name;
                             if (funcName) {
                                 copySymbol(location.symbol, meaning);
