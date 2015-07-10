@@ -912,7 +912,7 @@ namespace ts.server {
             var dirPath = ts.getDirectoryPath(configFilename);
             var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.readConfigFile(configFilename);
             if (rawConfig.error) {
-                return rawConfig.error;
+                return { errorMsg: ts.flattenDiagnosticMessageText(rawConfig.error.messageText, '\n') };
             }
             else {
                 var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
