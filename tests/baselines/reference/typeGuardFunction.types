@@ -97,6 +97,32 @@ if(isA(union)) {
 >propA : number
 }
 
+// Type assertions
+if (isA(<A>union)) {
+>isA(<A>union) : boolean
+>isA : (p1: any) => p1 is A
+><A>union : A
+>A : A
+>union : A | B
+
+    a = union;
+>a = union : A
+>a : A
+>union : A
+}
+if (isA(union as A)) {
+>isA(union as A) : boolean
+>isA : (p1: any) => p1 is A
+>union as A : A
+>union : A | B
+>A : A
+
+    a = union;
+>a = union : A
+>a : A
+>union : A
+}
+
 // Call signature
 interface I1 {
 >I1 : I1
