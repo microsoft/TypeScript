@@ -6700,8 +6700,21 @@ namespace ts {
             return result;
         }
 
-        // Presence of a contextual type mapper indicates inferential typing, except the identityMapper object is
-        // used as a special marker for other purposes.
+        /**
+         * Detect if the mapper implies an inference context. Specifically, there are 4 possible values
+         * for a mapper. Let's go through each one of them:
+         *
+         *    1. undefined - this means we are not doing inferential typing, but we may do contextual typing,
+         *       which could cause us to assign a parameter type
+         *    2. identityMapper - means we want to avoid assigning a parameter type, whether or not we are in
+         *       inferential typing (context is undefined for the identityMapper)
+         *    3. a mapper created by createInferenceMapper - we are doing inferential typing, we want to assign
+         *       parameter types and fix type parameters (context is defined)
+         *    4. an instantiation mapper created by createTypeMapper or createTypeEraser - this should never be
+         *       passed as the contextual mapper when checking an expression (context is undefined for these)
+         *
+         * isInferentialContext is detecting if we are in case 3
+         */
         function isInferentialContext(mapper: TypeMapper) {
             return mapper && mapper.context;
         }
