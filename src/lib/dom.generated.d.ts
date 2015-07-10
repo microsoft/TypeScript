@@ -8715,6 +8715,7 @@ declare var SVGDescElement: {
 
 interface SVGElement extends Element {
     id: string;
+    className: any;
     onclick: (ev: MouseEvent) => any;
     ondblclick: (ev: MouseEvent) => any;
     onfocusin: (ev: FocusEvent) => any;
@@ -12536,6 +12537,7 @@ interface SVGLocatable {
 }
 
 interface SVGStylable {
+    className: any;
     style: CSSStyleDeclaration;
 }
 
