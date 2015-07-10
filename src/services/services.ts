@@ -345,7 +345,7 @@ namespace ts {
                         ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
                             let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedParamJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                                addRange(jsDocCommentParts, cleanedParamJsDocComment);
                             }
                         });
                     }
@@ -365,7 +365,7 @@ namespace ts {
                         declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
                             let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                                addRange(jsDocCommentParts, cleanedJsDocComment);
                             }
                         });
                 }
@@ -1427,6 +1427,9 @@ namespace ts {
 
         // class X {}
         export const classElement = "class";
+
+        // var x = class X {}
+        export const localClassElement = "local class";
 
         // interface Y {}
         export const interfaceElement = "interface";
@@ -2799,18 +2802,15 @@ namespace ts {
                    program.getGlobalDiagnostics(cancellationToken));
         }
 
-        /// Completion
-        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
-            let displayName = symbol.getName();
-            if (displayName) {
-                // If this is the default export, get the name of the declaration if it exists
-                if (displayName === "default") {
-                    let localSymbol = getLocalSymbolForExportDefault(symbol);
-                    if (localSymbol && localSymbol.name) {
-                        displayName = symbol.valueDeclaration.localSymbol.name;
-                    }
-                }
+        /**
+         * Get the name to be display in completion from a given symbol.
+         *
+         * @return undefined if the name is of external module otherwise a name with striped of any quote
+         */
+        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
+            let displayName: string = getDeclaredName(program.getTypeChecker(), symbol, location);
 
+            if (displayName) {
                 let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -2823,37 +2823,38 @@ namespace ts {
             return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
         }
 
-        function getCompletionEntryDisplayName(displayName: string, target: ScriptTarget, performCharacterChecks: boolean): string {
-            if (!displayName) {
+        /**
+         * Get a displayName from a given for completion list, performing any necessary quotes stripping
+         * and checking whether the name is valid identifier name.
+         */
+        function getCompletionEntryDisplayName(name: string, target: ScriptTarget, performCharacterChecks: boolean): string {
+            if (!name) {
                 return undefined;
             }
 
-            let firstCharCode = displayName.charCodeAt(0);
-            if (displayName.length >= 2 &&
-                firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
-                (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                displayName = displayName.substring(1, displayName.length - 1);
-            }
+            name = stripQuotes(name);
 
-            if (!displayName) {
+            if (!name) {
                 return undefined;
             }
 
+            // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+            // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+            // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
+            // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifierStart(displayName.charCodeAt(0), target)) {
+                if (!isIdentifierStart(name.charCodeAt(0), target)) {
                     return undefined;
                 }
 
-                for (let i = 1, n = displayName.length; i < n; i++) {
-                    if (!isIdentifierPart(displayName.charCodeAt(i), target)) {
+                for (let i = 1, n = name.length; i < n; i++) {
+                    if (!isIdentifierPart(name.charCodeAt(i), target)) {
                         return undefined;
                     }
                 }
             }
 
-            return unescapeIdentifier(displayName);
+            return name;
         }
 
         function getCompletionData(fileName: string, position: number) {
@@ -2892,33 +2893,36 @@ namespace ts {
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
-            // Check if this is a valid completion location
-            if (contextToken && isCompletionListBlocker(contextToken)) {
-                log("Returning an empty list because completion was requested in an invalid position.");
-                return undefined;
-            }
-
-            let options = program.getCompilerOptions();
-            let jsx = options.jsx !== JsxEmit.None;
-            let target = options.target;
-
-            // Find the node where completion is requested on, in the case of a completion after 
-            // a dot, it is the member access expression other wise, it is a request for all 
-            // visible symbols in the scope, and the node is the current location.
+            // Find the node where completion is requested on.
+            // Also determine whether we are trying to complete with members of that node
+            // or attributes of a JSX tag.
             let node = currentToken;
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
 
             let location = getTouchingPropertyName(sourceFile, position);
-            if(contextToken) {
-                let kind = contextToken.kind;
-                if (kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                    node = (<PropertyAccessExpression>contextToken.parent).expression;
-                    isRightOfDot = true;
+            if (contextToken) {
+                // Bail out if this is a known invalid completion location
+                if (isCompletionListBlocker(contextToken)) {
+                    log("Returning an empty list because completion was requested in an invalid position.");
+                    return undefined;
                 }
-                else if (kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
-                    node = (<QualifiedName>contextToken.parent).left;
-                    isRightOfDot = true;
+
+                let { parent, kind } = contextToken;
+                if (kind === SyntaxKind.DotToken) {
+                    if (parent.kind === SyntaxKind.PropertyAccessExpression) {
+                        node = (<PropertyAccessExpression>contextToken.parent).expression;
+                        isRightOfDot = true;
+                    }
+                    else if (parent.kind === SyntaxKind.QualifiedName) {
+                        node = (<QualifiedName>contextToken.parent).left;
+                        isRightOfDot = true;
+                    }
+                    else {
+                        // There is nothing that precedes the dot, so this likely just a stray character
+                        // or leading into a '...' token. Just bail out instead.
+                        return undefined;
+                    }
                 }
                 else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
                     isRightOfOpenTag = true;
@@ -3010,68 +3014,21 @@ namespace ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
-                let jsxContainer = tryGetContainingJsxElement(contextToken);
-                if (objectLikeContainer) {
-                    // We're looking up possible property names from contextual/inferred/declared type.
-                    isMemberCompletion = true;
+                let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
+                let importClause: ImportClause;
+                let jsxContainer: JsxOpeningLikeElement;
 
-                    let typeForObject: Type;
-                    let existingMembers: Declaration[];
-
-                    if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                        // We are completing on contextual types, but may also include properties
-                        // other than those within the declared type.
-                        isNewIdentifierLocation = true;
-
-                        typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
-                        existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
-                    }
-                    else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
-                        // We are *only* completing on properties from the type being destructured.
-                        isNewIdentifierLocation = false;
-
-                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                        existingMembers = (<BindingPattern>objectLikeContainer).elements;
-                    }
-                    else {
-                        Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
-                    }
-
-                    if (!typeForObject) {
-                        return false;
-                    }
-
-                    let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
-                    if (typeMembers && typeMembers.length > 0) {
-                        // Add filtered items to the completion list
-                        symbols = filterObjectMembersList(typeMembers, existingMembers);
-                    }
-                    return true;
+                if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
+                    return tryGetObjectLikeCompletionSymbols(objectLikeContainer);
                 }
-                else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
-                    // cursor is in import clause
+
+                if (importClause = <ImportClause>getAncestor(contextToken, SyntaxKind.ImportClause)) {
+                    // cursor is in an import clause
                     // try to show exported member for imported module
-                    isMemberCompletion = true;
-                    isNewIdentifierLocation = true;
-                    if (showCompletionsInImportsClause(contextToken)) {
-                        let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
-                        Debug.assert(importDeclaration !== undefined);
-
-                        let exports: Symbol[];
-                        if (importDeclaration.moduleSpecifier) {
-                            let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                            if (moduleSpecifierSymbol) {
-                                exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
-                            }
-                        }
-
-                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
-                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
-                    }
-                    return true;
+                    return tryGetImportClauseCompletionSymbols(importClause);
                 }
-                else if (jsxContainer) {
+
+                if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
                     let attrsType: Type;
                     if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                         // Cursor is inside a JSX self-closing element or opening element
@@ -3144,16 +3101,16 @@ namespace ts {
                 return scope;
             }
 
-            function isCompletionListBlocker(previousToken: Node): boolean {
+            function isCompletionListBlocker(contextToken: Node): boolean {
                 let start = new Date().getTime();
-                let result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
-                    isIdentifierDefinitionLocation(previousToken) ||
-                    isRightOfIllegalDot(previousToken);
+                let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
+                    isIdentifierDefinitionLocation(contextToken) ||
+                    isDotOfNumericLiteral(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
 
-            function showCompletionsInImportsClause(node: Node): boolean {
+            function shouldShowCompletionsInImportsClause(node: Node): boolean {
                 if (node) {
                     // import {| 
                     // import {a,|
@@ -3227,12 +3184,12 @@ namespace ts {
                 return false;
             }
 
-            function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
-                if (previousToken.kind === SyntaxKind.StringLiteral
-                    || previousToken.kind === SyntaxKind.RegularExpressionLiteral
-                    || isTemplateLiteralKind(previousToken.kind)) {
-                    let start = previousToken.getStart();
-                    let end = previousToken.getEnd();
+            function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.StringLiteral
+                    || contextToken.kind === SyntaxKind.RegularExpressionLiteral
+                    || isTemplateLiteralKind(contextToken.kind)) {
+                    let start = contextToken.getStart();
+                    let end = contextToken.getEnd();
 
                     // To be "in" one of these literals, the position has to be:
                     //   1. entirely within the token text.
@@ -3243,12 +3200,92 @@ namespace ts {
                     }
 
                     if (position === end) {
-                        return !!(<LiteralExpression>previousToken).isUnterminated ||
-                            previousToken.kind === SyntaxKind.RegularExpressionLiteral;
+                        return !!(<LiteralExpression>contextToken).isUnterminated
+                            || contextToken.kind === SyntaxKind.RegularExpressionLiteral;
                     }
                 }
 
                 return false;
+            }
+
+            /**
+             * Aggregates relevant symbols for completion in object literals and object binding patterns.
+             * Relevant symbols are stored in the captured 'symbols' variable.
+             *
+             * @returns true if 'symbols' was successfully populated; false otherwise.
+             */
+            function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | BindingPattern): boolean {
+                // We're looking up possible property names from contextual/inferred/declared type.
+                isMemberCompletion = true;
+
+                let typeForObject: Type;
+                let existingMembers: Declaration[];
+
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // We are completing on contextual types, but may also include properties
+                    // other than those within the declared type.
+                    isNewIdentifierLocation = true;
+
+                    typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                    existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
+                }
+                else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
+                    // We are *only* completing on properties from the type being destructured.
+                    isNewIdentifierLocation = false;
+
+                    typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                    existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                }
+                else {
+                    Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
+                }
+
+                if (!typeForObject) {
+                    return false;
+                }
+
+                let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                if (typeMembers && typeMembers.length > 0) {
+                    // Add filtered items to the completion list
+                    symbols = filterObjectMembersList(typeMembers, existingMembers);
+                }
+                return true;
+            }
+
+            /**
+             * Aggregates relevant symbols for completion in import clauses; for instance,
+             *
+             *      import { $ } from "moduleName";
+             *
+             * Relevant symbols are stored in the captured 'symbols' variable.
+             *
+             * @returns true if 'symbols' was successfully populated; false otherwise.
+             */
+            function tryGetImportClauseCompletionSymbols(importClause: ImportClause): boolean {
+                // cursor is in import clause
+                // try to show exported member for imported module
+                if (shouldShowCompletionsInImportsClause(contextToken)) {
+                    isMemberCompletion = true;
+                    isNewIdentifierLocation = false;
+
+                    let importDeclaration = <ImportDeclaration>importClause.parent;
+                    Debug.assert(importDeclaration !== undefined && importDeclaration.kind === SyntaxKind.ImportDeclaration);
+
+                    let exports: Symbol[];
+                    let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                    if (moduleSpecifierSymbol) {
+                        exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
+                    }
+
+                    //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                    symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
+                }
+                else {
+                    isMemberCompletion = false;
+                    isNewIdentifierLocation = true;
+                }
+
+                return true;
             }
 
             /**
@@ -3318,101 +3355,98 @@ namespace ts {
                 return false;
             }
 
-            function isIdentifierDefinitionLocation(previousToken: Node): boolean {
-                if (previousToken) {
-                    let containingNodeKind = previousToken.parent.kind;
-                    switch (previousToken.kind) {
-                        case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.VariableDeclaration ||
-                                containingNodeKind === SyntaxKind.VariableDeclarationList ||
-                                containingNodeKind === SyntaxKind.VariableStatement ||
-                                containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
-                                isFunction(containingNodeKind) ||
-                                containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                                containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
+            function isIdentifierDefinitionLocation(contextToken: Node): boolean {
+                let containingNodeKind = contextToken.parent.kind;
+                switch (contextToken.kind) {
+                    case SyntaxKind.CommaToken:
+                        return containingNodeKind === SyntaxKind.VariableDeclaration ||
+                            containingNodeKind === SyntaxKind.VariableDeclarationList ||
+                            containingNodeKind === SyntaxKind.VariableStatement ||
+                            containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
+                            isFunction(containingNodeKind) ||
+                            containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
+                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
+                            containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
+                            containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
                                                                                                           
-                        case SyntaxKind.DotToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
+                    case SyntaxKind.DotToken:
+                        return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
                                                                                                           
-                        case SyntaxKind.ColonToken:
-                            return containingNodeKind === SyntaxKind.BindingElement;                        // var {x :html|
+                    case SyntaxKind.ColonToken:
+                        return containingNodeKind === SyntaxKind.BindingElement;                        // var {x :html|
                                                                                                           
-                        case SyntaxKind.OpenBracketToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
+                    case SyntaxKind.OpenBracketToken:
+                        return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
                                                                                                           
-                        case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CatchClause ||
-                                isFunction(containingNodeKind);
+                    case SyntaxKind.OpenParenToken:
+                        return containingNodeKind === SyntaxKind.CatchClause ||
+                            isFunction(containingNodeKind);
 
-                        case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
-                                containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
+                    case SyntaxKind.OpenBraceToken:
+                        return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
+                            containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
+                            containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
 
-                        case SyntaxKind.SemicolonToken:
-                            return containingNodeKind === SyntaxKind.PropertySignature &&
-                                previousToken.parent && previousToken.parent.parent &&
-                                (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                    previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
+                    case SyntaxKind.SemicolonToken:
+                        return containingNodeKind === SyntaxKind.PropertySignature &&
+                            contextToken.parent && contextToken.parent.parent &&
+                            (contextToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
+                                contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
 
-                        case SyntaxKind.LessThanToken:
-                            return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
-                                isFunction(containingNodeKind);
+                    case SyntaxKind.LessThanToken:
+                        return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
+                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
+                            containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
+                            isFunction(containingNodeKind);
 
-                        case SyntaxKind.StaticKeyword:
-                            return containingNodeKind === SyntaxKind.PropertyDeclaration;
+                    case SyntaxKind.StaticKeyword:
+                        return containingNodeKind === SyntaxKind.PropertyDeclaration;
 
-                        case SyntaxKind.DotDotDotToken:
-                            return containingNodeKind === SyntaxKind.Parameter ||
-                                containingNodeKind === SyntaxKind.Constructor ||
-                                (previousToken.parent && previousToken.parent.parent &&
-                                    previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
+                    case SyntaxKind.DotDotDotToken:
+                        return containingNodeKind === SyntaxKind.Parameter ||
+                            (contextToken.parent && contextToken.parent.parent &&
+                                contextToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
 
-                        case SyntaxKind.PublicKeyword:
-                        case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.ProtectedKeyword:
-                            return containingNodeKind === SyntaxKind.Parameter;
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                        return containingNodeKind === SyntaxKind.Parameter;
 
-                        case SyntaxKind.ClassKeyword:
-                        case SyntaxKind.EnumKeyword:
-                        case SyntaxKind.InterfaceKeyword:
-                        case SyntaxKind.FunctionKeyword:
-                        case SyntaxKind.VarKeyword:
-                        case SyntaxKind.GetKeyword:
-                        case SyntaxKind.SetKeyword:
-                        case SyntaxKind.ImportKeyword:
-                        case SyntaxKind.LetKeyword:
-                        case SyntaxKind.ConstKeyword:
-                        case SyntaxKind.YieldKeyword:
-                        case SyntaxKind.TypeKeyword:  // type htm|
-                            return true;
-                    }
+                    case SyntaxKind.ClassKeyword:
+                    case SyntaxKind.EnumKeyword:
+                    case SyntaxKind.InterfaceKeyword:
+                    case SyntaxKind.FunctionKeyword:
+                    case SyntaxKind.VarKeyword:
+                    case SyntaxKind.GetKeyword:
+                    case SyntaxKind.SetKeyword:
+                    case SyntaxKind.ImportKeyword:
+                    case SyntaxKind.LetKeyword:
+                    case SyntaxKind.ConstKeyword:
+                    case SyntaxKind.YieldKeyword:
+                    case SyntaxKind.TypeKeyword:  // type htm|
+                        return true;
+                }
 
-                    // Previous token may have been a keyword that was converted to an identifier.
-                    switch (previousToken.getText()) {
-                        case "class":
-                        case "interface":
-                        case "enum":
-                        case "function":
-                        case "var":
-                        case "static":
-                        case "let":
-                        case "const":
-                        case "yield":
-                            return true;
-                    }
+                // Previous token may have been a keyword that was converted to an identifier.
+                switch (contextToken.getText()) {
+                    case "class":
+                    case "interface":
+                    case "enum":
+                    case "function":
+                    case "var":
+                    case "static":
+                    case "let":
+                    case "const":
+                    case "yield":
+                        return true;
                 }
 
                 return false;
             }
 
-            function isRightOfIllegalDot(previousToken: Node): boolean {
-                if (previousToken && previousToken.kind === SyntaxKind.NumericLiteral) {
-                    let text = previousToken.getFullText();
+            function isDotOfNumericLiteral(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.NumericLiteral) {
+                    let text = contextToken.getFullText();
                     return text.charAt(text.length - 1) === ".";
                 }
 
@@ -3430,6 +3464,11 @@ namespace ts {
                     importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
 
                     forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                        // If this is the current item we are editing right now, do not filter it out
+                        if (el.getStart() <= position && position <= el.getEnd()) {
+                            return;
+                        }
+
                         let name = el.propertyName || el.name;
                         exisingImports[name.text] = true;
                     });
@@ -3484,23 +3523,29 @@ namespace ts {
 
                 return filteredMembers;
             }
+            
+            function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+                let seenNames: Map<boolean> = {};
+                for (let attr of attributes) {
+                    // If this is the current item we are editing right now, do not filter it out
+                    if (attr.getStart() <= position && position <= attr.getEnd()) {
+                        continue;
+                    }
+
+                    if (attr.kind === SyntaxKind.JsxAttribute) {
+                        seenNames[(<JsxAttribute>attr).name.text] = true;
+                    }
+                }
+                let result: Symbol[] = [];
+                for (let sym of symbols) {
+                    if (!seenNames[sym.name]) {
+                        result.push(sym);
+                    }
+                }
+                return result;
+            }
         }
 
-        function filterJsxAttributes(attributes: NodeArray<JsxAttribute|JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
-            let seenNames: Map<boolean> = {};
-            for(let attr of attributes) {
-                if(attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames[(<JsxAttribute>attr).name.text] = true;
-                }
-            }
-            let result: Symbol[] = [];
-            for(let sym of symbols) {
-                if(!seenNames[sym.name]) {
-                    result.push(sym);
-                }
-            }
-            return result;
-        }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
@@ -3563,7 +3608,7 @@ namespace ts {
                 // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
                 // We would like to only show things that can be added after a dot, so for instance numeric properties can
                 // not be accessed with a dot (a.1 <- invalid)
-                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
+                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true, location);
                 if (!displayName) {
                     return undefined;
                 }
@@ -3620,7 +3665,7 @@ namespace ts {
                 // We don't need to perform character checks here because we're only comparing the 
                 // name against 'entryName' (which is known to be good), not building a new 
                 // completion entry.
-                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false, location) === entryName ? s : undefined);
 
                 if (symbol) {
                     let { displayParts, documentation, symbolKind } = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
@@ -3653,7 +3698,8 @@ namespace ts {
         function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
-            if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
+            if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
+                ScriptElementKind.localClassElement : ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
@@ -3821,7 +3867,7 @@ namespace ts {
                                         displayParts.push(spacePart());
                                     }
                                     if (!(type.flags & TypeFlags.Anonymous)) {
-                                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                        addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                                     }
                                     addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
                                     break;
@@ -3862,7 +3908,16 @@ namespace ts {
                 }
             }
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
-                displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
+                    // Special case for class expressions because we would like to indicate that
+                    // the class name is local to the class body (similar to function expression)
+                    //      (local class) class <className>
+                    pushTypePart(ScriptElementKind.localClassElement);
+                }
+                else {
+                    // Class declaration has name which is not local.
+                    displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                }
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
@@ -3882,7 +3937,7 @@ namespace ts {
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
+                addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -3928,7 +3983,7 @@ namespace ts {
                     else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
                         addFullSymbolName(signatureDeclaration.symbol);
                     }
-                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -3989,10 +4044,10 @@ namespace ts {
                                 let typeParameterParts = mapToDisplayParts(writer => {
                                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
-                                displayParts.push.apply(displayParts, typeParameterParts);
+                                addRange(displayParts, typeParameterParts);
                             }
                             else {
-                                displayParts.push.apply(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                                addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                             }
                         }
                         else if (symbolFlags & SymbolFlags.Function ||
@@ -4026,7 +4081,7 @@ namespace ts {
             function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
                 let fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                     SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
-                displayParts.push.apply(displayParts, fullSymbolDisplayParts);
+                addRange(displayParts, fullSymbolDisplayParts);
             }
 
             function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
@@ -4056,7 +4111,7 @@ namespace ts {
             }
 
             function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
-                displayParts.push.apply(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 if (allSignatures.length > 1) {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -4073,7 +4128,7 @@ namespace ts {
                 let typeParameterParts = mapToDisplayParts(writer => {
                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
                 });
-                displayParts.push.apply(displayParts, typeParameterParts);
+                addRange(displayParts, typeParameterParts);
             }
         }
 
@@ -5068,7 +5123,7 @@ namespace ts {
 
             // Get the text to search for.
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            let declaredName = getDeclaredName(typeChecker, symbol, node);
+            let declaredName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -5145,10 +5200,10 @@ namespace ts {
              * a reference to a symbol can occur anywhere.
              */
             function getSymbolScope(symbol: Symbol): Node {
-                // If this is the symbol of a function expression, then named references
-                // are limited to its own scope.
+                // If this is the symbol of a named function expression or named class expression,
+                // then named references are limited to its own scope.
                 let valueDeclaration = symbol.valueDeclaration;
-                if (valueDeclaration && valueDeclaration.kind === SyntaxKind.FunctionExpression) {
+                if (valueDeclaration && (valueDeclaration.kind === SyntaxKind.FunctionExpression || valueDeclaration.kind === SyntaxKind.ClassExpression)) {
                     return valueDeclaration;
                 }
 
@@ -5587,7 +5642,7 @@ namespace ts {
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
-                        result.push.apply(result, typeChecker.getRootSymbols(contextualSymbol));
+                        addRange(result, typeChecker.getRootSymbols(contextualSymbol));
                     });
 
                     /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
@@ -6819,7 +6874,7 @@ namespace ts {
                             }
                         }
 
-                        let displayName = getDeclaredName(typeChecker, symbol, node);
+                        let displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
                         let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {

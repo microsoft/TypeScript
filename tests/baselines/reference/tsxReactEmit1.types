@@ -12,6 +12,8 @@ declare module JSX {
 >s : string
 	}
 }
+declare var React: any;
+>React : any
 
 var p;
 >p : any

@@ -130,7 +130,7 @@ namespace ts {
             moduleElementDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
-        }
+        };
 
         function hasInternalAnnotation(range: CommentRange) {
             let text = currentSourceFile.text;
@@ -188,7 +188,7 @@ namespace ts {
                 if (!moduleElementEmitInfo && asynchronousSubModuleDeclarationEmitInfo) {
                     moduleElementEmitInfo = forEach(asynchronousSubModuleDeclarationEmitInfo, declEmitInfo => declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined);
                 }
-                                
+
                 // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
                 // then we don't need to write it at this point. We will write it when we actually see its declaration
                 // Eg.
@@ -198,7 +198,7 @@ namespace ts {
                 // we would write alias foo declaration when we visit it since it would now be marked as visible
                 if (moduleElementEmitInfo) {
                     if (moduleElementEmitInfo.node.kind === SyntaxKind.ImportDeclaration) {
-                        // we have to create asynchronous output only after we have collected complete information 
+                        // we have to create asynchronous output only after we have collected complete information
                         // because it is possible to enable multiple bindings as asynchronously visible
                         moduleElementEmitInfo.isVisible = true;
                     }
@@ -355,6 +355,21 @@ namespace ts {
                     return emitEntityName(<Identifier>type);
                 case SyntaxKind.QualifiedName:
                     return emitEntityName(<QualifiedName>type);
+                case SyntaxKind.TypePredicate:
+                    return emitTypePredicate(<TypePredicateNode>type);
+            }
+
+            function writeEntityName(entityName: EntityName | Expression) {
+                if (entityName.kind === SyntaxKind.Identifier) {
+                    writeTextOfNode(currentSourceFile, entityName);
+                }
+                else {
+                    let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                    let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                    writeEntityName(left);
+                    write(".");
+                    writeTextOfNode(currentSourceFile, right);
+                }
             }
 
             function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
@@ -364,19 +379,6 @@ namespace ts {
 
                 handleSymbolAccessibilityError(visibilityResult);
                 writeEntityName(entityName);
-
-                function writeEntityName(entityName: EntityName | Expression) {
-                    if (entityName.kind === SyntaxKind.Identifier) {
-                        writeTextOfNode(currentSourceFile, entityName);
-                    }
-                    else {
-                        let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
-                        let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                        writeEntityName(left);
-                        write(".");
-                        writeTextOfNode(currentSourceFile, right);
-                    }
-                }
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
@@ -404,6 +406,12 @@ namespace ts {
                     emitCommaList(type.typeArguments, emitType);
                     write(">");
                 }
+            }
+
+            function emitTypePredicate(type: TypePredicateNode) {
+                writeTextOfNode(currentSourceFile, type.parameterName);
+                write(" is ");
+                emitType(type.type);
             }
 
             function emitTypeQuery(type: TypeQueryNode) {
@@ -608,7 +616,7 @@ namespace ts {
         }
 
         function writeImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // note usage of writer. methods instead of aliases created, just to make sure we are using 
+            // note usage of writer. methods instead of aliases created, just to make sure we are using
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
@@ -650,7 +658,7 @@ namespace ts {
 
         function writeImportDeclaration(node: ImportDeclaration) {
             if (!node.importClause && !(node.flags & NodeFlags.Export)) {
-                // do not write non-exported import declarations that don't have import clauses 
+                // do not write non-exported import declarations that don't have import clauses
                 return;
             }
             emitJsDocComments(node);
@@ -772,7 +780,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isConst(node)) {
-                write("const ")
+                write("const ");
             }
             write("enum ");
             writeTextOfNode(currentSourceFile, node.name);
@@ -1351,7 +1359,7 @@ namespace ts {
 
                 return {
                     diagnosticMessage,
-                    errorNode: <Node>node.name || node,
+                    errorNode: <Node>node.name || node
                 };
             }
         }
@@ -1525,7 +1533,7 @@ namespace ts {
                         }
                     }
                 }
-            } 
+            }
         }
 
         function emitNode(node: Node) {
@@ -1573,7 +1581,7 @@ namespace ts {
                 ? referencedFile.fileName // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),
@@ -1585,7 +1593,7 @@ namespace ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-    
+
     /* @internal */
     export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
