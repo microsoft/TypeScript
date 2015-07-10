@@ -49,21 +49,21 @@ namespace ts {
             return newNode;
         }
         
-        export function createNode<T extends Node>(kind: SyntaxKind): T {
-            return <T>new (getNodeConstructor(kind))();
+        export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange): T {
+            return setTextRange(<T>new (getNodeConstructor(kind))(), location);
         }
         
-        export function createNodeArray<TNode extends Node>(elements?: TNode[]) {
+        export function createNodeArray<TNode extends Node>(elements?: TNode[], location?: TextRange) {
             let nodes = <NodeArray<TNode>>(elements || []);
             if (nodes.pos === undefined) {
                 nodes.pos = -1;
                 nodes.end = -1;
             }
             
-            return nodes;
+            return setTextRange(nodes, location);
         }
         
-        export function createModifiersArray(elements?: Node[]) {
+        export function createModifiersArray(elements?: Node[], location?: TextRange) {
             let modifiers = <ModifiersArray>(elements || []);
             if (modifiers.flags === undefined) {
                 let flags = 0;
@@ -74,7 +74,7 @@ namespace ts {
                 modifiers.flags = flags;
             }
             
-            return modifiers;
+            return setTextRange(modifiers, location);
         }
         
         export function createSourceFile(): SourceFile {

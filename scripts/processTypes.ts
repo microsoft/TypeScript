@@ -681,7 +681,7 @@ function generateFactory(outputFile: string) {
         let typeNames = typeName.split(/\s*\|\s*/g);
         if (typeNames.length === 1) {
             let typeSymbol = resolveName(tsModuleSymbol.declarations[0], typeName, SymbolFlags.Type);
-            if (typeSymbol && findAnnotation(typeSymbol, annotation => annotation.name === "nofactorynodetest")) {
+            if (typeSymbol && findAnnotation(typeSymbol, annotation => annotation.name === "nofactoryanynodetest")) {
                 return;
             }
         }

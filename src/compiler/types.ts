@@ -456,7 +456,7 @@ namespace ts {
     // @factoryhidden("jsDocComment", true)
     // @factoryhidden("nextContainer", true)
     // @factoryorder("decorators", "modifiers")
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -500,12 +500,12 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
     
     // @factoryhidden("decorators", false)
     // @factoryhidden("modifiers", false)
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
@@ -751,7 +751,7 @@ namespace ts {
         _indexSignatureDeclarationBrand: any;
     }
 
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
@@ -837,7 +837,7 @@ namespace ts {
     // checker actually thinks you have something of the right type.  Note: the brands are
     // never actually given values.  At runtime they have zero cost.
     // @kind(SyntaxKind.OmittedExpression)
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
@@ -870,7 +870,7 @@ namespace ts {
     // @kind(SyntaxKind.NullKeyword, { create: false })
     // @kind(SyntaxKind.ThisKeyword, { create: false })
     // @kind(SyntaxKind.SuperKeyword, { create: false })
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export interface LeftHandSideExpression extends PostfixExpression {
         _leftHandSideExpressionBrand: any;
     }
@@ -1107,7 +1107,7 @@ namespace ts {
 
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
-    // @nofactorynodetest
+    // @nofactoryanynodetest
     export interface Statement extends Node {
         _statementBrand: any;
     }
