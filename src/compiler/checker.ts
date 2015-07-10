@@ -6018,8 +6018,6 @@ namespace ts {
                         }
                     }
 
-                    // TODO: Handle property access expression
-
                     function narrowType(): Type {
                         if (!assumeTrue) {
                             if (type.flags & TypeFlags.Union) {
