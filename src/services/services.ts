@@ -3522,23 +3522,29 @@ namespace ts {
 
                 return filteredMembers;
             }
+            
+            function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+                let seenNames: Map<boolean> = {};
+                for (let attr of attributes) {
+                    // If this is the current item we are editing right now, do not filter it out
+                    if (attr.getStart() <= position && position <= attr.getEnd()) {
+                        continue;
+                    }
+
+                    if (attr.kind === SyntaxKind.JsxAttribute) {
+                        seenNames[(<JsxAttribute>attr).name.text] = true;
+                    }
+                }
+                let result: Symbol[] = [];
+                for (let sym of symbols) {
+                    if (!seenNames[sym.name]) {
+                        result.push(sym);
+                    }
+                }
+                return result;
+            }
         }
 
-        function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
-            let seenNames: Map<boolean> = {};
-            for (let attr of attributes) {
-                if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames[(<JsxAttribute>attr).name.text] = true;
-                }
-            }
-            let result: Symbol[] = [];
-            for (let sym of symbols) {
-                if (!seenNames[sym.name]) {
-                    result.push(sym);
-                }
-            }
-            return result;
-        }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
