@@ -1,21 +1,15 @@
-tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(6,8): error TS4033: Property 'x' of exported interface has or is using private name 'C'.
-tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(7,8): error TS4033: Property 'y' of exported interface has or is using private name 'C'.
 tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(16,30): error TS4020: Extends clause of exported class 'MyClass' has or is using private name 'C'.
 tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(16,30): error TS4020: Extends clause of exported class 'MyClass' has or is using private name 'I'.
 
 
-==== tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts (4 errors) ====
+==== tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts (2 errors) ====
     
     interface I {
     }
     
     class C<T, U> {
         x: T;
-           ~
-!!! error TS4033: Property 'x' of exported interface has or is using private name 'C'.
         y: U;
-           ~
-!!! error TS4033: Property 'y' of exported interface has or is using private name 'C'.
     }
     
     function getClass(a) {

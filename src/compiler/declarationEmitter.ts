@@ -1039,8 +1039,8 @@ namespace ts {
                     return emitExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
                     return emitSourceFile(<SourceFile>node);
-               // default:
-                   // Debug.fail(`unknown SyntaxKind: ${node.kind} (${ (<any>ts).SyntaxKind ? (<any>ts).SyntaxKind[node.kind] : ""})`);
+                default:
+                    Debug.fail(`unknown SyntaxKind: ${node.kind} (${ (<any>ts).SyntaxKind ? (<any>ts).SyntaxKind[node.kind] : ""})`);
             }
         }
 
@@ -1302,8 +1302,6 @@ namespace ts {
 
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.Parameter:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1555,7 +1553,11 @@ namespace ts {
             }
         }
 
-        function collectDeclaration(node: Node, errorNode?:Node): void {
+        function collectDeclaration(node: Node, errorNode?: Node): void {
+            if (node.kind === SyntaxKind.TypeParameter || node.kind === SyntaxKind.Parameter) {
+                return;
+            }
+
             let links = getNodeLinks(node);
             if (!links.visited) {
                 links.visited = true;
