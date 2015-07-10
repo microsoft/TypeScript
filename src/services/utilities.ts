@@ -667,7 +667,7 @@ namespace ts {
 
         let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
 
-        return stripQuotes(name);
+        return name;
     }
 
     export function isImportOrExportSpecifierName(location: Node): boolean {

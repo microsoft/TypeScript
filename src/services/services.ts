@@ -2808,23 +2808,15 @@ namespace ts {
          * @return undefined if the name is of external module otherwise a name with striped of any quote
          */
         function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
-            let displayName: string = symbol.getName();
+            let displayName: string = getDeclaredName(program.getTypeChecker(), symbol, location);
 
             if (displayName) {
-                if (displayName === "default") {
-                    // In the case of default export, the binder bind them with "default".
-                    // However, for completion entry, we want to display its declared name rather than binder name.
-                    let typeChecker = program.getTypeChecker();
-                    displayName = getDeclaredName(typeChecker, symbol, location);
-                }
-                else {
-                    let firstCharCode = displayName.charCodeAt(0);
-                    // First check of the displayName is not external module; if it is an external module, it is not valid entry
-                    if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                        // If the symbol is external module, don't show it in the completion list
-                        // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
-                        return undefined;
-                    }
+                let firstCharCode = displayName.charCodeAt(0);
+                // First check of the displayName is not external module; if it is an external module, it is not valid entry
+                if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                    // If the symbol is external module, don't show it in the completion list
+                    // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
+                    return undefined;
                 }
             }
 
@@ -2862,7 +2854,7 @@ namespace ts {
                 }
             }
 
-            return unescapeIdentifier(name);
+            return name;
         }
 
         function getCompletionData(fileName: string, position: number) {
@@ -5087,7 +5079,7 @@ namespace ts {
 
             // Get the text to search for.
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            let declaredName = getDeclaredName(typeChecker, symbol, node);
+            let declaredName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -6838,7 +6830,7 @@ namespace ts {
                             }
                         }
 
-                        let displayName = getDeclaredName(typeChecker, symbol, node);
+                        let displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
                         let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {
