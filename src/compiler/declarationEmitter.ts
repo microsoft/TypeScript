@@ -457,15 +457,17 @@ namespace ts {
                 }
             }
 
-            if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
+            if (node.importClause.namedBindings) {
+              if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
                 indexOf(children, node.importClause.namedBindings) >= 0) {
                 write("* as ");
                 writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
-            }
-            else if (children.length) {
+              }
+              else if (children.length) {
                 write("{ ");
                 emitCommaList(children, emitImportOrExportSpecifier);
                 write(" }");
+              }
             }
 
             write(" from ");
@@ -1143,7 +1145,7 @@ namespace ts {
                     return visitNode((<QualifiedName>node).left) ||
                         visitNode((<QualifiedName>node).right);
                 case SyntaxKind.Identifier:
-                    return visitTypeName(<Identifier|QualifiedName>node);
+                    return visitTypeName(<Identifier>node);
             }
         }
 
@@ -1153,26 +1155,26 @@ namespace ts {
 
         function visitExportDeclaration(node: ExportDeclaration): void {
             if (!node.moduleSpecifier) {
-                forEach(node.exportClause.elements, collectAliasDeclaration);
+                forEach(node.exportClause.elements, e => collectAliasDeclaration(e, node));
             }
         }
 
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): void {
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
-                collectAliasDeclaration(node);
+                collectAliasDeclaration(node, node.moduleReference);
             }
         }
 
         function visitExportAssignment(node: ExportAssignment): void {
             if (node.expression.kind === SyntaxKind.Identifier) {
-                collectAliasDeclaration(node);
+                collectAliasDeclaration(node, node.expression);
             }
             else if (!node.isExportEquals) { 
                 // TODO: handel expressions
                 // TODO: Cache the result
                 let writer = createNewTextWriterWithSymbolWriter();
                 let previousErrorNode = currentErrorNode;
-                currentErrorNode = node;
+                currentErrorNode = node.expression;
                 resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = previousErrorNode;
             }
@@ -1194,7 +1196,7 @@ namespace ts {
                 // TODO: Cache the result
                 let writer = createNewTextWriterWithSymbolWriter();
                 let previousErrorNode = currentErrorNode;
-                currentErrorNode = node;
+                currentErrorNode = node.name || node;
                 resolver.writeReturnTypeOfSignatureDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = previousErrorNode;
             }
@@ -1217,7 +1219,7 @@ namespace ts {
                     // TODO: Cache the result
                     let writer = createNewTextWriterWithSymbolWriter();
                     let previousErrorNode = currentErrorNode;
-                    currentErrorNode = node;
+                    currentErrorNode = node.name;
                     resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
                     currentErrorNode = previousErrorNode;
                 }
@@ -1241,7 +1243,7 @@ namespace ts {
                 // TODO: Cache the result
                 let writer = createNewTextWriterWithSymbolWriter();
                 let previousErrorNode = currentErrorNode;
-                currentErrorNode = node;
+                currentErrorNode = node.name;
                 resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
                 currentErrorNode = previousErrorNode;
             }
@@ -1259,16 +1261,18 @@ namespace ts {
             visitNodes(node.typeArguments);
         }
 
-        function visitTypeName(node: Identifier|QualifiedName): void {
+        function visitTypeName(node: Identifier): void {
             let symbol = resolver.getSymbolAtLocation(node);
-            Debug.assert(!!symbol);
-            collectDeclarations(symbol, node);
+            if (symbol) {
+                collectDeclarations(symbol, node);
+            }
         }
 
-        function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment) {
+        function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment, errorNode: Node) {
             let target = resolver.getLocalTargetOfAliasDeclaration(node);
-            Debug.assert(!!target);
-            collectDeclarations(target, node);
+            if (target) {
+                collectDeclarations(target, errorNode);
+            }
         }
 
 
@@ -1408,7 +1412,7 @@ namespace ts {
                 return true;
             }
 
-            if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+            if (node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ImportDeclaration) {
                 return true;
             }
 
@@ -1516,17 +1520,17 @@ namespace ts {
                             (<TypeAliasDeclaration>container).name.text, referencedDeclarationName));
                         return;
                     case SyntaxKind.ExportAssignment:
-                        diagnostics.push(createDiagnosticForNode((<ExportAssignment>errorNode).expression,
+                        diagnostics.push(createDiagnosticForNode(errorNode,
                             Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
                             referencedDeclarationName));
                         return;
                     case SyntaxKind.TypeParameter:
-                        diagnostics.push(createDiagnosticForNode((<TypeParameterDeclaration>errorNode).constraint,
+                        diagnostics.push(createDiagnosticForNode(errorNode,
                             Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1,
                             (<TypeParameterDeclaration>container).name.text, referencedDeclarationName));
                         return;
                     case SyntaxKind.ImportEqualsDeclaration:
-                        diagnostics.push(createDiagnosticForNode((<ImportEqualsDeclaration>errorNode).moduleReference,
+                        diagnostics.push(createDiagnosticForNode(errorNode,
                             Diagnostics.Import_declaration_0_is_using_private_name_1,
                             (<ImportEqualsDeclaration>container).name.text, referencedDeclarationName));
                         return;
