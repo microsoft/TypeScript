@@ -574,31 +574,21 @@ function generateFactory(outputFile: string) {
         
         writer.write(`export function create${syntaxNode.kindName}(`);
         
-        let first = true;
         for (let member of syntaxNode.members) {
-            if (!first) {
-                writer.write(`, `);
-        
-        
-            }
-            else {
-                first = false;
-            }
-        
             let type = 
                 member.isNodeArray ? `Array<${member.elementTypeName}>` :
                 member.isModifiersArray ? `Array<Node>` :
                 member.typeName; 
             
-            writer.write(`${member.paramName}?: ${type}`);
+            writer.write(`${member.paramName}?: ${type}, `);
         }
         
-        writer.write(`): ${syntaxNode.typeName} {`);
+        writer.write(`location?: TextRange, flags?: NodeFlags): ${syntaxNode.typeName} {`);
         writer.writeLine();
         
         writer.increaseIndent();
         if (syntaxNode.members.length) {
-            writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
+            writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName}, location, flags);`);
             writer.writeLine();
             if (syntaxNode.members.length > 1) {
                 writer.write(`if (arguments.length) {`);
@@ -630,7 +620,7 @@ function generateFactory(outputFile: string) {
             writer.writeLine();
         }
         else {
-            writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
+            writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName}, location, flags);`);
             writer.writeLine();
         }
     
@@ -760,16 +750,11 @@ function generateFactory(outputFile: string) {
             writer.increaseIndent();
             
             writer.write(`return factory.create${syntaxNode.kindName}(`);
-            for (let i = 0; i < syntaxNode.members.length; ++i) {
-                if (i > 0) {
-                    writer.write(`, `);
-                }
-                
-                let member = syntaxNode.members[i];
-                writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}`);
+            for (let member of syntaxNode.members) {
+                writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}, `);
             }
             
-            writer.write(`);`);
+            writer.write(`/*location*/ undefined, node.flags);`);
             writer.writeLine();
 
             writer.decreaseIndent();
