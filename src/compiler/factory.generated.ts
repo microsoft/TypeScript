@@ -914,7 +914,7 @@ namespace ts {
             return node;
         }
         export function createOmittedExpression(location?: TextRange): Expression {
-            return createNode<Expression>(SyntaxKind.OmittedExpression);
+            return createNode<Expression>(SyntaxKind.OmittedExpression, location);
         }
         export function createExpressionWithTypeArguments(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, 
             location?: TextRange): ExpressionWithTypeArguments {
@@ -964,7 +964,7 @@ namespace ts {
             return node;
         }
         export function createSemicolonClassElement(location?: TextRange): SemicolonClassElement {
-            return createNode<SemicolonClassElement>(SyntaxKind.SemicolonClassElement);
+            return createNode<SemicolonClassElement>(SyntaxKind.SemicolonClassElement, location);
         }
         export function createBlock(statements?: Array<Statement>, location?: TextRange): Block {
             let node = createNode<Block>(SyntaxKind.Block, location);
@@ -991,7 +991,7 @@ namespace ts {
             return node;
         }
         export function createEmptyStatement(location?: TextRange): Statement {
-            return createNode<Statement>(SyntaxKind.EmptyStatement);
+            return createNode<Statement>(SyntaxKind.EmptyStatement, location);
         }
         export function createExpressionStatement(expression?: Expression, location?: TextRange): ExpressionStatement {
             let node = createNode<ExpressionStatement>(SyntaxKind.ExpressionStatement, location);
@@ -1219,7 +1219,7 @@ namespace ts {
             return node;
         }
         export function createDebuggerStatement(location?: TextRange): Statement {
-            return createNode<Statement>(SyntaxKind.DebuggerStatement);
+            return createNode<Statement>(SyntaxKind.DebuggerStatement, location);
         }
         export function createVariableDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier | BindingPattern, 
             type?: TypeNode, initializer?: Expression, location?: TextRange): VariableDeclaration {
@@ -1651,7 +1651,7 @@ namespace ts {
             return node;
         }
         export function createJsxText(location?: TextRange): JsxText {
-            return createNode<JsxText>(SyntaxKind.JsxText);
+            return createNode<JsxText>(SyntaxKind.JsxText, location);
         }
         export function createJsxClosingElement(tagName?: EntityName, location?: TextRange): JsxClosingElement {
             let node = createNode<JsxClosingElement>(SyntaxKind.JsxClosingElement, location);
@@ -1819,10 +1819,10 @@ namespace ts {
             return node;
         }
         export function createJSDocAllType(location?: TextRange): JSDocAllType {
-            return createNode<JSDocAllType>(SyntaxKind.JSDocAllType);
+            return createNode<JSDocAllType>(SyntaxKind.JSDocAllType, location);
         }
         export function createJSDocUnknownType(location?: TextRange): JSDocUnknownType {
-            return createNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType);
+            return createNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType, location);
         }
         export function createJSDocArrayType(elementType?: JSDocType, location?: TextRange): JSDocArrayType {
             let node = createNode<JSDocArrayType>(SyntaxKind.JSDocArrayType, location);

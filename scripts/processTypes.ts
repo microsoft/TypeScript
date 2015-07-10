@@ -871,7 +871,7 @@ function generate(outputFile: string) {
             writer.writeLine();
         }
         else {
-            writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
+            writer.write(`return createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName}, location);`);
             writer.writeLine();
         }
     
