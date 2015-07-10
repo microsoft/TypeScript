@@ -11,6 +11,7 @@
 ////import {foo,/*4*/ from "m1"
 ////import {bar as /*5*/, /*6*/ from "m1"
 ////import {foo, bar, baz as b,/*7*/} from "m1"
+
 function verifyCompletionAtMarker(marker: string, showBuilder: boolean, ...completions: string[]) {
     goTo.marker(marker);
     if (completions.length) {
