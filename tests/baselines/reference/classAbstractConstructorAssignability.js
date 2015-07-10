@@ -1,33 +1,20 @@
-//// [classAbstractInstantiations1.ts]
+//// [classAbstractConstructorAssignability.ts]
 
-//
-// Calling new with (non)abstract classes.
-//
+class A {}
 
-abstract class A {}
+abstract class B extends A {}
 
-class B extends A {}
+class C extends B {}
 
-abstract class C extends B {}
+var AA : typeof A = B;
+var BB : typeof B = A;
+var CC : typeof C = B;
 
-new A;
-new A(1); // should report 1 error
-new B;
-new C;
+new AA;
+new BB;
+new CC;
 
-var a : A;
-var b : B;
-var c : C;
-
-a = new B;
-b = new B;
-c = new B;
-
-
-//// [classAbstractInstantiations1.js]
-//
-// Calling new with (non)abstract classes.
-//
+//// [classAbstractConstructorAssignability.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -52,13 +39,9 @@ var C = (function (_super) {
     }
     return C;
 })(B);
-new A;
-new A(1); // should report 1 error
-new B;
-new C;
-var a;
-var b;
-var c;
-a = new B;
-b = new B;
-c = new B;
+var AA = B;
+var BB = A;
+var CC = B;
+new AA;
+new BB;
+new CC;
