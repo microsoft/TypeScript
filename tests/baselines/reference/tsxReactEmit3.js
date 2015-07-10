@@ -1,6 +1,7 @@
 //// [tsxReactEmit3.tsx]
 
 declare module JSX { interface Element { } }
+declare var React: any;
 
 declare var Foo, Bar, baz;
 

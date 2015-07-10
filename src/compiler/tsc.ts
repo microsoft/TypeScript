@@ -11,15 +11,15 @@ namespace ts {
      * and if it is, attempts to set the appropriate language.
      */
     function validateLocaleAndSetLanguage(locale: string, errors: Diagnostic[]): boolean {
-        var matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
+        let matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
         if (!matchResult) {
             errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, 'en', 'ja-jp'));
             return false;
         }
 
-        var language = matchResult[1];
-        var territory = matchResult[3];
+        let language = matchResult[1];
+        let territory = matchResult[3];
 
         // First try the entire locale, then fall back to just language if that's all we have.
         if (!trySetLanguageAndTerritory(language, territory, errors) &&
@@ -33,10 +33,10 @@ namespace ts {
     }
 
     function trySetLanguageAndTerritory(language: string, territory: string, errors: Diagnostic[]): boolean {
-        var compilerFilePath = normalizePath(sys.getExecutingFilePath());
-        var containingDirectoryPath = getDirectoryPath(compilerFilePath);
+        let compilerFilePath = normalizePath(sys.getExecutingFilePath());
+        let containingDirectoryPath = getDirectoryPath(compilerFilePath);
 
-        var filePath = combinePaths(containingDirectoryPath, language);
+        let filePath = combinePaths(containingDirectoryPath, language);
 
         if (territory) {
             filePath = filePath + "-" + territory;
@@ -49,8 +49,9 @@ namespace ts {
         }
 
         // TODO: Add codePage support for readFile?
+        let fileContents = '';
         try {
-            var fileContents = sys.readFile(filePath);
+            fileContents = sys.readFile(filePath);
         }
         catch (e) {
             errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
@@ -68,7 +69,7 @@ namespace ts {
     }
 
     function countLines(program: Program): number {
-        var count = 0;
+        let count = 0;
         forEach(program.getSourceFiles(), file => {
             count += getLineStarts(file).length;
         });
@@ -76,27 +77,27 @@ namespace ts {
     }
 
     function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
-        var diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        let diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
         return <string>diagnostic.messageText;
     }
 
     function reportDiagnostic(diagnostic: Diagnostic) {
-        var output = "";
-        
+        let output = "";
+
         if (diagnostic.file) {
-            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
             output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
-        var category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        let category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
 
         sys.write(output);
     }
 
     function reportDiagnostics(diagnostics: Diagnostic[]) {
-        for (var i = 0; i < diagnostics.length; i++) {
+        for (let i = 0; i < diagnostics.length; i++) {
             reportDiagnostic(diagnostics[i]);
         }
     }
@@ -133,15 +134,15 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        var commandLine = parseCommandLine(args);
-        var configFileName: string;                 // Configuration file name (if any)
-        var configFileWatcher: FileWatcher;         // Configuration file watcher
-        var cachedProgram: Program;                 // Program cached from last compilation
-        var rootFileNames: string[];                // Root fileNames for compilation
-        var compilerOptions: CompilerOptions;       // Compiler options for compilation
-        var compilerHost: CompilerHost;             // Compiler host
-        var hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
-        var timerHandle: number;                    // Handle for 0.25s wait timer
+        let commandLine = parseCommandLine(args);
+        let configFileName: string;                 // Configuration file name (if any)
+        let configFileWatcher: FileWatcher;         // Configuration file watcher
+        let cachedProgram: Program;                 // Program cached from last compilation
+        let rootFileNames: string[];                // Root fileNames for compilation
+        let compilerOptions: CompilerOptions;       // Compiler options for compilation
+        let compilerHost: CompilerHost;             // Compiler host
+        let hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
+        let timerHandle: number;                    // Handle for 0.25s wait timer
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
@@ -181,7 +182,7 @@ namespace ts {
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
-            var searchPath = normalizePath(sys.getCurrentDirectory());
+            let searchPath = normalizePath(sys.getCurrentDirectory());
             configFileName = findConfigFile(searchPath);
         }
 
@@ -247,14 +248,14 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
             // Return existing SourceFile object if one is available
             if (cachedProgram) {
-                var sourceFile = cachedProgram.getSourceFile(fileName);
+                let sourceFile = cachedProgram.getSourceFile(fileName);
                 // A modified source file has no watcher and should not be reused
                 if (sourceFile && sourceFile.fileWatcher) {
                     return sourceFile;
                 }
             }
             // Use default host function
-            var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
+            let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
                 sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
@@ -265,7 +266,7 @@ namespace ts {
         // Change cached program to the given program
         function setCachedProgram(program: Program) {
             if (cachedProgram) {
-                var newSourceFiles = program ? program.getSourceFiles() : undefined;
+                let newSourceFiles = program ? program.getSourceFiles() : undefined;
                 forEach(cachedProgram.getSourceFiles(), sourceFile => {
                     if (!(newSourceFiles && contains(newSourceFiles, sourceFile))) {
                         if (sourceFile.fileWatcher) {
@@ -316,8 +317,8 @@ namespace ts {
         checkTime = 0;
         emitTime = 0;
 
-        var program = createProgram(fileNames, compilerOptions, compilerHost);
-        var exitStatus = compileProgram();
+        let program = createProgram(fileNames, compilerOptions, compilerHost);
+        let exitStatus = compileProgram();
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -326,7 +327,7 @@ namespace ts {
         }
 
         if (compilerOptions.diagnostics) {
-            var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
+            let memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
             reportCountStatistic("Nodes", program.getNodeCount());
@@ -354,18 +355,18 @@ namespace ts {
         return { program, exitStatus };
 
         function compileProgram(): ExitStatus {
-            // First get any syntactic errors. 
-            var diagnostics = program.getSyntacticDiagnostics();
+            // First get any syntactic errors.
+            let diagnostics = program.getSyntacticDiagnostics();
             reportDiagnostics(diagnostics);
 
-            // If we didn't have any syntactic errors, then also try getting the global and 
+            // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                var diagnostics = program.getGlobalDiagnostics();
+                let diagnostics = program.getGlobalDiagnostics();
                 reportDiagnostics(diagnostics);
 
                 if (diagnostics.length === 0) {
-                    var diagnostics = program.getSemanticDiagnostics();
+                    let diagnostics = program.getSemanticDiagnostics();
                     reportDiagnostics(diagnostics);
                 }
             }
@@ -378,7 +379,7 @@ namespace ts {
             }
 
             // Otherwise, emit and report any errors we ran into.
-            var emitOutput = program.emit();
+            let emitOutput = program.emit();
             reportDiagnostics(emitOutput.diagnostics);
 
             // If the emitter didn't emit anything, then pass that value along.
@@ -401,22 +402,22 @@ namespace ts {
     }
 
     function printHelp() {
-        var output = "";
+        let output = "";
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
-        var syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
-        var examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length;
-        var marginLength = Math.max(syntaxLength, examplesLength);
+        let syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
+        let examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length;
+        let marginLength = Math.max(syntaxLength, examplesLength);
 
         // Build up the syntactic skeleton.
-        var syntax = makePadding(marginLength - syntaxLength);
+        let syntax = makePadding(marginLength - syntaxLength);
         syntax += "tsc [" + getDiagnosticText(Diagnostics.options) + "] [" + getDiagnosticText(Diagnostics.file) + " ...]";
 
         output += getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax);
         output += sys.newLine + sys.newLine;
 
         // Build up the list of examples.
-        var padding = makePadding(marginLength);
+        let padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
         output += padding + "tsc --out file.js file.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
@@ -425,17 +426,17 @@ namespace ts {
         output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        var optsList = filter(optionDeclarations.slice(), v => !v.experimental);
+        let optsList = filter(optionDeclarations.slice(), v => !v.experimental);
         optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.
-        var marginLength = 0;
-        var usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
-        var descriptionColumn: string[] = [];
+        marginLength = 0;
+        let usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
+        let descriptionColumn: string[] = [];
 
-        for (var i = 0; i < optsList.length; i++) {
-            var option = optsList[i];
+        for (let i = 0; i < optsList.length; i++) {
+            let option = optsList[i];
 
             // If an option lacks a description,
             // it is not officially supported.
@@ -443,7 +444,7 @@ namespace ts {
                 continue;
             }
 
-            var usageText = " ";
+            let usageText = " ";
             if (option.shortName) {
                 usageText += "-" + option.shortName;
                 usageText += getParamType(option);
@@ -461,15 +462,15 @@ namespace ts {
         }
 
         // Special case that can't fit in the loop.
-        var usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
+        let usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
         usageColumn.push(usageText);
         descriptionColumn.push(getDiagnosticText(Diagnostics.Insert_command_line_options_and_files_from_a_file));
         marginLength = Math.max(usageText.length, marginLength);
 
         // Print out each row, aligning all the descriptions on the same column.
-        for (var i = 0; i < usageColumn.length; i++) {
-            var usage = usageColumn[i];
-            var description = descriptionColumn[i];
+        for (let i = 0; i < usageColumn.length; i++) {
+            let usage = usageColumn[i];
+            let description = descriptionColumn[i];
             output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
         }
 
