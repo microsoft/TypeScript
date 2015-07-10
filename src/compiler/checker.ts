@@ -876,7 +876,7 @@ namespace ts {
         }
 
         // Resolves a qualified name and any involved aliases
-        function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags): Symbol {
+        function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol {
             if (nodeIsMissing(name)) {
                 return undefined;
             }
@@ -885,7 +885,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 let message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
 
-                symbol = resolveName(name, (<Identifier>name).text, meaning, message, <Identifier>name);
+                symbol = resolveName(name, (<Identifier>name).text, meaning, ignoreErrors ? undefined : message, <Identifier>name);
                 if (!symbol) {
                     return undefined;
                 }
@@ -894,13 +894,15 @@ namespace ts {
                 let left = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).left : (<PropertyAccessExpression>name).expression;
                 let right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
 
-                let namespace = resolveEntityName(left, SymbolFlags.Namespace);
+                let namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors);
                 if (!namespace || namespace === unknownSymbol || nodeIsMissing(right)) {
                     return undefined;
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.text, meaning);
                 if (!symbol) {
-                    error(right, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace), declarationNameToString(right));
+                    if (!ignoreErrors) {
+                        error(right, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace), declarationNameToString(right));
+                    }
                     return undefined;
                 }
             }
@@ -2486,10 +2488,6 @@ namespace ts {
             return links.type;
         }
 
-        function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
-            return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
-        }
-
         function getAnnotatedAccessorType(accessor: AccessorDeclaration): Type {
             if (accessor) {
                 if (accessor.kind === SyntaxKind.GetAccessor) {
@@ -3379,6 +3377,15 @@ namespace ts {
         // maps primitive types and type parameters are to their apparent types.
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfStructuredType(getApparentType(type), kind);
+        }
+
+        function typeHasConstructSignatures(type: Type): boolean {
+            let apparentType = getApparentType(type);
+            if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Union)) {
+                let resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                return resolved.constructSignatures.length > 0;
+            }
+            return false;
         }
 
         function typeHasCallOrConstructSignatures(type: Type): boolean {
@@ -10981,13 +10988,10 @@ namespace ts {
             // as if it were an expression so that we can emit the type in a value position when we
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
-                let type = getTypeFromTypeNode(node);
-                let shouldCheckIfUnknownType = type === unknownType && compilerOptions.isolatedModules;
-                if (!type || (!shouldCheckIfUnknownType && type.flags & (TypeFlags.Intrinsic | TypeFlags.NumberLike | TypeFlags.StringLike))) {
-                    return;
-                }
-                if (shouldCheckIfUnknownType || type.symbol.valueDeclaration) {
-                    checkExpression((<TypeReferenceNode>node).typeName);
+                let root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
+                let rootSymbol = resolveName(root, root.text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
+                    markAliasSymbolAsReferenced(rootSymbol);
                 }
             }
         }
@@ -12812,7 +12816,7 @@ namespace ts {
             Debug.assert(node.kind === SyntaxKind.Identifier);
             return <Identifier>node;
         }
-
+        
         function checkExternalImportOrExportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
             let moduleName = getExternalModuleName(node);
             if (!nodeIsMissing(moduleName) && moduleName.kind !== SyntaxKind.StringLiteral) {
@@ -13958,203 +13962,52 @@ namespace ts {
             return undefined;
         }
 
-        /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeEntityName(node: EntityName, fallbackPath?: string[]): string {
-            if (node.kind === SyntaxKind.Identifier) {
-                // TODO(ron.buckton): The getExpressionNameSubstitution function has been removed, but calling it
-                // here has no effect anyway as an identifier in a type name is not an expression.
-                // var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
-                // var text = substitution || (<Identifier>node).text;
-                let text = (<Identifier>node).text;
-                if (fallbackPath) {
-                    fallbackPath.push(text);
-                }
-                else {
-                    return text;
-                }
+        function isFunctionType(type: Type): boolean {
+            return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
+        }
+        
+        function getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind {
+            // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
+            let symbol = resolveEntityName(node.typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
+            let constructorType = symbol ? getTypeOfSymbol(symbol) : undefined;
+            if (constructorType && isConstructorType(constructorType)) {
+                return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
+            }
+
+            let type = getTypeFromTypeNode(node);
+            if (type === unknownType) {
+                return TypeReferenceSerializationKind.Unknown;
+            }
+            else if (type.flags & TypeFlags.Any) {
+                return TypeReferenceSerializationKind.ObjectType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.Void)) {
+                return TypeReferenceSerializationKind.VoidType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.Boolean)) {
+                return TypeReferenceSerializationKind.BooleanType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.NumberLike)) {
+                return TypeReferenceSerializationKind.NumberLikeType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.StringLike)) {
+                return TypeReferenceSerializationKind.StringLikeType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.Tuple)) {
+                return TypeReferenceSerializationKind.ArrayLikeType;
+            }
+            else if (allConstituentTypesHaveKind(type, TypeFlags.ESSymbol)) {
+                return TypeReferenceSerializationKind.ESSymbolType;
+            }
+            else if (isFunctionType(type)) {
+                return TypeReferenceSerializationKind.TypeWithCallSignature;
+            }
+            else if (isArrayType(type)) {
+                return TypeReferenceSerializationKind.ArrayLikeType;
             }
             else {
-                let left = serializeEntityName((<QualifiedName>node).left, fallbackPath);
-                let right = serializeEntityName((<QualifiedName>node).right, fallbackPath);
-                if (!fallbackPath) {
-                    return left + "." + right;
-                }
+                return TypeReferenceSerializationKind.ObjectType;
             }
-        }
-
-        /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeTypeReferenceNode(node: TypeReferenceNode): string | string[] {
-            // serialization of a TypeReferenceNode uses the following rules:
-            //
-            // * The serialized type of a TypeReference that is `void` is "void 0".
-            // * The serialized type of a TypeReference that is a `boolean` is "Boolean".
-            // * The serialized type of a TypeReference that is an enum or `number` is "Number".
-            // * The serialized type of a TypeReference that is a string literal or `string` is "String".
-            // * The serialized type of a TypeReference that is a tuple is "Array".
-            // * The serialized type of a TypeReference that is a `symbol` is "Symbol".
-            // * The serialized type of a TypeReference with a value declaration is its entity name.
-            // * The serialized type of a TypeReference with a call or construct signature is "Function".
-            // * The serialized type of any other type is "Object".
-            let type = getTypeFromTypeNode(node);
-            if (type.flags & TypeFlags.Void) {
-                return "void 0";
-            }
-            else if (type.flags & TypeFlags.Boolean) {
-                return "Boolean";
-            }
-            else if (type.flags & TypeFlags.NumberLike) {
-                return "Number";
-            }
-            else if (type.flags & TypeFlags.StringLike) {
-                return "String";
-            }
-            else if (type.flags & TypeFlags.Tuple) {
-                return "Array";
-            }
-            else if (type.flags & TypeFlags.ESSymbol) {
-                return "Symbol";
-            }
-            else if (type === unknownType) {
-                let fallbackPath: string[] = [];
-                serializeEntityName(node.typeName, fallbackPath);
-                return fallbackPath;
-            }
-            else if (type.symbol && type.symbol.valueDeclaration) {
-                return serializeEntityName(node.typeName);
-            }
-            else if (typeHasCallOrConstructSignatures(type)) {
-                return "Function";
-            }
-
-            return "Object";
-        }
-
-        /** Serializes a TypeNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeTypeNode(node: TypeNode | LiteralExpression): string | string[] {
-            // serialization of a TypeNode uses the following rules:
-            //
-            // * The serialized type of `void` is "void 0" (undefined).
-            // * The serialized type of a parenthesized type is the serialized type of its nested type.
-            // * The serialized type of a Function or Constructor type is "Function".
-            // * The serialized type of an Array or Tuple type is "Array".
-            // * The serialized type of `boolean` is "Boolean".
-            // * The serialized type of `string` or a string-literal type is "String".
-            // * The serialized type of a type reference is handled by `serializeTypeReferenceNode`.
-            // * The serialized type of any other type node is "Object".
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.VoidKeyword:
-                        return "void 0";
-                    case SyntaxKind.ParenthesizedType:
-                        return serializeTypeNode((<ParenthesizedTypeNode>node).type);
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                        return "Function";
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                        return "Array";
-                    case SyntaxKind.BooleanKeyword:
-                        return "Boolean";
-                    case SyntaxKind.StringKeyword:
-                    case SyntaxKind.StringLiteral:
-                        return "String";
-                    case SyntaxKind.NumberKeyword:
-                        return "Number";
-                    case SyntaxKind.TypeReference:
-                        return serializeTypeReferenceNode(<TypeReferenceNode>node);
-                    case SyntaxKind.TypeQuery:
-                    case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.IntersectionType:
-                    case SyntaxKind.AnyKeyword:
-                        break;
-                    default:
-                        Debug.fail("Cannot serialize unexpected type node.");
-                        break;
-                }
-            }
-
-            return "Object";
-        }
-
-        /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the __metadata decorator for a class member. */
-        function serializeTypeOfNode(node: Node): string | string[] {
-            // serialization of the type of a declaration uses the following rules:
-            //
-            // * The serialized type of a ClassDeclaration is "Function"
-            // * The serialized type of a ParameterDeclaration is the serialized type of its type annotation.
-            // * The serialized type of a PropertyDeclaration is the serialized type of its type annotation.
-            // * The serialized type of an AccessorDeclaration is the serialized type of the return type annotation of its getter or parameter type annotation of its setter.
-            // * The serialized type of any other FunctionLikeDeclaration is "Function".
-            // * The serialized type of any other node is "void 0".
-            //
-            // For rules on serializing type annotations, see `serializeTypeNode`.
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:       return "Function";
-                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type);
-                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type);
-                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type);
-                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
-            }
-            if (isFunctionLike(node)) {
-                return "Function";
-            }
-            return "void 0";
-        }
-
-        /** Serializes the parameter types of a function or the constructor of a class. Used by the __metadata decorator for a method or set accessor. */
-        function serializeParameterTypesOfNode(node: Node): (string | string[])[] {
-            // serialization of parameter types uses the following rules:
-            //
-            // * If the declaration is a class, the parameters of the first constructor with a body are used.
-            // * If the declaration is function-like and has a body, the parameters of the function are used.
-            //
-            // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
-            if (node) {
-                let valueDeclaration: FunctionLikeDeclaration;
-                if (node.kind === SyntaxKind.ClassDeclaration) {
-                    valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
-                }
-                else if (isFunctionLike(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
-                    valueDeclaration = <FunctionLikeDeclaration>node;
-                }
-                if (valueDeclaration) {
-                    let result: (string | string[])[];
-                    let parameters = valueDeclaration.parameters;
-                    let parameterCount = parameters.length;
-                    if (parameterCount > 0) {
-                        result = new Array<string>(parameterCount);
-                        for (let i = 0; i < parameterCount; i++) {
-                            if (parameters[i].dotDotDotToken) {
-                                let parameterType = parameters[i].type;
-                                if (parameterType.kind === SyntaxKind.ArrayType) {
-                                    parameterType = (<ArrayTypeNode>parameterType).elementType;
-                                }
-                                else if (parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
-                                    parameterType = (<TypeReferenceNode>parameterType).typeArguments[0];
-                                }
-                                else {
-                                    parameterType = undefined;
-                                }
-                                result[i] = serializeTypeNode(parameterType);
-                            }
-                            else {
-                                result[i] = serializeTypeOfNode(parameters[i]);
-                            }
-                        }
-                        return result;
-                    }
-                }
-            }
-            return emptyArray;
-        }
-
-        /** Serializes the return type of function. Used by the __metadata decorator for a method. */
-        function serializeReturnTypeOfNode(node: Node): string | string[] {
-            if (node && isFunctionLike(node)) {
-                return serializeTypeNode((<FunctionLikeDeclaration>node).type);
-            }
-            return "void 0";
         }
 
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
@@ -14254,9 +14107,7 @@ namespace ts {
                 collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
-                serializeTypeOfNode,
-                serializeParameterTypesOfNode,
-                serializeReturnTypeOfNode,
+                getTypeReferenceSerializationKind,
             };
         }
 
