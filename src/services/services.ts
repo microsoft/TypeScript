@@ -3463,6 +3463,11 @@ namespace ts {
                     importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
 
                     forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                        // If this is the current item we are editing right now, do not filter it out
+                        if (el.getStart() <= position && position <= el.getEnd()) {
+                            return;
+                        }
+
                         let name = el.propertyName || el.name;
                         exisingImports[name.text] = true;
                     });
