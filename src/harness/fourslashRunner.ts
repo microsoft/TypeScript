@@ -35,9 +35,9 @@ class FourSlashRunner extends RunnerBase {
             this.tests = this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
         }
 
-            this.tests.forEach((fn: string) => {
-         describe(fn, () => {
-               fn = ts.normalizeSlashes(fn);
+        this.tests.forEach((fn: string) => {
+            describe(fn, () => {
+                fn = ts.normalizeSlashes(fn);
                 var justName = fn.replace(/^.*[\\\/]/, '');
 
                 // Convert to relative path
@@ -45,7 +45,7 @@ class FourSlashRunner extends RunnerBase {
                 if (testIndex >= 0) fn = fn.substr(testIndex);
 
                 if (justName && !justName.match(/fourslash\.ts$/i) && !justName.match(/\.d\.ts$/i)) {
-                    it(this.testSuiteName + ' test ' + justName + ' runs correctly',() => {
+                    it(this.testSuiteName + ' test ' + justName + ' runs correctly', () => {
                         FourSlash.runFourSlashTest(this.basePath, this.testType, fn);
                     });
                 }
