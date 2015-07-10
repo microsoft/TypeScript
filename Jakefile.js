@@ -361,7 +361,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*keepComments*/ true,
             /*noResolve*/ false,
             /*stripInternal*/ true,
-            /*callback*/ function () { 
+            /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
                 prependFile(copyright, standaloneDefinitionsFile);
@@ -379,12 +379,12 @@ compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(se
 
 var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
 compileFile(
-    lsslFile, 
-    languageServiceLibrarySources, 
+    lsslFile,
+    languageServiceLibrarySources,
     [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
-    /*prefixes*/ [copyright], 
-    /*useBuiltCompiler*/ true, 
-    /*noOutFile*/ false, 
+    /*prefixes*/ [copyright],
+    /*useBuiltCompiler*/ true,
+    /*noOutFile*/ false,
     /*generateDeclarations*/ true);
 
 // Local target to build the language service server library
@@ -488,7 +488,7 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler) {
+function exec(cmd, completeHandler, errorHandler) {
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
@@ -504,8 +504,12 @@ function exec(cmd, completeHandler) {
         complete();
     });
     ex.addListener("error", function(e, status) {
-        fail("Process exited with code " + status);
-    })
+        if(errorHandler) {
+            errorHandler(e, status);
+        } else {
+            fail("Process exited with code " + status);
+        }
+    });
 
     ex.run();
 }
@@ -721,3 +725,17 @@ task("update-sublime", [serverFile], function() {
     jake.cpR(serverFile, "../TypeScript-Sublime-Plugin/tsserver/");
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
 });
+
+// if the codebase were free of linter errors we could make jake runtests
+// run this task automatically
+desc("Runs tslint on the compiler sources");
+task("lint", [], function() {
+    for(var i in compilerSources) {
+        var f = compilerSources[i];
+        var cmd = 'tslint -f ' + f;
+        exec(cmd,
+            function() { console.log('SUCCESS: No linter errors'); },
+            function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n');
+        });
+    }
+}, { async: true });
