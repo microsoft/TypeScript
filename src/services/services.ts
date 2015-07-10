@@ -3524,16 +3524,16 @@ namespace ts {
             }
         }
 
-        function filterJsxAttributes(attributes: NodeArray<JsxAttribute|JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+        function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
             let seenNames: Map<boolean> = {};
-            for(let attr of attributes) {
-                if(attr.kind === SyntaxKind.JsxAttribute) {
+            for (let attr of attributes) {
+                if (attr.kind === SyntaxKind.JsxAttribute) {
                     seenNames[(<JsxAttribute>attr).name.text] = true;
                 }
             }
             let result: Symbol[] = [];
-            for(let sym of symbols) {
-                if(!seenNames[sym.name]) {
+            for (let sym of symbols) {
+                if (!seenNames[sym.name]) {
                     result.push(sym);
                 }
             }
