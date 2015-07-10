@@ -67,6 +67,12 @@ namespace ts.formatting {
         delta: number
     }
 
+    interface ListStates {
+        indentationLockable: boolean;
+        indentationLocked: boolean;
+        parentExpressionEnd: LineAndCharacter;
+    }
+
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
         let line = sourceFile.getLineAndCharacterOfPosition(position).line;
         if (line === 0) {
@@ -537,7 +543,7 @@ namespace ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListElement*/ false)
+                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListElement*/ null)
                 },
                 (nodes: NodeArray<Node>) => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -559,7 +565,7 @@ namespace ts.formatting {
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 undecoratedParentStartLine: number,
-                isListItem: boolean): number {
+                parentListStates: ListStates): number {
 
                 let childStartPos = child.getStart(sourceFile);
 
@@ -572,7 +578,7 @@ namespace ts.formatting {
 
                 // if child is a list item - try to get its indentation
                 let childIndentationAmount = Constants.Unknown;
-                if (isListItem) {
+                if (parentListStates) {
                     childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;
@@ -602,13 +608,11 @@ namespace ts.formatting {
                 }
 
                 // inherit indentation of preceding argument
-                let forceIndentationInheritance = isListItem && (
-                    parent.kind === SyntaxKind.CallExpression ||
-                    parent.kind === SyntaxKind.NewExpression);
+                let {indentationLockable, indentationLocked} = parentListStates || <ListStates>{};
 
                 if (isToken(child) && !outOfTargetRange) {
                     // replace indentation with inherited one, ignoring delta to prevent unexpected over-indentation
-                    if (forceIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
+                    if (indentationLocked) {
                         parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, 0);
                     }
 
@@ -616,17 +620,13 @@ namespace ts.formatting {
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
-                    if (forceIndentationInheritance && inheritedIndentation === Constants.Unknown) {
+                    if (checkArgumentLockIndentation()) {
+                        parentListStates.indentationLocked = true;
                         return parentDynamicIndentation.getIndentation();
                     }
                     else {
                         return inheritedIndentation;
                     }
-                }
-                
-                // replace indentation with inherited one
-                if (forceIndentationInheritance && inheritedIndentation !== Constants.Unknown) {
-                    parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, parentDynamicIndentation.getDelta());
                 }
 
                 let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
@@ -637,19 +637,32 @@ namespace ts.formatting {
                     childContextNode = node;
                 }
 
-                // prepare indentation for forced inheritance
-                if (forceIndentationInheritance) {
-                    let ancesterExpression = (<CallExpression | NewExpression>parent).expression;
-                    let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
-                    let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(child.end).line;
-
-                    // single-line argument should not affect other indentation
-                    if (ancesterExpressionEnd.line !== precedingArgumentEnd) {
-                        inheritedIndentation = childIndentation.indentation;
-                    }
+                // lock indentation as current value
+                if (checkArgumentLockIndentation()) {
+                    parentListStates.indentationLocked = true;
+                    inheritedIndentation = childIndentation.indentation;
                 }
 
                 return inheritedIndentation;
+
+                function checkArgumentLockIndentation() {
+                    if (!indentationLockable || parentListStates.indentationLocked /* already cancelled */) {
+                        return false;
+                    }
+
+                    let argumentEnd = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
+
+                    // single-line argument should not affect other indentation
+                    if (parentListStates.parentExpressionEnd.line === argumentEnd) {
+                        return false;
+                    }
+
+                    if (parentListStates.parentExpressionEnd.line !== childStartLine) {
+                        return false;
+                    }
+
+                    return true;
+                }
             }
 
             function processChildNodes(nodes: NodeArray<Node>, 
@@ -688,8 +701,15 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
+                let listElementStates = <ListStates>{};
+                if (parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression) {
+                    listElementStates.indentationLockable = true;
+                    let parentExpression = (<CallExpression | NewExpression>parent).expression;
+                    listElementStates.parentExpressionEnd = sourceFile.getLineAndCharacterOfPosition(parentExpression.getEnd());
+                }
+                
                 for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ listElementStates)
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
