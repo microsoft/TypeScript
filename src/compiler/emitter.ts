@@ -4672,6 +4672,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         write("Array");
                         return;
                         
+                    case SyntaxKind.TypePredicate:
                     case SyntaxKind.BooleanKeyword:
                         write("Boolean");
                         return;
@@ -4710,9 +4711,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
                 let typeName = node.typeName;
-                let result = resolver.isTypeWithValue(node);
+                let result = resolver.getTypeReferenceSerializationKind(node);
                 switch (result) {
-                    case TypeWithValueResolutionResult.Unknown:
+                    case TypeReferenceSerializationKind.Unknown:
                         let temp = createAndRecordTempVariable(TempFlags.Auto);
                         write("(typeof (");
                         emitNodeWithoutSourceMap(temp);
@@ -4723,31 +4724,31 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         write(") || Object");
                         break;
 
-                    case TypeWithValueResolutionResult.ConstructorTypeWithValue:
+                    case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
                         emitEntityNameAsExpression(typeName, /*useFallback*/ false);
                         break;
                         
-                    case TypeWithValueResolutionResult.VoidType:
+                    case TypeReferenceSerializationKind.VoidType:
                         write("void 0");
                         break;
                         
-                    case TypeWithValueResolutionResult.BooleanType:
+                    case TypeReferenceSerializationKind.BooleanType:
                         write("Boolean");
                         break;
                         
-                    case TypeWithValueResolutionResult.NumberType:
+                    case TypeReferenceSerializationKind.NumberLikeType:
                         write("Number");
                         break;
                         
-                    case TypeWithValueResolutionResult.StringType:
+                    case TypeReferenceSerializationKind.StringLikeType:
                         write("String");
                         break;
                         
-                    case TypeWithValueResolutionResult.ArrayType:
+                    case TypeReferenceSerializationKind.ArrayLikeType:
                         write("Array");
                         break;
                         
-                    case TypeWithValueResolutionResult.ESSymbolType:
+                    case TypeReferenceSerializationKind.ESSymbolType:
                         if (languageVersion < ScriptTarget.ES6) {
                             write("typeof Symbol === 'function' ? Symbol : Object");
                         }
@@ -4756,11 +4757,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         }
                         break;
                         
-                    case TypeWithValueResolutionResult.FunctionType:
+                    case TypeReferenceSerializationKind.TypeWithCallSignature:
                         write("Function");
                         break;
                         
-                    case TypeWithValueResolutionResult.ObjectType:
+                    case TypeReferenceSerializationKind.ObjectType:
                         write("Object");
                         break;
                 }

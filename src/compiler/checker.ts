@@ -862,7 +862,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 let message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
 
-                symbol = resolveName(name, (<Identifier>name).text, meaning, !ignoreErrors ? message : undefined, <Identifier>name);
+                symbol = resolveName(name, (<Identifier>name).text, meaning, ignoreErrors ? undefined : message, <Identifier>name);
                 if (!symbol) {
                     return undefined;
                 }
@@ -13221,47 +13221,47 @@ namespace ts {
             return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
         
-        function isTypeWithValue(node: TypeReferenceNode): TypeWithValueResolutionResult {
+        function getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             let symbol = resolveEntityName(node.typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
             let constructorType = symbol ? getTypeOfSymbol(symbol) : undefined;
             if (constructorType && isConstructorType(constructorType)) {
-                return TypeWithValueResolutionResult.ConstructorTypeWithValue;
+                return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
             }
 
             let type = getTypeFromTypeNode(node);
             if (type === unknownType) {
-                return TypeWithValueResolutionResult.Unknown;
+                return TypeReferenceSerializationKind.Unknown;
             }
             else if (type.flags & TypeFlags.Any) {
-                return TypeWithValueResolutionResult.ObjectType;
+                return TypeReferenceSerializationKind.ObjectType;
             }
             else if (allConstituentTypesHaveKind(type, TypeFlags.Void)) {
-                return TypeWithValueResolutionResult.VoidType;
+                return TypeReferenceSerializationKind.VoidType;
             }
             else if (allConstituentTypesHaveKind(type, TypeFlags.Boolean)) {
-                return TypeWithValueResolutionResult.BooleanType;
+                return TypeReferenceSerializationKind.BooleanType;
             }
             else if (allConstituentTypesHaveKind(type, TypeFlags.NumberLike)) {
-                return TypeWithValueResolutionResult.NumberType;
+                return TypeReferenceSerializationKind.NumberLikeType;
             }
             else if (allConstituentTypesHaveKind(type, TypeFlags.StringLike)) {
-                return TypeWithValueResolutionResult.StringType;
+                return TypeReferenceSerializationKind.StringLikeType;
             }
             else if (allConstituentTypesHaveKind(type, TypeFlags.Tuple)) {
-                return TypeWithValueResolutionResult.ArrayType;
+                return TypeReferenceSerializationKind.ArrayLikeType;
             }
             else if (allConstituentTypesHaveKind(type, TypeFlags.ESSymbol)) {
-                return TypeWithValueResolutionResult.ESSymbolType;
+                return TypeReferenceSerializationKind.ESSymbolType;
             }
             else if (isFunctionType(type)) {
-                return TypeWithValueResolutionResult.FunctionType;
+                return TypeReferenceSerializationKind.TypeWithCallSignature;
             }
             else if (isArrayType(type)) {
-                return TypeWithValueResolutionResult.ArrayType;
+                return TypeReferenceSerializationKind.ArrayLikeType;
             }
             else {
-                return TypeWithValueResolutionResult.ObjectType;
+                return TypeReferenceSerializationKind.ObjectType;
             }
         }
 
@@ -13362,7 +13362,7 @@ namespace ts {
                 collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
-                isTypeWithValue,
+                getTypeReferenceSerializationKind,
             };
         }
 
