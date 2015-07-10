@@ -753,7 +753,8 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
-
+        public resolvedModules: Map<string>;
+        public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
@@ -1883,7 +1884,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
+            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -2481,8 +2482,8 @@ namespace ts {
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory()
-            });
+                getCurrentDirectory: () => host.getCurrentDirectory(),
+            }, program);
 
             // Release any files we have acquired in the old program but are 
             // not part of the new program.
