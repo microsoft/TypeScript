@@ -537,6 +537,7 @@ function generateFactory(outputFile: string) {
     writer.writeLine();
     writer.increaseIndent();
     writeCreateAndUpdateFunctions();
+    writeCloneFunction();
     writer.decreaseIndent();
     writer.write(`}`);
     writer.writeLine();
@@ -719,6 +720,63 @@ function generateFactory(outputFile: string) {
         writer.writeLine();
         
         writer.write(`return false; `);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+    
+    function writeCloneFunction() {
+        writer.write(`export function cloneNode<TNode extends Node>(node: TNode): TNode;`);
+        writer.writeLine();
+
+        writer.write(`export function cloneNode(node: Node): Node {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        writer.write(`if (!node) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        writer.write(`return node;`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
+        writer.write(`switch (node.kind) {`);
+        writer.writeLine();
+        writer.increaseIndent();
+        
+        for (let syntaxNode of syntax) {
+            if (!syntaxNode.options.create) {
+                continue;
+            }
+            
+            writer.write(`case SyntaxKind.${syntaxNode.kindName}:`);
+            writer.writeLine();
+            writer.increaseIndent();
+            
+            writer.write(`return factory.create${syntaxNode.kindName}(`);
+            for (let i = 0; i < syntaxNode.members.length; ++i) {
+                if (i > 0) {
+                    writer.write(`, `);
+                }
+                
+                let member = syntaxNode.members[i];
+                writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}`);
+            }
+            
+            writer.write(`);`);
+            writer.writeLine();
+
+            writer.decreaseIndent();
+        }
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
         writer.writeLine();
         
         writer.decreaseIndent();

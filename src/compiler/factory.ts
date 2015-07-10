@@ -148,21 +148,10 @@ namespace ts {
         export function createVoidZeroExpression(): VoidExpression {
             return factory.createVoidExpression(factory.createNumericLiteral2(0));
         }
-
-        export function cloneIdentifier(node: Identifier) {
-            return factory.createIdentifier(
-                node.text);
-        }
-
-        export function cloneIdentifierOrLiteralExpression(node: Identifier | LiteralExpression) {
-            let newNode = factory.createNode<Identifier | LiteralExpression>(node.kind);
-            newNode.text = node.text;
-            return newNode;
-        }
-
+        
         export function createPropertyOrElementAccessExpression(expression: Expression, propName: Identifier | LiteralExpression): LeftHandSideExpression {
             if (!nodeIsSynthesized(propName)) {
-                propName = cloneIdentifierOrLiteralExpression(propName);
+                propName = cloneNode(propName);
             }
             
             if (propName.kind !== SyntaxKind.Identifier) {
@@ -195,6 +184,23 @@ namespace ts {
                 [
                     factory.createNumericLiteral2(sliceIndex)
                 ]
+            );
+        }
+        
+        export function createDefaultValueCheck(value: Expression, defaultValue: Expression, ensureIdentifier: (value: Expression) => Expression): Expression {
+            // The value expression will be evaluated twice, so for anything but a simple identifier
+            // we need to generate a temporary variable
+            value = ensureIdentifier(value);
+            
+            // <value> === void 0 ? <defaultValue> : <value>
+            return factory.createConditionalExpression2(
+                factory.createBinaryExpression2(
+                    value,
+                    SyntaxKind.EqualsEqualsEqualsToken,
+                    factory.createVoidZeroExpression()
+                ),
+                defaultValue,
+                value
             );
         }
     }

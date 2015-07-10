@@ -2077,6 +2077,363 @@ namespace ts {
             }
             return node;
         }
+        export function cloneNode<TNode extends Node>(node: TNode): TNode;
+        export function cloneNode(node: Node): Node {
+            if (!node) {
+                return node;
+            }
+            switch (node.kind) {
+                case SyntaxKind.NumericLiteral:
+                    return factory.createNumericLiteral((<LiteralExpression>node).text);
+                case SyntaxKind.StringLiteral:
+                    return factory.createStringLiteral((<StringLiteral>node).text);
+                case SyntaxKind.RegularExpressionLiteral:
+                    return factory.createRegularExpressionLiteral((<LiteralExpression>node).text);
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    return factory.createNoSubstitutionTemplateLiteral((<LiteralExpression>node).text);
+                case SyntaxKind.TemplateHead:
+                    return factory.createTemplateHead((<LiteralExpression>node).text);
+                case SyntaxKind.TemplateMiddle:
+                    return factory.createTemplateMiddle((<LiteralExpression>node).text);
+                case SyntaxKind.TemplateTail:
+                    return factory.createTemplateTail((<LiteralExpression>node).text);
+                case SyntaxKind.Identifier:
+                    return factory.createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind);
+                case SyntaxKind.QualifiedName:
+                    return factory.createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right);
+                case SyntaxKind.ComputedPropertyName:
+                    return factory.createComputedPropertyName((<ComputedPropertyName>node).expression);
+                case SyntaxKind.TypeParameter:
+                    return factory.createTypeParameter((<TypeParameterDeclaration>node).name, (<TypeParameterDeclaration>node).constraint, 
+                        (<TypeParameterDeclaration>node).expression);
+                case SyntaxKind.Parameter:
+                    return factory.createParameter((<ParameterDeclaration>node).decorators, (<ParameterDeclaration>node).modifiers, 
+                        (<ParameterDeclaration>node).dotDotDotToken, (<ParameterDeclaration>node).name, (<ParameterDeclaration>node).questionToken, 
+                        (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer);
+                case SyntaxKind.Decorator:
+                    return factory.createDecorator((<Decorator>node).expression);
+                case SyntaxKind.PropertySignature:
+                    return factory.createPropertySignature((<PropertySignature>node).decorators, (<PropertySignature>node).modifiers, 
+                        (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type);
+                case SyntaxKind.PropertyDeclaration:
+                    return factory.createPropertyDeclaration((<PropertyDeclaration>node).decorators, (<PropertyDeclaration>node).modifiers, 
+                        (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).questionToken, (<PropertyDeclaration>node).type, 
+                        (<PropertyDeclaration>node).initializer);
+                case SyntaxKind.MethodSignature:
+                    return factory.createMethodSignature((<MethodSignature>node).decorators, (<MethodSignature>node).modifiers, 
+                        (<MethodSignature>node).name, (<MethodSignature>node).questionToken, (<MethodSignature>node).typeParameters, 
+                        (<MethodSignature>node).parameters, (<MethodSignature>node).type);
+                case SyntaxKind.MethodDeclaration:
+                    return factory.createMethodDeclaration((<MethodDeclaration>node).decorators, (<MethodDeclaration>node).modifiers, 
+                        (<MethodDeclaration>node).name, (<MethodDeclaration>node).typeParameters, (<MethodDeclaration>node).parameters, 
+                        (<MethodDeclaration>node).type, (<MethodDeclaration>node).body);
+                case SyntaxKind.Constructor:
+                    return factory.createConstructor((<ConstructorDeclaration>node).decorators, (<ConstructorDeclaration>node).modifiers, 
+                        (<ConstructorDeclaration>node).parameters, (<ConstructorDeclaration>node).type, (<ConstructorDeclaration>node).body);
+                case SyntaxKind.GetAccessor:
+                    return factory.createGetAccessor((<GetAccessorDeclaration>node).decorators, (<GetAccessorDeclaration>node).modifiers, 
+                        (<GetAccessorDeclaration>node).name, (<GetAccessorDeclaration>node).parameters, (<GetAccessorDeclaration>node).type, 
+                        (<GetAccessorDeclaration>node).body);
+                case SyntaxKind.SetAccessor:
+                    return factory.createSetAccessor((<SetAccessorDeclaration>node).decorators, (<SetAccessorDeclaration>node).modifiers, 
+                        (<SetAccessorDeclaration>node).name, (<SetAccessorDeclaration>node).parameters, (<SetAccessorDeclaration>node).type, 
+                        (<SetAccessorDeclaration>node).body);
+                case SyntaxKind.CallSignature:
+                    return factory.createCallSignature((<CallSignatureDeclaration>node).typeParameters, (<CallSignatureDeclaration>node).parameters, 
+                        (<CallSignatureDeclaration>node).type);
+                case SyntaxKind.ConstructSignature:
+                    return factory.createConstructSignature((<ConstructSignatureDeclaration>node).typeParameters, 
+                        (<ConstructSignatureDeclaration>node).parameters, (<ConstructSignatureDeclaration>node).type);
+                case SyntaxKind.IndexSignature:
+                    return factory.createIndexSignature((<IndexSignatureDeclaration>node).decorators, (<IndexSignatureDeclaration>node).modifiers, 
+                        (<IndexSignatureDeclaration>node).parameters, (<IndexSignatureDeclaration>node).type);
+                case SyntaxKind.TypePredicate:
+                    return factory.createTypePredicate((<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type);
+                case SyntaxKind.TypeReference:
+                    return factory.createTypeReference((<TypeReferenceNode>node).typeName, (<TypeReferenceNode>node).typeArguments);
+                case SyntaxKind.FunctionType:
+                    return factory.createFunctionType((<FunctionTypeNode>node).typeParameters, (<FunctionTypeNode>node).parameters, 
+                        (<FunctionTypeNode>node).type);
+                case SyntaxKind.ConstructorType:
+                    return factory.createConstructorType((<ConstructorTypeNode>node).typeParameters, (<ConstructorTypeNode>node).parameters, 
+                        (<ConstructorTypeNode>node).type);
+                case SyntaxKind.TypeQuery:
+                    return factory.createTypeQuery((<TypeQueryNode>node).exprName);
+                case SyntaxKind.TypeLiteral:
+                    return factory.createTypeLiteral((<TypeLiteralNode>node).members);
+                case SyntaxKind.ArrayType:
+                    return factory.createArrayType((<ArrayTypeNode>node).elementType);
+                case SyntaxKind.TupleType:
+                    return factory.createTupleType((<TupleTypeNode>node).elementTypes);
+                case SyntaxKind.UnionType:
+                    return factory.createUnionType((<UnionTypeNode>node).types);
+                case SyntaxKind.IntersectionType:
+                    return factory.createIntersectionType((<IntersectionTypeNode>node).types);
+                case SyntaxKind.ParenthesizedType:
+                    return factory.createParenthesizedType((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.ObjectBindingPattern:
+                    return factory.createObjectBindingPattern((<ObjectBindingPattern>node).elements);
+                case SyntaxKind.ArrayBindingPattern:
+                    return factory.createArrayBindingPattern((<ArrayBindingPattern>node).elements);
+                case SyntaxKind.BindingElement:
+                    return factory.createBindingElement((<BindingElement>node).decorators, (<BindingElement>node).modifiers, 
+                        (<BindingElement>node).propertyName, (<BindingElement>node).dotDotDotToken, (<BindingElement>node).name, 
+                        (<BindingElement>node).initializer);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return factory.createArrayLiteralExpression((<ArrayLiteralExpression>node).elements);
+                case SyntaxKind.ObjectLiteralExpression:
+                    return factory.createObjectLiteralExpression((<ObjectLiteralExpression>node).decorators, 
+                        (<ObjectLiteralExpression>node).modifiers, (<ObjectLiteralExpression>node).properties);
+                case SyntaxKind.PropertyAccessExpression:
+                    return factory.createPropertyAccessExpression((<PropertyAccessExpression>node).expression, 
+                        (<PropertyAccessExpression>node).dotToken, (<PropertyAccessExpression>node).name);
+                case SyntaxKind.ElementAccessExpression:
+                    return factory.createElementAccessExpression((<ElementAccessExpression>node).expression, 
+                        (<ElementAccessExpression>node).argumentExpression);
+                case SyntaxKind.CallExpression:
+                    return factory.createCallExpression((<CallExpression>node).expression, (<CallExpression>node).typeArguments, 
+                        (<CallExpression>node).arguments);
+                case SyntaxKind.NewExpression:
+                    return factory.createNewExpression((<NewExpression>node).expression, (<NewExpression>node).typeArguments, 
+                        (<NewExpression>node).arguments);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return factory.createTaggedTemplateExpression((<TaggedTemplateExpression>node).tag, (<TaggedTemplateExpression>node).template);
+                case SyntaxKind.TypeAssertionExpression:
+                    return factory.createTypeAssertionExpression((<TypeAssertion>node).type, (<TypeAssertion>node).expression);
+                case SyntaxKind.ParenthesizedExpression:
+                    return factory.createParenthesizedExpression((<ParenthesizedExpression>node).expression);
+                case SyntaxKind.FunctionExpression:
+                    return factory.createFunctionExpression((<FunctionExpression>node).decorators, (<FunctionExpression>node).modifiers, 
+                        (<FunctionExpression>node).asteriskToken, (<FunctionExpression>node).name, (<FunctionExpression>node).typeParameters, 
+                        (<FunctionExpression>node).parameters, (<FunctionExpression>node).type, (<FunctionExpression>node).body);
+                case SyntaxKind.ArrowFunction:
+                    return factory.createArrowFunction((<ArrowFunction>node).decorators, (<ArrowFunction>node).modifiers, 
+                        (<ArrowFunction>node).typeParameters, (<ArrowFunction>node).parameters, (<ArrowFunction>node).type, 
+                        (<ArrowFunction>node).equalsGreaterThanToken, (<ArrowFunction>node).body);
+                case SyntaxKind.DeleteExpression:
+                    return factory.createDeleteExpression((<DeleteExpression>node).expression);
+                case SyntaxKind.TypeOfExpression:
+                    return factory.createTypeOfExpression((<TypeOfExpression>node).expression);
+                case SyntaxKind.VoidExpression:
+                    return factory.createVoidExpression((<VoidExpression>node).expression);
+                case SyntaxKind.AwaitExpression:
+                    return factory.createAwaitExpression((<AwaitExpression>node).expression);
+                case SyntaxKind.PrefixUnaryExpression:
+                    return factory.createPrefixUnaryExpression((<PrefixUnaryExpression>node).operator, (<PrefixUnaryExpression>node).operand);
+                case SyntaxKind.PostfixUnaryExpression:
+                    return factory.createPostfixUnaryExpression((<PostfixUnaryExpression>node).operand, (<PostfixUnaryExpression>node).operator);
+                case SyntaxKind.BinaryExpression:
+                    return factory.createBinaryExpression((<BinaryExpression>node).left, (<BinaryExpression>node).operatorToken, 
+                        (<BinaryExpression>node).right);
+                case SyntaxKind.ConditionalExpression:
+                    return factory.createConditionalExpression((<ConditionalExpression>node).condition, (<ConditionalExpression>node).questionToken, 
+                        (<ConditionalExpression>node).whenTrue, (<ConditionalExpression>node).colonToken, (<ConditionalExpression>node).whenFalse);
+                case SyntaxKind.TemplateExpression:
+                    return factory.createTemplateExpression((<TemplateExpression>node).head, (<TemplateExpression>node).templateSpans);
+                case SyntaxKind.YieldExpression:
+                    return factory.createYieldExpression((<YieldExpression>node).asteriskToken, (<YieldExpression>node).expression);
+                case SyntaxKind.SpreadElementExpression:
+                    return factory.createSpreadElementExpression((<SpreadElementExpression>node).expression);
+                case SyntaxKind.ClassExpression:
+                    return factory.createClassExpression((<ClassExpression>node).decorators, (<ClassExpression>node).modifiers, 
+                        (<ClassExpression>node).name, (<ClassExpression>node).typeParameters, (<ClassExpression>node).heritageClauses, 
+                        (<ClassExpression>node).members);
+                case SyntaxKind.OmittedExpression:
+                    return factory.createOmittedExpression();
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return factory.createExpressionWithTypeArguments((<ExpressionWithTypeArguments>node).expression, 
+                        (<ExpressionWithTypeArguments>node).typeArguments);
+                case SyntaxKind.AsExpression:
+                    return factory.createAsExpression((<AsExpression>node).expression, (<AsExpression>node).type);
+                case SyntaxKind.TemplateSpan:
+                    return factory.createTemplateSpan((<TemplateSpan>node).expression, (<TemplateSpan>node).literal);
+                case SyntaxKind.SemicolonClassElement:
+                    return factory.createSemicolonClassElement();
+                case SyntaxKind.Block:
+                    return factory.createBlock((<Block>node).statements);
+                case SyntaxKind.VariableStatement:
+                    return factory.createVariableStatement((<VariableStatement>node).declarationList);
+                case SyntaxKind.EmptyStatement:
+                    return factory.createEmptyStatement();
+                case SyntaxKind.ExpressionStatement:
+                    return factory.createExpressionStatement((<ExpressionStatement>node).expression);
+                case SyntaxKind.IfStatement:
+                    return factory.createIfStatement((<IfStatement>node).expression, (<IfStatement>node).thenStatement, 
+                        (<IfStatement>node).elseStatement);
+                case SyntaxKind.DoStatement:
+                    return factory.createDoStatement((<DoStatement>node).statement, (<DoStatement>node).expression);
+                case SyntaxKind.WhileStatement:
+                    return factory.createWhileStatement((<WhileStatement>node).expression, (<WhileStatement>node).statement);
+                case SyntaxKind.ForStatement:
+                    return factory.createForStatement((<ForStatement>node).initializer, (<ForStatement>node).condition, 
+                        (<ForStatement>node).incrementor, (<ForStatement>node).statement);
+                case SyntaxKind.ForInStatement:
+                    return factory.createForInStatement((<ForInStatement>node).initializer, (<ForInStatement>node).expression, 
+                        (<ForInStatement>node).statement);
+                case SyntaxKind.ForOfStatement:
+                    return factory.createForOfStatement((<ForOfStatement>node).initializer, (<ForOfStatement>node).expression, 
+                        (<ForOfStatement>node).statement);
+                case SyntaxKind.ContinueStatement:
+                    return factory.createContinueStatement((<ContinueStatement>node).label);
+                case SyntaxKind.BreakStatement:
+                    return factory.createBreakStatement((<BreakStatement>node).label);
+                case SyntaxKind.ReturnStatement:
+                    return factory.createReturnStatement((<ReturnStatement>node).expression);
+                case SyntaxKind.WithStatement:
+                    return factory.createWithStatement((<WithStatement>node).expression, (<WithStatement>node).statement);
+                case SyntaxKind.SwitchStatement:
+                    return factory.createSwitchStatement((<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock);
+                case SyntaxKind.LabeledStatement:
+                    return factory.createLabeledStatement((<LabeledStatement>node).label, (<LabeledStatement>node).statement);
+                case SyntaxKind.ThrowStatement:
+                    return factory.createThrowStatement((<ThrowStatement>node).expression);
+                case SyntaxKind.TryStatement:
+                    return factory.createTryStatement((<TryStatement>node).tryBlock, (<TryStatement>node).catchClause, 
+                        (<TryStatement>node).finallyBlock);
+                case SyntaxKind.DebuggerStatement:
+                    return factory.createDebuggerStatement();
+                case SyntaxKind.VariableDeclaration:
+                    return factory.createVariableDeclaration((<VariableDeclaration>node).decorators, (<VariableDeclaration>node).modifiers, 
+                        (<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer);
+                case SyntaxKind.VariableDeclarationList:
+                    return factory.createVariableDeclarationList((<VariableDeclarationList>node).declarations);
+                case SyntaxKind.FunctionDeclaration:
+                    return factory.createFunctionDeclaration((<FunctionDeclaration>node).decorators, (<FunctionDeclaration>node).modifiers, 
+                        (<FunctionDeclaration>node).asteriskToken, (<FunctionDeclaration>node).name, (<FunctionDeclaration>node).typeParameters, 
+                        (<FunctionDeclaration>node).parameters, (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body);
+                case SyntaxKind.ClassDeclaration:
+                    return factory.createClassDeclaration((<ClassDeclaration>node).decorators, (<ClassDeclaration>node).modifiers, 
+                        (<ClassDeclaration>node).name, (<ClassDeclaration>node).typeParameters, (<ClassDeclaration>node).heritageClauses, 
+                        (<ClassDeclaration>node).members);
+                case SyntaxKind.InterfaceDeclaration:
+                    return factory.createInterfaceDeclaration((<InterfaceDeclaration>node).decorators, (<InterfaceDeclaration>node).modifiers, 
+                        (<InterfaceDeclaration>node).name, (<InterfaceDeclaration>node).typeParameters, (<InterfaceDeclaration>node).heritageClauses, 
+                        (<InterfaceDeclaration>node).members);
+                case SyntaxKind.TypeAliasDeclaration:
+                    return factory.createTypeAliasDeclaration((<TypeAliasDeclaration>node).decorators, (<TypeAliasDeclaration>node).modifiers, 
+                        (<TypeAliasDeclaration>node).name, (<TypeAliasDeclaration>node).typeParameters, (<TypeAliasDeclaration>node).type);
+                case SyntaxKind.EnumDeclaration:
+                    return factory.createEnumDeclaration((<EnumDeclaration>node).decorators, (<EnumDeclaration>node).modifiers, 
+                        (<EnumDeclaration>node).name, (<EnumDeclaration>node).members);
+                case SyntaxKind.ModuleDeclaration:
+                    return factory.createModuleDeclaration((<ModuleDeclaration>node).decorators, (<ModuleDeclaration>node).modifiers, 
+                        (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body);
+                case SyntaxKind.ModuleBlock:
+                    return factory.createModuleBlock((<ModuleBlock>node).statements);
+                case SyntaxKind.CaseBlock:
+                    return factory.createCaseBlock((<CaseBlock>node).clauses);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return factory.createImportEqualsDeclaration((<ImportEqualsDeclaration>node).decorators, 
+                        (<ImportEqualsDeclaration>node).modifiers, (<ImportEqualsDeclaration>node).name, 
+                        (<ImportEqualsDeclaration>node).moduleReference);
+                case SyntaxKind.ImportDeclaration:
+                    return factory.createImportDeclaration((<ImportDeclaration>node).decorators, (<ImportDeclaration>node).modifiers, 
+                        (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier);
+                case SyntaxKind.ImportClause:
+                    return factory.createImportClause((<ImportClause>node).name, (<ImportClause>node).namedBindings);
+                case SyntaxKind.NamespaceImport:
+                    return factory.createNamespaceImport((<NamespaceImport>node).name);
+                case SyntaxKind.NamedImports:
+                    return factory.createNamedImports((<NamedImports>node).elements);
+                case SyntaxKind.ImportSpecifier:
+                    return factory.createImportSpecifier((<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name);
+                case SyntaxKind.ExportAssignment:
+                    return factory.createExportAssignment((<ExportAssignment>node).decorators, (<ExportAssignment>node).modifiers, 
+                        (<ExportAssignment>node).expression);
+                case SyntaxKind.ExportDeclaration:
+                    return factory.createExportDeclaration((<ExportDeclaration>node).decorators, (<ExportDeclaration>node).modifiers, 
+                        (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier);
+                case SyntaxKind.NamedExports:
+                    return factory.createNamedExports((<NamedExports>node).elements);
+                case SyntaxKind.ExportSpecifier:
+                    return factory.createExportSpecifier((<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name);
+                case SyntaxKind.MissingDeclaration:
+                    return factory.createMissingDeclaration((<MissingDeclaration>node).decorators, (<MissingDeclaration>node).modifiers);
+                case SyntaxKind.ExternalModuleReference:
+                    return factory.createExternalModuleReference((<ExternalModuleReference>node).expression);
+                case SyntaxKind.JsxElement:
+                    return factory.createJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children, (<JsxElement>node).closingElement
+                        );
+                case SyntaxKind.JsxSelfClosingElement:
+                    return factory.createJsxSelfClosingElement((<JsxSelfClosingElement>node).tagName, (<JsxSelfClosingElement>node).attributes);
+                case SyntaxKind.JsxOpeningElement:
+                    return factory.createJsxOpeningElement((<JsxOpeningElement>node).tagName, (<JsxOpeningElement>node).attributes);
+                case SyntaxKind.JsxText:
+                    return factory.createJsxText();
+                case SyntaxKind.JsxClosingElement:
+                    return factory.createJsxClosingElement((<JsxClosingElement>node).tagName);
+                case SyntaxKind.JsxAttribute:
+                    return factory.createJsxAttribute((<JsxAttribute>node).name, (<JsxAttribute>node).initializer);
+                case SyntaxKind.JsxSpreadAttribute:
+                    return factory.createJsxSpreadAttribute((<JsxSpreadAttribute>node).expression);
+                case SyntaxKind.JsxExpression:
+                    return factory.createJsxExpression((<JsxExpression>node).expression);
+                case SyntaxKind.CaseClause:
+                    return factory.createCaseClause((<CaseClause>node).expression, (<CaseClause>node).statements);
+                case SyntaxKind.DefaultClause:
+                    return factory.createDefaultClause((<DefaultClause>node).statements);
+                case SyntaxKind.HeritageClause:
+                    return factory.createHeritageClause((<HeritageClause>node).types);
+                case SyntaxKind.CatchClause:
+                    return factory.createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block);
+                case SyntaxKind.PropertyAssignment:
+                    return factory.createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).questionToken, 
+                        (<PropertyAssignment>node).initializer);
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    return factory.createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, 
+                        (<ShorthandPropertyAssignment>node).questionToken);
+                case SyntaxKind.EnumMember:
+                    return factory.createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer);
+                case SyntaxKind.JSDocTypeExpression:
+                    return factory.createJSDocTypeExpression((<JSDocTypeExpression>node).type);
+                case SyntaxKind.JSDocAllType:
+                    return factory.createJSDocAllType();
+                case SyntaxKind.JSDocUnknownType:
+                    return factory.createJSDocUnknownType();
+                case SyntaxKind.JSDocArrayType:
+                    return factory.createJSDocArrayType((<JSDocArrayType>node).elementType);
+                case SyntaxKind.JSDocUnionType:
+                    return factory.createJSDocUnionType((<JSDocUnionType>node).types);
+                case SyntaxKind.JSDocTupleType:
+                    return factory.createJSDocTupleType((<JSDocTupleType>node).types);
+                case SyntaxKind.JSDocNullableType:
+                    return factory.createJSDocNullableType((<JSDocNullableType>node).type);
+                case SyntaxKind.JSDocNonNullableType:
+                    return factory.createJSDocNonNullableType((<JSDocNonNullableType>node).type);
+                case SyntaxKind.JSDocRecordType:
+                    return factory.createJSDocRecordType((<JSDocRecordType>node).members);
+                case SyntaxKind.JSDocRecordMember:
+                    return factory.createJSDocRecordMember((<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type);
+                case SyntaxKind.JSDocTypeReference:
+                    return factory.createJSDocTypeReference((<JSDocTypeReference>node).name, (<JSDocTypeReference>node).typeArguments);
+                case SyntaxKind.JSDocOptionalType:
+                    return factory.createJSDocOptionalType((<JSDocOptionalType>node).type);
+                case SyntaxKind.JSDocFunctionType:
+                    return factory.createJSDocFunctionType((<JSDocFunctionType>node).parameters, (<JSDocFunctionType>node).type);
+                case SyntaxKind.JSDocVariadicType:
+                    return factory.createJSDocVariadicType((<JSDocVariadicType>node).type);
+                case SyntaxKind.JSDocConstructorType:
+                    return factory.createJSDocConstructorType((<JSDocConstructorType>node).type);
+                case SyntaxKind.JSDocThisType:
+                    return factory.createJSDocThisType((<JSDocThisType>node).type);
+                case SyntaxKind.JSDocComment:
+                    return factory.createJSDocComment((<JSDocComment>node).tags);
+                case SyntaxKind.JSDocTag:
+                    return factory.createJSDocTag((<JSDocTag>node).atToken, (<JSDocTag>node).tagName);
+                case SyntaxKind.JSDocParameterTag:
+                    return factory.createJSDocParameterTag((<JSDocParameterTag>node).preParameterName, (<JSDocParameterTag>node).typeExpression, 
+                        (<JSDocParameterTag>node).postParameterName, (<JSDocParameterTag>node).atToken, (<JSDocParameterTag>node).tagName);
+                case SyntaxKind.JSDocReturnTag:
+                    return factory.createJSDocReturnTag((<JSDocReturnTag>node).typeExpression, (<JSDocReturnTag>node).atToken, 
+                        (<JSDocReturnTag>node).tagName);
+                case SyntaxKind.JSDocTypeTag:
+                    return factory.createJSDocTypeTag((<JSDocTypeTag>node).typeExpression, (<JSDocTypeTag>node).atToken, (<JSDocTypeTag>node).tagName
+                        );
+                case SyntaxKind.JSDocTemplateTag:
+                    return factory.createJSDocTemplateTag((<JSDocTemplateTag>node).typeParameters, (<JSDocTemplateTag>node).atToken, 
+                        (<JSDocTemplateTag>node).tagName);
+            }
+        }
     }
     export function isNumericLiteral(node: Node): node is LiteralExpression {
         return node && node.kind === SyntaxKind.NumericLiteral;
