@@ -16,9 +16,11 @@ namespace ts {
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         let declarations = symbol.declarations;
-        for (let declaration of declarations) {
-            if (declaration.kind === kind) {
-                return declaration;
+        if (declarations) {
+            for (let declaration of declarations) {
+                if (declaration.kind === kind) {
+                    return declaration;
+                }
             }
         }
 

@@ -13414,18 +13414,25 @@ namespace ts {
                             copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember);
                             break;
                         case SyntaxKind.ClassExpression:
-                            if ((<ClassExpression>location).name) {
+                            let className = (<ClassExpression>location).name;
+                            if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                        // Fall through
+                            // fall through; this fall-through is necessary because we would like to handle
+                            // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
+                            // If we didn't come from static member of class or interface,
+                            // add the type parameters into the symbol table 
+                            // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
+                            // Note: that the memberFlags come from previous iteration.
                             if (!(memberFlags & NodeFlags.Static)) {
                                 copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
-                            if ((<FunctionExpression>location).name) {
+                            let funcName = (<FunctionExpression>location).name;
+                            if (funcName) {
                                 copySymbol(location.symbol, meaning);
                             }
                             break;
@@ -13438,11 +13445,20 @@ namespace ts {
                 copySymbols(globals, meaning);
             }
 
-            // Returns 'true' if we should stop processing symbols.
+            /**
+             * Copy the given symbol into symbol tables if the symbol has the given meaning
+             * and it doesn't already existed in the symbol table
+             * @param key a key for storing in symbol table; if undefined, use symbol.name
+             * @param symbol the symbol to be added into symbol table
+             * @param meaning meaning of symbol to filter by before adding to symbol table
+             */
             function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
                 if (symbol.flags & meaning) {
                     let id = symbol.name;
-                    if (!isReservedMemberName(id) && !hasProperty(symbols, id)) {
+                    // We will copy all symbol regardless of its reserved name because
+                    // symbolsToArray will check whether the key is a reserved name and
+                    // it will not copy symbol with reserved name to the array
+                    if (!hasProperty(symbols, id)) {
                         symbols[id] = symbol;
                     }
                 }
@@ -13451,9 +13467,8 @@ namespace ts {
             function copySymbols(source: SymbolTable, meaning: SymbolFlags): void {
                 if (meaning) {
                     for (let id in source) {
-                        if (hasProperty(source, id)) {
-                            copySymbol(source[id], meaning);
-                        }
+                        let symbol = source[id];
+                        copySymbol(symbol, meaning);
                     }
                 }
             }
