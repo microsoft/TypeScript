@@ -5998,20 +5998,39 @@ namespace ts {
                 if (type.flags & TypeFlags.Any) {
                     return type;
                 }
+
                 let signature = getResolvedSignature(expr);
 
                 if (signature.typePredicate &&
-                    expr.arguments[signature.typePredicate.parameterIndex] &&
-                    getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
+                    expr.arguments[signature.typePredicate.parameterIndex]) {
 
-                    if (!assumeTrue) {
-                        if (type.flags & TypeFlags.Union) {
-                            return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, signature.typePredicate.type)));
-                        }
-                        return type;
+                    let arg = expr.arguments[signature.typePredicate.parameterIndex];
+                    if (arg.kind === SyntaxKind.Identifier && getSymbolAtLocation(arg) === symbol) {
+                        return narrowType();
                     }
-                    return getNarrowedType(type, signature.typePredicate.type);
+                    else if (arg.kind === SyntaxKind.AsExpression || arg.kind === SyntaxKind.TypeAssertionExpression) {
+                        if ((<AssertionExpression>arg).expression) {
+                            if ((<AssertionExpression>arg).expression.kind === SyntaxKind.Identifier &&
+                                getSymbolAtLocation((<AssertionExpression>arg).expression) === symbol) {
+
+                                return narrowType();
+                            }
+                        }
+                    }
+
+                    // TODO: Handle property access expression
+
+                    function narrowType(): Type {
+                        if (!assumeTrue) {
+                            if (type.flags & TypeFlags.Union) {
+                                return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, signature.typePredicate.type)));
+                            }
+                            return type;
+                        }
+                        return getNarrowedType(type, signature.typePredicate.type);
+                    }
                 }
+
                 return type;
             }
 
@@ -8011,7 +8030,6 @@ namespace ts {
 
             return args;
         }
-
 
         /**
           * Returns the effective argument count for a node that works like a function invocation.

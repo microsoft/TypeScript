@@ -38,6 +38,14 @@ if(isA(union)) {
     union.propA;
 }
 
+// Type assertions
+if (isA(<A>union)) {
+    a = union;
+}
+if (isA(union as A)) {
+    a = union;
+}
+
 // Call signature
 interface I1 {
     (p1: A): p1 is C;
@@ -83,6 +91,7 @@ acceptingTypeGuardFunction(isA);
 let union2: C | B;
 let union3: boolean | B = isA(union2) || union2;
 
+
 //// [typeGuardFunction.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -121,6 +130,13 @@ if (isA(subType)) {
 var union;
 if (isA(union)) {
     union.propA;
+}
+// Type assertions
+if (isA(union)) {
+    a = union;
+}
+if (isA(union)) {
+    a = union;
 }
 if (isC_multipleParams(a, 0)) {
     a.propC;

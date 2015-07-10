@@ -847,8 +847,8 @@ namespace ts {
     }
 
     export interface TypeAssertion extends UnaryExpression {
-        type: TypeNode;
         expression: UnaryExpression;
+        type: TypeNode;
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;

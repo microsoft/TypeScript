@@ -37,6 +37,14 @@ if(isA(union)) {
     union.propA;
 }
 
+// Type assertions
+if (isA(<A>union)) {
+    a = union;
+}
+if (isA(union as A)) {
+    a = union;
+}
+
 // Call signature
 interface I1 {
     (p1: A): p1 is C;
