@@ -3,51 +3,51 @@
 /// <reference path="factory.ts" />
 namespace ts {
     export namespace factory {
-        export function createNumericLiteral(text?: string, location?: TextRange): LiteralExpression {
-            let node = createNode<LiteralExpression>(SyntaxKind.NumericLiteral, location);
+        export function createNumericLiteral(text?: string): LiteralExpression {
+            let node = createNode<LiteralExpression>(SyntaxKind.NumericLiteral);
             node.text = text;
             return node;
         }
-        export function createStringLiteral(text?: string, location?: TextRange): StringLiteral {
-            let node = createNode<StringLiteral>(SyntaxKind.StringLiteral, location);
+        export function createStringLiteral(text?: string): StringLiteral {
+            let node = createNode<StringLiteral>(SyntaxKind.StringLiteral);
             node.text = text;
             return node;
         }
-        export function createRegularExpressionLiteral(text?: string, location?: TextRange): LiteralExpression {
-            let node = createNode<LiteralExpression>(SyntaxKind.RegularExpressionLiteral, location);
+        export function createRegularExpressionLiteral(text?: string): LiteralExpression {
+            let node = createNode<LiteralExpression>(SyntaxKind.RegularExpressionLiteral);
             node.text = text;
             return node;
         }
-        export function createNoSubstitutionTemplateLiteral(text?: string, location?: TextRange): LiteralExpression {
-            let node = createNode<LiteralExpression>(SyntaxKind.NoSubstitutionTemplateLiteral, location);
+        export function createNoSubstitutionTemplateLiteral(text?: string): LiteralExpression {
+            let node = createNode<LiteralExpression>(SyntaxKind.NoSubstitutionTemplateLiteral);
             node.text = text;
             return node;
         }
-        export function createTemplateHead(text?: string, location?: TextRange): LiteralExpression {
-            let node = createNode<LiteralExpression>(SyntaxKind.TemplateHead, location);
+        export function createTemplateHead(text?: string): LiteralExpression {
+            let node = createNode<LiteralExpression>(SyntaxKind.TemplateHead);
             node.text = text;
             return node;
         }
-        export function createTemplateMiddle(text?: string, location?: TextRange): LiteralExpression {
-            let node = createNode<LiteralExpression>(SyntaxKind.TemplateMiddle, location);
+        export function createTemplateMiddle(text?: string): LiteralExpression {
+            let node = createNode<LiteralExpression>(SyntaxKind.TemplateMiddle);
             node.text = text;
             return node;
         }
-        export function createTemplateTail(text?: string, location?: TextRange): LiteralExpression {
-            let node = createNode<LiteralExpression>(SyntaxKind.TemplateTail, location);
+        export function createTemplateTail(text?: string): LiteralExpression {
+            let node = createNode<LiteralExpression>(SyntaxKind.TemplateTail);
             node.text = text;
             return node;
         }
-        export function createIdentifier(text?: string, originalKeywordKind?: SyntaxKind, location?: TextRange): Identifier {
-            let node = createNode<Identifier>(SyntaxKind.Identifier, location);
+        export function createIdentifier(text?: string, originalKeywordKind?: SyntaxKind): Identifier {
+            let node = createNode<Identifier>(SyntaxKind.Identifier);
             if (arguments.length) {
                 node.text = text;
                 node.originalKeywordKind = originalKeywordKind;
             }
             return node;
         }
-        export function createQualifiedName(left?: EntityName, right?: Identifier, location?: TextRange): QualifiedName {
-            let node = createNode<QualifiedName>(SyntaxKind.QualifiedName, location);
+        export function createQualifiedName(left?: EntityName, right?: Identifier): QualifiedName {
+            let node = createNode<QualifiedName>(SyntaxKind.QualifiedName);
             if (arguments.length) {
                 node.left = left;
                 node.right = right;
@@ -61,8 +61,8 @@ namespace ts {
             }
             return node;
         }
-        export function createComputedPropertyName(expression?: Expression, location?: TextRange): ComputedPropertyName {
-            let node = createNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName, location);
+        export function createComputedPropertyName(expression?: Expression): ComputedPropertyName {
+            let node = createNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName);
             node.expression = expression;
             return node;
         }
@@ -73,9 +73,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeParameter(name?: Identifier, constraint?: TypeNode, expression?: Expression, 
-            location?: TextRange): TypeParameterDeclaration {
-            let node = createNode<TypeParameterDeclaration>(SyntaxKind.TypeParameter, location);
+        export function createTypeParameter(name?: Identifier, constraint?: TypeNode, expression?: Expression): TypeParameterDeclaration {
+            let node = createNode<TypeParameterDeclaration>(SyntaxKind.TypeParameter);
             if (arguments.length) {
                 node.name = name;
                 node.constraint = constraint;
@@ -92,9 +91,8 @@ namespace ts {
             return node;
         }
         export function createParameter(decorators?: Array<Decorator>, modifiers?: Array<Node>, dotDotDotToken?: Node, 
-            name?: Identifier | BindingPattern, questionToken?: Node, type?: TypeNode, initializer?: Expression, 
-            location?: TextRange): ParameterDeclaration {
-            let node = createNode<ParameterDeclaration>(SyntaxKind.Parameter, location);
+            name?: BindingPattern | Identifier, questionToken?: Node, type?: TypeNode, initializer?: Expression): ParameterDeclaration {
+            let node = createNode<ParameterDeclaration>(SyntaxKind.Parameter);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -107,7 +105,7 @@ namespace ts {
             return node;
         }
         export function updateParameter(node: ParameterDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
-            , name: Identifier | BindingPattern, type: TypeNode, initializer: Expression): ParameterDeclaration {
+            , name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): ParameterDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer);
@@ -115,8 +113,8 @@ namespace ts {
             }
             return node;
         }
-        export function createDecorator(expression?: LeftHandSideExpression, location?: TextRange): Decorator {
-            let node = createNode<Decorator>(SyntaxKind.Decorator, location);
+        export function createDecorator(expression?: LeftHandSideExpression): Decorator {
+            let node = createNode<Decorator>(SyntaxKind.Decorator);
             node.expression = expression;
             return node;
         }
@@ -128,8 +126,8 @@ namespace ts {
             return node;
         }
         export function createPropertySignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, questionToken?: Node, 
-            type?: TypeNode, location?: TextRange): PropertySignature {
-            let node = createNode<PropertySignature>(SyntaxKind.PropertySignature, location);
+            type?: TypeNode): PropertySignature {
+            let node = createNode<PropertySignature>(SyntaxKind.PropertySignature);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -148,8 +146,8 @@ namespace ts {
             return node;
         }
         export function createPropertyDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
-            questionToken?: Node, type?: TypeNode, initializer?: Expression, location?: TextRange): PropertyDeclaration {
-            let node = createNode<PropertyDeclaration>(SyntaxKind.PropertyDeclaration, location);
+            questionToken?: Node, type?: TypeNode, initializer?: Expression): PropertyDeclaration {
+            let node = createNode<PropertyDeclaration>(SyntaxKind.PropertyDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -170,9 +168,8 @@ namespace ts {
             return node;
         }
         export function createMethodSignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, questionToken?: Node, 
-            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, 
-            location?: TextRange): MethodSignature {
-            let node = createNode<MethodSignature>(SyntaxKind.MethodSignature, location);
+            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode): MethodSignature {
+            let node = createNode<MethodSignature>(SyntaxKind.MethodSignature);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -194,9 +191,9 @@ namespace ts {
             return node;
         }
         export function createMethodDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
-            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
-            location?: TextRange): MethodDeclaration {
-            let node = createNode<MethodDeclaration>(SyntaxKind.MethodDeclaration, location);
+            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block
+            ): MethodDeclaration {
+            let node = createNode<MethodDeclaration>(SyntaxKind.MethodDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -219,8 +216,8 @@ namespace ts {
             return node;
         }
         export function createConstructor(decorators?: Array<Decorator>, modifiers?: Array<Node>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, body?: Block, location?: TextRange): ConstructorDeclaration {
-            let node = createNode<ConstructorDeclaration>(SyntaxKind.Constructor, location);
+            type?: TypeNode, body?: Block): ConstructorDeclaration {
+            let node = createNode<ConstructorDeclaration>(SyntaxKind.Constructor);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -240,8 +237,8 @@ namespace ts {
             return node;
         }
         export function createGetAccessor(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
-            parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, location?: TextRange): GetAccessorDeclaration {
-            let node = createNode<GetAccessorDeclaration>(SyntaxKind.GetAccessor, location);
+            parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block): GetAccessorDeclaration {
+            let node = createNode<GetAccessorDeclaration>(SyntaxKind.GetAccessor);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -262,8 +259,8 @@ namespace ts {
             return node;
         }
         export function createSetAccessor(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
-            parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, location?: TextRange): SetAccessorDeclaration {
-            let node = createNode<SetAccessorDeclaration>(SyntaxKind.SetAccessor, location);
+            parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block): SetAccessorDeclaration {
+            let node = createNode<SetAccessorDeclaration>(SyntaxKind.SetAccessor);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -284,8 +281,8 @@ namespace ts {
             return node;
         }
         export function createCallSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange): CallSignatureDeclaration {
-            let node = createNode<CallSignatureDeclaration>(SyntaxKind.CallSignature, location);
+            type?: TypeNode): CallSignatureDeclaration {
+            let node = createNode<CallSignatureDeclaration>(SyntaxKind.CallSignature);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
@@ -302,8 +299,8 @@ namespace ts {
             return node;
         }
         export function createConstructSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange): ConstructSignatureDeclaration {
-            let node = createNode<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature, location);
+            type?: TypeNode): ConstructSignatureDeclaration {
+            let node = createNode<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
@@ -320,8 +317,8 @@ namespace ts {
             return node;
         }
         export function createIndexSignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange): IndexSignatureDeclaration {
-            let node = createNode<IndexSignatureDeclaration>(SyntaxKind.IndexSignature, location);
+            type?: TypeNode): IndexSignatureDeclaration {
+            let node = createNode<IndexSignatureDeclaration>(SyntaxKind.IndexSignature);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -338,8 +335,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypePredicate(parameterName?: Identifier, type?: TypeNode, location?: TextRange): TypePredicateNode {
-            let node = createNode<TypePredicateNode>(SyntaxKind.TypePredicate, location);
+        export function createTypePredicate(parameterName?: Identifier, type?: TypeNode): TypePredicateNode {
+            let node = createNode<TypePredicateNode>(SyntaxKind.TypePredicate);
             if (arguments.length) {
                 node.parameterName = parameterName;
                 node.type = type;
@@ -353,8 +350,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeReference(typeName?: EntityName, typeArguments?: Array<TypeNode>, location?: TextRange): TypeReferenceNode {
-            let node = createNode<TypeReferenceNode>(SyntaxKind.TypeReference, location);
+        export function createTypeReference(typeName?: EntityName, typeArguments?: Array<TypeNode>): TypeReferenceNode {
+            let node = createNode<TypeReferenceNode>(SyntaxKind.TypeReference);
             if (arguments.length) {
                 node.typeName = typeName;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
@@ -369,8 +366,8 @@ namespace ts {
             return node;
         }
         export function createFunctionType(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange): FunctionTypeNode {
-            let node = createNode<FunctionTypeNode>(SyntaxKind.FunctionType, location);
+            type?: TypeNode): FunctionTypeNode {
+            let node = createNode<FunctionTypeNode>(SyntaxKind.FunctionType);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
@@ -387,8 +384,8 @@ namespace ts {
             return node;
         }
         export function createConstructorType(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange): ConstructorTypeNode {
-            let node = createNode<ConstructorTypeNode>(SyntaxKind.ConstructorType, location);
+            type?: TypeNode): ConstructorTypeNode {
+            let node = createNode<ConstructorTypeNode>(SyntaxKind.ConstructorType);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
@@ -404,8 +401,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeQuery(exprName?: EntityName, location?: TextRange): TypeQueryNode {
-            let node = createNode<TypeQueryNode>(SyntaxKind.TypeQuery, location);
+        export function createTypeQuery(exprName?: EntityName): TypeQueryNode {
+            let node = createNode<TypeQueryNode>(SyntaxKind.TypeQuery);
             node.exprName = exprName;
             return node;
         }
@@ -416,8 +413,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeLiteral(members?: Array<Node>, location?: TextRange): TypeLiteralNode {
-            let node = createNode<TypeLiteralNode>(SyntaxKind.TypeLiteral, location);
+        export function createTypeLiteral(members?: Array<Node>): TypeLiteralNode {
+            let node = createNode<TypeLiteralNode>(SyntaxKind.TypeLiteral);
             node.members = members && createNodeArray(members)
             return node;
         }
@@ -428,8 +425,8 @@ namespace ts {
             }
             return node;
         }
-        export function createArrayType(elementType?: TypeNode, location?: TextRange): ArrayTypeNode {
-            let node = createNode<ArrayTypeNode>(SyntaxKind.ArrayType, location);
+        export function createArrayType(elementType?: TypeNode): ArrayTypeNode {
+            let node = createNode<ArrayTypeNode>(SyntaxKind.ArrayType);
             node.elementType = elementType;
             return node;
         }
@@ -440,8 +437,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTupleType(elementTypes?: Array<TypeNode>, location?: TextRange): TupleTypeNode {
-            let node = createNode<TupleTypeNode>(SyntaxKind.TupleType, location);
+        export function createTupleType(elementTypes?: Array<TypeNode>): TupleTypeNode {
+            let node = createNode<TupleTypeNode>(SyntaxKind.TupleType);
             node.elementTypes = elementTypes && createNodeArray(elementTypes)
             return node;
         }
@@ -452,8 +449,8 @@ namespace ts {
             }
             return node;
         }
-        export function createUnionType(types?: Array<TypeNode>, location?: TextRange): UnionTypeNode {
-            let node = createNode<UnionTypeNode>(SyntaxKind.UnionType, location);
+        export function createUnionType(types?: Array<TypeNode>): UnionTypeNode {
+            let node = createNode<UnionTypeNode>(SyntaxKind.UnionType);
             node.types = types && createNodeArray(types)
             return node;
         }
@@ -464,8 +461,8 @@ namespace ts {
             }
             return node;
         }
-        export function createIntersectionType(types?: Array<TypeNode>, location?: TextRange): IntersectionTypeNode {
-            let node = createNode<IntersectionTypeNode>(SyntaxKind.IntersectionType, location);
+        export function createIntersectionType(types?: Array<TypeNode>): IntersectionTypeNode {
+            let node = createNode<IntersectionTypeNode>(SyntaxKind.IntersectionType);
             node.types = types && createNodeArray(types)
             return node;
         }
@@ -476,8 +473,8 @@ namespace ts {
             }
             return node;
         }
-        export function createParenthesizedType(type?: TypeNode, location?: TextRange): ParenthesizedTypeNode {
-            let node = createNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType, location);
+        export function createParenthesizedType(type?: TypeNode): ParenthesizedTypeNode {
+            let node = createNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType);
             node.type = type;
             return node;
         }
@@ -488,8 +485,8 @@ namespace ts {
             }
             return node;
         }
-        export function createObjectBindingPattern(elements?: Array<BindingElement>, location?: TextRange): ObjectBindingPattern {
-            let node = createNode<ObjectBindingPattern>(SyntaxKind.ObjectBindingPattern, location);
+        export function createObjectBindingPattern(elements?: Array<BindingElement>): ObjectBindingPattern {
+            let node = createNode<ObjectBindingPattern>(SyntaxKind.ObjectBindingPattern);
             node.elements = elements && createNodeArray(elements)
             return node;
         }
@@ -500,8 +497,8 @@ namespace ts {
             }
             return node;
         }
-        export function createArrayBindingPattern(elements?: Array<BindingElement>, location?: TextRange): ArrayBindingPattern {
-            let node = createNode<ArrayBindingPattern>(SyntaxKind.ArrayBindingPattern, location);
+        export function createArrayBindingPattern(elements?: Array<BindingElement>): ArrayBindingPattern {
+            let node = createNode<ArrayBindingPattern>(SyntaxKind.ArrayBindingPattern);
             node.elements = elements && createNodeArray(elements)
             return node;
         }
@@ -512,9 +509,9 @@ namespace ts {
             }
             return node;
         }
-        export function createBindingElement(decorators?: Array<Decorator>, modifiers?: Array<Node>, propertyName?: Identifier, 
-            dotDotDotToken?: Node, name?: Identifier | BindingPattern, initializer?: Expression, location?: TextRange): BindingElement {
-            let node = createNode<BindingElement>(SyntaxKind.BindingElement, location);
+        export function createBindingElement(decorators?: Array<Decorator>, modifiers?: Array<Node>, propertyName?: Identifier, dotDotDotToken?: Node
+            , name?: BindingPattern | Identifier, initializer?: Expression): BindingElement {
+            let node = createNode<BindingElement>(SyntaxKind.BindingElement);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -526,7 +523,7 @@ namespace ts {
             return node;
         }
         export function updateBindingElement(node: BindingElement, decorators: Array<Decorator>, modifiers: Array<Node>, propertyName: Identifier
-            , name: Identifier | BindingPattern, initializer: Expression): BindingElement {
+            , name: BindingPattern | Identifier, initializer: Expression): BindingElement {
             if (decorators !== node.decorators || modifiers !== node.modifiers || propertyName !== node.propertyName || name !== node.name || 
                 initializer !== node.initializer) {
                 let newNode = createBindingElement(decorators, modifiers, propertyName, node.dotDotDotToken, name, initializer);
@@ -534,8 +531,8 @@ namespace ts {
             }
             return node;
         }
-        export function createArrayLiteralExpression(elements?: Array<Expression>, location?: TextRange): ArrayLiteralExpression {
-            let node = createNode<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression, location);
+        export function createArrayLiteralExpression(elements?: Array<Expression>): ArrayLiteralExpression {
+            let node = createNode<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
             node.elements = elements && createNodeArray(elements)
             return node;
         }
@@ -547,8 +544,8 @@ namespace ts {
             return node;
         }
         export function createObjectLiteralExpression(decorators?: Array<Decorator>, modifiers?: Array<Node>, 
-            properties?: Array<ObjectLiteralElement>, location?: TextRange): ObjectLiteralExpression {
-            let node = createNode<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression, location);
+            properties?: Array<ObjectLiteralElement>): ObjectLiteralExpression {
+            let node = createNode<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -564,9 +561,9 @@ namespace ts {
             }
             return node;
         }
-        export function createPropertyAccessExpression(expression?: LeftHandSideExpression, dotToken?: Node, name?: Identifier, 
-            location?: TextRange): PropertyAccessExpression {
-            let node = createNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression, location);
+        export function createPropertyAccessExpression(expression?: LeftHandSideExpression, dotToken?: Node, name?: Identifier
+            ): PropertyAccessExpression {
+            let node = createNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
             if (arguments.length) {
                 node.expression = expression;
                 node.dotToken = dotToken;
@@ -582,9 +579,9 @@ namespace ts {
             }
             return node;
         }
-        export function createElementAccessExpression(expression?: LeftHandSideExpression, argumentExpression?: Expression, 
-            location?: TextRange): ElementAccessExpression {
-            let node = createNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression, location);
+        export function createElementAccessExpression(expression?: LeftHandSideExpression, argumentExpression?: Expression
+            ): ElementAccessExpression {
+            let node = createNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
             if (arguments.length) {
                 node.expression = expression;
                 node.argumentExpression = argumentExpression;
@@ -599,9 +596,9 @@ namespace ts {
             }
             return node;
         }
-        export function createCallExpression(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, _arguments?: Array<Expression>, 
-            location?: TextRange): CallExpression {
-            let node = createNode<CallExpression>(SyntaxKind.CallExpression, location);
+        export function createCallExpression(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, _arguments?: Array<Expression>
+            ): CallExpression {
+            let node = createNode<CallExpression>(SyntaxKind.CallExpression);
             if (arguments.length) {
                 node.expression = expression;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
@@ -617,9 +614,9 @@ namespace ts {
             }
             return node;
         }
-        export function createNewExpression(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, _arguments?: Array<Expression>, 
-            location?: TextRange): NewExpression {
-            let node = createNode<NewExpression>(SyntaxKind.NewExpression, location);
+        export function createNewExpression(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, _arguments?: Array<Expression>
+            ): NewExpression {
+            let node = createNode<NewExpression>(SyntaxKind.NewExpression);
             if (arguments.length) {
                 node.expression = expression;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
@@ -635,9 +632,9 @@ namespace ts {
             }
             return node;
         }
-        export function createTaggedTemplateExpression(tag?: LeftHandSideExpression, template?: LiteralExpression | TemplateExpression, 
-            location?: TextRange): TaggedTemplateExpression {
-            let node = createNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression, location);
+        export function createTaggedTemplateExpression(tag?: LeftHandSideExpression, template?: LiteralExpression | TemplateExpression
+            ): TaggedTemplateExpression {
+            let node = createNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
             if (arguments.length) {
                 node.tag = tag;
                 node.template = template;
@@ -652,8 +649,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeAssertionExpression(type?: TypeNode, expression?: UnaryExpression, location?: TextRange): TypeAssertion {
-            let node = createNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression, location);
+        export function createTypeAssertionExpression(type?: TypeNode, expression?: UnaryExpression): TypeAssertion {
+            let node = createNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
             if (arguments.length) {
                 node.type = type;
                 node.expression = expression;
@@ -667,8 +664,8 @@ namespace ts {
             }
             return node;
         }
-        export function createParenthesizedExpression(expression?: Expression, location?: TextRange): ParenthesizedExpression {
-            let node = createNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression, location);
+        export function createParenthesizedExpression(expression?: Expression): ParenthesizedExpression {
+            let node = createNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
             node.expression = expression;
             return node;
         }
@@ -680,9 +677,9 @@ namespace ts {
             return node;
         }
         export function createFunctionExpression(decorators?: Array<Decorator>, modifiers?: Array<Node>, asteriskToken?: Node, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block | Expression, 
-            location?: TextRange): FunctionExpression {
-            let node = createNode<FunctionExpression>(SyntaxKind.FunctionExpression, location);
+            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block | Expression
+            ): FunctionExpression {
+            let node = createNode<FunctionExpression>(SyntaxKind.FunctionExpression);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -706,9 +703,8 @@ namespace ts {
             return node;
         }
         export function createArrowFunction(decorators?: Array<Decorator>, modifiers?: Array<Node>, typeParameters?: Array<TypeParameterDeclaration>, 
-            parameters?: Array<ParameterDeclaration>, type?: TypeNode, equalsGreaterThanToken?: Node, body?: Block | Expression, 
-            location?: TextRange): ArrowFunction {
-            let node = createNode<ArrowFunction>(SyntaxKind.ArrowFunction, location);
+            parameters?: Array<ParameterDeclaration>, type?: TypeNode, equalsGreaterThanToken?: Node, body?: Block | Expression): ArrowFunction {
+            let node = createNode<ArrowFunction>(SyntaxKind.ArrowFunction);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -730,8 +726,8 @@ namespace ts {
             }
             return node;
         }
-        export function createDeleteExpression(expression?: UnaryExpression, location?: TextRange): DeleteExpression {
-            let node = createNode<DeleteExpression>(SyntaxKind.DeleteExpression, location);
+        export function createDeleteExpression(expression?: UnaryExpression): DeleteExpression {
+            let node = createNode<DeleteExpression>(SyntaxKind.DeleteExpression);
             node.expression = expression;
             return node;
         }
@@ -742,8 +738,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeOfExpression(expression?: UnaryExpression, location?: TextRange): TypeOfExpression {
-            let node = createNode<TypeOfExpression>(SyntaxKind.TypeOfExpression, location);
+        export function createTypeOfExpression(expression?: UnaryExpression): TypeOfExpression {
+            let node = createNode<TypeOfExpression>(SyntaxKind.TypeOfExpression);
             node.expression = expression;
             return node;
         }
@@ -754,8 +750,8 @@ namespace ts {
             }
             return node;
         }
-        export function createVoidExpression(expression?: UnaryExpression, location?: TextRange): VoidExpression {
-            let node = createNode<VoidExpression>(SyntaxKind.VoidExpression, location);
+        export function createVoidExpression(expression?: UnaryExpression): VoidExpression {
+            let node = createNode<VoidExpression>(SyntaxKind.VoidExpression);
             node.expression = expression;
             return node;
         }
@@ -766,8 +762,8 @@ namespace ts {
             }
             return node;
         }
-        export function createAwaitExpression(expression?: UnaryExpression, location?: TextRange): AwaitExpression {
-            let node = createNode<AwaitExpression>(SyntaxKind.AwaitExpression, location);
+        export function createAwaitExpression(expression?: UnaryExpression): AwaitExpression {
+            let node = createNode<AwaitExpression>(SyntaxKind.AwaitExpression);
             node.expression = expression;
             return node;
         }
@@ -778,8 +774,8 @@ namespace ts {
             }
             return node;
         }
-        export function createPrefixUnaryExpression(operator?: SyntaxKind, operand?: UnaryExpression, location?: TextRange): PrefixUnaryExpression {
-            let node = createNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression, location);
+        export function createPrefixUnaryExpression(operator?: SyntaxKind, operand?: UnaryExpression): PrefixUnaryExpression {
+            let node = createNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
             if (arguments.length) {
                 node.operator = operator;
                 node.operand = operand;
@@ -793,9 +789,8 @@ namespace ts {
             }
             return node;
         }
-        export function createPostfixUnaryExpression(operand?: LeftHandSideExpression, operator?: SyntaxKind, 
-            location?: TextRange): PostfixUnaryExpression {
-            let node = createNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression, location);
+        export function createPostfixUnaryExpression(operand?: LeftHandSideExpression, operator?: SyntaxKind): PostfixUnaryExpression {
+            let node = createNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             if (arguments.length) {
                 node.operand = operand;
                 node.operator = operator;
@@ -809,8 +804,8 @@ namespace ts {
             }
             return node;
         }
-        export function createBinaryExpression(left?: Expression, operatorToken?: Node, right?: Expression, location?: TextRange): BinaryExpression {
-            let node = createNode<BinaryExpression>(SyntaxKind.BinaryExpression, location);
+        export function createBinaryExpression(left?: Expression, operatorToken?: Node, right?: Expression): BinaryExpression {
+            let node = createNode<BinaryExpression>(SyntaxKind.BinaryExpression);
             if (arguments.length) {
                 node.left = left;
                 node.operatorToken = operatorToken;
@@ -826,8 +821,8 @@ namespace ts {
             return node;
         }
         export function createConditionalExpression(condition?: Expression, questionToken?: Node, whenTrue?: Expression, colonToken?: Node, 
-            whenFalse?: Expression, location?: TextRange): ConditionalExpression {
-            let node = createNode<ConditionalExpression>(SyntaxKind.ConditionalExpression, location);
+            whenFalse?: Expression): ConditionalExpression {
+            let node = createNode<ConditionalExpression>(SyntaxKind.ConditionalExpression);
             if (arguments.length) {
                 node.condition = condition;
                 node.questionToken = questionToken;
@@ -845,9 +840,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTemplateExpression(head?: LiteralExpression, templateSpans?: Array<TemplateSpan>, 
-            location?: TextRange): TemplateExpression {
-            let node = createNode<TemplateExpression>(SyntaxKind.TemplateExpression, location);
+        export function createTemplateExpression(head?: LiteralExpression, templateSpans?: Array<TemplateSpan>): TemplateExpression {
+            let node = createNode<TemplateExpression>(SyntaxKind.TemplateExpression);
             if (arguments.length) {
                 node.head = head;
                 node.templateSpans = templateSpans && createNodeArray(templateSpans)
@@ -862,8 +856,8 @@ namespace ts {
             }
             return node;
         }
-        export function createYieldExpression(asteriskToken?: Node, expression?: Expression, location?: TextRange): YieldExpression {
-            let node = createNode<YieldExpression>(SyntaxKind.YieldExpression, location);
+        export function createYieldExpression(asteriskToken?: Node, expression?: Expression): YieldExpression {
+            let node = createNode<YieldExpression>(SyntaxKind.YieldExpression);
             if (arguments.length) {
                 node.asteriskToken = asteriskToken;
                 node.expression = expression;
@@ -877,8 +871,8 @@ namespace ts {
             }
             return node;
         }
-        export function createSpreadElementExpression(expression?: Expression, location?: TextRange): SpreadElementExpression {
-            let node = createNode<SpreadElementExpression>(SyntaxKind.SpreadElementExpression, location);
+        export function createSpreadElementExpression(expression?: Expression): SpreadElementExpression {
+            let node = createNode<SpreadElementExpression>(SyntaxKind.SpreadElementExpression);
             node.expression = expression;
             return node;
         }
@@ -890,9 +884,9 @@ namespace ts {
             return node;
         }
         export function createClassExpression(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<ClassElement>, 
-            location?: TextRange): ClassExpression {
-            let node = createNode<ClassExpression>(SyntaxKind.ClassExpression, location);
+            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<ClassElement>
+            ): ClassExpression {
+            let node = createNode<ClassExpression>(SyntaxKind.ClassExpression);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -913,12 +907,12 @@ namespace ts {
             }
             return node;
         }
-        export function createOmittedExpression(location?: TextRange): Expression {
-            return createNode<Expression>(SyntaxKind.OmittedExpression, location);
+        export function createOmittedExpression(): Expression {
+            return createNode<Expression>(SyntaxKind.OmittedExpression);
         }
-        export function createExpressionWithTypeArguments(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, 
-            location?: TextRange): ExpressionWithTypeArguments {
-            let node = createNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments, location);
+        export function createExpressionWithTypeArguments(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>
+            ): ExpressionWithTypeArguments {
+            let node = createNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments);
             if (arguments.length) {
                 node.expression = expression;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
@@ -933,8 +927,8 @@ namespace ts {
             }
             return node;
         }
-        export function createAsExpression(expression?: Expression, type?: TypeNode, location?: TextRange): AsExpression {
-            let node = createNode<AsExpression>(SyntaxKind.AsExpression, location);
+        export function createAsExpression(expression?: Expression, type?: TypeNode): AsExpression {
+            let node = createNode<AsExpression>(SyntaxKind.AsExpression);
             if (arguments.length) {
                 node.expression = expression;
                 node.type = type;
@@ -948,8 +942,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTemplateSpan(expression?: Expression, literal?: LiteralExpression, location?: TextRange): TemplateSpan {
-            let node = createNode<TemplateSpan>(SyntaxKind.TemplateSpan, location);
+        export function createTemplateSpan(expression?: Expression, literal?: LiteralExpression): TemplateSpan {
+            let node = createNode<TemplateSpan>(SyntaxKind.TemplateSpan);
             if (arguments.length) {
                 node.expression = expression;
                 node.literal = literal;
@@ -963,11 +957,11 @@ namespace ts {
             }
             return node;
         }
-        export function createSemicolonClassElement(location?: TextRange): SemicolonClassElement {
-            return createNode<SemicolonClassElement>(SyntaxKind.SemicolonClassElement, location);
+        export function createSemicolonClassElement(): SemicolonClassElement {
+            return createNode<SemicolonClassElement>(SyntaxKind.SemicolonClassElement);
         }
-        export function createBlock(statements?: Array<Statement>, location?: TextRange): Block {
-            let node = createNode<Block>(SyntaxKind.Block, location);
+        export function createBlock(statements?: Array<Statement>): Block {
+            let node = createNode<Block>(SyntaxKind.Block);
             node.statements = statements && createNodeArray(statements)
             return node;
         }
@@ -978,8 +972,8 @@ namespace ts {
             }
             return node;
         }
-        export function createVariableStatement(declarationList?: VariableDeclarationList, location?: TextRange): VariableStatement {
-            let node = createNode<VariableStatement>(SyntaxKind.VariableStatement, location);
+        export function createVariableStatement(declarationList?: VariableDeclarationList): VariableStatement {
+            let node = createNode<VariableStatement>(SyntaxKind.VariableStatement);
             node.declarationList = declarationList;
             return node;
         }
@@ -990,11 +984,11 @@ namespace ts {
             }
             return node;
         }
-        export function createEmptyStatement(location?: TextRange): Statement {
-            return createNode<Statement>(SyntaxKind.EmptyStatement, location);
+        export function createEmptyStatement(): EmptyStatement {
+            return createNode<EmptyStatement>(SyntaxKind.EmptyStatement);
         }
-        export function createExpressionStatement(expression?: Expression, location?: TextRange): ExpressionStatement {
-            let node = createNode<ExpressionStatement>(SyntaxKind.ExpressionStatement, location);
+        export function createExpressionStatement(expression?: Expression): ExpressionStatement {
+            let node = createNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
             node.expression = expression;
             return node;
         }
@@ -1005,9 +999,8 @@ namespace ts {
             }
             return node;
         }
-        export function createIfStatement(expression?: Expression, thenStatement?: Statement, elseStatement?: Statement, 
-            location?: TextRange): IfStatement {
-            let node = createNode<IfStatement>(SyntaxKind.IfStatement, location);
+        export function createIfStatement(expression?: Expression, thenStatement?: Statement, elseStatement?: Statement): IfStatement {
+            let node = createNode<IfStatement>(SyntaxKind.IfStatement);
             if (arguments.length) {
                 node.expression = expression;
                 node.thenStatement = thenStatement;
@@ -1023,8 +1016,8 @@ namespace ts {
             }
             return node;
         }
-        export function createDoStatement(statement?: Statement, expression?: Expression, location?: TextRange): DoStatement {
-            let node = createNode<DoStatement>(SyntaxKind.DoStatement, location);
+        export function createDoStatement(statement?: Statement, expression?: Expression): DoStatement {
+            let node = createNode<DoStatement>(SyntaxKind.DoStatement);
             if (arguments.length) {
                 node.statement = statement;
                 node.expression = expression;
@@ -1038,8 +1031,8 @@ namespace ts {
             }
             return node;
         }
-        export function createWhileStatement(expression?: Expression, statement?: Statement, location?: TextRange): WhileStatement {
-            let node = createNode<WhileStatement>(SyntaxKind.WhileStatement, location);
+        export function createWhileStatement(expression?: Expression, statement?: Statement): WhileStatement {
+            let node = createNode<WhileStatement>(SyntaxKind.WhileStatement);
             if (arguments.length) {
                 node.expression = expression;
                 node.statement = statement;
@@ -1053,9 +1046,9 @@ namespace ts {
             }
             return node;
         }
-        export function createForStatement(initializer?: VariableDeclarationList | Expression, condition?: Expression, incrementor?: Expression, 
-            statement?: Statement, location?: TextRange): ForStatement {
-            let node = createNode<ForStatement>(SyntaxKind.ForStatement, location);
+        export function createForStatement(initializer?: Expression | VariableDeclarationList, condition?: Expression, incrementor?: Expression, 
+            statement?: Statement): ForStatement {
+            let node = createNode<ForStatement>(SyntaxKind.ForStatement);
             if (arguments.length) {
                 node.initializer = initializer;
                 node.condition = condition;
@@ -1064,7 +1057,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateForStatement(node: ForStatement, initializer: VariableDeclarationList | Expression, condition: Expression
+        export function updateForStatement(node: ForStatement, initializer: Expression | VariableDeclarationList, condition: Expression
             , incrementor: Expression, statement: Statement): ForStatement {
             if (initializer !== node.initializer || condition !== node.condition || incrementor !== node.incrementor || statement !== node.statement
                 ) {
@@ -1073,9 +1066,9 @@ namespace ts {
             }
             return node;
         }
-        export function createForInStatement(initializer?: VariableDeclarationList | Expression, expression?: Expression, statement?: Statement, 
-            location?: TextRange): ForInStatement {
-            let node = createNode<ForInStatement>(SyntaxKind.ForInStatement, location);
+        export function createForInStatement(initializer?: Expression | VariableDeclarationList, expression?: Expression, statement?: Statement
+            ): ForInStatement {
+            let node = createNode<ForInStatement>(SyntaxKind.ForInStatement);
             if (arguments.length) {
                 node.initializer = initializer;
                 node.expression = expression;
@@ -1083,7 +1076,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateForInStatement(node: ForInStatement, initializer: VariableDeclarationList | Expression, expression: Expression
+        export function updateForInStatement(node: ForInStatement, initializer: Expression | VariableDeclarationList, expression: Expression
             , statement: Statement): ForInStatement {
             if (initializer !== node.initializer || expression !== node.expression || statement !== node.statement) {
                 let newNode = createForInStatement(initializer, expression, statement);
@@ -1091,9 +1084,9 @@ namespace ts {
             }
             return node;
         }
-        export function createForOfStatement(initializer?: VariableDeclarationList | Expression, expression?: Expression, statement?: Statement, 
-            location?: TextRange): ForOfStatement {
-            let node = createNode<ForOfStatement>(SyntaxKind.ForOfStatement, location);
+        export function createForOfStatement(initializer?: Expression | VariableDeclarationList, expression?: Expression, statement?: Statement
+            ): ForOfStatement {
+            let node = createNode<ForOfStatement>(SyntaxKind.ForOfStatement);
             if (arguments.length) {
                 node.initializer = initializer;
                 node.expression = expression;
@@ -1101,7 +1094,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateForOfStatement(node: ForOfStatement, initializer: VariableDeclarationList | Expression, expression: Expression
+        export function updateForOfStatement(node: ForOfStatement, initializer: Expression | VariableDeclarationList, expression: Expression
             , statement: Statement): ForOfStatement {
             if (initializer !== node.initializer || expression !== node.expression || statement !== node.statement) {
                 let newNode = createForOfStatement(initializer, expression, statement);
@@ -1109,8 +1102,8 @@ namespace ts {
             }
             return node;
         }
-        export function createContinueStatement(label?: Identifier, location?: TextRange): ContinueStatement {
-            let node = createNode<ContinueStatement>(SyntaxKind.ContinueStatement, location);
+        export function createContinueStatement(label?: Identifier): ContinueStatement {
+            let node = createNode<ContinueStatement>(SyntaxKind.ContinueStatement);
             node.label = label;
             return node;
         }
@@ -1121,8 +1114,8 @@ namespace ts {
             }
             return node;
         }
-        export function createBreakStatement(label?: Identifier, location?: TextRange): BreakStatement {
-            let node = createNode<BreakStatement>(SyntaxKind.BreakStatement, location);
+        export function createBreakStatement(label?: Identifier): BreakStatement {
+            let node = createNode<BreakStatement>(SyntaxKind.BreakStatement);
             node.label = label;
             return node;
         }
@@ -1133,8 +1126,8 @@ namespace ts {
             }
             return node;
         }
-        export function createReturnStatement(expression?: Expression, location?: TextRange): ReturnStatement {
-            let node = createNode<ReturnStatement>(SyntaxKind.ReturnStatement, location);
+        export function createReturnStatement(expression?: Expression): ReturnStatement {
+            let node = createNode<ReturnStatement>(SyntaxKind.ReturnStatement);
             node.expression = expression;
             return node;
         }
@@ -1145,8 +1138,8 @@ namespace ts {
             }
             return node;
         }
-        export function createWithStatement(expression?: Expression, statement?: Statement, location?: TextRange): WithStatement {
-            let node = createNode<WithStatement>(SyntaxKind.WithStatement, location);
+        export function createWithStatement(expression?: Expression, statement?: Statement): WithStatement {
+            let node = createNode<WithStatement>(SyntaxKind.WithStatement);
             if (arguments.length) {
                 node.expression = expression;
                 node.statement = statement;
@@ -1160,8 +1153,8 @@ namespace ts {
             }
             return node;
         }
-        export function createSwitchStatement(expression?: Expression, caseBlock?: CaseBlock, location?: TextRange): SwitchStatement {
-            let node = createNode<SwitchStatement>(SyntaxKind.SwitchStatement, location);
+        export function createSwitchStatement(expression?: Expression, caseBlock?: CaseBlock): SwitchStatement {
+            let node = createNode<SwitchStatement>(SyntaxKind.SwitchStatement);
             if (arguments.length) {
                 node.expression = expression;
                 node.caseBlock = caseBlock;
@@ -1175,8 +1168,8 @@ namespace ts {
             }
             return node;
         }
-        export function createLabeledStatement(label?: Identifier, statement?: Statement, location?: TextRange): LabeledStatement {
-            let node = createNode<LabeledStatement>(SyntaxKind.LabeledStatement, location);
+        export function createLabeledStatement(label?: Identifier, statement?: Statement): LabeledStatement {
+            let node = createNode<LabeledStatement>(SyntaxKind.LabeledStatement);
             if (arguments.length) {
                 node.label = label;
                 node.statement = statement;
@@ -1190,8 +1183,8 @@ namespace ts {
             }
             return node;
         }
-        export function createThrowStatement(expression?: Expression, location?: TextRange): ThrowStatement {
-            let node = createNode<ThrowStatement>(SyntaxKind.ThrowStatement, location);
+        export function createThrowStatement(expression?: Expression): ThrowStatement {
+            let node = createNode<ThrowStatement>(SyntaxKind.ThrowStatement);
             node.expression = expression;
             return node;
         }
@@ -1202,8 +1195,8 @@ namespace ts {
             }
             return node;
         }
-        export function createTryStatement(tryBlock?: Block, catchClause?: CatchClause, finallyBlock?: Block, location?: TextRange): TryStatement {
-            let node = createNode<TryStatement>(SyntaxKind.TryStatement, location);
+        export function createTryStatement(tryBlock?: Block, catchClause?: CatchClause, finallyBlock?: Block): TryStatement {
+            let node = createNode<TryStatement>(SyntaxKind.TryStatement);
             if (arguments.length) {
                 node.tryBlock = tryBlock;
                 node.catchClause = catchClause;
@@ -1218,12 +1211,12 @@ namespace ts {
             }
             return node;
         }
-        export function createDebuggerStatement(location?: TextRange): Statement {
-            return createNode<Statement>(SyntaxKind.DebuggerStatement, location);
+        export function createDebuggerStatement(): DebuggerStatement {
+            return createNode<DebuggerStatement>(SyntaxKind.DebuggerStatement);
         }
-        export function createVariableDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier | BindingPattern, 
-            type?: TypeNode, initializer?: Expression, location?: TextRange): VariableDeclaration {
-            let node = createNode<VariableDeclaration>(SyntaxKind.VariableDeclaration, location);
+        export function createVariableDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: BindingPattern | Identifier, 
+            type?: TypeNode, initializer?: Expression): VariableDeclaration {
+            let node = createNode<VariableDeclaration>(SyntaxKind.VariableDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1234,7 +1227,7 @@ namespace ts {
             return node;
         }
         export function updateVariableDeclaration(node: VariableDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
-            , name: Identifier | BindingPattern, type: TypeNode, initializer: Expression): VariableDeclaration {
+            , name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): VariableDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
                 let newNode = createVariableDeclaration(decorators, modifiers, name, type, initializer);
@@ -1242,8 +1235,8 @@ namespace ts {
             }
             return node;
         }
-        export function createVariableDeclarationList(declarations?: Array<VariableDeclaration>, location?: TextRange): VariableDeclarationList {
-            let node = createNode<VariableDeclarationList>(SyntaxKind.VariableDeclarationList, location);
+        export function createVariableDeclarationList(declarations?: Array<VariableDeclaration>): VariableDeclarationList {
+            let node = createNode<VariableDeclarationList>(SyntaxKind.VariableDeclarationList);
             node.declarations = declarations && createNodeArray(declarations)
             return node;
         }
@@ -1256,9 +1249,9 @@ namespace ts {
             return node;
         }
         export function createFunctionDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, asteriskToken?: Node, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
-            location?: TextRange): FunctionDeclaration {
-            let node = createNode<FunctionDeclaration>(SyntaxKind.FunctionDeclaration, location);
+            typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block
+            ): FunctionDeclaration {
+            let node = createNode<FunctionDeclaration>(SyntaxKind.FunctionDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1282,9 +1275,9 @@ namespace ts {
             return node;
         }
         export function createClassDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<ClassElement>, 
-            location?: TextRange): ClassDeclaration {
-            let node = createNode<ClassDeclaration>(SyntaxKind.ClassDeclaration, location);
+            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<ClassElement>
+            ): ClassDeclaration {
+            let node = createNode<ClassDeclaration>(SyntaxKind.ClassDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1306,9 +1299,9 @@ namespace ts {
             return node;
         }
         export function createInterfaceDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<Declaration>, 
-            location?: TextRange): InterfaceDeclaration {
-            let node = createNode<InterfaceDeclaration>(SyntaxKind.InterfaceDeclaration, location);
+            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<Declaration>
+            ): InterfaceDeclaration {
+            let node = createNode<InterfaceDeclaration>(SyntaxKind.InterfaceDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1330,8 +1323,8 @@ namespace ts {
             return node;
         }
         export function createTypeAliasDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, type?: TypeNode, location?: TextRange): TypeAliasDeclaration {
-            let node = createNode<TypeAliasDeclaration>(SyntaxKind.TypeAliasDeclaration, location);
+            typeParameters?: Array<TypeParameterDeclaration>, type?: TypeNode): TypeAliasDeclaration {
+            let node = createNode<TypeAliasDeclaration>(SyntaxKind.TypeAliasDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1350,9 +1343,9 @@ namespace ts {
             }
             return node;
         }
-        export function createEnumDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, members?: Array<EnumMember>, 
-            location?: TextRange): EnumDeclaration {
-            let node = createNode<EnumDeclaration>(SyntaxKind.EnumDeclaration, location);
+        export function createEnumDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, members?: Array<EnumMember>
+            ): EnumDeclaration {
+            let node = createNode<EnumDeclaration>(SyntaxKind.EnumDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1370,8 +1363,8 @@ namespace ts {
             return node;
         }
         export function createModuleDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier | LiteralExpression, 
-            body?: ModuleBlock | ModuleDeclaration, location?: TextRange): ModuleDeclaration {
-            let node = createNode<ModuleDeclaration>(SyntaxKind.ModuleDeclaration, location);
+            body?: ModuleBlock | ModuleDeclaration): ModuleDeclaration {
+            let node = createNode<ModuleDeclaration>(SyntaxKind.ModuleDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1388,8 +1381,8 @@ namespace ts {
             }
             return node;
         }
-        export function createModuleBlock(statements?: Array<Statement>, location?: TextRange): ModuleBlock {
-            let node = createNode<ModuleBlock>(SyntaxKind.ModuleBlock, location);
+        export function createModuleBlock(statements?: Array<Statement>): ModuleBlock {
+            let node = createNode<ModuleBlock>(SyntaxKind.ModuleBlock);
             node.statements = statements && createNodeArray(statements)
             return node;
         }
@@ -1400,8 +1393,8 @@ namespace ts {
             }
             return node;
         }
-        export function createCaseBlock(clauses?: Array<CaseOrDefaultClause>, location?: TextRange): CaseBlock {
-            let node = createNode<CaseBlock>(SyntaxKind.CaseBlock, location);
+        export function createCaseBlock(clauses?: Array<CaseOrDefaultClause>): CaseBlock {
+            let node = createNode<CaseBlock>(SyntaxKind.CaseBlock);
             node.clauses = clauses && createNodeArray(clauses)
             return node;
         }
@@ -1413,8 +1406,8 @@ namespace ts {
             return node;
         }
         export function createImportEqualsDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
-            moduleReference?: EntityName | ExternalModuleReference, location?: TextRange): ImportEqualsDeclaration {
-            let node = createNode<ImportEqualsDeclaration>(SyntaxKind.ImportEqualsDeclaration, location);
+            moduleReference?: EntityName | ExternalModuleReference): ImportEqualsDeclaration {
+            let node = createNode<ImportEqualsDeclaration>(SyntaxKind.ImportEqualsDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1432,8 +1425,8 @@ namespace ts {
             return node;
         }
         export function createImportDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, importClause?: ImportClause, 
-            moduleSpecifier?: Expression, location?: TextRange): ImportDeclaration {
-            let node = createNode<ImportDeclaration>(SyntaxKind.ImportDeclaration, location);
+            moduleSpecifier?: Expression): ImportDeclaration {
+            let node = createNode<ImportDeclaration>(SyntaxKind.ImportDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1451,23 +1444,23 @@ namespace ts {
             }
             return node;
         }
-        export function createImportClause(name?: Identifier, namedBindings?: NamespaceImport | NamedImports, location?: TextRange): ImportClause {
-            let node = createNode<ImportClause>(SyntaxKind.ImportClause, location);
+        export function createImportClause(name?: Identifier, namedBindings?: NamedImports | NamespaceImport): ImportClause {
+            let node = createNode<ImportClause>(SyntaxKind.ImportClause);
             if (arguments.length) {
                 node.name = name;
                 node.namedBindings = namedBindings;
             }
             return node;
         }
-        export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamespaceImport | NamedImports): ImportClause {
+        export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImports | NamespaceImport): ImportClause {
             if (name !== node.name || namedBindings !== node.namedBindings) {
                 let newNode = createImportClause(name, namedBindings);
                 return updateFrom(node, newNode);
             }
             return node;
         }
-        export function createNamespaceImport(name?: Identifier, location?: TextRange): NamespaceImport {
-            let node = createNode<NamespaceImport>(SyntaxKind.NamespaceImport, location);
+        export function createNamespaceImport(name?: Identifier): NamespaceImport {
+            let node = createNode<NamespaceImport>(SyntaxKind.NamespaceImport);
             node.name = name;
             return node;
         }
@@ -1478,8 +1471,8 @@ namespace ts {
             }
             return node;
         }
-        export function createNamedImports(elements?: Array<ImportOrExportSpecifier>, location?: TextRange): NamedImports {
-            let node = createNode<NamedImports>(SyntaxKind.NamedImports, location);
+        export function createNamedImports(elements?: Array<ImportOrExportSpecifier>): NamedImports {
+            let node = createNode<NamedImports>(SyntaxKind.NamedImports);
             node.elements = elements && createNodeArray(elements)
             return node;
         }
@@ -1490,8 +1483,8 @@ namespace ts {
             }
             return node;
         }
-        export function createImportSpecifier(propertyName?: Identifier, name?: Identifier, location?: TextRange): ImportSpecifier {
-            let node = createNode<ImportSpecifier>(SyntaxKind.ImportSpecifier, location);
+        export function createImportSpecifier(propertyName?: Identifier, name?: Identifier): ImportSpecifier {
+            let node = createNode<ImportSpecifier>(SyntaxKind.ImportSpecifier);
             if (arguments.length) {
                 node.propertyName = propertyName;
                 node.name = name;
@@ -1505,9 +1498,8 @@ namespace ts {
             }
             return node;
         }
-        export function createExportAssignment(decorators?: Array<Decorator>, modifiers?: Array<Node>, expression?: Expression, 
-            location?: TextRange): ExportAssignment {
-            let node = createNode<ExportAssignment>(SyntaxKind.ExportAssignment, location);
+        export function createExportAssignment(decorators?: Array<Decorator>, modifiers?: Array<Node>, expression?: Expression): ExportAssignment {
+            let node = createNode<ExportAssignment>(SyntaxKind.ExportAssignment);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1524,8 +1516,8 @@ namespace ts {
             return node;
         }
         export function createExportDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, exportClause?: NamedExports, 
-            moduleSpecifier?: Expression, location?: TextRange): ExportDeclaration {
-            let node = createNode<ExportDeclaration>(SyntaxKind.ExportDeclaration, location);
+            moduleSpecifier?: Expression): ExportDeclaration {
+            let node = createNode<ExportDeclaration>(SyntaxKind.ExportDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1543,8 +1535,8 @@ namespace ts {
             }
             return node;
         }
-        export function createNamedExports(elements?: Array<ImportOrExportSpecifier>, location?: TextRange): NamedExports {
-            let node = createNode<NamedExports>(SyntaxKind.NamedExports, location);
+        export function createNamedExports(elements?: Array<ImportOrExportSpecifier>): NamedExports {
+            let node = createNode<NamedExports>(SyntaxKind.NamedExports);
             node.elements = elements && createNodeArray(elements)
             return node;
         }
@@ -1555,8 +1547,8 @@ namespace ts {
             }
             return node;
         }
-        export function createExportSpecifier(propertyName?: Identifier, name?: Identifier, location?: TextRange): ExportSpecifier {
-            let node = createNode<ExportSpecifier>(SyntaxKind.ExportSpecifier, location);
+        export function createExportSpecifier(propertyName?: Identifier, name?: Identifier): ExportSpecifier {
+            let node = createNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
             if (arguments.length) {
                 node.propertyName = propertyName;
                 node.name = name;
@@ -1570,8 +1562,8 @@ namespace ts {
             }
             return node;
         }
-        export function createMissingDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, location?: TextRange): MissingDeclaration {
-            let node = createNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, location);
+        export function createMissingDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>): MissingDeclaration {
+            let node = createNode<MissingDeclaration>(SyntaxKind.MissingDeclaration);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
@@ -1586,8 +1578,8 @@ namespace ts {
             }
             return node;
         }
-        export function createExternalModuleReference(expression?: Expression, location?: TextRange): ExternalModuleReference {
-            let node = createNode<ExternalModuleReference>(SyntaxKind.ExternalModuleReference, location);
+        export function createExternalModuleReference(expression?: Expression): ExternalModuleReference {
+            let node = createNode<ExternalModuleReference>(SyntaxKind.ExternalModuleReference);
             node.expression = expression;
             return node;
         }
@@ -1598,9 +1590,9 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxElement(openingElement?: JsxOpeningElement, children?: Array<JsxChild>, closingElement?: JsxClosingElement, 
-            location?: TextRange): JsxElement {
-            let node = createNode<JsxElement>(SyntaxKind.JsxElement, location);
+        export function createJsxElement(openingElement?: JsxOpeningElement, children?: Array<JsxChild>, closingElement?: JsxClosingElement
+            ): JsxElement {
+            let node = createNode<JsxElement>(SyntaxKind.JsxElement);
             if (arguments.length) {
                 node.openingElement = openingElement;
                 node.children = children && createNodeArray(children)
@@ -1616,9 +1608,9 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxSelfClosingElement(tagName?: EntityName, attributes?: Array<JsxAttribute | JsxSpreadAttribute>, 
-            location?: TextRange): JsxSelfClosingElement {
-            let node = createNode<JsxSelfClosingElement>(SyntaxKind.JsxSelfClosingElement, location);
+        export function createJsxSelfClosingElement(tagName?: EntityName, attributes?: Array<JsxAttribute | JsxSpreadAttribute>
+            ): JsxSelfClosingElement {
+            let node = createNode<JsxSelfClosingElement>(SyntaxKind.JsxSelfClosingElement);
             if (arguments.length) {
                 node.tagName = tagName;
                 node.attributes = attributes && createNodeArray(attributes)
@@ -1633,9 +1625,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxOpeningElement(tagName?: EntityName, attributes?: Array<JsxAttribute | JsxSpreadAttribute>, 
-            location?: TextRange): JsxOpeningElement {
-            let node = createNode<JsxOpeningElement>(SyntaxKind.JsxOpeningElement, location);
+        export function createJsxOpeningElement(tagName?: EntityName, attributes?: Array<JsxAttribute | JsxSpreadAttribute>): JsxOpeningElement {
+            let node = createNode<JsxOpeningElement>(SyntaxKind.JsxOpeningElement);
             if (arguments.length) {
                 node.tagName = tagName;
                 node.attributes = attributes && createNodeArray(attributes)
@@ -1650,11 +1641,11 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxText(location?: TextRange): JsxText {
-            return createNode<JsxText>(SyntaxKind.JsxText, location);
+        export function createJsxText(): JsxText {
+            return createNode<JsxText>(SyntaxKind.JsxText);
         }
-        export function createJsxClosingElement(tagName?: EntityName, location?: TextRange): JsxClosingElement {
-            let node = createNode<JsxClosingElement>(SyntaxKind.JsxClosingElement, location);
+        export function createJsxClosingElement(tagName?: EntityName): JsxClosingElement {
+            let node = createNode<JsxClosingElement>(SyntaxKind.JsxClosingElement);
             node.tagName = tagName;
             return node;
         }
@@ -1665,8 +1656,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxAttribute(name?: Identifier, initializer?: Expression, location?: TextRange): JsxAttribute {
-            let node = createNode<JsxAttribute>(SyntaxKind.JsxAttribute, location);
+        export function createJsxAttribute(name?: Identifier, initializer?: Expression): JsxAttribute {
+            let node = createNode<JsxAttribute>(SyntaxKind.JsxAttribute);
             if (arguments.length) {
                 node.name = name;
                 node.initializer = initializer;
@@ -1680,8 +1671,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxSpreadAttribute(expression?: Expression, location?: TextRange): JsxSpreadAttribute {
-            let node = createNode<JsxSpreadAttribute>(SyntaxKind.JsxSpreadAttribute, location);
+        export function createJsxSpreadAttribute(expression?: Expression): JsxSpreadAttribute {
+            let node = createNode<JsxSpreadAttribute>(SyntaxKind.JsxSpreadAttribute);
             node.expression = expression;
             return node;
         }
@@ -1692,8 +1683,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJsxExpression(expression?: Expression, location?: TextRange): JsxExpression {
-            let node = createNode<JsxExpression>(SyntaxKind.JsxExpression, location);
+        export function createJsxExpression(expression?: Expression): JsxExpression {
+            let node = createNode<JsxExpression>(SyntaxKind.JsxExpression);
             node.expression = expression;
             return node;
         }
@@ -1704,8 +1695,8 @@ namespace ts {
             }
             return node;
         }
-        export function createCaseClause(expression?: Expression, statements?: Array<Statement>, location?: TextRange): CaseClause {
-            let node = createNode<CaseClause>(SyntaxKind.CaseClause, location);
+        export function createCaseClause(expression?: Expression, statements?: Array<Statement>): CaseClause {
+            let node = createNode<CaseClause>(SyntaxKind.CaseClause);
             if (arguments.length) {
                 node.expression = expression;
                 node.statements = statements && createNodeArray(statements)
@@ -1719,8 +1710,8 @@ namespace ts {
             }
             return node;
         }
-        export function createDefaultClause(statements?: Array<Statement>, location?: TextRange): DefaultClause {
-            let node = createNode<DefaultClause>(SyntaxKind.DefaultClause, location);
+        export function createDefaultClause(statements?: Array<Statement>): DefaultClause {
+            let node = createNode<DefaultClause>(SyntaxKind.DefaultClause);
             node.statements = statements && createNodeArray(statements)
             return node;
         }
@@ -1731,8 +1722,8 @@ namespace ts {
             }
             return node;
         }
-        export function createHeritageClause(types?: Array<ExpressionWithTypeArguments>, location?: TextRange): HeritageClause {
-            let node = createNode<HeritageClause>(SyntaxKind.HeritageClause, location);
+        export function createHeritageClause(types?: Array<ExpressionWithTypeArguments>): HeritageClause {
+            let node = createNode<HeritageClause>(SyntaxKind.HeritageClause);
             node.types = types && createNodeArray(types)
             return node;
         }
@@ -1743,8 +1734,8 @@ namespace ts {
             }
             return node;
         }
-        export function createCatchClause(variableDeclaration?: VariableDeclaration, block?: Block, location?: TextRange): CatchClause {
-            let node = createNode<CatchClause>(SyntaxKind.CatchClause, location);
+        export function createCatchClause(variableDeclaration?: VariableDeclaration, block?: Block): CatchClause {
+            let node = createNode<CatchClause>(SyntaxKind.CatchClause);
             if (arguments.length) {
                 node.variableDeclaration = variableDeclaration;
                 node.block = block;
@@ -1758,9 +1749,8 @@ namespace ts {
             }
             return node;
         }
-        export function createPropertyAssignment(name?: DeclarationName, questionToken?: Node, initializer?: Expression, 
-            location?: TextRange): PropertyAssignment {
-            let node = createNode<PropertyAssignment>(SyntaxKind.PropertyAssignment, location);
+        export function createPropertyAssignment(name?: DeclarationName, questionToken?: Node, initializer?: Expression): PropertyAssignment {
+            let node = createNode<PropertyAssignment>(SyntaxKind.PropertyAssignment);
             if (arguments.length) {
                 node.name = name;
                 node.questionToken = questionToken;
@@ -1775,9 +1765,8 @@ namespace ts {
             }
             return node;
         }
-        export function createShorthandPropertyAssignment(name?: Identifier, questionToken?: Node, 
-            location?: TextRange): ShorthandPropertyAssignment {
-            let node = createNode<ShorthandPropertyAssignment>(SyntaxKind.ShorthandPropertyAssignment, location);
+        export function createShorthandPropertyAssignment(name?: Identifier, questionToken?: Node): ShorthandPropertyAssignment {
+            let node = createNode<ShorthandPropertyAssignment>(SyntaxKind.ShorthandPropertyAssignment);
             if (arguments.length) {
                 node.name = name;
                 node.questionToken = questionToken;
@@ -1791,8 +1780,8 @@ namespace ts {
             }
             return node;
         }
-        export function createEnumMember(name?: DeclarationName, initializer?: Expression, location?: TextRange): EnumMember {
-            let node = createNode<EnumMember>(SyntaxKind.EnumMember, location);
+        export function createEnumMember(name?: DeclarationName, initializer?: Expression): EnumMember {
+            let node = createNode<EnumMember>(SyntaxKind.EnumMember);
             if (arguments.length) {
                 node.name = name;
                 node.initializer = initializer;
@@ -1806,8 +1795,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocTypeExpression(type?: JSDocType, location?: TextRange): JSDocTypeExpression {
-            let node = createNode<JSDocTypeExpression>(SyntaxKind.JSDocTypeExpression, location);
+        export function createJSDocTypeExpression(type?: JSDocType): JSDocTypeExpression {
+            let node = createNode<JSDocTypeExpression>(SyntaxKind.JSDocTypeExpression);
             node.type = type;
             return node;
         }
@@ -1818,14 +1807,14 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocAllType(location?: TextRange): JSDocAllType {
-            return createNode<JSDocAllType>(SyntaxKind.JSDocAllType, location);
+        export function createJSDocAllType(): JSDocAllType {
+            return createNode<JSDocAllType>(SyntaxKind.JSDocAllType);
         }
-        export function createJSDocUnknownType(location?: TextRange): JSDocUnknownType {
-            return createNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType, location);
+        export function createJSDocUnknownType(): JSDocUnknownType {
+            return createNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType);
         }
-        export function createJSDocArrayType(elementType?: JSDocType, location?: TextRange): JSDocArrayType {
-            let node = createNode<JSDocArrayType>(SyntaxKind.JSDocArrayType, location);
+        export function createJSDocArrayType(elementType?: JSDocType): JSDocArrayType {
+            let node = createNode<JSDocArrayType>(SyntaxKind.JSDocArrayType);
             node.elementType = elementType;
             return node;
         }
@@ -1836,8 +1825,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocUnionType(types?: Array<JSDocType>, location?: TextRange): JSDocUnionType {
-            let node = createNode<JSDocUnionType>(SyntaxKind.JSDocUnionType, location);
+        export function createJSDocUnionType(types?: Array<JSDocType>): JSDocUnionType {
+            let node = createNode<JSDocUnionType>(SyntaxKind.JSDocUnionType);
             node.types = types && createNodeArray(types)
             return node;
         }
@@ -1848,8 +1837,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocTupleType(types?: Array<JSDocType>, location?: TextRange): JSDocTupleType {
-            let node = createNode<JSDocTupleType>(SyntaxKind.JSDocTupleType, location);
+        export function createJSDocTupleType(types?: Array<JSDocType>): JSDocTupleType {
+            let node = createNode<JSDocTupleType>(SyntaxKind.JSDocTupleType);
             node.types = types && createNodeArray(types)
             return node;
         }
@@ -1860,8 +1849,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocNullableType(type?: JSDocType, location?: TextRange): JSDocNullableType {
-            let node = createNode<JSDocNullableType>(SyntaxKind.JSDocNullableType, location);
+        export function createJSDocNullableType(type?: JSDocType): JSDocNullableType {
+            let node = createNode<JSDocNullableType>(SyntaxKind.JSDocNullableType);
             node.type = type;
             return node;
         }
@@ -1872,8 +1861,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocNonNullableType(type?: JSDocType, location?: TextRange): JSDocNonNullableType {
-            let node = createNode<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType, location);
+        export function createJSDocNonNullableType(type?: JSDocType): JSDocNonNullableType {
+            let node = createNode<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType);
             node.type = type;
             return node;
         }
@@ -1884,8 +1873,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocRecordType(members?: Array<JSDocRecordMember>, location?: TextRange): JSDocRecordType {
-            let node = createNode<JSDocRecordType>(SyntaxKind.JSDocRecordType, location);
+        export function createJSDocRecordType(members?: Array<JSDocRecordMember>): JSDocRecordType {
+            let node = createNode<JSDocRecordType>(SyntaxKind.JSDocRecordType);
             node.members = members && createNodeArray(members)
             return node;
         }
@@ -1896,8 +1885,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocRecordMember(name?: Identifier | LiteralExpression, type?: JSDocType, location?: TextRange): JSDocRecordMember {
-            let node = createNode<JSDocRecordMember>(SyntaxKind.JSDocRecordMember, location);
+        export function createJSDocRecordMember(name?: Identifier | LiteralExpression, type?: JSDocType): JSDocRecordMember {
+            let node = createNode<JSDocRecordMember>(SyntaxKind.JSDocRecordMember);
             if (arguments.length) {
                 node.name = name;
                 node.type = type;
@@ -1911,8 +1900,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocTypeReference(name?: EntityName, typeArguments?: Array<JSDocType>, location?: TextRange): JSDocTypeReference {
-            let node = createNode<JSDocTypeReference>(SyntaxKind.JSDocTypeReference, location);
+        export function createJSDocTypeReference(name?: EntityName, typeArguments?: Array<JSDocType>): JSDocTypeReference {
+            let node = createNode<JSDocTypeReference>(SyntaxKind.JSDocTypeReference);
             if (arguments.length) {
                 node.name = name;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
@@ -1926,8 +1915,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocOptionalType(type?: JSDocType, location?: TextRange): JSDocOptionalType {
-            let node = createNode<JSDocOptionalType>(SyntaxKind.JSDocOptionalType, location);
+        export function createJSDocOptionalType(type?: JSDocType): JSDocOptionalType {
+            let node = createNode<JSDocOptionalType>(SyntaxKind.JSDocOptionalType);
             node.type = type;
             return node;
         }
@@ -1938,9 +1927,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocFunctionType(parameters?: Array<ParameterDeclaration>, type?: JSDocType, 
-            location?: TextRange): JSDocFunctionType {
-            let node = createNode<JSDocFunctionType>(SyntaxKind.JSDocFunctionType, location);
+        export function createJSDocFunctionType(parameters?: Array<ParameterDeclaration>, type?: JSDocType): JSDocFunctionType {
+            let node = createNode<JSDocFunctionType>(SyntaxKind.JSDocFunctionType);
             if (arguments.length) {
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
@@ -1955,8 +1943,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocVariadicType(type?: JSDocType, location?: TextRange): JSDocVariadicType {
-            let node = createNode<JSDocVariadicType>(SyntaxKind.JSDocVariadicType, location);
+        export function createJSDocVariadicType(type?: JSDocType): JSDocVariadicType {
+            let node = createNode<JSDocVariadicType>(SyntaxKind.JSDocVariadicType);
             node.type = type;
             return node;
         }
@@ -1967,8 +1955,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocConstructorType(type?: JSDocType, location?: TextRange): JSDocConstructorType {
-            let node = createNode<JSDocConstructorType>(SyntaxKind.JSDocConstructorType, location);
+        export function createJSDocConstructorType(type?: JSDocType): JSDocConstructorType {
+            let node = createNode<JSDocConstructorType>(SyntaxKind.JSDocConstructorType);
             node.type = type;
             return node;
         }
@@ -1979,8 +1967,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocThisType(type?: JSDocType, location?: TextRange): JSDocThisType {
-            let node = createNode<JSDocThisType>(SyntaxKind.JSDocThisType, location);
+        export function createJSDocThisType(type?: JSDocType): JSDocThisType {
+            let node = createNode<JSDocThisType>(SyntaxKind.JSDocThisType);
             node.type = type;
             return node;
         }
@@ -1991,8 +1979,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocComment(tags?: Array<JSDocTag>, location?: TextRange): JSDocComment {
-            let node = createNode<JSDocComment>(SyntaxKind.JSDocComment, location);
+        export function createJSDocComment(tags?: Array<JSDocTag>): JSDocComment {
+            let node = createNode<JSDocComment>(SyntaxKind.JSDocComment);
             node.tags = tags && createNodeArray(tags)
             return node;
         }
@@ -2003,8 +1991,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocTag(atToken?: Node, tagName?: Identifier, location?: TextRange): JSDocTag {
-            let node = createNode<JSDocTag>(SyntaxKind.JSDocTag, location);
+        export function createJSDocTag(atToken?: Node, tagName?: Identifier): JSDocTag {
+            let node = createNode<JSDocTag>(SyntaxKind.JSDocTag);
             if (arguments.length) {
                 node.atToken = atToken;
                 node.tagName = tagName;
@@ -2019,8 +2007,8 @@ namespace ts {
             return node;
         }
         export function createJSDocParameterTag(preParameterName?: Identifier, typeExpression?: JSDocTypeExpression, postParameterName?: Identifier, 
-            atToken?: Node, tagName?: Identifier, location?: TextRange): JSDocParameterTag {
-            let node = createNode<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, location);
+            atToken?: Node, tagName?: Identifier): JSDocParameterTag {
+            let node = createNode<JSDocParameterTag>(SyntaxKind.JSDocParameterTag);
             if (arguments.length) {
                 node.preParameterName = preParameterName;
                 node.typeExpression = typeExpression;
@@ -2039,9 +2027,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier, 
-            location?: TextRange): JSDocReturnTag {
-            let node = createNode<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, location);
+        export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier): JSDocReturnTag {
+            let node = createNode<JSDocReturnTag>(SyntaxKind.JSDocReturnTag);
             if (arguments.length) {
                 node.typeExpression = typeExpression;
                 node.atToken = atToken;
@@ -2056,9 +2043,8 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier, 
-            location?: TextRange): JSDocTypeTag {
-            let node = createNode<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, location);
+        export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier): JSDocTypeTag {
+            let node = createNode<JSDocTypeTag>(SyntaxKind.JSDocTypeTag);
             if (arguments.length) {
                 node.typeExpression = typeExpression;
                 node.atToken = atToken;
@@ -2073,9 +2059,9 @@ namespace ts {
             }
             return node;
         }
-        export function createJSDocTemplateTag(typeParameters?: Array<TypeParameterDeclaration>, atToken?: Node, tagName?: Identifier, 
-            location?: TextRange): JSDocTemplateTag {
-            let node = createNode<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, location);
+        export function createJSDocTemplateTag(typeParameters?: Array<TypeParameterDeclaration>, atToken?: Node, tagName?: Identifier
+            ): JSDocTemplateTag {
+            let node = createNode<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.atToken = atToken;
@@ -2115,6 +2101,21 @@ namespace ts {
     }
     export function isIdentifier(node: Node): node is Identifier {
         return node && node.kind === SyntaxKind.Identifier;
+    }
+    export function isFalseKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.FalseKeyword;
+    }
+    export function isNullKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.NullKeyword;
+    }
+    export function isSuperKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.SuperKeyword;
+    }
+    export function isThisKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.ThisKeyword;
+    }
+    export function isTrueKeyword(node: Node): node is LeftHandSideExpression {
+        return node && node.kind === SyntaxKind.TrueKeyword;
     }
     export function isQualifiedName(node: Node): node is QualifiedName {
         return node && node.kind === SyntaxKind.QualifiedName;
@@ -2293,7 +2294,7 @@ namespace ts {
     export function isVariableStatement(node: Node): node is VariableStatement {
         return node && node.kind === SyntaxKind.VariableStatement;
     }
-    export function isEmptyStatement(node: Node): node is Statement {
+    export function isEmptyStatement(node: Node): node is EmptyStatement {
         return node && node.kind === SyntaxKind.EmptyStatement;
     }
     export function isExpressionStatement(node: Node): node is ExpressionStatement {
@@ -2341,7 +2342,7 @@ namespace ts {
     export function isTryStatement(node: Node): node is TryStatement {
         return node && node.kind === SyntaxKind.TryStatement;
     }
-    export function isDebuggerStatement(node: Node): node is Statement {
+    export function isDebuggerStatement(node: Node): node is DebuggerStatement {
         return node && node.kind === SyntaxKind.DebuggerStatement;
     }
     export function isVariableDeclaration(node: Node): node is VariableDeclaration {
@@ -2520,5 +2521,339 @@ namespace ts {
     }
     export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag {
         return node && node.kind === SyntaxKind.JSDocTemplateTag;
+    }
+    export function isEntityName(node: Node): node is EntityName {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isBindingPatternOrIdentifier(node: Node): node is BindingPattern | Identifier {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.Identifier:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.ClassExpression:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isBlockOrExpression(node: Node): node is Block | Expression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.ClassExpression:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isLiteralExpression(node: Node): node is LiteralExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isLiteralExpressionOrTemplateExpression(node: Node): node is LiteralExpression | TemplateExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isJsxChild(node: Node): node is JsxChild {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JsxText:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isJsxAttributeOrJsxSpreadAttribute(node: Node): node is JsxAttribute | JsxSpreadAttribute {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JsxAttribute:
+                case SyntaxKind.JsxSpreadAttribute:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isExpressionOrVariableDeclarationList(node: Node): node is Expression | VariableDeclarationList {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.VariableDeclarationList:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isClassElement(node: Node): node is ClassElement {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.SemicolonClassElement:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.IndexSignature:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isIdentifierOrLiteralExpression(node: Node): node is Identifier | LiteralExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isModuleBlockOrModuleDeclaration(node: Node): node is ModuleBlock | ModuleDeclaration {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.ModuleDeclaration:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isEntityNameOrExternalModuleReference(node: Node): node is EntityName | ExternalModuleReference {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.ExternalModuleReference:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isNamedImportsOrNamespaceImport(node: Node): node is NamedImports | NamespaceImport {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.NamespaceImport:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isImportOrExportSpecifier(node: Node): node is ImportOrExportSpecifier {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isJSDocType(node: Node): node is JSDocType {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                case SyntaxKind.JSDocArrayType:
+                case SyntaxKind.JSDocUnionType:
+                case SyntaxKind.JSDocTupleType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JSDocTypeReference:
+                case SyntaxKind.JSDocOptionalType:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocVariadicType:
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                    return true;
+            }
+        }
+        return false; 
     }
 }
