@@ -4,7 +4,7 @@ tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(7,13): e
 tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(8,13): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(11,20): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(20,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(21,24): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(21,24): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
 
 
 ==== tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts (7 errors) ====
@@ -42,7 +42,7 @@ tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts(21,24): 
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     return super.test();
                            ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
                 }
             };
         }

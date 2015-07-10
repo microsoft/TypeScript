@@ -8,10 +8,10 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(30,16): error 
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(34,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(38,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(67,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(67,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 
 
 ==== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts (14 errors) ====
@@ -94,26 +94,26 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error T
         //super call in class member initializer of derived type
         t = super();
             ~~~~~
-!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
     
         fn() {
             //super call in class member function of derived type
             super();
             ~~~~~
-!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     
         //super call in class accessor (get and set) of derived type
         get foo() {
             super();
             ~~~~~
-!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
             return null;
         }
         set foo(n) {
             super();
             ~~~~~
-!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     }
     

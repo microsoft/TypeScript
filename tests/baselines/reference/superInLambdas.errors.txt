@@ -1,5 +1,5 @@
-tests/cases/compiler/superInLambdas.ts(47,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/compiler/superInLambdas.ts(51,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superInLambdas.ts(47,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/compiler/superInLambdas.ts(51,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/compiler/superInLambdas.ts(61,34): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/compiler/superInLambdas.ts(65,34): error TS1034: 'super' must be followed by an argument list or member access.
 
@@ -53,13 +53,13 @@ tests/cases/compiler/superInLambdas.ts(65,34): error TS1034: 'super' must be fol
             // super property in a nested lambda in a constructor 
             var superName = () => () => () => super.name;
                                                     ~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
         sayHello(): void {
             // super property in a nested lambda in a method
             var superName = () => () => () => super.name;
                                                     ~~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     }
     
