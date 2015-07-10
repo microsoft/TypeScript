@@ -616,7 +616,12 @@ namespace ts.formatting {
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
-                    return inheritedIndentation;
+                    if (forceIndentationInheritance && inheritedIndentation === Constants.Unknown) {
+                        return parentDynamicIndentation.getIndentation();
+                    }
+                    else {
+                        return inheritedIndentation;
+                    }
                 }
                 
                 // replace indentation with inherited one
