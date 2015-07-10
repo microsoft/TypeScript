@@ -52,6 +52,7 @@ namespace ts {
         interface NodeLinks {
             visibleChildren?: Node[];
             visited?: boolean;
+            collected?: boolean;
             hasExportDeclarations?: boolean;
         }
 
@@ -1558,38 +1559,26 @@ namespace ts {
                 return;
             }
 
+            // Make sure it is connected to its parent
+            ensureDeclarationVisible(node, errorNode);
+
             let links = getNodeLinks(node);
-            if (!links.visited) {
-                links.visited = true;
+            if (!links.collected) {
+                links.collected = true;
 
-                // Make the declaration visble by attaching it to its
-                // parent's visible declarations.
-                // also make sure the parent is reachable from a top-level
-                // declaration
-                let parent = getEnclosingDeclaration(node);
-                if (parent) {
-                    ensureDeclarationVisible(parent, errorNode);
-                    attachVisibleChild(parent, node);
-                }
-
+                // Collect any dependencies
                 visitNode(node);
-            }
 
-            if (errorNode) {
-                if (!canWriteDeclaration(node)) {
-                    reportDeclarationAccessiblityMessage(<Declaration>node, errorNode);
+                // Collect children as well
+                switch (node.kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.VariableStatement:
+                        collectTopLevelChildDeclarations(node);
+                        break;
                 }
-            }
-
-            // Collect children as well
-            switch (node.kind) {
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.VariableStatement:
-                    collectTopLevelChildDeclarations(node);
-                    break;
             }
         }
 
@@ -1606,6 +1595,10 @@ namespace ts {
             if (!links.visited) {
                 links.visited = true;
 
+                // Make the declaration visble by attaching it to its
+                // parent's visible declarations.
+                // also make sure the parent is reachable from a top-level
+                // declaration
                 var parent = getEnclosingDeclaration(node);
                 if (parent) {
                     ensureDeclarationVisible(parent, errorNode);
@@ -1613,6 +1606,7 @@ namespace ts {
                 }
             }
 
+            // Always report the error, even if the node was visited before
             if (errorNode) {
                 if (!canWriteDeclaration(node)) {
                     reportDeclarationAccessiblityMessage(<Declaration>node, errorNode);
