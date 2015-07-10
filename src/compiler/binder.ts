@@ -490,7 +490,7 @@ namespace ts {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
                         return true;
                     }
-                };
+                }
             }
             return false;
         }
