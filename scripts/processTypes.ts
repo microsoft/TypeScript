@@ -825,29 +825,21 @@ function generate(outputFile: string) {
     function writeCreateFunction(syntaxNode: SyntaxNode) {
         writer.write(`export function create${syntaxNode.kindName}(`);
         
-        let first = true;
         for (let member of syntaxNode.members) {
-            if (!first) {
-                writer.write(`, `);
-            }
-            else {
-                first = false;
-            }
-    
             let type = 
                 member.isNodeArray ? `Array<${member.elementTypeName}>` :
                 member.isModifiersArray ? `Array<Node>` :
                 member.typeName; 
             
-            writer.write(`${member.paramName}?: ${type}`);
+            writer.write(`${member.paramName}?: ${type}, `);
         }
         
-        writer.write(`): ${syntaxNode.typeName} {`);
+        writer.write(`location?: TextRange): ${syntaxNode.typeName} {`);
         writer.writeLine();
     
         writer.increaseIndent();
         if (syntaxNode.members.length) {
-            writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName});`);
+            writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName}, location);`);
             writer.writeLine();
             if (syntaxNode.members.length > 1) {
                 writer.write(`if (arguments.length) {`);
