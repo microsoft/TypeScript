@@ -1948,7 +1948,19 @@ namespace ts {
                     writePunctuation(writer, SyntaxKind.ColonToken);
                 }
                 writeSpace(writer);
-                buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, symbolStack);
+
+                let returnType: Type;
+                if (signature.typePredicate) {
+                    writer.writeParameter(signature.typePredicate.parameterName);
+                    writeSpace(writer);
+                    writeKeyword(writer, SyntaxKind.IsKeyword);
+                    writeSpace(writer);
+                    returnType = signature.typePredicate.type;
+                }
+                else {
+                    returnType = getReturnTypeOfSignature(signature);
+                }
+                buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
             }
 
             function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
@@ -3305,7 +3317,7 @@ namespace ts {
             let declarations: Declaration[] = [];
             for (let prop of props) {
                 if (prop.declarations) {
-                    declarations.push.apply(declarations, prop.declarations);
+                    addRange(declarations, prop.declarations);
                 }
                 propTypes.push(getTypeOfSymbol(prop));
             }
@@ -5490,7 +5502,7 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
-                    (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral))) {
+                    (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
                     // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
                     if (isInProcess(source, target)) {
                         return;
@@ -7094,14 +7106,17 @@ namespace ts {
 
                 // Look up the value in the current scope
                 if (node.tagName.kind === SyntaxKind.Identifier) {
-                    valueSymbol = getResolvedSymbol(<Identifier>node.tagName);
+                    let tag = <Identifier>node.tagName;
+                    let sym = getResolvedSymbol(tag);
+                    valueSymbol = sym.exportSymbol || sym;
                 }
                 else {
                     valueSymbol = checkQualifiedName(<QualifiedName>node.tagName).symbol;
                 }
 
-                if (valueSymbol !== unknownSymbol) {
+                if (valueSymbol && valueSymbol !== unknownSymbol) {
                     links.jsxFlags |= JsxFlags.ClassElement;
+                    getSymbolLinks(valueSymbol).referenced = true;
                 }
 
                 return valueSymbol || unknownSymbol;
@@ -7309,15 +7324,6 @@ namespace ts {
             }
 
             let targetAttributesType = getJsxElementAttributesType(node);
-
-            if (getNodeLinks(node).jsxFlags & JsxFlags.ClassElement) {
-                if (node.tagName.kind === SyntaxKind.Identifier) {
-                    checkIdentifier(<Identifier>node.tagName);
-                }
-                else {
-                    checkQualifiedName(<QualifiedName>node.tagName);
-                }
-            }
 
             let nameTable: Map<boolean> = {};
             // Process this array in right-to-left order so we know which
@@ -8005,6 +8011,7 @@ namespace ts {
 
             return args;
         }
+
 
         /**
           * Returns the effective argument count for a node that works like a function invocation.
@@ -11452,31 +11459,18 @@ namespace ts {
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
-        function checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node: Node) {
-            if (node.modifiers) {
-                if (inBlockOrObjectLiteralExpression(node)) {
-                    if (isAsyncFunctionLike(node)) {
-                        if (node.modifiers.length > 1) {
-                            return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
-                        }
-                    }
-                    else {
+        function checkGrammarDisallowedModifiersOnObjectLiteralExpressionMethod(node: Node) {
+            // We only disallow modifier on a method declaration if it is a property of object-literal-expression
+            if (node.modifiers && node.parent.kind === SyntaxKind.ObjectLiteralExpression){
+                if (isAsyncFunctionLike(node)) {
+                    if (node.modifiers.length > 1) {
                         return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
                     }
                 }
-            }
-        }
-
-        function inBlockOrObjectLiteralExpression(node: Node) {
-            while (node) {
-                if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.ObjectLiteralExpression) {
-                    return true;
+                else {
+                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
                 }
-
-                node = node.parent;
             }
-
-            return false;
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -14735,10 +14729,10 @@ namespace ts {
                 checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
-        function checkGrammarForOmittedArgument(node: CallExpression, arguments: NodeArray<Expression>): boolean {
-            if (arguments) {
+        function checkGrammarForOmittedArgument(node: CallExpression, args: NodeArray<Expression>): boolean {
+            if (args) {
                 let sourceFile = getSourceFileOfNode(node);
-                for (let arg of arguments) {
+                for (let arg of args) {
                     if (arg.kind === SyntaxKind.OmittedExpression) {
                         return grammarErrorAtPos(sourceFile, arg.pos, 0, Diagnostics.Argument_expression_expected);
                     }
@@ -14746,9 +14740,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarArguments(node: CallExpression, arguments: NodeArray<Expression>): boolean {
-            return checkGrammarForDisallowedTrailingComma(arguments) ||
-                checkGrammarForOmittedArgument(node, arguments);
+        function checkGrammarArguments(node: CallExpression, args: NodeArray<Expression>): boolean {
+            return checkGrammarForDisallowedTrailingComma(args) ||
+                checkGrammarForOmittedArgument(node, args);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
@@ -15034,7 +15028,7 @@ namespace ts {
         }
 
         function checkGrammarMethod(node: MethodDeclaration) {
-            if (checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) ||
+            if (checkGrammarDisallowedModifiersOnObjectLiteralExpressionMethod(node) ||
                 checkGrammarFunctionLikeDeclaration(node) ||
                 checkGrammarForGenerator(node)) {
                 return true;

@@ -353,6 +353,21 @@ namespace ts {
                     return emitEntityName(<Identifier>type);
                 case SyntaxKind.QualifiedName:
                     return emitEntityName(<QualifiedName>type);
+                case SyntaxKind.TypePredicate:
+                    return emitTypePredicate(<TypePredicateNode>type);
+            }
+
+            function writeEntityName(entityName: EntityName | Expression) {
+                if (entityName.kind === SyntaxKind.Identifier) {
+                    writeTextOfNode(currentSourceFile, entityName);
+                }
+                else {
+                    let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                    let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                    writeEntityName(left);
+                    write(".");
+                    writeTextOfNode(currentSourceFile, right);
+                }
             }
 
             function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
@@ -362,19 +377,6 @@ namespace ts {
 
                 handleSymbolAccessibilityError(visibilityResult);
                 writeEntityName(entityName);
-
-                function writeEntityName(entityName: EntityName | Expression) {
-                    if (entityName.kind === SyntaxKind.Identifier) {
-                        writeTextOfNode(currentSourceFile, entityName);
-                    }
-                    else {
-                        let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
-                        let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                        writeEntityName(left);
-                        write(".");
-                        writeTextOfNode(currentSourceFile, right);
-                    }
-                }
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
@@ -396,6 +398,12 @@ namespace ts {
                     emitCommaList(type.typeArguments, emitType);
                     write(">");
                 }
+            }
+
+            function emitTypePredicate(type: TypePredicateNode) {
+                writeTextOfNode(currentSourceFile, type.parameterName);
+                write(" is ");
+                emitType(type.type);
             }
 
             function emitTypeQuery(type: TypeQueryNode) {
