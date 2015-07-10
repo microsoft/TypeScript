@@ -4881,7 +4881,7 @@ namespace ts {
                 
                 if(sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract && (!targetReturnDecl || !(targetReturnDecl.flags & NodeFlags.Abstract))) {
                     if(reportErrors) {
-                        reportError(Diagnostics.Constructor_objects_of_abstract_type_cannot_be_assigned_to_constructor_objects_of_non_abstract_type);
+                        reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
                     }
                     return Ternary.False;
                 }

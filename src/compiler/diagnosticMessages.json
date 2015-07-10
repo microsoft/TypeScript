@@ -1617,7 +1617,7 @@
         "category": "Error",
         "code": 2516
     },
-    "Constructor objects of abstract type cannot be assigned to constructor objects of non-abstract type.": {
+    "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
         "code":2517
     },
