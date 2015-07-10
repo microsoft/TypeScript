@@ -8,6 +8,7 @@ export function w(): e.w { // Should be OK
 >w : Symbol(e.w, Decl(exporter.ts, 0, 0))
 
     return {name: 'value' };
+>{name: 'value' } : Symbol(, Decl(consumer.ts, 3, 10))
 >name : Symbol(name, Decl(consumer.ts, 3, 12))
 }
 === tests/cases/compiler/w1.ts ===
