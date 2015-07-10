@@ -4875,17 +4875,19 @@ namespace ts {
                 let targetReturnType = getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) return result;
                 let sourceReturnType = getReturnTypeOfSignature(source);
-                
-                let targetReturnDecl = targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+
                 let sourceReturnDecl = sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
-                
-                if(sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract && (!targetReturnDecl || !(targetReturnDecl.flags & NodeFlags.Abstract))) {
-                    if(reportErrors) {
+                let targetReturnDecl = targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
+                let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
+
+                if (sourceIsAbstract && !targetIsAbstract) {
+                    if (reportErrors) {
                         reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
                     }
                     return Ternary.False;
                 }
-                
+
                 return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
             }
 
