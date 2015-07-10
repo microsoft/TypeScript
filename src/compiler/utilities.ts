@@ -380,6 +380,15 @@ namespace ts {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
+    /** Gets the original node for a node that was updated via one of the factory.updateX functions */
+    export function getOriginalNode(node: Node) {
+        while (node.original) {
+            node = node.original;
+        }
+        
+        return node;
+    }
+
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {

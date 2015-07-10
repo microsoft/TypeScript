@@ -453,6 +453,7 @@ namespace ts {
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
     // @factoryhidden("parent", true)
+    // @factoryhidden("original", true)
     // @factoryhidden("jsDocComment", true)
     // @factoryhidden("nextContainer", true)
     // @factoryorder("decorators", "modifiers")
@@ -467,7 +468,8 @@ namespace ts {
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding
+        parent?: Node;                                  // Parent node (initialized by binding)
+        /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)

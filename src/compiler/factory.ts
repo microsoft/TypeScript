@@ -13,6 +13,15 @@ namespace ts {
     
     // @internal
     export namespace factory {
+        export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {
+            if (!node || flags === undefined) {
+                return node;
+            }
+            
+            node.flags = flags;
+            return node;
+        }
+        
         export function setTextRange<T extends TextRange>(node: T, range: TextRange): T {
             if (!node || !range) {
                 return node;
@@ -23,7 +32,7 @@ namespace ts {
             return node;
         }
 
-        export function setModifiers<TNode extends Node>(node: TNode, modifiers: Node[]): TNode {
+        export function setModifiers<T extends Node>(node: T, modifiers: Node[]): T {
             if (modifiers) {
                 node.modifiers = createModifiersArray(modifiers);
                 node.flags |= node.modifiers.flags;
@@ -43,18 +52,17 @@ namespace ts {
             }
             
             newNode.flags = flags;
-            newNode.pos = oldNode.pos;
-            newNode.end = oldNode.end;
             newNode.parent = oldNode.parent;
-            return newNode;
+            newNode.original = oldNode;
+            return setTextRange(newNode, oldNode);
         }
         
-        export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange): T {
-            return setTextRange(<T>new (getNodeConstructor(kind))(), location);
+        export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): T {
+            return setNodeFlags(setTextRange(<T>new (getNodeConstructor(kind))(), location), flags);
         }
         
-        export function createNodeArray<TNode extends Node>(elements?: TNode[], location?: TextRange) {
-            let nodes = <NodeArray<TNode>>(elements || []);
+        export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange) {
+            let nodes = <NodeArray<T>>(elements || []);
             if (nodes.pos === undefined) {
                 nodes.pos = -1;
                 nodes.end = -1;
@@ -148,21 +156,10 @@ namespace ts {
         export function createVoidZeroExpression(): VoidExpression {
             return factory.createVoidExpression(factory.createNumericLiteral2(0));
         }
-
-        export function cloneIdentifier(node: Identifier) {
-            return factory.createIdentifier(
-                node.text);
-        }
-
-        export function cloneIdentifierOrLiteralExpression(node: Identifier | LiteralExpression) {
-            let newNode = factory.createNode<Identifier | LiteralExpression>(node.kind);
-            newNode.text = node.text;
-            return newNode;
-        }
-
+        
         export function createPropertyOrElementAccessExpression(expression: Expression, propName: Identifier | LiteralExpression): LeftHandSideExpression {
             if (!nodeIsSynthesized(propName)) {
-                propName = cloneIdentifierOrLiteralExpression(propName);
+                propName = cloneNode(propName);
             }
             
             if (propName.kind !== SyntaxKind.Identifier) {
@@ -195,6 +192,23 @@ namespace ts {
                 [
                     factory.createNumericLiteral2(sliceIndex)
                 ]
+            );
+        }
+        
+        export function createDefaultValueCheck(value: Expression, defaultValue: Expression, ensureIdentifier: (value: Expression) => Expression): Expression {
+            // The value expression will be evaluated twice, so for anything but a simple identifier
+            // we need to generate a temporary variable
+            value = ensureIdentifier(value);
+            
+            // <value> === void 0 ? <defaultValue> : <value>
+            return factory.createConditionalExpression2(
+                factory.createBinaryExpression2(
+                    value,
+                    SyntaxKind.EqualsEqualsEqualsToken,
+                    factory.createVoidZeroExpression()
+                ),
+                defaultValue,
+                value
             );
         }
     }

@@ -3045,31 +3045,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return expr;
                 }
 
-                function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
-                    // The value expression will be evaluated twice, so for anything but a simple identifier
-                    // we need to generate a temporary variable
-                    value = ensureIdentifier(value);
-                    // Return the expression 'value === void 0 ? defaultValue : value'
-                    return factory.createConditionalExpression2(
-                        factory.createBinaryExpression2(
-                            value,
-                            SyntaxKind.EqualsEqualsEqualsToken,
-                            factory.createVoidZeroExpression()
-                        ),
-                        defaultValue,
-                        value
-                    );
-                }
-
-                function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier | LiteralExpression): Expression {
-                    // We create a synthetic copy of the identifier in order to avoid the rewriting that might
-                    // otherwise occur when the identifier is emitted.
-                    return factory.createPropertyOrElementAccessExpression(
-                        factory.parenthesizeForAccess(object),
-                        factory.cloneIdentifierOrLiteralExpression(propName)
-                    );
-                }
-
                 function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
                     let properties = target.properties;
                     if (properties.length !== 1) {
@@ -3108,7 +3083,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function emitDestructuringAssignment(target: Expression, value: Expression) {
                     if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
-                        value = createDefaultValueCheck(value, (<BinaryExpression>target).right);
+                        value = factory.createDefaultValueCheck(value, (<BinaryExpression>target).right, ensureIdentifier);
                         target = (<BinaryExpression>target).left;
                     }
                     if (target.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -3145,7 +3120,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitBindingElement(target: BindingElement, value: Expression) {
                     if (target.initializer) {
                         // Combine value and initializer
-                        value = value ? createDefaultValueCheck(value, target.initializer) : target.initializer;
+                        value = value ? factory.createDefaultValueCheck(value, target.initializer, ensureIdentifier) : target.initializer;
                     }
                     else if (!value) {
                         // Use 'void 0' in absence of value and initializer
