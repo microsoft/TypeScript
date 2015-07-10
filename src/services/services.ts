@@ -3103,7 +3103,7 @@ namespace ts {
             function isCompletionListBlocker(contextToken: Node): boolean {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
-                    isIdentifierDefinitionLocation(contextToken) ||
+                    isSolelyIdentifierDefinitionLocation(contextToken) ||
                     isDotOfNumericLiteral(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
@@ -3368,7 +3368,10 @@ namespace ts {
                 return false;
             }
 
-            function isIdentifierDefinitionLocation(contextToken: Node): boolean {
+            /**
+             * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
+             */
+            function isSolelyIdentifierDefinitionLocation(contextToken: Node): boolean {
                 let containingNodeKind = contextToken.parent.kind;
                 switch (contextToken.kind) {
                     case SyntaxKind.CommaToken:
