@@ -4766,9 +4766,37 @@ namespace ts {
                 outer: for (let t of targetSignatures) {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
                         let localErrors = reportErrors;
+                        let checkedAbstractAssignability = false;
                         for (let s of sourceSignatures) {
                             if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
-                                let related = signatureRelatedTo(s, t, localErrors);
+                                let related = Ternary.True;
+
+                                // Because the "abstractness" of a class is the same across all construct signatures
+                                // (internally we are checking the corresponding declaration), it is enough to perform 
+                                // the check and report an error once over all pairs of source and target construct signatures.
+                                if (!checkedAbstractAssignability) {
+                                    checkedAbstractAssignability = true;
+
+                                    let sourceErasedSignature = getErasedSignature(s);
+                                    let targetErasedSignature = getErasedSignature(t);
+
+                                    let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
+                                    let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
+
+                                    let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
+                                    let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                                    let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
+                                    let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
+
+                                    if (sourceIsAbstract && !targetIsAbstract) {
+                                        if (reportErrors) {
+                                            reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
+                                        }
+                                        related = Ternary.False;
+                                    }
+                                }
+
+                                related &= signatureRelatedTo(s, t, localErrors);
                                 if (related) {
                                     result &= related;
                                     errorInfo = saveErrorInfo;
@@ -4875,18 +4903,6 @@ namespace ts {
                 let targetReturnType = getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) return result;
                 let sourceReturnType = getReturnTypeOfSignature(source);
-
-                let sourceReturnDecl = sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
-                let targetReturnDecl = targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
-                let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
-                let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
-
-                if (sourceIsAbstract && !targetIsAbstract) {
-                    if (reportErrors) {
-                        reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
-                    }
-                    return Ternary.False;
-                }
 
                 return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
             }
