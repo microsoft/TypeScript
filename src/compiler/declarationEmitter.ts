@@ -1151,72 +1151,93 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return visitTypeName(<Identifier>node);
             }
-        }
 
-        function visitNodes(nodes: NodeArray<any>): void {
-            forEach(nodes, visitNode);
-        }
+            return;
 
-        function visitExportDeclaration(node: ExportDeclaration): void {
-            if (!node.moduleSpecifier) {
-                forEach(node.exportClause.elements, e => collectAliasDeclaration(e, node));
-            }
-        }
-
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): void {
-            if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
-                collectAliasDeclaration(node, node.moduleReference);
-            }
-        }
-
-        function visitExportAssignment(node: ExportAssignment): void {
-            if (node.expression.kind === SyntaxKind.Identifier) {
-                collectAliasDeclaration(node, node.expression);
-            }
-            else if (!node.isExportEquals) { 
-                // TODO: handel expressions
-                // TODO: Cache the result
-                let writer = createNewTextWriterWithSymbolWriter();
-                let previousErrorNode = currentErrorNode;
-                currentErrorNode = node.expression;
-                resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
-                currentErrorNode = previousErrorNode;
-            }
-        }
-
-        function visitSignatureDeclaration(node: SignatureDeclaration): void {
-            if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
-                return;
+            function visitExportDeclaration(node: ExportDeclaration): void {
+                if (!node.moduleSpecifier) {
+                    forEach(node.exportClause.elements, e => collectAliasDeclaration(e, node));
+                }
             }
 
-            visitNodes(node.typeParameters);
-            visitNodes(node.parameters);
-
-            if (node.type) {
-                visitNode(node.type);
-            }
-            else if (node.kind !== SyntaxKind.Constructor) {
-                // TODO: handel infered type
-                // TODO: Cache the result
-                let writer = createNewTextWriterWithSymbolWriter();
-                let previousErrorNode = currentErrorNode;
-                currentErrorNode = node.name || node;
-                resolver.writeReturnTypeOfSignatureDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
-                currentErrorNode = previousErrorNode;
-            }
-        }
-
-        function visitAccessorDeclaration(node: AccessorDeclaration) {
-            if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
-                return;
+            function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): void {
+                if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
+                    collectAliasDeclaration(node, node.moduleReference);
+                }
             }
 
-            let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
+            function visitExportAssignment(node: ExportAssignment): void {
+                if (node.expression.kind === SyntaxKind.Identifier) {
+                    collectAliasDeclaration(node, node.expression);
+                }
+                else if (!node.isExportEquals) { 
+                    // TODO: handel expressions
+                    // TODO: Cache the result
+                    let writer = createNewTextWriterWithSymbolWriter();
+                    let previousErrorNode = currentErrorNode;
+                    currentErrorNode = node.expression;
+                    resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    currentErrorNode = previousErrorNode;
+                }
+            }
 
-            if (accessors.firstAccessor === node) {
-                let type = getTypeAnnotationFromAccessor(accessors.getAccessor, accessors.setAccessor);
-                if (type) {
-                    visitNode(type);
+            function visitSignatureDeclaration(node: SignatureDeclaration): void {
+                if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
+                    return;
+                }
+
+                visitNodes(node.typeParameters);
+                visitNodes(node.parameters);
+
+                if (node.type) {
+                    visitNode(node.type);
+                }
+                else if (node.kind !== SyntaxKind.Constructor) {
+                    // TODO: handel infered type
+                    // TODO: Cache the result
+                    let writer = createNewTextWriterWithSymbolWriter();
+                    let previousErrorNode = currentErrorNode;
+                    currentErrorNode = node.name || node;
+                    resolver.writeReturnTypeOfSignatureDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    currentErrorNode = previousErrorNode;
+                }
+            }
+
+            function visitAccessorDeclaration(node: AccessorDeclaration) {
+                if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
+                    return;
+                }
+
+                let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
+
+                if (accessors.firstAccessor === node) {
+                    let type = getTypeAnnotationFromAccessor(accessors.getAccessor, accessors.setAccessor);
+                    if (type) {
+                        visitNode(type);
+                    }
+                    else {
+                        // TODO: handel infered type
+                        // TODO: Cache the result
+                        let writer = createNewTextWriterWithSymbolWriter();
+                        let previousErrorNode = currentErrorNode;
+                        currentErrorNode = node.name;
+                        resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                        currentErrorNode = previousErrorNode;
+                    }
+                }
+            }
+
+            function visitPropertyDeclaration(node: PropertyDeclaration): void {
+                if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
+                    return;
+                }
+
+                if (isBindingPattern(node.name)) {
+                    return visitNode(node.name);
+                }
+
+                if (node.type) {
+                    visitNode(node.type);
                 }
                 else {
                     // TODO: handel infered type
@@ -1228,59 +1249,40 @@ namespace ts {
                     currentErrorNode = previousErrorNode;
                 }
             }
-        }
 
-        function visitPropertyDeclaration(node: PropertyDeclaration): void {
-            if (hasDynamicName(node) || node.flags & NodeFlags.Private) {
-                return;
+            function visitHeritageClause(node: HeritageClause) {
+                let firstEntry = node.types && node.types[0];
+                if (node.token === SyntaxKind.ExtendsKeyword &&
+                    firstEntry && !isSupportedExpressionWithTypeArguments(firstEntry)) {
+                    // An expression in an extends clause
+                    // TODO: Cache the result
+                    let writer = createNewTextWriterWithSymbolWriter();
+                    let previousErrorNode = currentErrorNode;
+                    currentErrorNode = firstEntry;
+                    resolver.writeBaseConstructorTypeOfClass((<ClassLikeDeclaration>node.parent), getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    currentErrorNode = previousErrorNode;
+                }
+                else {
+                    // regular type references
+                    forEach(node.types, visitExpressionWithTypeArguments);
+                }
             }
 
-            if (isBindingPattern(node.name)) {
-                return visitNode(node.name);
+            function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): void {
+                Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
+                visitNode(node.expression);
+                visitNodes(node.typeArguments);
             }
 
-            if (node.type) {
-                visitNode(node.type);
+            function visitTypeName(node: Identifier): void {
+                let symbol = resolver.getSymbolAtLocation(node);
+                if (symbol) {
+                    collectDeclarations(symbol, node);
+                }
             }
-            else {
-                // TODO: handel infered type
-                // TODO: Cache the result
-                let writer = createNewTextWriterWithSymbolWriter();
-                let previousErrorNode = currentErrorNode;
-                currentErrorNode = node.name;
-                resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
-                currentErrorNode = previousErrorNode;
-            }
-        }
 
-        function visitHeritageClause(node: HeritageClause) {
-            let firstEntry = node.types && node.types[0];
-            if (node.token === SyntaxKind.ExtendsKeyword &&
-                firstEntry && !isSupportedExpressionWithTypeArguments(firstEntry)) {
-                // An expression in an extends clause
-                // TODO: Cache the result
-                let writer = createNewTextWriterWithSymbolWriter();
-                let previousErrorNode = currentErrorNode;
-                currentErrorNode = firstEntry;
-                resolver.writeBaseConstructorTypeOfClass((<ClassLikeDeclaration>node.parent), getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
-                currentErrorNode = previousErrorNode;
-            }
-            else {
-                // regular type references
-                forEach(node.types, visitExpressionWithTypeArguments);
-            }
-        }
-
-        function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): void {
-            Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
-            visitNode(node.expression);
-            visitNodes(node.typeArguments);
-        }
-
-        function visitTypeName(node: Identifier): void {
-            let symbol = resolver.getSymbolAtLocation(node);
-            if (symbol) {
-                collectDeclarations(symbol, node);
+            function visitNodes(nodes: NodeArray<any>): void {
+                forEach(nodes, visitNode);
             }
         }
 
@@ -1290,7 +1292,6 @@ namespace ts {
                 collectDeclarations(target, errorNode);
             }
         }
-
 
         function isDeclarationExported(node: Node): boolean {
             if (compilerOptions.stripInternal && isInternal(node)) {
@@ -1385,7 +1386,6 @@ namespace ts {
             }
             return undefined;
         }
-
 
         function collectDeclarations(symbol: Symbol, errorNode: Node): void {
             forEach(symbol.declarations, d => collectDeclaration(d, errorNode));
