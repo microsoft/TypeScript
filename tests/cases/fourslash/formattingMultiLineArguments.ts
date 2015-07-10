@@ -45,4 +45,4 @@ verify.currentLineContentIs("    bar: 3");
 
 goTo.marker('6');
 edit.insert(';');
-verify.currentLineContentIs('})');
+verify.currentLineContentIs('});');
