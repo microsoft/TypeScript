@@ -610,6 +610,9 @@ namespace ts {
                 if (isSupportedExpressionWithTypeArguments(node)) {
                     emitType(node);
                 }
+                else {
+                    resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
             }
         }
 
@@ -1093,6 +1096,9 @@ namespace ts {
                     return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
                         visitNodes((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses);
 
+                case SyntaxKind.HeritageClause:
+                    return visitHeritageClause(<HeritageClause>node);
+
                 case SyntaxKind.TypeAliasDeclaration:
                     return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
                         visitNode((<TypeAliasDeclaration>node).type);
@@ -1134,8 +1140,6 @@ namespace ts {
                     return visitSignatureDeclaration(<FunctionOrConstructorTypeNode>node);
                 case SyntaxKind.TypeLiteral:
                     return visitNodes((<TypeLiteralNode>node).members);
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    return visitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
                     return visitNode((<TypeQueryNode>node).exprName);
                 case SyntaxKind.TypeReference:
@@ -1249,15 +1253,27 @@ namespace ts {
             }
         }
 
-        function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): void {
-            // TODO: handel infered type
-            // TODO: Cache the result
-            let writer = createNewTextWriterWithSymbolWriter();
-            let previousErrorNode = currentErrorNode;
-            currentErrorNode = node;
-            resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
-            currentErrorNode = previousErrorNode;
+        function visitHeritageClause(node: HeritageClause) {
+            let firstEntry = node.types && node.types[0];
+            if (node.token === SyntaxKind.ExtendsKeyword &&
+                firstEntry && !isSupportedExpressionWithTypeArguments(firstEntry)) {
+                // An expression in an extends clause
+                // TODO: Cache the result
+                let writer = createNewTextWriterWithSymbolWriter();
+                let previousErrorNode = currentErrorNode;
+                currentErrorNode = firstEntry;
+                resolver.writeBaseConstructorTypeOfClass((<ClassLikeDeclaration>node.parent), getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                currentErrorNode = previousErrorNode;
+            }
+            else {
+                // regular type references
+                forEach(node.types, visitExpressionWithTypeArguments);
+            }
+        }
 
+        function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): void {
+            Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
+            visitNode(node.expression);
             visitNodes(node.typeArguments);
         }
 

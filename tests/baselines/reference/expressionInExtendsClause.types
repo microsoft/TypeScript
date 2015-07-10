@@ -1,0 +1,33 @@
+=== tests/cases/compiler/expressionInExtendsClause.ts ===
+
+export class C<T, U> {
+>C : C<T, U>
+>T : T
+>U : U
+
+    x: T;
+>x : T
+>T : T
+
+    y: U;
+>y : U
+>U : U
+}
+
+// Not exported, but not important in declaration generation
+function getClass(a) {
+>getClass : (a: any) => typeof C
+>a : any
+
+    return C;
+>C : typeof C
+}
+
+export class MyClass extends getClass(2) <string, number> {
+>MyClass : MyClass
+>getClass(2) : C<string, number>
+>getClass : (a: any) => typeof C
+>2 : number
+}
+
+

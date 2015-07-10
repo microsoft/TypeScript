@@ -14108,6 +14108,14 @@ namespace ts {
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
+        function writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+            let classSymbol = getSymbolOfNode(node);
+            let classType = <InterfaceType>getDeclaredTypeOfSymbol(classSymbol);
+            resolveBaseTypesOfClass(classType);
+            let type = classType.resolvedBaseTypes[0];
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+        }
+
         function hasGlobalName(name: string): boolean {
             return hasProperty(globals, name);
         }
@@ -14179,6 +14187,7 @@ namespace ts {
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
+                writeBaseConstructorTypeOfClass,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
