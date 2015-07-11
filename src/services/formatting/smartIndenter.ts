@@ -48,7 +48,9 @@ namespace ts.formatting {
             let indentationDelta: number;
 
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown)) {
+                if (positionBelongsToNode(current, position, sourceFile) &&
+                    shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown) &&
+                    !isListIndentationPrevented(current, sourceFile, options)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -128,11 +130,6 @@ namespace ts.formatting {
                     let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
-                    }
-
-                    actualIndentation = getPrecedingArgumentIndentationInMultiLineExpression(position, current, first, sourceFile, options);
-                    if (actualIndentation !== Value.Unknown) {
-                        return actualIndentation;
                     }
 
                     actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
@@ -378,51 +375,42 @@ namespace ts.formatting {
             return Value.Unknown;
         }
 
-        function getPrecedingArgumentIndentationInMultiLineExpression(
-            position: number,
-            node: Node,
-            firstNodeInPosition: Node,
-            sourceFile: SourceFile,
-            options: EditorOptions) {
-
-            if (position === Value.Unknown || node !== firstNodeInPosition) {
-                return Value.Unknown;
-            }
-            
+        function isListIndentationPrevented(node: Node, sourceFile: SourceFile, options: EditorOptions) {
             if (node.kind === SyntaxKind.CallExpression ||
                 node.kind === SyntaxKind.NewExpression) {
 
                 let arguments = (<CallExpression | NewExpression>node).arguments;
                 if (!arguments.length) {
-                    // do nothing when the expression has no arguments
-                    return Value.Unknown;
+                    return false;
                 }
 
-                let precedingArgument = findPrecedingTokenFromNodeArray(position, arguments);
-                if (!precedingArgument) {
-                    return Value.Unknown;
-                }
-                
                 let ancesterExpression = (<CallExpression | NewExpression>node).expression;
                 let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
-                
-                let precedingArgumentEnd = sourceFile.getLineAndCharacterOfPosition(precedingArgument.end);
-                if (precedingArgumentEnd.line === ancesterExpressionEnd.line) {
-                    // do nothing when no line break is between argument list start and cursor.
-                    return Value.Unknown;
-                }
 
-                return findColumnForFirstNonWhitespaceCharacterInLine(precedingArgumentEnd, sourceFile, options);
+                let preventer = findIndentationPreventingArgument(arguments, ancesterExpressionEnd);
+
+                return !!preventer;
             }
 
-            return Value.Unknown;
+            return false;
 
-            function findPrecedingTokenFromNodeArray(position: number, nodeArray: Node[]) {
-                for (let i = nodeArray.length - 1; i >= 0; i--) {
-                    let node = nodeArray[i];
-                    if (node.end <= position)
-                        return node;
+            function findIndentationPreventingArgument(argumentList: Node[], listParentExpressionEnd: LineAndCharacter) {
+                for (let argumentNode of argumentList) {
+                    let argumentEnd = sourceFile.getLineAndCharacterOfPosition(argumentNode.getEnd());
+
+                    if (argumentEnd.line === listParentExpressionEnd.line) {
+                        continue;
+                    }
+
+                    let argumentStart = sourceFile.getLineAndCharacterOfPosition(argumentNode.getStart());
+
+                    if (argumentStart.line !== listParentExpressionEnd.line) {
+                        continue;
+                    }
+
+                    return argumentNode;
                 }
+
                 return null;
             }
         }
