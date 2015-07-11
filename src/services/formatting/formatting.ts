@@ -480,6 +480,8 @@ namespace ts.formatting {
                         case SyntaxKind.CloseBraceToken:
                         case SyntaxKind.OpenBracketToken:
                         case SyntaxKind.CloseBracketToken:
+                        case SyntaxKind.OpenParenToken:
+                        case SyntaxKind.CloseParenToken:
                         case SyntaxKind.ElseKeyword:
                         case SyntaxKind.WhileKeyword:
                         case SyntaxKind.AtToken:
