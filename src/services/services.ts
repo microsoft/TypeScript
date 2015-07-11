@@ -3477,10 +3477,6 @@ namespace ts {
             function filterModuleExports(exports: Symbol[], namedImportsOrExports: NamedImportsOrExports): Symbol[] {
                 let exisingImports: Map<boolean> = {};
 
-                if (!importDeclaration.importClause) {
-                    return exports;
-                }
-
                 for (let element of namedImportsOrExports.elements) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (element.getStart() <= position && position <= element.getEnd()) {
