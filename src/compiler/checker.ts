@@ -3352,6 +3352,25 @@ namespace ts {
             return undefined;
         }
 
+        function isKnownProperty(type: Type, name: string): boolean {
+            if (type.flags & TypeFlags.ObjectType) {
+                var resolved = resolveStructuredTypeMembers(type);
+                return !!(resolved.properties.length === 0 ||
+                    resolved.stringIndexType ||
+                    resolved.numberIndexType ||
+                    getPropertyOfType(type, name));
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                for (let t of (<UnionOrIntersectionType>type).types) {
+                    if (isKnownProperty(t, name)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
         function getSignaturesOfStructuredType(type: Type, kind: SignatureKind): Signature[] {
             if (type.flags & TypeFlags.StructuredType) {
                 let resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -4601,20 +4620,14 @@ namespace ts {
             }
 
             function hasExcessProperties(source: ObjectType, target: Type, reportErrors: boolean): boolean {
-                if (target.flags & TypeFlags.ObjectType) {
-                    var resolved = resolveStructuredTypeMembers(target);
-                    if (resolved.properties.length > 0 && !resolved.stringIndexType && !resolved.numberIndexType) {
-                        for (let prop of getPropertiesOfObjectType(source)) {
-                            if (!getPropertyOfType(target, prop.name)) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
-                                }
-                                return true;
-                            }
+                for (let prop of getPropertiesOfObjectType(source)) {
+                    if (!isKnownProperty(target, prop.name)) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
                         }
+                        return true;
                     }
                 }
-                return false;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
