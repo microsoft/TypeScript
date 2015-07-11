@@ -22,9 +22,11 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     Property 'z' is missing in type '{ x: number; y: string; }'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(87,47): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(89,52): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(89,62): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+  Property 'y' does not exist on type 'A92'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts (15 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts (16 errors) ====
     // Generic call with no parameters
     function noParams<T extends {}>() { }
     noParams();
@@ -153,6 +155,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                        ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
+                                                                 ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+!!! error TS2345:   Property 'y' does not exist on type 'A92'.
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type
