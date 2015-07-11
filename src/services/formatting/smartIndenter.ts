@@ -82,24 +82,21 @@ namespace ts.formatting {
                 return 0;
             }
 
-            return getIndentationForNodeWorker(position, current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+            return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
             let start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
-            return getIndentationForNodeWorker(Value.Unknown, n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
         }
 
         function getIndentationForNodeWorker(
-            position: number,
             current: Node,
             currentStart: LineAndCharacter,
             ignoreActualIndentationRange: TextRange,
             indentationDelta: number,
             sourceFile: SourceFile,
             options: EditorOptions): number {
-
-            let first = current;
 
             let parent: Node = current.parent;
             let parentStart: LineAndCharacter;
@@ -131,7 +128,6 @@ namespace ts.formatting {
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
-
                     actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
