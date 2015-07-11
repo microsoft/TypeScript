@@ -3479,7 +3479,7 @@ namespace ts {
 
                 for (let element of namedImportsOrExports.elements) {
                     // If this is the current item we are editing right now, do not filter it out
-                    if (element.getStart() <= position && poition <= element.getEnd()) {
+                    if (element.getStart() <= position && position <= element.getEnd()) {
                         continue;
                     }
 
