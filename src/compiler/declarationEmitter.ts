@@ -390,7 +390,7 @@ namespace ts {
                     }
                 }
             }
-
+            
             function emitTypeReference(type: TypeReferenceNode) {
                 emitEntityName(type.typeName);
                 if (type.typeArguments) {

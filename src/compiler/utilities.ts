@@ -380,6 +380,15 @@ namespace ts {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
+    /** Gets the original node for a node that was updated via one of the factory.updateX functions */
+    export function getOriginalNode(node: Node) {
+        while (node.original) {
+            node = node.original;
+        }
+        
+        return node;
+    }
+
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
@@ -1102,7 +1111,7 @@ namespace ts {
         return false;
     }
 
-    export function isDeclaration(node: Node): boolean {
+    export function isDeclaration(node: Node): node is Declaration {
         switch (node.kind) {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
@@ -1137,7 +1146,7 @@ namespace ts {
         return false;
     }
 
-    export function isStatement(n: Node): boolean {
+    export function isStatement(n: Node): n is Statement {
         switch (n.kind) {
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
@@ -1158,21 +1167,6 @@ namespace ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.ExportAssignment:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    export function isClassElement(n: Node): boolean {
-        switch (n.kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.IndexSignature:
                 return true;
             default:
                 return false;
@@ -1425,20 +1419,7 @@ namespace ts {
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
-        return node.pos === -1;
-    }
-
-    export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind);
-        node.startsOnNewLine = startsOnNewLine;
-        return node;
-    }
-
-    export function createSynthesizedNodeArray(): NodeArray<any> {
-        let array = <NodeArray<any>>[];
-        array.pos = -1;
-        array.end = -1;
-        return array;
+        return node && node.pos === -1;
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
@@ -1915,7 +1896,7 @@ namespace ts {
         return 0;
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Node): boolean {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:
