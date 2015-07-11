@@ -3428,6 +3428,11 @@ namespace ts {
                     case SyntaxKind.ProtectedKeyword:
                         return containingNodeKind === SyntaxKind.Parameter;
 
+                    case SyntaxKind.AsKeyword:
+                        containingNodeKind === SyntaxKind.ImportSpecifier ||
+                        containingNodeKind === SyntaxKind.ExportSpecifier ||
+                        containingNodeKind === SyntaxKind.NamespaceImport;
+
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
                     case SyntaxKind.InterfaceKeyword:
