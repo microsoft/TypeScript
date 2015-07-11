@@ -562,7 +562,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
-    reporter = process.env.reporter || process.env.r || 'dot';
+    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;

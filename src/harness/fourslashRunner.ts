@@ -35,7 +35,7 @@ class FourSlashRunner extends RunnerBase {
             this.tests = this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
         }
 
-        describe('Fourslash tests', () => {
+        describe(this.testSuiteName + ' tests', () => {
             this.tests.forEach((fn: string) => {
                  describe(fn, () => {
                        fn = ts.normalizeSlashes(fn);

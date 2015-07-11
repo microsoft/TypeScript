@@ -10,6 +10,7 @@ const enum CompilerTestType {
 
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = 'tests/cases';
+    private testSuiteName: string;
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;
@@ -24,16 +25,17 @@ class CompilerBaselineRunner extends RunnerBase {
         this.decl = true;
         this.output = true;
         if (testType === CompilerTestType.Conformance) {
-            this.basePath += '/conformance';
+            this.testSuiteName = 'conformance';
         }
         else if (testType === CompilerTestType.Regressions) {
-            this.basePath += '/compiler';
+            this.testSuiteName = 'compiler';
         }
         else if (testType === CompilerTestType.Test262) {
-            this.basePath += '/test262';
+            this.testSuiteName = 'test262';
         } else {
-            this.basePath += '/compiler'; // default to this for historical reasons
+            this.testSuiteName = 'compiler'; // default to this for historical reasons
         }
+        this.basePath += '/' + this.testSuiteName;
     }
 
     public checkTestCodeOutput(fileName: string) {
@@ -384,7 +386,7 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public initializeTests() {
-        describe('Compiler tests', () => {
+        describe(this.testSuiteName + ' tests', () => {
             describe("Setup compiler for compiler baselines", () => {
                 var harnessCompiler = Harness.Compiler.getCompiler();
                 this.parseOptions();
