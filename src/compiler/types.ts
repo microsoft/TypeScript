@@ -1743,10 +1743,12 @@ namespace ts {
         FromSignature           = 0x00040000,  // Created for signature assignment check
         ObjectLiteral           = 0x00080000,  // Originates in an object literal
         /* @internal */
-        ContainsUndefinedOrNull = 0x00100000,  // Type is or contains Undefined or Null type
+        FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsObjectLiteral   = 0x00200000,  // Type is or contains object literal type
-        ESSymbol                = 0x00400000,  // Type of symbol primitive introduced in ES6
+        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
+        /* @internal */
+        ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
+        ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1837,6 +1839,11 @@ namespace ts {
         constructSignatures: Signature[];  // Construct signatures of type
         stringIndexType?: Type;            // String index type
         numberIndexType?: Type;            // Numeric index type
+    }
+
+    /* @internal */
+    export interface FreshObjectLiteralType extends ResolvedType {
+        regularType: ResolvedType;  // Regular version of fresh type
     }
 
     // Just a place to cache element types of iterables and iterators
@@ -2189,6 +2196,7 @@ namespace ts {
 
     export interface CompilerHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;

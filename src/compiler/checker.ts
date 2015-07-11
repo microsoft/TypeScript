@@ -1966,15 +1966,12 @@ namespace ts {
             }
 
             return _displayBuilder || (_displayBuilder = {
-                symbolToString: symbolToString,
-                typeToString: typeToString,
                 buildSymbolDisplay: buildSymbolDisplay,
                 buildTypeDisplay: buildTypeDisplay,
                 buildTypeParameterDisplay: buildTypeParameterDisplay,
                 buildParameterDisplay: buildParameterDisplay,
                 buildDisplayForParametersAndDelimiters: buildDisplayForParametersAndDelimiters,
                 buildDisplayForTypeParametersAndDelimiters: buildDisplayForTypeParametersAndDelimiters,
-                buildDisplayForTypeArgumentsAndDelimiters: buildDisplayForTypeArgumentsAndDelimiters,
                 buildTypeParameterDisplayFromSymbol: buildTypeParameterDisplayFromSymbol,
                 buildSignatureDisplay: buildSignatureDisplay,
                 buildReturnTypeDisplay: buildReturnTypeDisplay
@@ -4480,6 +4477,16 @@ namespace ts {
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
 
+            function reportRelationError(message: DiagnosticMessage, source: Type, target: Type) {
+                let sourceType = typeToString(source);
+                let targetType = typeToString(target);
+                if (sourceType === targetType) {
+                    sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                    targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                }
+                reportError(message || Diagnostics.Type_0_is_not_assignable_to_type_1, sourceType, targetType);
+            }
+
             // Compare two types and return
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
@@ -4499,7 +4506,19 @@ namespace ts {
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
+
+                if (relation === assignableRelation && source.flags & TypeFlags.ObjectLiteral && source.flags & TypeFlags.FreshObjectLiteral) {
+                    if (hasExcessProperties(<ObjectType>source, target, reportErrors)) {
+                        if (reportErrors) {
+                            reportRelationError(headMessage, source, target);
+                        }
+                        return Ternary.False;
+                    }
+                    source = getRegularTypeOfObjectLiteral(source);
+                }
+
                 let saveErrorInfo = errorInfo;
+
                 if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // We have type references to same target type, see if relationship holds for all type arguments
                     if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
@@ -4576,16 +4595,26 @@ namespace ts {
                 }
 
                 if (reportErrors) {
-                    headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    let sourceType = typeToString(source);
-                    let targetType = typeToString(target);
-                    if (sourceType === targetType) {
-                        sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                        targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                    }
-                    reportError(headMessage, sourceType, targetType);
+                    reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
+            }
+
+            function hasExcessProperties(source: ObjectType, target: Type, reportErrors: boolean): boolean {
+                if (target.flags & TypeFlags.ObjectType) {
+                    var resolved = resolveStructuredTypeMembers(target);
+                    if (resolved.properties.length > 0 && !resolved.stringIndexType && !resolved.numberIndexType) {
+                        for (let prop of getPropertiesOfObjectType(source)) {
+                            if (!getPropertyOfType(target, prop.name)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
@@ -5253,6 +5282,24 @@ namespace ts {
          */
         function isTupleType(type: Type): boolean {
             return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
+        }
+
+        function getRegularTypeOfObjectLiteral(type: Type): Type {
+            if (type.flags & TypeFlags.FreshObjectLiteral) {
+                let regularType = (<FreshObjectLiteralType>type).regularType;
+                if (!regularType) {
+                    regularType = <ResolvedType>createType((<ResolvedType>type).flags & ~TypeFlags.FreshObjectLiteral);
+                    regularType.symbol = (<ResolvedType>type).symbol;
+                    regularType.members = (<ResolvedType>type).members;
+                    regularType.properties = (<ResolvedType>type).properties;
+                    regularType.callSignatures = (<ResolvedType>type).callSignatures;
+                    regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
+                    regularType.stringIndexType = (<ResolvedType>type).stringIndexType;
+                    regularType.numberIndexType = (<ResolvedType>type).numberIndexType;
+                }
+                return regularType;
+            }
+            return type;
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -6830,18 +6877,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function isPermittedProperty(contextualType: Type, propName: string): boolean {
-            if (contextualType.flags & TypeFlags.ObjectType) {
-                let resolved = resolveStructuredTypeMembers(<ObjectType>contextualType);
-                return !!(resolved.properties.length === 0 || resolved.stringIndexType ||
-                    resolved.numberIndexType || getPropertyOfObjectType(contextualType, propName));
-            }
-            if (contextualType.flags & TypeFlags.UnionOrIntersection) {
-                return !forEach((<UnionOrIntersectionType>contextualType).types, type => !isPermittedProperty(type, propName));
-            }
-            return true;
-        }
-
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
@@ -6891,9 +6926,6 @@ namespace ts {
 
                 if (!hasDynamicName(memberDecl)) {
                     propertiesTable[member.name] = member;
-                    if (contextualType && !isPermittedProperty(contextualType, member.name)) {
-                        error(memberDecl.name, Diagnostics.Property_0_does_not_exist_in_contextual_type_1, member.name, typeToString(contextualType));
-                    }
                 }
                 propertiesArray.push(member);
             }
@@ -6901,7 +6933,7 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
             return result;
 
             function getIndexType(kind: IndexKind) {
@@ -8782,7 +8814,7 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
-            let exprType = checkExpression(node.expression);
+            let exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
             let targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
@@ -9559,7 +9591,7 @@ namespace ts {
                     return getUnionType([leftType, rightType]);
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
-                    return rightType;
+                    return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
                     return rightType;
             }
