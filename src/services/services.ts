@@ -3479,8 +3479,8 @@ namespace ts {
 
                 for (let element of namedImportsOrExports.elements) {
                     // If this is the current item we are editing right now, do not filter it out
-                    if (element.getStart() <= position && position <= element.getEnd()) {
-                        return;
+                    if (element.getStart() <= position && poition <= element.getEnd()) {
+                        continue;
                     }
 
                     let name = element.propertyName || element.name;
