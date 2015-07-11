@@ -345,7 +345,7 @@ namespace ts {
                         ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
                             let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedParamJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                                addRange(jsDocCommentParts, cleanedParamJsDocComment);
                             }
                         });
                     }
@@ -365,7 +365,7 @@ namespace ts {
                         declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
                             let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                                addRange(jsDocCommentParts, cleanedJsDocComment);
                             }
                         });
                 }
@@ -1427,6 +1427,9 @@ namespace ts {
 
         // class X {}
         export const classElement = "class";
+
+        // var x = class X {}
+        export const localClassElement = "local class";
 
         // interface Y {}
         export const interfaceElement = "interface";
@@ -2799,18 +2802,15 @@ namespace ts {
                    program.getGlobalDiagnostics(cancellationToken));
         }
 
-        /// Completion
-        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
-            let displayName = symbol.getName();
-            if (displayName) {
-                // If this is the default export, get the name of the declaration if it exists
-                if (displayName === "default") {
-                    let localSymbol = getLocalSymbolForExportDefault(symbol);
-                    if (localSymbol && localSymbol.name) {
-                        displayName = symbol.valueDeclaration.localSymbol.name;
-                    }
-                }
+        /**
+         * Get the name to be display in completion from a given symbol.
+         *
+         * @return undefined if the name is of external module otherwise a name with striped of any quote
+         */
+        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
+            let displayName: string = getDeclaredName(program.getTypeChecker(), symbol, location);
 
+            if (displayName) {
                 let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -2823,37 +2823,38 @@ namespace ts {
             return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
         }
 
-        function getCompletionEntryDisplayName(displayName: string, target: ScriptTarget, performCharacterChecks: boolean): string {
-            if (!displayName) {
+        /**
+         * Get a displayName from a given for completion list, performing any necessary quotes stripping
+         * and checking whether the name is valid identifier name.
+         */
+        function getCompletionEntryDisplayName(name: string, target: ScriptTarget, performCharacterChecks: boolean): string {
+            if (!name) {
                 return undefined;
             }
 
-            let firstCharCode = displayName.charCodeAt(0);
-            if (displayName.length >= 2 &&
-                firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
-                (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                displayName = displayName.substring(1, displayName.length - 1);
-            }
+            name = stripQuotes(name);
 
-            if (!displayName) {
+            if (!name) {
                 return undefined;
             }
 
+            // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+            // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+            // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
+            // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifierStart(displayName.charCodeAt(0), target)) {
+                if (!isIdentifierStart(name.charCodeAt(0), target)) {
                     return undefined;
                 }
 
-                for (let i = 1, n = displayName.length; i < n; i++) {
-                    if (!isIdentifierPart(displayName.charCodeAt(i), target)) {
+                for (let i = 1, n = name.length; i < n; i++) {
+                    if (!isIdentifierPart(name.charCodeAt(i), target)) {
                         return undefined;
                     }
                 }
             }
 
-            return unescapeIdentifier(displayName);
+            return name;
         }
 
         function getCompletionData(fileName: string, position: number) {
@@ -3463,6 +3464,11 @@ namespace ts {
                     importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
 
                     forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                        // If this is the current item we are editing right now, do not filter it out
+                        if (el.getStart() <= position && position <= el.getEnd()) {
+                            return;
+                        }
+
                         let name = el.propertyName || el.name;
                         exisingImports[name.text] = true;
                     });
@@ -3517,23 +3523,29 @@ namespace ts {
 
                 return filteredMembers;
             }
+            
+            function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+                let seenNames: Map<boolean> = {};
+                for (let attr of attributes) {
+                    // If this is the current item we are editing right now, do not filter it out
+                    if (attr.getStart() <= position && position <= attr.getEnd()) {
+                        continue;
+                    }
+
+                    if (attr.kind === SyntaxKind.JsxAttribute) {
+                        seenNames[(<JsxAttribute>attr).name.text] = true;
+                    }
+                }
+                let result: Symbol[] = [];
+                for (let sym of symbols) {
+                    if (!seenNames[sym.name]) {
+                        result.push(sym);
+                    }
+                }
+                return result;
+            }
         }
 
-        function filterJsxAttributes(attributes: NodeArray<JsxAttribute|JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
-            let seenNames: Map<boolean> = {};
-            for(let attr of attributes) {
-                if(attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames[(<JsxAttribute>attr).name.text] = true;
-                }
-            }
-            let result: Symbol[] = [];
-            for(let sym of symbols) {
-                if(!seenNames[sym.name]) {
-                    result.push(sym);
-                }
-            }
-            return result;
-        }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
@@ -3596,7 +3608,7 @@ namespace ts {
                 // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
                 // We would like to only show things that can be added after a dot, so for instance numeric properties can
                 // not be accessed with a dot (a.1 <- invalid)
-                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
+                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true, location);
                 if (!displayName) {
                     return undefined;
                 }
@@ -3653,7 +3665,7 @@ namespace ts {
                 // We don't need to perform character checks here because we're only comparing the 
                 // name against 'entryName' (which is known to be good), not building a new 
                 // completion entry.
-                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false, location) === entryName ? s : undefined);
 
                 if (symbol) {
                     let { displayParts, documentation, symbolKind } = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
@@ -3686,7 +3698,8 @@ namespace ts {
         function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
-            if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
+            if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
+                ScriptElementKind.localClassElement : ScriptElementKind.classElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
@@ -3854,7 +3867,7 @@ namespace ts {
                                         displayParts.push(spacePart());
                                     }
                                     if (!(type.flags & TypeFlags.Anonymous)) {
-                                        displayParts.push.apply(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                        addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                                     }
                                     addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
                                     break;
@@ -3895,7 +3908,16 @@ namespace ts {
                 }
             }
             if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
-                displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
+                    // Special case for class expressions because we would like to indicate that
+                    // the class name is local to the class body (similar to function expression)
+                    //      (local class) class <className>
+                    pushTypePart(ScriptElementKind.localClassElement);
+                }
+                else {
+                    // Class declaration has name which is not local.
+                    displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                }
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
@@ -3915,7 +3937,7 @@ namespace ts {
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                displayParts.push.apply(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
+                addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -3961,7 +3983,7 @@ namespace ts {
                     else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
                         addFullSymbolName(signatureDeclaration.symbol);
                     }
-                    displayParts.push.apply(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -4022,10 +4044,10 @@ namespace ts {
                                 let typeParameterParts = mapToDisplayParts(writer => {
                                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
-                                displayParts.push.apply(displayParts, typeParameterParts);
+                                addRange(displayParts, typeParameterParts);
                             }
                             else {
-                                displayParts.push.apply(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                                addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                             }
                         }
                         else if (symbolFlags & SymbolFlags.Function ||
@@ -4059,7 +4081,7 @@ namespace ts {
             function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
                 let fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                     SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
-                displayParts.push.apply(displayParts, fullSymbolDisplayParts);
+                addRange(displayParts, fullSymbolDisplayParts);
             }
 
             function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
@@ -4089,7 +4111,7 @@ namespace ts {
             }
 
             function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
-                displayParts.push.apply(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 if (allSignatures.length > 1) {
                     displayParts.push(spacePart());
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -4106,7 +4128,7 @@ namespace ts {
                 let typeParameterParts = mapToDisplayParts(writer => {
                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
                 });
-                displayParts.push.apply(displayParts, typeParameterParts);
+                addRange(displayParts, typeParameterParts);
             }
         }
 
@@ -5101,7 +5123,7 @@ namespace ts {
 
             // Get the text to search for.
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            let declaredName = getDeclaredName(typeChecker, symbol, node);
+            let declaredName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -5178,10 +5200,10 @@ namespace ts {
              * a reference to a symbol can occur anywhere.
              */
             function getSymbolScope(symbol: Symbol): Node {
-                // If this is the symbol of a function expression, then named references
-                // are limited to its own scope.
+                // If this is the symbol of a named function expression or named class expression,
+                // then named references are limited to its own scope.
                 let valueDeclaration = symbol.valueDeclaration;
-                if (valueDeclaration && valueDeclaration.kind === SyntaxKind.FunctionExpression) {
+                if (valueDeclaration && (valueDeclaration.kind === SyntaxKind.FunctionExpression || valueDeclaration.kind === SyntaxKind.ClassExpression)) {
                     return valueDeclaration;
                 }
 
@@ -5620,7 +5642,7 @@ namespace ts {
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
-                        result.push.apply(result, typeChecker.getRootSymbols(contextualSymbol));
+                        addRange(result, typeChecker.getRootSymbols(contextualSymbol));
                     });
 
                     /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
@@ -6852,7 +6874,7 @@ namespace ts {
                             }
                         }
 
-                        let displayName = getDeclaredName(typeChecker, symbol, node);
+                        let displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
                         let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {
