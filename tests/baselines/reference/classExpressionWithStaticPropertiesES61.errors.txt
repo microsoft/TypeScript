@@ -1,7 +1,0 @@
-tests/cases/compiler/classExpressionWithStaticPropertiesES61.ts(1,15): error TS9003: 'class' expressions are not currently supported.
-
-
-==== tests/cases/compiler/classExpressionWithStaticPropertiesES61.ts (1 errors) ====
-    var v = class C { static a = 1; static b = 2 };
-                  ~
-!!! error TS9003: 'class' expressions are not currently supported.

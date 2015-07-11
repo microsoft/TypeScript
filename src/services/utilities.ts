@@ -429,6 +429,7 @@ namespace ts {
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
         if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
@@ -651,5 +652,42 @@ namespace ts {
         return mapToDisplayParts(writer => {
             typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });
+    }
+
+    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
+        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+        // If so we want to search for whatever is under the cursor.
+        if (isImportOrExportSpecifierName(location)) {
+            return location.getText();
+        }
+
+        // Try to get the local symbol if we're dealing with an 'export default'
+        // since that symbol has the "true" name.
+        let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+
+        let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
+
+        return name;
+    }
+
+    export function isImportOrExportSpecifierName(location: Node): boolean {
+        return location.parent &&
+            (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
+            (<ImportOrExportSpecifier>location.parent).propertyName === location;
+    }
+
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
+    export function stripQuotes(name: string) {
+        let length = name.length;
+        if (length >= 2 &&
+            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
+            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
+            return name.substring(1, length - 1);
+        };
+        return name;
     }
 }

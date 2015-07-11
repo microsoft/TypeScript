@@ -8,7 +8,7 @@ tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts(9,14):
     }
     
     class A {
-        @(x => {
+        @((x, p) => {
             var a = 3;
             func(a);
                  ~

@@ -49,6 +49,7 @@ if (testConfigFile !== '') {
             if (!option) {
                 continue;
             }
+
             switch (option) {
                 case 'compiler':
                     runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
