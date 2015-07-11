@@ -3477,7 +3477,16 @@ namespace ts {
             function filterModuleExports(exports: Symbol[], namedImportsOrExports: NamedImportsOrExports): Symbol[] {
                 let exisingImports: Map<boolean> = {};
 
+                if (!importDeclaration.importClause) {
+                    return exports;
+                }
+
                 for (let element of namedImportsOrExports.elements) {
+                    // If this is the current item we are editing right now, do not filter it out
+                    if (element.getStart() <= position && position <= element.getEnd()) {
+                        return;
+                    }
+
                     let name = element.propertyName || element.name;
                     exisingImports[name.text] = true;
                 }
@@ -3532,23 +3541,29 @@ namespace ts {
 
                 return filteredMembers;
             }
+            
+            function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+                let seenNames: Map<boolean> = {};
+                for (let attr of attributes) {
+                    // If this is the current item we are editing right now, do not filter it out
+                    if (attr.getStart() <= position && position <= attr.getEnd()) {
+                        continue;
+                    }
+
+                    if (attr.kind === SyntaxKind.JsxAttribute) {
+                        seenNames[(<JsxAttribute>attr).name.text] = true;
+                    }
+                }
+                let result: Symbol[] = [];
+                for (let sym of symbols) {
+                    if (!seenNames[sym.name]) {
+                        result.push(sym);
+                    }
+                }
+                return result;
+            }
         }
 
-        function filterJsxAttributes(attributes: NodeArray<JsxAttribute|JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
-            let seenNames: Map<boolean> = {};
-            for(let attr of attributes) {
-                if(attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames[(<JsxAttribute>attr).name.text] = true;
-                }
-            }
-            let result: Symbol[] = [];
-            for(let sym of symbols) {
-                if(!seenNames[sym.name]) {
-                    result.push(sym);
-                }
-            }
-            return result;
-        }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
