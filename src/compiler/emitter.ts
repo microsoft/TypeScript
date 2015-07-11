@@ -3012,17 +3012,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return result;
             }
 
-            function emitEs6ExportDefaultCompat() {
-                if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
-                    if (!hasProperty(currentSourceFile.identifiers, "___esModule")) {
-                        if (languageVersion >= ScriptTarget.ES5) {
-                            // default value of configurable, enumerable, writable are `false`. 
-                            write("Object.defineProperty(exports, \"__esModule\", { value: true });");
-                            writeLine();
-                        }
-                        else {
-                            write("exports.__esModule = true;");
-                            writeLine();
+            function emitEs6ExportDefaultCompat(node: Node) {
+                if (node.parent.kind === SyntaxKind.SourceFile && (!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment)) {
+                    // only allow export default at a source file level
+                    if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
+                        if (!currentSourceFile.symbol.exports["___esModule"]) {
+                            if (languageVersion === ScriptTarget.ES5) {
+                                // default value of configurable, enumerable, writable are `false`. 
+                                write("Object.defineProperty(exports, \"__esModule\", { value: true });");
+                                writeLine();
+                            }
+                            else if (languageVersion === ScriptTarget.ES3) {
+                                write("exports.__esModule = true;");
+                                writeLine();
+                            }
                         }
                     }
                 }
@@ -3050,7 +3053,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         if (node.flags & NodeFlags.Default) {
-                            emitEs6ExportDefaultCompat();
+                            emitEs6ExportDefaultCompat(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("exports[\"default\"]");
                             }
@@ -5547,7 +5550,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(")");
                         }
                         else {
-                            emitEs6ExportDefaultCompat();
+                            emitEs6ExportDefaultCompat(node);
                             emitContainingModuleName(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("[\"default\"] = ");
