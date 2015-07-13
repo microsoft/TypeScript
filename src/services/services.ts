@@ -6574,7 +6574,7 @@ namespace ts {
                         }
                     }
 
-                    return ClassificationType.text;
+                    return ClassificationType.identifier;
                 }
             }
 
