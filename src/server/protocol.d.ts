@@ -856,7 +856,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-    * Arguments for geterrForProject request.
+    * Arguments for GeterrForProject request.
     */
     export interface GeterrForProjectRequestArgs {
         /**

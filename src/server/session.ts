@@ -878,7 +878,6 @@ namespace ts.server {
 
         getCanonicalFileName(fileName: string) {
             let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-            this.logger.info(ts.normalizePath(name));
             return ts.normalizePath(name);
         }
 
