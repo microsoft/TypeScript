@@ -1842,6 +1842,9 @@ namespace ts {
     }
 
     /* @internal */
+    // Object literals are initially marked fresh. Freshness disappears following an assignment,
+    // before a type assertion, or when when an object literal's type is widened. The regular
+    // version of a fresh type is identical except for the TypeFlags.FreshObjectLiteral flag.
     export interface FreshObjectLiteralType extends ResolvedType {
         regularType: ResolvedType;  // Regular version of fresh type
     }

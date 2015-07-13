@@ -3352,6 +3352,10 @@ namespace ts {
             return undefined;
         }
 
+        // Check if a property with the given name is known anywhere in the given type. In an object
+        // type, a property is considered known if the object type is empty, if it has any index
+        // signatures, or if the property is actually declared in the type. In a union or intersection
+        // type, a property is considered known if it is known in any constituent type.
         function isKnownProperty(type: Type, name: string): boolean {
             if (type.flags & TypeFlags.ObjectType) {
                 var resolved = resolveStructuredTypeMembers(type);
@@ -4526,13 +4530,17 @@ namespace ts {
                     }
                 }
 
-                if (relation === assignableRelation && source.flags & TypeFlags.ObjectLiteral && source.flags & TypeFlags.FreshObjectLiteral) {
-                    if (hasExcessProperties(<ObjectType>source, target, reportErrors)) {
+                if (relation !== identityRelation && source.flags & TypeFlags.FreshObjectLiteral) {
+                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
                         return Ternary.False;
                     }
+                    // Above we check for excess properties with respect to the entire target type. When union
+                    // and intersection types are further deconstructed on the target side, we don't want to
+                    // make the check again (as it might fail for a partial target type). Therefore we obtain
+                    // the regular source type and proceed with that.
                     source = getRegularTypeOfObjectLiteral(source);
                 }
 
@@ -4619,7 +4627,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function hasExcessProperties(source: ObjectType, target: Type, reportErrors: boolean): boolean {
+            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 for (let prop of getPropertiesOfObjectType(source)) {
                     if (!isKnownProperty(target, prop.name)) {
                         if (reportErrors) {
