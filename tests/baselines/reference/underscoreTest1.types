@@ -4071,6 +4071,9 @@ module Underscore {
         escape?: RegExp;
 >escape : RegExp
 >RegExp : RegExp
+
+        variable?: string;
+>variable : string
     }
 
     export interface Static {
