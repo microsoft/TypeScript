@@ -1,33 +1,22 @@
-//// [classAbstractInstantiations1.ts]
+//// [classAbstractExtends.ts]
 
-//
-// Calling new with (non)abstract classes.
-//
+class A {
+    foo() {}
+}
 
-abstract class A {}
+abstract class B extends A {
+    abstract bar();
+}
 
-class B extends A {}
+class C extends B { }
 
-abstract class C extends B {}
+abstract class D extends B {}
 
-new A;
-new A(1); // should report 1 error
-new B;
-new C;
+class E extends B {
+    bar() {}
+}
 
-var a : A;
-var b : B;
-var c : C;
-
-a = new B;
-b = new B;
-c = new B;
-
-
-//// [classAbstractInstantiations1.js]
-//
-// Calling new with (non)abstract classes.
-//
+//// [classAbstractExtends.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -36,6 +25,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var A = (function () {
     function A() {
     }
+    A.prototype.foo = function () { };
     return A;
 })();
 var B = (function (_super) {
@@ -52,13 +42,18 @@ var C = (function (_super) {
     }
     return C;
 })(B);
-new A;
-new A(1); // should report 1 error
-new B;
-new C;
-var a;
-var b;
-var c;
-a = new B;
-b = new B;
-c = new B;
+var D = (function (_super) {
+    __extends(D, _super);
+    function D() {
+        _super.apply(this, arguments);
+    }
+    return D;
+})(B);
+var E = (function (_super) {
+    __extends(E, _super);
+    function E() {
+        _super.apply(this, arguments);
+    }
+    E.prototype.bar = function () { };
+    return E;
+})(B);
