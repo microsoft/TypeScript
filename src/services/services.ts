@@ -4546,6 +4546,7 @@ namespace ts {
                                 if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
                                     return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                                 }
+                                break;
                             default:
                                 if (isModifier(node.kind) && node.parent &&
                                     (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
