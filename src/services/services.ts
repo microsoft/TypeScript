@@ -4694,7 +4694,8 @@ namespace ts {
                         if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
                             return undefined;
                         }
-                    } else if (modifier === SyntaxKind.AbstractKeyword) {
+                    }
+                    else if (modifier === SyntaxKind.AbstractKeyword) {
                         if (!(container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration)) {
                             return undefined;
                         }

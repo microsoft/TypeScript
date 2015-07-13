@@ -10,11 +10,13 @@
 ////    abstract bar(): void;
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-    verify.occurrencesAtPositionCount(test.ranges().length);
+const ranges = test.ranges();
 
-    test.ranges().forEach(range => {
+for(let r of ranges) {
+    goTo.position(r.start);
+    verify.occurrencesAtPositionCount(ranges.length);
+
+    for(let range of ranges) {
         verify.occurrencesAtPositionContains(range, false);
-    });
-});
+    }
+}
