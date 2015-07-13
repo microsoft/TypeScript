@@ -4694,6 +4694,10 @@ namespace ts {
                         if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
                             return undefined;
                         }
+                    } else if (modifier === SyntaxKind.AbstractKeyword) {
+                        if (!(container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration)) {
+                            return undefined;
+                        }
                     }
                     else { 
                         // unsupported modifier
@@ -4707,7 +4711,13 @@ namespace ts {
                     switch (container.kind) {
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.SourceFile:
-                            nodes = (<Block>container).statements;
+                            // Container is either a class declaration or the declaration is a classDeclaration
+                            if (modifierFlag & NodeFlags.Abstract) {
+                                nodes = (<Node[]>(<ClassDeclaration>declaration).members).concat(declaration);
+                            }
+                            else {
+                                nodes = (<Block>container).statements;
+                            }
                             break;
                         case SyntaxKind.Constructor:
                             nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
@@ -4726,6 +4736,9 @@ namespace ts {
                                 if (constructor) {
                                     nodes = nodes.concat(constructor.parameters);
                                 }
+                            }
+                            else if (modifierFlag & NodeFlags.Abstract) {
+                                nodes = nodes.concat(container);
                             }
                             break;
                         default:
@@ -4754,6 +4767,8 @@ namespace ts {
                                 return NodeFlags.Export;
                             case SyntaxKind.DeclareKeyword:
                                 return NodeFlags.Ambient;
+                            case SyntaxKind.AbstractKeyword:
+                                return NodeFlags.Abstract;
                             default:
                                 Debug.fail();
                         }
