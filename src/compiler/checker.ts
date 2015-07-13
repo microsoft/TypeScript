@@ -3357,7 +3357,7 @@ namespace ts {
         // signatures, or if the property is actually declared in the type. In a union or intersection
         // type, a property is considered known if it is known in any constituent type.
         function isKnownProperty(type: Type, name: string): boolean {
-            if (type.flags & TypeFlags.ObjectType) {
+            if (type.flags & TypeFlags.ObjectType && type !== globalObjectType) {
                 var resolved = resolveStructuredTypeMembers(type);
                 return !!(resolved.properties.length === 0 ||
                     resolved.stringIndexType ||
@@ -3977,7 +3977,7 @@ namespace ts {
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
             for (let type of types) {
-                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
+                if (candidate !== type && isTypeSubtypeOf(getRegularTypeOfObjectLiteral(candidate), type)) {
                     return true;
                 }
             }
