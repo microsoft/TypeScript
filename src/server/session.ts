@@ -854,7 +854,7 @@ namespace ts.server {
                     highPriorityFiles.push(fileNameInProject);
                 else {
                     let info = this.projectService.getScriptInfo(fileNameInProject);
-                    if (!info || !info.isOpen) {
+                    if (!info.isOpen) {
                         if (fileNameInProject.indexOf(".d.ts") > 0)
                             veryLowPriorityFiles.push(fileNameInProject);
                         else
