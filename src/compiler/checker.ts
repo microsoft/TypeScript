@@ -3943,7 +3943,7 @@ namespace ts {
             let id = getTypeListId(elementTypes);
             let type = tupleTypes[id];
             if (!type) {
-                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple);
+                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getWideningFlagsOfTypes(elementTypes));
                 type.elementTypes = elementTypes;
             }
             return type;
@@ -5299,8 +5299,8 @@ namespace ts {
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
-        function isTupleType(type: Type): boolean {
-            return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
+        function isTupleType(type: Type): type is TupleType {
+            return !!(type.flags & TypeFlags.Tuple);
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -5341,26 +5341,45 @@ namespace ts {
                 if (isArrayType(type)) {
                     return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
                 }
+                if (isTupleType(type)) {
+                    return createTupleType(map(type.elementTypes, getWidenedType));
+                }
             }
             return type;
         }
 
+        /**
+         * Reports implicit any errors that occur as a result of widening 'null' and 'undefined'
+         * to 'any'. A call to reportWideningErrorsInType is normally accompanied by a call to
+         * getWidenedType. But in some cases getWidenedType is called without reporting errors
+         * (type argument inference is an example).
+         *
+         * The return value indicates whether an error was in fact reported. The particular circumstances
+         * are on a best effort basis. Currently, if the null or undefined that causes widening is inside
+         * an object literal property (arbitrarily deeply), this function reports an error. If no error is
+         * reported, reportImplicitAnyError is a suitable fallback to report a general error.
+         */
         function reportWideningErrorsInType(type: Type): boolean {
+            let errorReported = false;
             if (type.flags & TypeFlags.Union) {
-                let errorReported = false;
-                forEach((<UnionType>type).types, t => {
+                for (let t of (<UnionType>type).types) {
                     if (reportWideningErrorsInType(t)) {
                         errorReported = true;
                     }
-                });
-                return errorReported;
+                }
             }
             if (isArrayType(type)) {
                 return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
             }
+            if (isTupleType(type)) {
+                for (let t of type.elementTypes) {
+                    if (reportWideningErrorsInType(t)) {
+                        errorReported = true;
+                    }
+                }
+            }
             if (type.flags & TypeFlags.ObjectLiteral) {
-                let errorReported = false;
-                forEach(getPropertiesOfObjectType(type), p => {
+                for (let p of getPropertiesOfObjectType(type)) {
                     let t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
                         if (!reportWideningErrorsInType(t)) {
@@ -5368,10 +5387,9 @@ namespace ts {
                         }
                         errorReported = true;
                     }
-                });
-                return errorReported;
+                }
             }
-            return false;
+            return errorReported;
         }
 
         function reportImplicitAnyError(declaration: Declaration, type: Type) {
@@ -6963,7 +6981,6 @@ namespace ts {
                 return undefined;
             }
         }
-
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
