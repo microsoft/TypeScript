@@ -1,72 +1,112 @@
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(281,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(282,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(283,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(284,21): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(309,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(315,27): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(321,16): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(327,9): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(416,63): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(428,21): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(441,78): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(447,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(448,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(449,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(450,21): error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(453,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(456,27): error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(459,16): error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(462,9): error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(466,70): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(469,21): error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(472,85): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(9,13): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(10,9): error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(11,18): error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(12,17): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(37,36): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(43,23): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(49,12): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(55,5): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(144,59): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(156,17): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(169,74): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(175,13): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(176,9): error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(177,18): error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(178,17): error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(181,36): error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(184,23): error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(187,12): error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(190,5): error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(194,66): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(197,17): error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(200,81): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(238,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(239,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(240,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(241,21): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(266,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(272,27): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(278,16): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(284,9): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(373,63): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(385,21): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(398,78): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(404,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(405,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(406,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(407,21): error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(410,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(413,27): error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(416,16): error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(419,9): error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(423,70): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(426,21): error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85): error TS4060: Return type of exported function has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(58,21): error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(58,21): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(59,17): error TS4047: Return type of call signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(60,26): error TS4049: Return type of index signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(61,25): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(86,44): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(92,31): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(98,20): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(104,13): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(193,67): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(205,25): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(218,82): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(224,21): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(225,17): error TS4047: Return type of call signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(226,26): error TS4049: Return type of index signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(227,25): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(230,44): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(233,31): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(243,74): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(249,89): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(281,17): error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(282,13): error TS4047: Return type of call signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(283,22): error TS4049: Return type of index signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(284,21): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(309,40): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(315,27): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(321,16): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(327,9): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(416,63): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(428,21): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(441,78): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(447,17): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(448,13): error TS4047: Return type of call signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(449,22): error TS4049: Return type of index signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(450,21): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(453,40): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(456,27): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(459,16): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(462,9): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(466,70): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(469,21): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(472,85): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(9,13): error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(10,9): error TS4047: Return type of call signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(11,18): error TS4049: Return type of index signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(12,17): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(37,36): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(43,23): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(49,12): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(55,5): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(144,59): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(156,17): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(169,74): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(175,13): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(176,9): error TS4047: Return type of call signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(177,18): error TS4049: Return type of index signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(178,17): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(181,36): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(184,23): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(187,12): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(190,5): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(194,66): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(197,17): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(200,81): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(238,17): error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(239,13): error TS4047: Return type of call signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(240,22): error TS4049: Return type of index signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(241,21): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(266,40): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(272,27): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(278,16): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(284,9): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(373,63): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(385,21): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(398,78): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(404,17): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(405,13): error TS4047: Return type of call signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(406,22): error TS4049: Return type of index signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(407,21): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(410,40): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(413,27): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(416,16): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(419,9): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(423,70): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(426,21): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(468,17): error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(468,17): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(469,13): error TS4047: Return type of call signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(470,22): error TS4049: Return type of index signature references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(471,21): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(496,40): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(502,27): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(508,16): error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(514,9): error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(603,63): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(615,21): error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(628,78): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(634,17): error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(635,13): error TS4047: Return type of call signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(636,22): error TS4049: Return type of index signature references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(637,21): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(640,40): error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(643,27): error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(653,70): error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(659,85): error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts (44 errors) ====
+==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts (64 errors) ====
     
     class privateClass {
     }
@@ -77,16 +117,16 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     export interface publicInterfaceWithPrivateParmeterTypes {
         new (): privateClass; // Error
                 ~~~~~~~~~~~~
-!!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
         (): privateClass; // Error
             ~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4047: Return type of call signature references inaccessible name 'privateClass'.
         [x: number]: privateClass; // Error
                      ~~~~~~~~~~~~
-!!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4049: Return type of index signature references inaccessible name 'privateClass'.
         myMethod(): privateClass; // Error
                     ~~~~~~~~~~~~
-!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
     }
     
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -113,7 +153,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod(): privateClass { // Error
                                        ~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
@@ -121,7 +161,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
         myPublicMethod(): privateClass { // Error
                           ~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
             return null;
         }
         private myPrivateMethod(): privateClass {
@@ -129,7 +169,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         private static myPrivateStaticMethod1() {
@@ -137,7 +177,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         private myPrivateMethod1() {
@@ -228,7 +268,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
                                                               ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
         return null;
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
@@ -242,7 +282,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     }
     export function publicFunctionWithPrivateParmeterTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
         return new privateClass();
     }
     export function publicFunctionWithPublicParmeterTypes1() {
@@ -257,7 +297,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
                                                                              ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
@@ -265,52 +305,52 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (): privateModule.publicClass; // Error
                 ~~~~~~~~~~~~~
-!!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
         (): privateModule.publicClass; // Error
             ~~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4047: Return type of call signature references inaccessible name 'privateModule'.
         [x: number]: privateModule.publicClass // Error
                      ~~~~~~~~~~~~~
-!!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4049: Return type of index signature references inaccessible name 'privateModule'.
         myMethod(): privateModule.publicClass; // Error
                     ~~~~~~~~~~~~~
-!!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
     }
     export class publicClassWithPrivateModuleParameterTypes {
         static myPublicStaticMethod(): privateModule.publicClass { // Error
                                        ~~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
             return null;
         }
         myPublicMethod(): privateModule.publicClass { // Error
                           ~~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
             return null;
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
             return new privateModule.publicClass();
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
-!!! error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateModule'.
             return new privateModule.publicClass();
         }
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
                                                                      ~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
         return null;
     }
     export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes1' references inaccessible name 'privateModule'.
         return new privateModule.publicClass();
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
                                                                                     ~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
     
     interface privateInterfaceWithPrivateModuleParameterTypes {
         new (): privateModule.publicClass; 
@@ -350,16 +390,16 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         export interface publicInterfaceWithPrivateParmeterTypes {
             new (): privateClass; // Error
                     ~~~~~~~~~~~~
-!!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
             (): privateClass; // Error
                 ~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4047: Return type of call signature references inaccessible name 'privateClass'.
             [x: number]: privateClass; // Error
                          ~~~~~~~~~~~~
-!!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4049: Return type of index signature references inaccessible name 'privateClass'.
             myMethod(): privateClass; // Error
                         ~~~~~~~~~~~~
-!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -386,7 +426,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         export class publicClassWithWithPrivateParmeterTypes {
             static myPublicStaticMethod(): privateClass { // Error
                                            ~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
@@ -394,7 +434,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
             myPublicMethod(): privateClass { // Error
                               ~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private myPrivateMethod(): privateClass {
@@ -402,7 +442,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
             static myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private static myPrivateStaticMethod1() {
@@ -410,7 +450,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
             myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private myPrivateMethod1() {
@@ -501,7 +541,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
                                                                   ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
             return null;
         }
         export function publicFunctionWithPublicParmeterTypes(): publicClass {
@@ -515,7 +555,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
         export function publicFunctionWithPrivateParmeterTypes1() { // Error
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         export function publicFunctionWithPublicParmeterTypes1() {
@@ -530,7 +570,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
                                                                                  ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
         export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
         declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
         declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
@@ -538,52 +578,52 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass; // Error
                     ~~~~~~~~~~~~~
-!!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
             (): privateModule.publicClass; // Error
                 ~~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4047: Return type of call signature references inaccessible name 'privateModule'.
             [x: number]: privateModule.publicClass; // Error
                          ~~~~~~~~~~~~~
-!!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4049: Return type of index signature references inaccessible name 'privateModule'.
             myMethod(): privateModule.publicClass; // Error
                         ~~~~~~~~~~~~~
-!!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(): privateModule.publicClass { // Error
                                            ~~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             myPublicMethod(): privateModule.publicClass { // Error
                               ~~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             static myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
             myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
                                                                          ~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
             return null;
         }
         export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes1' references inaccessible name 'privateModule'.
             return new privateModule.publicClass();
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
                                                                                         ~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass;
@@ -623,9 +663,19 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export interface publicInterfaceWithPrivateParmeterTypes {
             new (): privateClass; 
+                    ~~~~~~~~~~~~
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+                    ~~~~~~~~~~~~
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
             (): privateClass; 
+                ~~~~~~~~~~~~
+!!! error TS4047: Return type of call signature references inaccessible name 'privateClass'.
             [x: number]: privateClass; 
+                         ~~~~~~~~~~~~
+!!! error TS4049: Return type of index signature references inaccessible name 'privateClass'.
             myMethod(): privateClass; 
+                        ~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -651,24 +701,32 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export class publicClassWithWithPrivateParmeterTypes {
             static myPublicStaticMethod(): privateClass { 
+                                           ~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
                 return null;
             }
             myPublicMethod(): privateClass { 
+                              ~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private myPrivateMethod(): privateClass {
                 return null;
             }
             static myPublicStaticMethod1() { 
+                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private static myPrivateStaticMethod1() {
                 return new privateClass();
             }
             myPublicMethod1() { 
+            ~~~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private myPrivateMethod1() {
@@ -758,6 +816,8 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
     
         export function publicFunctionWithPrivateParmeterTypes(): privateClass { 
+                                                                  ~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
             return null;
         }
         export function publicFunctionWithPublicParmeterTypes(): publicClass {
@@ -770,6 +830,8 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             return null;
         }
         export function publicFunctionWithPrivateParmeterTypes1() { 
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         export function publicFunctionWithPublicParmeterTypes1() {
@@ -783,21 +845,35 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
     
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; 
+                                                                                 ~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
         export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
         declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
         declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass;
+                    ~~~~~~~~~~~~~
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
             (): privateModule.publicClass;
+                ~~~~~~~~~~~~~
+!!! error TS4047: Return type of call signature references inaccessible name 'privateModule'.
             [x: number]: privateModule.publicClass;
+                         ~~~~~~~~~~~~~
+!!! error TS4049: Return type of index signature references inaccessible name 'privateModule'.
             myMethod(): privateModule.publicClass;
+                        ~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(): privateModule.publicClass { 
+                                           ~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             myPublicMethod(): privateModule.publicClass { 
+                              ~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             static myPublicStaticMethod1() { 
@@ -808,12 +884,16 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
+                                                                         ~~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
             return null;
         }
         export function publicFunctionWithPrivateModuleParameterTypes1() { 
             return new privateModule.publicClass();
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
+                                                                                        ~~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass;
@@ -844,7 +924,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
     }
     
-==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts (22 errors) ====
+==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts (42 errors) ====
     class publicClassInGlobal {
     }
     interface publicInterfaceWithPublicParmeterTypesInGlobal {
@@ -903,9 +983,19 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
             export interface publicInterfaceWithPrivateParmeterTypes {
                 new (): privateClass;
+                        ~~~~~~~~~~~~
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
+                        ~~~~~~~~~~~~
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
                 (): privateClass;
+                    ~~~~~~~~~~~~
+!!! error TS4047: Return type of call signature references inaccessible name 'privateClass'.
                 [x: number]: privateClass;
+                             ~~~~~~~~~~~~
+!!! error TS4049: Return type of index signature references inaccessible name 'privateClass'.
                 myMethod(): privateClass;
+                            ~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
             }
     
             export interface publicInterfaceWithPublicParmeterTypes {
@@ -931,24 +1021,32 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
             export class publicClassWithWithPrivateParmeterTypes {
                 static myPublicStaticMethod(): privateClass {
+                                               ~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
                     return null;
                 }
                 private static myPrivateStaticMethod(): privateClass {
                     return null;
                 }
                 myPublicMethod(): privateClass {
+                                  ~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
                     return null;
                 }
                 private myPrivateMethod(): privateClass {
                     return null;
                 }
                 static myPublicStaticMethod1() {
+                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
                     return new privateClass();
                 }
                 private static myPrivateStaticMethod1() {
                     return new privateClass();
                 }
                 myPublicMethod1() {
+                ~~~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
                     return new privateClass();
                 }
                 private myPrivateMethod1() {
@@ -1038,6 +1136,8 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
     
             export function publicFunctionWithPrivateParmeterTypes(): privateClass {
+                                                                      ~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
                 return null;
             }
             export function publicFunctionWithPublicParmeterTypes(): publicClass {
@@ -1050,6 +1150,8 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
                 return null;
             }
             export function publicFunctionWithPrivateParmeterTypes1() {
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             export function publicFunctionWithPublicParmeterTypes1() {
@@ -1063,21 +1165,35 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
     
             export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+                                                                                     ~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
             export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
             declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
             declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
     
             export interface publicInterfaceWithPrivateModuleParameterTypes {
                 new (): privateModule.publicClass;
+                        ~~~~~~~~~~~~~
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
                 (): privateModule.publicClass;
+                    ~~~~~~~~~~~~~
+!!! error TS4047: Return type of call signature references inaccessible name 'privateModule'.
                 [x: number]: privateModule.publicClass;
+                             ~~~~~~~~~~~~~
+!!! error TS4049: Return type of index signature references inaccessible name 'privateModule'.
                 myMethod(): privateModule.publicClass;
+                            ~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
             }
             export class publicClassWithPrivateModuleParameterTypes {
                 static myPublicStaticMethod(): privateModule.publicClass {
+                                               ~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
                     return null;
                 }
                 myPublicMethod(): privateModule.publicClass {
+                                  ~~~~~~~~~~~~~
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
                     return null;
                 }
                 static myPublicStaticMethod1() {
@@ -1088,12 +1204,16 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
                 }
             }
             export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
+                                                                             ~~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
                 return null;
             }
             export function publicFunctionWithPrivateModuleParameterTypes1() {
                 return new privateModule.publicClass();
             }
             export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                            ~~~~~~~~~~~~~
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
     
             interface privateInterfaceWithPrivateModuleParameterTypes {
                 new (): privateModule.publicClass;
@@ -1127,16 +1247,16 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         export interface publicInterfaceWithPrivateParmeterTypes {
             new (): privateClass; // Error
                     ~~~~~~~~~~~~
-!!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
             (): privateClass; // Error
                 ~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4047: Return type of call signature references inaccessible name 'privateClass'.
             [x: number]: privateClass; // Error
                          ~~~~~~~~~~~~
-!!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4049: Return type of index signature references inaccessible name 'privateClass'.
             myMethod(): privateClass; // Error
                         ~~~~~~~~~~~~
-!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -1163,7 +1283,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         export class publicClassWithWithPrivateParmeterTypes {
             static myPublicStaticMethod(): privateClass { // Error
                                            ~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
@@ -1171,7 +1291,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
             myPublicMethod(): privateClass { // Error
                               ~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private myPrivateMethod(): privateClass {
@@ -1179,7 +1299,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
             static myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private static myPrivateStaticMethod1() {
@@ -1187,7 +1307,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
             myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private myPrivateMethod1() {
@@ -1278,7 +1398,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
                                                                   ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
             return null;
         }
         export function publicFunctionWithPublicParmeterTypes(): publicClass {
@@ -1292,7 +1412,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
         export function publicFunctionWithPrivateParmeterTypes1() { // Error
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateParmeterTypes1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         export function publicFunctionWithPublicParmeterTypes1() {
@@ -1307,7 +1427,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
                                                                                  ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateClass'.
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateParmeterTypes' references inaccessible name 'privateClass'.
         export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
         declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
         declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
@@ -1315,52 +1435,52 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass; // Error
                     ~~~~~~~~~~~~~
-!!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4044: Return type of construct signature references inaccessible name 'privateModule'.
             (): privateModule.publicClass; // Error
                 ~~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4047: Return type of call signature references inaccessible name 'privateModule'.
             [x: number]: privateModule.publicClass; // Error
                          ~~~~~~~~~~~~~
-!!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
+!!! error TS4049: Return type of index signature references inaccessible name 'privateModule'.
             myMethod(): privateModule.publicClass; // Error
                         ~~~~~~~~~~~~~
-!!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(): privateModule.publicClass { // Error
                                            ~~~~~~~~~~~~~
-!!! error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             myPublicMethod(): privateModule.publicClass { // Error
                               ~~~~~~~~~~~~~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             static myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
             myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4038: Return type of method 'myPublicMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
                                                                          ~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
             return null;
         }
         export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4060: Return type of function 'publicFunctionWithPrivateModuleParameterTypes1' references inaccessible name 'privateModule'.
             return new privateModule.publicClass();
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
                                                                                         ~~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
+!!! error TS4060: Return type of function 'publicAmbientFunctionWithPrivateModuleParameterTypes' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass;

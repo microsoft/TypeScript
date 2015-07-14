@@ -1,7 +1,7 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(13,19): error TS4025: Exported variable 'k' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(14,16): error TS4025: Exported variable 'l' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(30,20): error TS4025: Exported variable 'k3' has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(31,16): error TS4024: Exported variable 'l3' has or is using name 'm2.public2' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(13,19): error TS4025: Type of variable 'k' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(14,16): error TS4025: Type of variable 'l' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(30,20): error TS4025: Type of variable 'k3' references inaccessible name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts(31,16): error TS4025: Type of variable 'l3' references inaccessible name 'm2'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts (4 errors) ====
@@ -19,10 +19,10 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts
     
         export var k: private1;
                       ~~~~~~~~
-!!! error TS4025: Exported variable 'k' has or is using private name 'private1'.
+!!! error TS4025: Type of variable 'k' references inaccessible name 'private1'.
         export var l = new private1();
                    ~
-!!! error TS4025: Exported variable 'l' has or is using private name 'private1'.
+!!! error TS4025: Type of variable 'l' references inaccessible name 'private1'.
     
         var x2: public1;
         var y2 = new public1();
@@ -40,9 +40,9 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts
     
         export var k3: m2.public2;
                        ~~
-!!! error TS4025: Exported variable 'k3' has or is using private name 'm2'.
+!!! error TS4025: Type of variable 'k3' references inaccessible name 'm2'.
         export var l3 = new m2.public2();
                    ~~
-!!! error TS4024: Exported variable 'l3' has or is using name 'm2.public2' from private module 'm2'.
+!!! error TS4025: Type of variable 'l3' references inaccessible name 'm2'.
     }
     

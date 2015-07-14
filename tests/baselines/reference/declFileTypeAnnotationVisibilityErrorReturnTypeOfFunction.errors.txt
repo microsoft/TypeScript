@@ -1,7 +1,7 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(17,29): error TS4060: Return type of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(20,21): error TS4060: Return type of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(50,31): error TS4060: Return type of exported function has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(53,21): error TS4059: Return type of exported function has or is using name 'm2.public2' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(17,29): error TS4060: Return type of function 'foo3' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(20,21): error TS4060: Return type of function 'foo4' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(50,31): error TS4060: Return type of function 'foo113' references inaccessible name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(53,21): error TS4060: Return type of function 'foo114' references inaccessible name 'm2'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts (4 errors) ====
@@ -23,12 +23,12 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.t
     
         export function foo3(): private1 {
                                 ~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'private1'.
+!!! error TS4060: Return type of function 'foo3' references inaccessible name 'private1'.
             return;
         }
         export function foo4() {
                         ~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'private1'.
+!!! error TS4060: Return type of function 'foo4' references inaccessible name 'private1'.
             return new private1();
         }
     
@@ -60,12 +60,12 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.t
     
         export function foo113(): m2.public2 {
                                   ~~
-!!! error TS4060: Return type of exported function has or is using private name 'm2'.
+!!! error TS4060: Return type of function 'foo113' references inaccessible name 'm2'.
             return;
         }
         export function foo114() {
                         ~~~~~~
-!!! error TS4059: Return type of exported function has or is using name 'm2.public2' from private module 'm2'.
+!!! error TS4060: Return type of function 'foo114' references inaccessible name 'm2'.
             return new m2.public2();
         }
     }

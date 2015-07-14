@@ -1,36 +1,58 @@
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(105,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(121,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(123,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(148,51): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(153,66): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(159,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(162,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(163,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(165,57): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(166,72): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(9,17): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(25,36): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(27,23): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(52,47): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(57,62): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(63,17): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(66,36): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(67,23): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(69,53): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(70,68): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(90,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(106,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(108,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(133,51): error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(138,66): error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(144,21): error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(147,40): error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(148,27): error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(150,57): error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(30,25): error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(30,25): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(46,44): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(48,31): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(73,55): error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(78,70): error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(84,25): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(87,44): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(88,31): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(90,61): error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(91,76): error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(105,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(121,40): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(123,27): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(148,51): error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(153,66): error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(159,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(162,40): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(163,27): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(165,57): error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts(166,72): error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(9,17): error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(25,36): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(27,23): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(52,47): error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(57,62): error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(63,17): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(66,36): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(67,23): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(69,53): error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(70,68): error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(90,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(106,40): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(108,27): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(133,51): error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(138,66): error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(144,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(147,40): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(148,27): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(150,57): error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(172,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(172,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(188,40): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(190,27): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(215,51): error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(220,66): error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(226,21): error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(229,40): error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(230,27): error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(232,57): error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyVarDeclFile_externalModule.ts(233,72): error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyVarDeclFile_externalModule.ts (20 errors) ====
+==== tests/cases/compiler/privacyVarDeclFile_externalModule.ts (31 errors) ====
     
     class privateClass {
     }
@@ -41,7 +63,7 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     export interface publicInterfaceWithPrivatePropertyTypes {
         myProperty: privateClass;  // Error
                     ~~~~~~~~~~~~
-!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
     }
     
     export interface publicInterfaceWithPublicPropertyTypes {
@@ -59,11 +81,11 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty: privateClass; // Error
                                        ~~~~~~~~~~~~
-!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
         private static myPrivateStaticProperty: privateClass;
         myPublicProperty: privateClass; // Error
                           ~~~~~~~~~~~~
-!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
         private myPrivateProperty: privateClass;
     }
     
@@ -90,14 +112,14 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
     export var publicVarWithPrivatePropertyTypes: privateClass; // Error
                                                   ~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
     export var publicVarWithPublicPropertyTypes: publicClass;
     var privateVarWithPrivatePropertyTypes: privateClass;
     var privateVarWithPublicPropertyTypes: publicClass;
     
     export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
                                                                  ~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
     export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
     declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
     declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
@@ -105,22 +127,22 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     export interface publicInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass; // Error
                     ~~~~~~~~~~~~~
-!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
     }
     export class publicClassWithPrivateModulePropertyTypes {
         static myPublicStaticProperty: privateModule.publicClass; // Error
                                        ~~~~~~~~~~~~~
-!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
         myPublicProperty: privateModule.publicClass; // Error
                           ~~~~~~~~~~~~~
-!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
     }
     export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                                                         ~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+!!! error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
     export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                                                                        ~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
     
     interface privateInterfaceWithPrivateModulePropertyTypes {
         myProperty: privateModule.publicClass;
@@ -142,7 +164,7 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         export interface publicInterfaceWithPrivatePropertyTypes {
             myProperty: privateClass;  // Error
                         ~~~~~~~~~~~~
-!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicPropertyTypes {
@@ -160,11 +182,11 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         export class publicClassWithWithPrivatePropertyTypes {
             static myPublicStaticProperty: privateClass; // Error
                                            ~~~~~~~~~~~~
-!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
             private static myPrivateStaticProperty: privateClass;
             myPublicProperty: privateClass; // Error
                               ~~~~~~~~~~~~
-!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
             private myPrivateProperty: privateClass;
         }
     
@@ -191,14 +213,14 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
         export var publicVarWithPrivatePropertyTypes: privateClass; // Error
                                                       ~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
         export var publicVarWithPublicPropertyTypes: publicClass;
         var privateVarWithPrivatePropertyTypes: privateClass;
         var privateVarWithPublicPropertyTypes: publicClass;
     
         export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
                                                                      ~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
         export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
         declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
         declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
@@ -206,22 +228,22 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         export interface publicInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass; // Error
                         ~~~~~~~~~~~~~
-!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModulePropertyTypes {
             static myPublicStaticProperty: privateModule.publicClass; // Error
                                            ~~~~~~~~~~~~~
-!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
             myPublicProperty: privateModule.publicClass; // Error
                               ~~~~~~~~~~~~~
-!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
         }
         export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                                                             ~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+!!! error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
         export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                                                                            ~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass;
@@ -243,6 +265,10 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
         export interface publicInterfaceWithPrivatePropertyTypes {
             myProperty: privateClass;  
+                        ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+                        ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
         }
     
         export interface publicInterfaceWithPublicPropertyTypes {
@@ -259,8 +285,12 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
         export class publicClassWithWithPrivatePropertyTypes {
             static myPublicStaticProperty: privateClass; 
+                                           ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
             private static myPrivateStaticProperty: privateClass;
             myPublicProperty: privateClass; 
+                              ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
             private myPrivateProperty: privateClass;
         }
     
@@ -286,24 +316,38 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         }
     
         export var publicVarWithPrivatePropertyTypes: privateClass; 
+                                                      ~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
         export var publicVarWithPublicPropertyTypes: publicClass;
         var privateVarWithPrivatePropertyTypes: privateClass;
         var privateVarWithPublicPropertyTypes: publicClass;
     
         export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; 
+                                                                     ~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
         export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
         declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
         declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
     
         export interface publicInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass; 
+                        ~~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModulePropertyTypes {
             static myPublicStaticProperty: privateModule.publicClass; 
+                                           ~~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
             myPublicProperty: privateModule.publicClass; 
+                              ~~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
         }
         export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; 
+                                                            ~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
         export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+                                                                           ~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass;
@@ -316,7 +360,7 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
     }
     
-==== tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts (10 errors) ====
+==== tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts (21 errors) ====
     class publicClassInGlobal {
     }
     interface publicInterfaceWithPublicPropertyTypesInGlobal {
@@ -347,6 +391,10 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
             export interface publicInterfaceWithPrivatePropertyTypes {
                 myProperty: privateClass;
+                            ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
+                            ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
             }
     
             export interface publicInterfaceWithPublicPropertyTypes {
@@ -363,8 +411,12 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
             export class publicClassWithWithPrivatePropertyTypes {
                 static myPublicStaticProperty: privateClass;
+                                               ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
                 private static myPrivateStaticProperty: privateClass;
                 myPublicProperty: privateClass;
+                                  ~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
                 private myPrivateProperty: privateClass;
             }
     
@@ -390,24 +442,38 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
             }
     
             export var publicVarWithPrivatePropertyTypes: privateClass;
+                                                          ~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
             export var publicVarWithPublicPropertyTypes: publicClass;
             var privateVarWithPrivatePropertyTypes: privateClass;
             var privateVarWithPublicPropertyTypes: publicClass;
     
             export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass;
+                                                                         ~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
             export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
             declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
             declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
     
             export interface publicInterfaceWithPrivateModulePropertyTypes {
                 myProperty: privateModule.publicClass;
+                            ~~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
             }
             export class publicClassWithPrivateModulePropertyTypes {
                 static myPublicStaticProperty: privateModule.publicClass;
+                                               ~~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
                 myPublicProperty: privateModule.publicClass;
+                                  ~~~~~~~~~~~~~
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
             }
             export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+                                                                ~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
             export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
+                                                                               ~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
     
             interface privateInterfaceWithPrivateModulePropertyTypes {
                 myProperty: privateModule.publicClass;
@@ -423,7 +489,7 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         export interface publicInterfaceWithPrivatePropertyTypes {
             myProperty: privateClass;  // Error
                         ~~~~~~~~~~~~
-!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicPropertyTypes {
@@ -441,11 +507,11 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         export class publicClassWithWithPrivatePropertyTypes {
             static myPublicStaticProperty: privateClass; // Error
                                            ~~~~~~~~~~~~
-!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateClass'.
             private static myPrivateStaticProperty: privateClass;
             myPublicProperty: privateClass; // Error
                               ~~~~~~~~~~~~
-!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateClass'.
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateClass'.
             private myPrivateProperty: privateClass;
         }
     
@@ -472,14 +538,14 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
     
         export var publicVarWithPrivatePropertyTypes: privateClass; // Error
                                                       ~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Type of variable 'publicVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
         export var publicVarWithPublicPropertyTypes: publicClass;
         var privateVarWithPrivatePropertyTypes: privateClass;
         var privateVarWithPublicPropertyTypes: publicClass;
     
         export declare var publicAmbientVarWithPrivatePropertyTypes: privateClass; // Error
                                                                      ~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicAmbientVarWithPrivatePropertyTypes' has or is using private name 'privateClass'.
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivatePropertyTypes' references inaccessible name 'privateClass'.
         export declare var publicAmbientVarWithPublicPropertyTypes: publicClass;
         declare var privateAmbientVarWithPrivatePropertyTypes: privateClass;
         declare var privateAmbientVarWithPublicPropertyTypes: publicClass;
@@ -487,22 +553,22 @@ tests/cases/compiler/privacyVarDeclFile_externalModule.ts(151,72): error TS4025:
         export interface publicInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass; // Error
                         ~~~~~~~~~~~~~
-!!! error TS4033: Property 'myProperty' of exported interface has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myProperty' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModulePropertyTypes {
             static myPublicStaticProperty: privateModule.publicClass; // Error
                                            ~~~~~~~~~~~~~
-!!! error TS4028: Public static property 'myPublicStaticProperty' of exported class has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myPublicStaticProperty' references inaccessible name 'privateModule'.
             myPublicProperty: privateModule.publicClass; // Error
                               ~~~~~~~~~~~~~
-!!! error TS4031: Public property 'myPublicProperty' of exported class has or is using private name 'privateModule'.
+!!! error TS4028: Type of property 'myPublicProperty' references inaccessible name 'privateModule'.
         }
         export var publicVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                                                             ~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+!!! error TS4025: Type of variable 'publicVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
         export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
                                                                            ~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'publicAmbientVarWithPrivateModulePropertyTypes' has or is using private name 'privateModule'.
+!!! error TS4025: Type of variable 'publicAmbientVarWithPrivateModulePropertyTypes' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModulePropertyTypes {
             myProperty: privateModule.publicClass;
