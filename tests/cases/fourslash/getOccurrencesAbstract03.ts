@@ -1,10 +1,13 @@
 /// <reference path='fourslash.ts' />
 
-////class Animal {
-////    [|abstract|] walk(): void;
-////    [|abstract|] makeSound(): void;
+////// Abstract cannot appear here, won't get highlighted
+////let c = /**/abstract class Foo {
+////    [|abstract|] foo(): void;
+////    [|abstract|] bar(): void;
 ////}
 
+goTo.marker("1");
+verify.occurrencesAtPositionCount(0);
 
 // Still highlight occurrences even though abstract methods can only appear in abstract classes
 const ranges = test.ranges();
