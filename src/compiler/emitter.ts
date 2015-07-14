@@ -4219,6 +4219,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
+                    var startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
@@ -4253,7 +4254,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (superCall) {
                         statements = statements.slice(1);
                     }
-                    emitLines(statements);
+                    emitLinesStartingAt(statements, startIndex);
                 }
                 emitTempDeclarations(/*newLine*/ true);
                 writeLine();
