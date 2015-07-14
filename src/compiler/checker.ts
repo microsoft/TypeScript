@@ -4903,9 +4903,38 @@ namespace ts {
                 let targetSignatures = getSignaturesOfType(target, kind);
                 let result = Ternary.True;
                 let saveErrorInfo = errorInfo;
+
+                // Because the "abstractness" of a class is the same across all construct signatures
+                // (internally we are checking the corresponding declaration), it is enough to perform 
+                // the check and report an error once over all pairs of source and target construct signatures.
+                let sourceSig = sourceSignatures[0];
+                // Note that in an extends-clause, targetSignatures is stripped, so the check never proceeds.
+                let targetSig = targetSignatures[0];
+
+                if (sourceSig && targetSig) {
+                    let sourceErasedSignature = getErasedSignature(sourceSig);
+                    let targetErasedSignature = getErasedSignature(targetSig);
+
+                    let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
+                    let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
+
+                    let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
+                    let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                    let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
+                    let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
+
+                    if (sourceIsAbstract && !targetIsAbstract) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
+                        }
+                        return Ternary.False;
+                    }
+                }
+
                 outer: for (let t of targetSignatures) {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
                         let localErrors = reportErrors;
+                        let checkedAbstractAssignability = false;
                         for (let s of sourceSignatures) {
                             if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
                                 let related = signatureRelatedTo(s, t, localErrors);
@@ -5012,10 +5041,11 @@ namespace ts {
                     return Ternary.False;
                 }
 
-                let t = getReturnTypeOfSignature(target);
-                if (t === voidType) return result;
-                let s = getReturnTypeOfSignature(source);
-                return result & isRelatedTo(s, t, reportErrors);
+                let targetReturnType = getReturnTypeOfSignature(target);
+                if (targetReturnType === voidType) return result;
+                let sourceReturnType = getReturnTypeOfSignature(source);
+
+                return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
