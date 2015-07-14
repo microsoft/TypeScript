@@ -70,7 +70,8 @@ namespace ts.formatting {
     interface ListStates {
         indentationLockable: boolean;
         indentationLocked: boolean;
-        parentExpressionEnd: LineAndCharacter;
+        base: NodeArray<Node>;
+        startLine: number;
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
@@ -653,11 +654,11 @@ namespace ts.formatting {
                     let argumentEnd = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
 
                     // single-line argument should not affect other indentation
-                    if (parentListStates.parentExpressionEnd.line === argumentEnd) {
+                    if (parentListStates.startLine === argumentEnd) {
                         return false;
                     }
 
-                    if (parentListStates.parentExpressionEnd.line !== childStartLine) {
+                    if (parentListStates.startLine !== childStartLine) {
                         return false;
                     }
 
@@ -701,11 +702,10 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
-                let listElementStates = <ListStates>{};
+                let listElementStates = <ListStates>{ base: nodes };
                 if (parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression) {
                     listElementStates.indentationLockable = true;
-                    let parentExpression = (<CallExpression | NewExpression>parent).expression;
-                    listElementStates.parentExpressionEnd = sourceFile.getLineAndCharacterOfPosition(parentExpression.getEnd());
+                    listElementStates.startLine = sourceFile.getLineAndCharacterOfPosition(nodes.pos).line;
                 }
                 
                 for (let child of nodes) {
