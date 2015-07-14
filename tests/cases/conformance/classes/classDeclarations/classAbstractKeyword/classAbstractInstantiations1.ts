@@ -1,4 +1,8 @@
 
+//
+// Calling new with (non)abstract classes.
+//
+
 abstract class A {}
 
 class B extends A {}
