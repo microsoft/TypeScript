@@ -3943,7 +3943,7 @@ namespace ts {
             let id = getTypeListId(elementTypes);
             let type = tupleTypes[id];
             if (!type) {
-                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple);
+                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getWideningFlagsOfTypes(elementTypes));
                 type.elementTypes = elementTypes;
             }
             return type;
@@ -5300,7 +5300,7 @@ namespace ts {
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
         function isTupleType(type: Type): type is TupleType {
-            return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
+            return !!(type.flags & TypeFlags.Tuple);
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -5348,31 +5348,33 @@ namespace ts {
             return type;
         }
 
-        function reportWideningErrorsInType(type: Type, expression: Expression): boolean {
+        /**
+         * Reports implicit any errors that occur as a result of widening 'null' and 'undefined'
+         * to 'any'. A call to reportWideningErrorsInType is normally accompanied by a call to
+         * getWidenedType. But in some cases getWidenedType is called without reporting errors
+         * (type argument inference is an example).
+         *
+         * The return value indicates whether an error was in fact reported. The particular circumstances
+         * are on a best effort basis. Currently, if the null or undefined that causes widening is inside
+         * an object literal property (arbitrarily deeply), this function reports an error. If no error is
+         * reported, reportImplicitAnyError is a suitable fallback to report a general error.
+         */
+        function reportWideningErrorsInType(type: Type): boolean {
             let errorReported = false;
             if (type.flags & TypeFlags.Union) {
                 for (let t of (<UnionType>type).types) {
-                    if (reportWideningErrorsInType(t, expression)) {
+                    if (reportWideningErrorsInType(t)) {
                         errorReported = true;
                     }
                 }
             }
             if (isArrayType(type)) {
-                return reportWideningErrorsInType((<TypeReference>type).typeArguments[0], expression);
+                return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
             }
             if (isTupleType(type)) {
-                let { elementTypes } = type;
-                for (let i = 0; i < elementTypes.length; i++) {
-                    let t = elementTypes[i];
-                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
-                        if (reportWideningErrorsInType(t, expression)) {
-                            errorReported = true;
-                        }
-                        else if (expression.kind === SyntaxKind.ArrayLiteralExpression) {
-                            let element = (<ArrayLiteralExpression>expression).elements[i];
-                            error(element, Diagnostics.Array_element_at_index_0_implicitly_has_an_1_type, i, typeToString(getWidenedType(t)));
-                            errorReported = true;
-                        }
+                for (let t of type.elementTypes) {
+                    if (reportWideningErrorsInType(t)) {
+                        errorReported = true;
                     }
                 }
             }
@@ -5380,7 +5382,7 @@ namespace ts {
                 for (let p of getPropertiesOfObjectType(type)) {
                     let t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
-                        if (!reportWideningErrorsInType(t, expression)) {
+                        if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
                         errorReported = true;
@@ -5425,7 +5427,7 @@ namespace ts {
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
             if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
-                if (!reportWideningErrorsInType(type, declaration.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>declaration).initializer)) {
+                if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
                 }
             }
@@ -6801,7 +6803,6 @@ namespace ts {
             let hasSpreadElement = false;
             let elementTypes: Type[] = [];
             let inDestructuringPattern = isAssignmentTarget(node);
-            let typeFlags: TypeFlags;
             for (let e of elements) {
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElementExpression) {
                     // Given the following situation:
@@ -6821,23 +6822,21 @@ namespace ts {
                         (languageVersion >= ScriptTarget.ES6 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
                     if (restElementType) {
                         elementTypes.push(restElementType);
-                        typeFlags |= restElementType.flags;
                     }
                 }
                 else {
                     let type = checkExpression(e, contextualMapper);
                     elementTypes.push(type);
-                    typeFlags |= type.flags;
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
             }
             if (!hasSpreadElement) {
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType) || inDestructuringPattern) {
-                    return addTypeFlags(createTupleType(elementTypes), typeFlags & TypeFlags.RequiresWidening);
+                    return createTupleType(elementTypes);
                 }
             }
-            return addTypeFlags(createArrayType(getUnionType(elementTypes)), typeFlags & TypeFlags.RequiresWidening);
+            return createArrayType(getUnionType(elementTypes));
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -6953,7 +6952,8 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            return addTypeFlags(result, TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull));
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
+            return result;
 
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
@@ -6977,11 +6977,6 @@ namespace ts {
                 }
                 return undefined;
             }
-        }
-
-        function addTypeFlags(type: Type, flags: TypeFlags): Type {
-            type.flags |= flags;
-            return type;
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
