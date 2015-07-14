@@ -3541,14 +3541,7 @@ namespace ts {
                     existingMemberNames[existingName] = true;
                 }
 
-                let filteredMembers: Symbol[] = [];
-                forEach(contextualMemberSymbols, s => {
-                    if (!existingMemberNames[s.name]) {
-                        filteredMembers.push(s);
-                    }
-                });
-
-                return filteredMembers;
+                return filter(contextualMemberSymbols, m => !lookUp(existingMemberNames, m.name));
             }
             
             /**
@@ -3569,13 +3562,8 @@ namespace ts {
                         seenNames[(<JsxAttribute>attr).name.text] = true;
                     }
                 }
-                let result: Symbol[] = [];
-                for (let sym of symbols) {
-                    if (!seenNames[sym.name]) {
-                        result.push(sym);
-                    }
-                }
-                return result;
+
+                return filter(symbols, a => !lookUp(seenNames, a.name));
             }
         }
 
