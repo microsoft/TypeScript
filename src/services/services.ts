@@ -3255,11 +3255,6 @@ namespace ts {
              * @returns true if 'symbols' was successfully populated; false otherwise.
              */
             function tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports: NamedImportsOrExports): boolean {
-                // cursor is in import clause
-                // try to show exported member for imported module
-                isMemberCompletion = true;
-                isNewIdentifierLocation = false;
-
                 let declarationKind = namedImportsOrExports.kind === SyntaxKind.NamedImports ?
                     SyntaxKind.ImportDeclaration :
                     SyntaxKind.ExportDeclaration;
@@ -3270,13 +3265,16 @@ namespace ts {
                     return false;
                 }
 
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
+
                 let exports: Symbol[];
                 let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
                 if (moduleSpecifierSymbol) {
                     exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
                 }
 
-                symbols = exports ? filterModuleExports(exports, namedImportsOrExports) : emptyArray;
+                symbols = exports ? filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements) : emptyArray;
 
                 return true;
             }
@@ -3474,26 +3472,41 @@ namespace ts {
                 return false;
             }
 
-            function filterModuleExports(exports: Symbol[], namedImportsOrExports: NamedImportsOrExports): Symbol[] {
-                let exisingImports: Map<boolean> = {};
+            /**
+             * Filters out completion suggestions for named imports or exports.
+             *
+             * @param exportsOfModule          The list of symbols which a module exposes.
+             * @param namedImportsOrExports    The list of existing import/export specifiers in the import/export clause.
+             *
+             * @returns Symbols to be suggested at an import/export clause, barring those whose named imports/exports
+             *          do not occur at the current position and have not otherwise been typed.
+             */
+            function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
+                let exisingImportsOrExports: Map<boolean> = {};
 
-                for (let element of namedImportsOrExports.elements) {
+                for (let element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (element.getStart() <= position && position <= element.getEnd()) {
                         continue;
                     }
 
                     let name = element.propertyName || element.name;
-                    exisingImports[name.text] = true;
+                    exisingImportsOrExports[name.text] = true;
                 }
 
-                if (isEmpty(exisingImports)) {
-                    return exports;
+                if (isEmpty(exisingImportsOrExports)) {
+                    return exportsOfModule;
                 }
 
-                return filter(exports, e => !lookUp(exisingImports, e.name));
+                return filter(exportsOfModule, e => !lookUp(exisingImportsOrExports, e.name));
             }
 
+            /**
+             * Filters out completion suggestions for named imports or exports.
+             *
+             * @returns Symbols to be suggested in an object binding pattern or object literal expression, barring those whose declarations
+             *          do not occur at the current position and have not otherwise been typed.
+             */
             function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -3538,6 +3551,12 @@ namespace ts {
                 return filteredMembers;
             }
             
+            /**
+             * Filters out completion suggestions from 'symbols' according to existing JSX attributes.
+             *
+             * @returns Symbols to be suggested in a JSX element, barring those whose attributes
+             *          do not occur at the current position and have not otherwise been typed.
+             */
             function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
                 let seenNames: Map<boolean> = {};
                 for (let attr of attributes) {
