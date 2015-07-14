@@ -2347,6 +2347,14 @@
         "category": "Error",
         "code": 7026
     },
+    "JSX element implicitly has type 'any' because no interface 'JSX.{0}' exists": {
+        "category": "Error",
+        "code": 7026
+    },
+    "Array element at index {0} implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7027
+    },
 
 
     "You cannot rename this element.": {

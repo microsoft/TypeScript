@@ -5299,7 +5299,7 @@ namespace ts {
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
-        function isTupleType(type: Type): boolean {
+        function isTupleType(type: Type): type is TupleType {
             return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
         }
 
@@ -5341,37 +5341,53 @@ namespace ts {
                 if (isArrayType(type)) {
                     return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
                 }
+                if (isTupleType(type)) {
+                    return createTupleType(map(type.elementTypes, getWidenedType));
+                }
             }
             return type;
         }
 
-        function reportWideningErrorsInType(type: Type): boolean {
+        function reportWideningErrorsInType(type: Type, expression: Expression): boolean {
+            let errorReported = false;
             if (type.flags & TypeFlags.Union) {
-                let errorReported = false;
-                forEach((<UnionType>type).types, t => {
-                    if (reportWideningErrorsInType(t)) {
+                for (let t of (<UnionType>type).types) {
+                    if (reportWideningErrorsInType(t, expression)) {
                         errorReported = true;
                     }
-                });
-                return errorReported;
+                }
             }
             if (isArrayType(type)) {
-                return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
+                return reportWideningErrorsInType((<TypeReference>type).typeArguments[0], expression);
+            }
+            if (isTupleType(type)) {
+                let { elementTypes } = type;
+                for (let i = 0; i < elementTypes.length; i++) {
+                    let t = elementTypes[i];
+                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
+                        if (reportWideningErrorsInType(t, expression)) {
+                            errorReported = true;
+                        }
+                        else if (expression.kind === SyntaxKind.ArrayLiteralExpression) {
+                            let element = (<ArrayLiteralExpression>expression).elements[i];
+                            error(element, Diagnostics.Array_element_at_index_0_implicitly_has_an_1_type, i, typeToString(getWidenedType(t)));
+                            errorReported = true;
+                        }
+                    }
+                }
             }
             if (type.flags & TypeFlags.ObjectLiteral) {
-                let errorReported = false;
-                forEach(getPropertiesOfObjectType(type), p => {
+                for (let p of getPropertiesOfObjectType(type)) {
                     let t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
-                        if (!reportWideningErrorsInType(t)) {
+                        if (!reportWideningErrorsInType(t, expression)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
                         errorReported = true;
                     }
-                });
-                return errorReported;
+                }
             }
-            return false;
+            return errorReported;
         }
 
         function reportImplicitAnyError(declaration: Declaration, type: Type) {
@@ -5409,7 +5425,7 @@ namespace ts {
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
             if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
-                if (!reportWideningErrorsInType(type)) {
+                if (!reportWideningErrorsInType(type, declaration.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>declaration).initializer)) {
                     reportImplicitAnyError(declaration, type);
                 }
             }
@@ -6785,6 +6801,7 @@ namespace ts {
             let hasSpreadElement = false;
             let elementTypes: Type[] = [];
             let inDestructuringPattern = isAssignmentTarget(node);
+            let typeFlags: TypeFlags;
             for (let e of elements) {
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElementExpression) {
                     // Given the following situation:
@@ -6804,21 +6821,23 @@ namespace ts {
                         (languageVersion >= ScriptTarget.ES6 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
                     if (restElementType) {
                         elementTypes.push(restElementType);
+                        typeFlags |= restElementType.flags;
                     }
                 }
                 else {
                     let type = checkExpression(e, contextualMapper);
                     elementTypes.push(type);
+                    typeFlags |= type.flags;
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
             }
             if (!hasSpreadElement) {
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType) || inDestructuringPattern) {
-                    return createTupleType(elementTypes);
+                    return addTypeFlags(createTupleType(elementTypes), typeFlags & TypeFlags.RequiresWidening);
                 }
             }
-            return createArrayType(getUnionType(elementTypes));
+            return addTypeFlags(createArrayType(getUnionType(elementTypes)), typeFlags & TypeFlags.RequiresWidening);
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -6934,8 +6953,7 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
-            return result;
+            return addTypeFlags(result, TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull));
 
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
@@ -6961,6 +6979,10 @@ namespace ts {
             }
         }
 
+        function addTypeFlags(type: Type, flags: TypeFlags): Type {
+            type.flags |= flags;
+            return type;
+        }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
