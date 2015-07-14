@@ -197,6 +197,8 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        getDocCommentScaffoldingAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -783,6 +785,17 @@ namespace ts {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
+        }
+
+        public getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getDocCommentScaffoldingAtPosition('" + fileName + "', " + position + ")",
+                () => {
+                    var commentText = this.languageService.getDocCommentScaffoldingAtPosition(fileName, position);
+                    return commentText;
+                }
+                
+            )
         }
 
         /// NAVIGATE TO

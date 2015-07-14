@@ -1032,6 +1032,8 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
+        getDocCommentScaffoldingAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -6698,6 +6700,10 @@ namespace ts {
 
             return [];
         }
+        
+        function getDocCommentScaffoldingAtPosition(filename: string, position: number): string {
+                return "/** getDocCommentScaffoldingAtPosition -- TS side! */";
+            }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually 
@@ -6940,6 +6946,7 @@ namespace ts {
             getFormattingEditsForRange,
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
+            getDocCommentScaffoldingAtPosition,
             getEmitOutput,
             getSourceFile,
             getProgram

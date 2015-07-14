@@ -540,6 +540,10 @@ namespace ts.server {
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             throw new Error("Not Implemented Yet."); 
         }
+        
+        getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
+            throw new Error("Not Implemented Yet."); 
+        }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
