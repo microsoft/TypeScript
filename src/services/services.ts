@@ -4682,12 +4682,13 @@ namespace ts {
                     // Make sure we only highlight the keyword when it makes sense to do so.
                     if (isAccessibilityModifier(modifier)) {
                         if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                            container.kind === SyntaxKind.ClassExpression ||
                             (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
                             return undefined;
                         }
                     }
                     else if (modifier === SyntaxKind.StaticKeyword) {
-                        if (container.kind !== SyntaxKind.ClassDeclaration) {
+                        if (!(container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression)) {
                             return undefined;
                         }
                     }
@@ -4726,12 +4727,13 @@ namespace ts {
                                 (<ClassDeclaration>container.parent).members);
                             break;
                         case SyntaxKind.ClassDeclaration:
-                            nodes = (<ClassDeclaration>container).members;
+                        case SyntaxKind.ClassExpression:
+                            nodes = (<ClassLikeDeclaration>container).members;
 
                             // If we're an accessibility modifier, we're in an instance member and should search
                             // the constructor's parameter list for instance members as well.
                             if (modifierFlag & NodeFlags.AccessibilityModifier) {
-                                let constructor = forEach((<ClassDeclaration>container).members, member => {
+                                let constructor = forEach((<ClassLikeDeclaration>container).members, member => {
                                     return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
                                 });
 
