@@ -704,14 +704,14 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
-                let listElementStates = <ListStates>{ base: nodes };
-                if (parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression) {
-                    listElementStates.indentationLockable = true;
-                    listElementStates.startLine = sourceFile.getLineAndCharacterOfPosition(nodes.pos).line;
-                }
+                let listStates = <ListStates>{
+                    base: nodes,
+                    indentationLockable: true,
+                    startLine: sourceFile.getLineAndCharacterOfPosition(nodes.pos).line
+                };
                 
                 for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ listElementStates)
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ listStates)
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
