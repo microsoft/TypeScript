@@ -5538,30 +5538,33 @@ namespace ts {
                         inferFromTypes(sourceType, target);
                     }
                 }
-                else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
-                    (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
-                    // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
-                    if (isInProcess(source, target)) {
-                        return;
-                    }
-                    if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
-                        return;
-                    }
+                else {
+                    source = getApparentType(source);
+                    if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
+                        (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
+                        // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
+                        if (isInProcess(source, target)) {
+                            return;
+                        }
+                        if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                            return;
+                        }
 
-                    if (depth === 0) {
-                        sourceStack = [];
-                        targetStack = [];
+                        if (depth === 0) {
+                            sourceStack = [];
+                            targetStack = [];
+                        }
+                        sourceStack[depth] = source;
+                        targetStack[depth] = target;
+                        depth++;
+                        inferFromProperties(source, target);
+                        inferFromSignatures(source, target, SignatureKind.Call);
+                        inferFromSignatures(source, target, SignatureKind.Construct);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
+                        inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
+                        depth--;
                     }
-                    sourceStack[depth] = source;
-                    targetStack[depth] = target;
-                    depth++;
-                    inferFromProperties(source, target);
-                    inferFromSignatures(source, target, SignatureKind.Call);
-                    inferFromSignatures(source, target, SignatureKind.Construct);
-                    inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
-                    inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
-                    inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
-                    depth--;
                 }
             }
 
