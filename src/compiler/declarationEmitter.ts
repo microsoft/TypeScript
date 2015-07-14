@@ -1562,8 +1562,14 @@ namespace ts {
                 return;
             }
 
-            // Make sure it is connected to its parent
+            // Make sure this declaration can be emitted, that is it is accessible
+            // and is connected to its parent, or else report a accessibility error
             ensureDeclarationVisible(node, errorNode);
+
+            // If this declaration is from a diffrent file, we will get to it later. 
+            if (getSourceFileOfNode(node) !== currentSourceFile) {
+                return;
+            }
 
             let links = getNodeLinks(node);
             if (!links.collected) {
