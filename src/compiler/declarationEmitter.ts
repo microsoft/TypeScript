@@ -1149,6 +1149,9 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     return visitNode((<QualifiedName>node).left) ||
                         visitNode((<QualifiedName>node).right);
+                case SyntaxKind.PropertyAccessExpression:
+                    return visitNode((<PropertyAccessExpression>node).expression) ||
+                        visitNode((<PropertyAccessExpression>node).name);
                 case SyntaxKind.Identifier:
                     return visitTypeName(<Identifier>node);
             }
