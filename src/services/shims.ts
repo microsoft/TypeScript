@@ -57,10 +57,12 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
+        
+        getModuleResolutionsForFile?(fileName: string): string;        
     }
 
     /** Public interface of the the of a config service shim instance.*/
-    export interface CoreServicesShimHost extends Logger {
+    export interface CoreServicesShimHost extends Logger, ModuleResolutionHost {
         /** Returns a JSON-encoded value of the type: string[] */
         readDirectory(rootDir: string, extension: string): string;
     }
@@ -249,8 +251,20 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
+        private lastRequestedFile: string;
+        private lastRequestedModuleResolutions: Map<string>;
 
         constructor(private shimHost: LanguageServiceShimHost) {
+            if ("getModuleResolutionsForFile" in this.shimHost) {
+                (<any>this).resolveModuleName = (moduleName: string, containingFile: string) => {
+                    if (this.lastRequestedFile !== containingFile) {
+                        this.lastRequestedModuleResolutions = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                        this.lastRequestedFile = containingFile;
+                    }
+
+                    return this.lastRequestedModuleResolutions[moduleName];
+                };
+            }
         }
 
         public log(s: string): void {
@@ -267,7 +281,7 @@ namespace ts {
 
         public error(s: string): void {
             this.shimHost.error(s);
-        }
+        }        
 
         public getProjectVersion(): string {
             if (!this.shimHost.getProjectVersion) {
@@ -378,6 +392,10 @@ namespace ts {
         public readDirectory(rootDir: string, extension: string): string[] {
             var encoded = this.shimHost.readDirectory(rootDir, extension);
             return JSON.parse(encoded);
+        }
+        
+        public fileExists(fileName: string): boolean {
+            return this.shimHost.fileExists(fileName);
         }
     }
 
@@ -505,7 +523,7 @@ namespace ts {
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
             var newLine = this.getNewLine();
             return ts.realizeDiagnostics(diagnostics, newLine);
-        }
+        }        
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
@@ -880,6 +898,13 @@ namespace ts {
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
+        }
+        
+        public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
+            return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
+                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                return resolveModuleName(fileName, moduleName, compilerOptions, this.host);
+            }); 
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {

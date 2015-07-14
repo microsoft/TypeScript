@@ -866,41 +866,48 @@ module Harness {
                 }
             };
             inputFiles.forEach(register);
+            
+            function getSourceFile(fn: string, languageVersion: ts.ScriptTarget) {
+                fn = ts.normalizePath(fn);
+                if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
+                    return filemap[getCanonicalFileName(fn)];
+                }
+                else if (currentDirectory) {
+                    var canonicalAbsolutePath = getCanonicalFileName(ts.getNormalizedAbsolutePath(fn, currentDirectory));
+                    return Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(canonicalAbsolutePath)) ? filemap[canonicalAbsolutePath] : undefined;
+                }
+                else if (fn === fourslashFileName) {
+                    var tsFn = 'tests/cases/fourslash/' + fourslashFileName;
+                    fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
+                    return fourslashSourceFile;
+                }
+                else {
+                    if (fn === defaultLibFileName) {
+                        return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
+                    }
+                    // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
+                    return undefined;
+                }
+            }
 
             let newLine =
                 newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
                     newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
                         ts.sys.newLine;
-
+            
+            let moduleResolutionHost: ts.ModuleResolutionHost = {
+                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
+            }
+            
             return {
                 getCurrentDirectory,
-                getSourceFile: (fn, languageVersion) => {
-                    fn = ts.normalizePath(fn);
-                    if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
-                        return filemap[getCanonicalFileName(fn)];
-                    }
-                    else if (currentDirectory) {
-                        var canonicalAbsolutePath = getCanonicalFileName(ts.getNormalizedAbsolutePath(fn, currentDirectory));
-                        return Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(canonicalAbsolutePath)) ? filemap[canonicalAbsolutePath] : undefined;
-                    }
-                    else if (fn === fourslashFileName) {
-                        var tsFn = 'tests/cases/fourslash/' + fourslashFileName;
-                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
-                        return fourslashSourceFile;
-                    }
-                    else {
-                        if (fn === defaultLibFileName) {
-                            return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
-                        }
-                        // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                        return undefined;
-                    }
-                },
+                getSourceFile,
                 getDefaultLibFileName: options => defaultLibFileName,
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: () => newLine
+                getNewLine: () => newLine,
+                getModuleResolutionHost: () => moduleResolutionHost
             };
         }
 

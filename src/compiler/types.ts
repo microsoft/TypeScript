@@ -1285,7 +1285,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost {
+    export interface ParseConfigHost extends ModuleResolutionHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -2197,7 +2197,18 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }   
+    
+    export interface ModuleResolutionHost {
+        fileExists(fileName: string): boolean;
     }
+    
+    export interface ResolvedModule {
+        resolvedFileName: string;
+        failedLookupLocations: string[];
+    }
+    
+    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
 
     export interface CompilerHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
@@ -2207,6 +2218,10 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        
+        // compiler host should implement one of these methods
+        resolveModuleName?(moduleName: string, containingFile: string): string;
+        getModuleResolutionHost?(): ModuleResolutionHost;        
     }
 
     export interface TextSpan {

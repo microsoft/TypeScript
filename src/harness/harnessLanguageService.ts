@@ -228,7 +228,8 @@ module Harness.LanguageService {
 
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
-        }
+        }        
+        fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }        
 
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }

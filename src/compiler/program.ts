@@ -27,6 +27,52 @@ namespace ts {
         }
         return undefined;
     }
+    
+    export function getDefaultModuleNameResolver(options: CompilerOptions): ModuleNameResolver {
+        // TODO: return different resolver based on compiler options (i.e. module kind)
+        return resolveModuleName;
+    }
+    
+    export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
+        let basePath = getDirectoryPath(containingFile);
+        let referencedFileName = isRootedDiskPath(moduleName) ? moduleName : combinePaths(basePath, moduleName);
+        return normalizePath(referencedFileName);
+    }
+
+    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+
+        let searchPath = getDirectoryPath(containingFile);
+        let searchName: string;
+
+        let failedLookupLocations: string[] = [];
+
+        let referencedSourceFile: string;
+        while (true) {
+            searchName = normalizePath(combinePaths(searchPath, moduleName));
+            referencedSourceFile = forEach(supportedExtensions, extension => {
+                let candidate = searchName + extension;
+                let ok = host.fileExists(candidate) ? candidate : undefined;
+                if (host.fileExists(candidate)) {
+                    return candidate;
+                }
+                else {
+                    failedLookupLocations.push(candidate);
+                }
+            });
+
+            if (referencedSourceFile) {
+                break;
+            }
+
+            let parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            searchPath = parentPath;
+        }
+
+        return { resolvedFileName: referencedSourceFile, failedLookupLocations };
+    }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
@@ -94,7 +140,11 @@ namespace ts {
         }
 
         const newLine = getNewLineCharacter(options);
-
+        
+        let moduleResolutionHost: ModuleResolutionHost = {
+            fileExists: fileName => sys.fileExists(fileName),
+        }
+        
         return {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
@@ -102,7 +152,8 @@ namespace ts {
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
-            getNewLine: () => newLine
+            getNewLine: () => newLine,
+            getModuleResolutionHost: () => moduleResolutionHost
         };
     }
 
@@ -160,6 +211,20 @@ namespace ts {
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
+        
+        // initialize resolveModuleNameWorker only if noResolve is false
+        let resolveModuleNameWorker: (moduleName: string, containingFile: string) => string;
+        if (!options.noResolve) {
+            resolveModuleNameWorker = host.resolveModuleName;
+            if (!resolveModuleNameWorker) {
+                Debug.assert(host.getModuleResolutionHost !== undefined);
+                let defaultResolver = getDefaultModuleNameResolver(options);
+                resolveModuleNameWorker = (moduleName, containingFile) => { 
+                    let moduleResolution = defaultResolver(moduleName, containingFile, options, host.getModuleResolutionHost());
+                    return moduleResolution.resolvedFileName;
+                }
+            }
+        }
 
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
         
@@ -622,8 +687,8 @@ namespace ts {
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
-                let referencedFileName = isRootedDiskPath(ref.fileName) ? ref.fileName : combinePaths(basePath, ref.fileName);
-                processSourceFile(normalizePath(referencedFileName), /* isDefaultLib */ false, file, ref.pos, ref.end);
+                let referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
+                processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
         
@@ -647,36 +712,17 @@ namespace ts {
                 return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
 
-            function resolveModule(moduleNameExpr: LiteralExpression, existingResolutions: Map<string>): void {
-                let searchPath = basePath;
-                let searchName: string;
-
-                if (existingResolutions && hasProperty(existingResolutions, moduleNameExpr.text)) {
-                    let fileName = existingResolutions[moduleNameExpr.text];
-                    // use existing resolution
-                    setResolvedModuleName(file, moduleNameExpr.text, fileName);
-                    if (fileName) {
-                        findModuleSourceFile(fileName, moduleNameExpr);
-                    }
-                    return;
+            function resolveModule(moduleNameExpr: LiteralExpression, existingResolutions: Map<string>): void {                
+                Debug.assert(resolveModuleNameWorker !== undefined);
+                
+                let resolvedModuleName = existingResolutions && hasProperty(existingResolutions, moduleNameExpr.text)
+                    ? existingResolutions[moduleNameExpr.text]
+                    : resolveModuleNameWorker(moduleNameExpr.text, file.fileName);
+                    
+                setResolvedModuleName(file, moduleNameExpr.text, resolvedModuleName);
+                if (resolvedModuleName) {
+                    findModuleSourceFile(resolvedModuleName, moduleNameExpr);
                 }
-
-                while (true) {
-                    searchName = normalizePath(combinePaths(searchPath, moduleNameExpr.text));
-                    let referencedSourceFile = forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr));
-                    if (referencedSourceFile) {
-                        setResolvedModuleName(file, moduleNameExpr.text, referencedSourceFile.fileName);
-                        return;
-                    }
-
-                    let parentPath = getDirectoryPath(searchPath);
-                    if (parentPath === searchPath) {
-                        break;
-                    }
-                    searchPath = parentPath;
-                }
-                // mark reference as non-resolved
-                setResolvedModuleName(file, moduleNameExpr.text, undefined);
             }
         }
 

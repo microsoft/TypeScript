@@ -122,7 +122,7 @@ namespace ts {
         referencedFiles: FileReference[];
         importedFiles: FileReference[];
         isLibFile: boolean
-    }
+    }    
 
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
@@ -967,6 +967,10 @@ namespace ts {
         trace? (s: string): void;
         error? (s: string): void;
         useCaseSensitiveFileNames? (): boolean;
+        
+        // LS host should implement one of these methods
+        resolveModuleName?(moduleName: string, containingFile: string): string;
+        getModuleResolutionHost?(): ModuleResolutionHost;  
     }
 
     //
@@ -1783,6 +1787,10 @@ namespace ts {
 
         // Output
         let outputText: string;
+        
+        let moduleResolutionHost: ModuleResolutionHost = {
+            fileExists: fileName => fileName === inputFileName,
+        }
 
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
@@ -1795,7 +1803,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
-            getNewLine: () => newLine
+            getNewLine: () => newLine,
+            getModuleResolutionHost: () => moduleResolutionHost 
         };
 
         let program = createProgram([inputFileName], options, compilerHost);
@@ -1988,6 +1997,11 @@ namespace ts {
             releaseDocument,
             reportStats
         };
+    }
+    
+    export function resolveModuleName(fileName: string, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+        let resolver = getDefaultModuleNameResolver(compilerOptions);
+        return resolver(moduleName, fileName, compilerOptions, host);
     }
 
     export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
@@ -2472,9 +2486,9 @@ namespace ts {
             let oldSettings = program && program.getCompilerOptions();
             let newSettings = hostCache.compilationSettings();
             let changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
-
+            
             // Now create a new compiler
-            let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
+            let compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
@@ -2483,7 +2497,24 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory(),
-            }, program);
+            };
+            
+            if (host.resolveModuleName) {
+                compilerHost.resolveModuleName = (moduleName, containingFile) => host.resolveModuleName(moduleName, containingFile)
+            }
+            else if (host.getModuleResolutionHost) {
+                compilerHost.getModuleResolutionHost = () => host.getModuleResolutionHost()
+            }
+            else {
+                compilerHost.getModuleResolutionHost = () => {
+                    // stub missing host functionality
+                    return {
+                        fileExists: fileName => hostCache.getOrCreateEntry(fileName) != undefined,
+                    };
+                }
+            }
+            
+            let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
 
             // Release any files we have acquired in the old program but are 
             // not part of the new program.

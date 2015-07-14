@@ -103,6 +103,11 @@ module ts {
             file.sourceText = t.text;
             files[t.name] = file;
         }
+        
+        let moduleResolutionHost: ModuleResolutionHost = {
+            fileExists: fileName => hasProperty(files, fileName)
+        }
+        
         return {
             getSourceFile(fileName): SourceFile {
                 return files[fileName];
@@ -125,11 +130,7 @@ module ts {
             getNewLine(): string {
                 return sys.newLine;
             },
-            hasChanges(oldFile: SourceFileWithText): boolean {
-                let current = files[oldFile.fileName];
-                return !current || oldFile.sourceText.getVersion() !== current.sourceText.getVersion();
-            }
-
+            getModuleResolutionHost: () => moduleResolutionHost
         }
     }
 
