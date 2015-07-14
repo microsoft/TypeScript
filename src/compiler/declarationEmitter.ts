@@ -1067,15 +1067,17 @@ namespace ts {
             if (!node) return;
 
             switch (node.kind) {
-                // import/export aliases
                 case SyntaxKind.ExportDeclaration:
                     return visitExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportClause:
+                    // Nothing to visit, import declarations are only pulled in if referenced
+                    return;
 
-                // declarations
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
