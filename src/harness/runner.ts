@@ -1,6 +1,6 @@
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -20,6 +20,9 @@
 /// <reference path='rwcRunner.ts' />
 /// <reference path='harness.ts' />
 
+var runners: RunnerBase[] = [];
+var iterations: number = 1;
+
 function runTests(runners: RunnerBase[]) {
     for (var i = iterations; i > 0; i--) {
         for (var j = 0; j < runners.length; j++) {
@@ -27,9 +30,6 @@ function runTests(runners: RunnerBase[]) {
         }
     }
 }
-
-var runners: RunnerBase[] = [];
-var iterations: number = 1;
 
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
 var mytestconfig = 'mytest.config';
@@ -99,7 +99,7 @@ if (runners.length === 0) {
     runners.push(new FourSlashRunner(FourSlashTestType.Native));
     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
     runners.push(new FourSlashRunner(FourSlashTestType.Server));
-    //runners.push(new GeneratedFourslashRunner());
+    // runners.push(new GeneratedFourslashRunner());
 }
 
 ts.sys.newLine = '\r\n';

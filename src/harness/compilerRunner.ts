@@ -44,7 +44,7 @@ class CompilerBaselineRunner extends RunnerBase {
             // Everything declared here should be cleared out in the "after" callback.
             var justName: string;
             var content: string;
-            var testCaseContent: { settings: Harness.TestCaseParser.CompilerSetting[]; testUnitData: Harness.TestCaseParser.TestUnitData[]; }
+            var testCaseContent: { settings: Harness.TestCaseParser.CompilerSetting[]; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
 
             var units: Harness.TestCaseParser.TestUnitData[];
             var tcSettings: Harness.TestCaseParser.CompilerSetting[];

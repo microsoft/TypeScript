@@ -63,7 +63,7 @@ class Test262BaselineRunner extends RunnerBase {
 
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', testState.filename + '.output.js', () => {
-                    var files = testState.compilerResult.files.filter(f=> f.fileName !== Test262BaselineRunner.helpersFilePath);
+                    var files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
                     return Harness.Compiler.collateOutputs(files);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
@@ -84,8 +84,8 @@ class Test262BaselineRunner extends RunnerBase {
                 Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
-            it('has the expected AST',() => {
-                Harness.Baseline.runBaseline('has the expected AST', testState.filename + '.AST.txt',() => {
+            it('has the expected AST', () => {
+                Harness.Baseline.runBaseline('has the expected AST', testState.filename + '.AST.txt', () => {
                     var sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                     return Utils.sourceFileToJSON(sourceFile);
                 }, false, Test262BaselineRunner.baselineOptions);
@@ -105,4 +105,4 @@ class Test262BaselineRunner extends RunnerBase {
             this.tests.forEach(test => this.runTest(test));
         }
     }
-}  
+}

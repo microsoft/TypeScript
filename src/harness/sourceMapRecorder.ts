@@ -1,6 +1,6 @@
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -143,7 +143,7 @@ module Harness.SourceMapRecoder {
                     return { error: errorDecodeOfEncodedMapping, sourceMapSpan: decodeOfEncodedMapping };
                 }
 
-                // 2. Relative sourceIndex 
+                // 2. Relative sourceIndex
                 decodeOfEncodedMapping.sourceIndex += base64VLQFormatDecode();
                 // Incorrect sourceIndex dont support this map
                 if (createErrorIfCondition(decodeOfEncodedMapping.sourceIndex < 0, "Invalid sourceIndex found")) {
@@ -165,7 +165,7 @@ module Harness.SourceMapRecoder {
                     return { error: errorDecodeOfEncodedMapping, sourceMapSpan: decodeOfEncodedMapping };
                 }
 
-                // 4. Relative sourceColumn 0 based 
+                // 4. Relative sourceColumn 0 based
                 decodeOfEncodedMapping.sourceColumn += base64VLQFormatDecode();
                 // Incorrect sourceColumn dont support this map
                 if (createErrorIfCondition(decodeOfEncodedMapping.sourceColumn < 1, "Invalid sourceLine found")) {
@@ -278,7 +278,7 @@ module Harness.SourceMapRecoder {
             }
 
             if (spansOnSingleLine.length && spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine) {
-                // On different line from the one that we have been recording till now, 
+                // On different line from the one that we have been recording till now,
                 writeRecordedSpans();
                 spansOnSingleLine = [{ sourceMapSpan: sourceMapSpan, decodeErrors: decodedErrors }];
             }
@@ -329,6 +329,8 @@ module Harness.SourceMapRecoder {
         }
 
         function writeRecordedSpans() {
+            var markerIds: string[] = [];
+
             function getMarkerId(markerIndex: number) {
                 var markerId = "";
                 if (spanMarkerContinues) {
@@ -416,7 +418,6 @@ module Harness.SourceMapRecoder {
                 writeJsFileLines(currentJsLine);
 
                 // Emit markers
-                var markerIds: string[] = [];
                 iterateSpans(writeSourceMapMarker);
 
                 var jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.code);
@@ -455,7 +456,7 @@ module Harness.SourceMapRecoder {
                     SourceMapSpanWriter.recordSourceMapSpan(decodedSourceMapping);
                 }
             }
-            SourceMapSpanWriter.close();// If the last spans werent emitted, emit them
+            SourceMapSpanWriter.close(); // If the last spans werent emitted, emit them
         }
         sourceMapRecoder.Close();
         return sourceMapRecoder.lines.join('\r\n');

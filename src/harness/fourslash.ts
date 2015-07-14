@@ -1,6 +1,6 @@
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -135,7 +135,7 @@ module FourSlash {
     var fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
     var globalMetadataNames = [metadataOptionNames.allowNonTsExtensions, metadataOptionNames.baselineFile, metadataOptionNames.declaration,
         metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out,
-        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot]
+        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot];
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
         var settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
@@ -192,7 +192,7 @@ module FourSlash {
 
     export class TestCancellationToken implements ts.HostCancellationToken {
         // 0 - cancelled
-        // >0 - not cancelled 
+        // >0 - not cancelled
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
         private static NotCanceled: number = -1;
         private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
@@ -271,7 +271,7 @@ module FourSlash {
         private taoInvalidReason: string = null;
 
         private inputFiles: ts.Map<string> = {};  // Map between inputFile's fileName and its content for easily looking up when resolving references
-        
+
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
         private addMatchedInputFile(referenceFilePath: string) {
@@ -426,7 +426,7 @@ module FourSlash {
             this.activeFile = fileToOpen;
             var fileName = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), '').substr(1);
             this.scenarioActions.push('<OpenFile FileName="" SrcFileId="' + fileName + '" FileId="' + fileName + '" />');
-            
+
             // Let the host know that this file is now open
             this.languageServiceAdapterHost.openFile(fileToOpen.fileName);
         }
@@ -755,7 +755,7 @@ module FourSlash {
                         error += "Expected documentation: " + expectedDocumentation + " to equal: " + ts.displayPartsToString(details.documentation) + ".";
                     }
                     if (expectedKind) {
-                        error += "Expected kind: " + expectedKind + " to equal: " + filterCompletions[0].kind + "."
+                        error += "Expected kind: " + expectedKind + " to equal: " + filterCompletions[0].kind + ".";
                     }
                     this.raiseError(error);
                 }
@@ -1151,6 +1151,7 @@ module FourSlash {
             var length: number;
             var prefixString = "    >";
 
+            var pos = 0;
             var addSpanInfoString = () => {
                 if (previousSpanInfo) {
                     resultString += currentLine;
@@ -1163,7 +1164,7 @@ module FourSlash {
                 }
             };
 
-            for (var pos = 0; pos < this.activeFile.content.length; pos++) {
+            for (pos < this.activeFile.content.length; pos++) {
                 if (pos === 0 || pos === fileLineMap[nextLine]) {
                     nextLine++;
                     addSpanInfoString();
@@ -1347,7 +1348,7 @@ module FourSlash {
             var offset = this.currentCaretPosition;
             var ch = "";
 
-            var checkCadence = (count >> 2) + 1
+            var checkCadence = (count >> 2) + 1;
 
             for (var i = 0; i < count; i++) {
                 // Make the edit
@@ -1363,7 +1364,7 @@ module FourSlash {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                        //this.checkPostEditInvariants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1388,7 +1389,7 @@ module FourSlash {
 
             var offset = this.currentCaretPosition;
             var ch = "";
-            var checkCadence = (count >> 2) + 1
+            var checkCadence = (count >> 2) + 1;
 
             for (var i = 0; i < count; i++) {
                 offset--;
@@ -1503,8 +1504,8 @@ module FourSlash {
         }
 
         private checkPostEditInvariants() {
-            if (this.testType !== FourSlashTestType.Native) { 
-                // getSourcefile() results can not be serialized. Only perform these verifications 
+            if (this.testType !== FourSlashTestType.Native) {
+                // getSourcefile() results can not be serialized. Only perform these verifications
                 // if running against a native LS object.
                 return;
             }
@@ -1883,7 +1884,7 @@ module FourSlash {
                 assert.equal(
                     expected.join(","),
                     actual.fileNameList.map( file => {
-                        return file.replace(this.basePath + "/", "")
+                        return file.replace(this.basePath + "/", "");
                         }).join(",")
                     );
             }
@@ -2156,7 +2157,7 @@ module FourSlash {
 
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
-            var text = this.getFileContent(this.activeFile.fileName)
+            var text = this.getFileContent(this.activeFile.fileName);
 
             var pos = this.currentCaretPosition;
             var startPos = pos, endPos = pos;
@@ -2286,7 +2287,7 @@ module FourSlash {
         }
 
         public setCancelled(numberOfCalls: number): void {
-            this.cancellationToken.setCancelled(numberOfCalls)
+            this.cancellationToken.setCancelled(numberOfCalls);
         }
 
         public resetCancelled(): void {

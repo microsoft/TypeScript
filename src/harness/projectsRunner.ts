@@ -124,7 +124,7 @@ class ProjectRunner extends RunnerBase {
             return ts.sys.resolvePath(testCase.projectRoot);
         }
 
-        function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: ()=> string[],
+        function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: () => string[],
             getSourceFileText: (fileName: string) => string,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
@@ -302,7 +302,7 @@ class ProjectRunner extends RunnerBase {
                 }
             });
 
-            return compileProjectFiles(compilerResult.moduleKind,getInputFiles, getSourceFileText, writeFile);
+            return compileProjectFiles(compilerResult.moduleKind, getInputFiles, getSourceFileText, writeFile);
 
             function findOutpuDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
@@ -333,6 +333,8 @@ class ProjectRunner extends RunnerBase {
         describe('Projects tests', () => {
             describe(name, () => {
                 function verifyCompilerResults(moduleKind: ts.ModuleKind) {
+                    var compilerResult: BatchCompileProjectTestCaseResult;
+
                     function getCompilerResolutionInfo() {
                         var resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {
                             scenario: testCase.scenario,
@@ -356,8 +358,6 @@ class ProjectRunner extends RunnerBase {
 
                         return resolutionInfo;
                     }
-
-                    var compilerResult: BatchCompileProjectTestCaseResult;
 
                     it(name + ": " + moduleNameToString(moduleKind) , () => {
                         // Compile using node
