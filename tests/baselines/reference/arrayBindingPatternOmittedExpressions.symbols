@@ -11,7 +11,6 @@ var results: string[];
 
     let x = {
 >x : Symbol(x, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 7))
->{        a,        b    } : Symbol(, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 11))
 
         a,
 >a : Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 13))

@@ -29,21 +29,18 @@ for (var p: Point; ;) { }
 
 for (var p = { x: 1, y: 2 }; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8))
->{ x: 1, y: 2 } : Symbol(, Decl(forStatementsMultipleValidDecl.ts, 13, 12))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 13, 14))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 13, 20))
 
 for (var p: Point = { x: 0, y: undefined }; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8))
 >Point : Symbol(Point, Decl(forStatementsMultipleValidDecl.ts, 9, 1))
->{ x: 0, y: undefined } : Symbol(, Decl(forStatementsMultipleValidDecl.ts, 14, 19))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 14, 21))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 14, 27))
 >undefined : Symbol(undefined)
 
 for (var p = { x: 1, y: <number>undefined }; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8))
->{ x: 1, y: <number>undefined } : Symbol(, Decl(forStatementsMultipleValidDecl.ts, 15, 12))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 15, 14))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 15, 20))
 >undefined : Symbol(undefined)
@@ -52,7 +49,6 @@ for (var p: { x: number; y: number; } = { x: 1, y: 2 }; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 16, 13))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 16, 24))
->{ x: 1, y: 2 } : Symbol(, Decl(forStatementsMultipleValidDecl.ts, 16, 39))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 16, 41))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 16, 47))
 
@@ -60,7 +56,6 @@ for (var p = <{ x: number; y: number; }>{ x: 0, y: undefined }; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 17, 15))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 17, 26))
->{ x: 0, y: undefined } : Symbol(, Decl(forStatementsMultipleValidDecl.ts, 17, 40))
 >x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 17, 41))
 >y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 17, 47))
 >undefined : Symbol(undefined)
@@ -71,12 +66,10 @@ for (var p: typeof p; ;) { }
 
 for (var fn = function (s: string) { return 42; }; ;) { }
 >fn : Symbol(fn, Decl(forStatementsMultipleValidDecl.ts, 20, 8), Decl(forStatementsMultipleValidDecl.ts, 21, 8), Decl(forStatementsMultipleValidDecl.ts, 22, 8), Decl(forStatementsMultipleValidDecl.ts, 23, 8), Decl(forStatementsMultipleValidDecl.ts, 24, 8), Decl(forStatementsMultipleValidDecl.ts, 25, 8))
->function (s: string) { return 42; } : Symbol((Anonymous function), Decl(forStatementsMultipleValidDecl.ts, 20, 13))
 >s : Symbol(s, Decl(forStatementsMultipleValidDecl.ts, 20, 24))
 
 for (var fn = (s: string) => 3; ;) { }
 >fn : Symbol(fn, Decl(forStatementsMultipleValidDecl.ts, 20, 8), Decl(forStatementsMultipleValidDecl.ts, 21, 8), Decl(forStatementsMultipleValidDecl.ts, 22, 8), Decl(forStatementsMultipleValidDecl.ts, 23, 8), Decl(forStatementsMultipleValidDecl.ts, 24, 8), Decl(forStatementsMultipleValidDecl.ts, 25, 8))
->(s: string) => 3 : Symbol((Anonymous function), Decl(forStatementsMultipleValidDecl.ts, 21, 13))
 >s : Symbol(s, Decl(forStatementsMultipleValidDecl.ts, 21, 15))
 
 for (var fn: (s: string) => number; ;) { }

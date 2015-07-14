@@ -39,7 +39,6 @@ var p2 = p.then(function (x) {
 >p.then : Symbol(Promise.then, Decl(promiseTest.ts, 1, 22), Decl(promiseTest.ts, 2, 60))
 >p : Symbol(p, Decl(promiseTest.ts, 7, 3))
 >then : Symbol(Promise.then, Decl(promiseTest.ts, 1, 22), Decl(promiseTest.ts, 2, 60))
->function (x) {    return p;} : Symbol((Anonymous function), Decl(promiseTest.ts, 8, 16))
 >x : Symbol(x, Decl(promiseTest.ts, 8, 26))
 
     return p;

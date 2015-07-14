@@ -37,7 +37,6 @@ interface I {
 var w:I={x:null,y:3};
 >w : Symbol(w, Decl(null.ts, 17, 3))
 >I : Symbol(I, Decl(null.ts, 12, 1))
->{x:null,y:3} : Symbol(, Decl(null.ts, 17, 8))
 >x : Symbol(x, Decl(null.ts, 17, 9))
 >y : Symbol(y, Decl(null.ts, 17, 16))
 

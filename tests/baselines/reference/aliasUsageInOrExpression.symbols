@@ -41,7 +41,6 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 61))
 >x : Symbol(x, Decl(aliasUsageInOrExpression_main.ts, 9, 41))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 61))
->{ x: moduleA } : Symbol(, Decl(aliasUsageInOrExpression_main.ts, 9, 77))
 >x : Symbol(x, Decl(aliasUsageInOrExpression_main.ts, 9, 79))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInOrExpression_main.ts, 0, 63))
 
@@ -51,7 +50,6 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 61))
 >x : Symbol(x, Decl(aliasUsageInOrExpression_main.ts, 10, 41))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 61))
->{ x: moduleA } : Symbol(, Decl(aliasUsageInOrExpression_main.ts, 10, 76))
 >x : Symbol(x, Decl(aliasUsageInOrExpression_main.ts, 10, 78))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInOrExpression_main.ts, 0, 63))
 

@@ -36,7 +36,6 @@ var z0, z1, z2, z3;
 
     let {a: z2} = { a: 1 };
 >z2 : Symbol(z2, Decl(downlevelLetConst14.ts, 13, 9))
->{ a: 1 } : Symbol(, Decl(downlevelLetConst14.ts, 13, 17))
 >a : Symbol(a, Decl(downlevelLetConst14.ts, 13, 19))
 
     use(z2);
@@ -45,7 +44,6 @@ var z0, z1, z2, z3;
 
     let {a: z3} = { a: 1 };
 >z3 : Symbol(z3, Decl(downlevelLetConst14.ts, 15, 9))
->{ a: 1 } : Symbol(, Decl(downlevelLetConst14.ts, 15, 17))
 >a : Symbol(a, Decl(downlevelLetConst14.ts, 15, 19))
 
     use(z3);
@@ -89,7 +87,6 @@ var y = true;
 
         let {a: z6} = {a: 1}
 >z6 : Symbol(z6, Decl(downlevelLetConst14.ts, 30, 13))
->{a: 1} : Symbol(, Decl(downlevelLetConst14.ts, 30, 21))
 >a : Symbol(a, Decl(downlevelLetConst14.ts, 30, 23))
 
         use(y);
@@ -133,7 +130,6 @@ var z5 = 1;
 
         let {a: _z5} = { a: 1 };
 >_z5 : Symbol(_z5, Decl(downlevelLetConst14.ts, 47, 13))
->{ a: 1 } : Symbol(, Decl(downlevelLetConst14.ts, 47, 22))
 >a : Symbol(a, Decl(downlevelLetConst14.ts, 47, 24))
 
         // try to step on generated name

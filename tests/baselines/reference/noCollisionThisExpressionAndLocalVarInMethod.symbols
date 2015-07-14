@@ -9,13 +9,9 @@ class a {
 >method1 : Symbol(method1, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 1, 9))
 
         return {
->{            doStuff: (callback) => () => {                var _this = 2;                return callback(_this);            }        } : Symbol(, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 3, 14))
-
             doStuff: (callback) => () => {
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 3, 16))
->(callback) => () => {                var _this = 2;                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 4, 20))
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 4, 22))
->() => {                var _this = 2;                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 4, 34))
 
                 var _this = 2;
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 5, 19))
@@ -33,13 +29,9 @@ class a {
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 11, 11))
 
         return {
->{            doStuff: (callback) => () => {                return callback(_this);            }        } : Symbol(, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 12, 14))
-
             doStuff: (callback) => () => {
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 12, 16))
->(callback) => () => {                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 13, 20))
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 13, 22))
->() => {                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 13, 34))
 
                 return callback(_this);
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 13, 22))

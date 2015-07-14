@@ -65,7 +65,6 @@ var a: { foo<T>(x: T): T }
 
 var b = { foo<T>(x: T) { return null; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 25, 3))
->{ foo<T>(x: T) { return null; } } : Symbol(, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 25, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 25, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 25, 14))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 25, 17))

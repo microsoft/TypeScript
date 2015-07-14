@@ -26,7 +26,6 @@ var moduleMap: { [key: string]: IHasVisualizationModel } = {
 >moduleMap : Symbol(moduleMap, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 3))
 >key : Symbol(key, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 18))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 2, 77))
->{    "moduleA": moduleA,    "moduleB": moduleB} : Symbol(, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 58))
 
     "moduleA": moduleA,
 >moduleA : Symbol(moduleA, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 79))

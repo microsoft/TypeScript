@@ -37,7 +37,6 @@ var ResultIsString2 = typeof true;
 
 var ResultIsString3 = typeof { x: true, y: false };
 >ResultIsString3 : Symbol(ResultIsString3, Decl(typeofOperatorWithBooleanType.ts, 20, 3))
->{ x: true, y: false } : Symbol(, Decl(typeofOperatorWithBooleanType.ts, 20, 28))
 >x : Symbol(x, Decl(typeofOperatorWithBooleanType.ts, 20, 30))
 >y : Symbol(y, Decl(typeofOperatorWithBooleanType.ts, 20, 39))
 
@@ -106,7 +105,6 @@ r: typeof foo;
 
 var y = { a: true, b: false};
 >y : Symbol(y, Decl(typeofOperatorWithBooleanType.ts, 45, 3))
->{ a: true, b: false} : Symbol(, Decl(typeofOperatorWithBooleanType.ts, 45, 7))
 >a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 45, 9))
 >b : Symbol(b, Decl(typeofOperatorWithBooleanType.ts, 45, 18))
 

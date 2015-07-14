@@ -10,7 +10,6 @@ function B() {
 
     var someLocal: any = {};
 >someLocal : Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 5, 7))
->{} : Symbol(, Decl(implicitAnyAnyReturningFunction.ts, 5, 24))
 
     return someLocal;
 >someLocal : Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 5, 7))
@@ -30,7 +29,6 @@ class C {
 
         var someLocal: any = {};
 >someLocal : Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 15, 11))
->{} : Symbol(, Decl(implicitAnyAnyReturningFunction.ts, 15, 28))
 
         return someLocal;
 >someLocal : Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 15, 11))

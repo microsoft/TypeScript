@@ -26,7 +26,6 @@ function f5<T extends { (...args): void }>() { }
 
 var f6 = () => { return [<any>10]; }
 >f6 : Symbol(f6, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 6, 3))
->() => { return [<any>10]; } : Symbol((Anonymous function), Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 6, 8))
 
 
 

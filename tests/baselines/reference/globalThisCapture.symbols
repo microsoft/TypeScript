@@ -1,7 +1,6 @@
 === tests/cases/compiler/globalThisCapture.ts ===
 // Add a lambda to ensure global 'this' capture is triggered
 (()=>this.window);
->()=>this.window : Symbol((Anonymous function), Decl(globalThisCapture.ts, 1, 1))
 
 var parts = [];
 >parts : Symbol(parts, Decl(globalThisCapture.ts, 3, 3))

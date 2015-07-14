@@ -5,13 +5,10 @@ class class1 {
     constructor() {
         var x2 = {
 >x2 : Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 2, 11))
->{            doStuff: (callback) => () => {                var _this = 2;                return callback(_this);            }        } : Symbol(, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 2, 16))
 
             doStuff: (callback) => () => {
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 2, 18))
->(callback) => () => {                var _this = 2;                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 3, 20))
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 3, 22))
->() => {                var _this = 2;                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 3, 34))
 
                 var _this = 2;
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 4, 19))
@@ -33,13 +30,10 @@ class class2 {
 
         var x2 = {
 >x2 : Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 14, 11))
->{            doStuff: (callback) => () => {                return callback(_this);            }        } : Symbol(, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 14, 16))
 
             doStuff: (callback) => () => {
 >doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 14, 18))
->(callback) => () => {                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 15, 20))
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 15, 22))
->() => {                return callback(_this);            } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 15, 34))
 
                 return callback(_this);
 >callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 15, 22))

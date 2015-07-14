@@ -30,7 +30,6 @@ class Board {
 >this : Symbol(Board, Decl(2dArrays.ts, 5, 1))
 >ships : Symbol(ships, Decl(2dArrays.ts, 7, 13))
 >every : Symbol(Array.every, Decl(lib.d.ts, 1094, 62))
->function (val) { return val.isSunk; } : Symbol((Anonymous function), Decl(2dArrays.ts, 12, 32))
 >val : Symbol(val, Decl(2dArrays.ts, 12, 42))
 >val.isSunk : Symbol(Ship.isSunk, Decl(2dArrays.ts, 3, 12))
 >val : Symbol(val, Decl(2dArrays.ts, 12, 42))

@@ -30,7 +30,6 @@ fooWithParameters("a", 10);
  */
 var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string) {
 >fooFunc : Symbol(fooFunc, Decl(commentsFunction.ts, 15, 3))
->function FooFunctionValue(/** fooFunctionValue param */ b: string) {    return b;} : Symbol(FooFunctionValue, Decl(commentsFunction.ts, 15, 13))
 >FooFunctionValue : Symbol(FooFunctionValue, Decl(commentsFunction.ts, 15, 13))
 >b : Symbol(b, Decl(commentsFunction.ts, 15, 40))
 
@@ -41,7 +40,6 @@ var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string)
 /// lamdaFoo var comment
 var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
 >lambdaFoo : Symbol(lambdaFoo, Decl(commentsFunction.ts, 20, 3))
->(/**param a*/a: number, /**param b*/b: number) => a + b : Symbol((Anonymous function), Decl(commentsFunction.ts, 20, 15))
 >a : Symbol(a, Decl(commentsFunction.ts, 20, 46))
 >b : Symbol(b, Decl(commentsFunction.ts, 20, 68))
 >a : Symbol(a, Decl(commentsFunction.ts, 20, 46))
@@ -49,7 +47,6 @@ var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*
 
 var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
 >lambddaNoVarComment : Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 21, 3))
->(/**param a*/a: number, /**param b*/b: number) => a * b : Symbol((Anonymous function), Decl(commentsFunction.ts, 21, 25))
 >a : Symbol(a, Decl(commentsFunction.ts, 21, 63))
 >b : Symbol(b, Decl(commentsFunction.ts, 21, 85))
 >a : Symbol(a, Decl(commentsFunction.ts, 21, 63))
@@ -82,17 +79,13 @@ function blah3(a: string // trailing commen single line
 
 lambdaFoo = (a, b) => a * b; // This is trailing comment
 >lambdaFoo : Symbol(lambdaFoo, Decl(commentsFunction.ts, 20, 3))
->(a, b) => a * b : Symbol((Anonymous function), Decl(commentsFunction.ts, 36, 11))
 >a : Symbol(a, Decl(commentsFunction.ts, 36, 13))
 >b : Symbol(b, Decl(commentsFunction.ts, 36, 15))
 >a : Symbol(a, Decl(commentsFunction.ts, 36, 13))
 >b : Symbol(b, Decl(commentsFunction.ts, 36, 15))
 
 /*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
->() => 0 : Symbol((Anonymous function), Decl(commentsFunction.ts, 36, 28))
-
 /*leading comment*/(() => 0); //trailing comment
->() => 0 : Symbol((Anonymous function), Decl(commentsFunction.ts, 39, 20))
 
 function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
 >blah4 : Symbol(blah4, Decl(commentsFunction.ts, 39, 29))

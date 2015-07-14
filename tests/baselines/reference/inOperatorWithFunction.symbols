@@ -1,11 +1,9 @@
 === tests/cases/compiler/inOperatorWithFunction.ts ===
 var fn = function (val: boolean) { return val; }
 >fn : Symbol(fn, Decl(inOperatorWithFunction.ts, 0, 3))
->function (val: boolean) { return val; } : Symbol((Anonymous function), Decl(inOperatorWithFunction.ts, 0, 8))
 >val : Symbol(val, Decl(inOperatorWithFunction.ts, 0, 19))
 >val : Symbol(val, Decl(inOperatorWithFunction.ts, 0, 19))
 
 fn("a" in { "a": true });
 >fn : Symbol(fn, Decl(inOperatorWithFunction.ts, 0, 3))
->{ "a": true } : Symbol(, Decl(inOperatorWithFunction.ts, 1, 9))
 

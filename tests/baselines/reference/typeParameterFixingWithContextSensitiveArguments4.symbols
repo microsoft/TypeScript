@@ -42,10 +42,8 @@ var d = f(a, b, x => x, x => <any>x); // Type [A, B]
 >f : Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 0, 0))
 >a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 4, 3))
 >b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 4, 9))
->x => x : Symbol((Anonymous function), Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 6, 15))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 6, 15))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 6, 15))
->x => <any>x : Symbol((Anonymous function), Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 6, 23))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 6, 23))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 6, 23))
 

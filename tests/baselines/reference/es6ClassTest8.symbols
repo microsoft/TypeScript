@@ -10,7 +10,6 @@ class C {
     constructor() {
         var bar:any = (function() {
 >bar : Symbol(bar, Decl(es6ClassTest8.ts, 4, 11))
->function() {            return bar; // 'bar' should be resolvable        } : Symbol((Anonymous function), Decl(es6ClassTest8.ts, 4, 23))
 
             return bar; // 'bar' should be resolvable
 >bar : Symbol(bar, Decl(es6ClassTest8.ts, 4, 11))

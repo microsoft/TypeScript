@@ -1,4 +1,3 @@
 === tests/cases/compiler/emptyExpr.ts ===
 [{},]
->{} : Symbol(, Decl(emptyExpr.ts, 0, 1))
-
+No type information for this code.

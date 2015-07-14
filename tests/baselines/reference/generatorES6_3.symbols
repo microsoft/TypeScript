@@ -1,7 +1,6 @@
 === tests/cases/compiler/generatorES6_3.ts ===
 var v = function*() {
 >v : Symbol(v, Decl(generatorES6_3.ts, 0, 3))
->function*() {    yield 0} : Symbol((Anonymous function), Decl(generatorES6_3.ts, 0, 7))
 
     yield 0
 }

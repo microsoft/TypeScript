@@ -18,7 +18,6 @@ class C {
 
     protected d = () => '';
 >d : Symbol(d, Decl(classWithProtectedProperty.ts, 6, 31))
->() => '' : Symbol((Anonymous function), Decl(classWithProtectedProperty.ts, 7, 17))
 
     protected static e;
 >e : Symbol(C.e, Decl(classWithProtectedProperty.ts, 7, 27))
@@ -28,7 +27,6 @@ class C {
 
     protected static g = () => '';
 >g : Symbol(C.g, Decl(classWithProtectedProperty.ts, 9, 38))
->() => '' : Symbol((Anonymous function), Decl(classWithProtectedProperty.ts, 10, 24))
 }
 
 class D extends C {

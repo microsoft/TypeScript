@@ -48,12 +48,10 @@ var b: { foo: string; baz?: string }
 
 var a2 = { foo: '' };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembers2.ts, 16, 3))
->{ foo: '' } : Symbol(, Decl(assignmentCompatWithObjectMembers2.ts, 16, 8))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers2.ts, 16, 10))
 
 var b2 = { foo: '' };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembers2.ts, 17, 3))
->{ foo: '' } : Symbol(, Decl(assignmentCompatWithObjectMembers2.ts, 17, 8))
 >foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers2.ts, 17, 10))
 
 s = t;

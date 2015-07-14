@@ -68,7 +68,6 @@ var a: { foo<T extends Array<string>>(x: T): string }
 
 var b = { foo<T extends RegExp>(x: T) { return ''; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 25, 3))
->{ foo<T extends RegExp>(x: T) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 25, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 25, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints.ts, 25, 14))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))

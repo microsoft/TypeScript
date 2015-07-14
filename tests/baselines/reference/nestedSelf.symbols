@@ -12,7 +12,6 @@ module M {
 >foo : Symbol(foo, Decl(nestedSelf.ts, 2, 17))
 >[1,2,3].map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
->(x) => { return this.n * x; } : Symbol((Anonymous function), Decl(nestedSelf.ts, 3, 30))
 >x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
 >this.n : Symbol(n, Decl(nestedSelf.ts, 1, 17))
 >this : Symbol(C, Decl(nestedSelf.ts, 0, 10))

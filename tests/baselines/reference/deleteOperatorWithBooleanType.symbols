@@ -37,7 +37,6 @@ var ResultIsBoolean2 = delete true;
 
 var ResultIsBoolean3 = delete { x: true, y: false };
 >ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(deleteOperatorWithBooleanType.ts, 20, 3))
->{ x: true, y: false } : Symbol(, Decl(deleteOperatorWithBooleanType.ts, 20, 29))
 >x : Symbol(x, Decl(deleteOperatorWithBooleanType.ts, 20, 31))
 >y : Symbol(y, Decl(deleteOperatorWithBooleanType.ts, 20, 40))
 

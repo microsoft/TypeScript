@@ -64,7 +64,6 @@ var b: { [x: string]: Derived; } = { foo: <Derived>null };
 >b : Symbol(b, Decl(objectTypesIdentityWithStringIndexers2.ts, 30, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithStringIndexers2.ts, 30, 10))
 >Derived : Symbol(Derived, Decl(objectTypesIdentityWithStringIndexers2.ts, 2, 27))
->{ foo: <Derived>null } : Symbol(, Decl(objectTypesIdentityWithStringIndexers2.ts, 30, 34))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithStringIndexers2.ts, 30, 36))
 >Derived : Symbol(Derived, Decl(objectTypesIdentityWithStringIndexers2.ts, 2, 27))
 

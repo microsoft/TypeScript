@@ -16,7 +16,6 @@ module m {
 
     var y = {
 >y : Symbol(y, Decl(objectLiteralShorthandPropertiesWithModuleES6.ts, 7, 7))
->{        a: x,        x    } : Symbol(, Decl(objectLiteralShorthandPropertiesWithModuleES6.ts, 7, 11))
 
         a: x,
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesWithModuleES6.ts, 7, 13))

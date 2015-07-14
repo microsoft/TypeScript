@@ -7,10 +7,8 @@
 var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
 >r : Symbol(r, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 3))
 >a : Symbol(a, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 8))
->{ a: '', b: 123 } : Symbol(, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 22))
 >a : Symbol(a, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 24))
 >b : Symbol(b, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 31))
->{ a: '', b: true } : Symbol(, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 43))
 >a : Symbol(a, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 45))
 >b : Symbol(b, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 52))
 

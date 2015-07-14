@@ -2,7 +2,6 @@
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = (p: string) => p.length;
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 1, 3), Decl(arrowFunctionExpressions.ts, 2, 3))
->(p: string) => p.length : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 1, 7))
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 1, 9))
 >p.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 1, 9))
@@ -10,7 +9,6 @@ var a = (p: string) => p.length;
 
 var a = (p: string) => { return p.length; }
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 1, 3), Decl(arrowFunctionExpressions.ts, 2, 3))
->(p: string) => { return p.length; } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 2, 7))
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 2, 9))
 >p.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 2, 9))
@@ -19,12 +17,10 @@ var a = (p: string) => { return p.length; }
 // Identifier => Block is equivalent to(Identifier) => Block
 var b = j => { return 0; }
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 5, 3), Decl(arrowFunctionExpressions.ts, 6, 3))
->j => { return 0; } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 5, 7))
 >j : Symbol(j, Decl(arrowFunctionExpressions.ts, 5, 7))
 
 var b = (j) => { return 0; }
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 5, 3), Decl(arrowFunctionExpressions.ts, 6, 3))
->(j) => { return 0; } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 6, 7))
 >j : Symbol(j, Decl(arrowFunctionExpressions.ts, 6, 9))
 
 // Identifier => AssignmentExpression is equivalent to(Identifier) => AssignmentExpression
@@ -33,14 +29,12 @@ var c: number;
 
 var d = n => c = n;
 >d : Symbol(d, Decl(arrowFunctionExpressions.ts, 10, 3), Decl(arrowFunctionExpressions.ts, 11, 3), Decl(arrowFunctionExpressions.ts, 12, 3))
->n => c = n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 10, 7))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 10, 7))
 >c : Symbol(c, Decl(arrowFunctionExpressions.ts, 9, 3))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 10, 7))
 
 var d = (n) => c = n;
 >d : Symbol(d, Decl(arrowFunctionExpressions.ts, 10, 3), Decl(arrowFunctionExpressions.ts, 11, 3), Decl(arrowFunctionExpressions.ts, 12, 3))
->(n) => c = n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 11, 7))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 11, 9))
 >c : Symbol(c, Decl(arrowFunctionExpressions.ts, 9, 3))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 11, 9))
@@ -52,54 +46,43 @@ var d: (n: any) => any;
 // Binding patterns in arrow functions
 var p1 = ([a]) => { };
 >p1 : Symbol(p1, Decl(arrowFunctionExpressions.ts, 15, 3))
->([a]) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 15, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 15, 11))
 
 var p2 = ([...a]) => { };
 >p2 : Symbol(p2, Decl(arrowFunctionExpressions.ts, 16, 3))
->([...a]) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 16, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 16, 11))
 
 var p3 = ([, a]) => { };
 >p3 : Symbol(p3, Decl(arrowFunctionExpressions.ts, 17, 3))
->([, a]) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 17, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 17, 12))
 
 var p4 = ([, ...a]) => { };
 >p4 : Symbol(p4, Decl(arrowFunctionExpressions.ts, 18, 3))
->([, ...a]) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 18, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 18, 12))
 
 var p5 = ([a = 1]) => { };
 >p5 : Symbol(p5, Decl(arrowFunctionExpressions.ts, 19, 3))
->([a = 1]) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 19, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 19, 11))
 
 var p6 = ({ a }) => { };
 >p6 : Symbol(p6, Decl(arrowFunctionExpressions.ts, 20, 3))
->({ a }) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 20, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 20, 11))
 
 var p7 = ({ a: { b } }) => { };
 >p7 : Symbol(p7, Decl(arrowFunctionExpressions.ts, 21, 3))
->({ a: { b } }) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 21, 8))
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 21, 16))
 
 var p8 = ({ a = 1 }) => { };
 >p8 : Symbol(p8, Decl(arrowFunctionExpressions.ts, 22, 3))
->({ a = 1 }) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 22, 8))
 >a : Symbol(a, Decl(arrowFunctionExpressions.ts, 22, 11))
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : Symbol(p9, Decl(arrowFunctionExpressions.ts, 23, 3))
->({ a: { b = 1 } = { b: 1 } }) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 23, 8))
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 16))
->{ b: 1 } : Symbol(, Decl(arrowFunctionExpressions.ts, 23, 26))
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 28))
 
 var p10 = ([{ value, done }]) => { };
 >p10 : Symbol(p10, Decl(arrowFunctionExpressions.ts, 24, 3))
->([{ value, done }]) => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 24, 9))
 >value : Symbol(value, Decl(arrowFunctionExpressions.ts, 24, 13))
 >done : Symbol(done, Decl(arrowFunctionExpressions.ts, 24, 20))
 
@@ -110,13 +93,11 @@ class MyClass {
 
     m = (n) => n + 1;
 >m : Symbol(m, Decl(arrowFunctionExpressions.ts, 28, 15))
->(n) => n + 1 : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 29, 7))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 29, 9))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 29, 9))
 
     p = (n) => n && this;
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 29, 21))
->(n) => n && this : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 30, 7))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 30, 9))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 30, 9))
 >this : Symbol(MyClass, Decl(arrowFunctionExpressions.ts, 24, 37))
@@ -126,13 +107,11 @@ class MyClass {
 
         var m = (n) => n + 1;
 >m : Symbol(m, Decl(arrowFunctionExpressions.ts, 33, 11))
->(n) => n + 1 : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 33, 15))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 33, 17))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 33, 17))
 
         var p = (n) => n && this;
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 34, 11))
->(n) => n && this : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 34, 15))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 34, 17))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 34, 17))
 >this : Symbol(MyClass, Decl(arrowFunctionExpressions.ts, 24, 37))
@@ -142,11 +121,7 @@ class MyClass {
 // Arrow function used in arrow function
 var arrrr = () => (m: number) => () => (n: number) => m + n;
 >arrrr : Symbol(arrrr, Decl(arrowFunctionExpressions.ts, 39, 3))
->() => (m: number) => () => (n: number) => m + n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 39, 11))
->(m: number) => () => (n: number) => m + n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 39, 17))
 >m : Symbol(m, Decl(arrowFunctionExpressions.ts, 39, 19))
->() => (n: number) => m + n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 39, 32))
->(n: number) => m + n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 39, 38))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 39, 40))
 >m : Symbol(m, Decl(arrowFunctionExpressions.ts, 39, 19))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 39, 40))
@@ -164,9 +139,7 @@ function someFn() {
 
     var arr = (n: number) => (p: number) => p * n;
 >arr : Symbol(arr, Decl(arrowFunctionExpressions.ts, 45, 7))
->(n: number) => (p: number) => p * n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 45, 13))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 45, 15))
->(p: number) => p * n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 45, 28))
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 45, 30))
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 45, 30))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 45, 15))
@@ -183,7 +156,6 @@ function someOtherFn() {
 
     var arr = (n: number) => '' + n;
 >arr : Symbol(arr, Decl(arrowFunctionExpressions.ts, 51, 7))
->(n: number) => '' + n : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 51, 13))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 51, 15))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 51, 15))
 
@@ -202,7 +174,6 @@ function outerFn() {
 
         var arrowFn = () => { };
 >arrowFn : Symbol(arrowFn, Decl(arrowFunctionExpressions.ts, 58, 11))
->() => { } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 58, 21))
 
         var p = arrowFn();
 >p : Symbol(p, Decl(arrowFunctionExpressions.ts, 59, 11), Decl(arrowFunctionExpressions.ts, 60, 11))
@@ -216,7 +187,6 @@ function outerFn() {
 // Arrow function used in nested function in arrow function
 var f = (n: string) => {
 >f : Symbol(f, Decl(arrowFunctionExpressions.ts, 65, 3))
->(n: string) => {    function fn(x: number) {        return () => n + x;    }    return fn(4);} : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 65, 7))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 65, 9))
 
     function fn(x: number) {
@@ -224,7 +194,6 @@ var f = (n: string) => {
 >x : Symbol(x, Decl(arrowFunctionExpressions.ts, 66, 16))
 
         return () => n + x;
->() => n + x : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 67, 14))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 65, 9))
 >x : Symbol(x, Decl(arrowFunctionExpressions.ts, 66, 16))
     }
@@ -245,14 +214,12 @@ function someOuterFn() {
 
     var arr = (n: string) => {
 >arr : Symbol(arr, Decl(arrowFunctionExpressions.ts, 77, 7))
->(n: string) => {        function innerFn() {            return () => n.length;        }        return innerFn;    } : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 77, 13))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 77, 15))
 
         function innerFn() {
 >innerFn : Symbol(innerFn, Decl(arrowFunctionExpressions.ts, 77, 30))
 
             return () => n.length;
->() => n.length : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 79, 18))
 >n.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 77, 15))
 >length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
@@ -279,20 +246,17 @@ function tryCatchFn() {
     try {
         var x = () => this;
 >x : Symbol(x, Decl(arrowFunctionExpressions.ts, 91, 11))
->() => this : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 91, 15))
 
     } catch (e) {
 >e : Symbol(e, Decl(arrowFunctionExpressions.ts, 92, 13))
 
         var t = () => e + this;
 >t : Symbol(t, Decl(arrowFunctionExpressions.ts, 93, 11))
->() => e + this : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 93, 15))
 >e : Symbol(e, Decl(arrowFunctionExpressions.ts, 92, 13))
 
     } finally {
         var m = () => this + '';
 >m : Symbol(m, Decl(arrowFunctionExpressions.ts, 95, 11))
->() => this + '' : Symbol((Anonymous function), Decl(arrowFunctionExpressions.ts, 95, 15))
     }
 }
 

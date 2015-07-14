@@ -8,8 +8,6 @@ class A {
 >selectedValue : Symbol(selectedValue, Decl(argumentsUsedInObjectLiteralProperty.ts, 1, 63))
 
         return {
->{            selectedValue: arguments.length        } : Symbol(, Decl(argumentsUsedInObjectLiteralProperty.ts, 2, 14))
-
             selectedValue: arguments.length
 >selectedValue : Symbol(selectedValue, Decl(argumentsUsedInObjectLiteralProperty.ts, 2, 16))
 >arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, 272, 25))

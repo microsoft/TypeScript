@@ -27,10 +27,8 @@ interface MyArrayWrapper<T> {
 var thing = create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]); // should not error
 >thing : Symbol(thing, Decl(objectLiteralArraySpecialization.ts, 5, 3))
 >create : Symbol(create, Decl(objectLiteralArraySpecialization.ts, 0, 0))
->{ name: "bob", id: 24 } : Symbol(, Decl(objectLiteralArraySpecialization.ts, 5, 20))
 >name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))
 >id : Symbol(id, Decl(objectLiteralArraySpecialization.ts, 5, 35))
->{ name: "doug", id: 32 } : Symbol(, Decl(objectLiteralArraySpecialization.ts, 5, 45))
 >name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 47))
 >id : Symbol(id, Decl(objectLiteralArraySpecialization.ts, 5, 61))
 
@@ -38,7 +36,6 @@ thing.doSomething((x, y) => x.name === "bob"); // should not error
 >thing.doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
 >thing : Symbol(thing, Decl(objectLiteralArraySpecialization.ts, 5, 3))
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
->(x, y) => x.name === "bob" : Symbol((Anonymous function), Decl(objectLiteralArraySpecialization.ts, 6, 18))
 >x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 6, 19))
 >y : Symbol(y, Decl(objectLiteralArraySpecialization.ts, 6, 21))
 >x.name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))

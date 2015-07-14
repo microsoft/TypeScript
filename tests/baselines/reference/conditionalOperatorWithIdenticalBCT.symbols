@@ -41,24 +41,17 @@ var result1 = true ? x : a;
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
->{} : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 15, 6))
-
 true ? { a: 1 } : { a: 2, b: 'string' };
->{ a: 1 } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 6))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 8))
->{ a: 2, b: 'string' } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 17))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 19))
 >b : Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 25))
 
 var result2 = true ? {} : 1;
 >result2 : Symbol(result2, Decl(conditionalOperatorWithIdenticalBCT.ts, 17, 3))
->{} : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 17, 20))
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
 >result3 : Symbol(result3, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 3))
->{ a: 1 } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 20))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 22))
->{ a: 2, b: 'string' } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 31))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 33))
 >b : Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 39))
 
@@ -73,12 +66,10 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >result4 : Symbol(result4, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 3))
 >t : Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 14))
 >A : Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
->(m) => m.propertyX : Symbol((Anonymous function), Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 35))
 >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 37))
 >m.propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
 >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 37))
 >propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
->(n) => n.propertyA : Symbol((Anonymous function), Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 56))
 >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 58))
 >n.propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
 >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 58))
@@ -97,25 +88,18 @@ var result5 = true ? a : x;
 
 //Expr1 and Expr2 are literals
 true ? 1 : {};
->{} : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 30, 10))
-
 true ? { a: 2, b: 'string' } : { a: 1 };
->{ a: 2, b: 'string' } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 6))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 8))
 >b : Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 14))
->{ a: 1 } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 30))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 32))
 
 var result6 = true ? 1 : {};
 >result6 : Symbol(result6, Decl(conditionalOperatorWithIdenticalBCT.ts, 32, 3))
->{} : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 32, 24))
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
 >result7 : Symbol(result7, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 3))
->{ a: 2, b: 'string' } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 20))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 22))
 >b : Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 28))
->{ a: 1 } : Symbol(, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 44))
 >a : Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 46))
 
 //Contextually typed
@@ -129,12 +113,10 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >result8 : Symbol(result8, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 3))
 >t : Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 14))
 >A : Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
->(m) => m.propertyA : Symbol((Anonymous function), Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 35))
 >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 37))
 >m.propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
 >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 37))
 >propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
->(n) => n.propertyX : Symbol((Anonymous function), Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 56))
 >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 58))
 >n.propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
 >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 58))
@@ -152,12 +134,10 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result10 : Symbol(result10, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 3))
 >t : Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 15))
 >X : Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
->(m) => m.propertyX1 : Symbol((Anonymous function), Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 36))
 >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 38))
 >m.propertyX1 : Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
 >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 38))
 >propertyX1 : Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
->(n) => n.propertyX2 : Symbol((Anonymous function), Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 58))
 >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 60))
 >n.propertyX2 : Symbol(X.propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
 >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 60))

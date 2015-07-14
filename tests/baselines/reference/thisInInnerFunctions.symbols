@@ -14,7 +14,6 @@ class Foo {
             this.y = "hi"; // 'this' should be not type to 'Foo' either
             var f = () => this.y;  // 'this' should be not type to 'Foo' either
 >f : Symbol(f, Decl(thisInInnerFunctions.ts, 5, 15))
->() => this.y : Symbol((Anonymous function), Decl(thisInInnerFunctions.ts, 5, 19))
         }
     }
 }
@@ -24,11 +23,8 @@ function test() {
 
     var x = () => {
 >x : Symbol(x, Decl(thisInInnerFunctions.ts, 11, 7))
->() => {        (() => this)();        this;    } : Symbol((Anonymous function), Decl(thisInInnerFunctions.ts, 11, 11))
 
         (() => this)();
->() => this : Symbol((Anonymous function), Decl(thisInInnerFunctions.ts, 12, 9))
-
         this;
     };
 }

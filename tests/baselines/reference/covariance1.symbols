@@ -27,7 +27,6 @@ module M {
 
     f({x:a}); // ok
 >f : Symbol(f, Decl(covariance1.ts, 5, 24))
->{x:a} : Symbol(, Decl(covariance1.ts, 10, 6))
 >x : Symbol(x, Decl(covariance1.ts, 10, 7))
 >a : Symbol(a, Decl(covariance1.ts, 9, 7))
 
@@ -37,7 +36,6 @@ module M {
 
     f({x:b}); // ok covariant subtype
 >f : Symbol(f, Decl(covariance1.ts, 5, 24))
->{x:b} : Symbol(, Decl(covariance1.ts, 13, 6))
 >x : Symbol(x, Decl(covariance1.ts, 13, 7))
 >b : Symbol(b, Decl(covariance1.ts, 12, 7))
 }

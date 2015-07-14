@@ -11,6 +11,5 @@ interface Generic<T> {
 var y: Generic<number> = { x: 3 };
 >y : Symbol(y, Decl(interface0.ts, 4, 3))
 >Generic : Symbol(Generic, Decl(interface0.ts, 0, 0))
->{ x: 3 } : Symbol(, Decl(interface0.ts, 4, 24))
 >x : Symbol(x, Decl(interface0.ts, 4, 26))
 

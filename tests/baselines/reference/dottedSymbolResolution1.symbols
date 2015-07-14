@@ -65,7 +65,6 @@ function _setBarAndText(): void {
 >x.find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
 >x : Symbol(x, Decl(dottedSymbolResolution1.ts, 19, 7))
 >find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
->function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } : Symbol((Anonymous function), Decl(dottedSymbolResolution1.ts, 20, 21))
 
         var $this: JQuery = $(''),
 >$this : Symbol($this, Decl(dottedSymbolResolution1.ts, 21, 11))

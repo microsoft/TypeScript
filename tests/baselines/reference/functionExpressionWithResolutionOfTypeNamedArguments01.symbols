@@ -5,7 +5,6 @@ interface arguments {
 
 var x = function f() {
 >x : Symbol(x, Decl(functionExpressionWithResolutionOfTypeNamedArguments01.ts, 3, 3))
->function f() {    <arguments>arguments;} : Symbol(f, Decl(functionExpressionWithResolutionOfTypeNamedArguments01.ts, 3, 7))
 >f : Symbol(f, Decl(functionExpressionWithResolutionOfTypeNamedArguments01.ts, 3, 7))
 
     <arguments>arguments;

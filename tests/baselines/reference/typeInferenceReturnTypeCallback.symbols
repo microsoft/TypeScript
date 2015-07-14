@@ -56,7 +56,6 @@ class Cons<T> implements IList<T>{
 >foldRight : Symbol(foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
 >Nil : Symbol(Nil, Decl(typeInferenceReturnTypeCallback.ts, 2, 1))
 >U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
->(t, acc) => {            return new Cons<U>();        } : Symbol((Anonymous function), Decl(typeInferenceReturnTypeCallback.ts, 12, 43))
 >t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 12, 45))
 >acc : Symbol(acc, Decl(typeInferenceReturnTypeCallback.ts, 12, 47))
 

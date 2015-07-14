@@ -15,10 +15,8 @@ var obj: () => {}
 
 var obj1 = { x: "", y: () => { }};
 >obj1 : Symbol(obj1, Decl(negateOperatorWithAnyOtherType.ts, 6, 3))
->{ x: "", y: () => { }} : Symbol(, Decl(negateOperatorWithAnyOtherType.ts, 6, 10))
 >x : Symbol(x, Decl(negateOperatorWithAnyOtherType.ts, 6, 12))
 >y : Symbol(y, Decl(negateOperatorWithAnyOtherType.ts, 6, 19))
->() => { } : Symbol((Anonymous function), Decl(negateOperatorWithAnyOtherType.ts, 6, 22))
 
 function foo(): any {
 >foo : Symbol(foo, Decl(negateOperatorWithAnyOtherType.ts, 6, 34))

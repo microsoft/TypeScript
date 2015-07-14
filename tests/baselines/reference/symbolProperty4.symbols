@@ -1,7 +1,6 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty4.ts ===
 var x = {
 >x : Symbol(x, Decl(symbolProperty4.ts, 0, 3))
->{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : Symbol(, Decl(symbolProperty4.ts, 0, 7))
 
     [Symbol()]: 0,
 >Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))

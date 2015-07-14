@@ -25,7 +25,6 @@ x1.isElement;
 // This is a generic function
 var x2 = <T extends {}>() => {};
 >x2 : Symbol(x2, Decl(tsxGenericArrowFunctionParsing.tsx, 11, 3))
-><T extends {}>() => {} : Symbol((Anonymous function), Decl(tsxGenericArrowFunctionParsing.tsx, 11, 8))
 >T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 11, 10))
 
 x2();
@@ -34,7 +33,6 @@ x2();
 // This is a generic function
 var x3 = <T, T1>() => {};
 >x3 : Symbol(x3, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 3))
-><T, T1>() => {} : Symbol((Anonymous function), Decl(tsxGenericArrowFunctionParsing.tsx, 15, 8))
 >T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 10))
 >T1 : Symbol(T1, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 12))
 

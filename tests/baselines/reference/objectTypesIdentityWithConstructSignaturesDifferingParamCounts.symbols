@@ -44,7 +44,6 @@ var a: { new(x: string, y: string): string }
 
 var b = { new(x: string) { return ''; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts, 19, 3))
->{ new(x: string) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts, 19, 7))
 >new : Symbol(new, Decl(objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts, 19, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts, 19, 14))
 

@@ -26,17 +26,13 @@ interface Transform3D {
 var style: IBookStyle = {
 >style : Symbol(style, Decl(contextualTypeArrayReturnType.ts, 12, 3))
 >IBookStyle : Symbol(IBookStyle, Decl(contextualTypeArrayReturnType.ts, 0, 0))
->{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : Symbol(, Decl(contextualTypeArrayReturnType.ts, 12, 23))
 
     initialLeftPageTransforms: (width: number) => {
 >initialLeftPageTransforms : Symbol(initialLeftPageTransforms, Decl(contextualTypeArrayReturnType.ts, 12, 25))
->(width: number) => {        return [            {'ry': null }        ];    } : Symbol((Anonymous function), Decl(contextualTypeArrayReturnType.ts, 13, 30))
 >width : Symbol(width, Decl(contextualTypeArrayReturnType.ts, 13, 32))
 
         return [
             {'ry': null }
->{'ry': null } : Symbol(, Decl(contextualTypeArrayReturnType.ts, 14, 16))
-
         ];
     }
 }

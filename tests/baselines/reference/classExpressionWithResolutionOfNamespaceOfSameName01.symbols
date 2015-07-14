@@ -9,7 +9,6 @@ namespace C {
 
 var x = class C {
 >x : Symbol(x, Decl(classExpressionWithResolutionOfNamespaceOfSameName01.ts, 5, 3))
->class C {    prop: C.type;} : Symbol(C, Decl(classExpressionWithResolutionOfNamespaceOfSameName01.ts, 5, 7))
 >C : Symbol(C, Decl(classExpressionWithResolutionOfNamespaceOfSameName01.ts, 5, 7))
 
     prop: C.type;

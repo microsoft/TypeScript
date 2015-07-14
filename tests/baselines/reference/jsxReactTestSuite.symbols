@@ -186,7 +186,6 @@ var x =
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
->{ y: 2 } : Symbol(, Decl(jsxReactTestSuite.tsx, 113, 25))
 >y : Symbol(y, Decl(jsxReactTestSuite.tsx, 113, 27))
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
 >z : Symbol(unknown)

@@ -71,7 +71,6 @@ var a: { foo<T extends Date>(x: T): T }
 
 var b = { foo<T extends Date>(x: T) { return null; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 3))
->{ foo<T extends Date>(x: T) { return null; } } : Symbol(, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 14))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))

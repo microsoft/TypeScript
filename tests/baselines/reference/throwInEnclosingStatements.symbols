@@ -8,7 +8,6 @@ function fn(x) {
 }
 
 <T>(x: T) => { throw x; }
-><T>(x: T) => { throw x; } : Symbol((Anonymous function), Decl(throwInEnclosingStatements.ts, 2, 1))
 >T : Symbol(T, Decl(throwInEnclosingStatements.ts, 4, 1))
 >x : Symbol(x, Decl(throwInEnclosingStatements.ts, 4, 4))
 >T : Symbol(T, Decl(throwInEnclosingStatements.ts, 4, 1))
@@ -45,7 +44,6 @@ for (var i = 0; ;) { throw i; }
 
 for (var idx in {}) { throw idx; }
 >idx : Symbol(idx, Decl(throwInEnclosingStatements.ts, 21, 8))
->{} : Symbol(, Decl(throwInEnclosingStatements.ts, 21, 15))
 >idx : Symbol(idx, Decl(throwInEnclosingStatements.ts, 21, 8))
 
 do { throw null; }while(true)
@@ -82,7 +80,6 @@ class C<T> {
 
 var aa = {
 >aa : Symbol(aa, Decl(throwInEnclosingStatements.ts, 39, 3))
->{    id:12,    biz() {        throw this;    }} : Symbol(, Decl(throwInEnclosingStatements.ts, 39, 8))
 
     id:12,
 >id : Symbol(id, Decl(throwInEnclosingStatements.ts, 39, 10))

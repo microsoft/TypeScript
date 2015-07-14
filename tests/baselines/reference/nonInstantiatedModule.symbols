@@ -49,7 +49,6 @@ module M2 {
 >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
             return { x: 0, y: 0 };
->{ x: 0, y: 0 } : Symbol(, Decl(nonInstantiatedModule.ts, 18, 18))
 >x : Symbol(x, Decl(nonInstantiatedModule.ts, 18, 20))
 >y : Symbol(y, Decl(nonInstantiatedModule.ts, 18, 26))
         }

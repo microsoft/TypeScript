@@ -17,7 +17,6 @@ class Foo extends Parent {
 
         var x = () => super.foo();
 >x : Symbol(x, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 8, 11))
->() => super.foo() : Symbol((Anonymous function), Decl(emitClassDeclarationWithSuperMethodCall01.ts, 8, 15))
 >super.foo : Symbol(Parent.foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 1, 14))
 >super : Symbol(Parent, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 0))
 >foo : Symbol(Parent.foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 1, 14))

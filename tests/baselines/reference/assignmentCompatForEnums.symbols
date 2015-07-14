@@ -6,7 +6,6 @@ enum TokenType { One, Two };
 
 var list = {};
 >list : Symbol(list, Decl(assignmentCompatForEnums.ts, 2, 3))
->{} : Symbol(, Decl(assignmentCompatForEnums.ts, 2, 10))
 
 
 function returnType(): TokenType { return null; }

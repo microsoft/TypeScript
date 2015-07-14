@@ -13,7 +13,6 @@ function fn() {
 
 var t = function () {
 >t : Symbol(t, Decl(typeOfThisInFunctionExpression.ts, 7, 3))
->function () {    var p = this;    var p: any;} : Symbol((Anonymous function), Decl(typeOfThisInFunctionExpression.ts, 7, 7))
 
     var p = this;
 >p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 8, 7), Decl(typeOfThisInFunctionExpression.ts, 9, 7))
@@ -24,7 +23,6 @@ var t = function () {
 
 var t2 = function f() {
 >t2 : Symbol(t2, Decl(typeOfThisInFunctionExpression.ts, 12, 3))
->function f() {    var x = this;    var x: any;} : Symbol(f, Decl(typeOfThisInFunctionExpression.ts, 12, 8))
 >f : Symbol(f, Decl(typeOfThisInFunctionExpression.ts, 12, 8))
 
     var x = this;
@@ -39,7 +37,6 @@ class C {
 
     x = function () {
 >x : Symbol(x, Decl(typeOfThisInFunctionExpression.ts, 17, 9))
->function () {        var q: any;        var q = this;    } : Symbol((Anonymous function), Decl(typeOfThisInFunctionExpression.ts, 18, 7))
 
         var q: any;
 >q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 19, 11), Decl(typeOfThisInFunctionExpression.ts, 20, 11))
@@ -49,7 +46,6 @@ class C {
     }
     y = function ff() {
 >y : Symbol(y, Decl(typeOfThisInFunctionExpression.ts, 21, 5))
->function ff() {        var q: any;        var q = this;    } : Symbol(ff, Decl(typeOfThisInFunctionExpression.ts, 22, 7))
 >ff : Symbol(ff, Decl(typeOfThisInFunctionExpression.ts, 22, 7))
 
         var q: any;
@@ -75,7 +71,6 @@ module M {
 
     var t = function () {
 >t : Symbol(t, Decl(typeOfThisInFunctionExpression.ts, 34, 7))
->function () {        var p = this;        var p: any;    } : Symbol((Anonymous function), Decl(typeOfThisInFunctionExpression.ts, 34, 11))
 
         var p = this;
 >p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 35, 11), Decl(typeOfThisInFunctionExpression.ts, 36, 11))
@@ -86,7 +81,6 @@ module M {
 
     var t2 = function f() {
 >t2 : Symbol(t2, Decl(typeOfThisInFunctionExpression.ts, 39, 7))
->function f() {        var x = this;        var x: any;    } : Symbol(f, Decl(typeOfThisInFunctionExpression.ts, 39, 12))
 >f : Symbol(f, Decl(typeOfThisInFunctionExpression.ts, 39, 12))
 
         var x = this;

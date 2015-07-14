@@ -30,7 +30,6 @@ module A {
 
         return new Line({ x: 0, y: 0 }, p);
 >Line : Symbol(Line, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 5, 5))
->{ x: 0, y: 0 } : Symbol(, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 12, 24))
 >x : Symbol(x, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 12, 25))
 >y : Symbol(y, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 12, 31))
 >p : Symbol(p, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 11, 31))

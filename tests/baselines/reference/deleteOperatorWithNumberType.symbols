@@ -44,16 +44,13 @@ var ResultIsBoolean3 = delete 1;
 
 var ResultIsBoolean4 = delete { x: 1, y: 2};
 >ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(deleteOperatorWithNumberType.ts, 22, 3))
->{ x: 1, y: 2} : Symbol(, Decl(deleteOperatorWithNumberType.ts, 22, 29))
 >x : Symbol(x, Decl(deleteOperatorWithNumberType.ts, 22, 31))
 >y : Symbol(y, Decl(deleteOperatorWithNumberType.ts, 22, 37))
 
 var ResultIsBoolean5 = delete { x: 1, y: (n: number) => { return n; } };
 >ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(deleteOperatorWithNumberType.ts, 23, 3))
->{ x: 1, y: (n: number) => { return n; } } : Symbol(, Decl(deleteOperatorWithNumberType.ts, 23, 29))
 >x : Symbol(x, Decl(deleteOperatorWithNumberType.ts, 23, 31))
 >y : Symbol(y, Decl(deleteOperatorWithNumberType.ts, 23, 37))
->(n: number) => { return n; } : Symbol((Anonymous function), Decl(deleteOperatorWithNumberType.ts, 23, 40))
 >n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 23, 42))
 >n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 23, 42))
 

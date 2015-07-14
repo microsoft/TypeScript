@@ -15,7 +15,6 @@ function point(x: number, y: number): Point {
 >Point : Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
 
     return { x: x, y: y };
->{ x: x, y: y } : Symbol(, Decl(mergedDeclarations1.ts, 5, 10))
 >x : Symbol(x, Decl(mergedDeclarations1.ts, 5, 12))
 >x : Symbol(x, Decl(mergedDeclarations1.ts, 4, 15))
 >y : Symbol(y, Decl(mergedDeclarations1.ts, 5, 18))

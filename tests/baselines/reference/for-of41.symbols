@@ -1,10 +1,8 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of41.ts ===
 var array = [{x: [0], y: {p: ""}}]
 >array : Symbol(array, Decl(for-of41.ts, 0, 3))
->{x: [0], y: {p: ""}} : Symbol(, Decl(for-of41.ts, 0, 13))
 >x : Symbol(x, Decl(for-of41.ts, 0, 14))
 >y : Symbol(y, Decl(for-of41.ts, 0, 21))
->{p: ""} : Symbol(, Decl(for-of41.ts, 0, 24))
 >p : Symbol(p, Decl(for-of41.ts, 0, 26))
 
 for (var {x: [a], y: {p}} of array) {

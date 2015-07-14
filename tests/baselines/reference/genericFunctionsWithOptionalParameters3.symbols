@@ -61,9 +61,7 @@ var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
 >utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
 >mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
 >c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
->(x) => { return 1 } : Symbol((Anonymous function), Decl(genericFunctionsWithOptionalParameters3.ts, 9, 27))
 >x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 29))
->(y) => { return new Date() } : Symbol((Anonymous function), Decl(genericFunctionsWithOptionalParameters3.ts, 9, 48))
 >y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 50))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
@@ -73,20 +71,16 @@ var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return
 >utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
 >mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
 >c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
->(x: string) => { return 1 } : Symbol((Anonymous function), Decl(genericFunctionsWithOptionalParameters3.ts, 10, 27))
 >x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 29))
->(y: number) => { return new Date() } : Symbol((Anonymous function), Decl(genericFunctionsWithOptionalParameters3.ts, 10, 56))
 >y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 58))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
 var f1 = (x: string) => { return 1 };
 >f1 : Symbol(f1, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 3))
->(x: string) => { return 1 } : Symbol((Anonymous function), Decl(genericFunctionsWithOptionalParameters3.ts, 11, 8))
 >x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 10))
 
 var f2 = (y: number) => { return new Date() };
 >f2 : Symbol(f2, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 3))
->(y: number) => { return new Date() } : Symbol((Anonymous function), Decl(genericFunctionsWithOptionalParameters3.ts, 12, 8))
 >y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 10))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 

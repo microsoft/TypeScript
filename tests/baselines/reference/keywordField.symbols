@@ -1,14 +1,12 @@
 === tests/cases/compiler/keywordField.ts ===
 var obj:any = {};
 >obj : Symbol(obj, Decl(keywordField.ts, 0, 3))
->{} : Symbol(, Decl(keywordField.ts, 0, 13))
 
 obj.if = 1;
 >obj : Symbol(obj, Decl(keywordField.ts, 0, 3))
 
 var a = { if: "test" }
 >a : Symbol(a, Decl(keywordField.ts, 4, 3))
->{ if: "test" } : Symbol(, Decl(keywordField.ts, 4, 7))
 >if : Symbol(if, Decl(keywordField.ts, 4, 9))
 
 var n = a.if

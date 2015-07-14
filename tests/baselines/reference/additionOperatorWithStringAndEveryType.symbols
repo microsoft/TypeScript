@@ -128,7 +128,6 @@ var r18 = x + 0;
 var r19 = x + { a: '' };
 >r19 : Symbol(r19, Decl(additionOperatorWithStringAndEveryType.ts, 36, 3))
 >x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->{ a: '' } : Symbol(, Decl(additionOperatorWithStringAndEveryType.ts, 36, 13))
 >a : Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 36, 15))
 
 var r20 = x + [];

@@ -5,15 +5,12 @@ function* g(): IterableIterator<(x: string) => number> {
 >x : Symbol(x, Decl(generatorTypeCheck28.ts, 0, 33))
 
     yield * {
->{        *[Symbol.iterator]() {            yield x => x.length;        }    } : Symbol(, Decl(generatorTypeCheck28.ts, 1, 11))
-
         *[Symbol.iterator]() {
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
 >Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
 
             yield x => x.length;
->x => x.length : Symbol((Anonymous function), Decl(generatorTypeCheck28.ts, 3, 17))
 >x : Symbol(x, Decl(generatorTypeCheck28.ts, 3, 17))
 >x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >x : Symbol(x, Decl(generatorTypeCheck28.ts, 3, 17))

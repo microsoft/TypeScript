@@ -2,12 +2,9 @@
 [].map(() => [].map(p => ({ X: p })));
 >[].map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
->() => [].map(p => ({ X: p })) : Symbol((Anonymous function), Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts, 0, 7))
 >[].map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
->p => ({ X: p }) : Symbol((Anonymous function), Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts, 0, 20))
 >p : Symbol(p, Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts, 0, 20))
->{ X: p } : Symbol(, Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts, 0, 26))
 >X : Symbol(X, Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts, 0, 27))
 >p : Symbol(p, Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts, 0, 20))
 

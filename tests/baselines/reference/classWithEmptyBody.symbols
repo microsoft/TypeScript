@@ -16,12 +16,10 @@ c = 1;
 
 c = { foo: '' }
 >c : Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
->{ foo: '' } : Symbol(, Decl(classWithEmptyBody.ts, 6, 3))
 >foo : Symbol(foo, Decl(classWithEmptyBody.ts, 6, 5))
 
 c = () => { }
 >c : Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
->() => { } : Symbol((Anonymous function), Decl(classWithEmptyBody.ts, 7, 3))
 
 class D {
 >D : Symbol(D, Decl(classWithEmptyBody.ts, 7, 13))
@@ -44,10 +42,8 @@ d = 1;
 
 d = { foo: '' }
 >d : Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
->{ foo: '' } : Symbol(, Decl(classWithEmptyBody.ts, 18, 3))
 >foo : Symbol(foo, Decl(classWithEmptyBody.ts, 18, 5))
 
 d = () => { }
 >d : Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
->() => { } : Symbol((Anonymous function), Decl(classWithEmptyBody.ts, 19, 3))
 

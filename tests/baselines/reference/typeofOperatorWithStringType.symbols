@@ -44,16 +44,13 @@ var ResultIsString3 = typeof "";
 
 var ResultIsString4 = typeof { x: "", y: "" };
 >ResultIsString4 : Symbol(ResultIsString4, Decl(typeofOperatorWithStringType.ts, 22, 3))
->{ x: "", y: "" } : Symbol(, Decl(typeofOperatorWithStringType.ts, 22, 28))
 >x : Symbol(x, Decl(typeofOperatorWithStringType.ts, 22, 30))
 >y : Symbol(y, Decl(typeofOperatorWithStringType.ts, 22, 37))
 
 var ResultIsString5 = typeof { x: "", y: (s: string) => { return s; } };
 >ResultIsString5 : Symbol(ResultIsString5, Decl(typeofOperatorWithStringType.ts, 23, 3))
->{ x: "", y: (s: string) => { return s; } } : Symbol(, Decl(typeofOperatorWithStringType.ts, 23, 28))
 >x : Symbol(x, Decl(typeofOperatorWithStringType.ts, 23, 30))
 >y : Symbol(y, Decl(typeofOperatorWithStringType.ts, 23, 37))
->(s: string) => { return s; } : Symbol((Anonymous function), Decl(typeofOperatorWithStringType.ts, 23, 40))
 >s : Symbol(s, Decl(typeofOperatorWithStringType.ts, 23, 42))
 >s : Symbol(s, Decl(typeofOperatorWithStringType.ts, 23, 42))
 
@@ -145,7 +142,6 @@ r: typeof foo;
 
 var y = { a: "", b: "" };
 >y : Symbol(y, Decl(typeofOperatorWithStringType.ts, 52, 3))
->{ a: "", b: "" } : Symbol(, Decl(typeofOperatorWithStringType.ts, 52, 7))
 >a : Symbol(a, Decl(typeofOperatorWithStringType.ts, 52, 9))
 >b : Symbol(b, Decl(typeofOperatorWithStringType.ts, 52, 16))
 

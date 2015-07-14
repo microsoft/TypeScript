@@ -59,7 +59,6 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 >m.g : Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
 >m : Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
 >g : Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
->() => new c() : Symbol((Anonymous function), Decl(declFileTypeAnnotationUnionType.ts, 20, 88))
 >c : Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
 
 var y = new g<string>() || new m.g<number>() || (() => new c());
@@ -68,6 +67,5 @@ var y = new g<string>() || new m.g<number>() || (() => new c());
 >m.g : Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
 >m : Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
 >g : Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
->() => new c() : Symbol((Anonymous function), Decl(declFileTypeAnnotationUnionType.ts, 21, 49))
 >c : Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
 

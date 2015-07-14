@@ -2,7 +2,6 @@
 var fu: (s: string) => string = function (s) { return s.toLowerCase() };
 >fu : Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
 >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 9))
->function (s) { return s.toLowerCase() } : Symbol((Anonymous function), Decl(targetTypingOnFunctions.ts, 0, 31))
 >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
 >s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
 >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
@@ -11,7 +10,6 @@ var fu: (s: string) => string = function (s) { return s.toLowerCase() };
 var zu = fu = function (s) { return s.toLowerCase() };
 >zu : Symbol(zu, Decl(targetTypingOnFunctions.ts, 2, 3))
 >fu : Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
->function (s) { return s.toLowerCase() } : Symbol((Anonymous function), Decl(targetTypingOnFunctions.ts, 2, 13))
 >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))
 >s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
 >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))

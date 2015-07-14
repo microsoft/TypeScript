@@ -11,9 +11,7 @@ interface Ib { m(test: string, fn: Function); }
 var b: Ib = { m: function (test: string, fn: Function) { } };
 >b : Symbol(b, Decl(inferSecondaryParameter.ts, 4, 3))
 >Ib : Symbol(Ib, Decl(inferSecondaryParameter.ts, 0, 0))
->{ m: function (test: string, fn: Function) { } } : Symbol(, Decl(inferSecondaryParameter.ts, 4, 11))
 >m : Symbol(m, Decl(inferSecondaryParameter.ts, 4, 13))
->function (test: string, fn: Function) { } : Symbol((Anonymous function), Decl(inferSecondaryParameter.ts, 4, 16))
 >test : Symbol(test, Decl(inferSecondaryParameter.ts, 4, 27))
 >fn : Symbol(fn, Decl(inferSecondaryParameter.ts, 4, 40))
 >Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
@@ -22,7 +20,6 @@ b.m("test", function (bug) {
 >b.m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
 >b : Symbol(b, Decl(inferSecondaryParameter.ts, 4, 3))
 >m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
->function (bug) {    var a: number = bug;} : Symbol((Anonymous function), Decl(inferSecondaryParameter.ts, 6, 11))
 >bug : Symbol(bug, Decl(inferSecondaryParameter.ts, 6, 22))
 
     var a: number = bug;

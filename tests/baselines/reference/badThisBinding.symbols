@@ -13,11 +13,9 @@ class Greeter {
     constructor() {
 		foo(() => {
 >foo : Symbol(foo, Decl(badThisBinding.ts, 0, 0))
->() => {            bar(() => {                var x = this;			});		} : Symbol((Anonymous function), Decl(badThisBinding.ts, 5, 6))
 
             bar(() => {
 >bar : Symbol(bar, Decl(badThisBinding.ts, 0, 33))
->() => {                var x = this;			} : Symbol((Anonymous function), Decl(badThisBinding.ts, 6, 16))
 
                 var x = this;
 >x : Symbol(x, Decl(badThisBinding.ts, 7, 19))

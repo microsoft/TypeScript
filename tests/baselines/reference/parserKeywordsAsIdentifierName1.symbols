@@ -1,7 +1,6 @@
 === tests/cases/conformance/parser/ecmascript5/parserKeywordsAsIdentifierName1.ts ===
 var big = {
 >big : Symbol(big, Decl(parserKeywordsAsIdentifierName1.ts, 0, 3))
->{   break : 0,   super : 0,   const : 0} : Symbol(, Decl(parserKeywordsAsIdentifierName1.ts, 0, 9))
 
    break : 0,
 >break : Symbol(break, Decl(parserKeywordsAsIdentifierName1.ts, 0, 11))

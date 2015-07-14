@@ -17,7 +17,6 @@ class Greeter {
 
     messageHandler = (message: string) => {
 >messageHandler : Symbol(messageHandler, Decl(classMemberInitializerWithLamdaScoping5.ts, 5, 5))
->(message: string) => {        console.log(message); // This shouldnt be error    } : Symbol((Anonymous function), Decl(classMemberInitializerWithLamdaScoping5.ts, 7, 20))
 >message : Symbol(message, Decl(classMemberInitializerWithLamdaScoping5.ts, 7, 22))
 
         console.log(message); // This shouldnt be error

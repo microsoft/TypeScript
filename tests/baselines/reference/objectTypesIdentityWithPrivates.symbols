@@ -47,7 +47,6 @@ var a: { foo: string; }
 
 var b = { foo: '' };
 >b : Symbol(b, Decl(objectTypesIdentityWithPrivates.ts, 25, 3))
->{ foo: '' } : Symbol(, Decl(objectTypesIdentityWithPrivates.ts, 25, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithPrivates.ts, 25, 9))
 
 function foo1(x: A);

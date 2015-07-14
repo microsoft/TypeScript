@@ -95,13 +95,11 @@ function foo9(): (()=>c)[] {
 >c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
 
     return [() => new c()];
->() => new c() : Symbol((Anonymous function), Decl(declFileTypeAnnotationArrayType.ts, 46, 12))
 >c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
 }
 function foo10() {
 >foo10 : Symbol(foo10, Decl(declFileTypeAnnotationArrayType.ts, 47, 1))
 
     return [() => new c()];
->() => new c() : Symbol((Anonymous function), Decl(declFileTypeAnnotationArrayType.ts, 49, 12))
 >c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
 }

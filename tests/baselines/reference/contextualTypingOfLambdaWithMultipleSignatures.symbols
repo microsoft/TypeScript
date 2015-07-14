@@ -19,6 +19,5 @@ foo.getFoo = bar => { };
 >foo.getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
 >foo : Symbol(foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 5, 3))
 >getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
->bar => { } : Symbol((Anonymous function), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 6, 12))
 >bar : Symbol(bar, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 6, 12))
 

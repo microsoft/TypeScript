@@ -30,8 +30,6 @@ var o: {
 >idx : Symbol(idx, Decl(constEnumPropertyAccess1.ts, 13, 5))
 
 } = {
->{        1: true    } : Symbol(, Decl(constEnumPropertyAccess1.ts, 14, 3))
-
         1: true
     };
 

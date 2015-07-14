@@ -38,7 +38,6 @@ x1 += E.a;
 
 x1 += {};
 >x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 5, 3))
->{} : Symbol(, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 12, 5))
 
 x1 += null;
 >x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 5, 3))
@@ -75,7 +74,6 @@ x2 += E.a;
 
 x2 += {};
 >x2 : Symbol(x2, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 16, 3))
->{} : Symbol(, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 23, 5))
 
 x2 += null;
 >x2 : Symbol(x2, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 16, 3))

@@ -58,7 +58,6 @@ var a: { foo(x: string, y: string): string }
 
 var b = { foo(x: string) { return ''; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 23, 3))
->{ foo(x: string) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 23, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 23, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 23, 14))
 

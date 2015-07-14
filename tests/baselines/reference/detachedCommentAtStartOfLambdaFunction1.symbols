@@ -10,7 +10,6 @@ class TestFile {
 >message : Symbol(message, Decl(detachedCommentAtStartOfLambdaFunction1.ts, 2, 8))
 
         return (...x: string[]) =>
->(...x: string[]) =>            /// <summary>Test summary</summary>            /// <param name="message" type="String" />            /// <returns type="Function" />            message + this.name : Symbol((Anonymous function), Decl(detachedCommentAtStartOfLambdaFunction1.ts, 3, 14))
 >x : Symbol(x, Decl(detachedCommentAtStartOfLambdaFunction1.ts, 3, 16))
 
             /// <summary>Test summary</summary>

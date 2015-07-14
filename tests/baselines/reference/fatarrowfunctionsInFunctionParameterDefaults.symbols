@@ -2,7 +2,6 @@
 function fn(x = () => this, y = x()) {
 >fn : Symbol(fn, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 0))
 >x : Symbol(x, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 12))
->() => this : Symbol((Anonymous function), Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 15))
 >y : Symbol(y, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 27))
 >x : Symbol(x, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 12))
 

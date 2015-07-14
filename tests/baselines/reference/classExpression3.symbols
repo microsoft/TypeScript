@@ -1,9 +1,6 @@
 === tests/cases/conformance/classes/classExpressions/classExpression3.ts ===
 let C = class extends class extends class { a = 1 } { b = 2 } { c = 3 };
 >C : Symbol(C, Decl(classExpression3.ts, 0, 3))
->class extends class extends class { a = 1 } { b = 2 } { c = 3 } : Symbol((Anonymous class), Decl(classExpression3.ts, 0, 7))
->class extends class { a = 1 } { b = 2 } : Symbol((Anonymous class), Decl(classExpression3.ts, 0, 21))
->class { a = 1 } : Symbol((Anonymous class), Decl(classExpression3.ts, 0, 35))
 >a : Symbol((Anonymous class).a, Decl(classExpression3.ts, 0, 43))
 >b : Symbol((Anonymous class).b, Decl(classExpression3.ts, 0, 53))
 >c : Symbol((Anonymous class).c, Decl(classExpression3.ts, 0, 63))

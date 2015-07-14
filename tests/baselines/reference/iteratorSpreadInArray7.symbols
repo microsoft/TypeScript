@@ -15,8 +15,6 @@ class SymbolIterator {
 >next : Symbol(next, Decl(iteratorSpreadInArray7.ts, 3, 22))
 
         return {
->{            value: Symbol(),            done: false        } : Symbol(, Decl(iteratorSpreadInArray7.ts, 5, 14))
-
             value: Symbol(),
 >value : Symbol(value, Decl(iteratorSpreadInArray7.ts, 5, 16))
 >Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))

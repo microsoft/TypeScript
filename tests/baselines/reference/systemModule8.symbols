@@ -80,10 +80,8 @@ export let [y] = [1];
 export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
 >z0 : Symbol(z0, Decl(systemModule8.ts, 28, 14))
 >z1 : Symbol(z1, Decl(systemModule8.ts, 28, 25))
->{a: true, b: {c: "123"}} : Symbol(, Decl(systemModule8.ts, 28, 34))
 >a : Symbol(a, Decl(systemModule8.ts, 28, 36))
 >b : Symbol(b, Decl(systemModule8.ts, 28, 44))
->{c: "123"} : Symbol(, Decl(systemModule8.ts, 28, 47))
 >c : Symbol(c, Decl(systemModule8.ts, 28, 49))
 
 for ([x] of [[1]]) {}

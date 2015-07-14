@@ -55,7 +55,6 @@ var c2: Collection<number>;
 
 var rf1 = (x: number) => { return x.toFixed() };
 >rf1 : Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
->(x: number) => { return x.toFixed() } : Symbol((Anonymous function), Decl(callbacksDontShareTypes.ts, 13, 9))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
 >x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
@@ -67,7 +66,6 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 >_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
 >map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
 >c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
->(x) => { return x.toFixed() } : Symbol((Anonymous function), Decl(callbacksDontShareTypes.ts, 14, 19))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
 >x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
@@ -87,7 +85,6 @@ var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
 >_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
 >map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
 >c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
->(x) => { return x.toFixed() } : Symbol((Anonymous function), Decl(callbacksDontShareTypes.ts, 16, 35))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
 >x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))

@@ -35,7 +35,6 @@ var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: 
 >obj : Symbol(obj, Decl(bestCommonTypeWithContextualTyping.ts, 16, 3))
 >s : Symbol(s, Decl(bestCommonTypeWithContextualTyping.ts, 16, 12))
 >Contextual : Symbol(Contextual, Decl(bestCommonTypeWithContextualTyping.ts, 0, 0))
->{ s: e } : Symbol(, Decl(bestCommonTypeWithContextualTyping.ts, 16, 38))
 >s : Symbol(s, Decl(bestCommonTypeWithContextualTyping.ts, 16, 40))
 >e : Symbol(e, Decl(bestCommonTypeWithContextualTyping.ts, 10, 3))
 

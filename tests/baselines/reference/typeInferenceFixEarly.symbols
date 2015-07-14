@@ -10,6 +10,5 @@ declare function f<T>(p: (t: T) => T): T;
 
 f(n => 3);
 >f : Symbol(f, Decl(typeInferenceFixEarly.ts, 0, 0))
->n => 3 : Symbol((Anonymous function), Decl(typeInferenceFixEarly.ts, 2, 2))
 >n : Symbol(n, Decl(typeInferenceFixEarly.ts, 2, 2))
 

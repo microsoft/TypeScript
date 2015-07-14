@@ -5,7 +5,6 @@ interface Foo {
 
 var x = function Foo() {
 >x : Symbol(x, Decl(functionExpressionWithResolutionOfTypeOfSameName02.ts, 3, 3))
->function Foo() {    var x: Foo;} : Symbol(Foo, Decl(functionExpressionWithResolutionOfTypeOfSameName02.ts, 3, 7))
 >Foo : Symbol(Foo, Decl(functionExpressionWithResolutionOfTypeOfSameName02.ts, 3, 7))
 
     var x: Foo;

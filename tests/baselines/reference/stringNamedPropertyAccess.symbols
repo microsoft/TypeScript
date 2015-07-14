@@ -45,7 +45,6 @@ var r3 = a["a b"];
 
 var b = {
 >b : Symbol(b, Decl(stringNamedPropertyAccess.ts, 19, 3))
->{    "a b": 1} : Symbol(, Decl(stringNamedPropertyAccess.ts, 19, 7))
 
     "a b": 1
 }

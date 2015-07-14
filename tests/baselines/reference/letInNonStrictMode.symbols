@@ -4,6 +4,5 @@ let [x] = [1];
 
 let {a: y} = {a: 1};
 >y : Symbol(y, Decl(letInNonStrictMode.ts, 1, 5))
->{a: 1} : Symbol(, Decl(letInNonStrictMode.ts, 1, 12))
 >a : Symbol(a, Decl(letInNonStrictMode.ts, 1, 14))
 

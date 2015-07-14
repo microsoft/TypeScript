@@ -43,7 +43,6 @@ module C {
 
     var p = {x:0, y:0 };
 >p : Symbol(p, Decl(importStatements.ts, 17, 7), Decl(importStatements.ts, 18, 7))
->{x:0, y:0 } : Symbol(, Decl(importStatements.ts, 18, 11))
 >x : Symbol(x, Decl(importStatements.ts, 18, 13))
 >y : Symbol(y, Decl(importStatements.ts, 18, 17))
 }

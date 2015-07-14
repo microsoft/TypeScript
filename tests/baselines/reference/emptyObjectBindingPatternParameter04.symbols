@@ -3,7 +3,6 @@
 
 function f({} = {a: 1, b: "2", c: true}) {
 >f : Symbol(f, Decl(emptyObjectBindingPatternParameter04.ts, 0, 0))
->{a: 1, b: "2", c: true} : Symbol(, Decl(emptyObjectBindingPatternParameter04.ts, 2, 15))
 >a : Symbol(a, Decl(emptyObjectBindingPatternParameter04.ts, 2, 17))
 >b : Symbol(b, Decl(emptyObjectBindingPatternParameter04.ts, 2, 22))
 >c : Symbol(c, Decl(emptyObjectBindingPatternParameter04.ts, 2, 30))

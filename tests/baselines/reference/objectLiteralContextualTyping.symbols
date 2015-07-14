@@ -26,7 +26,6 @@ declare function foo(item: any): number;
 var x = foo({ name: "Sprocket" });
 >x : Symbol(x, Decl(objectLiteralContextualTyping.ts, 13, 3), Decl(objectLiteralContextualTyping.ts, 14, 3))
 >foo : Symbol(foo, Decl(objectLiteralContextualTyping.ts, 8, 1), Decl(objectLiteralContextualTyping.ts, 10, 41))
->{ name: "Sprocket" } : Symbol(, Decl(objectLiteralContextualTyping.ts, 13, 12))
 >name : Symbol(name, Decl(objectLiteralContextualTyping.ts, 13, 13))
 
 var x: string;
@@ -35,7 +34,6 @@ var x: string;
 var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >y : Symbol(y, Decl(objectLiteralContextualTyping.ts, 16, 3), Decl(objectLiteralContextualTyping.ts, 17, 3))
 >foo : Symbol(foo, Decl(objectLiteralContextualTyping.ts, 8, 1), Decl(objectLiteralContextualTyping.ts, 10, 41))
->{ name: "Sprocket", description: "Bumpy wheel" } : Symbol(, Decl(objectLiteralContextualTyping.ts, 16, 12))
 >name : Symbol(name, Decl(objectLiteralContextualTyping.ts, 16, 13))
 >description : Symbol(description, Decl(objectLiteralContextualTyping.ts, 16, 31))
 
@@ -45,7 +43,6 @@ var y: string;
 var z = foo({ name: "Sprocket", description: false });
 >z : Symbol(z, Decl(objectLiteralContextualTyping.ts, 19, 3), Decl(objectLiteralContextualTyping.ts, 20, 3))
 >foo : Symbol(foo, Decl(objectLiteralContextualTyping.ts, 8, 1), Decl(objectLiteralContextualTyping.ts, 10, 41))
->{ name: "Sprocket", description: false } : Symbol(, Decl(objectLiteralContextualTyping.ts, 19, 12))
 >name : Symbol(name, Decl(objectLiteralContextualTyping.ts, 19, 13))
 >description : Symbol(description, Decl(objectLiteralContextualTyping.ts, 19, 31))
 
@@ -55,7 +52,6 @@ var z: number;
 var w = foo({ a: 10 });
 >w : Symbol(w, Decl(objectLiteralContextualTyping.ts, 22, 3), Decl(objectLiteralContextualTyping.ts, 23, 3))
 >foo : Symbol(foo, Decl(objectLiteralContextualTyping.ts, 8, 1), Decl(objectLiteralContextualTyping.ts, 10, 41))
->{ a: 10 } : Symbol(, Decl(objectLiteralContextualTyping.ts, 22, 12))
 >a : Symbol(a, Decl(objectLiteralContextualTyping.ts, 22, 13))
 
 var w: number;
@@ -72,7 +68,6 @@ declare function bar<T>(param: { x?: T }): T;
 var b = bar({});
 >b : Symbol(b, Decl(objectLiteralContextualTyping.ts, 27, 3), Decl(objectLiteralContextualTyping.ts, 28, 3))
 >bar : Symbol(bar, Decl(objectLiteralContextualTyping.ts, 23, 14))
->{} : Symbol(, Decl(objectLiteralContextualTyping.ts, 27, 12))
 
 var b: {};
 >b : Symbol(b, Decl(objectLiteralContextualTyping.ts, 27, 3), Decl(objectLiteralContextualTyping.ts, 28, 3))

@@ -34,38 +34,30 @@ var cs = [a, b, c]; // { x: number; y?: number };[]
 
 var ds = [(x: Object) => 1, (x: string) => 2]; // { (x:Object) => number }[]
 >ds : Symbol(ds, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 10, 3))
->(x: Object) => 1 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 10, 10))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 10, 11))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->(x: string) => 2 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 10, 27))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 10, 29))
 
 var es = [(x: string) => 2, (x: Object) => 1]; // { (x:string) => number }[]
 >es : Symbol(es, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 11, 3))
->(x: string) => 2 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 11, 10))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 11, 11))
->(x: Object) => 1 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 11, 27))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 11, 29))
 >Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 var fs = [(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2]; // (a: { x: number; y?: number }) => number[]
 >fs : Symbol(fs, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 3))
->(a: { x: number; y?: number }) => 1 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 10))
 >a : Symbol(a, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 11))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 15))
 >y : Symbol(y, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 26))
->(b: { x: number; z?: number }) => 2 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 46))
 >b : Symbol(b, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 48))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 52))
 >z : Symbol(z, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 12, 63))
 
 var gs = [(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1]; // (b: { x: number; z?: number }) => number[]
 >gs : Symbol(gs, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 3))
->(b: { x: number; z?: number }) => 2 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 10))
 >b : Symbol(b, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 11))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 15))
 >z : Symbol(z, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 26))
->(a: { x: number; y?: number }) => 1 : Symbol((Anonymous function), Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 46))
 >a : Symbol(a, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 48))
 >x : Symbol(x, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 52))
 >y : Symbol(y, Decl(arrayLiteralWithMultipleBestCommonTypes.ts, 13, 63))

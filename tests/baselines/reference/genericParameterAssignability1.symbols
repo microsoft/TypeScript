@@ -8,7 +8,6 @@ function f<T>(x: T): T { return null; }
 
 var r = <T>(x: T) => x;
 >r : Symbol(r, Decl(genericParameterAssignability1.ts, 1, 3))
-><T>(x: T) => x : Symbol((Anonymous function), Decl(genericParameterAssignability1.ts, 1, 7))
 >T : Symbol(T, Decl(genericParameterAssignability1.ts, 1, 9))
 >x : Symbol(x, Decl(genericParameterAssignability1.ts, 1, 12))
 >T : Symbol(T, Decl(genericParameterAssignability1.ts, 1, 9))

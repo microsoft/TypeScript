@@ -13,7 +13,6 @@ function filter(handler: any) {
 >handler : Symbol(handler, Decl(b.ts, 2, 16))
 
     return function (target: any, propertyKey: string) {
->function (target: any, propertyKey: string) {        // ...    } : Symbol((Anonymous function), Decl(b.ts, 3, 10))
 >target : Symbol(target, Decl(b.ts, 3, 21))
 >propertyKey : Symbol(propertyKey, Decl(b.ts, 3, 33))
 
@@ -26,7 +25,6 @@ class Wat {
 
     @filter(() => test == 'abc')
 >filter : Symbol(filter, Decl(b.ts, 0, 27))
->() => test == 'abc' : Symbol((Anonymous function), Decl(b.ts, 9, 12))
 >test : Symbol(test, Decl(b.ts, 0, 8))
 
     static whatever() {

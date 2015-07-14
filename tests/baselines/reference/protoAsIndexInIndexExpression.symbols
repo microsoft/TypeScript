@@ -6,11 +6,9 @@ var EntityPrototype = undefined;
 
 var WorkspacePrototype = {
 >WorkspacePrototype : Symbol(WorkspacePrototype, Decl(protoAsIndexInIndexExpression_1.ts, 2, 3))
->{    serialize: function (): any {    }} : Symbol(, Decl(protoAsIndexInIndexExpression_1.ts, 2, 24))
 
     serialize: function (): any {
 >serialize : Symbol(serialize, Decl(protoAsIndexInIndexExpression_1.ts, 2, 26))
->function (): any {    } : Symbol((Anonymous function), Decl(protoAsIndexInIndexExpression_1.ts, 3, 14))
     }
 };
 WorkspacePrototype['__proto__'] = EntityPrototype;
@@ -19,7 +17,6 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 
 var o = {
 >o : Symbol(o, Decl(protoAsIndexInIndexExpression_1.ts, 8, 3))
->{    "__proto__": 0} : Symbol(, Decl(protoAsIndexInIndexExpression_1.ts, 8, 7))
 
     "__proto__": 0
 };

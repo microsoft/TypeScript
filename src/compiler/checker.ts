@@ -13744,7 +13744,7 @@ namespace ts {
                     }
                     break;
             }
-            return getSymbolOfNode(node);
+            return undefined;
         }
 
         function getShorthandAssignmentValueSymbol(location: Node): Symbol {

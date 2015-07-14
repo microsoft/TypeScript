@@ -25,9 +25,7 @@ interface Function {
 
 var a = {}[0]; // Should be Foo
 >a : Symbol(a, Decl(augmentedTypeBracketAccessIndexSignature.ts, 11, 3))
->{} : Symbol(, Decl(augmentedTypeBracketAccessIndexSignature.ts, 11, 7))
 
 var b = (() => { })[0]; // Should be Bar
 >b : Symbol(b, Decl(augmentedTypeBracketAccessIndexSignature.ts, 12, 3))
->() => { } : Symbol((Anonymous function), Decl(augmentedTypeBracketAccessIndexSignature.ts, 12, 9))
 

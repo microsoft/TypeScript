@@ -3,7 +3,6 @@
 var x: (a: any) => void = function <T>(x: T) {
 >x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 3))
 >a : Symbol(a, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 8))
->function <T>(x: T) {    return null;} : Symbol((Anonymous function), Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 25))
 >T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 36))
 >x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 39))
 >T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 36))
@@ -14,7 +13,6 @@ var x: (a: any) => void = function <T>(x: T) {
 var x2: (a: any) => void = function f<T>(x: T) {
 >x2 : Symbol(x2, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 3))
 >a : Symbol(a, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 9))
->function f<T>(x: T) {    return null;} : Symbol(f, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 26))
 >f : Symbol(f, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 26))
 >T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 38))
 >x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 41))

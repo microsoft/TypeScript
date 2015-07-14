@@ -7,7 +7,6 @@ var name: string = "my name";
 
 var person = { name, id };
 >person : Symbol(person, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 3))
->{ name, id } : Symbol(, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 12))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 14))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 20))
 
@@ -24,7 +23,6 @@ foo(person);
 
 var obj = { name: name, id: id };
 >obj : Symbol(obj, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 3))
->{ name: name, id: id } : Symbol(, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 9))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 11))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 1, 3))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 23))

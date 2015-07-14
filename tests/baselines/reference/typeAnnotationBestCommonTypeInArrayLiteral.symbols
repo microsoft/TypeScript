@@ -24,15 +24,11 @@ var menuData: IMenuItem[] = [
 >menuData : Symbol(menuData, Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 8, 3))
 >IMenuItem : Symbol(IMenuItem, Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 0, 0))
     {
->{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : Symbol(, Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 8, 29))
-
         "id": "ourLogo",
         "type": "image",
         "link": "",
         "icon": "modules/menu/logo.svg"
     }, {
->{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : Symbol(, Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 14, 6))
-
         "id": "productName",
         "type": "default",
         "link": "",

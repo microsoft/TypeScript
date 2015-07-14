@@ -95,12 +95,7 @@ class SomeClass {
 		var rewrites1 = <div>{() => this}</div>;
 >rewrites1 : Symbol(rewrites1, Decl(tsxReactEmit1.tsx, 25, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
-<<<<<<< HEAD
 >this : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 21, 45))
-=======
->() => this : Symbol((Anonymous function), Decl(tsxReactEmit1.tsx, 24, 24))
->this : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 20, 45))
->>>>>>> Accept symbol baselines
 
 		var rewrites2 = <div>{[p, ...p, p]}</div>;
 >rewrites2 : Symbol(rewrites2, Decl(tsxReactEmit1.tsx, 26, 5))
@@ -112,23 +107,13 @@ class SomeClass {
 		var rewrites3 = <div>{{p}}</div>;
 >rewrites3 : Symbol(rewrites3, Decl(tsxReactEmit1.tsx, 27, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
-<<<<<<< HEAD
 >p : Symbol(p, Decl(tsxReactEmit1.tsx, 27, 25))
-=======
->{p} : Symbol(, Decl(tsxReactEmit1.tsx, 26, 24))
->p : Symbol(p, Decl(tsxReactEmit1.tsx, 26, 25))
->>>>>>> Accept symbol baselines
 
 		var rewrites4 = <div a={() => this}></div>;
 >rewrites4 : Symbol(rewrites4, Decl(tsxReactEmit1.tsx, 29, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 >a : Symbol(unknown)
-<<<<<<< HEAD
 >this : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 21, 45))
-=======
->() => this : Symbol((Anonymous function), Decl(tsxReactEmit1.tsx, 28, 26))
->this : Symbol(SomeClass, Decl(tsxReactEmit1.tsx, 20, 45))
->>>>>>> Accept symbol baselines
 
 		var rewrites5 = <div a={[p, ...p, p]}></div>;
 >rewrites5 : Symbol(rewrites5, Decl(tsxReactEmit1.tsx, 30, 5))
@@ -142,12 +127,7 @@ class SomeClass {
 >rewrites6 : Symbol(rewrites6, Decl(tsxReactEmit1.tsx, 31, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 >a : Symbol(unknown)
-<<<<<<< HEAD
 >p : Symbol(p, Decl(tsxReactEmit1.tsx, 31, 27))
-=======
->{p} : Symbol(, Decl(tsxReactEmit1.tsx, 30, 26))
->p : Symbol(p, Decl(tsxReactEmit1.tsx, 30, 27))
->>>>>>> Accept symbol baselines
 	}
 }
 

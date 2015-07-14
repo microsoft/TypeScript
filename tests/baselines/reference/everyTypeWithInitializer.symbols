@@ -92,7 +92,6 @@ var aGenericClass = new D<string>();
 
 var anObjectLiteral = { id: 12 };
 >anObjectLiteral : Symbol(anObjectLiteral, Decl(everyTypeWithInitializer.ts, 36, 3))
->{ id: 12 } : Symbol(, Decl(everyTypeWithInitializer.ts, 36, 21))
 >id : Symbol(id, Decl(everyTypeWithInitializer.ts, 36, 23))
 
 var aFunction = F;
@@ -101,7 +100,6 @@ var aFunction = F;
 
 var aLambda = (x) => 2;
 >aLambda : Symbol(aLambda, Decl(everyTypeWithInitializer.ts, 39, 3))
->(x) => 2 : Symbol((Anonymous function), Decl(everyTypeWithInitializer.ts, 39, 13))
 >x : Symbol(x, Decl(everyTypeWithInitializer.ts, 39, 15))
 
 var aModule = M;

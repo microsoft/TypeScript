@@ -33,7 +33,6 @@
     } 
     var o = { 
 >o : Symbol(o, Decl(genericInference2.ts, 10, 7))
->{        name: ko.observable("Bob"),        age: ko.observable(37)     } : Symbol(, Decl(genericInference2.ts, 10, 11))
 
        name: ko.observable("Bob"), 
 >name : Symbol(name, Decl(genericInference2.ts, 10, 13))

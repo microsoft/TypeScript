@@ -41,7 +41,6 @@ module C {
 
     var p = { x: 0, y: 0 };
 >p : Symbol(p, Decl(importInTypePosition.ts, 17, 7), Decl(importInTypePosition.ts, 18, 7))
->{ x: 0, y: 0 } : Symbol(, Decl(importInTypePosition.ts, 18, 11))
 >x : Symbol(x, Decl(importInTypePosition.ts, 18, 13))
 >y : Symbol(y, Decl(importInTypePosition.ts, 18, 19))
 }

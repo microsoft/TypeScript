@@ -50,7 +50,6 @@ var a: {
 var b: { [x: string]: string; } = { foo: '' };
 >b : Symbol(b, Decl(objectTypesIdentityWithStringIndexers.ts, 27, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithStringIndexers.ts, 27, 10))
->{ foo: '' } : Symbol(, Decl(objectTypesIdentityWithStringIndexers.ts, 27, 33))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithStringIndexers.ts, 27, 35))
 
 function foo1(x: A);

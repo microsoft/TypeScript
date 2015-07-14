@@ -55,7 +55,6 @@ var b4 = (!b4) && b4; // expected boolean here. actually 'any'
 // (x:string) => any
 var f = (x: string) => f(x);
 >f : Symbol(f, Decl(recursiveInitializer.ts, 18, 3))
->(x: string) => f(x) : Symbol((Anonymous function), Decl(recursiveInitializer.ts, 18, 7))
 >x : Symbol(x, Decl(recursiveInitializer.ts, 18, 9))
 >f : Symbol(f, Decl(recursiveInitializer.ts, 18, 3))
 >x : Symbol(x, Decl(recursiveInitializer.ts, 18, 9))

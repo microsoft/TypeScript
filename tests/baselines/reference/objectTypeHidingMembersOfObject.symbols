@@ -37,11 +37,9 @@ var r2: void = i.valueOf();
 
 var a = {
 >a : Symbol(a, Decl(objectTypeHidingMembersOfObject.ts, 16, 3))
->{    valueOf: () => { }} : Symbol(, Decl(objectTypeHidingMembersOfObject.ts, 16, 7))
 
     valueOf: () => { }
 >valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfObject.ts, 16, 9))
->() => { } : Symbol((Anonymous function), Decl(objectTypeHidingMembersOfObject.ts, 17, 12))
 }
 
 var r3: void = a.valueOf();

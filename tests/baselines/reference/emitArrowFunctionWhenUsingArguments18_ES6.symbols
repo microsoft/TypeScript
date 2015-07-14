@@ -5,7 +5,6 @@ function f() {
 
     var { arguments: args } = { arguments };
 >args : Symbol(args, Decl(emitArrowFunctionWhenUsingArguments18_ES6.ts, 2, 9))
->{ arguments } : Symbol(, Decl(emitArrowFunctionWhenUsingArguments18_ES6.ts, 2, 29))
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments18_ES6.ts, 2, 31))
 
     if (Math.random()) {
@@ -14,7 +13,6 @@ function f() {
 >random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
 
         return () => arguments;
->() => arguments : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments18_ES6.ts, 4, 14))
 >arguments : Symbol(arguments)
     }
 }

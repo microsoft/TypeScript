@@ -4,7 +4,6 @@ module Variables{
 
     var x = function bar(a, b, c) {
 >x : Symbol(x, Decl(namedFunctionExpressionInModule.ts, 1, 7))
->function bar(a, b, c) {    } : Symbol(bar, Decl(namedFunctionExpressionInModule.ts, 1, 11))
 >bar : Symbol(bar, Decl(namedFunctionExpressionInModule.ts, 1, 11))
 >a : Symbol(a, Decl(namedFunctionExpressionInModule.ts, 1, 25))
 >b : Symbol(b, Decl(namedFunctionExpressionInModule.ts, 1, 27))

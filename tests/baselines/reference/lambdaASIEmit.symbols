@@ -8,7 +8,6 @@ function Foo(x: any)
  
 Foo(() =>
 >Foo : Symbol(Foo, Decl(lambdaASIEmit.ts, 0, 0))
->() =>    // do something    127 : Symbol((Anonymous function), Decl(lambdaASIEmit.ts, 5, 4))
 
     // do something
     127);

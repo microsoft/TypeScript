@@ -8,12 +8,10 @@ var b = undefined;
 
 var c = {x: null};
 >c : Symbol(c, Decl(widenedTypes1.ts, 3, 3))
->{x: null} : Symbol(, Decl(widenedTypes1.ts, 3, 7))
 >x : Symbol(x, Decl(widenedTypes1.ts, 3, 9))
 
 var d = [{x: null}];
 >d : Symbol(d, Decl(widenedTypes1.ts, 4, 3))
->{x: null} : Symbol(, Decl(widenedTypes1.ts, 4, 9))
 >x : Symbol(x, Decl(widenedTypes1.ts, 4, 10))
 
 var f = [null, null];
@@ -26,7 +24,6 @@ var g = [undefined, undefined];
 
 var h = [{x: undefined}];
 >h : Symbol(h, Decl(widenedTypes1.ts, 7, 3))
->{x: undefined} : Symbol(, Decl(widenedTypes1.ts, 7, 9))
 >x : Symbol(x, Decl(widenedTypes1.ts, 7, 10))
 >undefined : Symbol(undefined)
 

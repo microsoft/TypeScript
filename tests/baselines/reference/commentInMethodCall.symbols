@@ -9,5 +9,4 @@ s.map(// do something
 >map : Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 
     function () { });
->function () { } : Symbol((Anonymous function), Decl(commentInMethodCall.ts, 2, 6))
 

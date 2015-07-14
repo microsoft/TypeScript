@@ -20,7 +20,6 @@ import Adder = require('Math/Adder');
 
 var Math = {
 >Math : Symbol(Math, Decl(Math.ts, 2, 3))
->{    Adder:Adder} : Symbol(, Decl(Math.ts, 2, 10))
 
     Adder:Adder
 >Adder : Symbol(Adder, Decl(Math.ts, 2, 12))

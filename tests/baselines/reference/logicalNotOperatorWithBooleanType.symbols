@@ -37,7 +37,6 @@ var ResultIsBoolean2 = !true;
 
 var ResultIsBoolean3 = !{ x: true, y: false };
 >ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(logicalNotOperatorWithBooleanType.ts, 20, 3))
->{ x: true, y: false } : Symbol(, Decl(logicalNotOperatorWithBooleanType.ts, 20, 24))
 >x : Symbol(x, Decl(logicalNotOperatorWithBooleanType.ts, 20, 25))
 >y : Symbol(y, Decl(logicalNotOperatorWithBooleanType.ts, 20, 34))
 

@@ -15,7 +15,6 @@ function f() {
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 4, 13))
 
         return () => arguments;
->() => arguments : Symbol((Anonymous function), Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 5, 14))
 >arguments : Symbol(arguments)
     }
 }

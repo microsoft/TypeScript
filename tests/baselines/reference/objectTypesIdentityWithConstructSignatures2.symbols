@@ -41,7 +41,6 @@ var a: { new(x: Date): string }
 
 var b = { new(x: RegExp) { return ''; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 3))
->{ new(x: RegExp) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 7))
 >new : Symbol(new, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures2.ts, 19, 14))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))

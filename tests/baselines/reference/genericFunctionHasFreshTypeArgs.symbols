@@ -8,10 +8,8 @@ function f(p: <T>(x: T) => void) { };
 
 f(x => f(y => x = y));
 >f : Symbol(f, Decl(genericFunctionHasFreshTypeArgs.ts, 0, 0))
->x => f(y => x = y) : Symbol((Anonymous function), Decl(genericFunctionHasFreshTypeArgs.ts, 1, 2))
 >x : Symbol(x, Decl(genericFunctionHasFreshTypeArgs.ts, 1, 2))
 >f : Symbol(f, Decl(genericFunctionHasFreshTypeArgs.ts, 0, 0))
->y => x = y : Symbol((Anonymous function), Decl(genericFunctionHasFreshTypeArgs.ts, 1, 9))
 >y : Symbol(y, Decl(genericFunctionHasFreshTypeArgs.ts, 1, 9))
 >x : Symbol(x, Decl(genericFunctionHasFreshTypeArgs.ts, 1, 2))
 >y : Symbol(y, Decl(genericFunctionHasFreshTypeArgs.ts, 1, 9))

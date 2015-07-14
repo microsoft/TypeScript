@@ -18,7 +18,6 @@ var a: { x: typeof moduleA } = { x: moduleA };
 >a : Symbol(a, Decl(aliasUsageInObjectLiteral_main.ts, 5, 3))
 >x : Symbol(x, Decl(aliasUsageInObjectLiteral_main.ts, 5, 8))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInObjectLiteral_main.ts, 0, 64))
->{ x: moduleA } : Symbol(, Decl(aliasUsageInObjectLiteral_main.ts, 5, 30))
 >x : Symbol(x, Decl(aliasUsageInObjectLiteral_main.ts, 5, 32))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInObjectLiteral_main.ts, 0, 64))
 
@@ -26,7 +25,6 @@ var b: { x: IHasVisualizationModel } = { x: moduleA };
 >b : Symbol(b, Decl(aliasUsageInObjectLiteral_main.ts, 6, 3))
 >x : Symbol(x, Decl(aliasUsageInObjectLiteral_main.ts, 6, 8))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInObjectLiteral_main.ts, 1, 62))
->{ x: moduleA } : Symbol(, Decl(aliasUsageInObjectLiteral_main.ts, 6, 38))
 >x : Symbol(x, Decl(aliasUsageInObjectLiteral_main.ts, 6, 40))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInObjectLiteral_main.ts, 0, 64))
 
@@ -35,9 +33,7 @@ var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
 >y : Symbol(y, Decl(aliasUsageInObjectLiteral_main.ts, 7, 8))
 >z : Symbol(z, Decl(aliasUsageInObjectLiteral_main.ts, 7, 13))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInObjectLiteral_main.ts, 1, 62))
->{ y: { z: moduleA } } : Symbol(, Decl(aliasUsageInObjectLiteral_main.ts, 7, 45))
 >y : Symbol(y, Decl(aliasUsageInObjectLiteral_main.ts, 7, 47))
->{ z: moduleA } : Symbol(, Decl(aliasUsageInObjectLiteral_main.ts, 7, 50))
 >z : Symbol(z, Decl(aliasUsageInObjectLiteral_main.ts, 7, 52))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInObjectLiteral_main.ts, 0, 64))
 

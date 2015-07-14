@@ -13,7 +13,6 @@ function x() {
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 4, 7))
 
     x => { console.log(_this); };
->x => { console.log(_this); } : Symbol((Anonymous function), Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 4, 18))
 >x : Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 4, 18))
 >console.log : Symbol(log, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 14))
 >console : Symbol(console, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 3))

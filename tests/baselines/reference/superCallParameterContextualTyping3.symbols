@@ -36,7 +36,6 @@ class C extends CBase<string> {
         // 'p' should have type 'string'.
         super({
 >super : Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
->{            method(p) {                p.length;            }        } : Symbol(, Decl(superCallParameterContextualTyping3.ts, 16, 14))
 
             method(p) {
 >method : Symbol(method, Decl(superCallParameterContextualTyping3.ts, 16, 15))
@@ -55,7 +54,6 @@ class C extends CBase<string> {
 >super.foo : Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
 >super : Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
 >foo : Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
->{            method(p) {                p.length;            }        } : Symbol(, Decl(superCallParameterContextualTyping3.ts, 24, 18))
 
             method(p) {
 >method : Symbol(method, Decl(superCallParameterContextualTyping3.ts, 24, 19))

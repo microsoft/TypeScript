@@ -55,7 +55,6 @@ var a: { foo(x: Date): string }
 
 var b = { foo(x: RegExp) { return ''; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithCallSignatures2.ts, 23, 3))
->{ foo(x: RegExp) { return ''; } } : Symbol(, Decl(objectTypesIdentityWithCallSignatures2.ts, 23, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignatures2.ts, 23, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignatures2.ts, 23, 14))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))

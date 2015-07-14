@@ -3,7 +3,6 @@ function f() {
 >f : Symbol(f, Decl(returnStatement1.ts, 0, 0))
 
     return function (s) {
->function (s) {        var x = s;    } : Symbol((Anonymous function), Decl(returnStatement1.ts, 1, 10))
 >s : Symbol(s, Decl(returnStatement1.ts, 1, 21))
 
         var x = s;

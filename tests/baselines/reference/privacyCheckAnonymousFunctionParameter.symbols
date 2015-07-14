@@ -28,7 +28,6 @@ module Query {
 
         return fromDoWhile(test => {
 >fromDoWhile : Symbol(fromDoWhile, Decl(privacyCheckAnonymousFunctionParameter.ts, 4, 14))
->test => {            return true;        } : Symbol((Anonymous function), Decl(privacyCheckAnonymousFunctionParameter.ts, 10, 27))
 >test : Symbol(test, Decl(privacyCheckAnonymousFunctionParameter.ts, 10, 27))
 
             return true;

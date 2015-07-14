@@ -2,6 +2,5 @@
 var foo: {id:number;} = {id:4};
 >foo : Symbol(foo, Decl(contextualTyping1.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping1.ts, 0, 10))
->{id:4} : Symbol(, Decl(contextualTyping1.ts, 0, 23))
 >id : Symbol(id, Decl(contextualTyping1.ts, 0, 25))
 

@@ -3,7 +3,6 @@ var iter: Iterable<(x: string) => number> = [s => s.length];
 >iter : Symbol(iter, Decl(iterableContextualTyping1.ts, 0, 3))
 >Iterable : Symbol(Iterable, Decl(lib.d.ts, 1681, 1))
 >x : Symbol(x, Decl(iterableContextualTyping1.ts, 0, 20))
->s => s.length : Symbol((Anonymous function), Decl(iterableContextualTyping1.ts, 0, 45))
 >s : Symbol(s, Decl(iterableContextualTyping1.ts, 0, 45))
 >s.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >s : Symbol(s, Decl(iterableContextualTyping1.ts, 0, 45))

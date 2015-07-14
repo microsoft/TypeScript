@@ -8,7 +8,6 @@ function delegate(instance: any, method: (...args: any[]) => any, data?: any): (
 >args : Symbol(args, Decl(contextualTypeAppliedToVarArgs.ts, 0, 80))
 
     return function () { };
->function () { } : Symbol((Anonymous function), Decl(contextualTypeAppliedToVarArgs.ts, 1, 10))
 }
 
 class Foo{
@@ -21,7 +20,6 @@ class Foo{
         delegate(this, function (source, args2)
 >delegate : Symbol(delegate, Decl(contextualTypeAppliedToVarArgs.ts, 0, 0))
 >this : Symbol(Foo, Decl(contextualTypeAppliedToVarArgs.ts, 2, 1))
->function (source, args2)        {            var a = source.node;            var b = args2.node;        } : Symbol((Anonymous function), Decl(contextualTypeAppliedToVarArgs.ts, 8, 22))
 >source : Symbol(source, Decl(contextualTypeAppliedToVarArgs.ts, 8, 33))
 >args2 : Symbol(args2, Decl(contextualTypeAppliedToVarArgs.ts, 8, 40))
         {

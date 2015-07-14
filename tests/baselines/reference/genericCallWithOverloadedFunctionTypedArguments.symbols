@@ -32,7 +32,6 @@ module NonGenericParameter {
     var r2 = foo4(<T>(x: T) => x);
 >r2 : Symbol(r2, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 14, 7))
 >foo4 : Symbol(foo4, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 7, 5))
-><T>(x: T) => x : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 14, 18))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 14, 19))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 14, 22))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 14, 19))
@@ -41,7 +40,6 @@ module NonGenericParameter {
     var r4 = foo4(x => x);    
 >r4 : Symbol(r4, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 15, 7))
 >foo4 : Symbol(foo4, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 7, 5))
->x => x : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 15, 18))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 15, 18))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 15, 18))
 }
@@ -65,7 +63,6 @@ module GenericParameter {
     var r5 = foo5(x => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]. T is any
 >r5 : Symbol(r5, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 23, 7))
 >foo5 : Symbol(foo5, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 18, 25))
->x => x : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 23, 18))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 23, 18))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 23, 18))
 
@@ -101,14 +98,12 @@ module GenericParameter {
     var r8 = foo6(x => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]. T is any
 >r8 : Symbol(r8, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 31, 7))
 >foo6 : Symbol(foo6, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 25, 21))
->x => x : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 31, 18))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 31, 18))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 31, 18))
 
     var r9 = foo6(<T>(x: T) => ''); // any => string (+1 overload)
 >r9 : Symbol(r9, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 32, 7))
 >foo6 : Symbol(foo6, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 25, 21))
-><T>(x: T) => '' : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 32, 18))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 32, 19))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 32, 22))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 32, 19))
@@ -116,7 +111,6 @@ module GenericParameter {
     var r11 = foo6(<T>(x: T, y?: T) => ''); // any => string (+1 overload)
 >r11 : Symbol(r11, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 7))
 >foo6 : Symbol(foo6, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 25, 21))
-><T>(x: T, y?: T) => '' : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 19))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 20))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 23))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 20))
@@ -143,14 +137,12 @@ module GenericParameter {
     var r12 = foo7(1, (x) => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
 >r12 : Symbol(r12, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 39, 7))
 >foo7 : Symbol(foo7, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 43))
->(x) => x : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 39, 21))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 39, 23))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 39, 23))
 
     var r13 = foo7(1, <T>(x: T) => ''); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
 >r13 : Symbol(r13, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 40, 7))
 >foo7 : Symbol(foo7, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 33, 43))
-><T>(x: T) => '' : Symbol((Anonymous function), Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 40, 21))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 40, 23))
 >x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 40, 26))
 >T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments.ts, 40, 23))

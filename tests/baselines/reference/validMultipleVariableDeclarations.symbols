@@ -37,21 +37,18 @@ var p: Point;
 
 var p = { x: 1, y: 2 };
 >p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3), Decl(validMultipleVariableDeclarations.ts, 22, 3), Decl(validMultipleVariableDeclarations.ts, 23, 3))
->{ x: 1, y: 2 } : Symbol(, Decl(validMultipleVariableDeclarations.ts, 18, 7))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 18, 9))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 18, 15))
 
 var p: Point = { x: 0, y: undefined };
 >p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3), Decl(validMultipleVariableDeclarations.ts, 22, 3), Decl(validMultipleVariableDeclarations.ts, 23, 3))
 >Point : Symbol(Point, Decl(validMultipleVariableDeclarations.ts, 13, 1))
->{ x: 0, y: undefined } : Symbol(, Decl(validMultipleVariableDeclarations.ts, 19, 14))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 19, 16))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 19, 22))
 >undefined : Symbol(undefined)
 
 var p = { x: 1, y: <number>undefined };
 >p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3), Decl(validMultipleVariableDeclarations.ts, 22, 3), Decl(validMultipleVariableDeclarations.ts, 23, 3))
->{ x: 1, y: <number>undefined } : Symbol(, Decl(validMultipleVariableDeclarations.ts, 20, 7))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 20, 9))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 20, 15))
 >undefined : Symbol(undefined)
@@ -60,7 +57,6 @@ var p: { x: number; y: number; } = { x: 1, y: 2 };
 >p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3), Decl(validMultipleVariableDeclarations.ts, 22, 3), Decl(validMultipleVariableDeclarations.ts, 23, 3))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 21, 8))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 21, 19))
->{ x: 1, y: 2 } : Symbol(, Decl(validMultipleVariableDeclarations.ts, 21, 34))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 21, 36))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 21, 42))
 
@@ -68,7 +64,6 @@ var p = <{ x: number; y: number; }>{ x: 0, y: undefined };
 >p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3), Decl(validMultipleVariableDeclarations.ts, 22, 3), Decl(validMultipleVariableDeclarations.ts, 23, 3))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 22, 10))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 22, 21))
->{ x: 0, y: undefined } : Symbol(, Decl(validMultipleVariableDeclarations.ts, 22, 35))
 >x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 22, 36))
 >y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 22, 42))
 >undefined : Symbol(undefined)
@@ -79,12 +74,10 @@ var p: typeof p;
 
 var fn = function (s: string) { return 42; }
 >fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3), Decl(validMultipleVariableDeclarations.ts, 30, 3))
->function (s: string) { return 42; } : Symbol((Anonymous function), Decl(validMultipleVariableDeclarations.ts, 25, 8))
 >s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 25, 19))
 
 var fn = (s: string) => 3;
 >fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3), Decl(validMultipleVariableDeclarations.ts, 30, 3))
->(s: string) => 3 : Symbol((Anonymous function), Decl(validMultipleVariableDeclarations.ts, 26, 8))
 >s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 26, 10))
 
 var fn: (s: string) => number;

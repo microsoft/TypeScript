@@ -27,10 +27,8 @@ interface Take<T> {
 // Infer string from second argument because it isn't context sensitive
 foo(n => n.length, () => 'hi');
 >foo : Symbol(foo, Decl(inferenceFromParameterlessLambda.ts, 0, 0))
->n => n.length : Symbol((Anonymous function), Decl(inferenceFromParameterlessLambda.ts, 8, 4))
 >n : Symbol(n, Decl(inferenceFromParameterlessLambda.ts, 8, 4))
 >n.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >n : Symbol(n, Decl(inferenceFromParameterlessLambda.ts, 8, 4))
 >length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
->() => 'hi' : Symbol((Anonymous function), Decl(inferenceFromParameterlessLambda.ts, 8, 18))
 

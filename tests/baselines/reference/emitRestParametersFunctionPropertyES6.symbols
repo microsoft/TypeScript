@@ -9,7 +9,6 @@ var obj: {
 
 var obj2 = {
 >obj2 : Symbol(obj2, Decl(emitRestParametersFunctionPropertyES6.ts, 4, 3))
->{    func(...rest) { }} : Symbol(, Decl(emitRestParametersFunctionPropertyES6.ts, 4, 10))
 
     func(...rest) { }
 >func : Symbol(func, Decl(emitRestParametersFunctionPropertyES6.ts, 4, 12))

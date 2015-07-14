@@ -13,18 +13,15 @@ type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 var tree: Tree<number> = {
 >tree : Symbol(tree, Decl(genericTypeAliases.ts, 2, 3))
 >Tree : Symbol(Tree, Decl(genericTypeAliases.ts, 0, 0))
->{    left: {        left: 0,        right: {            left: 1,            right: 2        },    },    right: 3} : Symbol(, Decl(genericTypeAliases.ts, 2, 24))
 
     left: {
 >left : Symbol(left, Decl(genericTypeAliases.ts, 2, 26))
->{        left: 0,        right: {            left: 1,            right: 2        },    } : Symbol(, Decl(genericTypeAliases.ts, 3, 9))
 
         left: 0,
 >left : Symbol(left, Decl(genericTypeAliases.ts, 3, 11))
 
         right: {
 >right : Symbol(right, Decl(genericTypeAliases.ts, 4, 16))
->{            left: 1,            right: 2        } : Symbol(, Decl(genericTypeAliases.ts, 5, 14))
 
             left: 1,
 >left : Symbol(left, Decl(genericTypeAliases.ts, 5, 16))
@@ -54,7 +51,6 @@ ls = "eager";
 
 ls = () => "lazy";
 >ls : Symbol(ls, Decl(genericTypeAliases.ts, 15, 3))
->() => "lazy" : Symbol((Anonymous function), Decl(genericTypeAliases.ts, 17, 4))
 
 type Foo<T> = T | { x: Foo<T> };
 >Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 17, 18))
@@ -94,14 +90,11 @@ x = "string";
 
 x = { x: "hello" };
 >x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
->{ x: "hello" } : Symbol(, Decl(genericTypeAliases.ts, 29, 3))
 >x : Symbol(x, Decl(genericTypeAliases.ts, 29, 5))
 
 x = { x: { x: "world" } };
 >x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
->{ x: { x: "world" } } : Symbol(, Decl(genericTypeAliases.ts, 30, 3))
 >x : Symbol(x, Decl(genericTypeAliases.ts, 30, 5))
->{ x: "world" } : Symbol(, Decl(genericTypeAliases.ts, 30, 8))
 >x : Symbol(x, Decl(genericTypeAliases.ts, 30, 10))
 
 var z: Foo<number>;
@@ -113,14 +106,11 @@ z = 42;
 
 z = { x: 42 };
 >z : Symbol(z, Decl(genericTypeAliases.ts, 32, 3))
->{ x: 42 } : Symbol(, Decl(genericTypeAliases.ts, 34, 3))
 >x : Symbol(x, Decl(genericTypeAliases.ts, 34, 5))
 
 z = { x: { x: 42 } };
 >z : Symbol(z, Decl(genericTypeAliases.ts, 32, 3))
->{ x: { x: 42 } } : Symbol(, Decl(genericTypeAliases.ts, 35, 3))
 >x : Symbol(x, Decl(genericTypeAliases.ts, 35, 5))
->{ x: 42 } : Symbol(, Decl(genericTypeAliases.ts, 35, 8))
 >x : Symbol(x, Decl(genericTypeAliases.ts, 35, 10))
 
 type Strange<T> = string;  // Type parameter not used

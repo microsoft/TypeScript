@@ -7,7 +7,6 @@ module M {
     }
     var bar = () => { };
 >bar : Symbol(bar, Decl(innerBoundLambdaEmit.ts, 3, 7))
->() => { } : Symbol((Anonymous function), Decl(innerBoundLambdaEmit.ts, 3, 13))
 }
 interface Array<T> {
 >Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(innerBoundLambdaEmit.ts, 4, 1))

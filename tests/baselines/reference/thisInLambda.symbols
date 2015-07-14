@@ -15,7 +15,6 @@ class Foo {
 
         var f = () => this.x; // 'this' should be type 'Foo' as well
 >f : Symbol(f, Decl(thisInLambda.ts, 4, 11))
->() => this.x : Symbol((Anonymous function), Decl(thisInLambda.ts, 4, 15))
 >this.x : Symbol(x, Decl(thisInLambda.ts, 0, 11))
 >this : Symbol(Foo, Decl(thisInLambda.ts, 0, 0))
 >x : Symbol(x, Decl(thisInLambda.ts, 0, 11))
@@ -32,11 +31,9 @@ class myCls {
     constructor () {
         myFn(() => {
 >myFn : Symbol(myFn, Decl(thisInLambda.ts, 6, 1))
->() => {            myFn(() => {                var x = this;            });        } : Symbol((Anonymous function), Decl(thisInLambda.ts, 11, 13))
 
             myFn(() => {
 >myFn : Symbol(myFn, Decl(thisInLambda.ts, 6, 1))
->() => {                var x = this;            } : Symbol((Anonymous function), Decl(thisInLambda.ts, 12, 17))
 
                 var x = this;
 >x : Symbol(x, Decl(thisInLambda.ts, 13, 19))

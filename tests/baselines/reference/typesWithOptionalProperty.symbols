@@ -30,22 +30,18 @@ var a: {
 
 var b = { foo: '' };
 >b : Symbol(b, Decl(typesWithOptionalProperty.ts, 14, 3))
->{ foo: '' } : Symbol(, Decl(typesWithOptionalProperty.ts, 14, 7))
 >foo : Symbol(foo, Decl(typesWithOptionalProperty.ts, 14, 9))
 
 var c = { foo: '', bar: 3 };
 >c : Symbol(c, Decl(typesWithOptionalProperty.ts, 15, 3))
->{ foo: '', bar: 3 } : Symbol(, Decl(typesWithOptionalProperty.ts, 15, 7))
 >foo : Symbol(foo, Decl(typesWithOptionalProperty.ts, 15, 9))
 >bar : Symbol(bar, Decl(typesWithOptionalProperty.ts, 15, 18))
 
 var d = { foo: '', bar: 3, baz: () => '' };
 >d : Symbol(d, Decl(typesWithOptionalProperty.ts, 16, 3))
->{ foo: '', bar: 3, baz: () => '' } : Symbol(, Decl(typesWithOptionalProperty.ts, 16, 7))
 >foo : Symbol(foo, Decl(typesWithOptionalProperty.ts, 16, 9))
 >bar : Symbol(bar, Decl(typesWithOptionalProperty.ts, 16, 18))
 >baz : Symbol(baz, Decl(typesWithOptionalProperty.ts, 16, 26))
->() => '' : Symbol((Anonymous function), Decl(typesWithOptionalProperty.ts, 16, 31))
 
 var i: I;
 >i : Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))

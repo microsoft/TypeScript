@@ -92,7 +92,6 @@ var r4 = a['1.1'];
 
 var b = {
 >b : Symbol(b, Decl(objectTypeWithNumericProperty.ts, 34, 3))
->{    1: 1,    1.1: ""} : Symbol(, Decl(objectTypeWithNumericProperty.ts, 34, 7))
 
     1: 1,
     1.1: ""

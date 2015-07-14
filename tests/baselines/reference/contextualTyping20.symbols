@@ -2,12 +2,9 @@
 var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, {id:2, name:"foo"}];
 >foo : Symbol(foo, Decl(contextualTyping20.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping20.ts, 0, 9))
->{id:1} : Symbol(, Decl(contextualTyping20.ts, 0, 26))
 >id : Symbol(id, Decl(contextualTyping20.ts, 0, 27))
 >foo : Symbol(foo, Decl(contextualTyping20.ts, 0, 3))
->{id:1} : Symbol(, Decl(contextualTyping20.ts, 0, 42))
 >id : Symbol(id, Decl(contextualTyping20.ts, 0, 43))
->{id:2, name:"foo"} : Symbol(, Decl(contextualTyping20.ts, 0, 49))
 >id : Symbol(id, Decl(contextualTyping20.ts, 0, 51))
 >name : Symbol(name, Decl(contextualTyping20.ts, 0, 56))
 

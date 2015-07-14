@@ -10,7 +10,6 @@ var a: any;
 
 var v = {
 >v : Symbol(v, Decl(computedPropertyNames4_ES5.ts, 3, 3))
->{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : Symbol(, Decl(computedPropertyNames4_ES5.ts, 3, 7))
 
     [s]: 0,
 >s : Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))

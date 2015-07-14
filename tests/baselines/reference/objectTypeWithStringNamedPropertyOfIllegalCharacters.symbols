@@ -96,7 +96,6 @@ var r4 = a["~!@#$%^&*()_+{}|:'<>?\/.,`"];
 
 var b = {
 >b : Symbol(b, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 41, 3))
->{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : Symbol(, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 41, 7))
 
     "   ": 1,
     "a   b": "",

@@ -1,7 +1,6 @@
 === tests/cases/compiler/variableDeclarator1.ts ===
 var a = function () {
 >a : Symbol(a, Decl(variableDeclarator1.ts, 0, 3))
->function () {        var c = 1;        return c;    } : Symbol((Anonymous function), Decl(variableDeclarator1.ts, 0, 7))
 
         var c = 1;
 >c : Symbol(c, Decl(variableDeclarator1.ts, 1, 11))

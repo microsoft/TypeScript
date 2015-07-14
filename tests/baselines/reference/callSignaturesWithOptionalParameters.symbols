@@ -7,13 +7,11 @@ function foo(x?: number) { }
 
 var f = function foo(x?: number) { }
 >f : Symbol(f, Decl(callSignaturesWithOptionalParameters.ts, 3, 3))
->function foo(x?: number) { } : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 3, 7))
 >foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 3, 7))
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 3, 21))
 
 var f2 = (x: number, y?: number) => { }
 >f2 : Symbol(f2, Decl(callSignaturesWithOptionalParameters.ts, 4, 3))
->(x: number, y?: number) => { } : Symbol((Anonymous function), Decl(callSignaturesWithOptionalParameters.ts, 4, 8))
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 4, 10))
 >y : Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 4, 20))
 
@@ -118,7 +116,6 @@ a.foo(1);
 
 var b = {
 >b : Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
->{    foo(x?: number) { },    a: function foo(x: number, y?: number) { },    b: (x?: number) => { }} : Symbol(, Decl(callSignaturesWithOptionalParameters.ts, 42, 7))
 
     foo(x?: number) { },
 >foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 42, 9))
@@ -126,14 +123,12 @@ var b = {
 
     a: function foo(x: number, y?: number) { },
 >a : Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 43, 24))
->function foo(x: number, y?: number) { } : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 44, 6))
 >foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 44, 6))
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 44, 20))
 >y : Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 44, 30))
 
     b: (x?: number) => { }
 >b : Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 44, 47))
->(x?: number) => { } : Symbol((Anonymous function), Decl(callSignaturesWithOptionalParameters.ts, 45, 6))
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 45, 8))
 }
 

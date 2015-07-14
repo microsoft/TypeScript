@@ -18,10 +18,8 @@ var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello"
 >b2 : Symbol(b2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 10))
 >x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 15))
 >c2 : Symbol(c2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 20))
->{ x12: 10, y12: false } : Symbol(, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 39))
 >x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 41))
 >y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 50))
->{ x12: 5, y12: true } : Symbol(, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 81))
 >x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 83))
 >y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 91))
 
@@ -34,7 +32,6 @@ var [a3, b3] = [[x13, y13], { x: x13, y: y13 }];
 >b3 : Symbol(b3, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 8))
 >x13 : Symbol(x13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 5))
 >y13 : Symbol(y13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 9))
->{ x: x13, y: y13 } : Symbol(, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 27))
 >x : Symbol(x, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 29))
 >x13 : Symbol(x13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 5))
 >y : Symbol(y, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 37))

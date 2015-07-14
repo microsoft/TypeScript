@@ -1,7 +1,6 @@
 === tests/cases/compiler/generatorES6_4.ts ===
 var v = { 
 >v : Symbol(v, Decl(generatorES6_4.ts, 0, 3))
->{    *foo() {       yield 0   }} : Symbol(, Decl(generatorES6_4.ts, 0, 7))
 
    *foo() {
 >foo : Symbol(foo, Decl(generatorES6_4.ts, 0, 9))

@@ -28,14 +28,12 @@ function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 var r = foo({ a: moduleA });
 >r : Symbol(r, Decl(aliasUsageInGenericFunction_main.ts, 8, 3))
 >foo : Symbol(foo, Decl(aliasUsageInGenericFunction_main.ts, 4, 1))
->{ a: moduleA } : Symbol(, Decl(aliasUsageInGenericFunction_main.ts, 8, 12))
 >a : Symbol(a, Decl(aliasUsageInGenericFunction_main.ts, 8, 13))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInGenericFunction_main.ts, 0, 66))
 
 var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : Symbol(r2, Decl(aliasUsageInGenericFunction_main.ts, 9, 3))
 >foo : Symbol(foo, Decl(aliasUsageInGenericFunction_main.ts, 4, 1))
->{ a: <IHasVisualizationModel>null } : Symbol(, Decl(aliasUsageInGenericFunction_main.ts, 9, 13))
 >a : Symbol(a, Decl(aliasUsageInGenericFunction_main.ts, 9, 14))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInGenericFunction_main.ts, 1, 64))
 

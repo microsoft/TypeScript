@@ -12,12 +12,10 @@ function suggest(){
 >TypeScriptKeywords.forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
 >TypeScriptKeywords : Symbol(TypeScriptKeywords, Decl(targetTypeObjectLiteralToAny.ts, 1, 4))
 >forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
->function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	} : Symbol((Anonymous function), Decl(targetTypeObjectLiteralToAny.ts, 4, 28))
 >keyword : Symbol(keyword, Decl(targetTypeObjectLiteralToAny.ts, 4, 37))
 
 		result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any
 >result : Symbol(result, Decl(targetTypeObjectLiteralToAny.ts, 2, 4))
->{text:keyword, type:"keyword"} : Symbol(, Decl(targetTypeObjectLiteralToAny.ts, 5, 14))
 >text : Symbol(text, Decl(targetTypeObjectLiteralToAny.ts, 5, 15))
 >keyword : Symbol(keyword, Decl(targetTypeObjectLiteralToAny.ts, 4, 37))
 >type : Symbol(type, Decl(targetTypeObjectLiteralToAny.ts, 5, 28))

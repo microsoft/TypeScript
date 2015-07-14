@@ -2,8 +2,6 @@
 var foo = <{ id: number; }[]>[{ id: 4 }, <{ id: number; }>({  })];
 >foo : Symbol(foo, Decl(contextualTyping36.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping36.ts, 0, 12))
->{ id: 4 } : Symbol(, Decl(contextualTyping36.ts, 0, 30))
 >id : Symbol(id, Decl(contextualTyping36.ts, 0, 31))
 >id : Symbol(id, Decl(contextualTyping36.ts, 0, 43))
->{  } : Symbol(, Decl(contextualTyping36.ts, 0, 59))
 

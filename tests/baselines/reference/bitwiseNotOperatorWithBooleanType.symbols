@@ -37,7 +37,6 @@ var ResultIsNumber2 = ~true;
 
 var ResultIsNumber3 = ~{ x: true, y: false };
 >ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(bitwiseNotOperatorWithBooleanType.ts, 20, 3))
->{ x: true, y: false } : Symbol(, Decl(bitwiseNotOperatorWithBooleanType.ts, 20, 23))
 >x : Symbol(x, Decl(bitwiseNotOperatorWithBooleanType.ts, 20, 24))
 >y : Symbol(y, Decl(bitwiseNotOperatorWithBooleanType.ts, 20, 33))
 

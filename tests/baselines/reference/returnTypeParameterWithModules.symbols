@@ -63,7 +63,6 @@ module M2 {
 >C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
 
     return function (x) { return g(f(x)); }
->function (x) { return g(f(x)); } : Symbol((Anonymous function), Decl(returnTypeParameterWithModules.ts, 11, 10))
 >x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 11, 21))
 >g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 38))
 >f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 53))

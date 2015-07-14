@@ -44,7 +44,6 @@ var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), 
 >m.g : Symbol(m.g, Decl(declFileTypeAnnotationTupleType.ts, 5, 5))
 >m : Symbol(m, Decl(declFileTypeAnnotationTupleType.ts, 2, 1))
 >g : Symbol(m.g, Decl(declFileTypeAnnotationTupleType.ts, 5, 5))
->() => new c() : Symbol((Anonymous function), Decl(declFileTypeAnnotationTupleType.ts, 16, 79))
 >c : Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
 
 var y = x;

@@ -17,7 +17,6 @@ module Bugs {
 >message.replace : Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
 >message : Symbol(message, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 16))
 >replace : Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
->function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : Symbol((Anonymous function), Decl(overloadResolutionOverNonCTLambdas.ts, 6, 45))
 >match : Symbol(match, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 55))
 >rest : Symbol(rest, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 61))
 
@@ -59,7 +58,6 @@ bug3(fprime);
 
 bug3(function(x:string):string { return x; });
 >bug3 : Symbol(bug3, Decl(overloadResolutionOverNonCTLambdas.ts, 14, 1))
->function(x:string):string { return x; } : Symbol((Anonymous function), Decl(overloadResolutionOverNonCTLambdas.ts, 22, 5))
 >x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 22, 14))
 >x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 22, 14))
 

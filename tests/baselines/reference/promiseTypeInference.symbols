@@ -44,7 +44,6 @@ var $$x = load("something").then(s => convert(s));
 >load("something").then : Symbol(Promise.then, Decl(promiseTypeInference.ts, 0, 26))
 >load : Symbol(load, Decl(promiseTypeInference.ts, 5, 1))
 >then : Symbol(Promise.then, Decl(promiseTypeInference.ts, 0, 26))
->s => convert(s) : Symbol((Anonymous function), Decl(promiseTypeInference.ts, 9, 33))
 >s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))
 >convert : Symbol(convert, Decl(promiseTypeInference.ts, 6, 53))
 >s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))

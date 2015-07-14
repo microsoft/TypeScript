@@ -24,7 +24,6 @@ var s: string;
 // dotted name
 var dottedIdentity = { x: identity };
 >dottedIdentity : Symbol(dottedIdentity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 3))
->{ x: identity } : Symbol(, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 20))
 >x : Symbol(x, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 22))
 >identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
 
@@ -46,7 +45,6 @@ s = map("", dottedIdentity['x']);
 s = map("", (() => identity)());
 >s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
 >map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
->() => identity : Symbol((Anonymous function), Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 12, 13))
 >identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
 
 // construct

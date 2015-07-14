@@ -5,7 +5,6 @@ var salt:any = new salt.pepper();
 
 salt.pepper = function() {}
 >salt : Symbol(salt, Decl(recur1.ts, 0, 3))
->function() {} : Symbol((Anonymous function), Decl(recur1.ts, 1, 13))
 
 var cobalt = new cobalt.pitch();   
 >cobalt : Symbol(cobalt, Decl(recur1.ts, 3, 3))
@@ -13,6 +12,5 @@ var cobalt = new cobalt.pitch();
 
 cobalt.pitch = function() {}
 >cobalt : Symbol(cobalt, Decl(recur1.ts, 3, 3))
->function() {} : Symbol((Anonymous function), Decl(recur1.ts, 4, 14))
  
 

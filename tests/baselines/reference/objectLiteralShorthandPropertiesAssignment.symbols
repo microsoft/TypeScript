@@ -9,7 +9,6 @@ var person: { name: string; id: number } = { name, id };
 >person : Symbol(person, Decl(objectLiteralShorthandPropertiesAssignment.ts, 3, 3))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 3, 13))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 3, 27))
->{ name, id } : Symbol(, Decl(objectLiteralShorthandPropertiesAssignment.ts, 3, 42))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 3, 44))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 3, 50))
 
@@ -22,7 +21,6 @@ function bar(name: string, id: number) { return { name, id }; }
 >bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignment.ts, 4, 46))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 5, 13))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 5, 26))
->{ name, id } : Symbol(, Decl(objectLiteralShorthandPropertiesAssignment.ts, 5, 47))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 5, 49))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 5, 55))
 
@@ -30,7 +28,6 @@ function bar1(name: string, id: number) { return { name }; }
 >bar1 : Symbol(bar1, Decl(objectLiteralShorthandPropertiesAssignment.ts, 5, 63))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 6, 14))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 6, 27))
->{ name } : Symbol(, Decl(objectLiteralShorthandPropertiesAssignment.ts, 6, 48))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 6, 50))
 
 function baz(name: string, id: number): { name: string; id: number } { return { name, id }; }
@@ -39,7 +36,6 @@ function baz(name: string, id: number): { name: string; id: number } { return { 
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 7, 26))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 7, 41))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 7, 55))
->{ name, id } : Symbol(, Decl(objectLiteralShorthandPropertiesAssignment.ts, 7, 77))
 >name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignment.ts, 7, 79))
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignment.ts, 7, 85))
 

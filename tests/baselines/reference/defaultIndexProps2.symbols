@@ -14,7 +14,6 @@ var f = new Foo();
 
 var o = {v:"Yo2"};
 >o : Symbol(o, Decl(defaultIndexProps2.ts, 8, 3))
->{v:"Yo2"} : Symbol(, Decl(defaultIndexProps2.ts, 8, 7))
 >v : Symbol(v, Decl(defaultIndexProps2.ts, 8, 9))
 
 // WScript.Echo(o[0]);

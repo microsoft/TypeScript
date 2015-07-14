@@ -44,28 +44,24 @@ var r = foo(new Function());
 var r1 = foo((x) => x);
 >r1 : Symbol(r1, Decl(functionConstraintSatisfaction.ts, 18, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
->(x) => x : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 18, 13))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 18, 14))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 18, 14))
 
 var r2 = foo((x: string[]) => x);
 >r2 : Symbol(r2, Decl(functionConstraintSatisfaction.ts, 19, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
->(x: string[]) => x : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 19, 13))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 19, 14))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 19, 14))
 
 var r3 = foo(function (x) { return x });
 >r3 : Symbol(r3, Decl(functionConstraintSatisfaction.ts, 20, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
->function (x) { return x } : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 20, 13))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 20, 23))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 20, 23))
 
 var r4 = foo(function (x: string[]) { return x });
 >r4 : Symbol(r4, Decl(functionConstraintSatisfaction.ts, 21, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
->function (x: string[]) { return x } : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 21, 13))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 21, 23))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 21, 23))
 
@@ -141,7 +137,6 @@ var c2: { <T>(x: T): T; <T>(x: T, y: T): T };
 var r9 = foo(<U>(x: U) => x);
 >r9 : Symbol(r9, Decl(functionConstraintSatisfaction.ts, 40, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
-><U>(x: U) => x : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 40, 13))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 40, 14))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 40, 17))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 40, 14))
@@ -150,7 +145,6 @@ var r9 = foo(<U>(x: U) => x);
 var r10 = foo(function <U>(x: U) { return x; });
 >r10 : Symbol(r10, Decl(functionConstraintSatisfaction.ts, 41, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
->function <U>(x: U) { return x; } : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 41, 14))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 41, 24))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 41, 27))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 41, 24))
@@ -159,7 +153,6 @@ var r10 = foo(function <U>(x: U) { return x; });
 var r11 = foo(<U extends Date>(x: U) => x);
 >r11 : Symbol(r11, Decl(functionConstraintSatisfaction.ts, 42, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
-><U extends Date>(x: U) => x : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 42, 14))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
 >Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))
@@ -169,7 +162,6 @@ var r11 = foo(<U extends Date>(x: U) => x);
 var r12 = foo(<U, V>(x: U, y: V) => x);
 >r12 : Symbol(r12, Decl(functionConstraintSatisfaction.ts, 43, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
-><U, V>(x: U, y: V) => x : Symbol((Anonymous function), Decl(functionConstraintSatisfaction.ts, 43, 14))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 43, 15))
 >V : Symbol(V, Decl(functionConstraintSatisfaction.ts, 43, 17))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 43, 21))

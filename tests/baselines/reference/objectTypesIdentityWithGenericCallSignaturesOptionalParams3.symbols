@@ -86,7 +86,6 @@ var a: { foo<T, U>(x: T, y?: U): T }
 
 var b = { foo<T, U>(x: T, y: U) { return x; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 3))
->{ foo<T, U>(x: T, y: U) { return x; } } : Symbol(, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 7))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 14))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 16))

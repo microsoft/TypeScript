@@ -50,7 +50,6 @@ var a: { new<T>(x: T): T }
 
 var b = { new<T>(x: T): T { return null; } }; // not a construct signature, function called new
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 21, 3))
->{ new<T>(x: T): T { return null; } } : Symbol(, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 21, 7))
 >new : Symbol(new, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 21, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 21, 14))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 21, 17))

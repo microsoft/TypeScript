@@ -120,7 +120,6 @@ throw aGenericClass;
 
 var anObjectLiteral = { id: 12 };
 >anObjectLiteral : Symbol(anObjectLiteral, Decl(throwStatements.ts, 46, 3))
->{ id: 12 } : Symbol(, Decl(throwStatements.ts, 46, 21))
 >id : Symbol(id, Decl(throwStatements.ts, 46, 23))
 
 throw anObjectLiteral;
@@ -138,7 +137,6 @@ throw aFunction('');
 
 var aLambda = (x) => 2;
 >aLambda : Symbol(aLambda, Decl(throwStatements.ts, 52, 3))
->(x) => 2 : Symbol((Anonymous function), Decl(throwStatements.ts, 52, 13))
 >x : Symbol(x, Decl(throwStatements.ts, 52, 15))
 
 throw aLambda;
@@ -191,16 +189,12 @@ throw undefined;
 
 throw 'a string';
 throw function () { return 'a string' };
->function () { return 'a string' } : Symbol((Anonymous function), Decl(throwStatements.ts, 74, 5))
-
 throw <T>(x:T) => 42;
-><T>(x:T) => 42 : Symbol((Anonymous function), Decl(throwStatements.ts, 75, 5))
 >T : Symbol(T, Decl(throwStatements.ts, 75, 7))
 >x : Symbol(x, Decl(throwStatements.ts, 75, 10))
 >T : Symbol(T, Decl(throwStatements.ts, 75, 7))
 
 throw { x: 12, y: 13 };
->{ x: 12, y: 13 } : Symbol(, Decl(throwStatements.ts, 76, 5))
 >x : Symbol(x, Decl(throwStatements.ts, 76, 7))
 >y : Symbol(y, Decl(throwStatements.ts, 76, 14))
 

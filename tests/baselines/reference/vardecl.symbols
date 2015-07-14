@@ -16,7 +16,6 @@ var varWithInitialValue = 30;
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : Symbol(withComplicatedValue, Decl(vardecl.ts, 8, 3))
->{ x: 30, y: 70, desc: "position" } : Symbol(, Decl(vardecl.ts, 8, 26))
 >x : Symbol(x, Decl(vardecl.ts, 8, 28))
 >y : Symbol(y, Decl(vardecl.ts, 8, 35))
 >desc : Symbol(desc, Decl(vardecl.ts, 8, 42))
@@ -45,7 +44,6 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push : Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
 >complicatedArrayVar : Symbol(complicatedArrayVar, Decl(vardecl.ts, 18, 3))
 >push : Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
->{ x: 30, y : 'hello world' } : Symbol(, Decl(vardecl.ts, 19, 25))
 >x : Symbol(x, Decl(vardecl.ts, 19, 26))
 >y : Symbol(y, Decl(vardecl.ts, 19, 33))
 

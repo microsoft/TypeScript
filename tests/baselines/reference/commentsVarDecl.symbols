@@ -48,7 +48,6 @@ var yy =
 /** comment2 */
 var z = /** lambda comment */ (x: number, y: number) => x + y;
 >z : Symbol(z, Decl(commentsVarDecl.ts, 35, 3))
->(x: number, y: number) => x + y : Symbol((Anonymous function), Decl(commentsVarDecl.ts, 35, 7))
 >x : Symbol(x, Decl(commentsVarDecl.ts, 35, 31))
 >y : Symbol(y, Decl(commentsVarDecl.ts, 35, 41))
 >x : Symbol(x, Decl(commentsVarDecl.ts, 35, 31))

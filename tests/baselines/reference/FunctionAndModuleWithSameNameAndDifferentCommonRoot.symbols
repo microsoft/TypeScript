@@ -6,7 +6,6 @@ module A {
 >Point : Symbol(Point, Decl(function.ts, 0, 10))
 
         return { x: 0, y: 0 };
->{ x: 0, y: 0 } : Symbol(, Decl(function.ts, 2, 14))
 >x : Symbol(x, Decl(function.ts, 2, 16))
 >y : Symbol(y, Decl(function.ts, 2, 22))
     }
@@ -21,7 +20,6 @@ module B {
 
         export var Origin = { x: 0, y: 0 };
 >Origin : Symbol(Origin, Decl(module.ts, 2, 18))
->{ x: 0, y: 0 } : Symbol(, Decl(module.ts, 2, 27))
 >x : Symbol(x, Decl(module.ts, 2, 29))
 >y : Symbol(y, Decl(module.ts, 2, 35))
     }

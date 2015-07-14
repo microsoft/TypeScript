@@ -76,11 +76,9 @@ var r3b: string = a()['toString']();
 
 var b = {
 >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 3))
->{    foo: <T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    }} : Symbol(, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 7))
 
     foo: <T>(x: T) => {
 >foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 9))
-><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : Symbol((Anonymous function), Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 8))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 10))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 13))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 10))

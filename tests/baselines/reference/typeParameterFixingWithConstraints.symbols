@@ -34,10 +34,7 @@ foo.foo({ bar: null }, bar => null, bar => null);
 >foo.foo : Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
 >foo : Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 8, 3))
 >foo : Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
->{ bar: null } : Symbol(, Decl(typeParameterFixingWithConstraints.ts, 9, 8))
 >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 9))
->bar => null : Symbol((Anonymous function), Decl(typeParameterFixingWithConstraints.ts, 9, 22))
 >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 22))
->bar => null : Symbol((Anonymous function), Decl(typeParameterFixingWithConstraints.ts, 9, 35))
 >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 35))
 

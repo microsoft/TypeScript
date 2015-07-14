@@ -91,7 +91,6 @@ class SomeClass {
 		var rewrites1 = <div>{() => this}</div>;
 >rewrites1 : Symbol(rewrites1, Decl(tsxEmit1.tsx, 24, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
->() => this : Symbol((Anonymous function), Decl(tsxEmit1.tsx, 24, 24))
 >this : Symbol(SomeClass, Decl(tsxEmit1.tsx, 20, 43))
 
 		var rewrites2 = <div>{[p, ...p, p]}</div>;
@@ -104,14 +103,12 @@ class SomeClass {
 		var rewrites3 = <div>{{p}}</div>;
 >rewrites3 : Symbol(rewrites3, Decl(tsxEmit1.tsx, 26, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
->{p} : Symbol(, Decl(tsxEmit1.tsx, 26, 24))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 26, 25))
 
 		var rewrites4 = <div a={() => this}></div>;
 >rewrites4 : Symbol(rewrites4, Decl(tsxEmit1.tsx, 28, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >a : Symbol(unknown)
->() => this : Symbol((Anonymous function), Decl(tsxEmit1.tsx, 28, 26))
 >this : Symbol(SomeClass, Decl(tsxEmit1.tsx, 20, 43))
 
 		var rewrites5 = <div a={[p, ...p, p]}></div>;
@@ -126,7 +123,6 @@ class SomeClass {
 >rewrites6 : Symbol(rewrites6, Decl(tsxEmit1.tsx, 30, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >a : Symbol(unknown)
->{p} : Symbol(, Decl(tsxEmit1.tsx, 30, 26))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 30, 27))
 	}
 }

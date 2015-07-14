@@ -21,6 +21,5 @@ var x: B.A1.I = { x: 1 };
 >B : Symbol(B, Decl(exportImportNonInstantiatedModule.ts, 2, 1))
 >A1 : Symbol(B.A1, Decl(exportImportNonInstantiatedModule.ts, 4, 10))
 >I : Symbol(A.I, Decl(exportImportNonInstantiatedModule.ts, 0, 10))
->{ x: 1 } : Symbol(, Decl(exportImportNonInstantiatedModule.ts, 9, 15))
 >x : Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 9, 17))
 

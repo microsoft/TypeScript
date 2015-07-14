@@ -39,7 +39,6 @@ EIGHT:
 while (true) {
     var fn = function () { }
 >fn : Symbol(fn, Decl(whileBreakStatements.ts, 38, 7))
->function () { } : Symbol((Anonymous function), Decl(whileBreakStatements.ts, 38, 12))
 
     break EIGHT;
 }

@@ -16,5 +16,4 @@ interface IDirectChildrenMap {
 var directChildrenMap = <IDirectChildrenMap>{}; 
 >directChildrenMap : Symbol(directChildrenMap, Decl(indexer2.ts, 5, 3))
 >IDirectChildrenMap : Symbol(IDirectChildrenMap, Decl(indexer2.ts, 0, 32))
->{} : Symbol(, Decl(indexer2.ts, 5, 44))
 

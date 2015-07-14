@@ -1,7 +1,6 @@
 === tests/cases/compiler/typeArgumentsInFunctionExpressions.ts ===
 var obj = function f<T>(a: T) { // should not error
 >obj : Symbol(obj, Decl(typeArgumentsInFunctionExpressions.ts, 0, 3))
->function f<T>(a: T) { // should not error    var x: T;    return a;} : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 0, 9))
 >f : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 0, 9))
 >T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
 >a : Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 0, 24))
@@ -18,7 +17,6 @@ var obj = function f<T>(a: T) { // should not error
  
 var obj2 = function f<T>(a: T): T { // should not error
 >obj2 : Symbol(obj2, Decl(typeArgumentsInFunctionExpressions.ts, 5, 3))
->function f<T>(a: T): T { // should not error    var x: T;    return a;} : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 5, 10))
 >f : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 5, 10))
 >T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
 >a : Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 5, 25))

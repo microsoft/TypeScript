@@ -24,25 +24,21 @@ interface Window {
 }
 var o = {
 >o : Symbol(o, Decl(selfInLambdas.ts, 10, 3))
->{    counter: 0,    start: function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    }} : Symbol(, Decl(selfInLambdas.ts, 10, 7))
 
     counter: 0,
 >counter : Symbol(counter, Decl(selfInLambdas.ts, 10, 9))
 
     start: function() {
 >start : Symbol(start, Decl(selfInLambdas.ts, 12, 15))
->function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    } : Symbol((Anonymous function), Decl(selfInLambdas.ts, 14, 10))
 
         window.onmousemove = () => {
 >window.onmousemove : Symbol(Window.onmousemove, Decl(selfInLambdas.ts, 6, 18))
 >window : Symbol(window, Decl(selfInLambdas.ts, 5, 11))
 >onmousemove : Symbol(Window.onmousemove, Decl(selfInLambdas.ts, 6, 18))
->() => {            this.counter++            var f = () => this.counter;        } : Symbol((Anonymous function), Decl(selfInLambdas.ts, 16, 28))
 
             this.counter++
             var f = () => this.counter;
 >f : Symbol(f, Decl(selfInLambdas.ts, 18, 15))
->() => this.counter : Symbol((Anonymous function), Decl(selfInLambdas.ts, 18, 19))
 
         }
 
@@ -63,7 +59,6 @@ class X {
 
 		var outer= () => {
 >outer : Symbol(outer, Decl(selfInLambdas.ts, 32, 5))
->() => {            var x = this.value;            var inner = () => {                var y = this.value;			}			inner();		} : Symbol((Anonymous function), Decl(selfInLambdas.ts, 32, 12))
 
             var x = this.value;
 >x : Symbol(x, Decl(selfInLambdas.ts, 33, 15))
@@ -73,7 +68,6 @@ class X {
 
             var inner = () => {
 >inner : Symbol(inner, Decl(selfInLambdas.ts, 34, 15))
->() => {                var y = this.value;			} : Symbol((Anonymous function), Decl(selfInLambdas.ts, 34, 23))
 
                 var y = this.value;
 >y : Symbol(y, Decl(selfInLambdas.ts, 35, 19))

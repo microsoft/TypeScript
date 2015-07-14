@@ -4,7 +4,6 @@ function M() {
 
     var m = class C<X> {
 >m : Symbol(m, Decl(classExpressionTest2.ts, 1, 7))
->class C<X> {        f<T>() {            var t: T;            var x: X;            return { t, x };        }    } : Symbol(C, Decl(classExpressionTest2.ts, 1, 11))
 >C : Symbol(C, Decl(classExpressionTest2.ts, 1, 11))
 >X : Symbol(X, Decl(classExpressionTest2.ts, 1, 20))
 
@@ -21,7 +20,6 @@ function M() {
 >X : Symbol(X, Decl(classExpressionTest2.ts, 1, 20))
 
             return { t, x };
->{ t, x } : Symbol(, Decl(classExpressionTest2.ts, 5, 18))
 >t : Symbol(t, Decl(classExpressionTest2.ts, 5, 20))
 >x : Symbol(x, Decl(classExpressionTest2.ts, 5, 23))
         }

@@ -4,14 +4,12 @@ var z: { x: number; y: (w:string)=>number;} = {
 >x : Symbol(x, Decl(targetTypeObjectLiteral.ts, 0, 8))
 >y : Symbol(y, Decl(targetTypeObjectLiteral.ts, 0, 19))
 >w : Symbol(w, Decl(targetTypeObjectLiteral.ts, 0, 24))
->{    x: 12,    y: function(w) {        return 0;    }} : Symbol(, Decl(targetTypeObjectLiteral.ts, 0, 45))
 
     x: 12,
 >x : Symbol(x, Decl(targetTypeObjectLiteral.ts, 0, 47))
 
     y: function(w) {
 >y : Symbol(y, Decl(targetTypeObjectLiteral.ts, 2, 10))
->function(w) {        return 0;    } : Symbol((Anonymous function), Decl(targetTypeObjectLiteral.ts, 4, 6))
 >w : Symbol(w, Decl(targetTypeObjectLiteral.ts, 4, 16))
 
         return 0;

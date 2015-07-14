@@ -14,7 +14,6 @@ Point.prototype.add = function(dx, dy) {
 >Point : Symbol(Point, Decl(assignToPrototype1.ts, 0, 0))
 >prototype : Symbol(Point.prototype)
 >add : Symbol(Point.add, Decl(assignToPrototype1.ts, 0, 21))
->function(dx, dy) {} : Symbol((Anonymous function), Decl(assignToPrototype1.ts, 4, 21))
 >dx : Symbol(dx, Decl(assignToPrototype1.ts, 4, 31))
 >dy : Symbol(dy, Decl(assignToPrototype1.ts, 4, 34))
 

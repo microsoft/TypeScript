@@ -101,7 +101,6 @@ var a: {
 
 var b = {
 >b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 3))
->{    foo(x: any) { return <any>''; }} : Symbol(, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 7))
 
     foo(x: any) { return <any>''; }
 >foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 9))

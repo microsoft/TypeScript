@@ -51,7 +51,6 @@ class D extends C {
 function fn10(): I { return { id: 12 }; } 
 >fn10 : Symbol(fn10, Decl(returnStatements.ts, 17, 1))
 >I : Symbol(I, Decl(returnStatements.ts, 8, 31))
->{ id: 12 } : Symbol(, Decl(returnStatements.ts, 18, 27))
 >id : Symbol(id, Decl(returnStatements.ts, 18, 29))
 
 function fn11(): I { return new C(); }
