@@ -1076,6 +1076,24 @@ namespace ts {
                     return visitExportAssignment(<ExportAssignment>node);
 
                 // declarations
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
+                        forEach((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses, visitHeritageClause);
+
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
+                    // Nothing to visit here
+                    return;
+
+                case SyntaxKind.TypeAliasDeclaration:
+                    return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
+                        visitNode((<TypeAliasDeclaration>node).type);
+
+                case SyntaxKind.TypeParameter:
+                    return visitNode((<TypeParameterDeclaration>node).constraint);
+
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.MethodDeclaration:
@@ -1083,26 +1101,13 @@ namespace ts {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.IndexSignature:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                     return visitSignatureDeclaration(<FunctionLikeDeclaration>node);
 
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return visitAccessorDeclaration(<AccessorDeclaration>node);
-
-                case SyntaxKind.TypeParameter:
-                    return visitNode((<TypeParameterDeclaration>node).constraint);
-
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                    return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
-                        visitNodes((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses);
-
-                case SyntaxKind.HeritageClause:
-                    return visitHeritageClause(<HeritageClause>node);
-
-                case SyntaxKind.TypeAliasDeclaration:
-                    return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
-                        visitNode((<TypeAliasDeclaration>node).type);
 
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
@@ -1111,49 +1116,11 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     return visitPropertyDeclaration(<PropertyDeclaration>node);
 
-                case SyntaxKind.ObjectBindingPattern:
-                case SyntaxKind.ArrayBindingPattern:
-                    return visitNodes((<BindingPattern>node).elements);
-
-                // TypeNodes
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.StringKeyword:
-                case SyntaxKind.NumberKeyword:
-                case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.SymbolKeyword:
-                case SyntaxKind.VoidKeyword:
-                case SyntaxKind.StringLiteral:
-                    // Nothing to visit
-                    return;
-
-                case SyntaxKind.TypePredicate:
-                    return visitNode((<TypePredicateNode>node).type);
-                case SyntaxKind.ArrayType:
-                    return visitNode((<ArrayTypeNode>node).elementType);
-                case SyntaxKind.TupleType:
-                    return visitNodes((<TupleTypeNode>node).elementTypes);
-                case SyntaxKind.UnionType:
-                    return visitNodes((<UnionTypeNode>node).types);
-                case SyntaxKind.ParenthesizedType:
-                    return visitNode((<ParenthesizedTypeNode>node).type);
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                    return visitSignatureDeclaration(<FunctionOrConstructorTypeNode>node);
-                case SyntaxKind.TypeLiteral:
-                    return visitNodes((<TypeLiteralNode>node).members);
-                case SyntaxKind.TypeQuery:
-                    return visitNode((<TypeQueryNode>node).exprName);
-                case SyntaxKind.TypeReference:
-                    return visitNode((<TypeReferenceNode>node).typeName) ||
-                        visitNodes((<TypeReferenceNode>node).typeArguments);
-                case SyntaxKind.QualifiedName:
-                    return visitNode((<QualifiedName>node).left) ||
-                        visitNode((<QualifiedName>node).right);
-                case SyntaxKind.PropertyAccessExpression:
-                    return visitNode((<PropertyAccessExpression>node).expression) ||
-                        visitNode((<PropertyAccessExpression>node).name);
                 case SyntaxKind.Identifier:
                     return visitTypeName(<Identifier>node);
+
+                default:
+                    return forEachChild(node, visitNode);
             }
 
             return;
