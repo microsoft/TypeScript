@@ -3034,7 +3034,7 @@ namespace ts {
                         attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
 
                         if (attrsType) {
-                            symbols = filterJsxAttributes((<JsxOpeningLikeElement>jsxContainer).attributes, typeChecker.getPropertiesOfType(attrsType));
+                            symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
                             isMemberCompletion = true;
                             isNewIdentifierLocation = false;
                             return true;
@@ -3550,7 +3550,7 @@ namespace ts {
              * @returns Symbols to be suggested in a JSX element, barring those whose attributes
              *          do not occur at the current position and have not otherwise been typed.
              */
-            function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+            function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
                 let seenNames: Map<boolean> = {};
                 for (let attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
