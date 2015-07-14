@@ -10,6 +10,7 @@ const enum CompilerTestType {
 
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = 'tests/cases';
+    private testSuiteName: string;
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;
@@ -24,16 +25,17 @@ class CompilerBaselineRunner extends RunnerBase {
         this.decl = true;
         this.output = true;
         if (testType === CompilerTestType.Conformance) {
-            this.basePath += '/conformance';
+            this.testSuiteName = 'conformance';
         }
         else if (testType === CompilerTestType.Regressions) {
-            this.basePath += '/compiler';
+            this.testSuiteName = 'compiler';
         }
         else if (testType === CompilerTestType.Test262) {
-            this.basePath += '/test262';
+            this.testSuiteName = 'test262';
         } else {
-            this.basePath += '/compiler'; // default to this for historical reasons
+            this.testSuiteName = 'compiler'; // default to this for historical reasons
         }
+        this.basePath += '/' + this.testSuiteName;
     }
 
     public checkTestCodeOutput(fileName: string) {
@@ -100,7 +102,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             beforeEach(() => {
-                /* The compiler doesn't handle certain flags flipping during a single compilation setting. Tests on these flags will need 
+                /* The compiler doesn't handle certain flags flipping during a single compilation setting. Tests on these flags will need
                    a fresh compiler instance for themselves and then create a fresh one for the next test. Would be nice to get dev fixes
                    eventually to remove this limitation. */
                 for (var i = 0; i < tcSettings.length; ++i) {
@@ -261,19 +263,19 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
-                    // The full walker simulates the types that you would get from doing a full 
+                    // The full walker simulates the types that you would get from doing a full
                     // compile.  The pull walker simulates the types you get when you just do
                     // a type query for a random node (like how the LS would do it).  Most of the
                     // time, these will be the same.  However, occasionally, they can be different.
                     // Specifically, when the compiler internally depends on symbol IDs to order
-                    // things, then we may see different results because symbols can be created in a 
+                    // things, then we may see different results because symbols can be created in a
                     // different order with 'pull' operations, and thus can produce slightly differing
                     // output.
                     //
                     // For example, with a full type check, we may see a type outputed as: number | string
                     // But with a pull type check, we may see it as:                       string | number
                     //
-                    // These types are equivalent, but depend on what order the compiler observed 
+                    // These types are equivalent, but depend on what order the compiler observed
                     // certain parts of the program.
 
                     let allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
@@ -384,25 +386,27 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public initializeTests() {
-        describe("Setup compiler for compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler();
-            this.parseOptions();
-        });
-
-        // this will set up a series of describe/it blocks to run between the setup and cleanup phases
-        if (this.tests.length === 0) {
-            var testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
-            testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
-                this.checkTestCodeOutput(fn);
+        describe(this.testSuiteName + ' tests', () => {
+            describe("Setup compiler for compiler baselines", () => {
+                var harnessCompiler = Harness.Compiler.getCompiler();
+                this.parseOptions();
             });
-        }
-        else {
-            this.tests.forEach(test => this.checkTestCodeOutput(test));
-        }
 
-        describe("Cleanup after compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler();
+            // this will set up a series of describe/it blocks to run between the setup and cleanup phases
+            if (this.tests.length === 0) {
+                var testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
+                testFiles.forEach(fn => {
+                    fn = fn.replace(/\\/g, "/");
+                    this.checkTestCodeOutput(fn);
+                });
+            }
+            else {
+                this.tests.forEach(test => this.checkTestCodeOutput(test));
+            }
+
+            describe("Cleanup after compiler baselines", () => {
+                var harnessCompiler = Harness.Compiler.getCompiler();
+            });
         });
     }
 

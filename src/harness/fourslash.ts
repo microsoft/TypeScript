@@ -190,14 +190,14 @@ module FourSlash {
         return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
     }
 
-    export class TestCancellationToken implements ts.CancellationToken {
+    export class TestCancellationToken implements ts.HostCancellationToken {
         // 0 - cancelled
         // >0 - not cancelled 
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static NotCancelled: number = -1;
-        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCancelled;
-        public isCancellationRequested(): boolean {
+        private static NotCanceled: number = -1;
+        private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
 
+        public isCancellationRequested(): boolean {
             if (this.numberOfCallsBeforeCancellation < 0) {
                 return false;
             }
@@ -216,7 +216,7 @@ module FourSlash {
         }
 
         public resetCancelled(): void {
-            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCancelled;
+            this.numberOfCallsBeforeCancellation = TestCancellationToken.NotCanceled;
         }
     }
 
@@ -704,13 +704,61 @@ module FourSlash {
             }
         }
 
-        public verifyCompletionListDoesNotContain(symbol: string) {
+        /**
+         * Verify that the completion list does NOT contain the given symbol.
+         * The symbol is considered matched with the symbol in the list if and only if all given parameters must matched.
+         * When any parameter is omitted, the parameter is ignored during comparison and assumed that the parameter with
+         * that property of the symbol in the list.
+         * @param symbol the name of symbol
+         * @param expectedText the text associated with the symbol
+         * @param expectedDocumentation the documentation text associated with the symbol
+         * @param expectedKind the kind of symbol (see ScriptElementKind)
+         */
+        public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string) {
+            let that = this;
+            function filterByTextOrDocumentation(entry: ts.CompletionEntry) {
+                let details = that.getCompletionEntryDetails(entry.name);
+                let documentation = ts.displayPartsToString(details.documentation);
+                let text = ts.displayPartsToString(details.displayParts);
+                if (expectedText && expectedDocumentation) {
+                    return (documentation === expectedDocumentation && text === expectedText) ? true : false;
+                }
+                else if (expectedText && !expectedDocumentation) {
+                    return text === expectedText ? true : false;
+                }
+                else if (expectedDocumentation && !expectedText) {
+                    return documentation === expectedDocumentation ? true : false;
+                }
+                // Because expectedText and expectedDocumentation are undefined, we assume that
+                // users don't care to compare them so we will treat that entry as if the entry has matching text and documentation
+                // and keep it in the list of filtered entry.
+                return true;
+            }
             this.scenarioActions.push('<ShowCompletionList />');
             this.scenarioActions.push('<VerifyCompletionDoesNotContainItem ItemName="' + escapeXmlAttributeValue(symbol) + '" />');
 
             var completions = this.getCompletionListAtCaret();
-            if (completions && completions.entries.filter(e => e.name === symbol).length !== 0) {
-                this.raiseError('Completion list did contain ' + symbol);
+            if (completions) {
+                let filterCompletions = completions.entries.filter(e => e.name === symbol);
+                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
+                filterCompletions = filterCompletions.filter(filterByTextOrDocumentation);
+                if (filterCompletions.length !== 0) {
+                    // After filtered using all present criterion, if there are still symbol left in the list
+                    // then these symbols must meet the criterion for Not supposed to be in the list. So we
+                    // raise an error
+                    let error = "Completion list did contain \'" + symbol + "\'.";
+                    let details = this.getCompletionEntryDetails(filterCompletions[0].name);
+                    if (expectedText) {
+                        error += "Expected text: " + expectedText + " to equal: " + ts.displayPartsToString(details.displayParts) + ".";
+                    }
+                    if (expectedDocumentation) {
+                        error += "Expected documentation: " + expectedDocumentation + " to equal: " + ts.displayPartsToString(details.documentation) + ".";
+                    }
+                    if (expectedKind) {
+                        error += "Expected kind: " + expectedKind + " to equal: " + filterCompletions[0].kind + "."
+                    }
+                    this.raiseError(error);
+                }
             }
         }
 
@@ -2167,7 +2215,7 @@ module FourSlash {
 
             var itemsString = items.map((item) => JSON.stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            this.raiseError('Expected "' + JSON.stringify({ name: name, text: text, documentation: documentation, kind: kind }) + '" to be in list [' + itemsString + ']');
+            this.raiseError('Expected "' + JSON.stringify({ name, text, documentation, kind }) + '" to be in list [' + itemsString + ']');
         }
 
         private findFile(indexOrName: any) {

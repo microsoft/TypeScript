@@ -5,6 +5,7 @@ declare module JSX {
 		[s: string]: any;
 	}
 }
+declare var React: any;
 
 var p;
 var selfClosed1 = <div />;

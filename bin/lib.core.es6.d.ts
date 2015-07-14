@@ -1184,6 +1184,19 @@ declare type ClassDecorator = <TFunction extends Function>(target: TFunction) =>
 declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
+
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+
+interface PromiseLike<T> {
+    /**
+    * Attaches callbacks for the resolution and/or rejection of the Promise.
+    * @param onfulfilled The callback to execute when the Promise is resolved.
+    * @param onrejected The callback to execute when the Promise is rejected.
+    * @returns A Promise for the completion of which ever callback is executed.
+    */
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+}
 declare type PropertyKey = string | number | symbol;
 
 interface Symbol {
@@ -4759,17 +4772,6 @@ declare module Reflect {
     function setPrototypeOf(target: any, proto: any): boolean;
 }
 
-interface PromiseLike<T> {
-    /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
-}
-
 /**
  * Represents the completion of an asynchronous operation
  */
@@ -4789,6 +4791,7 @@ interface Promise<T> {
      * @returns A Promise for the completion of the callback.
      */
     catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
+    catch(onrejected?: (reason: any) => void): Promise<T>;
 
     [Symbol.toStringTag]: string;
 }
