@@ -8,7 +8,10 @@
 ////function f ({ /*1*/next: { /*2*/next: x} }) {
 ////}
 
-for (let { position } of test.markers()) {
-    goTo.position(position)
-    verify.quickInfoIs("(property) next: any");
-}
+goTo.marker("1");
+verify.quickInfoIs(`(property) next: {
+    next: any;
+}`);
+
+goTo.marker("2");
+verify.quickInfoIs("(property) next: any");

@@ -8,8 +8,6 @@
 ////function f ({ [|next|]: { [|next|]: x} }: Recursive) {
 ////}
 
-goTo.marker();
-
 let ranges = test.ranges();
 for (let range of ranges) {
     goTo.position(range.start);
