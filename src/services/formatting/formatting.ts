@@ -653,10 +653,10 @@ namespace ts.formatting {
                         return false;
                     }
 
-                    let argumentEnd = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
+                    let listElementEnd = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
 
                     // single-line argument should not affect other indentation
-                    if (parentListStates.startLine === argumentEnd) {
+                    if (parentListStates.startLine === listElementEnd) {
                         return false;
                     }
 
