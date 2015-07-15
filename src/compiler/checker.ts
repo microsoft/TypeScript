@@ -5841,32 +5841,15 @@ namespace ts {
             }
         }
 
-        function resolveLocation(node: Node) {
-            // Resolve location from top down towards node if it is a context sensitive expression
-            // That helps in making sure not assigning types as any when resolved out of order
-            let containerNodes: Node[] = [];
-            for (let parent = node.parent; parent; parent = parent.parent) {
-                if ((isExpression(parent) || isObjectLiteralMethod(node)) &&
-                    isContextSensitive(<Expression>parent)) {
-                    containerNodes.unshift(parent);
-                }
-            }
-
-            ts.forEach(containerNodes, node => { getTypeOfNode(node); });
-        }
-
         function getSymbolAtLocation(node: Node): Symbol {
-            resolveLocation(node);
             return getSymbolInfo(node);
         }
 
         function getTypeAtLocation(node: Node): Type {
-            resolveLocation(node);
             return getTypeOfNode(node);
         }
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
-            resolveLocation(node);
             // Get the narrowed type of symbol at given location instead of just getting
             // the type of the symbol.
             // eg.
