@@ -68,7 +68,6 @@ namespace ts.formatting {
     }
 
     interface ListStates {
-        indentationLockable: boolean;
         indentationLocked: boolean;
         base: NodeArray<Node>;
         startLine: number;
@@ -611,7 +610,7 @@ namespace ts.formatting {
                 }
 
                 // inherit indentation of preceding argument
-                let {indentationLockable, indentationLocked} = parentListStates || <ListStates>{};
+                let {indentationLocked} = parentListStates || <ListStates>{};
 
                 if (isToken(child) && !outOfTargetRange) {
                     // replace indentation with inherited one, ignoring delta to prevent unexpected over-indentation
@@ -649,7 +648,7 @@ namespace ts.formatting {
                 return inheritedIndentation;
 
                 function checkListElementLockIndentation() {
-                    if (!indentationLockable || parentListStates.indentationLocked /* already cancelled */) {
+                    if (parentListStates.indentationLocked /* already cancelled */) {
                         return false;
                     }
 
@@ -706,7 +705,6 @@ namespace ts.formatting {
                 let inheritedIndentation = Constants.Unknown;
                 let listStates = <ListStates>{
                     base: nodes,
-                    indentationLockable: true,
                     startLine: sourceFile.getLineAndCharacterOfPosition(nodes.pos).line
                 };
                 
