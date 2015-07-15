@@ -50,7 +50,7 @@ namespace ts.formatting {
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) &&
                     shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown) &&
-                    !isListIndentationPrevented(current, sourceFile, options)) {
+                    !isListIndentationPrevented(current, position, sourceFile, options)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -245,49 +245,58 @@ namespace ts.formatting {
         function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> {
             if (node.parent) {
                 switch (node.parent.kind) {
-                    case SyntaxKind.TypeReference:
-                        if ((<TypeReferenceNode>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
-                            return (<TypeReferenceNode>node.parent).typeArguments;
-                        }
-                        break;
                     case SyntaxKind.ObjectLiteralExpression:
                         return (<ObjectLiteralExpression>node.parent).properties;
                     case SyntaxKind.ArrayLiteralExpression:
                         return (<ArrayLiteralExpression>node.parent).elements;
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature: {
-                        let start = node.getStart(sourceFile);
-                        if ((<SignatureDeclaration>node.parent).typeParameters &&
-                            rangeContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
-                            return (<SignatureDeclaration>node.parent).typeParameters;
-                        }
-                        if (rangeContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
-                            return (<SignatureDeclaration>node.parent).parameters;
-                        }
-                        break;
-                    }
-                    case SyntaxKind.NewExpression:
-                    case SyntaxKind.CallExpression: {
-                        let start = node.getStart(sourceFile);
-                        if ((<CallExpression>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
-                            return (<CallExpression>node.parent).typeArguments;
-                        }
-                        if ((<CallExpression>node.parent).arguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
-                            return (<CallExpression>node.parent).arguments;
-                        }
-                        break;
-                    }
+                    default:
+                        return getListByPosition(node.getStart(sourceFile), node.getEnd(), node.parent);
                 }
             }
             return undefined;
+        }
+
+        function getListByPosition(start: number, end: number, node: Node): NodeArray<Node> {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    if ((<TypeReferenceNode>node).typeArguments &&
+                        rangeContainsStartEnd((<TypeReferenceNode>node).typeArguments, start, end)) {
+                        return (<TypeReferenceNode>node).typeArguments;
+                    }
+                    break;
+                case SyntaxKind.ObjectLiteralExpression:
+                    return (<ObjectLiteralExpression>node).properties;
+                case SyntaxKind.ArrayLiteralExpression:
+                    return (<ArrayLiteralExpression>node).elements;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature: {
+                    if ((<SignatureDeclaration>node).typeParameters &&
+                        rangeContainsStartEnd((<SignatureDeclaration>node).typeParameters, start, end)) {
+                        return (<SignatureDeclaration>node).typeParameters;
+                    }
+                    if (rangeContainsStartEnd((<SignatureDeclaration>node).parameters, start, end)) {
+                        return (<SignatureDeclaration>node).parameters;
+                    }
+                    break;
+                }
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression: {
+                    if ((<CallExpression>node).typeArguments &&
+                        rangeContainsStartEnd((<CallExpression>node).typeArguments, start, end)) {
+                        return (<CallExpression>node).typeArguments;
+                    }
+                    if ((<CallExpression>node).arguments &&
+                        rangeContainsStartEnd((<CallExpression>node).arguments, start, end)) {
+                        return (<CallExpression>node).arguments;
+                    }
+                    break;
+                }
+            }
         }
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
@@ -371,43 +380,34 @@ namespace ts.formatting {
             return Value.Unknown;
         }
 
-        function isListIndentationPrevented(node: Node, sourceFile: SourceFile, options: EditorOptions) {
-            if (node.kind === SyntaxKind.CallExpression ||
-                node.kind === SyntaxKind.NewExpression) {
-
-                let arguments = (<CallExpression | NewExpression>node).arguments;
-                if (!arguments.length) {
-                    return false;
-                }
-
-                let ancesterExpression = (<CallExpression | NewExpression>node).expression;
-                let ancesterExpressionEnd = sourceFile.getLineAndCharacterOfPosition(ancesterExpression.end);
-
-                let preventer = findIndentationPreventingArgument(arguments, ancesterExpressionEnd);
-
-                return !!preventer;
+        function isListIndentationPrevented(node: Node, position: number, sourceFile: SourceFile, options: EditorOptions) {
+            let list = getListByPosition(position, position, node);
+            if (!list || !list.length) {
+                return false;
             }
 
-            return false;
+            let listStartLine = sourceFile.getLineAndCharacterOfPosition(list.pos).line;
+            
+            return checkIndentationPrevented(list, listStartLine);
 
-            function findIndentationPreventingArgument(argumentList: Node[], listParentExpressionEnd: LineAndCharacter) {
-                for (let argumentNode of argumentList) {
-                    let argumentEnd = sourceFile.getLineAndCharacterOfPosition(argumentNode.getEnd());
+            function checkIndentationPrevented(list: NodeArray<Node>, listStartLine: number) {
+                for (let listElement of list) {
+                    let listElementEnd = sourceFile.getLineAndCharacterOfPosition(listElement.getEnd());
 
-                    if (argumentEnd.line === listParentExpressionEnd.line) {
+                    if (listElementEnd.line === listStartLine) {
                         continue;
                     }
 
-                    let argumentStart = sourceFile.getLineAndCharacterOfPosition(argumentNode.getStart());
+                    let listElementStart = sourceFile.getLineAndCharacterOfPosition(listElement.getStart());
 
-                    if (argumentStart.line !== listParentExpressionEnd.line) {
+                    if (listElementStart.line !== listStartLine) {
                         continue;
                     }
 
-                    return argumentNode;
+                    return true;
                 }
 
-                return null;
+                return false;
             }
         }
 
