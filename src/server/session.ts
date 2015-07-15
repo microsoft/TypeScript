@@ -131,12 +131,13 @@ module ts.server {
         ];
 
         export function countEvent(eventName: string, projectSvc: ProjectService, host: ts.System) {
-            if (projectSvc.getFormatCodeOptions().SendMetrics) {
+            var opts = projectSvc.getFormatCodeOptions();
+            if (opts.SendMetrics) {
                 eventCounts[eventName] = (eventCounts[eventName] || 0) + 1;
 
                 if (Date.now() > nextSendTimeMs) {
                     registerSettings(projectSvc);
-                    send(host);
+                    send(host, opts.TelemetryUserID);
                 }
             }
         }
@@ -161,7 +162,7 @@ module ts.server {
             }
         }
 
-        function send(host: ts.System) {
+        function send(host: ts.System, userID: string) {
             var data = [{
                 iKey: '78e2d1f3-b56d-47d8-9b9a-fa4c056a0f21',
                 name: 'Microsoft.ApplicationInsights.Event',
@@ -176,10 +177,11 @@ module ts.server {
                     }
                 },
                 tags: {
-                    'ai.user.id': 'anonymous'
+                    'ai.user.id': userID
                 }
             }];
             var payload = JSON.stringify(data);
+            // TODO: stop logging this locally
             var logPath = 'C:/throwaway/';
             host.writeFile(logPath + 'appLog.txt', payload, false);
             host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json', (err, data) => {
@@ -649,7 +651,8 @@ module ts.server {
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
-                                SendMetrics: formatOptions.SendMetrics
+                                SendMetrics: formatOptions.SendMetrics,
+                                TelemetryUserID: formatOptions.TelemetryUserID
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);

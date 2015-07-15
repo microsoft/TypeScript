@@ -995,7 +995,8 @@ module ts.server {
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
-            SendMetrics: false 
+            SendMetrics: false,
+            TelemetryUserID: null
         }
 
     }

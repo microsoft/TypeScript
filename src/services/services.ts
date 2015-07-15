@@ -1115,6 +1115,7 @@ module ts {
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
         SendMetrics: boolean;
+        TelemetryUserID: string;
     }
 
     export interface FormatCodeOptions extends EditorOptions {
