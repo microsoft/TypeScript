@@ -5135,7 +5135,12 @@ namespace ts {
             }
             else {
                 node.exportClause = parseNamedImportsOrExports(SyntaxKind.NamedExports);
-                if (parseOptional(SyntaxKind.FromKeyword)) {
+
+                // It is not uncommon to accidentally omit the 'from' keyword. Additionally, in editing scenarios,
+                // the 'from' keyword can be parsed as a named export when the export clause is unterminated (i.e. `export { from "moduleName";`)
+                // If we don't have a 'from' keyword, see if we have a string literal such that ASI won't take effect.
+                if (token === SyntaxKind.FromKeyword || (token === SyntaxKind.StringLiteral && !scanner.hasPrecedingLineBreak())) {
+                    parseExpected(SyntaxKind.FromKeyword)
                     node.moduleSpecifier = parseModuleSpecifier();
                 }
             }
