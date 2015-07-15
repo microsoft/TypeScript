@@ -113,7 +113,7 @@ var languageServiceLibrarySources = [
     return path.join(serverDirectory, f);
 }).concat(servicesSources);
 
-var harnessSources = [
+var harnessCoreSources = [
     "harness.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
@@ -129,7 +129,9 @@ var harnessSources = [
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-}).concat([
+});
+
+var harnessSources = harnessCoreSources.concat([
     "incrementalParser.ts",
     "jsDocParsing.ts",
     "services/colorization.ts",
@@ -361,7 +363,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*keepComments*/ true,
             /*noResolve*/ false,
             /*stripInternal*/ true,
-            /*callback*/ function () { 
+            /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
                 prependFile(copyright, standaloneDefinitionsFile);
@@ -379,12 +381,12 @@ compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(se
 
 var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
 compileFile(
-    lsslFile, 
-    languageServiceLibrarySources, 
+    lsslFile,
+    languageServiceLibrarySources,
     [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
-    /*prefixes*/ [copyright], 
-    /*useBuiltCompiler*/ true, 
-    /*noOutFile*/ false, 
+    /*prefixes*/ [copyright],
+    /*useBuiltCompiler*/ true,
+    /*noOutFile*/ false,
     /*generateDeclarations*/ true);
 
 // Local target to build the language service server library
@@ -488,7 +490,7 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler) {
+function exec(cmd, completeHandler, errorHandler) {
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
@@ -504,8 +506,12 @@ function exec(cmd, completeHandler) {
         complete();
     });
     ex.addListener("error", function(e, status) {
-        fail("Process exited with code " + status);
-    })
+        if(errorHandler) {
+            errorHandler(e, status);
+        } else {
+            fail("Process exited with code " + status);
+        }
+    });
 
     ex.run();
 }
@@ -562,7 +568,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
-    reporter = process.env.reporter || process.env.r || 'dot';
+    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
@@ -717,7 +723,22 @@ task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function
 }, { async: true });
 
 desc("Updates the sublime plugin's tsserver");
-task("update-sublime", [serverFile], function() {
+task("update-sublime", ["local", serverFile], function() {
     jake.cpR(serverFile, "../TypeScript-Sublime-Plugin/tsserver/");
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
 });
+
+// if the codebase were free of linter errors we could make jake runtests
+// run this task automatically
+desc("Runs tslint on the compiler sources");
+task("lint", [], function() {
+    function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
+    function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
+
+    var lintTargets = compilerSources.concat(harnessCoreSources);
+    for(var i in lintTargets) {
+        var f = lintTargets[i];
+        var cmd = 'tslint -f ' + f;
+        exec(cmd, success(f), failure(f));
+    }
+}, { async: true });

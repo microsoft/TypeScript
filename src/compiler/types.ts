@@ -273,7 +273,7 @@ namespace ts {
         // Module references
         ExternalModuleReference,
 
-        //JSX
+        // JSX
         JsxElement,
         JsxSelfClosingElement,
         JsxOpeningElement,
@@ -405,10 +405,10 @@ namespace ts {
 
         // Context flags set directly by the parser.
         ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
-        
+
         // Exclude these flags when parsing a Type
-        TypeExcludesFlags = Yield | Await,       
-        
+        TypeExcludesFlags = Yield | Await,
+
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an
@@ -1055,7 +1055,7 @@ namespace ts {
     }
 
     export interface ModuleBlock extends Node, Statement {
-        statements: NodeArray<Statement>
+        statements: NodeArray<Statement>;
     }
 
     export interface ImportEqualsDeclaration extends Declaration, Statement {
@@ -1171,7 +1171,7 @@ namespace ts {
 
     export interface JSDocTypeReference extends JSDocType {
         name: EntityName;
-        typeArguments: NodeArray<JSDocType>
+        typeArguments: NodeArray<JSDocType>;
     }
 
     export interface JSDocOptionalType extends JSDocType {
@@ -1196,8 +1196,8 @@ namespace ts {
     }
 
     export interface JSDocRecordMember extends PropertyDeclaration {
-        name: Identifier | LiteralExpression,
-        type?: JSDocType
+        name: Identifier | LiteralExpression;
+        type?: JSDocType;
     }
 
     export interface JSDocComment extends Node {
@@ -1294,7 +1294,7 @@ namespace ts {
 
     export interface CancellationToken {
         isCancellationRequested(): boolean;
-   
+
         /** @throws OperationCanceledException if isCancellationRequested is true */
         throwIfCancellationRequested(): void;
     }
@@ -1323,7 +1323,7 @@ namespace ts {
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
 
-        /** 
+        /**
          * Gets a type checker that can be used to semantically analyze source fils in the program.
          */
         getTypeChecker(): TypeChecker;
@@ -1344,15 +1344,15 @@ namespace ts {
 
     export interface SourceMapSpan {
         /** Line number in the .js file. */
-        emittedLine: number; 
+        emittedLine: number;
         /** Column number in the .js file. */
-        emittedColumn: number;  
+        emittedColumn: number;
         /** Line number in the .ts file. */
-        sourceLine: number; 
+        sourceLine: number;
         /** Column number in the .ts file. */
-        sourceColumn: number; 
+        sourceColumn: number;
         /** Optional name (index into names array) associated with this span. */
-        nameIndex?: number; 
+        nameIndex?: number;
         /** .ts file (index into sources array) associated with this span */
         sourceIndex: number;
     }
@@ -1506,7 +1506,7 @@ namespace ts {
         NotAccessible,
         CannotBeNamed
     }
-    
+
     export interface TypePredicate {
         parameterName: string;
         parameterIndex: number;
@@ -1526,7 +1526,28 @@ namespace ts {
 
     /* @internal */
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
-        errorModuleName?: string // If the symbol is not visible from module, module's name
+        errorModuleName?: string; // If the symbol is not visible from module, module's name
+    }
+    
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
+      * metadata */
+    /* @internal */
+    export enum TypeReferenceSerializationKind {
+        Unknown,                            // The TypeReferenceNode could not be resolved. The type name
+                                            // should be emitted using a safe fallback.
+        TypeWithConstructSignatureAndValue, // The TypeReferenceNode resolves to a type with a constructor
+                                            // function that can be reached at runtime (e.g. a `class`
+                                            // declaration or a `var` declaration for the static side
+                                            // of a type, such as the global `Promise` type in lib.d.ts).
+        VoidType,                           // The TypeReferenceNode resolves to a Void-like type.
+        NumberLikeType,                     // The TypeReferenceNode resolves to a Number-like type.
+        StringLikeType,                     // The TypeReferenceNode resolves to a String-like type.
+        BooleanType,                        // The TypeReferenceNode resolves to a Boolean-like type.
+        ArrayLikeType,                      // The TypeReferenceNode resolves to an Array-like type.
+        ESSymbolType,                       // The TypeReferenceNode resolves to the ESSymbol type.
+        TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
+                                            // with call signatures.
+        ObjectType,                         // The TypeReferenceNode resolves to any other type.
     }
 
     /* @internal */
@@ -1552,9 +1573,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        serializeTypeOfNode(node: Node): string | string[];
-        serializeParameterTypesOfNode(node: Node): (string | string[])[];
-        serializeReturnTypeOfNode(node: Node): string | string[];
+        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
     }
 
     export const enum SymbolFlags {
@@ -1637,7 +1656,7 @@ namespace ts {
         Export = ExportNamespace | ExportType | ExportValue,
 
         /* @internal */
-        // The set of things we consider semantically classifiable.  Used to speed up the LS during 
+        // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
     }
@@ -1657,7 +1676,7 @@ namespace ts {
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
@@ -1672,14 +1691,14 @@ namespace ts {
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
     export interface SymbolTable {
         [index: string]: Symbol;
     }
 
-    /* @internal */ 
+    /* @internal */
     export const enum NodeCheckFlags {
         TypeChecked                 = 0x00000001,  // Node has been type checked
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
@@ -1701,7 +1720,7 @@ namespace ts {
         LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
         resolvedAwaitedType?: Type;       // Cached awaited type of type node
@@ -1748,16 +1767,16 @@ namespace ts {
         ContainsObjectLiteral   = 0x00200000,  // Type is or contains object literal type
         ESSymbol                = 0x00400000,  // Type of symbol primitive introduced in ES6
 
-        /* @internal */ 
+        /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
-        /* @internal */ 
+        /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
-        /* @internal */ 
+        /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
@@ -1768,7 +1787,7 @@ namespace ts {
         symbol?: Symbol;                // Symbol associated with type (if any)
     }
 
-    /* @internal */ 
+    /* @internal */
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
