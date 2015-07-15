@@ -2098,6 +2098,27 @@ namespace ts {
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
+    
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
+      * metadata */
+    /* @internal */
+    export enum TypeReferenceSerializationKind {
+        Unknown,                            // The TypeReferenceNode could not be resolved. The type name
+                                            // should be emitted using a safe fallback.
+        TypeWithConstructSignatureAndValue, // The TypeReferenceNode resolves to a type with a constructor
+                                            // function that can be reached at runtime (e.g. a `class`
+                                            // declaration or a `var` declaration for the static side
+                                            // of a type, such as the global `Promise` type in lib.d.ts).
+        VoidType,                           // The TypeReferenceNode resolves to a Void-like type.
+        NumberLikeType,                     // The TypeReferenceNode resolves to a Number-like type.
+        StringLikeType,                     // The TypeReferenceNode resolves to a String-like type.
+        BooleanType,                        // The TypeReferenceNode resolves to a Boolean-like type.
+        ArrayLikeType,                      // The TypeReferenceNode resolves to an Array-like type.
+        ESSymbolType,                       // The TypeReferenceNode resolves to the ESSymbol type.
+        TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
+                                            // with call signatures.
+        ObjectType,                         // The TypeReferenceNode resolves to any other type.
+    }
 
     /* @internal */
     export interface EmitResolver {
@@ -2122,9 +2143,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        serializeTypeOfNode(node: Node): string | string[];
-        serializeParameterTypesOfNode(node: Node): (string | string[])[];
-        serializeReturnTypeOfNode(node: Node): string | string[];
+        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
     }
 
     export const enum SymbolFlags {

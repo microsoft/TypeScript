@@ -4546,6 +4546,7 @@ namespace ts {
                                 if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
                                     return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                                 }
+                                break;
                             default:
                                 if (isModifier(node) && node.parent &&
                                     (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
@@ -4681,17 +4682,23 @@ namespace ts {
                     // Make sure we only highlight the keyword when it makes sense to do so.
                     if (isAccessibilityModifier(modifier)) {
                         if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                            container.kind === SyntaxKind.ClassExpression ||
                             (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
                             return undefined;
                         }
                     }
                     else if (modifier === SyntaxKind.StaticKeyword) {
-                        if (container.kind !== SyntaxKind.ClassDeclaration) {
+                        if (!(container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression)) {
                             return undefined;
                         }
                     }
                     else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
                         if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
+                            return undefined;
+                        }
+                    }
+                    else if (modifier === SyntaxKind.AbstractKeyword) {
+                        if (!(container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration)) {
                             return undefined;
                         }
                     }
@@ -4707,25 +4714,35 @@ namespace ts {
                     switch (container.kind) {
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.SourceFile:
-                            nodes = (<Block>container).statements;
+                            // Container is either a class declaration or the declaration is a classDeclaration
+                            if (modifierFlag & NodeFlags.Abstract) {
+                                nodes = (<Node[]>(<ClassDeclaration>declaration).members).concat(declaration);
+                            }
+                            else {
+                                nodes = (<Block>container).statements;
+                            }
                             break;
                         case SyntaxKind.Constructor:
                             nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
                                 (<ClassDeclaration>container.parent).members);
                             break;
                         case SyntaxKind.ClassDeclaration:
-                            nodes = (<ClassDeclaration>container).members;
+                        case SyntaxKind.ClassExpression:
+                            nodes = (<ClassLikeDeclaration>container).members;
 
                             // If we're an accessibility modifier, we're in an instance member and should search
                             // the constructor's parameter list for instance members as well.
                             if (modifierFlag & NodeFlags.AccessibilityModifier) {
-                                let constructor = forEach((<ClassDeclaration>container).members, member => {
+                                let constructor = forEach((<ClassLikeDeclaration>container).members, member => {
                                     return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
                                 });
 
                                 if (constructor) {
                                     nodes = nodes.concat(constructor.parameters);
                                 }
+                            }
+                            else if (modifierFlag & NodeFlags.Abstract) {
+                                nodes = nodes.concat(container);
                             }
                             break;
                         default:
@@ -4754,6 +4771,8 @@ namespace ts {
                                 return NodeFlags.Export;
                             case SyntaxKind.DeclareKeyword:
                                 return NodeFlags.Ambient;
+                            case SyntaxKind.AbstractKeyword:
+                                return NodeFlags.Abstract;
                             default:
                                 Debug.fail();
                         }
@@ -6574,7 +6593,7 @@ namespace ts {
                         }
                     }
 
-                    return ClassificationType.text;
+                    return ClassificationType.identifier;
                 }
             }
 
