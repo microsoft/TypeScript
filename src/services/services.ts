@@ -91,6 +91,9 @@ module ts {
          * not happen and the entire document will be re - parsed.
          */
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
 
     export module ScriptSnapshot {
@@ -1873,6 +1876,16 @@ module ts {
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
                     newSourceFile.nameTable = undefined;
+
+                    // dispose all resources held by old script snapshot
+                    if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
+                        if (sourceFile.scriptSnapshot.dispose) {
+                            sourceFile.scriptSnapshot.dispose();
+                        }
+
+                        sourceFile.scriptSnapshot = undefined;
+                    }
+
                     return newSourceFile;
                 }
             }

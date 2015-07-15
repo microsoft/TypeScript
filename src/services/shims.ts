@@ -34,6 +34,9 @@ module ts {
          * Or undefined value if there was no change.
          */
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
 
     export interface Logger {
@@ -241,6 +244,14 @@ module ts {
             var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+        }
+
+        public dispose(): void {
+            // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
+            // 'in' does not have this effect
+            if ("dispose" in this.scriptSnapshotShim) {
+                this.scriptSnapshotShim.dispose();
+            }
         }
     }
 
