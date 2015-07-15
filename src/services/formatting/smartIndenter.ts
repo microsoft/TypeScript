@@ -189,13 +189,6 @@ namespace ts.formatting {
             // actual indentation is used for statements\declarations if one of cases below is true:
             // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
             // - parent and child are not on the same line
-
-            /*
-            TODO:
-            Stop checking parent.kind and instead do checkListElementLockIndentation
-            on getIndentationForNodeWorker, after checking !parentAndChildShareLine
-            (do list[0] === current check before it)
-            */
             let useActualIndentation =
                 (isDeclaration(current) || isStatement(current)) &&
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
@@ -442,10 +435,6 @@ namespace ts.formatting {
         }
 
         function isListIndentationPrevented(list: NodeArray<Node>, sourceFile: SourceFile) {
-            /*
-            TODO:
-            This seems too similar with checkListElementLockIndentation in formatting.ts...
-            */
             let listStartLine = sourceFile.getLineAndCharacterOfPosition(list.pos).line;
 
             for (let listElement of list) {
