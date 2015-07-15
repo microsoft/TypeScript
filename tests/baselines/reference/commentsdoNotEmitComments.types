@@ -169,3 +169,8 @@ var shade: color = color.green;
 >color : typeof color
 >green : color
 
+function detached() {
+>detached : () => void
+
+    /* detached comment */
+}
