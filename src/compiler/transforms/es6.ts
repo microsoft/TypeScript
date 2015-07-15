@@ -93,7 +93,6 @@ namespace ts.transform {
     }
     
     function transformClassDeclaration(context: VisitorContext, node: ClassDeclaration): ClassDeclaration {
-        // TODO(rbuckton): Handle decorators, for now we don't change the class and let the old emitter handle this
         let baseTypeNode = getClassExtendsHeritageClauseElement(node);
         let modifiers = visitNodeArrayOfModifier(context, node.modifiers, transformNodeWorker);
         let heritageClauses = visitNodeArrayOfHeritageClause(context, node.heritageClauses, transformNodeWorker);
@@ -338,12 +337,14 @@ namespace ts.transform {
     }
     
     function transformPropertyDeclaration(context: VisitorContext, node: ClassLikeDeclaration, property: PropertyDeclaration): Expression {
-        let target = property.flags & NodeFlags.Static
+        let isStatic = (property.flags & NodeFlags.Static) !== 0;
+        let target = isStatic
             ? <Identifier>context.getDeclarationName(node)
             : factory.createThisKeyword();
         
+        let name = transformPropertyName(context, property, /*isPerInstance*/ !isStatic);
         return factory.createAssignmentExpression(
-            factory.createMemberAccessForPropertyName(target, property.name, /*location*/ property.name),
+            factory.createMemberAccessForPropertyName(target, name, /*location*/ property.name),
             visitExpression(context, property.initializer, transformNode)
         );
     }
@@ -459,15 +460,15 @@ namespace ts.transform {
         }
     }
     
-    function transformPropertyName(context: VisitorContext, container: Declaration): PropertyName {
+    function transformPropertyName(context: VisitorContext, container: Declaration, isPerInstance?: boolean): PropertyName {
         let name = context.getDeclarationName(container);
         if (isComputedPropertyName(name)) {
-            if (context.nodeHasGeneratedName(name)) {
+            if (!isPerInstance && context.nodeHasGeneratedName(name)) {
                 return factory.createIdentifier(context.getGeneratedNameForNode(name));
             }
             
             let expression = visitExpression(context, name.expression, transformNode);
-            if (nodeCanBeDecorated(container) && nodeIsDecorated(container)) {
+            if (!isPerInstance && nodeCanBeDecorated(container) && nodeIsDecorated(container)) {
                 let generatedName = factory.createIdentifier(context.getGeneratedNameForNode(name));
                 context.hoistVariableDeclaration(generatedName);
                 expression = factory.createAssignmentExpression(
