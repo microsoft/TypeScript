@@ -3975,26 +3975,59 @@ namespace ts {
             }
         }
 
-        function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
+        function isObjectLiteralTypeDuplicateOf(source: ObjectType, target: ObjectType): boolean {
+            let sourceProperties = getPropertiesOfObjectType(source);
+            let targetProperties = getPropertiesOfObjectType(target);
+            if (sourceProperties.length !== targetProperties.length) {
+                return false;
+            }
+            for (let sourceProp of sourceProperties) {
+                let targetProp = getPropertyOfObjectType(target, sourceProp.name);
+                if (!targetProp ||
+                    getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected) ||
+                    !isTypeDuplicateOf(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function isTypeDuplicateOf(source: Type, target: Type): boolean {
+            if (source === target) {
+                return true;
+            }
+            if (source.flags & TypeFlags.Undefined || source.flags & TypeFlags.Null && !(target.flags & TypeFlags.Undefined)) {
+                return true;
+            }
+            if (source.flags & TypeFlags.ObjectLiteral && target.flags & TypeFlags.ObjectType) {
+                return isObjectLiteralTypeDuplicateOf(<ObjectType>source, <ObjectType>target);
+            }
+            if (isArrayType(source) && isArrayType(target)) {
+                return isTypeDuplicateOf((<TypeReference>source).typeArguments[0], (<TypeReference>target).typeArguments[0]);
+            }
+            return isTypeIdenticalTo(source, target);
+        }
+
+        function isTypeDuplicateOfSomeType(candidate: Type, types: Type[]): boolean {
             for (let type of types) {
-                if (candidate !== type && isTypeSubtypeOf(getRegularTypeOfObjectLiteral(candidate), type)) {
+                if (candidate !== type && isTypeDuplicateOf(candidate, type)) {
                     return true;
                 }
             }
             return false;
         }
 
-        function removeSubtypes(types: Type[]) {
+        function removeDuplicateTypes(types: Type[]) {
             let i = types.length;
             while (i > 0) {
                 i--;
-                if (isSubtypeOfAny(types[i], types)) {
+                if (isTypeDuplicateOfSomeType(types[i], types)) {
                     types.splice(i, 1);
                 }
             }
         }
 
-        function containsTypeAny(types: Type[]) {
+        function containsTypeAny(types: Type[]): boolean {
             for (let type of types) {
                 if (isTypeAny(type)) {
                     return true;
@@ -4017,27 +4050,28 @@ namespace ts {
             return type1.id - type2.id;
         }
 
-        // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
-        // is true when creating a union type from a type node and when instantiating a union type. In both of those
-        // cases subtype reduction has to be deferred to properly support recursive union types. For example, a
-        // type alias of the form "type Item = string | (() => Item)" cannot be reduced during its declaration.
-        function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
+        // The noDeduplication flag exists because it isn't always possible to deduplicate the constituent types.
+        // The flag is true when creating a union type from a type node and when instantiating a union type. In
+        // both of those cases subtype deduplication has to be deferred to properly support recursive union types.
+        // For example, a type alias of the form "type Item = string | (() => Item)" cannot be deduplicated during
+        // its declaration.
+        function getUnionType(types: Type[], noDeduplication?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
             }
             let typeSet: Type[] = [];
             addTypesToSet(typeSet, types, TypeFlags.Union);
-            typeSet.sort(compareTypeIds);
-            if (noSubtypeReduction) {
-                if (containsTypeAny(typeSet)) {
-                    return anyType;
-                }
+            if (containsTypeAny(typeSet)) {
+                return anyType;
+            }
+            if (noDeduplication) {
                 removeAllButLast(typeSet, undefinedType);
                 removeAllButLast(typeSet, nullType);
             }
             else {
-                removeSubtypes(typeSet);
+                removeDuplicateTypes(typeSet);
             }
+            typeSet.sort(compareTypeIds);
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
@@ -4046,19 +4080,41 @@ namespace ts {
             if (!type) {
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(typeSet));
                 type.types = typeSet;
-                type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
         }
 
-        // Subtype reduction is basically an optimization we do to avoid excessively large union types, which take longer
-        // to process and look strange in quick info and error messages. Semantically there is no difference between the
-        // reduced type and the type itself. So, when we detect a circularity we simply say that the reduced type is the
-        // type itself.
+        function isTypeSubtypeOfSomeType(candidate: Type, types: Type[]): boolean {
+            for (let type of types) {
+                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function removeSubtypes(types: Type[]): Type[] {
+            let result = types;
+            let i = result.length;
+            while (i > 0) {
+                i--;
+                if (isTypeSubtypeOfSomeType(result[i], result)) {
+                    if (result === types) {
+                        result = types.slice(0);
+                    }
+                    result.splice(i, 1);
+                }
+            }
+            return result;
+        }
+
+        // The reduced type is a union type in which no constituent type is a subtype of another
+        // constituent type.
         function getReducedTypeOfUnionType(type: UnionType): Type {
             if (!type.reducedType) {
                 type.reducedType = circularType;
-                let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                let typesWithoutSubtypes = removeSubtypes(type.types);
+                let reducedType = typesWithoutSubtypes === type.types ? type : getUnionType(typesWithoutSubtypes);
                 if (type.reducedType === circularType) {
                     type.reducedType = reducedType;
                 }
@@ -4072,7 +4128,7 @@ namespace ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noSubtypeReduction*/ true);
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noDeduplication*/ true);
             }
             return links.resolvedType;
         }
@@ -4355,7 +4411,7 @@ namespace ts {
                     return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noSubtypeReduction*/ true);
+                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noDeduplication*/ true);
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType));
