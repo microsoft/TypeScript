@@ -329,8 +329,6 @@ module Harness.SourceMapRecoder {
         }
 
         function writeRecordedSpans() {
-            let markerIds: string[] = [];
-
             function getMarkerId(markerIndex: number) {
                 let markerId = "";
                 if (spanMarkerContinues) {
@@ -418,6 +416,7 @@ module Harness.SourceMapRecoder {
                 writeJsFileLines(currentJsLine);
 
                 // Emit markers
+                var markerIds: string[] = [];
                 iterateSpans(writeSourceMapMarker);
 
                 let jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.code);
