@@ -6891,12 +6891,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                     return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
                 }
+                // Omit /// comment if compilerOptions.removeComments is true.
                 // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
                 // so that we don't end up computing comment string and doing match for all // comments
-                else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                if (!compilerOptions.removeComments && (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
                     comment.pos + 2 < comment.end &&
                     currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
-                    currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
+                    currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx))) {
                     return true;
                 }
             }
