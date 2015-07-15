@@ -623,7 +623,7 @@ namespace ts.formatting {
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
-                    if (checkArgumentLockIndentation()) {
+                    if (checkListElementLockIndentation()) {
                         parentListStates.indentationLocked = true;
                         return parentDynamicIndentation.getIndentation();
                     }
@@ -641,14 +641,14 @@ namespace ts.formatting {
                 }
 
                 // lock indentation as current value
-                if (checkArgumentLockIndentation()) {
+                if (checkListElementLockIndentation()) {
                     parentListStates.indentationLocked = true;
                     inheritedIndentation = childIndentation.indentation;
                 }
 
                 return inheritedIndentation;
 
-                function checkArgumentLockIndentation() {
+                function checkListElementLockIndentation() {
                     if (!indentationLockable || parentListStates.indentationLocked /* already cancelled */) {
                         return false;
                     }

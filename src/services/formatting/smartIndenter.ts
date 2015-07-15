@@ -50,7 +50,8 @@ namespace ts.formatting {
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) &&
                     shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown) &&
-                    !isListIndentationPrevented(current, position, sourceFile, options)) {
+                    !isNodeComponentListIndentationPrevented(current, position, sourceFile)) {
+
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -135,7 +136,10 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent.kind, current.kind) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent.kind, current.kind) &&
+                    !parentAndChildShareLine &&
+                    !isListElementIndentationPrevented(current, sourceFile)) {
+
                     indentationDelta += options.IndentSize;
                 }
 
@@ -185,11 +189,15 @@ namespace ts.formatting {
             // actual indentation is used for statements\declarations if one of cases below is true:
             // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
             // - parent and child are not on the same line
-            // additionally, actual indentation is used for arguments in a call/new expression
+
+            /*
+            TODO:
+            Stop checking parent.kind and instead do checkListElementLockIndentation
+            on getIndentationForNodeWorker, after checking !parentAndChildShareLine
+            (do list[0] === current check before it)
+            */
             let useActualIndentation =
-                (isDeclaration(current) || isStatement(current) ||
-                    parent.kind === SyntaxKind.CallExpression ||
-                    parent.kind === SyntaxKind.NewExpression) &&
+                (isDeclaration(current) || isStatement(current)) &&
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
             if (!useActualIndentation) {
@@ -380,37 +388,6 @@ namespace ts.formatting {
             return Value.Unknown;
         }
 
-        function isListIndentationPrevented(node: Node, position: number, sourceFile: SourceFile, options: EditorOptions) {
-            let list = getListByPosition(position, position, node);
-            if (!list || !list.length) {
-                return false;
-            }
-
-            let listStartLine = sourceFile.getLineAndCharacterOfPosition(list.pos).line;
-            
-            return checkIndentationPrevented(list, listStartLine);
-
-            function checkIndentationPrevented(list: NodeArray<Node>, listStartLine: number) {
-                for (let listElement of list) {
-                    let listElementEnd = sourceFile.getLineAndCharacterOfPosition(listElement.getEnd());
-
-                    if (listElementEnd.line === listStartLine) {
-                        continue;
-                    }
-
-                    let listElementStart = sourceFile.getLineAndCharacterOfPosition(listElement.getStart());
-
-                    if (listElementStart.line !== listStartLine) {
-                        continue;
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
             let lineStart = sourceFile.getPositionOfLineAndCharacter(lineAndCharacter.line, 0);
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
@@ -446,6 +423,48 @@ namespace ts.formatting {
 
         export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
             return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
+        }
+        
+        function isNodeComponentListIndentationPrevented(node: Node, position: number, sourceFile: SourceFile) {
+            let list = getListByPosition(position, position, node);
+            if (!list || !list.length) {
+                return false;
+            }
+            return isListIndentationPrevented(list, sourceFile);
+        }
+
+        function isListElementIndentationPrevented(listElementNode: Node, sourceFile: SourceFile) {
+            let list = getContainingList(listElementNode, sourceFile);
+            if (!list) {
+                return false;
+            }
+            return isListIndentationPrevented(list, sourceFile);
+        }
+
+        function isListIndentationPrevented(list: NodeArray<Node>, sourceFile: SourceFile) {
+            /*
+            TODO:
+            This seems too similar with checkListElementLockIndentation in formatting.ts...
+            */
+            let listStartLine = sourceFile.getLineAndCharacterOfPosition(list.pos).line;
+
+            for (let listElement of list) {
+                let listElementEnd = sourceFile.getLineAndCharacterOfPosition(listElement.getEnd());
+
+                if (listElementEnd.line === listStartLine) {
+                    continue;
+                }
+
+                let listElementStart = sourceFile.getLineAndCharacterOfPosition(listElement.getStart());
+
+                if (listElementStart.line !== listStartLine) {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
