@@ -64,7 +64,8 @@ namespace ts {
 
     /** Public interface of the the of a config service shim instance.*/
     export interface CoreServicesShimHost extends Logger {
-        /** Returns a JSON-encoded value of the type: string[] 
+        /**
+         * Returns a JSON-encoded value of the type: string[]
          *
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
