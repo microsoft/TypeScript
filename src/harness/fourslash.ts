@@ -510,8 +510,9 @@ module FourSlash {
             let exists = false;
 
             let startPos = startMarker.position;
+            let endPos: number = undefined;
             if (endMarker !== undefined) {
-                let endPos = endMarker.position;
+                endPos = endMarker.position;
             }
 
             errors.forEach(function (error: ts.Diagnostic) {
@@ -989,12 +990,12 @@ module FourSlash {
                 ts.displayPartsToString(help.suffixDisplayParts), expected);
         }
 
-        public verifyCurrentParameterIsletiable(isletiable: boolean) {
+        public verifyCurrentParameterIsletiable(isVariable: boolean) {
             this.taoInvalidReason = 'verifyCurrentParameterIsletiable NYI';
 
             let signature = this.getActiveSignatureHelpItem();
             assert.isNotNull(signature);
-            assert.equal(isletiable, signature.isletiadic);
+            assert.equal(isVariable, signature.isVariadic);
         }
 
         public verifyCurrentParameterHelpName(name: string) {
@@ -1511,7 +1512,7 @@ module FourSlash {
             }
 
             let incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
-            Utils.assertInletiants(incrementalSourceFile, /*parent:*/ undefined);
+            Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
             let incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
 

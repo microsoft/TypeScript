@@ -24,17 +24,15 @@
 /// <reference path='sourceMapRecorder.ts'/>
 /// <reference path='runnerbase.ts'/>
 
-let Buffer: BufferConstructor = require('buffer').Buffer;
+var Buffer: BufferConstructor = require('buffer').Buffer;
 
 // this will work in the browser via browserify
-let _chai: typeof chai = require('chai');
-let assert: typeof _chai.assert = _chai.assert;
-declare let __dirname: string; // Node-specific
-let global = <any>Function("return this").call(null);
+var _chai: typeof chai = require('chai');
+var assert: typeof _chai.assert = _chai.assert;
+declare var __dirname: string; // Node-specific
+var global = <any>Function("return this").call(null);
 
 module Utils {
-    let global = <any>Function("return this").call(null);
-
     // Setup some globals based on the current environment
     export const enum ExecutionEnvironment {
         Node,
@@ -98,8 +96,9 @@ module Utils {
             path = "tests/" + path;
         }
 
+        let content = '';
         try {
-            let content = ts.sys.readFile(Harness.userSpecifiedRoot + path);
+            content = ts.sys.readFile(Harness.userSpecifiedRoot + path);
         }
         catch (err) {
             return undefined;
@@ -122,7 +121,7 @@ module Utils {
         });
     }
 
-    export function assertInletiants(node: ts.Node, parent: ts.Node): void {
+    export function assertInvariants(node: ts.Node, parent: ts.Node): void {
         if (node) {
             assert.isFalse(node.pos < 0, "node.pos < 0");
             assert.isFalse(node.end < 0, "node.end < 0");
@@ -136,7 +135,7 @@ module Utils {
             }
 
             ts.forEachChild(node, child => {
-                assertInletiants(child, node);
+                assertInvariants(child, node);
             });
 
             // Make sure each of the children is in order.
@@ -606,8 +605,8 @@ module Harness {
                 export function writeToServerSync(url: string, action: string, contents?: string): XHRResponse {
                     let xhr = new XMLHttpRequest();
                     try {
-                        let action = '?action=' + action;
-                        xhr.open('POST', url + action, false);
+                        let actionMsg = '?action=' + action;
+                        xhr.open('POST', url + actionMsg, false);
                         xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
                         xhr.send(contents);
                     }
@@ -645,7 +644,7 @@ module Harness {
                     if (dirPath.match(/.*\/$/)) {
                         dirPath = dirPath.substring(0, dirPath.length - 2);
                     }
-                    let dirPath = dirPath.substring(0, dirPath.lastIndexOf('/'));
+                    dirPath = dirPath.substring(0, dirPath.lastIndexOf('/'));
                 }
 
                 return dirPath;
@@ -690,7 +689,7 @@ module Harness {
         }
     }
 
-    export let IO: IO;
+    export var IO: IO;
     switch (Utils.getExecutionEnvironment()) {
         case Utils.ExecutionEnvironment.CScript:
             IO = IOImpl.CScript;
@@ -808,18 +807,18 @@ module Harness {
             }
         }
 
-        export function createSourceFileAndAssertInletiants(
+        export function createSourceFileAndAssertInvariants(
                 fileName: string,
                 sourceText: string,
                 languageVersion: ts.ScriptTarget) {
             // We'll only assert inletiants outside of light mode. 
-            const shouldAssertInletiants = !Harness.lightMode;
+            const shouldassertInvariants = !Harness.lightMode;
             
             // Only set the parent nodes if we're asserting inletiants.  We don't need them otherwise.
-            let result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ shouldAssertInletiants);
+            let result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ shouldassertInvariants);
 
-            if (shouldAssertInletiants) {
-                Utils.assertInletiants(result, /*parent:*/ undefined);
+            if (shouldassertInvariants) {
+                Utils.assertInvariants(result, /*parent:*/ undefined);
             }
 
             return result;
@@ -829,8 +828,8 @@ module Harness {
         const lineFeed = "\n";
 
         export let defaultLibFileName = 'lib.d.ts';
-        export let defaultLibSourceFile = createSourceFileAndAssertInletiants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export let defaultES6LibSourceFile = createSourceFileAndAssertInletiants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export let defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export let defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export let fourslashFileName = 'fourslash.ts';
@@ -861,7 +860,7 @@ module Harness {
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
                     let fileName = ts.normalizePath(file.unitName);
-                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInletiants(fileName, file.content, scriptTarget);
+                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                 }
             };
             inputFiles.forEach(register);
@@ -884,7 +883,7 @@ module Harness {
                     }
                     else if (fn === fourslashFileName) {
                         let tsFn = 'tests/cases/fourslash/' + fourslashFileName;
-                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInletiants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
+                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                         return fourslashSourceFile;
                     }
                     else {
@@ -1192,12 +1191,12 @@ module Harness {
                     throw new Error('There were no errors and declFiles generated did not match number of js files generated');
                 }
 
+                let declInputFiles: { unitName: string; content: string }[] = [];
+                let declOtherFiles: { unitName: string; content: string }[] = [];
+                let declResult: Harness.Compiler.CompilerResult;
+
                 // if the .d.ts is non-empty, confirm it compiles correctly as well
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
-                    let declInputFiles: { unitName: string; content: string }[] = [];
-                    let declOtherFiles: { unitName: string; content: string }[] = [];
-                    let declResult: Harness.Compiler.CompilerResult;
-
                     ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                     ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
                     this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },

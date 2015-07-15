@@ -60,8 +60,9 @@ class ProjectRunner extends RunnerBase {
     private runProjectTestCase(testCaseFileName: string) {
         let testCase: ProjectRunnerTestCase;
 
+        let testFileText: string = null;
         try {
-            let testFileText = ts.sys.readFile(testCaseFileName);
+            testFileText = ts.sys.readFile(testCaseFileName);
         }
         catch (e) {
             assert(false, "Unable to open testcase file: " + testCaseFileName + ": " + e.message);
@@ -175,7 +176,7 @@ class ProjectRunner extends RunnerBase {
                 else {
                     let text = getSourceFileText(fileName);
                     if (text !== undefined) {
-                        sourceFile = Harness.Compiler.createSourceFileAndAssertInletiants(fileName, text, languageVersion);
+                        sourceFile = Harness.Compiler.createSourceFileAndAssertInvariants(fileName, text, languageVersion);
                     }
                 }
 
@@ -211,8 +212,9 @@ class ProjectRunner extends RunnerBase {
             };
 
             function getSourceFileText(fileName: string): string {
+                let text: string = undefined;
                 try {
-                    let text = ts.sys.readFile(ts.isRootedDiskPath(fileName)
+                    text = ts.sys.readFile(ts.isRootedDiskPath(fileName)
                         ? fileName
                         : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
                 }
@@ -281,13 +283,14 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (ts.shouldEmitToOwnFile(sourceFile, compilerResult.program.getCompilerOptions())) {
+                    let emitOutputFilePathWithoutExtension: string = undefined;
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
-                        let emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
+                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
                     }
                     else {
-                        let emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
+                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
                     }
 
                     let outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";

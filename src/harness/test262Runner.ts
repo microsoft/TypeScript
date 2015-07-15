@@ -81,7 +81,7 @@ class Test262BaselineRunner extends RunnerBase {
 
             it('satisfies inletiants', () => {
                 let sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
-                Utils.assertInletiants(sourceFile, /*parent:*/ undefined);
+                Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it('has the expected AST', () => {

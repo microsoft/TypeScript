@@ -76,7 +76,7 @@ module RWC {
                     // Add files to compilation
                     for (let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
-                        let resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
+                        var resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
                         let inInputList = ts.forEach(inputFiles, inputFile => inputFile.unitName === resolvedPath);
 
                         if (!Harness.isLibraryFile(fileRead.path)) {
@@ -118,8 +118,9 @@ module RWC {
 
                 function getHarnessCompilerInputUnit(fileName: string) {
                     let unitName = ts.normalizeSlashes(ts.sys.resolvePath(fileName));
+                    let content: string = null;
                     try {
-                        let content = ts.sys.readFile(unitName);
+                        content = ts.sys.readFile(unitName);
                     }
                     catch (e) {
                         // Leave content undefined.

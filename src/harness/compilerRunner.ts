@@ -48,7 +48,6 @@ class CompilerBaselineRunner extends RunnerBase {
 
             let units: Harness.TestCaseParser.TestUnitData[];
             let tcSettings: Harness.TestCaseParser.CompilerSetting[];
-            let createNewInstance: boolean;
 
             let lastUnit: Harness.TestCaseParser.TestUnitData;
             let rootDir: string;
