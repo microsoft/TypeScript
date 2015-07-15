@@ -113,7 +113,7 @@ var languageServiceLibrarySources = [
     return path.join(serverDirectory, f);
 }).concat(servicesSources);
 
-var harnessSources = [
+var harnessCoreSources = [
     "harness.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
@@ -129,7 +129,9 @@ var harnessSources = [
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-}).concat([
+});
+
+var harnessSources = harnessCoreSources.concat([
     "incrementalParser.ts",
     "jsDocParsing.ts",
     "services/colorization.ts",
@@ -730,12 +732,13 @@ task("update-sublime", ["local", serverFile], function() {
 // run this task automatically
 desc("Runs tslint on the compiler sources");
 task("lint", [], function() {
-    for(var i in compilerSources) {
-        var f = compilerSources[i];
+    function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
+    function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
+
+    var lintTargets = compilerSources.concat(harnessCoreSources);
+    for(var i in lintTargets) {
+        var f = lintTargets[i];
         var cmd = 'tslint -f ' + f;
-        exec(cmd,
-            function() { console.log('SUCCESS: No linter errors'); },
-            function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n');
-        });
+        exec(cmd, success(f), failure(f));
     }
 }, { async: true });

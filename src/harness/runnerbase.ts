@@ -24,17 +24,17 @@ class RunnerBase {
 
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
-        var fixedPath = path;
+        let fixedPath = path;
 
         // full paths either start with a drive letter or / for *nix, shouldn't have \ in the path at this point
-        var fullPath = /(\w+:|\/)?([\w+\-\.]|\/)*\.tsx?/g; 
-        var fullPathList = fixedPath.match(fullPath);
+        let fullPath = /(\w+:|\/)?([\w+\-\.]|\/)*\.tsx?/g; 
+        let fullPathList = fixedPath.match(fullPath);
         if (fullPathList) {
             fullPathList.forEach((match: string) => fixedPath = fixedPath.replace(match, Harness.Path.getFileName(match)));
         }
         
         // when running in the browser the 'full path' is the host name, shows up in error baselines
-        var localHost = /http:\/localhost:\d+/g;
+        let localHost = /http:\/localhost:\d+/g;
         fixedPath = fixedPath.replace(localHost, '');
         return fixedPath;
     }

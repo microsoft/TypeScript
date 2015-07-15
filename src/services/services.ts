@@ -91,6 +91,9 @@ namespace ts {
          * not happen and the entire document will be re - parsed.
          */
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
 
     export module ScriptSnapshot {
@@ -1863,6 +1866,16 @@ namespace ts {
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
                     newSourceFile.nameTable = undefined;
+
+                    // dispose all resources held by old script snapshot
+                    if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
+                        if (sourceFile.scriptSnapshot.dispose) {
+                            sourceFile.scriptSnapshot.dispose();
+                        }
+
+                        sourceFile.scriptSnapshot = undefined;
+                    }
+
                     return newSourceFile;
                 }
             }
@@ -3015,17 +3028,17 @@ namespace ts {
 
             function tryGetGlobalSymbols(): boolean {
                 let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
-                let importClause: ImportClause;
+                let namedImportsOrExports: NamedImportsOrExports;
                 let jsxContainer: JsxOpeningLikeElement;
 
                 if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
                     return tryGetObjectLikeCompletionSymbols(objectLikeContainer);
                 }
 
-                if (importClause = <ImportClause>getAncestor(contextToken, SyntaxKind.ImportClause)) {
+                if (namedImportsOrExports = tryGetNamedImportsOrExportsForCompletion(contextToken)) {
                     // cursor is in an import clause
                     // try to show exported member for imported module
-                    return tryGetImportClauseCompletionSymbols(importClause);
+                    return tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports);
                 }
 
                 if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
@@ -3035,7 +3048,7 @@ namespace ts {
                         attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
 
                         if (attrsType) {
-                            symbols = filterJsxAttributes((<JsxOpeningLikeElement>jsxContainer).attributes, typeChecker.getPropertiesOfType(attrsType));
+                            symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
                             isMemberCompletion = true;
                             isNewIdentifierLocation = false;
                             return true;
@@ -3104,22 +3117,10 @@ namespace ts {
             function isCompletionListBlocker(contextToken: Node): boolean {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
-                    isIdentifierDefinitionLocation(contextToken) ||
+                    isSolelyIdentifierDefinitionLocation(contextToken) ||
                     isDotOfNumericLiteral(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
-            }
-
-            function shouldShowCompletionsInImportsClause(node: Node): boolean {
-                if (node) {
-                    // import {| 
-                    // import {a,|
-                    if (node.kind === SyntaxKind.OpenBraceToken || node.kind === SyntaxKind.CommaToken) {
-                        return node.parent.kind === SyntaxKind.NamedImports;
-                    }
-                }
-
-                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -3253,37 +3254,41 @@ namespace ts {
             }
 
             /**
-             * Aggregates relevant symbols for completion in import clauses; for instance,
+             * Aggregates relevant symbols for completion in import clauses and export clauses
+             * whose declarations have a module specifier; for instance, symbols will be aggregated for
              *
-             *      import { $ } from "moduleName";
+             *      import { | } from "moduleName";
+             *      export { a as foo, | } from "moduleName";
+             *
+             * but not for
+             *
+             *      export { | };
              *
              * Relevant symbols are stored in the captured 'symbols' variable.
              *
              * @returns true if 'symbols' was successfully populated; false otherwise.
              */
-            function tryGetImportClauseCompletionSymbols(importClause: ImportClause): boolean {
-                // cursor is in import clause
-                // try to show exported member for imported module
-                if (shouldShowCompletionsInImportsClause(contextToken)) {
-                    isMemberCompletion = true;
-                    isNewIdentifierLocation = false;
+            function tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports: NamedImportsOrExports): boolean {
+                let declarationKind = namedImportsOrExports.kind === SyntaxKind.NamedImports ?
+                    SyntaxKind.ImportDeclaration :
+                    SyntaxKind.ExportDeclaration;
+                let importOrExportDeclaration = <ImportDeclaration | ExportDeclaration>getAncestor(namedImportsOrExports, declarationKind);
+                let moduleSpecifier = importOrExportDeclaration.moduleSpecifier;
 
-                    let importDeclaration = <ImportDeclaration>importClause.parent;
-                    Debug.assert(importDeclaration !== undefined && importDeclaration.kind === SyntaxKind.ImportDeclaration);
-
-                    let exports: Symbol[];
-                    let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                    if (moduleSpecifierSymbol) {
-                        exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
-                    }
-
-                    //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
-                    symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
+                if (!moduleSpecifier) {
+                    return false;
                 }
-                else {
-                    isMemberCompletion = false;
-                    isNewIdentifierLocation = true;
+
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
+
+                let exports: Symbol[];
+                let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
+                if (moduleSpecifierSymbol) {
+                    exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
                 }
+
+                symbols = exports ? filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements) : emptyArray;
 
                 return true;
             }
@@ -3302,6 +3307,26 @@ namespace ts {
                                 return <ObjectLiteralExpression | BindingPattern>parent;
                             }
                             break;
+                    }
+                }
+
+                return undefined;
+            }
+
+            /**
+             * Returns the containing list of named imports or exports of a context token,
+             * on the condition that one exists and that the context implies completion should be given.
+             */
+            function tryGetNamedImportsOrExportsForCompletion(contextToken: Node): NamedImportsOrExports {
+                if (contextToken) {
+                    switch (contextToken.kind) {
+                        case SyntaxKind.OpenBraceToken:  // import { |
+                        case SyntaxKind.CommaToken:      // import { a as 0, |
+                            switch (contextToken.parent.kind) {
+                                case SyntaxKind.NamedImports:
+                                case SyntaxKind.NamedExports:
+                                    return <NamedImportsOrExports>contextToken.parent;
+                            }
                     }
                 }
 
@@ -3355,7 +3380,10 @@ namespace ts {
                 return false;
             }
 
-            function isIdentifierDefinitionLocation(contextToken: Node): boolean {
+            /**
+             * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
+             */
+            function isSolelyIdentifierDefinitionLocation(contextToken: Node): boolean {
                 let containingNodeKind = contextToken.parent.kind;
                 switch (contextToken.kind) {
                     case SyntaxKind.CommaToken:
@@ -3412,6 +3440,11 @@ namespace ts {
                     case SyntaxKind.ProtectedKeyword:
                         return containingNodeKind === SyntaxKind.Parameter;
 
+                    case SyntaxKind.AsKeyword:
+                        containingNodeKind === SyntaxKind.ImportSpecifier ||
+                        containingNodeKind === SyntaxKind.ExportSpecifier ||
+                        containingNodeKind === SyntaxKind.NamespaceImport;
+
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
                     case SyntaxKind.InterfaceKeyword:
@@ -3453,33 +3486,41 @@ namespace ts {
                 return false;
             }
 
-            function filterModuleExports(exports: Symbol[], importDeclaration: ImportDeclaration): Symbol[] {
-                let exisingImports: Map<boolean> = {};
+            /**
+             * Filters out completion suggestions for named imports or exports.
+             *
+             * @param exportsOfModule          The list of symbols which a module exposes.
+             * @param namedImportsOrExports    The list of existing import/export specifiers in the import/export clause.
+             *
+             * @returns Symbols to be suggested at an import/export clause, barring those whose named imports/exports
+             *          do not occur at the current position and have not otherwise been typed.
+             */
+            function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
+                let exisingImportsOrExports: Map<boolean> = {};
 
-                if (!importDeclaration.importClause) {
-                    return exports;
+                for (let element of namedImportsOrExports) {
+                    // If this is the current item we are editing right now, do not filter it out
+                    if (element.getStart() <= position && position <= element.getEnd()) {
+                        continue;
+                    }
+
+                    let name = element.propertyName || element.name;
+                    exisingImportsOrExports[name.text] = true;
                 }
 
-                if (importDeclaration.importClause.namedBindings &&
-                    importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
-
-                    forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
-                        // If this is the current item we are editing right now, do not filter it out
-                        if (el.getStart() <= position && position <= el.getEnd()) {
-                            return;
-                        }
-
-                        let name = el.propertyName || el.name;
-                        exisingImports[name.text] = true;
-                    });
+                if (isEmpty(exisingImportsOrExports)) {
+                    return exportsOfModule;
                 }
 
-                if (isEmpty(exisingImports)) {
-                    return exports;
-                }
-                return filter(exports, e => !lookUp(exisingImports, e.name));
+                return filter(exportsOfModule, e => !lookUp(exisingImportsOrExports, e.name));
             }
 
+            /**
+             * Filters out completion suggestions for named imports or exports.
+             *
+             * @returns Symbols to be suggested in an object binding pattern or object literal expression, barring those whose declarations
+             *          do not occur at the current position and have not otherwise been typed.
+             */
             function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -3514,17 +3555,16 @@ namespace ts {
                     existingMemberNames[existingName] = true;
                 }
 
-                let filteredMembers: Symbol[] = [];
-                forEach(contextualMemberSymbols, s => {
-                    if (!existingMemberNames[s.name]) {
-                        filteredMembers.push(s);
-                    }
-                });
-
-                return filteredMembers;
+                return filter(contextualMemberSymbols, m => !lookUp(existingMemberNames, m.name));
             }
             
-            function filterJsxAttributes(attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>, symbols: Symbol[]): Symbol[] {
+            /**
+             * Filters out completion suggestions from 'symbols' according to existing JSX attributes.
+             *
+             * @returns Symbols to be suggested in a JSX element, barring those whose attributes
+             *          do not occur at the current position and have not otherwise been typed.
+             */
+            function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
                 let seenNames: Map<boolean> = {};
                 for (let attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -3536,13 +3576,8 @@ namespace ts {
                         seenNames[(<JsxAttribute>attr).name.text] = true;
                     }
                 }
-                let result: Symbol[] = [];
-                for (let sym of symbols) {
-                    if (!seenNames[sym.name]) {
-                        result.push(sym);
-                    }
-                }
-                return result;
+
+                return filter(symbols, a => !lookUp(seenNames, a.name));
             }
         }
 
@@ -4682,12 +4717,13 @@ namespace ts {
                     // Make sure we only highlight the keyword when it makes sense to do so.
                     if (isAccessibilityModifier(modifier)) {
                         if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                            container.kind === SyntaxKind.ClassExpression ||
                             (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
                             return undefined;
                         }
                     }
                     else if (modifier === SyntaxKind.StaticKeyword) {
-                        if (container.kind !== SyntaxKind.ClassDeclaration) {
+                        if (!(container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression)) {
                             return undefined;
                         }
                     }
@@ -4726,12 +4762,13 @@ namespace ts {
                                 (<ClassDeclaration>container.parent).members);
                             break;
                         case SyntaxKind.ClassDeclaration:
-                            nodes = (<ClassDeclaration>container).members;
+                        case SyntaxKind.ClassExpression:
+                            nodes = (<ClassLikeDeclaration>container).members;
 
                             // If we're an accessibility modifier, we're in an instance member and should search
                             // the constructor's parameter list for instance members as well.
                             if (modifierFlag & NodeFlags.AccessibilityModifier) {
-                                let constructor = forEach((<ClassDeclaration>container).members, member => {
+                                let constructor = forEach((<ClassLikeDeclaration>container).members, member => {
                                     return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
                                 });
 
