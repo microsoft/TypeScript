@@ -1,0 +1,13 @@
+=== tests/cases/compiler/file1.ts ===
+/// <reference path="file0.ts" />
+/// <reference path="file2.ts" />
+/// <amd-dependency path="/js/libs/hgn.js!app/templates/home" name="compiler"/>
+var OData: any;
+>OData : Symbol(OData, Decl(file1.ts, 3, 3))
+
+=== tests/cases/compiler/file0.ts ===
+
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/file2.ts ===
+
+No type information for this code.

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/file1.ts ===
+
+//
+// Copy Right comment
+//
+
+/// <reference path="file0.ts" />
+var x = 10;
+>x : Symbol(x, Decl(file1.ts, 6, 3))
+
+=== tests/cases/compiler/file0.ts ===
+
+No type information for this code.
+No type information for this code.
