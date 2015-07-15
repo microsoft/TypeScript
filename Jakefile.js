@@ -365,18 +365,7 @@ compileFile(/*outfile*/configureNightlyJs,
             /*callback*/ function () {
                 var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
                 console.log(cmd);
-                var ex = jake.createExec([cmd]);
-                // Add listeners for output and error
-                ex.addListener("stdout", function(output) {
-                    process.stdout.write(output);
-                });
-                ex.addListener("stderr", function(error) {
-                    process.stderr.write(error);
-                });
-                ex.addListener("cmdEnd", function() {
-                    complete();
-                });
-                ex.run();
+                exec(cmd, completeHandler, errorHandler)
             });
 
 task("setDebugModeTrue", function() {
@@ -387,18 +376,7 @@ desc("Configure, build, test, and publish the nightly release.");
 task("publish-nightly", [configureNightlyJs, "LKG", "clean", "setDebugModeTrue", "runtests"], function () {
     var cmd = "npm publish";
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
-    ex.addListener("cmdEnd", function() {
-        complete();
-    });
-    ex.run();
+    exec(cmd, completeHandler, errorHandler)
 }, {async: true});
 
 // Local target to build the compiler and services
