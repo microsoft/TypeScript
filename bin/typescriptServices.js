@@ -41389,6 +41389,13 @@ var ts;
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
                     newSourceFile.nameTable = undefined;
+                    // dispose all resources held by old script snapshot
+                    if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
+                        if (sourceFile.scriptSnapshot.dispose) {
+                            sourceFile.scriptSnapshot.dispose();
+                        }
+                        sourceFile.scriptSnapshot = undefined;
+                    }
                     return newSourceFile;
                 }
             }
@@ -46759,6 +46766,13 @@ var ts;
             }
             var decoded = JSON.parse(encoded);
             return ts.createTextChangeRange(ts.createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+        };
+        ScriptSnapshotShimAdapter.prototype.dispose = function () {
+            // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
+            // 'in' does not have this effect
+            if ("dispose" in this.scriptSnapshotShim) {
+                this.scriptSnapshotShim.dispose();
+            }
         };
         return ScriptSnapshotShimAdapter;
     })();
