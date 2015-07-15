@@ -648,7 +648,7 @@ namespace ts.formatting {
                 return inheritedIndentation;
 
                 function checkListElementLockIndentation() {
-                    if (parentListStates.indentationLocked /* already cancelled */) {
+                    if (!parentListStates || indentationLocked /* already cancelled */) {
                         return false;
                     }
 
