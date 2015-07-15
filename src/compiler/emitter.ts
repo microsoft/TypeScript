@@ -3013,7 +3013,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitEs6ExportDefaultCompat(node: Node) {
-                if (node.parent.kind === SyntaxKind.SourceFile && (!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment)) {
+                if (node.parent.kind === SyntaxKind.SourceFile) {
+                    Debug.assert(!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
                     // only allow export default at a source file level
                     if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
                         if (!currentSourceFile.symbol.exports["___esModule"]) {
