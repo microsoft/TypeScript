@@ -4215,13 +4215,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
+                let startIndex = 0;
+
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
                     // Emit all the directive prologues (like "use strict").  These have to come before
                     // any other preamble code we write (like parameter initializers).
-                    var startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
+                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
