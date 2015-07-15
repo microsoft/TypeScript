@@ -1164,7 +1164,7 @@ module FourSlash {
                 }
             };
 
-            for (pos < this.activeFile.content.length; pos++) {
+            for (; pos < this.activeFile.content.length; pos++) {
                 if (pos === 0 || pos === fileLineMap[nextLine]) {
                     nextLine++;
                     addSpanInfoString();
