@@ -29,6 +29,9 @@ namespace ts {
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
+    declare var Buffer: {  
+        new (str: string, encoding ?: string): any;  
+    }
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -267,10 +270,17 @@ namespace ts {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
-                write(s: string): void {
+                write(s: string): void {  
+                    var buffer = new Buffer(s, 'utf8');  
+                    var offset: number = 0;
+                    var toWrite: number = buffer.length;
+                    var written = 0;
                     // 1 is a standard descriptor for stdout
-                    _fs.writeSync(1, s);
-                },
+                    while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
+                        offset += written;
+                        toWrite -= written;
+                    }
+                },  
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {

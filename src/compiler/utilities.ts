@@ -1687,6 +1687,10 @@ namespace ts {
         });
     }
 
+    export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
+        return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
+    }
+
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
