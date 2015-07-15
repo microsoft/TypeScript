@@ -4,7 +4,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
 
     export interface TextRangeWithKind extends TextRange {
         kind: SyntaxKind;
@@ -480,6 +480,8 @@ module ts.formatting {
                         case SyntaxKind.CloseBraceToken:
                         case SyntaxKind.OpenBracketToken:
                         case SyntaxKind.CloseBracketToken:
+                        case SyntaxKind.OpenParenToken:
+                        case SyntaxKind.CloseParenToken:
                         case SyntaxKind.ElseKeyword:
                         case SyntaxKind.WhileKeyword:
                         case SyntaxKind.AtToken:
@@ -644,7 +646,7 @@ module ts.formatting {
                             // consume list start token
                             startLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
                             let indentation =
-                                computeIndentation(tokenInfo.token, startLine, Constants.Unknown, parent, parentDynamicIndentation, startLine);
+                                computeIndentation(tokenInfo.token, startLine, Constants.Unknown, parent, parentDynamicIndentation, parentStartLine);
 
                             listDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentation.indentation, indentation.delta);
                             consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);

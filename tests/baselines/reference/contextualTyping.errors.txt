@@ -1,5 +1,11 @@
-tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.\ntests/cases/compiler/contextualTyping.ts(197,15): error TS2300: Duplicate identifier 'Point'.\ntests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.\ntests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not assignable to type 'B'.
-  Property 'x' is missing in type '{}'.\n\n\n==== tests/cases/compiler/contextualTyping.ts (4 errors) ====
+tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/compiler/contextualTyping.ts(197,15): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not assignable to type 'B'.
+  Property 'x' is missing in type '{}'.
+
+
+==== tests/cases/compiler/contextualTyping.ts (4 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;

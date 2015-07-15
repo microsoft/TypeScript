@@ -169,7 +169,7 @@ module FourSlashInterface {
         // completion list is brought up if necessary
         public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
-                FourSlash.currentTestState.verifyCompletionListDoesNotContain(symbol);
+                FourSlash.currentTestState.verifyCompletionListDoesNotContain(symbol, text, documentation, kind);
             } else {
                 FourSlash.currentTestState.verifyCompletionListContains(symbol, text, documentation, kind);
             }

@@ -1,7 +1,6 @@
 /// <reference path='harness.ts' />
 /// <reference path='runnerbase.ts' />
 /// <reference path='typeWriter.ts' />
-/// <reference path='syntacticCleaner.ts' />
 
 const enum CompilerTestType {
     Conformance,
@@ -11,6 +10,7 @@ const enum CompilerTestType {
 
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = 'tests/cases';
+    private testSuiteName: string;
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;
@@ -18,50 +18,50 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public options: string;
 
-    constructor(public testType?: CompilerTestType) {
+    constructor(public testType: CompilerTestType) {
         super();
         this.errors = true;
         this.emit = true;
         this.decl = true;
         this.output = true;
         if (testType === CompilerTestType.Conformance) {
-            this.basePath += '/conformance';
+            this.testSuiteName = 'conformance';
         }
         else if (testType === CompilerTestType.Regressions) {
-            this.basePath += '/compiler';
+            this.testSuiteName = 'compiler';
         }
         else if (testType === CompilerTestType.Test262) {
-            this.basePath += '/test262';
+            this.testSuiteName = 'test262';
         } else {
-            this.basePath += '/compiler'; // default to this for historical reasons
+            this.testSuiteName = 'compiler'; // default to this for historical reasons
         }
+        this.basePath += '/' + this.testSuiteName;
     }
 
     public checkTestCodeOutput(fileName: string) {
         describe('compiler tests for ' + fileName, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
-            var justName: string;
-            var content: string;
-            var testCaseContent: { settings: Harness.TestCaseParser.CompilerSetting[]; testUnitData: Harness.TestCaseParser.TestUnitData[]; }
+            let justName: string;
+            let content: string;
+            let testCaseContent: { settings: Harness.TestCaseParser.CompilerSetting[]; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
 
-            var units: Harness.TestCaseParser.TestUnitData[];
-            var tcSettings: Harness.TestCaseParser.CompilerSetting[];
-            var createNewInstance: boolean;
+            let units: Harness.TestCaseParser.TestUnitData[];
+            let tcSettings: Harness.TestCaseParser.CompilerSetting[];
 
-            var lastUnit: Harness.TestCaseParser.TestUnitData;
-            var rootDir: string;
+            let lastUnit: Harness.TestCaseParser.TestUnitData;
+            let rootDir: string;
 
-            var result: Harness.Compiler.CompilerResult;
-            var program: ts.Program;
-            var options: ts.CompilerOptions;
+            let result: Harness.Compiler.CompilerResult;
+            let program: ts.Program;
+            let options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
-            var toBeCompiled: { unitName: string; content: string }[];
+            let toBeCompiled: { unitName: string; content: string }[];
             // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
-            var otherFiles: { unitName: string; content: string }[];
-            var harnessCompiler: Harness.Compiler.HarnessCompiler;
+            let otherFiles: { unitName: string; content: string }[];
+            let harnessCompiler: Harness.Compiler.HarnessCompiler;
 
-            var createNewInstance = false;
+            let createNewInstance = false;
 
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ''); // strips the fileName from the path.
@@ -101,10 +101,10 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             beforeEach(() => {
-                /* The compiler doesn't handle certain flags flipping during a single compilation setting. Tests on these flags will need 
+                /* The compiler doesn't handle certain flags flipping during a single compilation setting. Tests on these flags will need
                    a fresh compiler instance for themselves and then create a fresh one for the next test. Would be nice to get dev fixes
                    eventually to remove this limitation. */
-                for (var i = 0; i < tcSettings.length; ++i) {
+                for (let i = 0; i < tcSettings.length; ++i) {
                     // noImplicitAny is passed to getCompiler, but target is just passed in the settings blob to setCompilerSettings
                     if (!createNewInstance && (tcSettings[i].flag == "noimplicitany" || tcSettings[i].flag === 'target')) {
                         harnessCompiler = Harness.Compiler.getCompiler();
@@ -150,7 +150,7 @@ class CompilerBaselineRunner extends RunnerBase {
             // check errors
             it('Correct errors for ' + fileName, () => {
                 if (this.errors) {
-                    Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
+                    Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.tsx?$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
@@ -160,8 +160,8 @@ class CompilerBaselineRunner extends RunnerBase {
             // Source maps?
             it('Correct sourcemap content for ' + fileName, () => {
                 if (options.sourceMap || options.inlineSourceMap) {
-                    Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.ts$/, '.sourcemap.txt'), () => {
-                        var record = result.getSourceMapRecord();
+                    Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.tsx?$/, '.sourcemap.txt'), () => {
+                        let record = result.getSourceMapRecord();
                         if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                             return null;
@@ -171,7 +171,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-
             it('Correct JS output for ' + fileName, () => {
                 if (!ts.fileExtensionIs(lastUnit.name, '.d.ts') && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
@@ -179,36 +178,34 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
 
                     // check js output
-                    Harness.Baseline.runBaseline('Correct JS output for ' + fileName, justName.replace(/\.ts/, '.js'), () => {
-                        var tsCode = '';
-                        var tsSources = otherFiles.concat(toBeCompiled);
+                    Harness.Baseline.runBaseline('Correct JS output for ' + fileName, justName.replace(/\.tsx?/, '.js'), () => {
+                        let tsCode = '';
+                        let tsSources = otherFiles.concat(toBeCompiled);
                         if (tsSources.length > 1) {
                             tsCode += '//// [' + fileName + '] ////\r\n\r\n';
                         }
-                        for (var i = 0; i < tsSources.length; i++) {
+                        for (let i = 0; i < tsSources.length; i++) {
                             tsCode += '//// [' + Harness.Path.getFileName(tsSources[i].unitName) + ']\r\n';
                             tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? '\r\n' : '');
                         }
 
-                        var jsCode = '';
-                        for (var i = 0; i < result.files.length; i++) {
+                        let jsCode = '';
+                        for (let i = 0; i < result.files.length; i++) {
                             jsCode += '//// [' + Harness.Path.getFileName(result.files[i].fileName) + ']\r\n';
                             jsCode += getByteOrderMarkText(result.files[i]);
                             jsCode += result.files[i].code;
-                            // Re-enable this if we want to do another comparison of old vs new compiler baselines
-                            // jsCode += SyntacticCleaner.clean(result.files[i].code);
                         }
 
                         if (result.declFilesCode.length > 0) {
                             jsCode += '\r\n\r\n';
-                            for (var i = 0; i < result.declFilesCode.length; i++) {
+                            for (let i = 0; i < result.declFilesCode.length; i++) {
                                 jsCode += '//// [' + Harness.Path.getFileName(result.declFilesCode[i].fileName) + ']\r\n';
                                 jsCode += getByteOrderMarkText(result.declFilesCode[i]);
                                 jsCode += result.declFilesCode[i].code;
                             }
                         }
 
-                        var declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
+                        let declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
                             harnessCompiler.setCompilerSettings(tcSettings);
                         }, options);
 
@@ -239,15 +236,15 @@ class CompilerBaselineRunner extends RunnerBase {
                         throw new Error('Number of sourcemap files should be same as js files.');
                     }
 
-                    Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.ts/, '.js.map'), () => {
+                    Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.tsx?/, '.js.map'), () => {
                         if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
                             // Baselining isn't required here because there is no output.
                             return null;
                         }
 
-                        var sourceMapCode = '';
-                        for (var i = 0; i < result.sourceMaps.length; i++) {
+                        let sourceMapCode = '';
+                        for (let i = 0; i < result.sourceMaps.length; i++) {
                             sourceMapCode += '//// [' + Harness.Path.getFileName(result.sourceMaps[i].fileName) + ']\r\n';
                             sourceMapCode += getByteOrderMarkText(result.sourceMaps[i]);
                             sourceMapCode += result.sourceMaps[i].code;
@@ -265,19 +262,19 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
-                    // The full walker simulates the types that you would get from doing a full 
+                    // The full walker simulates the types that you would get from doing a full
                     // compile.  The pull walker simulates the types you get when you just do
                     // a type query for a random node (like how the LS would do it).  Most of the
                     // time, these will be the same.  However, occasionally, they can be different.
                     // Specifically, when the compiler internally depends on symbol IDs to order
-                    // things, then we may see different results because symbols can be created in a 
+                    // things, then we may see different results because symbols can be created in a
                     // different order with 'pull' operations, and thus can produce slightly differing
                     // output.
                     //
                     // For example, with a full type check, we may see a type outputed as: number | string
                     // But with a pull type check, we may see it as:                       string | number
                     //
-                    // These types are equivalent, but depend on what order the compiler observed 
+                    // These types are equivalent, but depend on what order the compiler observed
                     // certain parts of the program.
 
                     let allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
@@ -295,7 +292,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                     // Produce baselines.  The first gives the types for all expressions.
                     // The second gives symbols for all identifiers.
-                    var e1: Error, e2: Error;
+                    let e1: Error, e2: Error;
                     try {
                         checkBaseLines(/*isSymbolBaseLine:*/ false);
                     }
@@ -324,11 +321,11 @@ class CompilerBaselineRunner extends RunnerBase {
                         let pullExtension = isSymbolBaseLine ? '.symbols.pull' : '.types.pull';
 
                         if (fullBaseLine !== pullBaseLine) {
-                            Harness.Baseline.runBaseline('Correct full information for ' + fileName, justName.replace(/\.ts/, fullExtension), () => fullBaseLine);
-                            Harness.Baseline.runBaseline('Correct pull information for ' + fileName, justName.replace(/\.ts/, pullExtension), () => pullBaseLine);
+                            Harness.Baseline.runBaseline('Correct full information for ' + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                            Harness.Baseline.runBaseline('Correct pull information for ' + fileName, justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
                         }
                         else {
-                            Harness.Baseline.runBaseline('Correct information for ' + fileName, justName.replace(/\.ts/, fullExtension), () => fullBaseLine);
+                            Harness.Baseline.runBaseline('Correct information for ' + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
                         }
                     }
 
@@ -337,20 +334,20 @@ class CompilerBaselineRunner extends RunnerBase {
                         let typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
                         allFiles.forEach(file => {
-                            var codeLines = file.content.split('\n');
+                            let codeLines = file.content.split('\n');
                             typeWriterResults[file.unitName].forEach(result => {
                                 if (isSymbolBaseline && !result.symbol) {
                                     return;
                                 }
 
-                                var typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
-                                var formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
+                                let typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
+                                let formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
                                 if (!typeMap[file.unitName]) {
                                     typeMap[file.unitName] = {};
                                 }
 
-                                var typeInfo = [formattedLine];
-                                var existingTypeInfo = typeMap[file.unitName][result.line];
+                                let typeInfo = [formattedLine];
+                                let existingTypeInfo = typeMap[file.unitName][result.line];
                                 if (existingTypeInfo) {
                                     typeInfo = existingTypeInfo.concat(typeInfo);
                                 }
@@ -358,11 +355,11 @@ class CompilerBaselineRunner extends RunnerBase {
                             });
 
                             typeLines.push('=== ' + file.unitName + ' ===\r\n');
-                            for (var i = 0; i < codeLines.length; i++) {
-                                var currentCodeLine = codeLines[i];
+                            for (let i = 0; i < codeLines.length; i++) {
+                                let currentCodeLine = codeLines[i];
                                 typeLines.push(currentCodeLine + '\r\n');
                                 if (typeMap[file.unitName]) {
-                                    var typeInfo = typeMap[file.unitName][i];
+                                    let typeInfo = typeMap[file.unitName][i];
                                     if (typeInfo) {
                                         typeInfo.forEach(ty => {
                                             typeLines.push('>' + ty + '\r\n');
@@ -388,25 +385,27 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public initializeTests() {
-        describe("Setup compiler for compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler();
-            this.parseOptions();
-        });
-
-        // this will set up a series of describe/it blocks to run between the setup and cleanup phases
-        if (this.tests.length === 0) {
-            var testFiles = this.enumerateFiles(this.basePath, /\.ts$/, { recursive: true });
-            testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
-                this.checkTestCodeOutput(fn);
+        describe(this.testSuiteName + ' tests', () => {
+            describe("Setup compiler for compiler baselines", () => {
+                let harnessCompiler = Harness.Compiler.getCompiler();
+                this.parseOptions();
             });
-        }
-        else {
-            this.tests.forEach(test => this.checkTestCodeOutput(test));
-        }
 
-        describe("Cleanup after compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler();
+            // this will set up a series of describe/it blocks to run between the setup and cleanup phases
+            if (this.tests.length === 0) {
+                let testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
+                testFiles.forEach(fn => {
+                    fn = fn.replace(/\\/g, "/");
+                    this.checkTestCodeOutput(fn);
+                });
+            }
+            else {
+                this.tests.forEach(test => this.checkTestCodeOutput(test));
+            }
+
+            describe("Cleanup after compiler baselines", () => {
+                let harnessCompiler = Harness.Compiler.getCompiler();
+            });
         });
     }
 
@@ -417,8 +416,8 @@ class CompilerBaselineRunner extends RunnerBase {
             this.decl = false;
             this.output = false;
 
-            var opts = this.options.split(',');
-            for (var i = 0; i < opts.length; i++) {
+            let opts = this.options.split(',');
+            for (let i = 0; i < opts.length; i++) {
                 switch (opts[i]) {
                     case 'error':
                         this.errors = true;

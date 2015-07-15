@@ -33,7 +33,9 @@
         "mocha": "latest",
         "chai": "latest",
         "browserify": "latest",
-        "istanbul": "latest"
+        "istanbul": "latest",
+        "mocha-fivemat-progress-reporter": "latest",
+        "tslint": "latest"
     },
     "scripts": {
         "test": "jake runtests"

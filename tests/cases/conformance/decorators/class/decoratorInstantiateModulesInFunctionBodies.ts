@@ -10,7 +10,7 @@ export var test = 'abc';
 import { test } from './a';
 
 function filter(handler: any) {
-    return function (target: any) {
+    return function (target: any, propertyKey: string) {
         // ...
     };
 }

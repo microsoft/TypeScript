@@ -8,8 +8,8 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error
     Type '() => string | number | boolean' is not assignable to type '() => number'.
       Type 'string | number | boolean' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error TS2322: Type '(string[] | number[])[]' is not assignable to type 'tup'.
-  Property '0' is missing in type '(string[] | number[])[]'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error TS2322: Type '(number[] | string[])[]' is not assignable to type 'tup'.
+  Property '0' is missing in type '(number[] | string[])[]'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
   Property '0' is missing in type 'number[]'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
@@ -68,8 +68,8 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     interface myArray2 extends Array<Number|String> { }
     var c0: tup = [...temp2];                         // Error
         ~~
-!!! error TS2322: Type '(string[] | number[])[]' is not assignable to type 'tup'.
-!!! error TS2322:   Property '0' is missing in type '(string[] | number[])[]'.
+!!! error TS2322: Type '(number[] | string[])[]' is not assignable to type 'tup'.
+!!! error TS2322:   Property '0' is missing in type '(number[] | string[])[]'.
     var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
         ~~
 !!! error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.

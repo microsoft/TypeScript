@@ -1,8 +1,8 @@
 /* @internal */
-module ts.NavigateTo {
+namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
-    export function getNavigateToItems(program: Program, cancellationToken: CancellationTokenObject, searchValue: string, maxResultCount: number): NavigateToItem[] {
+    export function getNavigateToItems(program: Program, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[] {
         let patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 

@@ -103,9 +103,17 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-});
+}).concat(servicesSources);
 
-var harnessSources = [
+var languageServiceLibrarySources = [
+    "editorServices.ts",
+    "protocol.d.ts",
+    "session.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+}).concat(servicesSources);
+
+var harnessCoreSources = [
     "harness.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
@@ -121,7 +129,9 @@ var harnessSources = [
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-}).concat([
+});
+
+var harnessSources = harnessCoreSources.concat([
     "incrementalParser.ts",
     "jsDocParsing.ts",
     "services/colorization.ts",
@@ -129,7 +139,8 @@ var harnessSources = [
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
     "versionCache.ts",
-    "convertToBase64.ts"
+    "convertToBase64.ts",
+    "transpile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -148,7 +159,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -352,7 +363,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*keepComments*/ true,
             /*noResolve*/ false,
             /*stripInternal*/ true,
-            /*callback*/ function () { 
+            /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
                 prependFile(copyright, standaloneDefinitionsFile);
@@ -360,13 +371,27 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-                definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
+                definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
             });
 
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+
+var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
+compileFile(
+    lsslFile,
+    languageServiceLibrarySources,
+    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    /*prefixes*/ [copyright],
+    /*useBuiltCompiler*/ true,
+    /*noOutFile*/ false,
+    /*generateDeclarations*/ true);
+
+// Local target to build the language service server library
+desc("Builds language service server library");
+task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
@@ -465,7 +490,7 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler) {
+function exec(cmd, completeHandler, errorHandler) {
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
@@ -481,8 +506,12 @@ function exec(cmd, completeHandler) {
         complete();
     });
     ex.addListener("error", function(e, status) {
-        fail("Process exited with code " + status);
-    })
+        if(errorHandler) {
+            errorHandler(e, status);
+        } else {
+            fail("Process exited with code " + status);
+        }
+    });
 
     ex.run();
 }
@@ -504,9 +533,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, testConfigFile) {
+function writeTestConfigFile(tests, light, testConfigFile) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
+    var testConfigContents = JSON.stringify({ test: [tests], light: light });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -522,13 +551,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
     host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -538,7 +568,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
-    reporter = process.env.reporter || process.env.r || 'dot';
+    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
@@ -571,12 +601,13 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
     port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
-    if(tests) {
-        writeTestConfigFile(tests, testConfigFile);
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
     }
 
     tests = tests ? tests : '';
@@ -689,4 +720,25 @@ task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function
         complete();
     });
     ex.run();
+}, { async: true });
+
+desc("Updates the sublime plugin's tsserver");
+task("update-sublime", ["local", serverFile], function() {
+    jake.cpR(serverFile, "../TypeScript-Sublime-Plugin/tsserver/");
+    jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
+});
+
+// if the codebase were free of linter errors we could make jake runtests
+// run this task automatically
+desc("Runs tslint on the compiler sources");
+task("lint", [], function() {
+    function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
+    function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
+
+    var lintTargets = compilerSources.concat(harnessCoreSources);
+    for(var i in lintTargets) {
+        var f = lintTargets[i];
+        var cmd = 'tslint -f ' + f;
+        exec(cmd, success(f), failure(f));
+    }
 }, { async: true });

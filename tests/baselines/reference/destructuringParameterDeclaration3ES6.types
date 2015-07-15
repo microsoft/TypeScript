@@ -12,7 +12,7 @@ type arrayString = Array<String>
 >String : String
 
 type someArray = Array<String> | number[];
->someArray : number[] | String[]
+>someArray : String[] | number[]
 >Array : T[]
 >String : String
 

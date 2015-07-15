@@ -67,22 +67,6 @@
         "category": "Error",
         "code": 1023
     },
-    "A class or interface declaration can only have one 'extends' clause.": {
-        "category": "Error",
-        "code": 1024
-    },
-    "An 'extends' clause must precede an 'implements' clause.": {
-        "category": "Error",
-        "code": 1025
-    },
-    "A class can only extend a single class.": {
-        "category": "Error",
-        "code": 1026
-    },
-    "A class declaration can only have one 'implements' clause.": {
-        "category": "Error",
-        "code": 1027
-    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -98,10 +82,6 @@
     "'{0}' modifier cannot appear on a class element.": {
         "category": "Error",
         "code": 1031
-    },
-    "An interface declaration cannot have an 'implements' clause.": {
-        "category": "Error",
-        "code": 1032
     },
     "'super' must be followed by an argument list or member access.": {
         "category": "Error",
@@ -123,11 +103,27 @@
         "category": "Error",
         "code": 1039
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used here.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a data property.": {
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
     },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
+    "A '{0}' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045
     },
@@ -163,13 +159,37 @@
         "category": "Error",
         "code": 1054
     },
+    "Type '{0}' is not a valid async function return type.": {
+        "category": "Error",
+        "code": 1055  
+    },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Operand for 'await' does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1058
+    },
+    "Return expression in async function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1059
+    },
+    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1060
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
+    },
+    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+        "category": "Error",
+        "code": 1062
     },
     "An export assignment cannot be used in a namespace.": {
         "category": "Error",
@@ -183,7 +203,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "A '{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
     },
@@ -363,10 +383,6 @@
         "category": "Error",
         "code": 1132
     },
-    "Type reference expected.": {
-        "category": "Error",
-        "code": 1133
-    },
     "Variable declaration expected.": {
         "category": "Error",
         "code": 1134
@@ -431,18 +447,6 @@
         "category": "Error",
         "code": 1150
     },
-    "'var', 'let' or 'const' expected.": {
-        "category": "Error",
-        "code": 1152
-    },
-    "'let' declarations are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1153
-    },
-    "'const' declarations are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1154
-    },
     "'const' declarations must be initialized": {
         "category": "Error",
         "code": 1155
@@ -482,10 +486,6 @@
     "A computed property name in a class property declaration must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1166
-    },
-    "Computed property names are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1167
     },
     "A computed property name in a method overload must directly refer to a built-in symbol.": {
         "category": "Error",
@@ -546,10 +546,6 @@
     "A destructuring declaration must have an initializer.": {
         "category": "Error",
         "code": 1182
-    },
-    "Destructuring declarations are not allowed in ambient contexts.": {
-        "category": "Error",
-        "code": 1183
     },
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
@@ -671,13 +667,13 @@
         "category": "Error",
         "code": 1213
     },
-    "Type expected. '{0}' is a reserved word in strict mode": {
+    "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "Invalid use of '{0}'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1215
-    },
-    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
-        "category": "Error",
-        "code": 1216
     },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
@@ -686,7 +682,7 @@
     "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
         "category": "Error",
         "code": 1219
-    },    
+    },
     "Generators are only available when targeting ECMAScript 6 or higher.": {
         "category": "Error",
         "code": 1220
@@ -703,7 +699,112 @@
         "category": "Error",
         "code": 1223
     },
+    "Signature '{0}' must have a type predicate.": {
+        "category": "Error",
+        "code": 1224
+    },
+    "Cannot find parameter '{0}'.": {
+        "category": "Error",
+        "code": 1225
+    },
+    "Type predicate '{0}' is not assignable to '{1}'.": {
+        "category": "Error",
+        "code": 1226
+    },
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
+        "category": "Error",
+        "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
+    },
+    "A type predicate cannot reference a rest parameter.": {
+        "category": "Error",
+        "code": 1229
+    },
+    "A type predicate cannot reference element '{0}' in a binding pattern.": {
+        "category": "Error",
+        "code": 1230
+    },
+    "An export assignment can only be used in a module.": {
+        "category": "Error",
+        "code": 1231
+    },
+    "An import declaration can only be used in a namespace or module.": {
+        "category": "Error",
+        "code": 1232
+    },
+    "An export declaration can only be used in a module.": {
+        "category": "Error",
+        "code": 1233
+    },
+    "An ambient module declaration is only allowed at the top level in a file.": {
+        "category": "Error",
+        "code": 1234
+    },
+    "A namespace declaration is only allowed in a namespace or module.": {
+        "category": "Error",
+        "code": 1235
+    },
+    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
+        "category": "Error",
+        "code": 1236
+    },
 
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'await' expression is only allowed within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
+    },
+    "The return type of a property decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1236
+    },
+    "The return type of a parameter decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1237
+    },
+    "Unable to resolve signature of class decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1238
+    },
+    "Unable to resolve signature of parameter decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1239
+    },
+    "Unable to resolve signature of property decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1240
+    },
+    "Unable to resolve signature of method decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1241
+    },
+    "'abstract' modifier can only appear on a class or method declaration.": {
+        "category": "Error",
+        "code": 1242
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1243
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1244
+    },
+    "Method '{0}' cannot have an implementation because it is marked abstract.": {
+        "category": "Error",
+        "code": 1245
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -735,10 +836,6 @@
     "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
-    },
-    "A module cannot have more than one export assignment.": {
-        "category": "Error",
-        "code": 2308
     },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
@@ -848,11 +945,11 @@
         "category": "Error",
         "code": 2336
     },
-    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+    "Super calls are not permitted outside constructors or in nested functions inside constructors.": {
         "category": "Error",
         "code": 2337
     },
-    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.": {
         "category": "Error",
         "code": 2338
     },
@@ -860,7 +957,7 @@
         "category": "Error",
         "code": 2339
     },
-    "Only public and protected methods of the base class are accessible via the 'super' keyword": {
+    "Only public and protected methods of the base class are accessible via the 'super' keyword.": {
         "category": "Error",
         "code": 2340
     },
@@ -1476,7 +1573,118 @@
         "category": "Error",
         "code": 2505
     },
-
+    "'{0}' is referenced directly or indirectly in its own base expression.": {
+        "category": "Error",
+        "code": 2506
+    },
+    "Type '{0}' is not a constructor function type.": {
+        "category": "Error",
+        "code": 2507
+    },
+    "No base constructor has the specified number of type arguments.": {
+        "category": "Error",
+        "code": 2508
+    },
+    "Base constructor return type '{0}' is not a class or interface type.": {
+        "category": "Error",
+        "code": 2509
+    },
+    "Base constructors must all have the same return type.": {
+        "category": "Error",
+        "code": 2510
+    },
+    "Cannot create an instance of the abstract class '{0}'.": {
+        "category": "Error",
+        "code": 2511
+    },
+    "Overload signatures must all be abstract or not abstract.": {
+        "category": "Error",
+        "code": 2512
+    },
+    "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
+        "category": "Error",
+        "code": 2513
+    },
+    "Classes containing abstract methods must be marked abstract.": {
+        "category": "Error",
+        "code": 2514
+    },
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+        "category": "Error",
+        "code": 2515
+    },
+    "All declarations of an abstract method must be consecutive.": {
+        "category": "Error",
+        "code": 2516
+    },
+    "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
+        "category": "Error",
+        "code":2517
+    },
+    "Only an ambient class can be merged with an interface.": {
+        "category": "Error",
+        "code": 2518
+    },
+    "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
+        "category": "Error",
+        "code": 2520
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2521
+    },
+    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
+        "category": "Error",
+        "code": 2522
+    },
+    "'yield' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2523
+    },
+    "'await' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2524
+    },
+    "JSX element attributes type '{0}' must be an object type.": {
+        "category": "Error",
+        "code": 2600
+    },
+    "The return type of a JSX element constructor must return an object type.": {
+        "category": "Error",
+        "code": 2601
+    },
+    "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
+        "category": "Error",
+        "code": 2602
+    },
+    "Property '{0}' in type '{1}' is not assignable to type '{2}'": {
+        "category": "Error",
+        "code": 2603
+    },
+    "JSX element type '{0}' does not have any construct or call signatures.": {
+        "category": "Error",
+        "code": 2604
+    },
+    "JSX element type '{0}' is not a constructor function for JSX elements.": {
+        "category": "Error",
+        "code": 2605
+    },
+    "Property '{0}' of JSX spread attribute is not assignable to target property.": {
+        "category": "Error",
+        "code": 2606
+    },
+    "JSX element class does not support attributes because it does not have a '{0}' property": {
+        "category": "Error",
+        "code": 2607
+    },
+    "The global type 'JSX.{0}' may not have more than one property": {
+        "category": "Error",
+        "code": 2608
+    },
+    "Cannot emit namespaced JSX elements in React": {
+        "category": "Error",
+        "code": 2650
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -1845,7 +2053,7 @@
         "category": "Error",
         "code": 5050
     },
-     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
     },
@@ -2022,10 +2230,6 @@
         "category": "Message",
         "code": 6056
     },
-    "Preserve new-lines when emitting code.": {
-        "category": "Message",
-        "code": 6057
-    },
     "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",
         "code": 6058
@@ -2038,13 +2242,21 @@
         "category": "Message",
         "code": 6060
     },
-    "NEWLINE": { 
-        "category": "Message", 
+    "NEWLINE": {
+        "category": "Message",
         "code": 6061
     },
     "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error", 
+        "category": "Error",
         "code": 6062
+    },
+    "Specify JSX code generation: 'preserve' or 'react'": {
+        "category": "Message",
+        "code": 6080
+    },
+    "Argument for '--jsx' must be 'preserve' or 'react'.": {
+        "category": "Message",
+        "code": 6081
     },
     "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified.": {
         "category": "Error",
@@ -2057,6 +2269,14 @@
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
+    },
+    "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower.": {
+        "category": "Message",
+        "code": 6067
+    },
+    "Enables experimental support for ES7 async functions.": {
+        "category": "Message",
+        "code": 6068
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -2107,7 +2327,7 @@
         "category": "Error",
         "code": 7020
     },
-    "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
+    "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
         "code": 7022
     },
@@ -2123,6 +2343,12 @@
         "category": "Error",
         "code": 7025
     },
+    "JSX element implicitly has type 'any' because no interface 'JSX.{0}' exists": {
+        "category": "Error",
+        "code": 7026
+    },
+
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -2199,5 +2425,25 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
+    },
+    "JSX attributes must only be assigned a non-empty 'expression'.": {
+        "category": "Error",
+        "code": 17000
+    },
+    "JSX elements cannot have multiple attributes with the same name.": {
+        "category": "Error",
+        "code": 17001
+    },
+    "Expected corresponding JSX closing tag for '{0}'.": {
+        "category": "Error",
+        "code": 17002
+    },
+    "JSX attribute expected.": {
+        "category": "Error",
+        "code": 17003
+    },
+    "Cannot use JSX unless the '--jsx' flag is provided.": {
+        "category": "Error",
+        "code": 17004
     }
 }

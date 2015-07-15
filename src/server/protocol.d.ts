@@ -1,7 +1,7 @@
 /** 
   * Declaration module describing the TypeScript Server protocol 
   */
-declare module ts.server.protocol {
+declare namespace ts.server.protocol {
     /** 
       * A TypeScript Server message 
       */
@@ -67,12 +67,12 @@ declare module ts.server.protocol {
         command: string;
 
         /** 
-          * Contains error message if success == false. 
+          * Contains error message if success === false. 
           */
         message?: string;
 
         /**
-          * Contains message body if success == true.
+          * Contains message body if success === true.
           */
         body?: any;
     }

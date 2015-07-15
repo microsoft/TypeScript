@@ -4,12 +4,12 @@ tests/cases/compiler/superErrors.ts(4,19): error TS2335: 'super' can only be ref
 tests/cases/compiler/superErrors.ts(4,24): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/compiler/superErrors.ts(5,31): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/compiler/superErrors.ts(5,36): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/compiler/superErrors.ts(22,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
-tests/cases/compiler/superErrors.ts(27,27): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
-tests/cases/compiler/superErrors.ts(31,36): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superErrors.ts(22,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+tests/cases/compiler/superErrors.ts(27,27): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+tests/cases/compiler/superErrors.ts(31,36): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
 tests/cases/compiler/superErrors.ts(31,41): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/compiler/superErrors.ts(39,27): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
-tests/cases/compiler/superErrors.ts(43,36): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+tests/cases/compiler/superErrors.ts(39,27): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+tests/cases/compiler/superErrors.ts(43,36): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
 tests/cases/compiler/superErrors.ts(43,41): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/compiler/superErrors.ts(47,22): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/compiler/superErrors.ts(48,28): error TS1034: 'super' must be followed by an argument list or member access.
@@ -52,20 +52,20 @@ tests/cases/compiler/superErrors.ts(49,40): error TS1034: 'super' must be follow
             function inner() {
                 super.sayHello();
                 ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
             }
     
             // super call in a lambda in an inner function in a constructor 
             function inner2() {
                 var x = () => super.sayHello();
                               ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
             }
     
             // super call in a lambda in a function expression in a constructor 
             (function() { return () => super; })();
                                        ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
                                             ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
         }
@@ -77,13 +77,13 @@ tests/cases/compiler/superErrors.ts(49,40): error TS1034: 'super' must be follow
             function inner() {
                 var x = () => super.sayHello();
                               ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
             }
     
             // super call in a lambda in a function expression in a constructor 
             (function() { return () => super; })();
                                        ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
                                             ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
         }

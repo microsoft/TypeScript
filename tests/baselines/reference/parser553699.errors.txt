@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS1216: Type expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS2304: Cannot find name 'public'.
 
 
@@ -7,7 +7,7 @@ tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21)
       constructor() { }
       public banana (x: public) { }
                         ~~~~~~
-!!! error TS1216: Type expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                         ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
     }

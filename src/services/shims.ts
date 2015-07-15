@@ -19,7 +19,7 @@
 var debugObjectHost = (<any>this);
 
 /* @internal */
-module ts {
+namespace ts {
     export interface ScriptSnapshotShim {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -34,6 +34,9 @@ module ts {
          * Or undefined value if there was no change.
          */
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
 
     export interface Logger {
@@ -51,11 +54,12 @@ module ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): CancellationToken;
+        getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
+        useCaseSensitiveFileNames?(): boolean;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -233,6 +237,7 @@ module ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            // TODO: should this be '==='?
             if (encoded == null) {
                 return null;
             }
@@ -241,20 +246,34 @@ module ts {
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
+
+        public dispose(): void {
+            // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
+            // 'in' does not have this effect
+            if ("dispose" in this.scriptSnapshotShim) {
+                this.scriptSnapshotShim.dispose();
+            }
+        }
     }
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
+        private loggingEnabled = false;
+        private tracingEnabled = false;
 
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
         public log(s: string): void {
-            this.shimHost.log(s);
+            if (this.loggingEnabled) {
+                this.shimHost.log(s);
+            }
         }
 
         public trace(s: string): void {
-            this.shimHost.trace(s);
+            if (this.tracingEnabled) {
+                this.shimHost.trace(s);
+            }
         }
 
         public error(s: string): void {
@@ -270,8 +289,13 @@ module ts {
             return this.shimHost.getProjectVersion();
         }
 
+        public useCaseSensitiveFileNames(): boolean {
+            return this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+        }
+
         public getCompilationSettings(): CompilerOptions {
             var settingsJson = this.shimHost.getCompilationSettings();
+            // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;
@@ -313,8 +337,9 @@ module ts {
             }
         }
 
-        public getCancellationToken(): CancellationToken {
-            return this.shimHost.getCancellationToken();
+        public getCancellationToken(): HostCancellationToken {
+            var hostCancellationToken = this.shimHost.getCancellationToken();
+            return new ThrottledCancellationToken(hostCancellationToken);
         }
 
         public getCurrentDirectory(): string {
@@ -333,6 +358,29 @@ module ts {
         }
     }
 
+    /** A cancellation that throttles calls to the host */
+    class ThrottledCancellationToken implements HostCancellationToken {
+        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
+        // to marshall over to the host layer).  So we only bother actually checking once enough
+        // time has passed.
+        private lastCancellationCheckTime = 0;
+
+        constructor(private hostCancellationToken: HostCancellationToken) {
+        }
+
+        public isCancellationRequested(): boolean {
+            var time = Date.now();
+            var duration = Math.abs(time - this.lastCancellationCheckTime);
+            if (duration > 10) {
+                // Check no more than once every 10 ms.
+                this.lastCancellationCheckTime = time;
+                return this.hostCancellationToken.isCancellationRequested();
+            }
+
+            return false;
+        }
+    }
+
     export class CoreServicesShimHostAdapter implements ParseConfigHost {
 
         constructor(private shimHost: CoreServicesShimHost) {
@@ -344,15 +392,15 @@ module ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
-        if (!noPerfLogging) {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+        if (logPerformance) {
             logger.log(actionDescription);
             var start = Date.now();
         }
 
         var result = action();
 
-        if (!noPerfLogging) {
+        if (logPerformance) {
             var end = Date.now();
             logger.log(actionDescription + " completed in " + (end - start) + " msec");
             if (typeof (result) === "string") {
@@ -367,9 +415,9 @@ module ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action, noPerfLogging);
+            var result = simpleForwardCall(logger, actionDescription, action, logPerformance);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -408,6 +456,7 @@ module ts {
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
         private logger: Logger;
+        private logPerformance = false;
 
         constructor(factory: ShimFactory,
             private host: LanguageServiceShimHost,
@@ -417,7 +466,7 @@ module ts {
         }
 
         public forwardJSONCall(actionDescription: string, action: () => any): string {
-            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
+            return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
         /// DISPOSE
@@ -806,6 +855,7 @@ module ts {
 
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
+        private logPerformance = false;
 
         constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
@@ -815,7 +865,7 @@ module ts {
         public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
             return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
                 () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
-                /*noPerfLogging:*/ true);
+                this.logPerformance);
         }
 
         /// COLORIZATION
@@ -833,13 +883,14 @@ module ts {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
+        private logPerformance = false;
 
         constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
+            return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -909,7 +960,7 @@ module ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry = createDocumentRegistry();
+        private documentRegistry: DocumentRegistry;
 
         /*
          * Returns script API version.
@@ -920,6 +971,9 @@ module ts {
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
+                if (this.documentRegistry === undefined) {
+                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+                }
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
                 var languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
