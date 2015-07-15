@@ -311,7 +311,7 @@ var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnostic
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
 
-file(processDiagnosticMessagesTs)
+file(processDiagnosticMessagesTs);
 
 // processDiagnosticMessages script
 compileFile(processDiagnosticMessagesJs,
@@ -341,6 +341,65 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs])
 
+
+// Publish nightly
+var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
+var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
+var packageJson = "package.json";
+var programTs = path.join(compilerDirectory, "program.ts")
+
+file(configureNightlyTs);
+
+compileFile(/*outfile*/configureNightlyJs,
+            /*sources*/ [configureNightlyTs],
+            /*prereqs*/ [configureNightlyTs],
+            /*prefixes*/ [],
+            /*useBuiltCompiler*/ false,
+            /*noOutFile*/ false,
+            /*generateDeclarations*/ false,
+            /*outDir*/ undefined,
+            /*preserveConstEnums*/ undefined,
+            /*keepComments*/ false,
+            /*noResolve*/ false,
+            /*stripInternal*/ false,
+            /*callback*/ function () {
+                var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
+                console.log(cmd);
+                var ex = jake.createExec([cmd]);
+                // Add listeners for output and error
+                ex.addListener("stdout", function(output) {
+                    process.stdout.write(output);
+                });
+                ex.addListener("stderr", function(error) {
+                    process.stderr.write(error);
+                });
+                ex.addListener("cmdEnd", function() {
+                    complete();
+                });
+                ex.run();
+            });
+
+task("setDebugModeTrue", function() {
+    useDebugMode = true;
+});
+
+desc("Configure, build, test, and publish the nightly release.");
+task("publish-nightly", [configureNightlyJs, "LKG", "clean", "setDebugModeTrue", "runtests"], function () {
+    var cmd = "npm publish";
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function(output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function(error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function() {
+        complete();
+    });
+    ex.run();
+}, {async: true});
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
