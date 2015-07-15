@@ -735,7 +735,7 @@ module Harness {
 
     /** Functionality for compiling TypeScript code */
     export module Compiler {
-        /** Aggregate letious writes into a single array of lines. Useful for passing to the
+        /** Aggregate various writes into a single array of lines. Useful for passing to the
          *  TypeScript compiler to fill with source code or errors.
          */
         export class WriterAggregator implements ITextWriter {
