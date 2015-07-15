@@ -421,7 +421,221 @@ namespace ts {
     
     /* @internal */
     export const enum TransformFlags {
-        ThisNodeFlags = 0
+        //
+        // Individual Facts
+        //
+        
+        // A fact that states that a node is TypeScript syntax
+        TypeScript = 1 << 1,
+        
+        // A fact that states that this node or its subtree contains TypeScript 
+        // syntax
+        ContainsTypeScript = 1 << 2,
+        ContainsTypeScriptPropertyDeclarationWithInitializer = 1 << 3,
+        ContainsTypeScriptClassSyntaxExtension = 1 << 4,
+        ContainsTypeScriptGeneratedStatements = 1 << 5,
+        
+        // A fact that states that a node is ES6 syntax
+        ES6 = 1 << 6,
+        
+        // A fact that states that this node or its subtree contains ES6 syntax
+        ContainsES6 = 1 << 7,
+        
+        ContainsES6Yield = 1 << 8,
+        
+        // A fact that states that this node or its subtree contains an ES6 Binding Pattern
+        ContainsES6BindingPattern = 1 << 9,
+        
+        // A fact that states that this node or its subtree contains an ES6 Rest Parameter
+        ContainsES6RestParameter = 1 << 10,
+        
+        // A fact that states that this node or its subtree contains an ES6 Parameter Initializer
+        ContainsES6ParameterInitializer = 1 << 11,
+        
+        ContainsES6SpreadElement = 1 << 12,
+        
+        ContainsES6LetOrConst = 1 << 13,
+        
+        // A fact that states that this node or its subtree contains a captured lexical `this` binding
+        ContainsCapturedThis = 1 << 14,
+        
+        // A fact that states that this node or its subtree contains a lexical `this` binding
+        ContainsLexicalThis = 1 << 15,
+        
+        ContainsHoistedDeclarationInES6Generator = 1 << 16,
+        ContainsCompletionStatementInES6Genertator = 1 << 17,
+
+        //
+        // Assertions
+        //
+        
+        ThisNodeIsTypeScript = TypeScript | ContainsTypeScript,
+        ThisNodeIsTypeScriptAccessibilityModifier = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptOverload = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptPropertyDeclaration = ThisNodeIsTypeScript | ContainsTypeScriptClassSyntaxExtension,
+        ThisNodeIsTypeScriptPropertyDeclarationWithInitializer = ThisNodeIsTypeScriptPropertyDeclaration | ContainsTypeScriptPropertyDeclarationWithInitializer,
+        ThisNodeIsTypeScriptAmbientDeclaration = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptParameterPropertyAssignment = ThisNodeIsTypeScript | ContainsTypeScriptClassSyntaxExtension,
+        ThisNodeIsTypeScriptOptionalParameter = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptClassWithSyntaxExtensions = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptEnumDeclaration = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptModuleDeclaration = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptImportEqualsDeclaration = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptExportAssignmentDeclaration = ThisNodeIsTypeScript,
+        ThisNodeIsTypeScriptDecorator = ThisNodeIsTypeScript,
+        
+        // Asserts that this node is ES6, and any subtree that contains it contains ES6.
+        ThisNodeIsES6 = ES6 | ContainsES6,
+        
+        ThisNodeIsES6Yield = ThisNodeIsES6 | ContainsES6Yield,
+        
+        // Asserts that this node is ES6, and any subtree that contains it contains an 
+        // ES6 binding pattern.
+        ThisNodeIsES6BindingPattern = ThisNodeIsES6 | ContainsES6BindingPattern,
+
+        // Asserts that this node is ES6, and any subtree that contains it contains an 
+        // ES6 rest parameter.
+        ThisNodeIsES6RestParameter = ThisNodeIsES6 | ContainsES6RestParameter,
+
+        // Asserts that this node is ES6, and any subtree that contains it contains an 
+        // ES6 parameter initializer.
+        ThisNodeIsES6ParameterInitializer = ThisNodeIsES6 | ContainsES6ParameterInitializer,
+        
+        ThisNodeIsES6SpreadElement = ThisNodeIsES6 | ContainsES6SpreadElement,
+        ThisNodeIsES6LetOrConst = ThisNodeIsES6 | ContainsES6LetOrConst,
+        ThisNodeIsES6ArrowFunction = ThisNodeIsES6,
+        ThisNodeIsES6Generator = ThisNodeIsES6,
+        ThisNodeIsES6MethodDeclaration = ThisNodeIsES6,
+        ThisNodeIsES6DestructuringAssignment = ThisNodeIsES6,
+        ThisNodeIsES6ComputedPropertyName = ThisNodeIsES6,
+        ThisNodeIsES6ShorthandPropertyAssignment = ThisNodeIsES6,
+        ThisNodeIsES6ForOfStatement = ThisNodeIsES6,
+        ThisNodeIsES6ImportDeclaration = ThisNodeIsES6,
+        ThisNodeIsES6ExportDeclaration = ThisNodeIsES6,
+        ThisNodeIsES6Export = ThisNodeIsES6,
+        ThisNodeIsES6NoSubstitutionTemplateLiteral = ThisNodeIsES6,
+        ThisNodeIsES6TemplateExpression = ThisNodeIsES6,
+        ThisNodeIsES6TaggedTemplateExpression = ThisNodeIsES6,
+        ThisNodeIsES6BinaryOrOctalLiteralExpression = ThisNodeIsES6,
+
+        // Asserts that this node is ES6, and any subtree that contains it contains an 
+        // ES6 class expression or declaration.
+        ThisNodeIsES6Class = ThisNodeIsES6,
+        
+        // Additional markers 
+        ThisNodeCapturesLexicalThis = ContainsCapturedThis,
+        ThisNodeIsThisKeyword = ContainsLexicalThis,
+        ThisNodeIsHoistedDeclarationInGenerator = ContainsHoistedDeclarationInES6Generator,
+        ThisNodeIsCompletionStatementInGenerator = ContainsCompletionStatementInES6Genertator,
+        
+        //
+        // Masks
+        //
+        
+        ThisNodeIsTypeScriptMask =
+            TypeScript,
+            
+        ThisNodeIsES6Mask =
+            ES6,
+
+        // Mask used to clear transform flags that only apply to a node and not a subtree.
+        ThisNodeFlags = 
+            ThisNodeIsTypeScriptMask |
+            ThisNodeIsES6Mask,
+            
+        //
+        // Transformation Tests
+        //
+        
+        ThisNodeNeedsTransformToES6 =
+            ThisNodeIsTypeScriptMask |
+            ContainsTypeScriptGeneratedStatements,
+        
+        ThisNodeNeedsTransformToES5 =
+            ThisNodeIsES6Mask,
+          
+        //  
+        // Questions
+        //
+        
+        SubtreeContainsTypeScript =
+            ThisNodeIsTypeScriptMask |
+            ContainsTypeScript,
+            
+        SubtreeNeedsTransformToES6 =
+            SubtreeContainsTypeScript,
+            
+        SubtreeContainsTypeScriptGeneratedStatements =
+            ContainsTypeScriptGeneratedStatements,
+        
+        SubtreeContainsLexicalThis =
+            ContainsLexicalThis,
+            
+        SubtreeCapturesLexicalThis =
+            ContainsCapturedThis,
+            
+        SubtreeContainsRestParameter =
+            ContainsES6RestParameter,
+            
+        SubtreeContainsBindingPattern =
+            ContainsES6BindingPattern,
+            
+        SubtreeContainsParameterInitializer =
+            ContainsES6ParameterInitializer,
+            
+        SubtreeContainsES6 =
+            ThisNodeIsES6Mask |
+            ContainsES6,
+            
+        SubtreeNeedsTransformToES5 =
+            SubtreeContainsES6,
+            
+        SubtreeNeedsAnyTransform =
+            SubtreeNeedsTransformToES6 |
+            SubtreeNeedsTransformToES5,
+            
+        ThisParameterNeedsTransform =
+            ContainsES6BindingPattern |
+            ContainsES6RestParameter |
+            ContainsES6ParameterInitializer,
+            
+        //
+        // Scope Exclusions
+        //
+        
+        ArrowFunctionScopeExcludes =
+            ContainsTypeScriptGeneratedStatements |
+            ContainsES6Yield |
+            ContainsES6BindingPattern |
+            ContainsES6RestParameter |
+            ContainsES6ParameterInitializer |
+            ContainsES6LetOrConst |
+            ContainsHoistedDeclarationInES6Generator |
+            ContainsCompletionStatementInES6Genertator,
+            
+        FunctionScopeExcludes =
+            ArrowFunctionScopeExcludes |
+            ContainsLexicalThis |
+            ContainsCapturedThis,
+            
+        ClassScopeExcludes =
+            ContainsLexicalThis |
+            ContainsCapturedThis |
+            ContainsES6BindingPattern |
+            ContainsTypeScriptClassSyntaxExtension,
+            
+        ModuleScopeExcludes =
+            ContainsTypeScriptGeneratedStatements |
+            ContainsES6LetOrConst |
+            ContainsLexicalThis |
+            ContainsCapturedThis |
+            ContainsES6BindingPattern,
+            
+        BlockScopeExcludes =
+            ContainsTypeScriptGeneratedStatements,
+            
+        CallOrArrayLiteralExcludes =
+            ContainsES6SpreadElement,
     }
     
     /* @internal */
@@ -481,10 +695,22 @@ namespace ts {
         hasTrailingComma?: boolean;
     }
 
-    export interface ModifiersArray extends NodeArray<Node> {
+    export interface ModifiersArray extends NodeArray<Modifier> {
         flags: number;
     }
-
+    
+    // @kind(SyntaxKind.AbstractKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.AsyncKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.ConstKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.DeclareKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.DefaultKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.ExportKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.PublicKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.PrivateKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.ProtectedKeyword, { create: false, update: false, test: false })
+    // @kind(SyntaxKind.StaticKeyword, { create: false, update: false, test: false })
+    export type Modifier = Node;
+    
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         // @factoryparam
@@ -502,15 +728,16 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    // @nofactoryanynodetest
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
     
     // @factoryhidden("decorators", false)
     // @factoryhidden("modifiers", false)
-    // @nofactoryanynodetest
     export interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
+    }
+    
+    export interface DeclarationStatement extends Declaration, Statement {
     }
     
     // @kind(SyntaxKind.ComputedPropertyName)
@@ -544,13 +771,15 @@ namespace ts {
     // @factoryhidden("name")
     // @factoryhidden("decorators")
     // @factoryhidden("modifiers")
-    export type CallSignatureDeclaration = SignatureDeclaration;
+    export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
+    }
 
     // @kind(SyntaxKind.ConstructSignature)
     // @factoryhidden("name")
     // @factoryhidden("decorators")
     // @factoryhidden("modifiers")
-    export type ConstructSignatureDeclaration = SignatureDeclaration;
+    export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement {
+    }
 
     // @kind(SyntaxKind.VariableDeclaration)
     export interface VariableDeclaration extends Declaration {
@@ -588,7 +817,7 @@ namespace ts {
     }
     
     // @kind(SyntaxKind.PropertySignature)
-    export interface PropertySignature extends Declaration {
+    export interface PropertySignature extends TypeElement {
         name: DeclarationName;              // Declared property name
         // @factoryparam
         questionToken?: Node;               // Present on optional property
@@ -669,14 +898,18 @@ namespace ts {
         asteriskToken?: Node;
         // @factoryparam
         questionToken?: Node;
+
+        // @visitor("visitBlockOrExpressionInNewLexicalScope")
         body?: Block | Expression;
     }
 
     // @kind(SyntaxKind.FunctionDeclaration)
     // @factoryhidden("questionToken", true)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
-    export interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
+    export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
         name?: Identifier;
+        
+        // @visitor("visitBlockInNewLexicalScope")
         body?: Block;
     }
 
@@ -684,7 +917,7 @@ namespace ts {
     // @factoryhidden("asteriskToken", true)
     // @factoryhidden("body", true)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "questionToken", "typeParameters", "parameters", "type")
-    export interface MethodSignature extends FunctionLikeDeclaration {
+    export interface MethodSignature extends SignatureDeclaration, TypeElement {
     }
 
     // Note that a MethodDeclaration is considered both a ClassElement and an ObjectLiteralElement.
@@ -700,7 +933,7 @@ namespace ts {
     // @factoryhidden("questionToken", true)
     // @factoryhidden("body", false)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
-    export interface MethodDeclaration extends MethodSignature, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         body?: Block;
     }
     
@@ -729,6 +962,8 @@ namespace ts {
     // SyntaxKind.SetAccessor
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
+        
+        // @visitor("visitBlockInNewLexicalScope")
         body: Block;
     }
     
@@ -749,11 +984,10 @@ namespace ts {
     // @kind(SyntaxKind.IndexSignature)
     // @factoryhidden("typeParameters")
     // @factoryhidden("name")
-    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
+    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement, TypeElement {
         _indexSignatureDeclarationBrand: any;
     }
 
-    // @nofactoryanynodetest
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
@@ -790,14 +1024,14 @@ namespace ts {
     export interface TypeQueryNode extends TypeNode {
         exprName: EntityName;
     }
-
+    
     // A TypeLiteral is the declaration node for an anonymous symbol.
     // @kind(SyntaxKind.TypeLiteral)
     // @factoryhidden("name", true)
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
     export interface TypeLiteralNode extends TypeNode, Declaration {
-        members: NodeArray<Node>;
+        members: NodeArray<TypeElement>;
     }
 
     // @kind(SyntaxKind.ArrayType)
@@ -839,7 +1073,6 @@ namespace ts {
     // checker actually thinks you have something of the right type.  Note: the brands are
     // never actually given values.  At runtime they have zero cost.
     // @kind(SyntaxKind.OmittedExpression)
-    // @nofactoryanynodetest
     export interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
@@ -870,9 +1103,8 @@ namespace ts {
     // @kind(SyntaxKind.TrueKeyword, { create: false })
     // @kind(SyntaxKind.FalseKeyword, { create: false })
     // @kind(SyntaxKind.NullKeyword, { create: false })
-    // @kind(SyntaxKind.ThisKeyword, { create: false })
+    // @kind(SyntaxKind.ThisKeyword)
     // @kind(SyntaxKind.SuperKeyword, { create: false })
-    // @nofactoryanynodetest
     export interface LeftHandSideExpression extends PostfixExpression {
         _leftHandSideExpressionBrand: any;
     }
@@ -936,6 +1168,8 @@ namespace ts {
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
+        
+        // @visitor("visitBlockOrExpressionInNewLexicalScope")
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
@@ -1109,7 +1343,6 @@ namespace ts {
 
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
-    // @nofactoryanynodetest
     export interface Statement extends Node {
         _statementBrand: any;
     }
@@ -1122,7 +1355,7 @@ namespace ts {
 
     // @kind(SyntaxKind.MissingDeclaration)
     // @factoryhidden("name", true)
-    export interface MissingDeclaration extends Declaration, Statement {
+    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
     }
 
     // @kind(SyntaxKind.Block)
@@ -1258,7 +1491,9 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.ClassDeclaration)
-    export interface ClassDeclaration extends ClassLikeDeclaration, Statement {
+    // @factoryorder("decorators", "modifiers", "name", "typeParameters", "heritageClauses", "members")
+    export interface ClassDeclaration extends ClassLikeDeclaration, DeclarationStatement {
+        name?: Identifier;
     }
 
     // @kind(SyntaxKind.ClassExpression)
@@ -1270,13 +1505,20 @@ namespace ts {
     export interface ClassElement extends Declaration {
         _classElementBrand: any;
     }
+    
+    export interface TypeElement extends Declaration {
+        _typeElementBrand: any;
+
+        // @factoryparam
+        questionToken?: Node;
+    }
 
     // @kind(SyntaxKind.InterfaceDeclaration)
-    export interface InterfaceDeclaration extends Declaration, Statement {
+    export interface InterfaceDeclaration extends DeclarationStatement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
-        members: NodeArray<Declaration>;
+        members: NodeArray<TypeElement>;
     }
 
     // @kind(SyntaxKind.HeritageClause)
@@ -1286,7 +1528,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.TypeAliasDeclaration)
-    export interface TypeAliasDeclaration extends Declaration, Statement {
+    export interface TypeAliasDeclaration extends DeclarationStatement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
@@ -1303,14 +1545,16 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.EnumDeclaration)
-    export interface EnumDeclaration extends Declaration, Statement {
+    export interface EnumDeclaration extends DeclarationStatement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
 
     // @kind(SyntaxKind.ModuleDeclaration)
-    export interface ModuleDeclaration extends Declaration, Statement {
+    export interface ModuleDeclaration extends DeclarationStatement {
         name: Identifier | LiteralExpression;
+        
+        // @visitor("visitModuleBlockOrModuleDeclarationInNewLexicalScope")
         body: ModuleBlock | ModuleDeclaration;
     }
 
@@ -1320,7 +1564,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.ImportEqualsDeclaration)
-    export interface ImportEqualsDeclaration extends Declaration, Statement {
+    export interface ImportEqualsDeclaration extends DeclarationStatement {
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -1368,7 +1612,7 @@ namespace ts {
 
     // @kind(SyntaxKind.ExportDeclaration)
     // @factoryhidden("name", true)
-    export interface ExportDeclaration extends Declaration, Statement {
+    export interface ExportDeclaration extends DeclarationStatement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -1398,7 +1642,7 @@ namespace ts {
 
     // @kind(SyntaxKind.ExportAssignment)
     // @factoryhidden("name", true)
-    export interface ExportAssignment extends Declaration, Statement {
+    export interface ExportAssignment extends DeclarationStatement {
         isExportEquals?: boolean;
         expression: Expression;
     }
@@ -2303,6 +2547,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        /* @internal */ experimentalTransforms?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

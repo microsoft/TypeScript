@@ -20,6 +20,8 @@
         "checker.ts",
         "transform.ts",
         "transform.generated.ts",
+        "transforms/es6.ts",
+        "transforms/es5.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",

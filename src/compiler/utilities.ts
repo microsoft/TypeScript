@@ -1112,67 +1112,71 @@ namespace ts {
     }
 
     export function isDeclaration(node: Node): node is Declaration {
-        switch (node.kind) {
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.BindingElement:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.Constructor:
-            case SyntaxKind.EnumDeclaration:
-            case SyntaxKind.EnumMember:
-            case SyntaxKind.ExportSpecifier:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.ImportClause:
-            case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.Parameter:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.VariableDeclaration:
-                return true;
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
         }
         return false;
     }
 
     export function isStatement(n: Node): n is Statement {
-        switch (n.kind) {
-            case SyntaxKind.BreakStatement:
-            case SyntaxKind.ContinueStatement:
-            case SyntaxKind.DebuggerStatement:
-            case SyntaxKind.DoStatement:
-            case SyntaxKind.ExpressionStatement:
-            case SyntaxKind.EmptyStatement:
-            case SyntaxKind.ForInStatement:
-            case SyntaxKind.ForOfStatement:
-            case SyntaxKind.ForStatement:
-            case SyntaxKind.IfStatement:
-            case SyntaxKind.LabeledStatement:
-            case SyntaxKind.ReturnStatement:
-            case SyntaxKind.SwitchStatement:
-            case SyntaxKind.ThrowKeyword:
-            case SyntaxKind.TryStatement:
-            case SyntaxKind.VariableStatement:
-            case SyntaxKind.WhileStatement:
-            case SyntaxKind.WithStatement:
-            case SyntaxKind.ExportAssignment:
-                return true;
-            default:
-                return false;
+        if (n) {
+            switch (n.kind) {
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.DebuggerStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.EmptyStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.ThrowKeyword:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ImportDeclaration:
+                    return true;
+            }
         }
+        return false;
     }
-
+    
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
@@ -1243,6 +1247,18 @@ namespace ts {
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
+    }
+
+    export function isDestructuringAssignment(node: Node): node is BinaryExpression {
+        if (isBinaryExpression(node)) {
+            if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
+                let left = node.left;
+                return left.kind === SyntaxKind.ObjectLiteralExpression 
+                    || left.kind === SyntaxKind.ArrayLiteralExpression;
+            }
+        }
+        
+        return false;
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
@@ -1385,7 +1401,7 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
-    export function isModifier(token: SyntaxKind): boolean {
+    export function isModifierKind(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.AsyncKeyword:
@@ -1698,8 +1714,15 @@ namespace ts {
         }
         return false;
     }
+    
+    export interface AllAccessorDeclarations {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
+    }
 
-    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
+    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
         let firstAccessor: AccessorDeclaration;
         let secondAccessor: AccessorDeclaration;
         let getAccessor: AccessorDeclaration;

@@ -214,6 +214,11 @@ namespace ts {
             description: Diagnostics.Enables_experimental_support_for_ES7_decorators
         },
         {
+            name: "experimentalTransforms",
+            type: "boolean",
+            experimental: true
+        },
+        {
             name: "emitDecoratorMetadata",
             type: "boolean",
             experimental: true,

@@ -43,6 +43,7 @@ var compilerSources = [
     "checker.ts",
     "transform.ts",
     "transform.generated.ts",
+    "transforms/es6.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -64,6 +65,7 @@ var servicesSources = [
     "checker.ts",
     "transform.ts",
     "transform.generated.ts",
+    "transforms/es6.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -229,7 +231,9 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
           , preserveConstEnums = opts && opts.preserveConstEnums
           , keepComments = opts && opts.keepComments
           , noResolve = opts && opts.noResolve
-          , stripInternal = opts && opts.stripInternal;
+          , stripInternal = opts && opts.stripInternal
+          , experimentalDecorators = opts && opts.experimentalDecorators
+          , target = opts && opts.target;
          
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -266,6 +270,14 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
 
         if (stripInternal) {
             options += " --stripInternal";
+        }
+        
+        if (experimentalDecorators) {
+            options += " --experimentalDecorators";
+        }
+        
+        if (target) {
+            options += " --target " + target;
         }
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
@@ -360,6 +372,9 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var processTypesJs = path.join(scriptsDirectory, "processTypes.js");
 var processTypesTs = path.join(scriptsDirectory, "processTypes.ts");
 var typesTs = path.join(compilerDirectory, "types.ts");
+var factoryTs = path.join(compilerDirectory, "factory.ts");
+var transformTs = path.join(compilerDirectory, "transform.ts");
+var utilitiesTs = path.join(compilerDirectory, "utilities.ts");
 var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
 var transformGeneratedTs = path.join(compilerDirectory, "transform.generated.ts");
 
@@ -368,12 +383,18 @@ file(processTypesTs);
 // processTypes script
 compileFile(processTypesJs, [processTypesTs], [processTypesTs], {
     useBuiltCompiler: false,
-    noOutFile: true 
+    noOutFile: true,
+    experimentalDecorators: true,
+    target: "es5"
 });
 
 // The generated factory; built for the compiler and for the 'generate-factory' task
-file(factoryGeneratedTs, [processTypesJs, typesTs], function() {
-    var cmd = "node " + processTypesJs + " " + typesTs;
+file(factoryGeneratedTs, [processTypesJs, typesTs, factoryTs, transformTs, utilitiesTs], function() {
+    var cmd = "node " + processTypesJs 
+            + " " + typesTs
+            + " " + factoryTs
+            + " " + transformTs
+            + " " + utilitiesTs;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error

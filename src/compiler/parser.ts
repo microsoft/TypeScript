@@ -996,7 +996,9 @@ namespace ts {
                 parseErrorBeforeNextFinishedNode = false;
                 node.parserContextFlags |= ParserContextFlags.ThisNodeHasError;
             }
-
+            
+            transform.aggregateTransformFlags(node);
+            
             return node;
         }
 
@@ -1114,7 +1116,7 @@ namespace ts {
         }
 
         function parseAnyContextualModifier(): boolean {
-            return isModifier(token) && tryParse(nextTokenCanFollowModifier);
+            return isModifierKind(token) && tryParse(nextTokenCanFollowModifier);
         }
 
         function canFollowModifier(): boolean {
@@ -1963,7 +1965,7 @@ namespace ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifier(token) || token === SyntaxKind.AtToken;
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken;
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -1984,7 +1986,7 @@ namespace ts {
 
             node.name = parseIdentifierOrPattern();
 
-            if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
+            if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifierKind(token)) {
                 // in cases like
                 // 'use strict'
                 // function foo(static)
@@ -2091,8 +2093,8 @@ namespace ts {
             parseSemicolon();
         }
 
-        function parseSignatureMember(kind: SyntaxKind): SignatureDeclaration {
-            let node = beginNode(<SignatureDeclaration>factory.createNode(kind));
+        function parseSignatureMember(kind: SyntaxKind): CallSignatureDeclaration | ConstructSignatureDeclaration {
+            let node = beginNode(factory.createNode<CallSignatureDeclaration | ConstructSignatureDeclaration>(kind));
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
@@ -2131,7 +2133,7 @@ namespace ts {
                 return true;
             }
 
-            if (isModifier(token)) {
+            if (isModifierKind(token)) {
                 nextToken();
                 if (isIdentifier()) {
                     return true;
@@ -2174,7 +2176,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parsePropertyOrMethodSignature(): Declaration {
+        function parsePropertyOrMethodSignature(): PropertySignature | MethodSignature {
             let fullStart = scanner.getStartPos();
             let name = parsePropertyName();
             let questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
@@ -2207,7 +2209,7 @@ namespace ts {
                 case SyntaxKind.OpenBracketToken: // Both for indexers and computed properties
                     return true;
                 default:
-                    if (isModifier(token)) {
+                    if (isModifierKind(token)) {
                         let result = lookAhead(isStartOfIndexSignatureDeclaration);
                         if (result) {
                             return result;
@@ -2219,7 +2221,7 @@ namespace ts {
         }
 
         function isStartOfIndexSignatureDeclaration() {
-            while (isModifier(token)) {
+            while (isModifierKind(token)) {
                 nextToken();
             }
 
@@ -2235,7 +2237,7 @@ namespace ts {
                 canParseSemicolon();
         }
 
-        function parseTypeMember(): Declaration {
+        function parseTypeMember(): TypeElement {
             switch (token) {
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.LessThanToken:
@@ -2260,7 +2262,7 @@ namespace ts {
                     // when incrementally parsing as the parser will produce the Index declaration
                     // if it has the same text regardless of whether it is inside a class or an
                     // object type.
-                    if (isModifier(token)) {
+                    if (isModifierKind(token)) {
                         let result = tryParse(parseIndexSignatureWithModifiers);
                         if (result) {
                             return result;
@@ -2293,14 +2295,14 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseObjectTypeMembers(): NodeArray<Declaration> {
-            let members: NodeArray<Declaration>;
+        function parseObjectTypeMembers(): NodeArray<TypeElement> {
+            let members: NodeArray<TypeElement>;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 members = parseList(ParsingContext.TypeMembers, parseTypeMember);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                members = createMissingList<Declaration>();
+                members = createMissingList<TypeElement>();
             }
 
             return members;
@@ -2437,11 +2439,11 @@ namespace ts {
                 // ( ...
                 return true;
             }
-            if (isIdentifier() || isModifier(token)) {
+            if (isIdentifier() || isModifierKind(token)) {
                 nextToken();
                 if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
                     token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
-                    isIdentifier() || isModifier(token)) {
+                    isIdentifier() || isModifierKind(token)) {
                     // ( id :
                     // ( id ,
                     // ( id ?
@@ -4585,7 +4587,7 @@ namespace ts {
             }
 
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
-            while (isModifier(token)) {
+            while (isModifierKind(token)) {
                 idToken = token;
                 // If the idToken is a class modifier (protected, private, public, and static), it is
                 // certain that we are starting to parse class member. This allows better error recovery

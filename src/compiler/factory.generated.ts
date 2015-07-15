@@ -46,6 +46,9 @@ namespace ts {
             }
             return node;
         }
+        export function createThisKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
+            return createNode<LeftHandSideExpression>(SyntaxKind.ThisKeyword, location, flags);
+        }
         export function createQualifiedName(left?: EntityName, right?: Identifier, location?: TextRange, flags?: NodeFlags): QualifiedName {
             let node = createNode<QualifiedName>(SyntaxKind.QualifiedName, location, flags);
             if (arguments.length) {
@@ -193,13 +196,14 @@ namespace ts {
             }
             return node;
         }
-        export function createMethodDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
+        export function createMethodDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, asteriskToken?: Node, name?: DeclarationName, 
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): MethodDeclaration {
             let node = createNode<MethodDeclaration>(SyntaxKind.MethodDeclaration, location, flags);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
+                node.asteriskToken = asteriskToken;
                 node.name = name;
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
@@ -213,7 +217,7 @@ namespace ts {
             ): MethodDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type || body !== node.body) {
-                let newNode = createMethodDeclaration(decorators, modifiers, name, typeParameters, parameters, type, body);
+                let newNode = createMethodDeclaration(decorators, modifiers, node.asteriskToken, name, typeParameters, parameters, type, body);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -286,56 +290,59 @@ namespace ts {
             return node;
         }
         export function createCallSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange, flags?: NodeFlags): CallSignatureDeclaration {
+            type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): CallSignatureDeclaration {
             let node = createNode<CallSignatureDeclaration>(SyntaxKind.CallSignature, location, flags);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
+                node.questionToken = questionToken;
             }
             return node;
         }
         export function updateCallSignature(node: CallSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>
             , parameters: Array<ParameterDeclaration>, type: TypeNode): CallSignatureDeclaration {
             if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-                let newNode = createCallSignature(typeParameters, parameters, type);
+                let newNode = createCallSignature(typeParameters, parameters, type, node.questionToken);
                 return updateFrom(node, newNode);
             }
             return node;
         }
         export function createConstructSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange, flags?: NodeFlags): ConstructSignatureDeclaration {
+            type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): ConstructSignatureDeclaration {
             let node = createNode<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature, location, flags);
             if (arguments.length) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
+                node.questionToken = questionToken;
             }
             return node;
         }
         export function updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>
             , parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructSignatureDeclaration {
             if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-                let newNode = createConstructSignature(typeParameters, parameters, type);
+                let newNode = createConstructSignature(typeParameters, parameters, type, node.questionToken);
                 return updateFrom(node, newNode);
             }
             return node;
         }
         export function createIndexSignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, parameters?: Array<ParameterDeclaration>, 
-            type?: TypeNode, location?: TextRange, flags?: NodeFlags): IndexSignatureDeclaration {
+            type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): IndexSignatureDeclaration {
             let node = createNode<IndexSignatureDeclaration>(SyntaxKind.IndexSignature, location, flags);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
+                node.questionToken = questionToken;
             }
             return node;
         }
         export function updateIndexSignature(node: IndexSignatureDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
             , parameters: Array<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || parameters !== node.parameters || type !== node.type) {
-                let newNode = createIndexSignature(decorators, modifiers, parameters, type);
+                let newNode = createIndexSignature(decorators, modifiers, parameters, type, node.questionToken);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -420,12 +427,12 @@ namespace ts {
             }
             return node;
         }
-        export function createTypeLiteral(members?: Array<Node>, location?: TextRange, flags?: NodeFlags): TypeLiteralNode {
+        export function createTypeLiteral(members?: Array<TypeElement>, location?: TextRange, flags?: NodeFlags): TypeLiteralNode {
             let node = createNode<TypeLiteralNode>(SyntaxKind.TypeLiteral, location, flags);
             node.members = members && createNodeArray(members)
             return node;
         }
-        export function updateTypeLiteral(node: TypeLiteralNode, members: Array<Node>): TypeLiteralNode {
+        export function updateTypeLiteral(node: TypeLiteralNode, members: Array<TypeElement>): TypeLiteralNode {
             if (members !== node.members) {
                 let newNode = createTypeLiteral(members);
                 return updateFrom(node, newNode);
@@ -1322,7 +1329,7 @@ namespace ts {
             return node;
         }
         export function createInterfaceDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
-            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<Declaration>, 
+            typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<TypeElement>, 
             location?: TextRange, flags?: NodeFlags): InterfaceDeclaration {
             let node = createNode<InterfaceDeclaration>(SyntaxKind.InterfaceDeclaration, location, flags);
             if (arguments.length) {
@@ -1336,7 +1343,7 @@ namespace ts {
             return node;
         }
         export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: Identifier
-            , typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<Declaration>
+            , typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<TypeElement>
             ): InterfaceDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 heritageClauses !== node.heritageClauses || members !== node.members) {
@@ -1589,19 +1596,20 @@ namespace ts {
             }
             return node;
         }
-        export function createMissingDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, 
+        export function createMissingDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, questionToken?: Node, 
             location?: TextRange, flags?: NodeFlags): MissingDeclaration {
             let node = createNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, location, flags);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
+                node.questionToken = questionToken;
             }
             return node;
         }
         export function updateMissingDeclaration(node: MissingDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
             ): MissingDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers) {
-                let newNode = createMissingDeclaration(decorators, modifiers);
+                let newNode = createMissingDeclaration(decorators, modifiers, node.questionToken);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -2115,398 +2123,377 @@ namespace ts {
             }
             return node;
         }
-        export function cloneNode<TNode extends Node>(node: TNode): TNode;
-        export function cloneNode(node: Node): Node {
+        export function cloneNode<TNode extends Node>(node: TNode, location?: TextRange, flags?: NodeFlags): TNode;
+        export function cloneNode(node: Node, location?: TextRange, flags: NodeFlags = node.flags): Node {
             if (!node) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.NumericLiteral:
-                    return factory.createNumericLiteral((<LiteralExpression>node).text, /*location*/ undefined, node.flags);
+                    return factory.createNumericLiteral((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.StringLiteral:
-                    return factory.createStringLiteral((<StringLiteral>node).text, /*location*/ undefined, node.flags);
+                    return factory.createStringLiteral((<StringLiteral>node).text, location, flags);
                 case SyntaxKind.RegularExpressionLiteral:
-                    return factory.createRegularExpressionLiteral((<LiteralExpression>node).text, /*location*/ undefined, node.flags);
+                    return factory.createRegularExpressionLiteral((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return factory.createNoSubstitutionTemplateLiteral((<LiteralExpression>node).text, /*location*/ undefined, node.flags);
+                    return factory.createNoSubstitutionTemplateLiteral((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.TemplateHead:
-                    return factory.createTemplateHead((<LiteralExpression>node).text, /*location*/ undefined, node.flags);
+                    return factory.createTemplateHead((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.TemplateMiddle:
-                    return factory.createTemplateMiddle((<LiteralExpression>node).text, /*location*/ undefined, node.flags);
+                    return factory.createTemplateMiddle((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.TemplateTail:
-                    return factory.createTemplateTail((<LiteralExpression>node).text, /*location*/ undefined, node.flags);
+                    return factory.createTemplateTail((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.Identifier:
-                    return factory.createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind, location, flags);
+                case SyntaxKind.ThisKeyword:
+                    return factory.createThisKeyword(location, flags);
                 case SyntaxKind.QualifiedName:
-                    return factory.createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right, /*location*/ undefined, node.flags);
+                    return factory.createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right, location, flags);
                 case SyntaxKind.ComputedPropertyName:
-                    return factory.createComputedPropertyName((<ComputedPropertyName>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createComputedPropertyName((<ComputedPropertyName>node).expression, location, flags);
                 case SyntaxKind.TypeParameter:
                     return factory.createTypeParameter((<TypeParameterDeclaration>node).name, (<TypeParameterDeclaration>node).constraint, 
-                        (<TypeParameterDeclaration>node).expression, /*location*/ undefined, node.flags);
+                        (<TypeParameterDeclaration>node).expression, location, flags);
                 case SyntaxKind.Parameter:
                     return factory.createParameter((<ParameterDeclaration>node).decorators, (<ParameterDeclaration>node).modifiers, 
                         (<ParameterDeclaration>node).dotDotDotToken, (<ParameterDeclaration>node).name, (<ParameterDeclaration>node).questionToken, 
-                        (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer, /*location*/ undefined, node.flags);
+                        (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer, location, flags);
                 case SyntaxKind.Decorator:
-                    return factory.createDecorator((<Decorator>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createDecorator((<Decorator>node).expression, location, flags);
                 case SyntaxKind.PropertySignature:
                     return factory.createPropertySignature((<PropertySignature>node).decorators, (<PropertySignature>node).modifiers, 
-                        (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type, 
-                        /*location*/ undefined, node.flags);
+                        (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type, location, flags);
                 case SyntaxKind.PropertyDeclaration:
                     return factory.createPropertyDeclaration((<PropertyDeclaration>node).decorators, (<PropertyDeclaration>node).modifiers, 
                         (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).questionToken, (<PropertyDeclaration>node).type, 
-                        (<PropertyDeclaration>node).initializer, /*location*/ undefined, node.flags);
+                        (<PropertyDeclaration>node).initializer, location, flags);
                 case SyntaxKind.MethodSignature:
                     return factory.createMethodSignature((<MethodSignature>node).decorators, (<MethodSignature>node).modifiers, 
                         (<MethodSignature>node).name, (<MethodSignature>node).questionToken, (<MethodSignature>node).typeParameters, 
-                        (<MethodSignature>node).parameters, (<MethodSignature>node).type, /*location*/ undefined, node.flags);
+                        (<MethodSignature>node).parameters, (<MethodSignature>node).type, location, flags);
                 case SyntaxKind.MethodDeclaration:
                     return factory.createMethodDeclaration((<MethodDeclaration>node).decorators, (<MethodDeclaration>node).modifiers, 
-                        (<MethodDeclaration>node).name, (<MethodDeclaration>node).typeParameters, (<MethodDeclaration>node).parameters, 
-                        (<MethodDeclaration>node).type, (<MethodDeclaration>node).body, /*location*/ undefined, node.flags);
+                        (<MethodDeclaration>node).asteriskToken, (<MethodDeclaration>node).name, (<MethodDeclaration>node).typeParameters, 
+                        (<MethodDeclaration>node).parameters, (<MethodDeclaration>node).type, (<MethodDeclaration>node).body, location, flags);
                 case SyntaxKind.Constructor:
                     return factory.createConstructor((<ConstructorDeclaration>node).decorators, (<ConstructorDeclaration>node).modifiers, 
                         (<ConstructorDeclaration>node).parameters, (<ConstructorDeclaration>node).type, (<ConstructorDeclaration>node).body, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.GetAccessor:
                     return factory.createGetAccessor((<GetAccessorDeclaration>node).decorators, (<GetAccessorDeclaration>node).modifiers, 
                         (<GetAccessorDeclaration>node).name, (<GetAccessorDeclaration>node).parameters, (<GetAccessorDeclaration>node).type, 
-                        (<GetAccessorDeclaration>node).body, /*location*/ undefined, node.flags);
+                        (<GetAccessorDeclaration>node).body, location, flags);
                 case SyntaxKind.SetAccessor:
                     return factory.createSetAccessor((<SetAccessorDeclaration>node).decorators, (<SetAccessorDeclaration>node).modifiers, 
                         (<SetAccessorDeclaration>node).name, (<SetAccessorDeclaration>node).parameters, (<SetAccessorDeclaration>node).type, 
-                        (<SetAccessorDeclaration>node).body, /*location*/ undefined, node.flags);
+                        (<SetAccessorDeclaration>node).body, location, flags);
                 case SyntaxKind.CallSignature:
                     return factory.createCallSignature((<CallSignatureDeclaration>node).typeParameters, (<CallSignatureDeclaration>node).parameters, 
-                        (<CallSignatureDeclaration>node).type, /*location*/ undefined, node.flags);
+                        (<CallSignatureDeclaration>node).type, (<CallSignatureDeclaration>node).questionToken, location, flags);
                 case SyntaxKind.ConstructSignature:
                     return factory.createConstructSignature((<ConstructSignatureDeclaration>node).typeParameters, 
                         (<ConstructSignatureDeclaration>node).parameters, (<ConstructSignatureDeclaration>node).type, 
-                        /*location*/ undefined, node.flags);
+                        (<ConstructSignatureDeclaration>node).questionToken, location, flags);
                 case SyntaxKind.IndexSignature:
                     return factory.createIndexSignature((<IndexSignatureDeclaration>node).decorators, (<IndexSignatureDeclaration>node).modifiers, 
-                        (<IndexSignatureDeclaration>node).parameters, (<IndexSignatureDeclaration>node).type, /*location*/ undefined, node.flags);
+                        (<IndexSignatureDeclaration>node).parameters, (<IndexSignatureDeclaration>node).type, 
+                        (<IndexSignatureDeclaration>node).questionToken, location, flags);
                 case SyntaxKind.TypePredicate:
-                    return factory.createTypePredicate((<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createTypePredicate((<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type, location, flags);
                 case SyntaxKind.TypeReference:
-                    return factory.createTypeReference((<TypeReferenceNode>node).typeName, (<TypeReferenceNode>node).typeArguments, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createTypeReference((<TypeReferenceNode>node).typeName, (<TypeReferenceNode>node).typeArguments, location, flags);
                 case SyntaxKind.FunctionType:
                     return factory.createFunctionType((<FunctionTypeNode>node).typeParameters, (<FunctionTypeNode>node).parameters, 
-                        (<FunctionTypeNode>node).type, /*location*/ undefined, node.flags);
+                        (<FunctionTypeNode>node).type, location, flags);
                 case SyntaxKind.ConstructorType:
                     return factory.createConstructorType((<ConstructorTypeNode>node).typeParameters, (<ConstructorTypeNode>node).parameters, 
-                        (<ConstructorTypeNode>node).type, /*location*/ undefined, node.flags);
+                        (<ConstructorTypeNode>node).type, location, flags);
                 case SyntaxKind.TypeQuery:
-                    return factory.createTypeQuery((<TypeQueryNode>node).exprName, /*location*/ undefined, node.flags);
+                    return factory.createTypeQuery((<TypeQueryNode>node).exprName, location, flags);
                 case SyntaxKind.TypeLiteral:
-                    return factory.createTypeLiteral((<TypeLiteralNode>node).members, /*location*/ undefined, node.flags);
+                    return factory.createTypeLiteral((<TypeLiteralNode>node).members, location, flags);
                 case SyntaxKind.ArrayType:
-                    return factory.createArrayType((<ArrayTypeNode>node).elementType, /*location*/ undefined, node.flags);
+                    return factory.createArrayType((<ArrayTypeNode>node).elementType, location, flags);
                 case SyntaxKind.TupleType:
-                    return factory.createTupleType((<TupleTypeNode>node).elementTypes, /*location*/ undefined, node.flags);
+                    return factory.createTupleType((<TupleTypeNode>node).elementTypes, location, flags);
                 case SyntaxKind.UnionType:
-                    return factory.createUnionType((<UnionTypeNode>node).types, /*location*/ undefined, node.flags);
+                    return factory.createUnionType((<UnionTypeNode>node).types, location, flags);
                 case SyntaxKind.IntersectionType:
-                    return factory.createIntersectionType((<IntersectionTypeNode>node).types, /*location*/ undefined, node.flags);
+                    return factory.createIntersectionType((<IntersectionTypeNode>node).types, location, flags);
                 case SyntaxKind.ParenthesizedType:
-                    return factory.createParenthesizedType((<ParenthesizedTypeNode>node).type, /*location*/ undefined, node.flags);
+                    return factory.createParenthesizedType((<ParenthesizedTypeNode>node).type, location, flags);
                 case SyntaxKind.ObjectBindingPattern:
-                    return factory.createObjectBindingPattern((<ObjectBindingPattern>node).elements, /*location*/ undefined, node.flags);
+                    return factory.createObjectBindingPattern((<ObjectBindingPattern>node).elements, location, flags);
                 case SyntaxKind.ArrayBindingPattern:
-                    return factory.createArrayBindingPattern((<ArrayBindingPattern>node).elements, /*location*/ undefined, node.flags);
+                    return factory.createArrayBindingPattern((<ArrayBindingPattern>node).elements, location, flags);
                 case SyntaxKind.BindingElement:
                     return factory.createBindingElement((<BindingElement>node).decorators, (<BindingElement>node).modifiers, 
                         (<BindingElement>node).propertyName, (<BindingElement>node).dotDotDotToken, (<BindingElement>node).name, 
-                        (<BindingElement>node).initializer, /*location*/ undefined, node.flags);
+                        (<BindingElement>node).initializer, location, flags);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return factory.createArrayLiteralExpression((<ArrayLiteralExpression>node).elements, /*location*/ undefined, node.flags);
+                    return factory.createArrayLiteralExpression((<ArrayLiteralExpression>node).elements, location, flags);
                 case SyntaxKind.ObjectLiteralExpression:
                     return factory.createObjectLiteralExpression((<ObjectLiteralExpression>node).decorators, 
-                        (<ObjectLiteralExpression>node).modifiers, (<ObjectLiteralExpression>node).properties, /*location*/ undefined, node.flags);
+                        (<ObjectLiteralExpression>node).modifiers, (<ObjectLiteralExpression>node).properties, location, flags);
                 case SyntaxKind.PropertyAccessExpression:
                     return factory.createPropertyAccessExpression((<PropertyAccessExpression>node).expression, 
-                        (<PropertyAccessExpression>node).dotToken, (<PropertyAccessExpression>node).name, /*location*/ undefined, node.flags);
+                        (<PropertyAccessExpression>node).dotToken, (<PropertyAccessExpression>node).name, location, flags);
                 case SyntaxKind.ElementAccessExpression:
                     return factory.createElementAccessExpression((<ElementAccessExpression>node).expression, 
-                        (<ElementAccessExpression>node).argumentExpression, /*location*/ undefined, node.flags);
+                        (<ElementAccessExpression>node).argumentExpression, location, flags);
                 case SyntaxKind.CallExpression:
                     return factory.createCallExpression((<CallExpression>node).expression, (<CallExpression>node).typeArguments, 
-                        (<CallExpression>node).arguments, /*location*/ undefined, node.flags);
+                        (<CallExpression>node).arguments, location, flags);
                 case SyntaxKind.NewExpression:
                     return factory.createNewExpression((<NewExpression>node).expression, (<NewExpression>node).typeArguments, 
-                        (<NewExpression>node).arguments, /*location*/ undefined, node.flags);
+                        (<NewExpression>node).arguments, location, flags);
                 case SyntaxKind.TaggedTemplateExpression:
                     return factory.createTaggedTemplateExpression((<TaggedTemplateExpression>node).tag, (<TaggedTemplateExpression>node).template, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.TypeAssertionExpression:
-                    return factory.createTypeAssertionExpression((<TypeAssertion>node).type, (<TypeAssertion>node).expression, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createTypeAssertionExpression((<TypeAssertion>node).type, (<TypeAssertion>node).expression, location, flags);
                 case SyntaxKind.ParenthesizedExpression:
-                    return factory.createParenthesizedExpression((<ParenthesizedExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createParenthesizedExpression((<ParenthesizedExpression>node).expression, location, flags);
                 case SyntaxKind.FunctionExpression:
                     return factory.createFunctionExpression((<FunctionExpression>node).decorators, (<FunctionExpression>node).modifiers, 
                         (<FunctionExpression>node).asteriskToken, (<FunctionExpression>node).name, (<FunctionExpression>node).typeParameters, 
-                        (<FunctionExpression>node).parameters, (<FunctionExpression>node).type, (<FunctionExpression>node).body, 
-                        /*location*/ undefined, node.flags);
+                        (<FunctionExpression>node).parameters, (<FunctionExpression>node).type, (<FunctionExpression>node).body, location, flags);
                 case SyntaxKind.ArrowFunction:
                     return factory.createArrowFunction((<ArrowFunction>node).decorators, (<ArrowFunction>node).modifiers, 
                         (<ArrowFunction>node).typeParameters, (<ArrowFunction>node).parameters, (<ArrowFunction>node).type, 
-                        (<ArrowFunction>node).equalsGreaterThanToken, (<ArrowFunction>node).body, /*location*/ undefined, node.flags);
+                        (<ArrowFunction>node).equalsGreaterThanToken, (<ArrowFunction>node).body, location, flags);
                 case SyntaxKind.DeleteExpression:
-                    return factory.createDeleteExpression((<DeleteExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createDeleteExpression((<DeleteExpression>node).expression, location, flags);
                 case SyntaxKind.TypeOfExpression:
-                    return factory.createTypeOfExpression((<TypeOfExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createTypeOfExpression((<TypeOfExpression>node).expression, location, flags);
                 case SyntaxKind.VoidExpression:
-                    return factory.createVoidExpression((<VoidExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createVoidExpression((<VoidExpression>node).expression, location, flags);
                 case SyntaxKind.AwaitExpression:
-                    return factory.createAwaitExpression((<AwaitExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createAwaitExpression((<AwaitExpression>node).expression, location, flags);
                 case SyntaxKind.PrefixUnaryExpression:
                     return factory.createPrefixUnaryExpression((<PrefixUnaryExpression>node).operator, (<PrefixUnaryExpression>node).operand, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.PostfixUnaryExpression:
                     return factory.createPostfixUnaryExpression((<PostfixUnaryExpression>node).operand, (<PostfixUnaryExpression>node).operator, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.BinaryExpression:
                     return factory.createBinaryExpression((<BinaryExpression>node).left, (<BinaryExpression>node).operatorToken, 
-                        (<BinaryExpression>node).right, /*location*/ undefined, node.flags);
+                        (<BinaryExpression>node).right, location, flags);
                 case SyntaxKind.ConditionalExpression:
                     return factory.createConditionalExpression((<ConditionalExpression>node).condition, (<ConditionalExpression>node).questionToken, 
                         (<ConditionalExpression>node).whenTrue, (<ConditionalExpression>node).colonToken, (<ConditionalExpression>node).whenFalse, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.TemplateExpression:
                     return factory.createTemplateExpression((<TemplateExpression>node).head, (<TemplateExpression>node).templateSpans, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.YieldExpression:
-                    return factory.createYieldExpression((<YieldExpression>node).asteriskToken, (<YieldExpression>node).expression, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createYieldExpression((<YieldExpression>node).asteriskToken, (<YieldExpression>node).expression, location, flags);
                 case SyntaxKind.SpreadElementExpression:
-                    return factory.createSpreadElementExpression((<SpreadElementExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createSpreadElementExpression((<SpreadElementExpression>node).expression, location, flags);
                 case SyntaxKind.ClassExpression:
                     return factory.createClassExpression((<ClassExpression>node).decorators, (<ClassExpression>node).modifiers, 
                         (<ClassExpression>node).name, (<ClassExpression>node).typeParameters, (<ClassExpression>node).heritageClauses, 
-                        (<ClassExpression>node).members, /*location*/ undefined, node.flags);
+                        (<ClassExpression>node).members, location, flags);
                 case SyntaxKind.OmittedExpression:
-                    return factory.createOmittedExpression(/*location*/ undefined, node.flags);
+                    return factory.createOmittedExpression(location, flags);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return factory.createExpressionWithTypeArguments((<ExpressionWithTypeArguments>node).expression, 
-                        (<ExpressionWithTypeArguments>node).typeArguments, /*location*/ undefined, node.flags);
+                        (<ExpressionWithTypeArguments>node).typeArguments, location, flags);
                 case SyntaxKind.AsExpression:
-                    return factory.createAsExpression((<AsExpression>node).expression, (<AsExpression>node).type, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createAsExpression((<AsExpression>node).expression, (<AsExpression>node).type, location, flags);
                 case SyntaxKind.TemplateSpan:
-                    return factory.createTemplateSpan((<TemplateSpan>node).expression, (<TemplateSpan>node).literal, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createTemplateSpan((<TemplateSpan>node).expression, (<TemplateSpan>node).literal, location, flags);
                 case SyntaxKind.SemicolonClassElement:
-                    return factory.createSemicolonClassElement(/*location*/ undefined, node.flags);
+                    return factory.createSemicolonClassElement(location, flags);
                 case SyntaxKind.Block:
-                    return factory.createBlock((<Block>node).statements, /*location*/ undefined, node.flags);
+                    return factory.createBlock((<Block>node).statements, location, flags);
                 case SyntaxKind.VariableStatement:
-                    return factory.createVariableStatement((<VariableStatement>node).declarationList, /*location*/ undefined, node.flags);
+                    return factory.createVariableStatement((<VariableStatement>node).declarationList, location, flags);
                 case SyntaxKind.EmptyStatement:
-                    return factory.createEmptyStatement(/*location*/ undefined, node.flags);
+                    return factory.createEmptyStatement(location, flags);
                 case SyntaxKind.ExpressionStatement:
-                    return factory.createExpressionStatement((<ExpressionStatement>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createExpressionStatement((<ExpressionStatement>node).expression, location, flags);
                 case SyntaxKind.IfStatement:
                     return factory.createIfStatement((<IfStatement>node).expression, (<IfStatement>node).thenStatement, 
-                        (<IfStatement>node).elseStatement, /*location*/ undefined, node.flags);
+                        (<IfStatement>node).elseStatement, location, flags);
                 case SyntaxKind.DoStatement:
-                    return factory.createDoStatement((<DoStatement>node).statement, (<DoStatement>node).expression, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createDoStatement((<DoStatement>node).statement, (<DoStatement>node).expression, location, flags);
                 case SyntaxKind.WhileStatement:
-                    return factory.createWhileStatement((<WhileStatement>node).expression, (<WhileStatement>node).statement, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createWhileStatement((<WhileStatement>node).expression, (<WhileStatement>node).statement, location, flags);
                 case SyntaxKind.ForStatement:
                     return factory.createForStatement((<ForStatement>node).initializer, (<ForStatement>node).condition, 
-                        (<ForStatement>node).incrementor, (<ForStatement>node).statement, /*location*/ undefined, node.flags);
+                        (<ForStatement>node).incrementor, (<ForStatement>node).statement, location, flags);
                 case SyntaxKind.ForInStatement:
                     return factory.createForInStatement((<ForInStatement>node).initializer, (<ForInStatement>node).expression, 
-                        (<ForInStatement>node).statement, /*location*/ undefined, node.flags);
+                        (<ForInStatement>node).statement, location, flags);
                 case SyntaxKind.ForOfStatement:
                     return factory.createForOfStatement((<ForOfStatement>node).initializer, (<ForOfStatement>node).expression, 
-                        (<ForOfStatement>node).statement, /*location*/ undefined, node.flags);
+                        (<ForOfStatement>node).statement, location, flags);
                 case SyntaxKind.ContinueStatement:
-                    return factory.createContinueStatement((<ContinueStatement>node).label, /*location*/ undefined, node.flags);
+                    return factory.createContinueStatement((<ContinueStatement>node).label, location, flags);
                 case SyntaxKind.BreakStatement:
-                    return factory.createBreakStatement((<BreakStatement>node).label, /*location*/ undefined, node.flags);
+                    return factory.createBreakStatement((<BreakStatement>node).label, location, flags);
                 case SyntaxKind.ReturnStatement:
-                    return factory.createReturnStatement((<ReturnStatement>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createReturnStatement((<ReturnStatement>node).expression, location, flags);
                 case SyntaxKind.WithStatement:
-                    return factory.createWithStatement((<WithStatement>node).expression, (<WithStatement>node).statement, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createWithStatement((<WithStatement>node).expression, (<WithStatement>node).statement, location, flags);
                 case SyntaxKind.SwitchStatement:
-                    return factory.createSwitchStatement((<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createSwitchStatement((<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock, location, flags);
                 case SyntaxKind.LabeledStatement:
-                    return factory.createLabeledStatement((<LabeledStatement>node).label, (<LabeledStatement>node).statement, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createLabeledStatement((<LabeledStatement>node).label, (<LabeledStatement>node).statement, location, flags);
                 case SyntaxKind.ThrowStatement:
-                    return factory.createThrowStatement((<ThrowStatement>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createThrowStatement((<ThrowStatement>node).expression, location, flags);
                 case SyntaxKind.TryStatement:
                     return factory.createTryStatement((<TryStatement>node).tryBlock, (<TryStatement>node).catchClause, 
-                        (<TryStatement>node).finallyBlock, /*location*/ undefined, node.flags);
+                        (<TryStatement>node).finallyBlock, location, flags);
                 case SyntaxKind.DebuggerStatement:
-                    return factory.createDebuggerStatement(/*location*/ undefined, node.flags);
+                    return factory.createDebuggerStatement(location, flags);
                 case SyntaxKind.VariableDeclaration:
                     return factory.createVariableDeclaration((<VariableDeclaration>node).decorators, (<VariableDeclaration>node).modifiers, 
                         (<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.VariableDeclarationList:
-                    return factory.createVariableDeclarationList((<VariableDeclarationList>node).declarations, /*location*/ undefined, node.flags);
+                    return factory.createVariableDeclarationList((<VariableDeclarationList>node).declarations, location, flags);
                 case SyntaxKind.FunctionDeclaration:
                     return factory.createFunctionDeclaration((<FunctionDeclaration>node).decorators, (<FunctionDeclaration>node).modifiers, 
                         (<FunctionDeclaration>node).asteriskToken, (<FunctionDeclaration>node).name, (<FunctionDeclaration>node).typeParameters, 
-                        (<FunctionDeclaration>node).parameters, (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body, 
-                        /*location*/ undefined, node.flags);
+                        (<FunctionDeclaration>node).parameters, (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body, location, flags);
                 case SyntaxKind.ClassDeclaration:
                     return factory.createClassDeclaration((<ClassDeclaration>node).decorators, (<ClassDeclaration>node).modifiers, 
                         (<ClassDeclaration>node).name, (<ClassDeclaration>node).typeParameters, (<ClassDeclaration>node).heritageClauses, 
-                        (<ClassDeclaration>node).members, /*location*/ undefined, node.flags);
+                        (<ClassDeclaration>node).members, location, flags);
                 case SyntaxKind.InterfaceDeclaration:
                     return factory.createInterfaceDeclaration((<InterfaceDeclaration>node).decorators, (<InterfaceDeclaration>node).modifiers, 
                         (<InterfaceDeclaration>node).name, (<InterfaceDeclaration>node).typeParameters, (<InterfaceDeclaration>node).heritageClauses, 
-                        (<InterfaceDeclaration>node).members, /*location*/ undefined, node.flags);
+                        (<InterfaceDeclaration>node).members, location, flags);
                 case SyntaxKind.TypeAliasDeclaration:
                     return factory.createTypeAliasDeclaration((<TypeAliasDeclaration>node).decorators, (<TypeAliasDeclaration>node).modifiers, 
                         (<TypeAliasDeclaration>node).name, (<TypeAliasDeclaration>node).typeParameters, (<TypeAliasDeclaration>node).type, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.EnumDeclaration:
                     return factory.createEnumDeclaration((<EnumDeclaration>node).decorators, (<EnumDeclaration>node).modifiers, 
-                        (<EnumDeclaration>node).name, (<EnumDeclaration>node).members, /*location*/ undefined, node.flags);
+                        (<EnumDeclaration>node).name, (<EnumDeclaration>node).members, location, flags);
                 case SyntaxKind.ModuleDeclaration:
                     return factory.createModuleDeclaration((<ModuleDeclaration>node).decorators, (<ModuleDeclaration>node).modifiers, 
-                        (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body, /*location*/ undefined, node.flags);
+                        (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body, location, flags);
                 case SyntaxKind.ModuleBlock:
-                    return factory.createModuleBlock((<ModuleBlock>node).statements, /*location*/ undefined, node.flags);
+                    return factory.createModuleBlock((<ModuleBlock>node).statements, location, flags);
                 case SyntaxKind.CaseBlock:
-                    return factory.createCaseBlock((<CaseBlock>node).clauses, /*location*/ undefined, node.flags);
+                    return factory.createCaseBlock((<CaseBlock>node).clauses, location, flags);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return factory.createImportEqualsDeclaration((<ImportEqualsDeclaration>node).decorators, 
                         (<ImportEqualsDeclaration>node).modifiers, (<ImportEqualsDeclaration>node).name, 
-                        (<ImportEqualsDeclaration>node).moduleReference, /*location*/ undefined, node.flags);
+                        (<ImportEqualsDeclaration>node).moduleReference, location, flags);
                 case SyntaxKind.ImportDeclaration:
                     return factory.createImportDeclaration((<ImportDeclaration>node).decorators, (<ImportDeclaration>node).modifiers, 
-                        (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier, /*location*/ undefined, node.flags);
+                        (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier, location, flags);
                 case SyntaxKind.ImportClause:
-                    return factory.createImportClause((<ImportClause>node).name, (<ImportClause>node).namedBindings, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createImportClause((<ImportClause>node).name, (<ImportClause>node).namedBindings, location, flags);
                 case SyntaxKind.NamespaceImport:
-                    return factory.createNamespaceImport((<NamespaceImport>node).name, /*location*/ undefined, node.flags);
+                    return factory.createNamespaceImport((<NamespaceImport>node).name, location, flags);
                 case SyntaxKind.NamedImports:
-                    return factory.createNamedImports((<NamedImports>node).elements, /*location*/ undefined, node.flags);
+                    return factory.createNamedImports((<NamedImports>node).elements, location, flags);
                 case SyntaxKind.ImportSpecifier:
-                    return factory.createImportSpecifier((<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createImportSpecifier((<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name, location, flags);
                 case SyntaxKind.ExportAssignment:
                     return factory.createExportAssignment((<ExportAssignment>node).decorators, (<ExportAssignment>node).modifiers, 
-                        (<ExportAssignment>node).expression, /*location*/ undefined, node.flags);
+                        (<ExportAssignment>node).expression, location, flags);
                 case SyntaxKind.ExportDeclaration:
                     return factory.createExportDeclaration((<ExportDeclaration>node).decorators, (<ExportDeclaration>node).modifiers, 
-                        (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier, /*location*/ undefined, node.flags);
+                        (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier, location, flags);
                 case SyntaxKind.NamedExports:
-                    return factory.createNamedExports((<NamedExports>node).elements, /*location*/ undefined, node.flags);
+                    return factory.createNamedExports((<NamedExports>node).elements, location, flags);
                 case SyntaxKind.ExportSpecifier:
-                    return factory.createExportSpecifier((<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createExportSpecifier((<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name, location, flags);
                 case SyntaxKind.MissingDeclaration:
                     return factory.createMissingDeclaration((<MissingDeclaration>node).decorators, (<MissingDeclaration>node).modifiers, 
-                        /*location*/ undefined, node.flags);
+                        (<MissingDeclaration>node).questionToken, location, flags);
                 case SyntaxKind.ExternalModuleReference:
-                    return factory.createExternalModuleReference((<ExternalModuleReference>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createExternalModuleReference((<ExternalModuleReference>node).expression, location, flags);
                 case SyntaxKind.JsxElement:
                     return factory.createJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children, 
-                        (<JsxElement>node).closingElement, /*location*/ undefined, node.flags);
+                        (<JsxElement>node).closingElement, location, flags);
                 case SyntaxKind.JsxSelfClosingElement:
                     return factory.createJsxSelfClosingElement((<JsxSelfClosingElement>node).tagName, (<JsxSelfClosingElement>node).attributes, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.JsxOpeningElement:
-                    return factory.createJsxOpeningElement((<JsxOpeningElement>node).tagName, (<JsxOpeningElement>node).attributes, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createJsxOpeningElement((<JsxOpeningElement>node).tagName, (<JsxOpeningElement>node).attributes, location, flags);
                 case SyntaxKind.JsxText:
-                    return factory.createJsxText(/*location*/ undefined, node.flags);
+                    return factory.createJsxText(location, flags);
                 case SyntaxKind.JsxClosingElement:
-                    return factory.createJsxClosingElement((<JsxClosingElement>node).tagName, /*location*/ undefined, node.flags);
+                    return factory.createJsxClosingElement((<JsxClosingElement>node).tagName, location, flags);
                 case SyntaxKind.JsxAttribute:
-                    return factory.createJsxAttribute((<JsxAttribute>node).name, (<JsxAttribute>node).initializer, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createJsxAttribute((<JsxAttribute>node).name, (<JsxAttribute>node).initializer, location, flags);
                 case SyntaxKind.JsxSpreadAttribute:
-                    return factory.createJsxSpreadAttribute((<JsxSpreadAttribute>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createJsxSpreadAttribute((<JsxSpreadAttribute>node).expression, location, flags);
                 case SyntaxKind.JsxExpression:
-                    return factory.createJsxExpression((<JsxExpression>node).expression, /*location*/ undefined, node.flags);
+                    return factory.createJsxExpression((<JsxExpression>node).expression, location, flags);
                 case SyntaxKind.CaseClause:
-                    return factory.createCaseClause((<CaseClause>node).expression, (<CaseClause>node).statements, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createCaseClause((<CaseClause>node).expression, (<CaseClause>node).statements, location, flags);
                 case SyntaxKind.DefaultClause:
-                    return factory.createDefaultClause((<DefaultClause>node).statements, /*location*/ undefined, node.flags);
+                    return factory.createDefaultClause((<DefaultClause>node).statements, location, flags);
                 case SyntaxKind.HeritageClause:
-                    return factory.createHeritageClause((<HeritageClause>node).types, /*location*/ undefined, node.flags);
+                    return factory.createHeritageClause((<HeritageClause>node).types, location, flags);
                 case SyntaxKind.CatchClause:
-                    return factory.createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block, location, flags);
                 case SyntaxKind.PropertyAssignment:
                     return factory.createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).questionToken, 
-                        (<PropertyAssignment>node).initializer, /*location*/ undefined, node.flags);
+                        (<PropertyAssignment>node).initializer, location, flags);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return factory.createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, 
-                        (<ShorthandPropertyAssignment>node).questionToken, /*location*/ undefined, node.flags);
+                        (<ShorthandPropertyAssignment>node).questionToken, location, flags);
                 case SyntaxKind.EnumMember:
-                    return factory.createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, /*location*/ undefined, node.flags);
+                    return factory.createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, location, flags);
                 case SyntaxKind.JSDocTypeExpression:
-                    return factory.createJSDocTypeExpression((<JSDocTypeExpression>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocTypeExpression((<JSDocTypeExpression>node).type, location, flags);
                 case SyntaxKind.JSDocAllType:
-                    return factory.createJSDocAllType(/*location*/ undefined, node.flags);
+                    return factory.createJSDocAllType(location, flags);
                 case SyntaxKind.JSDocUnknownType:
-                    return factory.createJSDocUnknownType(/*location*/ undefined, node.flags);
+                    return factory.createJSDocUnknownType(location, flags);
                 case SyntaxKind.JSDocArrayType:
-                    return factory.createJSDocArrayType((<JSDocArrayType>node).elementType, /*location*/ undefined, node.flags);
+                    return factory.createJSDocArrayType((<JSDocArrayType>node).elementType, location, flags);
                 case SyntaxKind.JSDocUnionType:
-                    return factory.createJSDocUnionType((<JSDocUnionType>node).types, /*location*/ undefined, node.flags);
+                    return factory.createJSDocUnionType((<JSDocUnionType>node).types, location, flags);
                 case SyntaxKind.JSDocTupleType:
-                    return factory.createJSDocTupleType((<JSDocTupleType>node).types, /*location*/ undefined, node.flags);
+                    return factory.createJSDocTupleType((<JSDocTupleType>node).types, location, flags);
                 case SyntaxKind.JSDocNullableType:
-                    return factory.createJSDocNullableType((<JSDocNullableType>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocNullableType((<JSDocNullableType>node).type, location, flags);
                 case SyntaxKind.JSDocNonNullableType:
-                    return factory.createJSDocNonNullableType((<JSDocNonNullableType>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocNonNullableType((<JSDocNonNullableType>node).type, location, flags);
                 case SyntaxKind.JSDocRecordType:
-                    return factory.createJSDocRecordType((<JSDocRecordType>node).members, /*location*/ undefined, node.flags);
+                    return factory.createJSDocRecordType((<JSDocRecordType>node).members, location, flags);
                 case SyntaxKind.JSDocRecordMember:
-                    return factory.createJSDocRecordMember((<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createJSDocRecordMember((<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type, location, flags);
                 case SyntaxKind.JSDocTypeReference:
                     return factory.createJSDocTypeReference((<JSDocTypeReference>node).name, (<JSDocTypeReference>node).typeArguments, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.JSDocOptionalType:
-                    return factory.createJSDocOptionalType((<JSDocOptionalType>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocOptionalType((<JSDocOptionalType>node).type, location, flags);
                 case SyntaxKind.JSDocFunctionType:
-                    return factory.createJSDocFunctionType((<JSDocFunctionType>node).parameters, (<JSDocFunctionType>node).type, 
-                        /*location*/ undefined, node.flags);
+                    return factory.createJSDocFunctionType((<JSDocFunctionType>node).parameters, (<JSDocFunctionType>node).type, location, flags);
                 case SyntaxKind.JSDocVariadicType:
-                    return factory.createJSDocVariadicType((<JSDocVariadicType>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocVariadicType((<JSDocVariadicType>node).type, location, flags);
                 case SyntaxKind.JSDocConstructorType:
-                    return factory.createJSDocConstructorType((<JSDocConstructorType>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocConstructorType((<JSDocConstructorType>node).type, location, flags);
                 case SyntaxKind.JSDocThisType:
-                    return factory.createJSDocThisType((<JSDocThisType>node).type, /*location*/ undefined, node.flags);
+                    return factory.createJSDocThisType((<JSDocThisType>node).type, location, flags);
                 case SyntaxKind.JSDocComment:
-                    return factory.createJSDocComment((<JSDocComment>node).tags, /*location*/ undefined, node.flags);
+                    return factory.createJSDocComment((<JSDocComment>node).tags, location, flags);
                 case SyntaxKind.JSDocTag:
-                    return factory.createJSDocTag((<JSDocTag>node).atToken, (<JSDocTag>node).tagName, /*location*/ undefined, node.flags);
+                    return factory.createJSDocTag((<JSDocTag>node).atToken, (<JSDocTag>node).tagName, location, flags);
                 case SyntaxKind.JSDocParameterTag:
                     return factory.createJSDocParameterTag((<JSDocParameterTag>node).preParameterName, (<JSDocParameterTag>node).typeExpression, 
                         (<JSDocParameterTag>node).postParameterName, (<JSDocParameterTag>node).atToken, (<JSDocParameterTag>node).tagName, 
-                        /*location*/ undefined, node.flags);
+                        location, flags);
                 case SyntaxKind.JSDocReturnTag:
                     return factory.createJSDocReturnTag((<JSDocReturnTag>node).typeExpression, (<JSDocReturnTag>node).atToken, 
-                        (<JSDocReturnTag>node).tagName, /*location*/ undefined, node.flags);
+                        (<JSDocReturnTag>node).tagName, location, flags);
                 case SyntaxKind.JSDocTypeTag:
                     return factory.createJSDocTypeTag((<JSDocTypeTag>node).typeExpression, (<JSDocTypeTag>node).atToken, 
-                        (<JSDocTypeTag>node).tagName, /*location*/ undefined, node.flags);
+                        (<JSDocTypeTag>node).tagName, location, flags);
                 case SyntaxKind.JSDocTemplateTag:
                     return factory.createJSDocTemplateTag((<JSDocTemplateTag>node).typeParameters, (<JSDocTemplateTag>node).atToken, 
-                        (<JSDocTemplateTag>node).tagName, /*location*/ undefined, node.flags);
+                        (<JSDocTemplateTag>node).tagName, location, flags);
             }
         }
     }
@@ -2975,29 +2962,211 @@ namespace ts {
         }
         return false; 
     }
-    export function isUnaryExpression(node: Node): node is UnaryExpression {
+    export function isModifier(node: Node): node is Modifier {
         if (node) {
             switch (node.kind) {
+                case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.DefaultKeyword:
+                case SyntaxKind.ExportKeyword:
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.StaticKeyword:
                 case SyntaxKind.Identifier:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
-                case SyntaxKind.DeleteExpression:
-                case SyntaxKind.TypeOfExpression:
-                case SyntaxKind.VoidExpression:
-                case SyntaxKind.AwaitExpression:
-                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.ComputedPropertyName:
+                case SyntaxKind.Decorator:
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.VariableDeclarationList:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Block:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.SemicolonClassElement:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.TypeReference:
+                case SyntaxKind.TypePredicate:
+                case SyntaxKind.TypeQuery:
+                case SyntaxKind.TypeLiteral:
+                case SyntaxKind.ArrayType:
+                case SyntaxKind.TupleType:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.IntersectionType:
+                case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.TemplateSpan:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.ExpressionWithTypeArguments:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxText:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxClosingElement:
+                case SyntaxKind.JsxAttribute:
+                case SyntaxKind.JsxSpreadAttribute:
+                case SyntaxKind.EmptyStatement:
+                case SyntaxKind.DebuggerStatement:
+                case SyntaxKind.MissingDeclaration:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.CatchClause:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.HeritageClause:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExternalModuleReference:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.NamedExports:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.JSDocTypeExpression:
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                case SyntaxKind.JSDocArrayType:
+                case SyntaxKind.JSDocUnionType:
+                case SyntaxKind.JSDocTupleType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JSDocRecordMember:
+                case SyntaxKind.JSDocTypeReference:
+                case SyntaxKind.JSDocOptionalType:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocVariadicType:
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                case SyntaxKind.JSDocComment:
+                case SyntaxKind.JSDocTag:
+                case SyntaxKind.JSDocTemplateTag:
+                case SyntaxKind.JSDocReturnTag:
+                case SyntaxKind.JSDocTypeTag:
+                case SyntaxKind.JSDocParameterTag:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isTypeElement(node: Node): node is TypeElement {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.MissingDeclaration:
+                case SyntaxKind.JSDocRecordMember:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.FunctionExpression:
                 case SyntaxKind.TemplateExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
@@ -3020,16 +3189,22 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Block:
-                case SyntaxKind.Identifier:
-                case SyntaxKind.StringLiteral:
                 case SyntaxKind.OmittedExpression:
-                case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.Identifier:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -3039,12 +3214,6 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
                 case SyntaxKind.TemplateExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
@@ -3059,8 +3228,8 @@ namespace ts {
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.JsxElement:
                 case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.ClassExpression:
                     return true;
             }
@@ -3070,13 +3239,13 @@ namespace ts {
     export function isLiteralExpression(node: Node): node is LiteralExpression {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
                     return true;
             }
         }
@@ -3090,6 +3259,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.MissingDeclaration:
                     return true;
             }
         }
@@ -3098,13 +3268,13 @@ namespace ts {
     export function isLiteralExpressionOrTemplateExpression(node: Node): node is LiteralExpression | TemplateExpression {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
                 case SyntaxKind.TemplateExpression:
                     return true;
             }
@@ -3136,16 +3306,22 @@ namespace ts {
     export function isExpressionOrVariableDeclarationList(node: Node): node is Expression | VariableDeclarationList {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.Identifier:
-                case SyntaxKind.StringLiteral:
                 case SyntaxKind.OmittedExpression:
-                case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.Identifier:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -3155,12 +3331,6 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
                 case SyntaxKind.TemplateExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
@@ -3175,8 +3345,8 @@ namespace ts {
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.JsxElement:
                 case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.VariableDeclarationList:
                     return true;
@@ -3204,6 +3374,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.IndexSignature:
+                case SyntaxKind.MissingDeclaration:
                     return true;
             }
         }
@@ -3213,13 +3384,13 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
                     return true;
             }
         }
@@ -3250,6 +3421,7 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.NamedImports:
+                case SyntaxKind.NamedExports:
                 case SyntaxKind.NamespaceImport:
                     return true;
             }

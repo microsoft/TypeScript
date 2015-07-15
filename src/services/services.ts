@@ -4547,7 +4547,7 @@ namespace ts {
                                     return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                                 }
                             default:
-                                if (isModifier(node.kind) && node.parent &&
+                                if (isModifier(node) && node.parent &&
                                     (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
                                     return getModifierOccurrences(node.kind, node.parent);
                                 }

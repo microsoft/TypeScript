@@ -1,4 +1,5 @@
 /// <reference path="checker.ts"/>
+/// <reference path="transforms/chain.ts" />
 /// <reference path="declarationEmitter.ts"/>
 
 /* @internal */
@@ -69,6 +70,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let newLine = host.getNewLine();
         let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
+        let transformationChain = transform.getTransformationChain(compilerOptions);
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -3956,12 +3958,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitEnd(member);
                         }
                     }
+                    else if (member.kind === SyntaxKind.MissingDeclaration) {
+                        emitOnlyPinnedOrTripleSlashComments(member);
+                    }
                 });
             }
 
             function emitMemberFunctionsForES6AndHigher(node: ClassLikeDeclaration) {
                 for (let member of node.members) {
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
+                        emitOnlyPinnedOrTripleSlashComments(member);
+                    }
+                    else if (member.kind === SyntaxKind.MissingDeclaration) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
                     else if (member.kind === SyntaxKind.MethodDeclaration ||
@@ -4034,7 +4042,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (languageVersion >= ScriptTarget.ES6 && !ctor && !hasInstancePropertyWithInitializer) {
                     return;
                 }
-
+                
                 if (ctor) {
                     emitLeadingComments(ctor);
                 }
@@ -4069,7 +4077,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
-                if (ctor) {
+                if (ctor && !nodeIsSynthesized(ctor.body)) {
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
@@ -5459,7 +5467,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function processTopLevelVariableAndFunctionDeclarations(node: SourceFile): (Identifier | Declaration)[] {
+            function processTopLevelVariableAndFunctionDeclarations(statements: NodeArray<Statement>): (Identifier | Declaration)[] {
                 // per ES6 spec:
                 // 15.2.1.16.4 ModuleDeclarationInstantiation() Concrete Method
                 // - var declarations are initialized to undefined - 14.a.ii
@@ -5473,7 +5481,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
                 let exportedDeclarations: (Identifier | Declaration)[];
 
-                visit(node);
+                forEach(statements, visit);
 
                 if (hoistedVars) {
                     writeLine();
@@ -5625,7 +5633,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return compilerOptions.module === ModuleKind.System && isExternalModule(currentSourceFile);
             }
 
-            function emitSystemModuleBody(node: SourceFile, startIndex: number): void {
+            function emitSystemModuleBody(statements: NodeArray<Statement>, startIndex: number): void {
                 // shape of the body in system modules:
                 // function (exports) {
                 //     <list of local aliases for imports>
@@ -5664,7 +5672,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // }
                 emitVariableDeclarationsForImports();
                 writeLine();
-                let exportedDeclarations = processTopLevelVariableAndFunctionDeclarations(node);
+                let exportedDeclarations = processTopLevelVariableAndFunctionDeclarations(statements);
                 let exportStarFunction = emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations);
                 writeLine();
                 write("return {");
@@ -5672,7 +5680,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 emitSetters(exportStarFunction);
                 writeLine();
-                emitExecute(node, startIndex);
+                emitExecute(statements, startIndex);
                 decreaseIndent();
                 writeLine();
                 write("}"); // return
@@ -5787,12 +5795,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("],");
             }
 
-            function emitExecute(node: SourceFile, startIndex: number) {
+            function emitExecute(statements: NodeArray<Statement>, startIndex: number) {
                 write("execute: function() {");
                 increaseIndent();
                 writeLine();
-                for (let i = startIndex; i < node.statements.length; ++i) {
-                    let statement = node.statements[i];
+                for (let i = startIndex; i < statements.length; ++i) {
+                    let statement = statements[i];
                     // - imports/exports are not emitted for system modules
                     // - function declarations are not emitted because they were already hoisted
                     switch (statement.kind) {
@@ -5810,7 +5818,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function emitSystemModule(node: SourceFile, startIndex: number): void {
+            function emitSystemModule(node: SourceFile, statements: NodeArray<Statement>, startIndex: number): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -5839,7 +5847,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 increaseIndent();
                 emitCaptureThisForNodeIfNecessary(node);
-                emitSystemModuleBody(node, startIndex);
+                emitSystemModuleBody(statements, startIndex);
                 decreaseIndent();
                 writeLine();
                 write("});");
@@ -5908,7 +5916,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitAMDModule(node: SourceFile, startIndex: number) {
+            function emitAMDModule(node: SourceFile, statements: NodeArray<Statement>, startIndex: number) {
                 collectExternalModuleInfo(node);
 
                 writeLine();
@@ -5921,7 +5929,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 increaseIndent();
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
-                emitLinesStartingAt(node.statements, startIndex);
+                emitLinesStartingAt(statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ true);
                 decreaseIndent();
@@ -5929,16 +5937,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitCommonJSModule(node: SourceFile, startIndex: number) {
+            function emitCommonJSModule(node: SourceFile, statements: NodeArray<Statement>, startIndex: number) {
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
-                emitLinesStartingAt(node.statements, startIndex);
+                emitLinesStartingAt(statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ false);
             }
 
-            function emitUMDModule(node: SourceFile, startIndex: number) {
+            function emitUMDModule(node: SourceFile, statements: NodeArray<Statement>, startIndex: number) {
                 collectExternalModuleInfo(node);
 
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
@@ -5955,7 +5963,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 increaseIndent();
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
-                emitLinesStartingAt(node.statements, startIndex);
+                emitLinesStartingAt(statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ true);
                 decreaseIndent();
@@ -5963,13 +5971,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitES6Module(node: SourceFile, startIndex: number) {
+            function emitES6Module(node: SourceFile, statements: NodeArray<Statement>, startIndex: number) {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
                 hasExportStars = false;
                 emitCaptureThisForNodeIfNecessary(node);
-                emitLinesStartingAt(node.statements, startIndex);
+                emitLinesStartingAt(statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 // Emit exportDefault if it exists will happen as part
                 // or normal statement emit.
@@ -6110,9 +6118,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Start new file on new line
                 writeLine();
                 emitDetachedComments(node);
+                
+                // Process tree transformations
+                let statements = node.statements;
+                if (compilerOptions.experimentalTransforms) {
+                    let context = new transform.VisitorContext(currentSourceFile, resolver, generatedNameSet, getGeneratedNameForNode);
+                    statements = transformationChain(context, node.statements);
+                }
 
                 // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                let startIndex = emitDirectivePrologues(statements, /*startWithNewLine*/ false);
 
                 // Only emit helpers if the user did not say otherwise.
                 if (!compilerOptions.noEmitHelpers) {
@@ -6144,19 +6159,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (languageVersion >= ScriptTarget.ES6) {
-                        emitES6Module(node, startIndex);
+                        emitES6Module(node, statements, startIndex);
                     }
                     else if (compilerOptions.module === ModuleKind.AMD) {
-                        emitAMDModule(node, startIndex);
+                        emitAMDModule(node, statements, startIndex);
                     }
                     else if (compilerOptions.module === ModuleKind.System) {
-                        emitSystemModule(node, startIndex);
+                        emitSystemModule(node, statements, startIndex);
                     }
                     else if (compilerOptions.module === ModuleKind.UMD) {
-                        emitUMDModule(node, startIndex);
+                        emitUMDModule(node, statements, startIndex);
                     }
                     else {
-                        emitCommonJSModule(node, startIndex);
+                        emitCommonJSModule(node, statements, startIndex);
                     }
                 }
                 else {
@@ -6165,7 +6180,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     exportEquals = undefined;
                     hasExportStars = false;
                     emitCaptureThisForNodeIfNecessary(node);
-                    emitLinesStartingAt(node.statements, startIndex);
+                    emitLinesStartingAt(statements, startIndex);
                     emitTempDeclarations(/*newLine*/ true);
                 }
 
@@ -6177,7 +6192,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
-                if (node.flags & NodeFlags.Ambient) {
+                if (node.flags & NodeFlags.Ambient || isMissingDeclaration(node)) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
@@ -6439,6 +6454,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function getLeadingCommentsToEmit(node: Node) {
+                if ((<SynthesizedNode>node).leadingCommentRanges) {
+                    return (<SynthesizedNode>node).leadingCommentRanges;
+                }
+                
+                node = getOriginalNode(node);
+                
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
                     if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
@@ -6455,6 +6476,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function getTrailingCommentsToEmit(node: Node) {
+                if ((<SynthesizedNode>node).trailingCommentRanges) {
+                    return (<SynthesizedNode>node).trailingCommentRanges;
+                }
+
+                node = getOriginalNode(node);
+
                 // Emit the trailing comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
                     if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
