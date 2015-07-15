@@ -566,7 +566,7 @@ namespace ts {
         }
     }
 
-    export function isVariableLike(node: Node): boolean {
+    export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.BindingElement:
