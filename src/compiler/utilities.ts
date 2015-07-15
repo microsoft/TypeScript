@@ -594,7 +594,7 @@ namespace ts {
         return false;
     }
 
-    export function isAccessor(node: Node): boolean {
+    export function isAccessor(node: Node): node is AccessorDeclaration {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
@@ -757,6 +757,15 @@ namespace ts {
             }
         }
     }
+
+    export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+        while (node) {
+            if (node === ancestor) return true;
+            node = node.parent;
+        }
+        return false;
+    }
+
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
         if (node) {

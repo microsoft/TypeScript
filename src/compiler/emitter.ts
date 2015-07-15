@@ -304,6 +304,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return generateNameForExportDefault();
                     case SyntaxKind.ClassExpression:
                         return generateNameForClassExpression();
+                    case SyntaxKind.ComputedPropertyName:
+                        return makeTempVariableName(TempFlags.Auto);
                 }
             }
 
@@ -4297,7 +4299,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(")");
                 }
                 else {
-                    writeLine();
+                    if (!isClassExpression(node)) {
+                        writeLine();
+                    }
+                    
                     emitPropertyDeclarations(node, staticProperties);
                     emitDecoratorsOfClass(node);
                 }
@@ -6122,7 +6127,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Process tree transformations
                 let statements = node.statements;
                 if (compilerOptions.experimentalTransforms) {
-                    let context = new transform.VisitorContext(currentSourceFile, resolver, generatedNameSet, getGeneratedNameForNode);
+                    let context = new transform.VisitorContext(compilerOptions, currentSourceFile, resolver, generatedNameSet, nodeToGeneratedName);
                     statements = transformationChain(context, node.statements);
                 }
 

@@ -10,23 +10,25 @@ namespace ts.transform {
     }
     
     export class VisitorContext {
-        private generatedNameSet: Map<string> = {};
-        private getGeneratedNameForNode: (node: Node) => string;
-        
+        private generatedNameSet: Map<string>;
+        private nodeToGeneratedName: string[];
+        private computedPropertyNamesToGeneratedNames: Identifier [] = [];
         private tempFlagStack: number[] = [];
         private hoistedVariableDeclarationsStack: VariableDeclaration[][] = [];
         private hoistedFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         private statementsStack: Statement[][] = [];
         private isPinnedOrTripleSlashComment = (comment: CommentRange) => this.isPinnedOrTripleSlashCommentWorker(comment);
         
+        public compilerOptions: CompilerOptions;
         public currentSourceFile: SourceFile;
         public resolver: EmitResolver;
         
-        constructor(currentSourceFile: SourceFile, resolver: EmitResolver, generatedNameSet: Map<string>, getGeneratedNameForNode: (node: Node) => string) {
+        constructor(compilerOptions: CompilerOptions, currentSourceFile: SourceFile, resolver: EmitResolver, generatedNameSet: Map<string>, nodeToGeneratedName: string[]) {
+            this.compilerOptions = compilerOptions;
             this.currentSourceFile = currentSourceFile;
             this.resolver = resolver;
             this.generatedNameSet = generatedNameSet;
-            this.getGeneratedNameForNode = getGeneratedNameForNode;
+            this.nodeToGeneratedName = nodeToGeneratedName;
         }
         
         public pushLexicalEnvironment(): void {
@@ -90,16 +92,41 @@ namespace ts.transform {
             }
         }
 
-        public getDeclarationName(node: Declaration) {
+        public getGeneratedNameForNode(node: Node) {
+            let id = getNodeId(node);
+            return this.nodeToGeneratedName[id] || (this.nodeToGeneratedName[id] = unescapeIdentifier(this.generateNameForNode(node)));
+        }
+        
+        public nodeHasGeneratedName(node: Node) {
+            let id = getNodeId(node);
+            return this.nodeToGeneratedName[id] !== undefined;
+        }
+
+        public getDeclarationName(node: DeclarationStatement): Identifier;
+        public getDeclarationName(node: ClassLikeDeclaration): Identifier;
+        public getDeclarationName(node: Declaration): DeclarationName;
+        public getDeclarationName<T extends DeclarationName>(node: Declaration): T | Identifier {
             let name = node.name;
             if (name && !nodeIsSynthesized(name)) {
-                return factory.cloneNode(name);
+                return factory.cloneNode(<T>name);
             }
             else {
                 return factory.createIdentifier(
                     this.getGeneratedNameForNode(node)
                 );
             }
+        }
+
+        public getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement) {
+            let expression: Expression = this.getDeclarationName(node);
+            if (!(member.flags & NodeFlags.Static)) {
+                expression = factory.createPropertyAccessExpression2(
+                    expression,
+                    factory.createIdentifier("prototype")
+                );
+            }
+            
+            return expression;
         }
         
         public createUniqueIdentifier(baseName: string): Identifier {
@@ -254,6 +281,61 @@ namespace ts.transform {
             return !this.resolver.hasGlobalName(name)
                 && !hasProperty(this.currentSourceFile.identifiers, name)
                 && !hasProperty(this.generatedNameSet, name);
+        }
+
+        private isUniqueLocalName(name: string, container: Node): boolean {
+            container = getOriginalNode(container);
+            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+                if (node.locals && hasProperty(node.locals, name)) {
+                    // We conservatively include alias symbols to cover cases where they're emitted as locals
+                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private generateNameForNode(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return this.makeUniqueName((<Identifier>node).text);
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return this.generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                    return this.generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ExportAssignment:
+                    return this.generateNameForExportDefault();
+                case SyntaxKind.ClassExpression:
+                    return this.generateNameForClassExpression();
+                case SyntaxKind.ComputedPropertyName:
+                    return this.makeTempVariableName(TempFlags.Auto);
+            }
+        }
+
+        private generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
+            let name = node.name.text;
+            // Use module/enum name itself if it is unique, otherwise make a unique variation
+            return this.isUniqueLocalName(name, node) ? name : this.makeUniqueName(name);
+        }
+
+        private generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
+            let expr = getExternalModuleName(node);
+            let baseName = expr.kind === SyntaxKind.StringLiteral ?
+                escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+            return this.makeUniqueName(baseName);
+        }
+
+        private generateNameForExportDefault() {
+            return this.makeUniqueName("default");
+        }
+
+        private generateNameForClassExpression() {
+            return this.makeUniqueName("class");
         }
     }
     

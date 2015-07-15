@@ -802,7 +802,7 @@ function generateTransform(outputFile: string) {
             return;
         }
         
-        writer.write(`export function visitNodeArrayOf${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, nodes: NodeArray<${typeName}>, visitor: Visitor): NodeArray<${typeName}> {`);
+        writer.write(`export function visitNodeArrayOf${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, nodes: Array<${typeName}>, visitor: Visitor): NodeArray<${typeName}> {`);
         writer.writeLine();
         writer.increaseIndent();
         

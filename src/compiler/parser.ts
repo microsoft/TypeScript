@@ -1054,7 +1054,7 @@ namespace ts {
                 token === SyntaxKind.NumericLiteral;
         }
 
-        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): DeclarationName {
+        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
                 return parseLiteralNode(/*internName*/ true);
             }
@@ -1064,7 +1064,7 @@ namespace ts {
             return parseIdentifierName();
         }
 
-        function parsePropertyName(): DeclarationName {
+        function parsePropertyName(): PropertyName {
             return parsePropertyNameWorker(/*allowComputedPropertyNames:*/ true);
         }
 
@@ -4499,7 +4499,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
+        function parseMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, asteriskToken: Node, name: PropertyName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
             let method = beginNode(factory.createMethodDeclaration(), fullStart);
             method.decorators = decorators;
             setModifiers(method, modifiers);
@@ -4513,7 +4513,7 @@ namespace ts {
             return finishNode(method);
         }
 
-        function parsePropertyDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, name: DeclarationName, questionToken: Node): ClassElement {
+        function parsePropertyDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, name: PropertyName, questionToken: Node): ClassElement {
             let property = beginNode(factory.createPropertyDeclaration(), fullStart);
             property.decorators = decorators;
             setModifiers(property, modifiers);

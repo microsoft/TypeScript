@@ -730,6 +730,8 @@ namespace ts {
 
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
     
+    export type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
+    
     // @factoryhidden("decorators", false)
     // @factoryhidden("modifiers", false)
     export interface Declaration extends Node {
@@ -817,30 +819,34 @@ namespace ts {
     }
     
     // @kind(SyntaxKind.PropertySignature)
+    // @factoryorder("decorators", "modifiers", "name", "questionToken", "type")
     export interface PropertySignature extends TypeElement {
-        name: DeclarationName;              // Declared property name
+        name: PropertyName;
         // @factoryparam
         questionToken?: Node;               // Present on optional property
         type?: TypeNode;                    // Optional type annotation
     }
 
     // @kind(SyntaxKind.PropertyDeclaration)
-    // @factoryorder("decorators", "modifiers", "name", "questionToken", "type", "initializer")
-    export interface PropertyDeclaration extends PropertySignature, ClassElement {
-        name: DeclarationName;              // Declared property name
+    // @factoryorder("decorators", "modifiers", "name", "type", "initializer")
+    export interface PropertyDeclaration extends ClassElement {
+        // @factoryhidden
+        questionToken?: Node;               // Present for use with reporting a grammar error
+        name: PropertyName;
+        type?: TypeNode;
         initializer?: Expression;           // Optional initializer
     }
 
     export interface ObjectLiteralElement extends Declaration {
         _objectLiteralBrandBrand: any;
-    }
+   }
 
     // @kind(SyntaxKind.PropertyAssignment)
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
     export interface PropertyAssignment extends ObjectLiteralElement {
         _propertyAssignmentBrand: any;
-        name: DeclarationName;
+        name: PropertyName;
         // @factoryparam
         questionToken?: Node;
         initializer: Expression;
@@ -918,6 +924,7 @@ namespace ts {
     // @factoryhidden("body", true)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "questionToken", "typeParameters", "parameters", "type")
     export interface MethodSignature extends SignatureDeclaration, TypeElement {
+        name: PropertyName;
     }
 
     // Note that a MethodDeclaration is considered both a ClassElement and an ObjectLiteralElement.
@@ -934,6 +941,7 @@ namespace ts {
     // @factoryhidden("body", false)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
     export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+        name: PropertyName;
         body?: Block;
     }
     
@@ -962,7 +970,7 @@ namespace ts {
     // SyntaxKind.SetAccessor
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
-        
+        name: PropertyName;
         // @visitor("visitBlockInNewLexicalScope")
         body: Block;
     }

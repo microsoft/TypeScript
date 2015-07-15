@@ -130,7 +130,7 @@ namespace ts {
             }
             return node;
         }
-        export function createPropertySignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, questionToken?: Node, 
+        export function createPropertySignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, questionToken?: Node, 
             type?: TypeNode, location?: TextRange, flags?: NodeFlags): PropertySignature {
             let node = createNode<PropertySignature>(SyntaxKind.PropertySignature, location, flags);
             if (arguments.length) {
@@ -142,7 +142,7 @@ namespace ts {
             }
             return node;
         }
-        export function updatePropertySignature(node: PropertySignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+        export function updatePropertySignature(node: PropertySignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: PropertyName
             , type: TypeNode): PropertySignature {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type) {
                 let newNode = createPropertySignature(decorators, modifiers, name, node.questionToken, type);
@@ -150,29 +150,28 @@ namespace ts {
             }
             return node;
         }
-        export function createPropertyDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
-            questionToken?: Node, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): PropertyDeclaration {
+        export function createPropertyDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, type?: TypeNode, 
+            initializer?: Expression, location?: TextRange, flags?: NodeFlags): PropertyDeclaration {
             let node = createNode<PropertyDeclaration>(SyntaxKind.PropertyDeclaration, location, flags);
             if (arguments.length) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
-                node.questionToken = questionToken;
                 node.type = type;
                 node.initializer = initializer;
             }
             return node;
         }
-        export function updatePropertyDeclaration(node: PropertyDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
-            , name: DeclarationName, type: TypeNode, initializer: Expression): PropertyDeclaration {
+        export function updatePropertyDeclaration(node: PropertyDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: PropertyName
+            , type: TypeNode, initializer: Expression): PropertyDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
                 initializer !== node.initializer) {
-                let newNode = createPropertyDeclaration(decorators, modifiers, name, node.questionToken, type, initializer);
+                let newNode = createPropertyDeclaration(decorators, modifiers, name, type, initializer);
                 return updateFrom(node, newNode);
             }
             return node;
         }
-        export function createMethodSignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, questionToken?: Node, 
+        export function createMethodSignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, questionToken?: Node, 
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, 
             location?: TextRange, flags?: NodeFlags): MethodSignature {
             let node = createNode<MethodSignature>(SyntaxKind.MethodSignature, location, flags);
@@ -187,7 +186,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateMethodSignature(node: MethodSignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+        export function updateMethodSignature(node: MethodSignature, decorators: Array<Decorator>, modifiers: Array<Node>, name: PropertyName
             , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): MethodSignature {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
                 parameters !== node.parameters || type !== node.type) {
@@ -196,7 +195,7 @@ namespace ts {
             }
             return node;
         }
-        export function createMethodDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, asteriskToken?: Node, name?: DeclarationName, 
+        export function createMethodDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, asteriskToken?: Node, name?: PropertyName, 
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): MethodDeclaration {
             let node = createNode<MethodDeclaration>(SyntaxKind.MethodDeclaration, location, flags);
@@ -212,7 +211,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateMethodDeclaration(node: MethodDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+        export function updateMethodDeclaration(node: MethodDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: PropertyName
             , typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block
             ): MethodDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || 
@@ -243,7 +242,7 @@ namespace ts {
             }
             return node;
         }
-        export function createGetAccessor(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
+        export function createGetAccessor(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, 
             parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): GetAccessorDeclaration {
             let node = createNode<GetAccessorDeclaration>(SyntaxKind.GetAccessor, location, flags);
@@ -257,7 +256,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateGetAccessor(node: GetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+        export function updateGetAccessor(node: GetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: PropertyName
             , parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): GetAccessorDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || parameters !== node.parameters || 
                 type !== node.type || body !== node.body) {
@@ -266,7 +265,7 @@ namespace ts {
             }
             return node;
         }
-        export function createSetAccessor(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: DeclarationName, 
+        export function createSetAccessor(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, 
             parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): SetAccessorDeclaration {
             let node = createNode<SetAccessorDeclaration>(SyntaxKind.SetAccessor, location, flags);
@@ -280,7 +279,7 @@ namespace ts {
             }
             return node;
         }
-        export function updateSetAccessor(node: SetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: DeclarationName
+        export function updateSetAccessor(node: SetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>, name: PropertyName
             , parameters: Array<ParameterDeclaration>, type: TypeNode, body: Block): SetAccessorDeclaration {
             if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || parameters !== node.parameters || 
                 type !== node.type || body !== node.body) {
@@ -1788,7 +1787,7 @@ namespace ts {
             }
             return node;
         }
-        export function createPropertyAssignment(name?: DeclarationName, questionToken?: Node, initializer?: Expression, 
+        export function createPropertyAssignment(name?: PropertyName, questionToken?: Node, initializer?: Expression, 
             location?: TextRange, flags?: NodeFlags): PropertyAssignment {
             let node = createNode<PropertyAssignment>(SyntaxKind.PropertyAssignment, location, flags);
             if (arguments.length) {
@@ -1798,7 +1797,7 @@ namespace ts {
             }
             return node;
         }
-        export function updatePropertyAssignment(node: PropertyAssignment, name: DeclarationName, initializer: Expression): PropertyAssignment {
+        export function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment {
             if (name !== node.name || initializer !== node.initializer) {
                 let newNode = createPropertyAssignment(name, node.questionToken, initializer);
                 return updateFrom(node, newNode);
@@ -2165,8 +2164,8 @@ namespace ts {
                         (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type, location, flags);
                 case SyntaxKind.PropertyDeclaration:
                     return factory.createPropertyDeclaration((<PropertyDeclaration>node).decorators, (<PropertyDeclaration>node).modifiers, 
-                        (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).questionToken, (<PropertyDeclaration>node).type, 
-                        (<PropertyDeclaration>node).initializer, location, flags);
+                        (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).type, (<PropertyDeclaration>node).initializer, 
+                        location, flags);
                 case SyntaxKind.MethodSignature:
                     return factory.createMethodSignature((<MethodSignature>node).decorators, (<MethodSignature>node).modifiers, 
                         (<MethodSignature>node).name, (<MethodSignature>node).questionToken, (<MethodSignature>node).typeParameters, 
@@ -3128,13 +3127,29 @@ namespace ts {
         }
         return false; 
     }
+    export function isPropertyName(node: Node): node is PropertyName {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.ComputedPropertyName:
+                    return true;
+            }
+        }
+        return false; 
+    }
     export function isTypeElement(node: Node): node is TypeElement {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.PropertySignature:
-                case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.MissingDeclaration:

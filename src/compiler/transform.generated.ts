@@ -40,14 +40,14 @@ namespace ts.transform {
                     <PropertySignature>node, 
                     visitNodeArrayOfDecorator(context, (<PropertySignature>node).decorators, visitor), 
                     visitNodeArrayOfModifier(context, (<PropertySignature>node).modifiers, visitor), 
-                    visitDeclarationName(context, (<PropertySignature>node).name, visitor), 
+                    visitPropertyName(context, (<PropertySignature>node).name, visitor), 
                     visitTypeNode(context, (<PropertySignature>node).type, visitor));
             case SyntaxKind.PropertyDeclaration:
                 return factory.updatePropertyDeclaration(
                     <PropertyDeclaration>node, 
                     visitNodeArrayOfDecorator(context, (<PropertyDeclaration>node).decorators, visitor), 
                     visitNodeArrayOfModifier(context, (<PropertyDeclaration>node).modifiers, visitor), 
-                    visitDeclarationName(context, (<PropertyDeclaration>node).name, visitor), 
+                    visitPropertyName(context, (<PropertyDeclaration>node).name, visitor), 
                     visitTypeNode(context, (<PropertyDeclaration>node).type, visitor), 
                     visitExpression(context, (<PropertyDeclaration>node).initializer, visitor));
             case SyntaxKind.MethodSignature:
@@ -55,7 +55,7 @@ namespace ts.transform {
                     <MethodSignature>node, 
                     visitNodeArrayOfDecorator(context, (<MethodSignature>node).decorators, visitor), 
                     visitNodeArrayOfModifier(context, (<MethodSignature>node).modifiers, visitor), 
-                    visitDeclarationName(context, (<MethodSignature>node).name, visitor), 
+                    visitPropertyName(context, (<MethodSignature>node).name, visitor), 
                     visitNodeArrayOfTypeParameter(context, (<MethodSignature>node).typeParameters, visitor), 
                     visitNodeArrayOfParameter(context, (<MethodSignature>node).parameters, visitor), 
                     visitTypeNode(context, (<MethodSignature>node).type, visitor));
@@ -64,7 +64,7 @@ namespace ts.transform {
                     <MethodDeclaration>node, 
                     visitNodeArrayOfDecorator(context, (<MethodDeclaration>node).decorators, visitor), 
                     visitNodeArrayOfModifier(context, (<MethodDeclaration>node).modifiers, visitor), 
-                    visitDeclarationName(context, (<MethodDeclaration>node).name, visitor), 
+                    visitPropertyName(context, (<MethodDeclaration>node).name, visitor), 
                     visitNodeArrayOfTypeParameter(context, (<MethodDeclaration>node).typeParameters, visitor), 
                     visitNodeArrayOfParameter(context, (<MethodDeclaration>node).parameters, visitor), 
                     visitTypeNode(context, (<MethodDeclaration>node).type, visitor), 
@@ -82,7 +82,7 @@ namespace ts.transform {
                     <GetAccessorDeclaration>node, 
                     visitNodeArrayOfDecorator(context, (<GetAccessorDeclaration>node).decorators, visitor), 
                     visitNodeArrayOfModifier(context, (<GetAccessorDeclaration>node).modifiers, visitor), 
-                    visitDeclarationName(context, (<GetAccessorDeclaration>node).name, visitor), 
+                    visitPropertyName(context, (<GetAccessorDeclaration>node).name, visitor), 
                     visitNodeArrayOfParameter(context, (<GetAccessorDeclaration>node).parameters, visitor), 
                     visitTypeNode(context, (<GetAccessorDeclaration>node).type, visitor), 
                     visitBlockInNewLexicalScope(context, (<GetAccessorDeclaration>node).body, visitor));
@@ -91,7 +91,7 @@ namespace ts.transform {
                     <SetAccessorDeclaration>node, 
                     visitNodeArrayOfDecorator(context, (<SetAccessorDeclaration>node).decorators, visitor), 
                     visitNodeArrayOfModifier(context, (<SetAccessorDeclaration>node).modifiers, visitor), 
-                    visitDeclarationName(context, (<SetAccessorDeclaration>node).name, visitor), 
+                    visitPropertyName(context, (<SetAccessorDeclaration>node).name, visitor), 
                     visitNodeArrayOfParameter(context, (<SetAccessorDeclaration>node).parameters, visitor), 
                     visitTypeNode(context, (<SetAccessorDeclaration>node).type, visitor), 
                     visitBlockInNewLexicalScope(context, (<SetAccessorDeclaration>node).body, visitor));
@@ -588,7 +588,7 @@ namespace ts.transform {
             case SyntaxKind.PropertyAssignment:
                 return factory.updatePropertyAssignment(
                     <PropertyAssignment>node, 
-                    visitDeclarationName(context, (<PropertyAssignment>node).name, visitor), 
+                    visitPropertyName(context, (<PropertyAssignment>node).name, visitor), 
                     visitExpression(context, (<PropertyAssignment>node).initializer, visitor));
             case SyntaxKind.ShorthandPropertyAssignment:
                 return factory.updateShorthandPropertyAssignment(
@@ -747,10 +747,10 @@ namespace ts.transform {
         Debug.assert(!visited || isVariableDeclaration(visited), "Wrong node kind after visit.");
         return <VariableDeclaration>visited;
     }
-    export function visitDeclarationName(context: VisitorContext, node: DeclarationName, visitor: Visitor): DeclarationName {
+    export function visitPropertyName(context: VisitorContext, node: PropertyName, visitor: Visitor): PropertyName {
         let visited = visit(context, node, visitor);
-        Debug.assert(!visited || isDeclarationName(visited), "Wrong node kind after visit.");
-        return <DeclarationName>visited;
+        Debug.assert(!visited || isPropertyName(visited), "Wrong node kind after visit.");
+        return <PropertyName>visited;
     }
     export function visitBindingElement(context: VisitorContext, node: BindingElement, visitor: Visitor): BindingElement {
         let visited = visit(context, node, visitor);
@@ -857,6 +857,11 @@ namespace ts.transform {
         Debug.assert(!visited || isExpressionWithTypeArguments(visited), "Wrong node kind after visit.");
         return <ExpressionWithTypeArguments>visited;
     }
+    export function visitDeclarationName(context: VisitorContext, node: DeclarationName, visitor: Visitor): DeclarationName {
+        let visited = visit(context, node, visitor);
+        Debug.assert(!visited || isDeclarationName(visited), "Wrong node kind after visit.");
+        return <DeclarationName>visited;
+    }
     export function visitEnumMember(context: VisitorContext, node: EnumMember, visitor: Visitor): EnumMember {
         let visited = visit(context, node, visitor);
         Debug.assert(!visited || isEnumMember(visited), "Wrong node kind after visit.");
@@ -917,70 +922,70 @@ namespace ts.transform {
         Debug.assert(!visited || isJSDocTypeExpression(visited), "Wrong node kind after visit.");
         return <JSDocTypeExpression>visited;
     }
-    export function visitNodeArrayOfTypeParameter(context: VisitorContext, nodes: NodeArray<TypeParameterDeclaration>, visitor: Visitor): NodeArray<TypeParameterDeclaration> {
+    export function visitNodeArrayOfTypeParameter(context: VisitorContext, nodes: Array<TypeParameterDeclaration>, visitor: Visitor): NodeArray<TypeParameterDeclaration> {
         return <NodeArray<TypeParameterDeclaration>>visitNodes(context, nodes, visitor, visitTypeParameter);
     }
-    export function visitNodeArrayOfParameter(context: VisitorContext, nodes: NodeArray<ParameterDeclaration>, visitor: Visitor): NodeArray<ParameterDeclaration> {
+    export function visitNodeArrayOfParameter(context: VisitorContext, nodes: Array<ParameterDeclaration>, visitor: Visitor): NodeArray<ParameterDeclaration> {
         return <NodeArray<ParameterDeclaration>>visitNodes(context, nodes, visitor, visitParameter);
     }
-    export function visitNodeArrayOfDecorator(context: VisitorContext, nodes: NodeArray<Decorator>, visitor: Visitor): NodeArray<Decorator> {
+    export function visitNodeArrayOfDecorator(context: VisitorContext, nodes: Array<Decorator>, visitor: Visitor): NodeArray<Decorator> {
         return <NodeArray<Decorator>>visitNodes(context, nodes, visitor, visitDecorator);
     }
-    export function visitNodeArrayOfModifier(context: VisitorContext, nodes: NodeArray<Modifier>, visitor: Visitor): NodeArray<Modifier> {
+    export function visitNodeArrayOfModifier(context: VisitorContext, nodes: Array<Modifier>, visitor: Visitor): NodeArray<Modifier> {
         return <NodeArray<Modifier>>visitNodes(context, nodes, visitor, visitModifier);
     }
-    export function visitNodeArrayOfVariableDeclaration(context: VisitorContext, nodes: NodeArray<VariableDeclaration>, visitor: Visitor): NodeArray<VariableDeclaration> {
+    export function visitNodeArrayOfVariableDeclaration(context: VisitorContext, nodes: Array<VariableDeclaration>, visitor: Visitor): NodeArray<VariableDeclaration> {
         return <NodeArray<VariableDeclaration>>visitNodes(context, nodes, visitor, visitVariableDeclaration);
     }
-    export function visitNodeArrayOfBindingElement(context: VisitorContext, nodes: NodeArray<BindingElement>, visitor: Visitor): NodeArray<BindingElement> {
+    export function visitNodeArrayOfBindingElement(context: VisitorContext, nodes: Array<BindingElement>, visitor: Visitor): NodeArray<BindingElement> {
         return <NodeArray<BindingElement>>visitNodes(context, nodes, visitor, visitBindingElement);
     }
-    export function visitNodeArrayOfTypeNode(context: VisitorContext, nodes: NodeArray<TypeNode>, visitor: Visitor): NodeArray<TypeNode> {
+    export function visitNodeArrayOfTypeNode(context: VisitorContext, nodes: Array<TypeNode>, visitor: Visitor): NodeArray<TypeNode> {
         return <NodeArray<TypeNode>>visitNodes(context, nodes, visitor, visitTypeNode);
     }
-    export function visitNodeArrayOfTypeElement(context: VisitorContext, nodes: NodeArray<TypeElement>, visitor: Visitor): NodeArray<TypeElement> {
+    export function visitNodeArrayOfTypeElement(context: VisitorContext, nodes: Array<TypeElement>, visitor: Visitor): NodeArray<TypeElement> {
         return <NodeArray<TypeElement>>visitNodes(context, nodes, visitor, visitTypeElement);
     }
-    export function visitNodeArrayOfTemplateSpan(context: VisitorContext, nodes: NodeArray<TemplateSpan>, visitor: Visitor): NodeArray<TemplateSpan> {
+    export function visitNodeArrayOfTemplateSpan(context: VisitorContext, nodes: Array<TemplateSpan>, visitor: Visitor): NodeArray<TemplateSpan> {
         return <NodeArray<TemplateSpan>>visitNodes(context, nodes, visitor, visitTemplateSpan);
     }
-    export function visitNodeArrayOfExpression(context: VisitorContext, nodes: NodeArray<Expression>, visitor: Visitor): NodeArray<Expression> {
+    export function visitNodeArrayOfExpression(context: VisitorContext, nodes: Array<Expression>, visitor: Visitor): NodeArray<Expression> {
         return <NodeArray<Expression>>visitNodes(context, nodes, visitor, visitExpression);
     }
-    export function visitNodeArrayOfObjectLiteralElement(context: VisitorContext, nodes: NodeArray<ObjectLiteralElement>, visitor: Visitor): NodeArray<ObjectLiteralElement> {
+    export function visitNodeArrayOfObjectLiteralElement(context: VisitorContext, nodes: Array<ObjectLiteralElement>, visitor: Visitor): NodeArray<ObjectLiteralElement> {
         return <NodeArray<ObjectLiteralElement>>visitNodes(context, nodes, visitor, visitObjectLiteralElement);
     }
-    export function visitNodeArrayOfJsxChild(context: VisitorContext, nodes: NodeArray<JsxChild>, visitor: Visitor): NodeArray<JsxChild> {
+    export function visitNodeArrayOfJsxChild(context: VisitorContext, nodes: Array<JsxChild>, visitor: Visitor): NodeArray<JsxChild> {
         return <NodeArray<JsxChild>>visitNodes(context, nodes, visitor, visitJsxChild);
     }
-    export function visitNodeArrayOfJsxAttributeOrJsxSpreadAttribute(context: VisitorContext, nodes: NodeArray<JsxAttribute | JsxSpreadAttribute>, visitor: Visitor): NodeArray<JsxAttribute | JsxSpreadAttribute> {
+    export function visitNodeArrayOfJsxAttributeOrJsxSpreadAttribute(context: VisitorContext, nodes: Array<JsxAttribute | JsxSpreadAttribute>, visitor: Visitor): NodeArray<JsxAttribute | JsxSpreadAttribute> {
         return <NodeArray<JsxAttribute | JsxSpreadAttribute>>visitNodes(context, nodes, visitor, visitJsxAttributeOrJsxSpreadAttribute);
     }
-    export function visitNodeArrayOfCaseOrDefaultClause(context: VisitorContext, nodes: NodeArray<CaseOrDefaultClause>, visitor: Visitor): NodeArray<CaseOrDefaultClause> {
+    export function visitNodeArrayOfCaseOrDefaultClause(context: VisitorContext, nodes: Array<CaseOrDefaultClause>, visitor: Visitor): NodeArray<CaseOrDefaultClause> {
         return <NodeArray<CaseOrDefaultClause>>visitNodes(context, nodes, visitor, visitCaseOrDefaultClause);
     }
-    export function visitNodeArrayOfHeritageClause(context: VisitorContext, nodes: NodeArray<HeritageClause>, visitor: Visitor): NodeArray<HeritageClause> {
+    export function visitNodeArrayOfHeritageClause(context: VisitorContext, nodes: Array<HeritageClause>, visitor: Visitor): NodeArray<HeritageClause> {
         return <NodeArray<HeritageClause>>visitNodes(context, nodes, visitor, visitHeritageClause);
     }
-    export function visitNodeArrayOfClassElement(context: VisitorContext, nodes: NodeArray<ClassElement>, visitor: Visitor): NodeArray<ClassElement> {
+    export function visitNodeArrayOfClassElement(context: VisitorContext, nodes: Array<ClassElement>, visitor: Visitor): NodeArray<ClassElement> {
         return <NodeArray<ClassElement>>visitNodes(context, nodes, visitor, visitClassElement);
     }
-    export function visitNodeArrayOfExpressionWithTypeArguments(context: VisitorContext, nodes: NodeArray<ExpressionWithTypeArguments>, visitor: Visitor): NodeArray<ExpressionWithTypeArguments> {
+    export function visitNodeArrayOfExpressionWithTypeArguments(context: VisitorContext, nodes: Array<ExpressionWithTypeArguments>, visitor: Visitor): NodeArray<ExpressionWithTypeArguments> {
         return <NodeArray<ExpressionWithTypeArguments>>visitNodes(context, nodes, visitor, visitExpressionWithTypeArguments);
     }
-    export function visitNodeArrayOfEnumMember(context: VisitorContext, nodes: NodeArray<EnumMember>, visitor: Visitor): NodeArray<EnumMember> {
+    export function visitNodeArrayOfEnumMember(context: VisitorContext, nodes: Array<EnumMember>, visitor: Visitor): NodeArray<EnumMember> {
         return <NodeArray<EnumMember>>visitNodes(context, nodes, visitor, visitEnumMember);
     }
-    export function visitNodeArrayOfImportOrExportSpecifier(context: VisitorContext, nodes: NodeArray<ImportOrExportSpecifier>, visitor: Visitor): NodeArray<ImportOrExportSpecifier> {
+    export function visitNodeArrayOfImportOrExportSpecifier(context: VisitorContext, nodes: Array<ImportOrExportSpecifier>, visitor: Visitor): NodeArray<ImportOrExportSpecifier> {
         return <NodeArray<ImportOrExportSpecifier>>visitNodes(context, nodes, visitor, visitImportOrExportSpecifier);
     }
-    export function visitNodeArrayOfJSDocType(context: VisitorContext, nodes: NodeArray<JSDocType>, visitor: Visitor): NodeArray<JSDocType> {
+    export function visitNodeArrayOfJSDocType(context: VisitorContext, nodes: Array<JSDocType>, visitor: Visitor): NodeArray<JSDocType> {
         return <NodeArray<JSDocType>>visitNodes(context, nodes, visitor, visitJSDocType);
     }
-    export function visitNodeArrayOfJSDocRecordMember(context: VisitorContext, nodes: NodeArray<JSDocRecordMember>, visitor: Visitor): NodeArray<JSDocRecordMember> {
+    export function visitNodeArrayOfJSDocRecordMember(context: VisitorContext, nodes: Array<JSDocRecordMember>, visitor: Visitor): NodeArray<JSDocRecordMember> {
         return <NodeArray<JSDocRecordMember>>visitNodes(context, nodes, visitor, visitJSDocRecordMember);
     }
-    export function visitNodeArrayOfJSDocTag(context: VisitorContext, nodes: NodeArray<JSDocTag>, visitor: Visitor): NodeArray<JSDocTag> {
+    export function visitNodeArrayOfJSDocTag(context: VisitorContext, nodes: Array<JSDocTag>, visitor: Visitor): NodeArray<JSDocTag> {
         return <NodeArray<JSDocTag>>visitNodes(context, nodes, visitor, visitJSDocTag);
     }
 }

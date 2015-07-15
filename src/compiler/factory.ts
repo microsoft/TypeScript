@@ -233,9 +233,9 @@ namespace ts {
             return factory.createVariableStatement(
                 factory.createVariableDeclarationList([
                     factory.createVariableDeclaration2(name, initializer)
-                ]),
+                ], /*location*/ undefined, flags & (NodeFlags.Let | NodeFlags.Const)),
                 location,
-                flags
+                flags & ~(NodeFlags.Let | NodeFlags.Const) 
             );
         }
         
@@ -248,6 +248,36 @@ namespace ts {
                 initializer,
                 location,
                 flags
+            );
+        }
+        
+        export function createClassDeclaration2(modifiers: Modifier[], name: Identifier, heritageClause: HeritageClause, members: ClassElement[]): ClassDeclaration {
+            return factory.createClassDeclaration(
+                /*decorators*/ undefined,
+                modifiers,
+                name,
+                /*typeParameters*/ undefined,
+                heritageClause ? [heritageClause] : undefined,
+                members
+            );
+        }
+
+        export function createClassExpression2(name: Identifier, heritageClause: HeritageClause, members: ClassElement[]): ClassExpression {
+            return factory.createClassExpression(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                name,
+                /*typeParameters*/ undefined,
+                heritageClause ? [heritageClause] : undefined,
+                members
+            );
+        }
+        
+        export function createClassExpression3(heritageClause: HeritageClause, members: ClassElement[]) {
+            return factory.createClassExpression2(
+                /*name*/ undefined,
+                heritageClause,
+                members
             );
         }
         

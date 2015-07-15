@@ -80,7 +80,13 @@ namespace ts.transform {
             case SyntaxKind.MethodDeclaration:
                 // TypeScript method declarations may be 'async', and may have decorators.
                 return transformMethodDeclaration(context, <MethodDeclaration>node);
-            
+                
+            case SyntaxKind.GetAccessor:
+                return transformGetAccessor(context, <GetAccessorDeclaration>node);
+                
+            case SyntaxKind.SetAccessor:
+                return transformSetAccessor(context, <SetAccessorDeclaration>node);
+                
             default:
                 return transform.accept(context, node, transformNode);
         }
@@ -88,10 +94,6 @@ namespace ts.transform {
     
     function transformClassDeclaration(context: VisitorContext, node: ClassDeclaration): ClassDeclaration {
         // TODO(rbuckton): Handle decorators, for now we don't change the class and let the old emitter handle this
-        if (node.decorators) {
-            return node;
-        }
-        
         let baseTypeNode = getClassExtendsHeritageClauseElement(node);
         let modifiers = visitNodeArrayOfModifier(context, node.modifiers, transformNodeWorker);
         let heritageClauses = visitNodeArrayOfHeritageClause(context, node.heritageClauses, transformNodeWorker);
@@ -100,25 +102,41 @@ namespace ts.transform {
         if (ctor) {
             members = factory.createNodeArray([ctor, ...members]);
         }
-        
-        let newNode = factory.updateClassDeclaration(
-            node,
-            /*decorators*/ undefined,
-            /*modifiers*/ modifiers,
-            node.name,
-            /*typeParameters*/ undefined,
-            /*heritageClauses*/ heritageClauses,
-            /*members*/ members
-        );
+
+        if (node.decorators) {
+            let newNode = factory.createVariableStatement2(
+                <Identifier>context.getDeclarationName(node),
+                factory.createClassExpression2(
+                    node.name ? context.createUniqueIdentifier(node.name.text) : undefined,
+                    heritageClauses ? heritageClauses[0] : undefined,
+                    members
+                ),
+                /*location*/ node,
+                NodeFlags.Let
+            );
+            newNode.original = node;
+            context.emitStatement(newNode);
+        }
+        else {
+            let newNode = factory.updateClassDeclaration(
+                node,
+                /*decorators*/ undefined,
+                /*modifiers*/ modifiers,
+                node.name,
+                /*typeParameters*/ undefined,
+                /*heritageClauses*/ heritageClauses,
+                /*members*/ members
+            );
+        }
         
         let staticPropertyAssignments = getInitializedProperties(node, /*isStatic*/ true);
         if (staticPropertyAssignments) {
-            context.emitStatement(newNode);
             emitPropertyDeclarations(context, node, staticPropertyAssignments);
-            return undefined;
         }
-        
-        return newNode;
+
+        // Transform any decorators into following statements        
+        emitDecoratorsOfClass(context, node);
+        return undefined;
     }
 
     function transformClassExpression(context: VisitorContext, node: ClassExpression): LeftHandSideExpression {
@@ -383,6 +401,376 @@ namespace ts.transform {
             return missing;
         }
         
-        return node;
+        let modifiers = visitNodeArrayOfModifier(context, node.modifiers, transformNode);
+        let name = transformPropertyName(context, node);
+        let parameters = visitNodeArrayOfParameter(context, node.parameters, transformNode);
+        let body = visitBlock(context, node.body, transformNode);
+        return factory.updateMethodDeclaration(
+            node,
+            /*decorators*/ undefined,
+            modifiers,
+            name,
+            /*typeParameters*/ undefined,
+            parameters,
+            /*typeNode*/ undefined,
+            body
+        );
+    }
+    
+    function transformGetAccessor(context: VisitorContext, node: GetAccessorDeclaration) {
+        let modifiers = visitNodeArrayOfModifier(context, node.modifiers, transformNode);
+        let name = transformPropertyName(context, node);
+        let parameters = visitNodeArrayOfParameter(context, node.parameters, transformNode);
+        let body = visitBlock(context, node.body, transformNode);
+        return factory.updateGetAccessor(
+            node,
+            /*decorators*/ undefined,
+            modifiers,
+            name,
+            parameters,
+            /*typeNode*/ undefined,
+            body
+        );
+    }
+    
+    function transformSetAccessor(context: VisitorContext, node: SetAccessorDeclaration) {
+        let modifiers = visitNodeArrayOfModifier(context, node.modifiers, transformNode);
+        let name = transformPropertyName(context, node);
+        let parameters = visitNodeArrayOfParameter(context, node.parameters, transformNode);
+        let body = visitBlock(context, node.body, transformNode);
+        return factory.updateSetAccessor(
+            node,
+            /*decorators*/ undefined,
+            modifiers,
+            name,
+            parameters,
+            /*typeNode*/ undefined,
+            body
+        );
+    }
+    
+    function getExpressionForPropertyName(context: VisitorContext, container: Declaration): Expression {
+        let name = transformPropertyName(context, container);
+        if (isComputedPropertyName(name)) {
+            return name.expression;
+        }
+        else if (isStringLiteral(name)) {
+            return factory.createStringLiteral(name.text);
+        }
+    }
+    
+    function transformPropertyName(context: VisitorContext, container: Declaration): PropertyName {
+        let name = context.getDeclarationName(container);
+        if (isComputedPropertyName(name)) {
+            if (context.nodeHasGeneratedName(name)) {
+                return factory.createIdentifier(context.getGeneratedNameForNode(name));
+            }
+            
+            let expression = visitExpression(context, name.expression, transformNode);
+            if (nodeCanBeDecorated(container) && nodeIsDecorated(container)) {
+                let generatedName = factory.createIdentifier(context.getGeneratedNameForNode(name));
+                context.hoistVariableDeclaration(generatedName);
+                expression = factory.createAssignmentExpression(
+                    generatedName,
+                    expression
+                );
+            }
+            
+            return factory.updateComputedPropertyName(
+                name,
+                expression
+            );
+        }
+        else if (isPropertyName(name)) {
+            return name;
+        }
+        
+        Debug.fail("Binding patterns cannot be used as property names.");
+    }
+    
+    function emitDecoratorsOfClass(context: VisitorContext, node: ClassLikeDeclaration) {
+        emitDecoratorsOfMembers(context, node, /*isStatic*/ false);
+        emitDecoratorsOfMembers(context, node, /*isStatic*/ true);
+        emitDecoratorsOfConstructor(context, node);
+    }
+    
+    function emitDecoratorsOfMembers(context: VisitorContext, node: ClassLikeDeclaration, isStatic: boolean) {
+        for (let member of node.members) {
+            // only emit members in the correct group
+            if (isStatic !== ((member.flags & NodeFlags.Static) !== 0)) {
+                continue;
+            }
+            
+            // skip members that cannot be decorated (such as the constructor)
+            // skip a member if it or any of its parameters are not decorated
+            if (!nodeCanBeDecorated(member) || !nodeOrChildIsDecorated(member)) {
+                continue;
+            }
+            
+            emitDecoratorsOfMember(context, node, member);
+        }
+    }
+    
+    function emitDecoratorsOfConstructor(context: VisitorContext, node: ClassLikeDeclaration) {
+        let decorators = node.decorators;
+        let constructor = getFirstConstructorWithBody(node);
+        let hasDecoratedParameters = constructor && forEach(constructor.parameters, nodeIsDecorated);
+
+        // skip decoration of the constructor if neither it nor its parameters are decorated
+        if (!decorators && !hasDecoratedParameters) {
+            return;
+        }
+
+        // Emit the call to __decorate. Given the class:
+        //
+        //   @dec
+        //   class C {
+        //   }
+        //
+        // The emit for the class is:
+        //
+        //   C = __decorate([dec], C);
+        //
+        
+        let decoratorExpressions: Expression[] = [];
+        if (decorators) {
+            for (let decorator of decorators) {
+                decoratorExpressions.push(visitExpression(context, decorator.expression, transformNode))
+            }
+        }
+        
+        if (constructor) {
+            emitDecoratorsOfParameters(context, constructor.parameters, decoratorExpressions);
+        }
+        
+        if (context.compilerOptions.emitDecoratorMetadata) {
+            emitSerializedTypeMetadata(context, node, decoratorExpressions);
+        }
+        
+        context.emitAssignmentStatement(
+            <Identifier>context.getDeclarationName(node),
+            factory.createCallExpression2(
+                factory.createIdentifier("__decorate"),
+                [
+                    factory.createArrayLiteralExpression(decoratorExpressions),
+                    <Identifier>context.getDeclarationName(node)
+                ]
+            )
+        );
+    }
+    
+    function emitDecoratorsOfMember(context: VisitorContext, node: ClassLikeDeclaration, member: ClassElement) {
+        let decorators: Decorator[];
+        let parameters: ParameterDeclaration[];
+
+        // skip an accessor declaration if it is not the first accessor
+        if (isAccessor(member) && member.body) {
+            let accessors = getAllAccessorDeclarations(node.members, member);
+            if (member !== accessors.firstAccessor) {
+                return;
+            }
+            
+            // get the decorators from the first accessor with decorators
+            decorators = accessors.firstAccessor.decorators;
+            if (!decorators && accessors.secondAccessor) {
+                decorators = accessors.secondAccessor.decorators;
+            }
+
+            // we only decorate parameters of the set accessor
+            parameters = accessors.setAccessor 
+                ? accessors.setAccessor.parameters
+                : undefined;
+        }
+        else {
+            decorators = member.decorators;
+
+            // we only decorate the parameters here if this is a method
+            if (isMethodDeclaration(member) && member.body) {
+                parameters = member.parameters;
+            }
+        }
+        
+        // Emit the call to __decorate. Given the following:
+        //
+        //   class C {
+        //     @dec method(@dec2 x) {}
+        //     @dec get accessor() {}
+        //     @dec prop;
+        //   }
+        //
+        // The emit for a method is:
+        //
+        //   Object.defineProperty(C.prototype, "method",
+        //       __decorate([
+        //           dec,
+        //           __param(0, dec2),
+        //           __metadata("design:type", Function),
+        //           __metadata("design:paramtypes", [Object]),
+        //           __metadata("design:returntype", void 0)
+        //       ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+        //
+        // The emit for an accessor is:
+        //
+        //   Object.defineProperty(C.prototype, "accessor",
+        //       __decorate([
+        //           dec
+        //       ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+        //
+        // The emit for a property is:
+        //
+        //   __decorate([
+        //       dec
+        //   ], C.prototype, "prop");
+        //
+
+        let decoratorExpressions: Expression[] = [];
+        if (decorators) {
+            for (let decorator of decorators) {
+                decoratorExpressions.push(visitExpression(context, decorator.expression, transformNode))
+            }
+        }
+        
+        if (parameters) {
+            emitDecoratorsOfParameters(context, parameters, decoratorExpressions);
+        }
+        
+        if (context.compilerOptions.emitDecoratorMetadata) {
+            emitSerializedTypeMetadata(context, node, decoratorExpressions);
+        }
+        
+        let prefix = context.getClassMemberPrefix(node, member);
+        let decorateCallArguments: Expression[] = [
+            factory.createArrayLiteralExpression(decoratorExpressions),
+            prefix,
+            getExpressionForPropertyName(context, member)
+        ];
+        
+        let expression: Expression = factory.createCallExpression2(
+            factory.createIdentifier("__decorate"),
+            decorateCallArguments
+        );
+
+        if (!isPropertyDeclaration(member)) {
+            decorateCallArguments.push(
+                factory.createCallExpression2(
+                    factory.createPropertyAccessExpression2(
+                        factory.createIdentifier("Object"),
+                        factory.createIdentifier("getOwnPropertyDescriptor")
+                    ),
+                    [
+                        prefix, 
+                        getExpressionForPropertyName(context, member)
+                    ]
+                )
+            );
+            
+            expression = factory.createCallExpression2(
+                factory.createPropertyAccessExpression2(
+                    factory.createIdentifier("Object"),
+                    factory.createIdentifier("defineProperty")
+                ),
+                [
+                    prefix, 
+                    getExpressionForPropertyName(context, member), 
+                    expression
+                ]
+            );
+        }
+
+        context.emitExpressionStatement(expression);
+    }
+    
+    function emitDecoratorsOfParameters(context: VisitorContext, parameters: ParameterDeclaration[], expressions: Expression[]) {
+        for (let parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
+            let parameter = parameters[parameterIndex];
+            if (nodeIsDecorated(parameter)) {
+                for (let decorator of parameter.decorators) {
+                    expressions.push(
+                        factory.createCallExpression2(
+                            factory.createIdentifier("__param"),
+                            [
+                                factory.createNumericLiteral2(parameterIndex),
+                                visitExpression(context, decorator.expression, transformNode)
+                            ]
+                        )
+                    );
+                }
+            }
+        }
+    }
+    
+    function emitSerializedTypeMetadata(context: VisitorContext, node: Declaration, expressions: Expression[]) {
+        if (shouldEmitTypeMetadata(node)) {
+            expressions.push(
+                factory.createCallExpression2(
+                    factory.createIdentifier("__metadata"),
+                    [
+                        factory.createStringLiteral("design:type"),
+                        // TODO
+                    ]
+                )
+            );
+        }
+        if (shouldEmitParamTypesMetadata(node)) {
+            expressions.push(
+                factory.createCallExpression2(
+                    factory.createIdentifier("__metadata"),
+                    [
+                        factory.createStringLiteral("design:paramtypes"),
+                        // TODO
+                    ]
+                )
+            );
+        }
+        if (shouldEmitReturnTypeMetadata(node)) {
+            expressions.push(
+                factory.createCallExpression2(
+                    factory.createIdentifier("__metadata"),
+                    [
+                        factory.createStringLiteral("design:returntype"),
+                        // TODO
+                    ]
+                )
+            );
+        }
+    }
+
+    function shouldEmitTypeMetadata(node: Declaration): boolean {
+        // This method determines whether to emit the "design:type" metadata based on the node's kind.
+        // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
+        // compiler option is set.
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.PropertyDeclaration:
+                return true;
+        }
+
+        return false;
+    }
+
+    function shouldEmitReturnTypeMetadata(node: Declaration): boolean {
+        // This method determines whether to emit the "design:returntype" metadata based on the node's kind.
+        // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
+        // compiler option is set.
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+                return true;
+        }
+        return false;
+    }
+
+    function shouldEmitParamTypesMetadata(node: Declaration): boolean {
+        // This method determines whether to emit the "design:paramtypes" metadata based on the node's kind.
+        // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
+        // compiler option is set.
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                return true;
+        }
+        return false;
     }
 }
