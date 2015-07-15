@@ -20,26 +20,26 @@
 /// <reference path='rwcRunner.ts' />
 /// <reference path='harness.ts' />
 
-var runners: RunnerBase[] = [];
-var iterations: number = 1;
+let runners: RunnerBase[] = [];
+let iterations: number = 1;
 
 function runTests(runners: RunnerBase[]) {
-    for (var i = iterations; i > 0; i--) {
-        for (var j = 0; j < runners.length; j++) {
+    for (let i = iterations; i > 0; i--) {
+        for (let j = 0; j < runners.length; j++) {
             runners[j].initializeTests();
         }
     }
 }
 
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
-var mytestconfig = 'mytest.config';
-var testconfig = 'test.config';
-var testConfigFile =
+let mytestconfig = 'mytest.config';
+let testconfig = 'test.config';
+let testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
 
 if (testConfigFile !== '') {
-    var testConfig = JSON.parse(testConfigFile);
+    let testConfig = JSON.parse(testConfigFile);
     if (testConfig.light) {
         Harness.lightMode = true;
     }

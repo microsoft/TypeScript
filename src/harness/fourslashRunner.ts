@@ -39,10 +39,10 @@ class FourSlashRunner extends RunnerBase {
             this.tests.forEach((fn: string) => {
                  describe(fn, () => {
                        fn = ts.normalizeSlashes(fn);
-                        var justName = fn.replace(/^.*[\\\/]/, '');
+                        let justName = fn.replace(/^.*[\\\/]/, '');
 
                         // Convert to relative path
-                        var testIndex = fn.indexOf('tests/');
+                        let testIndex = fn.indexOf('tests/');
                         if (testIndex >= 0) fn = fn.substr(testIndex);
 
                         if (justName && !justName.match(/fourslash\.ts$/i) && !justName.match(/\.d\.ts$/i)) {
@@ -54,21 +54,21 @@ class FourSlashRunner extends RunnerBase {
             });
 
             describe('Generate Tao XML', () => {
-                var invalidReasons: any = {};
+                let invalidReasons: any = {};
                 FourSlash.xmlData.forEach(xml => {
                     if (xml.invalidReason !== null) {
                         invalidReasons[xml.invalidReason] = (invalidReasons[xml.invalidReason] || 0) + 1;
                     }
                 });
-                var invalidReport: { reason: string; count: number }[] = [];
-                for (var reason in invalidReasons) {
+                let invalidReport: { reason: string; count: number }[] = [];
+                for (let reason in invalidReasons) {
                     if (invalidReasons.hasOwnProperty(reason)) {
                         invalidReport.push({ reason: reason, count: invalidReasons[reason] });
                     }
                 }
                 invalidReport.sort((lhs, rhs) => lhs.count > rhs.count ? -1 : lhs.count === rhs.count ? 0 : 1);
 
-                var lines: string[] = [];
+                let lines: string[] = [];
                 lines.push('<!-- Blocked Test Report');
                 invalidReport.forEach((reasonAndCount) => {
                     lines.push(reasonAndCount.count + ' tests blocked by ' + reasonAndCount.reason);
