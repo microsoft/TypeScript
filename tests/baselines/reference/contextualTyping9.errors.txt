@@ -1,0 +1,13 @@
+tests/cases/compiler/contextualTyping9.ts(1,5): error TS2322: Type '({ id: number; } | { id: number; name: string; })[]' is not assignable to type '{ id: number; }[]'.
+  Type '{ id: number; } | { id: number; name: string; }' is not assignable to type '{ id: number; }'.
+    Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
+      Property 'name' does not exist on type '{ id: number; }'.
+
+
+==== tests/cases/compiler/contextualTyping9.ts (1 errors) ====
+    var foo:{id:number;}[] = [{id:1}, {id:2, name:"foo"}];
+        ~~~
+!!! error TS2322: Type '({ id: number; } | { id: number; name: string; })[]' is not assignable to type '{ id: number; }[]'.
+!!! error TS2322:   Type '{ id: number; } | { id: number; name: string; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322:     Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322:       Property 'name' does not exist on type '{ id: number; }'.

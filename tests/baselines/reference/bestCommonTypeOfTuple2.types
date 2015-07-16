@@ -66,8 +66,8 @@ var t5: [C1, F]
 >F : F
 
 var e11 = t1[4]; // base
->e11 : base
->t1[4] : base
+>e11 : base | C
+>t1[4] : base | C
 >t1 : [C, base]
 >4 : number
 
@@ -78,14 +78,14 @@ var e21 = t2[4]; // {}
 >4 : number
 
 var e31 = t3[4]; // C1
->e31 : C1
->t3[4] : C1
+>e31 : C1 | D1
+>t3[4] : C1 | D1
 >t3 : [C1, D1]
 >4 : number
 
 var e41 = t4[2]; // base1
->e41 : base1
->t4[2] : base1
+>e41 : base1 | C1
+>t4[2] : base1 | C1
 >t4 : [base1, C1]
 >2 : number
 

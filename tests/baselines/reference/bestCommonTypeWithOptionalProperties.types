@@ -27,43 +27,43 @@ var z: Z;
 
 // All these arrays should be X[]
 var b1 = [x, y, z];
->b1 : X[]
->[x, y, z] : X[]
+>b1 : (X | Y | Z)[]
+>[x, y, z] : (X | Y | Z)[]
 >x : X
 >y : Y
 >z : Z
 
 var b2 = [x, z, y];
->b2 : X[]
->[x, z, y] : X[]
+>b2 : (X | Y | Z)[]
+>[x, z, y] : (X | Y | Z)[]
 >x : X
 >z : Z
 >y : Y
 
 var b3 = [y, x, z];
->b3 : X[]
->[y, x, z] : X[]
+>b3 : (X | Y | Z)[]
+>[y, x, z] : (X | Y | Z)[]
 >y : Y
 >x : X
 >z : Z
 
 var b4 = [y, z, x];
->b4 : X[]
->[y, z, x] : X[]
+>b4 : (X | Y | Z)[]
+>[y, z, x] : (X | Y | Z)[]
 >y : Y
 >z : Z
 >x : X
 
 var b5 = [z, x, y];
->b5 : X[]
->[z, x, y] : X[]
+>b5 : (X | Y | Z)[]
+>[z, x, y] : (X | Y | Z)[]
 >z : Z
 >x : X
 >y : Y
 
 var b6 = [z, y, x];
->b6 : X[]
->[z, y, x] : X[]
+>b6 : (X | Y | Z)[]
+>[z, y, x] : (X | Y | Z)[]
 >z : Z
 >y : Y
 >x : X
