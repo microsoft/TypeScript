@@ -3,59 +3,59 @@ tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(56,48): error TS4043:
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(62,35): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(68,24): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(74,17): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(164,52): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(168,39): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(164,52): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(168,39): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(208,48): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(211,35): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(223,52): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(225,39): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(223,52): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(225,39): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(253,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(259,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(265,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(271,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(361,48): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(365,35): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(361,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(365,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(405,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(408,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(411,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(414,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(420,48): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(422,35): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(420,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(422,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(9,40): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(15,27): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(21,16): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(27,9): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(117,44): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(121,31): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(117,44): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(121,31): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(161,40): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(164,27): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(167,16): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(170,9): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(176,44): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(178,31): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(176,44): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(178,31): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(211,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(217,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(223,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(229,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(319,48): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(323,35): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(319,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(323,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(363,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(366,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(369,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(372,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(378,48): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(378,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(414,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(414,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(420,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(426,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(432,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(522,48): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(526,35): error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(522,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(526,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(566,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(569,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(581,48): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(581,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts (35 errors) ====
@@ -185,13 +185,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
     export class publicClassWithWithPrivateSetAccessorTypes {
         static set myPublicStaticMethod(param: privateClass) { // Error
                                                ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         }
         private static set myPrivateStaticMethod(param: privateClass) {
         }
         set myPublicMethod(param: privateClass) { // Error
                                   ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         }
         private set myPrivateMethod(param: privateClass) {
         }
@@ -256,11 +256,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
     export class publicClassWithPrivateModuleSetAccessorTypes {
         static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                                ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
                                   ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
         }
     }
     
@@ -411,13 +411,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { // Error
                                                    ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { // Error
                                       ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -482,11 +482,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                                    ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { // Error
                                       ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
         }
     
@@ -640,13 +640,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { 
                                                    ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { 
                                       ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -707,11 +707,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { 
                                                    ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { 
                                       ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
         }
     
@@ -914,13 +914,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
             export class publicClassWithWithPrivateSetAccessorTypes {
                 static set myPublicStaticMethod(param: privateClass) {
                                                        ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
                 }
                 private static set myPrivateStaticMethod(param: privateClass) {
                 }
                 set myPublicMethod(param: privateClass) {
                                           ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
                 }
                 private set myPrivateMethod(param: privateClass) {
                 }
@@ -981,11 +981,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
             export class publicClassWithPrivateModuleSetAccessorTypes {
                 static set myPublicStaticMethod(param: privateModule.publicClass) {
                                                        ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 }
                 set myPublicMethod(param: privateModule.publicClass) {
                                           ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 }
             }
     
@@ -1131,13 +1131,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { // Error
                                                    ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { // Error
                                       ~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -1202,11 +1202,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(583,35): error TS
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                                    ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { // Error
                                       ~~~~~~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
         }
     

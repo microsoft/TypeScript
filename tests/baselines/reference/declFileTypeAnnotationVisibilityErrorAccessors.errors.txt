@@ -1,12 +1,12 @@
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(16,21): error TS4043: Return type of property getter 'foo1' references inaccessible name 'private1'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(21,13): error TS4043: Return type of property getter 'foo2' references inaccessible name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(26,25): error TS4028: Type of parameter 'param' references inaccessible name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(33,25): error TS4028: Type of parameter 'param' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(26,25): error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(33,25): error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(37,21): error TS4043: Return type of property getter 'foo5' references inaccessible name 'private1'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(72,23): error TS4043: Return type of property getter 'foo111' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(77,13): error TS4043: Return type of property getter 'foo112' references inaccessible name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(82,27): error TS4028: Type of parameter 'param' references inaccessible name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(89,27): error TS4028: Type of parameter 'param' references inaccessible name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(82,27): error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(89,27): error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): error TS4043: Return type of property getter 'foo115' references inaccessible name 'm2'.
 
 
@@ -42,7 +42,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
             // setter with annotation
             set foo3(param: private1) {
                             ~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'private1'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
             }
     
             // Both - getter without annotation, setter with annotation
@@ -51,7 +51,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
             }
             set foo4(param: private1) {
                             ~~~~~~~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'private1'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
             }
     
             // Both - with annotation
@@ -108,7 +108,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
             // setter with annotation
             set foo113(param: m2.public2) {
                               ~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'm2'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
             }
     
             // Both - getter without annotation, setter with annotation
@@ -117,7 +117,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
             }
             set foo114(param: m2.public2) {
                               ~~
-!!! error TS4028: Type of parameter 'param' references inaccessible name 'm2'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
             }
     
             // Both - with annotation

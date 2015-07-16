@@ -64,7 +64,8 @@ namespace ts {
                 increaseIndent: () => { },
                 decreaseIndent: () => { },
                 clear: () => str = "",
-                trackSymbol: () => { }
+                trackSymbol: () => { },
+                trackInaccesibleSymbol: () => { }
             };
         }
 

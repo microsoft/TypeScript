@@ -8,11 +8,11 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(18,16):
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(18,16): error TS4025: Type of variable 'x2' references inaccessible name 'private1'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(25,16): error TS4025: Type of variable 'x3' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(25,16): error TS4025: Type of variable 'x3' references inaccessible name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,23): error TS4028: Type of parameter 'a' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,23): error TS4030: Type of parameter 'a' references inaccessible name 'private1'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,36): error TS4025: Type of variable 'y' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(29,16): error TS4025: Type of variable 'y2' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(29,16): error TS4025: Type of variable 'y2' references inaccessible name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,27): error TS4028: Type of parameter 'a' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,27): error TS4030: Type of parameter 'a' references inaccessible name 'private1'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,40): error TS4025: Type of variable 'z' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(33,16): error TS4025: Type of variable 'z2' references inaccessible name 'm2'.
 tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(33,16): error TS4025: Type of variable 'z2' references inaccessible name 'private1'.
@@ -68,7 +68,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(33,16):
         // Function type
         export var y: (a: private1) => m2.public1;
                           ~~~~~~~~
-!!! error TS4028: Type of parameter 'a' references inaccessible name 'private1'.
+!!! error TS4030: Type of parameter 'a' references inaccessible name 'private1'.
                                        ~~
 !!! error TS4025: Type of variable 'y' references inaccessible name 'm2'.
         export var y2 = y;
@@ -80,7 +80,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(33,16):
         // constructor type
         export var z: new (a: private1) => m2.public1;
                               ~~~~~~~~
-!!! error TS4028: Type of parameter 'a' references inaccessible name 'private1'.
+!!! error TS4030: Type of parameter 'a' references inaccessible name 'private1'.
                                            ~~
 !!! error TS4025: Type of variable 'z' references inaccessible name 'm2'.
         export var z2 = z;

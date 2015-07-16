@@ -128,6 +128,7 @@ namespace ts {
         function createNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
             let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
+            writer.trackInaccesibleSymbol = trackInaccesibleSymbol;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -151,6 +152,12 @@ namespace ts {
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             if (currentErrorNode) {
                 collectDeclarations(symbol, currentErrorNode);
+            }
+        }
+
+        function trackInaccesibleSymbol(symbol: Symbol): void {
+            if (currentErrorNode) {
+                reportUnamedDeclarationMessage(currentErrorNode);
             }
         }
 
@@ -1517,6 +1524,53 @@ namespace ts {
                         diagnostics.push(createDiagnosticForNode(errorNode,
                             Diagnostics.Import_declaration_0_references_inaccessible_name_1,
                             (<ImportEqualsDeclaration>container).name.text, referencedDeclarationName));
+                        return;
+                }
+                container = container.parent;
+            }
+
+            Debug.fail("Could not find container node");
+        }
+
+        function reportUnamedDeclarationMessage(errorNode: Node): void {
+            reportedDeclarationError = true;
+            let container = errorNode;
+
+            while (container) {
+                switch (container.kind) {
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.VariableDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Name_of_inferred_type_of_variable_0_could_not_be_written_Consider_adding_an_explicit_type_annotation,
+                            getNameText(<VariableDeclaration>container)));
+                        return;
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessor:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Name_of_inferred_type_of_property_0_could_not_be_written_Consider_adding_an_explicit_type_annotation,
+                            getNameText(<PropertyDeclaration>container)));
+                        return;
+                    case SyntaxKind.Parameter:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Name_of_inferred_type_of_parameter_0_could_not_be_written_Consider_adding_an_explicit_type_annotation,
+                            getNameText(<ParameterDeclaration>container)));
+                        return;
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Name_of_inferred_return_type_of_method_0_could_not_be_written_Consider_adding_an_explicit_type_annotation,
+                            getNameText(<MethodDeclaration>container)));
+                        return;
+                    case SyntaxKind.FunctionDeclaration:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Name_of_inferred_return_type_of_function_0_could_not_be_written_Consider_adding_an_explicit_type_annotation,
+                            getNameText(<FunctionDeclaration>container)));
+                        return;
+                    case SyntaxKind.ExportAssignment:
+                        diagnostics.push(createDiagnosticForNode(errorNode,
+                            Diagnostics.Name_of_inferred_type_of_default_export_could_not_be_written_Consider_exporting_a_declaration_instead));
                         return;
                 }
                 container = container.parent;

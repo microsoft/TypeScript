@@ -1706,17 +1706,33 @@
         "category": "Error",
         "code": 4025
     },
+    "Name of inferred type of variable '{0}' could not be written. Consider adding an explicit type annotation.": {
+        "category": "Error",
+        "code": 4026
+    },
     "Type of property '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4028
     },
+    "Name of inferred type of property '{0}' could not be written. Consider adding an explicit type annotation.": {
+        "category": "Error",
+        "code": 4029
+    },
     "Type of parameter '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
-        "code": 4028
+        "code": 4030
+    },
+    "Name of inferred type of parameter '{0}' could not be written. Consider adding an explicit type annotation.": {
+        "category": "Error",
+        "code": 4031
     },
     "Return type of method '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4038
+    },
+    "Name of inferred return type of method '{0}' could not be written. Consider adding an explicit type annotation.": {
+        "category": "Error",
+        "code": 4039
     },
     "Return type of property getter '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
@@ -1738,6 +1754,10 @@
         "category": "Error",
         "code": 4060
     },
+    "Name of inferred return type of function '{0}' could not be written. Consider adding an explicit type annotation.": {
+        "category": "Error",
+        "code": 4061
+    },
     "Type alias '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4081
@@ -1746,6 +1766,11 @@
         "category": "Error",
         "code": 4082
     },
+    "Name of inferred type of default export could not be written. Consider exporting a declaration instead.": {
+        "category": "Error",
+        "code": 4083
+    },
+
 
     "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
         "category": "Error",

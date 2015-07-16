@@ -528,7 +528,8 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { }
+            trackSymbol: () => { },
+            trackInaccesibleSymbol: () => { }
         };
 
         function writeIndent() {

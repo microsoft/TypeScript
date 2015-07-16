@@ -1,7 +1,7 @@
 tests/cases/compiler/declInput-2.ts(10,21): error TS4028: Type of property 'm22' references inaccessible name 'C'.
 tests/cases/compiler/declInput-2.ts(13,21): error TS4028: Type of property 'm25' references inaccessible name 'I2'.
 tests/cases/compiler/declInput-2.ts(16,24): error TS4038: Return type of method 'm252' references inaccessible name 'I2'.
-tests/cases/compiler/declInput-2.ts(18,23): error TS4028: Type of parameter 'i' references inaccessible name 'I2'.
+tests/cases/compiler/declInput-2.ts(18,23): error TS4030: Type of parameter 'i' references inaccessible name 'I2'.
 tests/cases/compiler/declInput-2.ts(19,21): error TS4038: Return type of method 'm3' references inaccessible name 'C'.
 
 
@@ -31,7 +31,7 @@ tests/cases/compiler/declInput-2.ts(19,21): error TS4038: Return type of method 
             public m26(i:I1) {}
             public m262(i:I2) {}
                           ~~
-!!! error TS4028: Type of parameter 'i' references inaccessible name 'I2'.
+!!! error TS4030: Type of parameter 'i' references inaccessible name 'I2'.
             public m3():C { return new C(); }
                         ~
 !!! error TS4038: Return type of method 'm3' references inaccessible name 'C'.

@@ -1,0 +1,29 @@
+tests/cases/compiler/privacyCannotNameAccessorDeclFile2.ts(19,21): error TS4061: Name of inferred return type of function 'getIlocally' could not be written. Consider adding an explicit type annotation.
+
+
+==== tests/cases/compiler/privacyCannotNameAccessorDeclFile2.ts (1 errors) ====
+    
+    namespace M {
+        export interface I { }
+    }
+    
+    namespace N {
+        export function getI(): M.I {
+            return undefined
+        }
+    }
+    
+    namespace O {
+        // shadow M with a local namespace declaration
+        export namespace M {
+            export var x = 0;
+        }
+    
+        // Error, return type cannot be named
+        export function getIlocally() {
+                        ~~~~~~~~~~~
+!!! error TS4061: Name of inferred return type of function 'getIlocally' could not be written. Consider adding an explicit type annotation.
+            return N.getI();
+        }
+    }
+    

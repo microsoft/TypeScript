@@ -1567,6 +1567,11 @@ namespace ts {
                             }
                         }
                         else {
+
+                            if (!parentSymbol) {
+                                writer.trackInaccesibleSymbol(symbol);
+                            }
+
                             // If we didn't find accessible symbol chain for this symbol, break if this is external module
                             if (!parentSymbol && ts.forEach(symbol.declarations, hasExternalModuleSymbol)) {
                                 return;
