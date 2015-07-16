@@ -872,7 +872,9 @@ namespace ts.server {
                     let normalizedFileName = ts.normalizePath(fileName);
                     return { fileName: normalizedFileName, project };
                 });
-                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, false);
+                // Project level error analysis runs on background files too, therefore
+                // doesn't require the file to be opened
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
             }
         }
 
