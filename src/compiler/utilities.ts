@@ -1424,6 +1424,22 @@ namespace ts {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
 
+    export function cloneEntityName(node: EntityName): EntityName {
+        if (node.kind === SyntaxKind.Identifier) {
+            let clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            clone.text = (<Identifier>node).text;
+            return clone;
+        }
+        else {
+            let clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+            clone.left = cloneEntityName((<QualifiedName>node).left);
+            clone.left.parent = clone;
+            clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
+            clone.right.parent = clone;
+            return clone;
+        }
+    }
+
     export function nodeIsSynthesized(node: Node): boolean {
         return node.pos === -1;
     }
