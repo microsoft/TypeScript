@@ -1884,7 +1884,7 @@ module FourSlash {
                     );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNameList.map( file => {
+                    actual.fileNames.map( file => {
                         return file.replace(this.basePath + "/", "");
                         }).join(",")
                     );
