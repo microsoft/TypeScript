@@ -103,9 +103,29 @@
         "category": "Error",
         "code": 1039
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used here.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a data property.": {
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
+    },
+    "A '{0}' modifier cannot be used with an interface declaration.": {
+        "category": "Error",
+        "code": 1045
     },
     "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
         "category": "Error",
@@ -139,13 +159,37 @@
         "category": "Error",
         "code": 1054
     },
+    "Type '{0}' is not a valid async function return type.": {
+        "category": "Error",
+        "code": 1055  
+    },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Operand for 'await' does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1058
+    },
+    "Return expression in async function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1059
+    },
+    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1060
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
+    },
+    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+        "category": "Error",
+        "code": 1062
     },
     "An export assignment cannot be used in a namespace.": {
         "category": "Error",
@@ -159,7 +203,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "A '{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
     },
@@ -703,8 +747,24 @@
         "category": "Error",
         "code": 1235
     },
+    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
+        "category": "Error",
+        "code": 1236
+    },
 
 
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'await' expression is only allowed within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
+    },
     "The return type of a property decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1236
@@ -729,7 +789,22 @@
         "category": "Error",
         "code": 1241
     },
-
+    "'abstract' modifier can only appear on a class or method declaration.": {
+        "category": "Error",
+        "code": 1242
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1243
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1244
+    },
+    "Method '{0}' cannot have an implementation because it is marked abstract.": {
+        "category": "Error",
+        "code": 1245
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -870,11 +945,11 @@
         "category": "Error",
         "code": 2336
     },
-    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+    "Super calls are not permitted outside constructors or in nested functions inside constructors.": {
         "category": "Error",
         "code": 2337
     },
-    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.": {
         "category": "Error",
         "code": 2338
     },
@@ -882,7 +957,7 @@
         "category": "Error",
         "code": 2339
     },
-    "Only public and protected methods of the base class are accessible via the 'super' keyword": {
+    "Only public and protected methods of the base class are accessible via the 'super' keyword.": {
         "category": "Error",
         "code": 2340
     },
@@ -1518,7 +1593,58 @@
         "category": "Error",
         "code": 2510
     },
-
+    "Cannot create an instance of the abstract class '{0}'.": {
+        "category": "Error",
+        "code": 2511
+    },
+    "Overload signatures must all be abstract or not abstract.": {
+        "category": "Error",
+        "code": 2512
+    },
+    "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
+        "category": "Error",
+        "code": 2513
+    },
+    "Classes containing abstract methods must be marked abstract.": {
+        "category": "Error",
+        "code": 2514
+    },
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+        "category": "Error",
+        "code": 2515
+    },
+    "All declarations of an abstract method must be consecutive.": {
+        "category": "Error",
+        "code": 2516
+    },
+    "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
+        "category": "Error",
+        "code":2517
+    },
+    "Only an ambient class can be merged with an interface.": {
+        "category": "Error",
+        "code": 2518
+    },
+    "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
+        "category": "Error",
+        "code": 2520
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2521
+    },
+    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
+        "category": "Error",
+        "code": 2522
+    },
+    "'yield' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2523
+    },
+    "'await' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2524
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600
@@ -1559,7 +1685,6 @@
         "category": "Error",
         "code": 2650
     },
-
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2144,6 +2269,14 @@
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
+    },
+    "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower.": {
+        "category": "Message",
+        "code": 6067
+    },
+    "Enables experimental support for ES7 async functions.": {
+        "category": "Message",
+        "code": 6068
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

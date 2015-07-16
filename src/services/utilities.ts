@@ -429,6 +429,7 @@ namespace ts {
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
         if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
@@ -666,7 +667,7 @@ namespace ts {
 
         let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
 
-        return stripQuotes(name);
+        return name;
     }
 
     export function isImportOrExportSpecifierName(location: Node): boolean {
@@ -675,9 +676,16 @@ namespace ts {
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
     }
 
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
     export function stripQuotes(name: string) {
         let length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
+        if (length >= 2 &&
+            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
+            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
             return name.substring(1, length - 1);
         };
         return name;

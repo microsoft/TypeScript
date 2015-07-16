@@ -34,6 +34,9 @@ namespace ts {
          * Or undefined value if there was no change.
          */
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
 
     export interface Logger {
@@ -51,7 +54,7 @@ namespace ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): CancellationToken;
+        getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
@@ -243,6 +246,14 @@ namespace ts {
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
+
+        public dispose(): void {
+            // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
+            // 'in' does not have this effect
+            if ("dispose" in this.scriptSnapshotShim) {
+                this.scriptSnapshotShim.dispose();
+            }
+        }
     }
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
@@ -326,8 +337,9 @@ namespace ts {
             }
         }
 
-        public getCancellationToken(): CancellationToken {
-            return this.shimHost.getCancellationToken();
+        public getCancellationToken(): HostCancellationToken {
+            var hostCancellationToken = this.shimHost.getCancellationToken();
+            return new ThrottledCancellationToken(hostCancellationToken);
         }
 
         public getCurrentDirectory(): string {
@@ -343,6 +355,29 @@ namespace ts {
             catch (e) {
                 return "";
             }
+        }
+    }
+
+    /** A cancellation that throttles calls to the host */
+    class ThrottledCancellationToken implements HostCancellationToken {
+        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
+        // to marshall over to the host layer).  So we only bother actually checking once enough
+        // time has passed.
+        private lastCancellationCheckTime = 0;
+
+        constructor(private hostCancellationToken: HostCancellationToken) {
+        }
+
+        public isCancellationRequested(): boolean {
+            var time = Date.now();
+            var duration = Math.abs(time - this.lastCancellationCheckTime);
+            if (duration > 10) {
+                // Check no more than once every 10 ms.
+                this.lastCancellationCheckTime = time;
+                return this.hostCancellationToken.isCancellationRequested();
+            }
+
+            return false;
         }
     }
 

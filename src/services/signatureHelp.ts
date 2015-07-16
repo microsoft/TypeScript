@@ -178,7 +178,7 @@ namespace ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems {
         let typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help
@@ -550,7 +550,7 @@ namespace ts.SignatureHelp {
                 let suffixDisplayParts: SymbolDisplayPart[] = [];
 
                 if (callTargetDisplayParts) {
-                    prefixDisplayParts.push.apply(prefixDisplayParts, callTargetDisplayParts);
+                    addRange(prefixDisplayParts, callTargetDisplayParts);
                 }
 
                 if (isTypeParameterList) {
@@ -560,12 +560,12 @@ namespace ts.SignatureHelp {
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                     let parameterParts = mapToDisplayParts(writer =>
                         typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
-                    suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
+                    addRange(suffixDisplayParts, parameterParts);
                 }
                 else {
                     let typeParameterParts = mapToDisplayParts(writer =>
                         typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
-                    prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
+                    addRange(prefixDisplayParts, typeParameterParts);
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
                     let parameters = candidateSignature.parameters;
@@ -575,7 +575,7 @@ namespace ts.SignatureHelp {
 
                 let returnTypeParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
-                suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
+                addRange(suffixDisplayParts, returnTypeParts);
                 
                 return {
                     isVariadic: candidateSignature.hasRestParameter,

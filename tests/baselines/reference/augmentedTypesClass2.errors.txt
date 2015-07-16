@@ -1,5 +1,5 @@
-tests/cases/compiler/augmentedTypesClass2.ts(4,7): error TS2300: Duplicate identifier 'c11'.
-tests/cases/compiler/augmentedTypesClass2.ts(10,11): error TS2300: Duplicate identifier 'c11'.
+tests/cases/compiler/augmentedTypesClass2.ts(4,7): error TS2518: Only an ambient class can be merged with an interface.
+tests/cases/compiler/augmentedTypesClass2.ts(10,11): error TS2518: Only an ambient class can be merged with an interface.
 tests/cases/compiler/augmentedTypesClass2.ts(16,7): error TS2300: Duplicate identifier 'c33'.
 tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate identifier 'c33'.
 
@@ -10,7 +10,7 @@ tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate iden
     // class then interface
     class c11 { // error
           ~~~
-!!! error TS2300: Duplicate identifier 'c11'.
+!!! error TS2518: Only an ambient class can be merged with an interface.
         foo() {
             return 1;
         }
@@ -18,7 +18,7 @@ tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate iden
     
     interface c11 { // error
               ~~~
-!!! error TS2300: Duplicate identifier 'c11'.
+!!! error TS2518: Only an ambient class can be merged with an interface.
         bar(): void;
     }
     
