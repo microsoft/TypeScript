@@ -6700,10 +6700,45 @@ namespace ts {
 
             return [];
         }
-        
-        function getDocCommentScaffoldingAtPosition(filename: string, position: number): string {
-                return "/** getDocCommentScaffoldingAtPosition -- TS side! */";
-            }
+
+        /**
+         * Checks if position points to a valid position to add JSDoc comments, and if so,
+         * returns the appropriate scaffolding. Otherwise returns a default string.
+         * @param fileName The file in which to perofrm the check
+         * @param position The (character-indexed) position in the file where the check should
+         * be performed.
+         */
+        function getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
+            const nullResult = "/** */";
+            let start = new Date().getTime();
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+
+            // Check if in comment context
+            var nodeAtPos = getTokenAtPosition(sourceFile, position);
+
+            return "/** token is : daniel cant copy/paste " + tokenToString(nodeAtPos.kind) + " */";
+
+            // Get the next non-comment token
+            
+            // check if token is a function keyword
+            
+            // Get the parsed object corresponding to the token
+            
+            // get the function's param list
+            
+            // map the params to JSDoc declarations. ie:
+            // foo: T -> '* @param foo '
+            
+            // Get the indentation level
+            // * perhaps just use the carat's indentation?
+            
+            // Recall that the in-comment have one extra whitespace character
+            
+            // Create the JSDoc comment string from the parts
+            
+            return "/** getDocCommentScaffoldingAtPosition -- TS side! */";
+        }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually 
