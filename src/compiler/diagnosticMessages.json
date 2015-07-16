@@ -2445,5 +2445,9 @@
     "Cannot use JSX unless the '--jsx' flag is provided.": {
         "category": "Error",
         "code": 17004
+    },
+    "A constructor can not contain super call when a class extends null": {
+      "category": "Error",
+      "code": 17005
     }
 }
