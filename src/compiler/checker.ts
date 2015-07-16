@@ -3992,6 +3992,23 @@ namespace ts {
             return true;
         }
 
+        function isTupleTypeDuplicateOf(source: TupleType, target: TupleType): boolean {
+            let sourceTypes = source.elementTypes;
+            let targetTypes = target.elementTypes;
+            if (sourceTypes.length !== targetTypes.length) {
+                return false;
+            }
+            for (var i = 0; i < sourceTypes.length; i++) {
+                if (!isTypeDuplicateOf(sourceTypes[i], targetTypes[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Returns true if the source type is a duplicate of the target type. A source type is a duplicate of
+        // a target type if the the two are identical, with the exception that the source type may have null or
+        // undefined in places where the target type doesn't. This is by design an asymmetric relationship.
         function isTypeDuplicateOf(source: Type, target: Type): boolean {
             if (source === target) {
                 return true;
@@ -4004,6 +4021,9 @@ namespace ts {
             }
             if (isArrayType(source) && isArrayType(target)) {
                 return isTypeDuplicateOf((<TypeReference>source).typeArguments[0], (<TypeReference>target).typeArguments[0]);
+            }
+            if (isTupleType(source) && isTupleType(target)) {
+                return isTupleTypeDuplicateOf(<TupleType>source, <TupleType>target);
             }
             return isTypeIdenticalTo(source, target);
         }
@@ -4050,11 +4070,11 @@ namespace ts {
             return type1.id - type2.id;
         }
 
-        // The noDeduplication flag exists because it isn't always possible to deduplicate the constituent types.
-        // The flag is true when creating a union type from a type node and when instantiating a union type. In
-        // both of those cases subtype deduplication has to be deferred to properly support recursive union types.
-        // For example, a type alias of the form "type Item = string | (() => Item)" cannot be deduplicated during
-        // its declaration.
+        // We always deduplicate the constituent type set based on object identity, but we'll also deduplicate
+        // based on the structure of the types unless the noDeduplication flag is true, which is the case when
+        // creating a union type from a type node and when instantiating a union type. In both of those cases,
+        // structural deduplication has to be deferred to properly support recursive union types. For example,
+        // a type of the form "type Item = string | (() => Item)" cannot be deduplicated during its declaration.
         function getUnionType(types: Type[], noDeduplication?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
@@ -4133,7 +4153,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        // We do not perform supertype reduction on intersection types. Intersection types are created only by the &
+        // We do not perform structural deduplication on intersection types. Intersection types are created only by the &
         // type operator and we can't reduce those because we want to support recursive intersection types. For example,
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
