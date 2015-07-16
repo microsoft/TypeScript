@@ -887,53 +887,53 @@ namespace ts.server {
         private handlers : Map<(request: protocol.Request) => {response?: any, responseRequired?: boolean}> = {
             [CommandNames.Exit]: () => {
                 this.exit();
-                return {};
+                return { responseRequired: false};
             },
             [CommandNames.Definition]: (request: protocol.Request) => {
                 var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getDefinition(defArgs.line, defArgs.offset, defArgs.file)};
+                return {response: this.getDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true};
             },
             [CommandNames.TypeDefinition]: (request: protocol.Request) => {
                 var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file)};
+                return {response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true};
             },
             [CommandNames.References]: (request: protocol.Request) => {
                 var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getReferences(defArgs.line, defArgs.offset, defArgs.file)};
+                return {response: this.getReferences(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true};
             },
             [CommandNames.Rename]: (request: protocol.Request) => {
                 var renameArgs = <protocol.RenameRequestArgs>request.arguments;
-                return {response: this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings)}
+                return {response: this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings), responseRequired: true}
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 var openArgs = <protocol.OpenRequestArgs>request.arguments;
                 this.openClientFile(openArgs.file);
-                return {}
+                return {responseRequired: false}
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {
                 var quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file)};
+                return {response: this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file), responseRequired: true};
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 var formatArgs = <protocol.FormatRequestArgs>request.arguments;
-                return {response: this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file)};
+                return {response: this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file), responseRequired: true};
             },
             [CommandNames.Formatonkey]: (request: protocol.Request) => {
                 var formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
-                return {response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file)};
+                return {response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true};
             },
             [CommandNames.Completions]: (request: protocol.Request) => {
                 var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
-                return {response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file)}
+                return {response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file), responseRequired: true}
             },
             [CommandNames.CompletionDetails]: (request: protocol.Request) => {
                 var completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
                 return {response: this.getCompletionEntryDetails(completionDetailsArgs.line,completionDetailsArgs.offset,
-                                                                  completionDetailsArgs.entryNames,completionDetailsArgs.file)}
+                                                                  completionDetailsArgs.entryNames,completionDetailsArgs.file), responseRequired: true}
             },
             [CommandNames.SignatureHelp]: (request: protocol.Request) => {
                 var signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
-                return {response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file)}
+                return {response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true}
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
@@ -972,23 +972,23 @@ namespace ts.server {
             },
             [CommandNames.Navto]: (request: protocol.Request) => {
                 var navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                return {response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount)};
+                return {response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true};
             },
             [CommandNames.Brace]: (request: protocol.Request) => {
                 var braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file)};
+                return {response: this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file), responseRequired: true};
             },
             [CommandNames.NavBar]: (request: protocol.Request) => {
                 var navBarArgs = <protocol.FileRequestArgs>request.arguments;
-                return {response: this.getNavigationBarItems(navBarArgs.file)};
+                return {response: this.getNavigationBarItems(navBarArgs.file), responseRequired: true};
             },
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getOccurrences(line, offset, fileName)};
+                return {response: this.getOccurrences(line, offset, fileName), responseRequired: true};
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
-                return {response: this.getProjectInfo(file, needFileNameList)};
+                return {response: this.getProjectInfo(file, needFileNameList), responseRequired: true};
             },
         };
         addProtocolHandler(command: string, handler: (request: protocol.Request) => {response?: any, responseRequired: boolean}) {
