@@ -5,7 +5,9 @@ var array = [{ x: "", y: 0 }]
 >y : Symbol(y, Decl(for-of42.ts, 0, 21))
 
 for (var {x: a, y: b} of array) {
+>x : Symbol(x, Decl(for-of42.ts, 0, 14))
 >a : Symbol(a, Decl(for-of42.ts, 1, 10))
+>y : Symbol(y, Decl(for-of42.ts, 0, 21))
 >b : Symbol(b, Decl(for-of42.ts, 1, 15))
 >array : Symbol(array, Decl(for-of42.ts, 0, 3))
 
