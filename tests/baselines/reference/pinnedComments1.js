@@ -5,6 +5,11 @@
 class C {
 }
 
+function foo() {
+	/* unpinned comment */
+	/*! pinned comment */
+}
+
 //// [pinnedComments1.js]
 /*! pinned comment */
 var C = (function () {
@@ -12,3 +17,6 @@ var C = (function () {
     }
     return C;
 })();
+function foo() {
+    /*! pinned comment */
+}

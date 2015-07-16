@@ -92,6 +92,9 @@ declare var x;
 const enum color { red, green, blue }
 var shade: color = color.green;
 
+function detached() {
+    /* detached comment */
+}
 
 //// [commentsdoNotEmitComments.js]
 var myVariable = 10;
@@ -135,6 +138,8 @@ var m1;
     m1.b = b;
 })(m1 || (m1 = {}));
 var shade = 1;
+function detached() {
+}
 
 
 //// [commentsdoNotEmitComments.d.ts]
@@ -173,3 +178,4 @@ declare const enum color {
     blue = 2,
 }
 declare var shade: color;
+declare function detached(): void;

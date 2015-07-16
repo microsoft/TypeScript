@@ -5,3 +5,10 @@
 class C {
 >C : C
 }
+
+function foo() {
+>foo : () => void
+
+	/* unpinned comment */
+	/*! pinned comment */
+}

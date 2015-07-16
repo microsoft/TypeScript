@@ -159,3 +159,8 @@ var shade: color = color.green;
 >color : Symbol(color, Decl(commentsdoNotEmitComments.ts, 86, 14))
 >green : Symbol(color.green, Decl(commentsdoNotEmitComments.ts, 90, 23))
 
+function detached() {
+>detached : Symbol(detached, Decl(commentsdoNotEmitComments.ts, 91, 31))
+
+    /* detached comment */
+}
