@@ -1372,8 +1372,8 @@ namespace ts {
             function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter, isTypeSymbol: boolean): void {
                 writer.writeSymbol(getNameOfSymbol(symbol), symbol);
 
-                if (isTypeSymbol) {
-                    writer.trackSymbol(symbol);
+                if (isTypeSymbol && writer.trackTypeSymbol) {
+                    writer.trackTypeSymbol(symbol);
                 }
             }
 
@@ -1422,7 +1422,7 @@ namespace ts {
                         }
                         else {
 
-                            if (!parentSymbol) {
+                            if (!parentSymbol && writer.trackInaccesibleSymbol) {
                                 writer.trackInaccesibleSymbol(symbol);
                             }
 

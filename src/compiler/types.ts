@@ -1470,8 +1470,8 @@ namespace ts {
         // Called when the symbol writer encounters a symbol to write.  Currently only used by the
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
-        trackInaccesibleSymbol(symbol: Symbol): void;
+        trackTypeSymbol?(symbol: Symbol): void;
+        trackInaccesibleSymbol?(symbol: Symbol): void;
     }
 
     export const enum TypeFormatFlags {

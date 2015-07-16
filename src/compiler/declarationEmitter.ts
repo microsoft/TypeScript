@@ -27,6 +27,8 @@ namespace ts {
         return diagnostics;
     }
 
+    const emptyHandler = () => { };
+
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
@@ -127,8 +129,6 @@ namespace ts {
 
         function createNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
             let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
-            writer.trackSymbol = trackSymbol;
-            writer.trackInaccesibleSymbol = trackInaccesibleSymbol;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -148,17 +148,22 @@ namespace ts {
             decreaseIndent = newWriter.decreaseIndent;
         }
 
-        var currentErrorNode: Node;
-        function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            if (currentErrorNode) {
-                collectDeclarations(symbol, currentErrorNode);
-            }
-        }
-
-        function trackInaccesibleSymbol(symbol: Symbol): void {
-            if (currentErrorNode) {
-                reportUnamedDeclarationMessage(currentErrorNode);
-            }
+        function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
+            return {
+                writeLine: emptyHandler,
+                writeKeyword: emptyHandler,
+                writeOperator: emptyHandler,
+                writePunctuation: emptyHandler,
+                writeSpace: emptyHandler,
+                writeStringLiteral: emptyHandler,
+                writeParameter: emptyHandler,
+                writeSymbol: emptyHandler,
+                decreaseIndent: emptyHandler,
+                increaseIndent: emptyHandler,
+                clear: emptyHandler,
+                trackTypeSymbol,
+                trackInaccesibleSymbol
+            };
         }
 
         function emitTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
@@ -466,16 +471,16 @@ namespace ts {
             }
 
             if (node.importClause.namedBindings) {
-              if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
-                indexOf(children, node.importClause.namedBindings) >= 0) {
-                write("* as ");
-                writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
-              }
-              else if (children.length) {
-                write("{ ");
-                emitCommaList(children, emitImportOrExportSpecifier);
-                write(" }");
-              }
+                if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
+                    indexOf(children, node.importClause.namedBindings) >= 0) {
+                    write("* as ");
+                    writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
+                }
+                else if (children.length) {
+                    write("{ ");
+                    emitCommaList(children, emitImportOrExportSpecifier);
+                    write(" }");
+                }
             }
 
             write(" from ");
@@ -758,7 +763,7 @@ namespace ts {
             }
         }
 
-        function hasChildDeclaration(node: VariableStatement): boolean{
+        function hasChildDeclaration(node: VariableStatement): boolean {
             return forEach(<VariableDeclaration[]>getNodeLinks(node).visibleChildren, child => {
                 if (isBindingPattern(child.name)) {
                     return forEach((<BindingPattern>child.name).elements, e => {
@@ -1069,70 +1074,87 @@ namespace ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
 
+        function collectReferencedDeclarations(node: Node): void {
+            let currentErrorNode: Node;
+            let typeWriter = createVoidSymbolWriter(trackTypeSymbol, trackInaccesibleSymbol);
 
-        function visitNode(node: Node): void {
-            if (!node) return;
+            return visitNode(node);
 
-            switch (node.kind) {
-                case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
-                case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
-                case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
-                case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.ImportClause:
-                    // Nothing to visit, import declarations are only pulled in if referenced
-                    return;
-
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                    return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
-                        forEach((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses, visitHeritageClause);
-
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.EnumMember:
-                    // Nothing to visit here
-                    return;
-
-                case SyntaxKind.TypeAliasDeclaration:
-                    return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
-                        visitNode((<TypeAliasDeclaration>node).type);
-
-                case SyntaxKind.TypeParameter:
-                    return visitNode((<TypeParameterDeclaration>node).constraint);
-
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                    return visitSignatureDeclaration(<FunctionLikeDeclaration>node);
-
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return visitAccessorDeclaration(<AccessorDeclaration>node);
-
-                case SyntaxKind.Parameter:
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.BindingElement:
-                    return visitPropertyDeclaration(<PropertyDeclaration>node);
-
-                case SyntaxKind.Identifier:
-                    return visitTypeName(<Identifier>node);
-
-                default:
-                    return forEachChild(node, visitNode);
+            function trackTypeSymbol(symbol: Symbol) {
+                if (currentErrorNode) {
+                    collectDeclarations(symbol, currentErrorNode);
+                }
             }
 
-            return;
+            function trackInaccesibleSymbol(symbol: Symbol): void {
+                if (currentErrorNode) {
+                    reportUnamedDeclarationMessage(currentErrorNode);
+                }
+            }
+
+            function visitNode(node: Node): void {
+                if (!node) return;
+
+                switch (node.kind) {
+                    case SyntaxKind.ExportDeclaration:
+                        return visitExportDeclaration(<ExportDeclaration>node);
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    case SyntaxKind.ExportAssignment:
+                        return visitExportAssignment(<ExportAssignment>node);
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportClause:
+                        // Nothing to visit, import declarations are only pulled in if referenced
+                        return;
+
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                        return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
+                            forEach((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses, visitHeritageClause);
+
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.EnumMember:
+                        // Nothing to visit here
+                        return;
+
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return visitNodes((<TypeAliasDeclaration>node).typeParameters) ||
+                            visitNode((<TypeAliasDeclaration>node).type);
+
+                    case SyntaxKind.TypeParameter:
+                        return visitNode((<TypeParameterDeclaration>node).constraint);
+
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                        return visitSignatureDeclaration(<FunctionLikeDeclaration>node);
+
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return visitAccessorDeclaration(<AccessorDeclaration>node);
+
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.BindingElement:
+                        return visitPropertyDeclaration(<PropertyDeclaration>node);
+
+                    case SyntaxKind.Identifier:
+                        return visitTypeName(<Identifier>node);
+
+                    default:
+                        return forEachChild(node, visitNode);
+                }
+
+            }
 
             function visitExportDeclaration(node: ExportDeclaration): void {
                 if (!node.moduleSpecifier) {
@@ -1151,12 +1173,10 @@ namespace ts {
                     collectAliasDeclaration(node, node.expression);
                 }
                 else if (!node.isExportEquals) { 
-                    // TODO: handel expressions
-                    // TODO: Cache the result
-                    let writer = createNewTextWriterWithSymbolWriter();
+                    // handel expressions
                     let previousErrorNode = currentErrorNode;
                     currentErrorNode = node.expression;
-                    resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    resolver.writeTypeOfExpression(node.expression, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, typeWriter);
                     currentErrorNode = previousErrorNode;
                 }
             }
@@ -1173,12 +1193,10 @@ namespace ts {
                     visitNode(node.type);
                 }
                 else if (node.kind !== SyntaxKind.Constructor) {
-                    // TODO: handel infered type
-                    // TODO: Cache the result
-                    let writer = createNewTextWriterWithSymbolWriter();
+                    // handel infered type
                     let previousErrorNode = currentErrorNode;
                     currentErrorNode = node.name || node;
-                    resolver.writeReturnTypeOfSignatureDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    resolver.writeReturnTypeOfSignatureDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, typeWriter);
                     currentErrorNode = previousErrorNode;
                 }
             }
@@ -1196,12 +1214,10 @@ namespace ts {
                         visitNode(type);
                     }
                     else {
-                        // TODO: handel infered type
-                        // TODO: Cache the result
-                        let writer = createNewTextWriterWithSymbolWriter();
+                        // handel infered type
                         let previousErrorNode = currentErrorNode;
                         currentErrorNode = accessors.getAccessor ? accessors.getAccessor.name : node.name;
-                        resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                        resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, typeWriter);
                         currentErrorNode = previousErrorNode;
                     }
                 }
@@ -1224,12 +1240,10 @@ namespace ts {
                     visitNode(node.type);
                 }
                 else {
-                    // TODO: handel infered type
-                    // TODO: Cache the result
-                    let writer = createNewTextWriterWithSymbolWriter();
+                    // handel infered type
                     let previousErrorNode = currentErrorNode;
                     currentErrorNode = node.name;
-                    resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    resolver.writeTypeOfDeclaration(node, getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, typeWriter);
                     currentErrorNode = previousErrorNode;
                 }
             }
@@ -1239,11 +1253,9 @@ namespace ts {
                 if (node.token === SyntaxKind.ExtendsKeyword &&
                     firstEntry && !isSupportedExpressionWithTypeArguments(firstEntry)) {
                     // An expression in an extends clause
-                    // TODO: Cache the result
-                    let writer = createNewTextWriterWithSymbolWriter();
                     let previousErrorNode = currentErrorNode;
                     currentErrorNode = firstEntry;
-                    resolver.writeBaseConstructorTypeOfClass((<ClassLikeDeclaration>node.parent), getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, writer);
+                    resolver.writeBaseConstructorTypeOfClass((<ClassLikeDeclaration>node.parent), getEnclosingDeclaration(node), TypeFormatFlags.UseTypeOfFunction, typeWriter);
                     currentErrorNode = previousErrorNode;
                 }
                 else {
@@ -1268,12 +1280,16 @@ namespace ts {
             function visitNodes(nodes: NodeArray<any>): void {
                 forEach(nodes, visitNode);
             }
-        }
 
-        function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment, errorNode: Node) {
-            let target = resolver.getLocalTargetOfAliasDeclaration(node);
-            if (target) {
-                collectDeclarations(target, errorNode);
+            function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment, errorNode: Node) {
+                let target = resolver.getLocalTargetOfAliasDeclaration(node);
+                if (target) {
+                    collectDeclarations(target, errorNode);
+                }
+            }
+
+            function collectDeclarations(symbol: Symbol, errorNode: Node): void {
+                forEach(symbol.declarations, d => collectDeclaration(d, errorNode));
             }
         }
 
@@ -1339,7 +1355,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     forEach((<InterfaceDeclaration|EnumDeclaration|ClassDeclaration>node).members, action);
                     break;
-                case SyntaxKind.VariableStatement: 
+                case SyntaxKind.VariableStatement:
                     forEach((<VariableStatement>node).declarationList.declarations, action);
                     break;
                 case SyntaxKind.ModuleDeclaration:
@@ -1371,10 +1387,6 @@ namespace ts {
             return undefined;
         }
 
-        function collectDeclarations(symbol: Symbol, errorNode: Node): void {
-            forEach(symbol.declarations, d => collectDeclaration(d, errorNode));
-        }
-
         function hasExportDeclatations(node: Node): boolean {
             let links = getNodeLinks(node);
             if (typeof links.hasExportDeclarations === "undefined") {
@@ -1399,7 +1411,7 @@ namespace ts {
          * they have an export modifier or not.
          *
          */
-        function canWriteDeclaration(node: Node): boolean{
+        function canWriteDeclaration(node: Node): boolean {
             if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                 node = node.parent.parent;
             }
@@ -1598,7 +1610,7 @@ namespace ts {
                 links.collected = true;
 
                 // Collect any dependencies
-                visitNode(node);
+                collectReferencedDeclarations(node);
 
                 // Collect children as well
                 switch (node.kind) {
