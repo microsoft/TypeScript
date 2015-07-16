@@ -635,19 +635,6 @@ namespace ts {
             return false;
         }
 
-        function getAnyImportSyntax(node: Node): AnyImportSyntax {
-            if (isAliasSymbolDeclaration(node)) {
-                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    return <ImportEqualsDeclaration>node;
-                }
-
-                while (node && node.kind !== SyntaxKind.ImportDeclaration) {
-                    node = node.parent;
-                }
-                return <ImportDeclaration>node;
-            }
-        }
-
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
             return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
@@ -1296,145 +1283,12 @@ namespace ts {
             return qualify;
         }
 
-        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult {
-            if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
-                let initialSymbol = symbol;
-                let meaningToLook = meaning;
-                while (symbol) {
-                    // Symbol is accessible if it by itself is accessible
-                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaningToLook, /*useOnlyExternalAliasing*/ false);
-                    if (accessibleSymbolChain) {
-                        let hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0]);
-                        if (!hasAccessibleDeclarations) {
-                            return <SymbolAccessiblityResult>{
-                                accessibility: SymbolAccessibility.NotAccessible,
-                                errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
-                                errorModuleName: symbol !== initialSymbol ? symbolToString(symbol, enclosingDeclaration, SymbolFlags.Namespace) : undefined,
-                            };
-                        }
-                        return hasAccessibleDeclarations;
-                    }
-
-                    // If we haven't got the accessible symbol, it doesn't mean the symbol is actually inaccessible.
-                    // It could be a qualified symbol and hence verify the path
-                    // e.g.:
-                    // module m {
-                    //     export class c {
-                    //     }
-                    // }
-                    // let x: typeof m.c
-                    // In the above example when we start with checking if typeof m.c symbol is accessible,
-                    // we are going to see if c can be accessed in scope directly.
-                    // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
-                    // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
-                    meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = getParentOfSymbol(symbol);
-                }
-
-                // This could be a symbol that is not exported in the external module
-                // or it could be a symbol from different external module that is not aliased and hence cannot be named
-                let symbolExternalModule = forEach(initialSymbol.declarations, getExternalModuleContainer);
-                if (symbolExternalModule) {
-                    let enclosingExternalModule = getExternalModuleContainer(enclosingDeclaration);
-                    if (symbolExternalModule !== enclosingExternalModule) {
-                        // name from different external module that is not visible
-                        return {
-                            accessibility: SymbolAccessibility.CannotBeNamed,
-                            errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
-                            errorModuleName: symbolToString(symbolExternalModule)
-                        };
-                    }
-                }
-
-                // Just a local name that is not accessible
-                return {
-                    accessibility: SymbolAccessibility.NotAccessible,
-                    errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
-                };
-            }
-
-            return { accessibility: SymbolAccessibility.Accessible };
-
-            function getExternalModuleContainer(declaration: Node) {
-                for (; declaration; declaration = declaration.parent) {
-                    if (hasExternalModuleSymbol(declaration)) {
-                        return getSymbolOfNode(declaration);
-                    }
-                }
-            }
-        }
-
         function hasExternalModuleSymbol(declaration: Node) {
             return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
                 (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
         }
 
-        function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
-            let aliasesToMakeVisible: AnyImportSyntax[];
-            if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
-                return undefined;
-            }
-            return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
-
-            function getIsDeclarationVisible(declaration: Declaration) {
-                if (!isDeclarationVisible(declaration)) {
-                    // Mark the unexported alias as visible if its parent is visible
-                    // because these kind of aliases can be used to name types in declaration file
-
-                    let anyImportSyntax = getAnyImportSyntax(declaration);
-                    if (anyImportSyntax &&
-                        !(anyImportSyntax.flags & NodeFlags.Export) && // import clause without export
-                        isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
-                        getNodeLinks(declaration).isVisible = true;
-                        if (aliasesToMakeVisible) {
-                            if (!contains(aliasesToMakeVisible, anyImportSyntax)) {
-                                aliasesToMakeVisible.push(anyImportSyntax);
-                            }
-                        }
-                        else {
-                            aliasesToMakeVisible = [anyImportSyntax];
-                        }
-                        return true;
-                    }
-
-                    // Declaration is not visible
-                    return false;
-                }
-
-                return true;
-            }
-        }
-
-        function isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult {
-            // get symbol of the first identifier of the entityName
-            let meaning: SymbolFlags;
-            if (entityName.parent.kind === SyntaxKind.TypeQuery) {
-                // Typeof value
-                meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
-            }
-            else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
-                entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-                // Left identifier from type reference or TypeAlias
-                // Entity name of the import declaration
-                meaning = SymbolFlags.Namespace;
-            }
-            else {
-                // Type Reference or TypeAlias entity = Identifier
-                meaning = SymbolFlags.Type;
-            }
-
-            let firstIdentifier = getFirstIdentifier(entityName);
-            let symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-
-            // Verify if the symbol is accessible
-            return (symbol && hasVisibleDeclarations(symbol)) || <SymbolVisibilityResult>{
-                accessibility: SymbolAccessibility.NotAccessible,
-                errorSymbolName: getTextOfNode(firstIdentifier),
-                errorNode: firstIdentifier
-            };
-        }
-
-        function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
+       function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
             writer.writeKeyword(tokenToString(kind));
         }
 
@@ -2026,188 +1880,6 @@ namespace ts {
                 buildSignatureDisplay: buildSignatureDisplay,
                 buildReturnTypeDisplay: buildReturnTypeDisplay
             });
-        }
-
-        function isDeclarationVisible(node: Declaration): boolean {
-            function getContainingExternalModule(node: Node) {
-                for (; node; node = node.parent) {
-                    if (node.kind === SyntaxKind.ModuleDeclaration) {
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-                            return node;
-                        }
-                    }
-                    else if (node.kind === SyntaxKind.SourceFile) {
-                        return isExternalModule(<SourceFile>node) ? node : undefined;
-                    }
-                }
-                Debug.fail("getContainingModule cant reach here");
-            }
-
-            function isUsedInExportAssignment(node: Node) {
-                // Get source File and see if it is external module and has export assigned symbol
-                let externalModule = getContainingExternalModule(node);
-                let exportAssignmentSymbol: Symbol;
-                let resolvedExportSymbol: Symbol;
-                if (externalModule) {
-                    // This is export assigned symbol node
-                    let externalModuleSymbol = getSymbolOfNode(externalModule);
-                    exportAssignmentSymbol = getExportAssignmentSymbol(externalModuleSymbol);
-                    let symbolOfNode = getSymbolOfNode(node);
-                    if (isSymbolUsedInExportAssignment(symbolOfNode)) {
-                        return true;
-                    }
-
-                    // if symbolOfNode is alias declaration, resolve the symbol declaration and check
-                    if (symbolOfNode.flags & SymbolFlags.Alias) {
-                        return isSymbolUsedInExportAssignment(resolveAlias(symbolOfNode));
-                    }
-                }
-
-                // Check if the symbol is used in export assignment
-                function isSymbolUsedInExportAssignment(symbol: Symbol) {
-                    if (exportAssignmentSymbol === symbol) {
-                        return true;
-                    }
-
-                    if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Alias)) {
-                        // if export assigned symbol is alias declaration, resolve the alias
-                        resolvedExportSymbol = resolvedExportSymbol || resolveAlias(exportAssignmentSymbol);
-                        if (resolvedExportSymbol === symbol) {
-                            return true;
-                        }
-
-                        // Container of resolvedExportSymbol is visible
-                        return forEach(resolvedExportSymbol.declarations, (current: Node) => {
-                            while (current) {
-                                if (current === node) {
-                                    return true;
-                                }
-                                current = current.parent;
-                            }
-                        });
-                    }
-                }
-            }
-
-            function determineIfDeclarationIsVisible() {
-                switch (node.kind) {
-                    case SyntaxKind.BindingElement:
-                        return isDeclarationVisible(<Declaration>node.parent.parent);
-                    case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern(node.name) &&
-                            !(<BindingPattern>node.name).elements.length) {
-                            // If the binding pattern is empty, this variable declaration is not visible
-                            return false;
-                        }
-                    // Otherwise fall through
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeAliasDeclaration:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                        let parent = getDeclarationContainer(node);
-                        // If the node is not exported or it is not ambient module element (except import declaration)
-                        if (!(getCombinedNodeFlags(node) & NodeFlags.Export) &&
-                            !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
-                            return isGlobalSourceFile(parent);
-                        }
-                        // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                        return isDeclarationVisible(<Declaration>parent);
-
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                        if (node.flags & (NodeFlags.Private | NodeFlags.Protected)) {
-                            // Private/protected properties/methods are not visible
-                            return false;
-                        }
-                    // Public properties/methods are visible if its parents are visible, so let it fall into next case statement
-
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.IndexSignature:
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                    case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.TypeReference:
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.IntersectionType:
-                    case SyntaxKind.ParenthesizedType:
-                        return isDeclarationVisible(<Declaration>node.parent);
-
-                    // Default binding, import specifier and namespace import is visible
-                    // only on demand so by default it is not visible
-                    case SyntaxKind.ImportClause:
-                    case SyntaxKind.NamespaceImport:
-                    case SyntaxKind.ImportSpecifier:
-                        return false;
-
-                    // Type parameters are always visible
-                    case SyntaxKind.TypeParameter:
-                    // Source file is always visible
-                    case SyntaxKind.SourceFile:
-                        return true;
-
-                    // Export assignements do not create name bindings outside the module
-                    case SyntaxKind.ExportAssignment:
-                        return false;
-
-                    default:
-                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
-                }
-            }
-
-            if (node) {
-                let links = getNodeLinks(node);
-                if (links.isVisible === undefined) {
-                    links.isVisible = !!determineIfDeclarationIsVisible();
-                }
-                return links.isVisible;
-            }
-        }
-
-        function collectLinkedAliases(node: Identifier): Node[] {
-            let exportSymbol: Symbol;
-            if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
-            }
-            else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
-            }
-            let result: Node[] = [];
-            if (exportSymbol) {
-                buildVisibleNodeList(exportSymbol.declarations);
-            }
-            return result;
-
-            function buildVisibleNodeList(declarations: Declaration[]) {
-                forEach(declarations, declaration => {
-                    getNodeLinks(declaration).isVisible = true;
-                    let resultNode = getAnyImportSyntax(declaration) || declaration;
-                    if (!contains(result, resultNode)) {
-                        result.push(resultNode);
-                    }
-
-                    if (isInternalModuleImportEqualsDeclaration(declaration)) {
-                        // Add the referenced top container visible
-                        let internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
-                        let firstIdentifier = getFirstIdentifier(internalModuleReference);
-                        let importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
-                            Diagnostics.Cannot_find_name_0, firstIdentifier);
-                        buildVisibleNodeList(importSymbol.declarations);
-                    }
-                });
-            }
         }
 
         // Push an entry on the type resolution stack. If an entry with the given target is not already on the stack,
@@ -14187,27 +13859,17 @@ namespace ts {
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
                 isTopLevelValueImportEqualsWithEntityName,
-                isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
                 writeBaseConstructorTypeOfClass,
-                isSymbolAccessible,
-                isEntityNameVisible,
                 getConstantValue,
-                collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
-                resolveName,
                 getSymbolAtLocation,
-                resolveAlias,
                 getLocalTargetOfAliasDeclaration,
-                getTypeOfSymbol,
-                getReturnTypeOfSignature,
-                getSignatureFromDeclaration,
-                getSignaturesOfType,
             };
         }
 

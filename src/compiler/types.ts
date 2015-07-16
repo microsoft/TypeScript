@@ -1501,35 +1501,12 @@ namespace ts {
         UseOnlyExternalAliasing = 0x00000002,
     }
 
-    /* @internal */
-    export const enum SymbolAccessibility {
-        Accessible,
-        NotAccessible,
-        CannotBeNamed
-    }
-
     export interface TypePredicate {
         parameterName: string;
         parameterIndex: number;
         type: Type;
     }
 
-    /* @internal */
-    export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
-
-    /* @internal */
-    export interface SymbolVisibilityResult {
-        accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
-        errorSymbolName?: string; // Optional symbol name that results in error
-        errorNode?: Node; // optional node that results in error
-    }
-
-    /* @internal */
-    export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
-        errorModuleName?: string; // If the symbol is not visible from module, module's name
-    }
-    
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
       * metadata */
     /* @internal */
@@ -1562,28 +1539,18 @@ namespace ts {
         isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
-        isDeclarationVisible(node: Declaration): boolean;
-        collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeBaseConstructorTypeOfClass(expr: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
-        resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol;
         getSymbolAtLocation(node: Node): Symbol;
-        resolveAlias(symbol: Symbol): Symbol;
         getLocalTargetOfAliasDeclaration(node: Declaration): Symbol;
-        getTypeOfSymbol(symbol: Symbol): Type;
-        getReturnTypeOfSignature(signature: Signature): Type;
-        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
-        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
     }
 
     export const enum SymbolFlags {
