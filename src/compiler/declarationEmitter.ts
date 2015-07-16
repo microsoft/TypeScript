@@ -2,22 +2,17 @@
 
 /* @internal */
 namespace ts {
-    interface ModuleElementDeclarationEmitInfo {
-        node: Node;
-        outputPos: number;
-        indent: number;
-        asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
-        subModuleElementDeclarationEmitInfo?: ModuleElementDeclarationEmitInfo[];
-        isVisible?: boolean;
-    }
-
     interface DeclarationEmit {
-        reportedDeclarationError: boolean;
-        synchronousDeclarationOutput: string;
+        hasDeclarationDiagnostics: boolean;
+        output: string;
         referencePathsOutput: string;
     }
 
-    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
+    interface NodeLinks {
+        visibleChildren?: Node[];
+        visited?: boolean;
+        collected?: boolean;
+        hasExportDeclarations?: boolean;
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
@@ -33,30 +28,21 @@ namespace ts {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
 
-        let write: (s: string) => void;
-        let writeLine: () => void;
-        let increaseIndent: () => void;
-        let decreaseIndent: () => void;
-        let writeTextOfNode: (sourceFile: SourceFile, node: Node) => void;
-
         let writer = createNewTextWriterWithSymbolWriter();
-        setWriter(writer);
+        let write = writer.write;
+        let writeTextOfNode = writer.writeTextOfNode;
+        let writeLine = writer.writeLine;
+        let increaseIndent = writer.increaseIndent;
+        let decreaseIndent = writer.decreaseIndent;
 
         let enclosingDeclaration: Node;
         let currentSourceFile: SourceFile;
-        let reportedDeclarationError = false;
+        let hasDeclarationDiagnostics = false;
 
         // Contains the reference paths that needs to go in the declaration file.
         // Collecting this separately because reference paths need to be first thing in the declaration file
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencePathsOutput = "";
-
-        interface NodeLinks {
-            visibleChildren?: Node[];
-            visited?: boolean;
-            collected?: boolean;
-            hasExportDeclarations?: boolean;
-        }
 
         let nodeLinks: NodeLinks[] = [];
         function getNodeLinks(node: Node): NodeLinks {
@@ -112,8 +98,8 @@ namespace ts {
         }
 
         return {
-            reportedDeclarationError,
-            synchronousDeclarationOutput: writer.getText(),
+            hasDeclarationDiagnostics,
+            output: writer.getText(),
             referencePathsOutput,
         };
 
@@ -127,8 +113,8 @@ namespace ts {
             return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
         }
 
-        function createNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
-            let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
+        function createNewTextWriterWithSymbolWriter(): EmitTextWriter & SymbolWriter {
+            let writer = <EmitTextWriter & SymbolWriter>createTextWriter(newLine);
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -137,15 +123,6 @@ namespace ts {
             writer.writeParameter = writer.write;
             writer.writeSymbol = writer.write;
             return writer;
-        }
-
-        function setWriter(newWriter: EmitTextWriterWithSymbolWriter) {
-            writer = newWriter;
-            write = newWriter.write;
-            writeTextOfNode = newWriter.writeTextOfNode;
-            writeLine = newWriter.writeLine;
-            increaseIndent = newWriter.increaseIndent;
-            decreaseIndent = newWriter.decreaseIndent;
         }
 
         function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
@@ -1451,7 +1428,7 @@ namespace ts {
         function reportDeclarationAccessiblityMessage(referencedDeclaration: Declaration, errorNode: Node): void {
             Debug.assert(referencedDeclaration.name && referencedDeclaration.name.kind === SyntaxKind.Identifier);
 
-            reportedDeclarationError = true;
+            hasDeclarationDiagnostics = true;
 
             let referencedDeclarationName = (<Identifier>referencedDeclaration.name).text;
             let container = errorNode;
@@ -1545,7 +1522,7 @@ namespace ts {
         }
 
         function reportUnamedDeclarationMessage(errorNode: Node): void {
-            reportedDeclarationError = true;
+            hasDeclarationDiagnostics = true;
             let container = errorNode;
 
             while (container) {
@@ -1691,9 +1668,9 @@ namespace ts {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
         // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.reportedDeclarationError) {
+        if (!emitDeclarationResult.hasDeclarationDiagnostics) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
-                + emitDeclarationResult.synchronousDeclarationOutput;
+                + emitDeclarationResult.output;
             writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
         }
     }
