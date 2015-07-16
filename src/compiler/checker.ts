@@ -3050,42 +3050,55 @@ namespace ts {
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
         }
 
-        function signatureListsIdentical(s: Signature[], t: Signature[]): boolean {
-            if (s.length !== t.length) {
-                return false;
-            }
-            for (let i = 0; i < s.length; i++) {
-                if (!compareSignatures(s[i], t[i], /*compareReturnTypes*/ false, compareTypes)) {
-                    return false;
+        function findMatchingSignature(signature: Signature, signatureList: Signature[]): Signature {
+            for (let s of signatureList) {
+                // Only signatures with no type parameters may differ in return types
+                if (compareSignatures(signature, s, /*compareReturnTypes*/ !!signature.typeParameters, compareTypes)) {
+                    return s;
                 }
             }
-            return true;
         }
 
-        // If the lists of call or construct signatures in the given types are all identical except for return types,
-        // and if none of the signatures are generic, return a list of signatures that has substitutes a union of the
-        // return types of the corresponding signatures in each resulting signature.
-        function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
-            let signatureLists = map(types, t => getSignaturesOfType(t, kind));
-            let signatures = signatureLists[0];
-            for (let signature of signatures) {
-                if (signature.typeParameters) {
-                    return emptyArray;
-                }
-            }
+        function findMatchingSignatures(signature: Signature, signatureLists: Signature[][]): Signature[] {
+            let result: Signature[] = undefined;
             for (let i = 1; i < signatureLists.length; i++) {
-                if (!signatureListsIdentical(signatures, signatureLists[i])) {
-                    return emptyArray;
+                let match = findMatchingSignature(signature, signatureLists[i]);
+                if (!match) {
+                    return undefined;
                 }
-            }
-            let result = map(signatures, cloneSignature);
-            for (var i = 0; i < result.length; i++) {
-                let s = result[i];
-                // Clear resolved return type we possibly got from cloneSignature
-                s.resolvedReturnType = undefined;
-                s.unionSignatures = map(signatureLists, signatures => signatures[i]);
+                if (!result) {
+                    result = [signature];
+                }
+                if (match !== signature) {
+                    result.push(match);
+                }
             }
             return result;
+        }
+
+        // The signatures of a union type are those signatures that are present and identical in each of the
+        // constituent types, except that non-generic signatures may differ in return types. When signatures
+        // differ in return types, the resulting return type is the union of the constituent return types.
+        function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
+            let signatureLists = map(types, t => getSignaturesOfType(t, kind));
+            let result: Signature[] = undefined;
+            for (let source of signatureLists[0]) {
+                let unionSignatures = findMatchingSignatures(source, signatureLists);
+                if (unionSignatures) {
+                    let signature: Signature = undefined;
+                    if (unionSignatures.length === 1 || source.typeParameters) {
+                        signature = source;
+                    }
+                    else {
+                        signature = cloneSignature(source);
+                        // Clear resolved return type we possibly got from cloneSignature
+                        signature.resolvedReturnType = undefined;
+                        signature.unionSignatures = unionSignatures;
+                    }
+                    (result || (result = [])).push(signature);
+                }
+            }
+            return result || emptyArray;
         }
 
         function getUnionIndexType(types: Type[], kind: IndexKind): Type {
@@ -3245,9 +3258,6 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            if (type.flags & TypeFlags.Union) {
-                type = getReducedTypeOfUnionType(<UnionType>type);
-            }
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
                     type = getConstraintOfTypeParameter(<TypeParameter>type);
@@ -4102,47 +4112,6 @@ namespace ts {
                 type.types = typeSet;
             }
             return type;
-        }
-
-        function isTypeSubtypeOfSomeType(candidate: Type, types: Type[]): boolean {
-            for (let type of types) {
-                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function removeSubtypes(types: Type[]): Type[] {
-            let result = types;
-            let i = result.length;
-            while (i > 0) {
-                i--;
-                if (isTypeSubtypeOfSomeType(result[i], result)) {
-                    if (result === types) {
-                        result = types.slice(0);
-                    }
-                    result.splice(i, 1);
-                }
-            }
-            return result;
-        }
-
-        // The reduced type is a union type in which no constituent type is a subtype of another
-        // constituent type.
-        function getReducedTypeOfUnionType(type: UnionType): Type {
-            if (!type.reducedType) {
-                type.reducedType = circularType;
-                let typesWithoutSubtypes = removeSubtypes(type.types);
-                let reducedType = typesWithoutSubtypes === type.types ? type : getUnionType(typesWithoutSubtypes);
-                if (type.reducedType === circularType) {
-                    type.reducedType = reducedType;
-                }
-            }
-            else if (type.reducedType === circularType) {
-                type.reducedType = type;
-            }
-            return type.reducedType;
         }
 
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
