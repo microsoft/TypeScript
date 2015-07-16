@@ -39,59 +39,23 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let hasDeclarationDiagnostics = false;
 
-        // Contains the reference paths that needs to go in the declaration file.
-        // Collecting this separately because reference paths need to be first thing in the declaration file
-        // and we could be collecting these paths from multiple files into single one with --out option
-        let referencePathsOutput = "";
-
         let nodeLinks: NodeLinks[] = [];
         function getNodeLinks(node: Node): NodeLinks {
             let nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
+        // Emit any triple-slash references
+        emitTripleSlashReferences(root);
+
         if (root) {
             // Emitting just a single file, so emit references in this file only
-            if (!compilerOptions.noResolve) {
-                let addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
-                    let referencedFile = tryResolveScriptReference(host, root, fileReference);
-
-                    // All the references that are not going to be part of same file
-                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
-
-                        emitReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                            addedGlobalFileReference = true;
-                        }
-                    }
-                });
-            }
-
             emitSourceFile(root);
         }
         else {
             // Emit references corresponding to this file
-            let emittedReferencedFiles: SourceFile[] = [];
             forEach(host.getSourceFiles(), sourceFile => {
                 if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                emitReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-
                     emitSourceFile(sourceFile);
                 }
             });
@@ -100,8 +64,81 @@ namespace ts {
         return {
             hasDeclarationDiagnostics,
             output: writer.getText(),
-            referencePathsOutput,
+            referencePathsOutput : "",
         };
+
+        function emitTripleSlashReferences(root: SourceFile) {
+            if (compilerOptions.noResolve) {
+                // Nothing to do
+                return;
+            }
+
+            let emittedReferencedFiles: SourceFile[] = [];
+            let addedGlobalFileReference = false;
+
+            if (root) {
+                // Emitting just a single file, so emit references in this file only
+                emitTripleSlashReferncesInFile(root);
+            }
+            else {
+                // Emit references corresponding to this file
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        emitTripleSlashReferncesInFile(sourceFile);
+                    }
+                });
+            }
+
+            return;
+
+            function emitTripleSlashReferncesInFile(sourceFile: SourceFile): void {
+                forEach(sourceFile.referencedFiles, fileReference => {
+                    let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+
+                    // Could not find the file, or has been already emitted
+                    if (!referencedFile || contains(emittedReferencedFiles, referencedFile)) {
+                        return false;
+                    }
+
+                    let shouldEmitRefrence: boolean
+                    
+                    if (isDeclarationFile(referencedFile) || shouldEmitToOwnFile(referencedFile, compilerOptions)) {
+                        // If the reference file is a declaration file or an external module,
+                        // we know there is going to be a .d.ts file matching it. Emit that reference
+                        shouldEmitRefrence = true;
+                    }
+                    else if (compilerOptions.out && !addedGlobalFileReference && isExternalModule(sourceFile)) {
+                        // This is a reference to a file in the global island, since out is on, all files
+                        // in the global island will be merged into one. so keep only one of these references
+                        addedGlobalFileReference = true;
+                        shouldEmitRefrence = true;
+                    }
+
+                    if (shouldEmitRefrence) {
+                        emitReferencePath(referencedFile);
+                        emittedReferencedFiles.push(referencedFile);
+                    }
+                });
+            }
+
+            function emitReferencePath(referencedFile: SourceFile) {
+                let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
+                    ? referencedFile.fileName // Declaration file, use declaration file name
+                    : shouldEmitToOwnFile(referencedFile, compilerOptions)
+                        ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
+                        : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
+
+                declFileName = getRelativePathToDirectoryOrUrl(
+                    getDirectoryPath(normalizeSlashes(jsFilePath)),
+                    declFileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false);
+
+                write(`/// <reference path="${ declFileName }" />`);
+                writeLine();
+            }
+        }
 
         function hasInternalAnnotation(range: CommentRange) {
             let text = currentSourceFile.text;
@@ -326,13 +363,7 @@ namespace ts {
                 write("}");
             }
         }
-
-        function emitSourceFile(node: SourceFile) {
-            currentSourceFile = node;
-            enclosingDeclaration = node;
-            emitSourceFileDeclarations(node);
-        }
-
+        
         // Return a temp variable name to be used in `export default` statements.
         // The temp name will be of the form _default_counter.
         // Note that export default is only allowed at most once in a module, so we
@@ -1034,23 +1065,6 @@ namespace ts {
             }
         }
 
-        function emitReferencePath(referencedFile: SourceFile) {
-            let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
-                ? referencedFile.fileName // Declaration file, use declaration file name
-                : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
-
-            declFileName = getRelativePathToDirectoryOrUrl(
-                getDirectoryPath(normalizeSlashes(jsFilePath)),
-                declFileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-            /*isAbsolutePathAnUrl*/ false);
-
-            referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
-        }
-
         function collectReferencedDeclarations(node: Node): void {
             let currentErrorNode: Node;
             let typeWriter = createVoidSymbolWriter(trackTypeSymbol, trackInaccesibleSymbol);
@@ -1654,7 +1668,10 @@ namespace ts {
             forEach(sortDeclarations(getNodeLinks(node).visibleChildren), emitNode);
         }
 
-        function emitSourceFileDeclarations(sourceFile: SourceFile): void {
+        function emitSourceFile(sourceFile: SourceFile): void {
+            currentSourceFile = sourceFile;
+            enclosingDeclaration = sourceFile;
+
             // Collect all visible declarations
             collectTopLevelChildDeclarations(sourceFile);
 
