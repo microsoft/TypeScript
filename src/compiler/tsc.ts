@@ -122,7 +122,7 @@ namespace ts {
                 let lineEnd = getPositionOfLineAndCharacter(file, firstLine + i + 1, 0);
                 let lineContent = file.text.slice(lineStart, lineEnd);
                 lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
-                lineContent = lineContent.replace("\t", "    "); // normalize tabs to 4 spaces
+                lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
                 output += lineContent + sys.newLine;
                 
