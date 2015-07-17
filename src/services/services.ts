@@ -5806,10 +5806,12 @@ namespace ts {
                         break;  
                     case SyntaxKind.ImportEqualsDeclaration:
                         let importEqualsDeclaration = <ImportEqualsDeclaration>node;
-                        if (importEqualsDeclaration.moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(importEqualsDeclaration)) {
-                            runtime.push(getModuleNameText(importEqualsDeclaration));
-                        } else {
-                            compileTime.push(getModuleNameText(importEqualsDeclaration));
+                        if (importEqualsDeclaration.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                            if (resolver.isReferencedAliasDeclaration(importEqualsDeclaration)) {
+                                runtime.push(getModuleNameText(importEqualsDeclaration));
+                            } else {
+                                compileTime.push(getModuleNameText(importEqualsDeclaration));
+                            }
                         }
                         break;  
                     case SyntaxKind.ExportDeclaration:  
