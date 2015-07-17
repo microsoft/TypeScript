@@ -6756,19 +6756,21 @@ namespace ts {
          * be performed.
          */
         function getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
-            const nullResult = "/** */";
+            const nullResult = "/**";
+            const emptyCompletion = "/** */";
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             // Check if in comment context
-            var nodeAtPos = getTokenAtPosition(sourceFile, position);
-
-            return "/** token is : daniel cant copy/paste " + tokenToString(nodeAtPos.kind) + " */";
+           if(isInString(sourceFile, position) || isInComment(sourceFile,position)) { return nullResult; }
 
             // Get the next non-comment token
+            var nodeAtPos = getTokenAtPosition(sourceFile, position);
+            var containingFunction = getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
             
             // check if token is a function keyword
+            if(!containingFunction) { return emptyCompletion; }
             
             // Get the parsed object corresponding to the token
             

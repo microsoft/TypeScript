@@ -438,7 +438,18 @@ namespace ts {
 
             // Then we want to make sure that it wasn't in a "///<" directive comment
             // We don't want to unintentionally update a file name.
-            return forEach(commentRanges, c => c.pos < position && position < c.end && extraCheck(c));
+            return forEach(commentRanges, c => c.pos < position &&
+                // The end marker of a single-line comment does not include the newline character.
+                // In the following case, we are inside a comment (^ denotes the cursor position):
+                //
+                //    // asdf   ^\n
+                //
+                // But for multi-line comments, we don't want to be inside the comment in the following case:
+                //    /* asdf */^
+                //
+                // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+                (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                extraCheck(c));
         }
 
         return false;

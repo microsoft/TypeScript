@@ -9,7 +9,11 @@ namespace ts {
         Instantiated    = 1,
         ConstEnumOnly   = 2
     }
+    
+    "/**"
 
+    /* /**   */
+    //  /** getDocCommentScaffoldingAtPosition -- TS side! */
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         // 1. interface declarations, type alias declarations
