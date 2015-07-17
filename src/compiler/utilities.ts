@@ -1981,6 +1981,17 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
     }
 
+    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
+        let kind = expression.kind;
+        if (kind === SyntaxKind.ObjectLiteralExpression) {
+            return (<ObjectLiteralExpression>expression).properties.length === 0;
+        }
+        if (kind === SyntaxKind.ArrayLiteralExpression) {
+            return (<ArrayLiteralExpression>expression).elements.length === 0;
+        }
+        return false;
+    }
+
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
