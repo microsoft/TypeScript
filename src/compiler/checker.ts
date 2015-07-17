@@ -2307,6 +2307,7 @@ namespace ts {
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
             }
+
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
                 // checkRightHandSideOfForOf will return undefined if the for-of expression type was
                 // missing properties/signatures required to get its iteratedType (like
@@ -2314,13 +2315,16 @@ namespace ts {
                 // or it may have led to an error inside getElementTypeOfIterable.
                 return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
             }
+
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
+            
             // Use type from type annotation if one is present
             if (declaration.type) {
                 return getTypeFromTypeNode(declaration.type);
             }
+
             if (declaration.kind === SyntaxKind.Parameter) {
                 let func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
@@ -2336,14 +2340,22 @@ namespace ts {
                     return type;
                 }
             }
+            
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 return checkExpressionCached(declaration.initializer);
             }
+            
             // If it is a short-hand property assignment, use the type of the identifier
             if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return checkIdentifier(<Identifier>declaration.name);
             }
+
+            // If the declaration specifies a binding pattern, use the type implied by the binding pattern
+            if (isBindingPattern(declaration.name)) {
+                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
+            }
+
             // No type specified and nothing can be inferred
             return undefined;
         }
@@ -2429,13 +2441,10 @@ namespace ts {
                 // tools see the actual type.
                 return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
             }
-            // If no type was specified and nothing could be inferred, and if the declaration specifies a binding pattern, use
-            // the type implied by the binding pattern
-            if (isBindingPattern(declaration.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
-            }
+            
             // Rest parameters default to type any[], other parameters default to type any
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
+            
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors && compilerOptions.noImplicitAny) {
                 let root = getRootDeclaration(declaration);
@@ -3943,7 +3952,7 @@ namespace ts {
             let id = getTypeListId(elementTypes);
             let type = tupleTypes[id];
             if (!type) {
-                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple);
+                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getWideningFlagsOfTypes(elementTypes));
                 type.elementTypes = elementTypes;
             }
             return type;
@@ -5299,8 +5308,8 @@ namespace ts {
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
-        function isTupleType(type: Type): boolean {
-            return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
+        function isTupleType(type: Type): type is TupleType {
+            return !!(type.flags & TypeFlags.Tuple);
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -5341,26 +5350,45 @@ namespace ts {
                 if (isArrayType(type)) {
                     return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
                 }
+                if (isTupleType(type)) {
+                    return createTupleType(map(type.elementTypes, getWidenedType));
+                }
             }
             return type;
         }
 
+        /**
+         * Reports implicit any errors that occur as a result of widening 'null' and 'undefined'
+         * to 'any'. A call to reportWideningErrorsInType is normally accompanied by a call to
+         * getWidenedType. But in some cases getWidenedType is called without reporting errors
+         * (type argument inference is an example).
+         *
+         * The return value indicates whether an error was in fact reported. The particular circumstances
+         * are on a best effort basis. Currently, if the null or undefined that causes widening is inside
+         * an object literal property (arbitrarily deeply), this function reports an error. If no error is
+         * reported, reportImplicitAnyError is a suitable fallback to report a general error.
+         */
         function reportWideningErrorsInType(type: Type): boolean {
+            let errorReported = false;
             if (type.flags & TypeFlags.Union) {
-                let errorReported = false;
-                forEach((<UnionType>type).types, t => {
+                for (let t of (<UnionType>type).types) {
                     if (reportWideningErrorsInType(t)) {
                         errorReported = true;
                     }
-                });
-                return errorReported;
+                }
             }
             if (isArrayType(type)) {
                 return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
             }
+            if (isTupleType(type)) {
+                for (let t of type.elementTypes) {
+                    if (reportWideningErrorsInType(t)) {
+                        errorReported = true;
+                    }
+                }
+            }
             if (type.flags & TypeFlags.ObjectLiteral) {
-                let errorReported = false;
-                forEach(getPropertiesOfObjectType(type), p => {
+                for (let p of getPropertiesOfObjectType(type)) {
                     let t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
                         if (!reportWideningErrorsInType(t)) {
@@ -5368,10 +5396,9 @@ namespace ts {
                         }
                         errorReported = true;
                     }
-                });
-                return errorReported;
+                }
             }
-            return false;
+            return errorReported;
         }
 
         function reportImplicitAnyError(declaration: Declaration, type: Type) {
@@ -5538,30 +5565,33 @@ namespace ts {
                         inferFromTypes(sourceType, target);
                     }
                 }
-                else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
-                    (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
-                    // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
-                    if (isInProcess(source, target)) {
-                        return;
-                    }
-                    if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
-                        return;
-                    }
+                else {
+                    source = getApparentType(source);
+                    if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
+                        (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
+                        // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
+                        if (isInProcess(source, target)) {
+                            return;
+                        }
+                        if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                            return;
+                        }
 
-                    if (depth === 0) {
-                        sourceStack = [];
-                        targetStack = [];
+                        if (depth === 0) {
+                            sourceStack = [];
+                            targetStack = [];
+                        }
+                        sourceStack[depth] = source;
+                        targetStack[depth] = target;
+                        depth++;
+                        inferFromProperties(source, target);
+                        inferFromSignatures(source, target, SignatureKind.Call);
+                        inferFromSignatures(source, target, SignatureKind.Construct);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
+                        inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
+                        depth--;
                     }
-                    sourceStack[depth] = source;
-                    targetStack[depth] = target;
-                    depth++;
-                    inferFromProperties(source, target);
-                    inferFromSignatures(source, target, SignatureKind.Call);
-                    inferFromSignatures(source, target, SignatureKind.Construct);
-                    inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
-                    inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
-                    inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
-                    depth--;
                 }
             }
 
@@ -6960,7 +6990,6 @@ namespace ts {
                 return undefined;
             }
         }
-
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
@@ -13650,10 +13679,22 @@ namespace ts {
                 return getSymbolOfNode(node.parent);
             }
 
-            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
-                return node.parent.kind === SyntaxKind.ExportAssignment
-                    ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
-                    : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node);
+            if (node.kind === SyntaxKind.Identifier) {
+                if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
+                    return node.parent.kind === SyntaxKind.ExportAssignment
+                        ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
+                        : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node);
+                }
+                else if (node.parent.kind === SyntaxKind.BindingElement &&
+                        node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
+                        node === (<BindingElement>node.parent).propertyName) {
+                    let typeOfPattern = getTypeAtLocation(node.parent.parent);
+                    let propertyDeclaration = typeOfPattern && getPropertyOfType(typeOfPattern, (<Identifier>node).text);
+
+                    if (propertyDeclaration) {
+                        return propertyDeclaration;
+                    }
+                }
             }
 
             switch (node.kind) {
