@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge02.ts] ////
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports01.ts] ////
 
 //// [m1.ts]
 
