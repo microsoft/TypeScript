@@ -6783,11 +6783,11 @@ namespace ts {
          * for a mapper. Let's go through each one of them:
          *
          *    1. undefined - this means we are not doing inferential typing, but we may do contextual typing,
-         *       which could cause us to assign a parameter type
-         *    2. identityMapper - means we want to avoid assigning a parameter type, whether or not we are in
+         *       which could cause us to assign a parameter a type
+         *    2. identityMapper - means we want to avoid assigning a parameter a type, whether or not we are in
          *       inferential typing (context is undefined for the identityMapper)
          *    3. a mapper created by createInferenceMapper - we are doing inferential typing, we want to assign
-         *       parameter types and fix type parameters (context is defined)
+         *       types to parameters and fix type parameters (context is defined)
          *    4. an instantiation mapper created by createTypeMapper or createTypeEraser - this should never be
          *       passed as the contextual mapper when checking an expression (context is undefined for these)
          *
