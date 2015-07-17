@@ -8522,6 +8522,9 @@ namespace ts {
             if (!produceDiagnostics) {
                 for (let candidate of candidates) {
                     if (hasCorrectArity(node, args, candidate)) {
+                        if (candidate.typeParameters && typeArguments) {
+                            candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
+                        }
                         return candidate;
                     }
                 }
