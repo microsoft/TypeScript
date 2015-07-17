@@ -414,6 +414,35 @@ namespace ts {
             }
         }
     }
+    
+    export function isInString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+    }
+
+    export function isInComment(sourceFile: SourceFile, position: number) {
+        return isInCommentHelper(sourceFile, position, c => true);
+    }
+
+    /**
+     * Returns true if the cursor at position in sourceFile is within a comment that additionally
+     * satisfies extraCheck, and false otherwise.
+     */
+    export function isInCommentHelper(sourceFile: SourceFile, position: number, 
+        extraCheck: (c: CommentRange) => boolean): boolean {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (token && position < token.getStart()) {
+            // First, we have to see if this position actually landed in a comment.
+            let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+            // Then we want to make sure that it wasn't in a "///<" directive comment
+            // We don't want to unintentionally update a file name.
+            return forEach(commentRanges, c => c.pos < position && position < c.end && extraCheck(c));
+        }
+
+        return false;
+    }
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
