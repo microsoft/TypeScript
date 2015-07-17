@@ -3249,7 +3249,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitAssignmentExpression(root: BinaryExpression) {
                     let target = root.left;
                     let value = root.right;
-                    if (isAssignmentExpressionStatement) {
+
+                    if (isEmptyObjectLiteralOrArrayLiteral(target)) {
+                        emit(value);
+                    }
+                    else if (isAssignmentExpressionStatement) {
                         emitDestructuringAssignment(target, value);
                     }
                     else {
