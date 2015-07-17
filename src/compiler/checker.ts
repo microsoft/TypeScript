@@ -161,6 +161,7 @@ namespace ts {
 
         let resolutionTargets: Object[] = [];
         let resolutionResults: boolean[] = [];
+        let resolutionKinds: TypeSystemObjectKind[] = [];
 
         let mergedSymbols: Symbol[] = [];
         let symbolLinks: SymbolLinks[] = [];
@@ -200,6 +201,13 @@ namespace ts {
         let subtypeRelation: Map<RelationComparisonResult> = {};
         let assignableRelation: Map<RelationComparisonResult> = {};
         let identityRelation: Map<RelationComparisonResult> = {};
+
+        enum TypeSystemObjectKind {
+            Symbol,
+            Type,
+            SymbolLinks,
+            Signature
+        }
 
         initializeTypeChecker();
 
@@ -2184,13 +2192,14 @@ namespace ts {
         // a unique identity for a particular type resolution result: Symbol instances are used to track resolution of
         // SymbolLinks.type, SymbolLinks instances are used to track resolution of SymbolLinks.declaredType, and
         // Signature instances are used to track resolution of Signature.resolvedReturnType.
-        function pushTypeResolution(target: Object): boolean {
-            let i = 0;
+        function pushTypeResolution(target: Object, flags: TypeSystemObjectKind): boolean {
             let count = resolutionTargets.length;
-            while (i < count && resolutionTargets[i] !== target) {
-                i++;
+            let i = count - 1;
+            let foundGoodType = false;
+            while (i >= 0 && !(foundGoodType = !!hasType(resolutionTargets[i], resolutionKinds[i])) && resolutionTargets[i] !== target) {
+                i--;
             }
-            if (i < count) {
+            if (i >= 0 && !foundGoodType) {
                 do {
                     resolutionResults[i++] = false;
                 }
@@ -2199,13 +2208,33 @@ namespace ts {
             }
             resolutionTargets.push(target);
             resolutionResults.push(true);
+            resolutionKinds.push(flags);
             return true;
+        }
+
+        function hasType(target: Object, flags: TypeSystemObjectKind): Type {
+            if (flags === TypeSystemObjectKind.Symbol) {
+                return getSymbolLinks(<Symbol>target).type;
+            }
+            else if (flags === TypeSystemObjectKind.Type) {
+                Debug.assert(!!((<Type>target).flags & TypeFlags.Class));
+                return (<InterfaceType>target).resolvedBaseConstructorType;
+            }
+            else if (flags === TypeSystemObjectKind.SymbolLinks) {
+                return (<SymbolLinks>target).declaredType;
+            }
+            else if (flags === TypeSystemObjectKind.Signature) {
+                return (<Signature>target).resolvedReturnType;
+            }
+
+            Debug.fail("Unhandled TypeSystemObjectKind");
         }
 
         // Pop an entry from the type resolution stack and return its associated result value. The result value will
         // be true if no circularities were detected, or false if a circularity was found.
         function popTypeResolution(): boolean {
             resolutionTargets.pop();
+            resolutionKinds.pop();
             return resolutionResults.pop();
         }
 
@@ -2468,7 +2497,7 @@ namespace ts {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
                 // Handle variable, parameter or property
-                if (!pushTypeResolution(symbol)) {
+                if (!pushTypeResolution(symbol, TypeSystemObjectKind.Symbol)) {
                     return unknownType;
                 }
                 let type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
@@ -2509,7 +2538,7 @@ namespace ts {
         function getTypeOfAccessors(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (!pushTypeResolution(symbol)) {
+                if (!pushTypeResolution(symbol, TypeSystemObjectKind.Symbol)) {
                     return unknownType;
                 }
                 let getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
@@ -2725,7 +2754,7 @@ namespace ts {
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
                 }
-                if (!pushTypeResolution(type)) {
+                if (!pushTypeResolution(type, TypeSystemObjectKind.Type)) {
                     return unknownType;
                 }
                 let baseConstructorType = checkExpression(baseTypeNode.expression);
@@ -2852,7 +2881,7 @@ namespace ts {
             if (!links.declaredType) {
                 // Note that we use the links object as the target here because the symbol object is used as the unique
                 // identity for resolution of the 'type' property in SymbolLinks.
-                if (!pushTypeResolution(links)) {
+                if (!pushTypeResolution(links, TypeSystemObjectKind.SymbolLinks)) {
                     return unknownType;
                 }
                 let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
@@ -3539,7 +3568,7 @@ namespace ts {
 
         function getReturnTypeOfSignature(signature: Signature): Type {
             if (!signature.resolvedReturnType) {
-                if (!pushTypeResolution(signature)) {
+                if (!pushTypeResolution(signature, TypeSystemObjectKind.Signature)) {
                     return unknownType;
                 }
                 let type: Type;
