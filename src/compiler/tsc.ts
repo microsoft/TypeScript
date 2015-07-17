@@ -117,9 +117,9 @@ namespace ts {
             let { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
             
             output += sys.newLine;
-            for (let i = 0, indexOfLastLine = lastLine - firstLine; i <= indexOfLastLine; i++) {
-                let lineStart = getPositionOfLineAndCharacter(file, firstLine + i, 0);
-                let lineEnd = getPositionOfLineAndCharacter(file, firstLine + i + 1, 0);
+            for (let i = firstLine; i <= lastLine; i++) {
+                let lineStart = getPositionOfLineAndCharacter(file, i, 0);
+                let lineEnd = i < lastLine ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
                 let lineContent = file.text.slice(lineStart, lineEnd);
                 lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
                 lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
@@ -127,13 +127,13 @@ namespace ts {
                 output += lineContent + sys.newLine;
                 
                 output += redColorControlChar;
-                if (i === 0) {
-                    let lastCharForLine = i === indexOfLastLine ? lastLineChar : undefined;
+                if (i === firstLine) {
+                    let lastCharForLine = i === lastLine ? lastLineChar : undefined;
 
                     output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
                     output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
                 }
-                else if (i === indexOfLastLine) {
+                else if (i === lastLine) {
                     output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
                     // Don't bother "filling" at the end.
                 }
