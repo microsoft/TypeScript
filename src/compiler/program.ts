@@ -678,6 +678,7 @@ namespace ts {
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
+                (options.declaration &&  options.out && options.module) ||
                 (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
 

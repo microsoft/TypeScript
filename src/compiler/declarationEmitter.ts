@@ -55,7 +55,7 @@ namespace ts {
         else {
             // Emit references corresponding to this file
             forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                if (!isDeclarationFile(sourceFile)) {
                     emitSourceFile(sourceFile);
                 }
             });
@@ -74,7 +74,6 @@ namespace ts {
             }
 
             let emittedReferencedFiles: SourceFile[] = [];
-            let addedGlobalFileReference = false;
 
             if (root) {
                 // Emitting just a single file, so emit references in this file only
@@ -82,11 +81,7 @@ namespace ts {
             }
             else {
                 // Emit references corresponding to this file
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emitTripleSlashReferncesInFile(sourceFile);
-                    }
-                });
+                forEach(host.getSourceFiles(), emitTripleSlashReferncesInFile);
             }
 
             return;
@@ -100,21 +95,9 @@ namespace ts {
                         return false;
                     }
 
-                    let shouldEmitRefrence: boolean
-                    
-                    if (isDeclarationFile(referencedFile) || shouldEmitToOwnFile(referencedFile, compilerOptions)) {
+                    if (isDeclarationFile(referencedFile) || !compilerOptions.out) {
                         // If the reference file is a declaration file or an external module,
                         // we know there is going to be a .d.ts file matching it. Emit that reference
-                        shouldEmitRefrence = true;
-                    }
-                    else if (compilerOptions.out && !addedGlobalFileReference && isExternalModule(sourceFile)) {
-                        // This is a reference to a file in the global island, since out is on, all files
-                        // in the global island will be merged into one. so keep only one of these references
-                        addedGlobalFileReference = true;
-                        shouldEmitRefrence = true;
-                    }
-
-                    if (shouldEmitRefrence) {
                         emitReferencePath(referencedFile);
                         emittedReferencedFiles.push(referencedFile);
                     }
@@ -122,12 +105,12 @@ namespace ts {
             }
 
             function emitReferencePath(referencedFile: SourceFile) {
-                let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
+                let declFileName = isDeclarationFile(referencedFile)
                     ? referencedFile.fileName // Declaration file, use declaration file name
-                    : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                        ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                        : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
-
+                    : compilerOptions.out
+                        ? removeFileExtension(compilerOptions.out) + ".d.ts" // Global out file
+                        : getOwnEmitOutputFilePath(referencedFile, host, ".d.ts"); // Own output file so get the .d.ts file
+                        
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(jsFilePath)),
                     declFileName,
@@ -415,7 +398,9 @@ namespace ts {
                     write("default ");
                 }
                 else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
-                    write("declare ");
+                    if (!(enclosingDeclaration === currentSourceFile && isExternalModule(currentSourceFile) && compilerOptions.out)) {
+                        write("declare ");
+                    }
                 }
             }
         }
@@ -452,7 +437,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentSourceFile, getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(getExternalModuleImportEqualsDeclarationExpression(node));
                 write(");");
             }
             writer.writeLine();
@@ -492,7 +477,7 @@ namespace ts {
             }
 
             write(" from ");
-            writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            emitExternalModuleSpecifier(node.moduleSpecifier);
             write(";");
             writer.writeLine();
         }
@@ -522,10 +507,52 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                emitExternalModuleSpecifier(node.moduleSpecifier);
             }
             write(";");
             writer.writeLine();
+        }
+
+        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
+            Debug.assert(moduleSpecifier.kind === SyntaxKind.StringLiteral);
+
+            if (compilerOptions.out) {
+                let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
+                if (moduleSymbol && moduleSymbol.valueDeclaration &&
+                    moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile &&
+                    !isDeclarationFile(<SourceFile>moduleSymbol.valueDeclaration)) {
+                    let nonRelativeModuleName = getExternalModuleNameFromPath((<SourceFile>moduleSymbol.valueDeclaration).fileName);
+                    write("\"");
+                    write(nonRelativeModuleName);
+                    write("\"");
+                    return;
+                }
+            }
+
+            writeTextOfNode(currentSourceFile, moduleSpecifier);
+        }
+
+        function getExternalModuleNameFromPath(fileName: string) {
+            let sourceFilePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
+            let commonSourceDirectory = host.getCommonSourceDirectory();
+            sourceFilePath = sourceFilePath.replace(commonSourceDirectory, "");
+            return removeFileExtension(sourceFilePath);
+        }
+
+        function emitExternalModuleDeclaration(node: SourceFile) {
+            let prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
+
+            write(`declare module "${ getExternalModuleNameFromPath(node.fileName) }"`);
+            write(" {");
+            writeLine();
+            increaseIndent();
+            writeChildDeclarations(node);
+            decreaseIndent();
+            write("}");
+            writeLine();
+
+            enclosingDeclaration = prevEnclosingDeclaration;
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
@@ -1676,7 +1703,12 @@ namespace ts {
             collectTopLevelChildDeclarations(sourceFile);
 
             // write the declarations
-            writeChildDeclarations(sourceFile);
+            if (isExternalModule(sourceFile)) {
+                emitExternalModuleDeclaration(sourceFile);
+            }
+            else {
+                writeChildDeclarations(sourceFile);
+            }
         }
     }
 
