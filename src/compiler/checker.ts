@@ -10260,7 +10260,7 @@ namespace ts {
             if (getClassExtendsHeritageClauseElement(<ClassDeclaration>node.parent)) {
 
                 if (containsSuperCall(node.body)) {
-                    // The first statement in the body of a constructor must be a super call(or prologue directives followed by a super call)
+                    // The first statement in the body of a constructor (excluding prologue directives) must be a super call
                     // if both of the following are true:
                     // - The containing class is a derived class.
                     // - The constructor declares parameter properties
@@ -10269,6 +10269,8 @@ namespace ts {
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
                         forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
 
+                    // Skip past any prologue directives to find the first statement
+                    // to ensure that it was a super call.
                     if (superCallShouldBeFirst) {
                         let statements = (<Block>node.body).statements;
                         let superCallStatement: ExpressionStatement;
