@@ -10272,8 +10272,7 @@ namespace ts {
                     if (superCallShouldBeFirst) {
                         let statements = (<Block>node.body).statements;
                         let superCallStatement: ExpressionStatement;
-                        for (let i = 0; i < statements.length; i++) {
-                            let statement = statements[i];
+                        for (let statement of statements) {
                             if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
                                 superCallStatement = <ExpressionStatement>statement;
                                 break;
@@ -10284,7 +10283,8 @@ namespace ts {
                         }
                         if (!superCallStatement) {
                             error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
-                        } else {
+                        } 
+                        else {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
