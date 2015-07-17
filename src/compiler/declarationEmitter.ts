@@ -5,7 +5,6 @@ namespace ts {
     interface DeclarationEmit {
         hasDeclarationDiagnostics: boolean;
         output: string;
-        referencePathsOutput: string;
     }
 
     interface NodeLinks {
@@ -64,7 +63,6 @@ namespace ts {
         return {
             hasDeclarationDiagnostics,
             output: writer.getText(),
-            referencePathsOutput : "",
         };
 
         function emitTripleSlashReferences(root: SourceFile) {
@@ -1686,9 +1684,7 @@ namespace ts {
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
         // or should we just not write this file like we are doing now
         if (!emitDeclarationResult.hasDeclarationDiagnostics) {
-            let declarationOutput = emitDeclarationResult.referencePathsOutput
-                + emitDeclarationResult.output;
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
+            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", emitDeclarationResult.output, host.getCompilerOptions().emitBOM);
         }
     }
 }
