@@ -260,30 +260,25 @@ namespace ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            let children = this.getChildren(); // why isn't sourceFile passed as an argument??
-            if (!(children && children.length > 0)) { return undefined; }
+            let children = this.getChildren(sourceFile);
+            if (!(children.length > 0)) {
+                return undefined;
+            }
 
             let child = children[0];
 
-            if (child.kind < SyntaxKind.FirstNode) {
-                return child;
-            }
-
-            return child.getFirstToken(sourceFile);
+            return child.kind < SyntaxKind.FirstNode ? child : child.getFirstToken(sourceFile);
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
             let children = this.getChildren(sourceFile);
-            if (!children) { return undefined; }
 
             let child = lastOrUndefined(children);
-            if (!child) { return undefined; }
-
-            if (child.kind < SyntaxKind.FirstNode) {
-                return child;
+            if (!child) { 
+                return undefined; 
             }
 
-            return child.getLastToken(sourceFile);
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
     }
 
