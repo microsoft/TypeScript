@@ -433,11 +433,8 @@ namespace ts {
         let token = getTokenAtPosition(sourceFile, position);
 
         if (token && position < token.getStart()) {
-            // First, we have to see if this position actually landed in a comment.
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
-            // Then we want to make sure that it wasn't in a "///<" directive comment
-            // We don't want to unintentionally update a file name.
             return forEach(commentRanges, c => c.pos < position &&
                 // The end marker of a single-line comment does not include the newline character.
                 // In the following case, we are inside a comment (^ denotes the cursor position):
@@ -453,6 +450,17 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function hasDocComment(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        let JSDocPrefixRegex = /^\/\*\*\s*/;
+
+        // First, we have to see if this position actually landed in a comment.
+        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+        return forEach(commentRanges, c => JSDocPrefixRegex.test(sourceFile.text.substring(c.pos, c.end)));
     }
 
     function nodeHasTokens(n: Node): boolean {

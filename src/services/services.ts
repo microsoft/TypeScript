@@ -6762,31 +6762,30 @@ namespace ts {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
-            // Check if in comment context
-           if(isInString(sourceFile, position) || isInComment(sourceFile,position)) { return nullResult; }
+            // Check if in a context where we don't want to perform any insertion
+            if (isInString(sourceFile, position) || isInComment(sourceFile, position)) {
+                return nullResult;
+            }
 
-            // Get the next non-comment token
-            var nodeAtPos = getTokenAtPosition(sourceFile, position);
-            var containingFunction = getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
-            
-            // check if token is a function keyword
-            if(!containingFunction) { return emptyCompletion; }
-            
-            // Get the parsed object corresponding to the token
-            
-            // get the function's param list
-            
-            // map the params to JSDoc declarations. ie:
-            // foo: T -> '* @param foo '
-            
-            // Get the indentation level
-            // * perhaps just use the carat's indentation?
-            
-            // Recall that the in-comment have one extra whitespace character
-            
-            // Create the JSDoc comment string from the parts
-            
-            return "/** getDocCommentScaffoldingAtPosition -- TS side! */";
+            let nodeAtPos = getTokenAtPosition(sourceFile, position);
+            let containingFunction = <FunctionDeclaration>getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
+
+            if (hasDocComment(sourceFile, position) || !containingFunction) {
+                return emptyCompletion;
+            }
+
+            let parameters = containingFunction.parameters;
+            let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
+            let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
+
+            let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).match(/\s*/).toString();
+
+            let docParams = parameters.map((p, index) =>
+                indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + "\n");
+
+            let result = "/**\n" + docParams.reduce((prev, cur) => prev + cur, "") + indentationStr + " */";
+
+            return result;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
