@@ -9,7 +9,5 @@
 // @Filename: tsconfig.json
 ////{ "files": ["a.ts", "b.ts"] }
 
-debugger;
-
 goTo.file("a.ts")
 verify.ProjectInfo(["lib.d.ts", "a.ts", "b.ts"])
