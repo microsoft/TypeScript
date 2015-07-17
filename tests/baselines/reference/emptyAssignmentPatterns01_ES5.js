@@ -7,5 +7,5 @@ var a: any;
 
 //// [emptyAssignmentPatterns01_ES5.js]
 var a;
-(, a);
-(, a);
+(a);
+(a);
