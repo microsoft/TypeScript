@@ -3249,7 +3249,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitAssignmentExpression(root: BinaryExpression) {
                     let target = root.left;
                     let value = root.right;
-                    if (isAssignmentExpressionStatement) {
+
+                    if (isEmptyObjectLiteralOrArrayLiteral(target)) {
+                        emit(value);
+                    }
+                    else if (isAssignmentExpressionStatement) {
                         emitDestructuringAssignment(target, value);
                     }
                     else {
@@ -4215,10 +4219,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
+                let startIndex = 0;
+
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
+                    // Emit all the directive prologues (like "use strict").  These have to come before
+                    // any other preamble code we write (like parameter initializers).
+                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
@@ -4253,7 +4262,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (superCall) {
                         statements = statements.slice(1);
                     }
-                    emitLines(statements);
+                    emitLinesStartingAt(statements, startIndex);
                 }
                 emitTempDeclarations(/*newLine*/ true);
                 writeLine();

@@ -56,6 +56,7 @@ var p6 = ({ a }) => { };
 
 var p7 = ({ a: { b } }) => { };
 >p7 : Symbol(p7, Decl(emitArrowFunctionES6.ts, 15, 3))
+>a : Symbol(a)
 >b : Symbol(b, Decl(emitArrowFunctionES6.ts, 15, 16))
 
 var p8 = ({ a = 1 }) => { };
@@ -64,6 +65,7 @@ var p8 = ({ a = 1 }) => { };
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : Symbol(p9, Decl(emitArrowFunctionES6.ts, 17, 3))
+>a : Symbol(a)
 >b : Symbol(b, Decl(emitArrowFunctionES6.ts, 17, 16))
 >b : Symbol(b, Decl(emitArrowFunctionES6.ts, 17, 28))
 
