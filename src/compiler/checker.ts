@@ -59,7 +59,20 @@ namespace ts {
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
-            getTypeOfSymbolAtLocation,
+
+            // Get the narrowed type of symbol at given location instead of just getting
+            // the type of the symbol.
+            // eg.
+            // function foo(a: string | number) {
+            //     if (typeof a === "string") {
+            //         a/**/
+            //     }
+            // }
+            // getTypeOfSymbol for a would return type of parameter symbol string | number
+            // Unless we provide location /**/, checker wouldn't know how to narrow the type
+            // By using getNarrowedTypeOfSymbol would return string since it would be able to narrow
+            // it by typeguard in the if true condition
+            getTypeOfSymbolAtLocation: getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
@@ -69,7 +82,7 @@ namespace ts {
             getSymbolsInScope,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
-            getTypeAtLocation,
+            getTypeAtLocation: getTypeOfNode,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -4226,7 +4239,7 @@ namespace ts {
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
-                    let symbol = getSymbolInfo(node);
+                    let symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
@@ -5881,30 +5894,6 @@ namespace ts {
                 }
                 return false;
             }
-        }
-
-        function getSymbolAtLocation(node: Node): Symbol {
-            return getSymbolInfo(node);
-        }
-
-        function getTypeAtLocation(node: Node): Type {
-            return getTypeOfNode(node);
-        }
-
-        function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
-            // Get the narrowed type of symbol at given location instead of just getting
-            // the type of the symbol.
-            // eg.
-            // function foo(a: string | number) {
-            //     if (typeof a === "string") {
-            //         a/**/
-            //     }
-            // }
-            // getTypeOfSymbol for a would return type of parameter symbol string | number
-            // Unless we provide location /**/, checker wouldn't know how to narrow the type
-            // By using getNarrowedTypeOfSymbol would return string since it would be able to narrow
-            // it by typeguard in the if true condition
-            return getNarrowedTypeOfSymbol(symbol, node);
         }
 
         // Get the narrowed type of a given symbol at a given location
@@ -10136,7 +10125,7 @@ namespace ts {
                             }
                             else {
                                 checkTypeAssignableTo(typePredicate.type,
-                                    getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
+                                    getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
                                     typePredicateNode.type);
                             }
                         }
@@ -13758,7 +13747,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolInfo(node: Node) {
+        function getSymbolAtLocation(node: Node) {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -13778,7 +13767,7 @@ namespace ts {
                 else if (node.parent.kind === SyntaxKind.BindingElement &&
                         node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
                         node === (<BindingElement>node.parent).propertyName) {
-                    let typeOfPattern = getTypeAtLocation(node.parent.parent);
+                    let typeOfPattern = getTypeOfNode(node.parent.parent);
                     let propertyDeclaration = typeOfPattern && getPropertyOfType(typeOfPattern, (<Identifier>node).text);
 
                     if (propertyDeclaration) {
@@ -13861,24 +13850,24 @@ namespace ts {
             }
 
             if (isTypeDeclaration(node)) {
-                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
                 let symbol = getSymbolOfNode(node);
                 return getDeclaredTypeOfSymbol(symbol);
             }
 
             if (isTypeDeclarationName(node)) {
-                let symbol = getSymbolInfo(node);
+                let symbol = getSymbolAtLocation(node);
                 return symbol && getDeclaredTypeOfSymbol(symbol);
             }
 
             if (isDeclaration(node)) {
-                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
                 let symbol = getSymbolOfNode(node);
                 return getTypeOfSymbol(symbol);
             }
 
             if (isDeclarationName(node)) {
-                let symbol = getSymbolInfo(node);
+                let symbol = getSymbolAtLocation(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
 
@@ -13887,7 +13876,7 @@ namespace ts {
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
-                let symbol = getSymbolInfo(node);
+                let symbol = getSymbolAtLocation(node);
                 let declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
