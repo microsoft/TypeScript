@@ -1904,6 +1904,8 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     }
 
+    export type TypeSystemEntity = Symbol | Type | Signature;
+
     export const enum IndexKind {
         String,
         Number,
