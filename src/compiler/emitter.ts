@@ -142,6 +142,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let generatedNameSet: Map<string> = {};
             let nodeToGeneratedName: string[] = [];
             let computedPropertyNamesToGeneratedNames: string[];
+            
+            // `nodeStack` is a stack consisting of each node in a branch of the 
+            // tree as we descend into the branch. It is used to derive the parent
+            // node of any node without needing parent pointers, to help with
+            // the emit of synthesized nodes that do not maintain parent pointers.
+            let nodeStack: Node[] = [];
+            let parentNode: Node;
+            let currentNode: Node;
 
             let extendsEmitted = false;
             let decorateEmitted = false;
@@ -213,9 +221,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSourceFile(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
+                nodeStack.length = 0;
+                parentNode = undefined;
+                currentNode = undefined;
                 emit(sourceFile);
             }
+            
+            function pushNode(node: Node): void {
+                nodeStack.push(parentNode);
+                parentNode = currentNode;
+                currentNode = node;
+            }
+            
+            function popNode(): void {
+                currentNode = parentNode;
+                parentNode = nodeStack.pop();
+            }
 
+            function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+            function findAncestorNode(match: (node: Node) => boolean): Node;
+            function findAncestorNode(match: (node: Node) => boolean) {
+                if (parentNode && match(parentNode)) {
+                    return parentNode;
+                }
+                for (let i = nodeStack.length; i >= 0; i--) {
+                    let node = nodeStack[i];
+                    if (match(node)) {
+                        return node;
+                    }
+                }
+                return undefined;
+            }
+            
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
                     !hasProperty(currentSourceFile.identifiers, name) &&
@@ -900,7 +937,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // If we don't need to downlevel and we can reach the original source text using
                 // the node's parent reference, then simply get the text as it was originally written.
-                if (node.parent) {
+                if (!nodeIsSynthesized(node) && node.parent) {
                     return getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
                 }
 
@@ -956,11 +993,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     literalEmitter(<LiteralExpression>node.template);
                 }
                 else {
+                    pushNode(node.template);
                     literalEmitter((<TemplateExpression>node.template).head);
                     forEach((<TemplateExpression>node.template).templateSpans, (child) => {
                         write(", ");
+                        pushNode(child);
                         literalEmitter(child.literal);
+                        popNode();
                     });
+                    popNode();
                 }
                 write("]");
             }
@@ -984,12 +1025,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // Now we emit the expressions
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
+                    pushNode(node.template);
                     forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
                         write(", ");
+                        pushNode(templateSpan);
                         let needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
                             && (<BinaryExpression>templateSpan.expression).operatorToken.kind === SyntaxKind.CommaToken;
                         emitParenthesizedIf(templateSpan.expression, needsParens);
+                        popNode();
                     });
+                    popNode();
                 }
                 write("))");
             }
@@ -1002,8 +1047,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
-                let emitOuterParens = isExpression(node.parent)
-                    && templateNeedsParens(node, <Expression>node.parent);
+                let emitOuterParens = isExpression(parentNode)
+                    && templateNeedsParens(node, <Expression>parentNode);
 
                 if (emitOuterParens) {
                     write("(");
@@ -1017,7 +1062,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 for (let i = 0, n = node.templateSpans.length; i < n; i++) {
                     let templateSpan = node.templateSpans[i];
-
+                    pushNode(templateSpan);
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
                     // If it does, we need to wrap the expression in parentheses. Otherwise, something like
                     //    `abc${ 1 << 2 }`
@@ -1047,6 +1092,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(" + ");
                         emitLiteral(templateSpan.literal);
                     }
+                    popNode();
                 }
 
                 if (emitOuterParens) {
@@ -1350,61 +1396,67 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
             // For example, this is utilized when feeding in a result to Object.defineProperty.
-            function emitExpressionForPropertyName(node: DeclarationName) {
-                Debug.assert(node.kind !== SyntaxKind.BindingElement);
+            function emitExpressionForPropertyName(node: Declaration) {
+                let name = node.name;
+                Debug.assert(name.kind !== SyntaxKind.BindingElement);
 
-                if (node.kind === SyntaxKind.StringLiteral) {
-                    emitLiteral(<LiteralExpression>node);
+                if (name.kind === SyntaxKind.StringLiteral) {
+                    emitLiteral(<LiteralExpression>name);
                 }
-                else if (node.kind === SyntaxKind.ComputedPropertyName) {
-                    // if this is a decorated computed property, we will need to capture the result
-                    // of the property expression so that we can apply decorators later. This is to ensure
-                    // we don't introduce unintended side effects:
-                    //
-                    //   class C {
-                    //     [_a = x]() { }
-                    //   }
-                    //
-                    // The emit for the decorated computed property decorator is:
-                    //
-                    //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
-                    //
-                    if (nodeIsDecorated(node.parent)) {
-                        if (!computedPropertyNamesToGeneratedNames) {
-                            computedPropertyNamesToGeneratedNames = [];
-                        }
-
-                        let generatedName = computedPropertyNamesToGeneratedNames[getNodeId(node)];
-                        if (generatedName) {
-                            // we have already generated a variable for this node, write that value instead.
-                            write(generatedName);
-                            return;
-                        }
-
-                        generatedName = createAndRecordTempVariable(TempFlags.Auto).text;
-                        computedPropertyNamesToGeneratedNames[getNodeId(node)] = generatedName;
-                        write(generatedName);
-                        write(" = ");
-                    }
-
-                    emit((<ComputedPropertyName>node).expression);
+                else if (name.kind === SyntaxKind.ComputedPropertyName) {
+                    pushNode(name);
+                    emitExpressionForComputedPropertyName(node, <ComputedPropertyName>name);
+                    popNode();
                 }
                 else {
                     write("\"");
 
-                    if (node.kind === SyntaxKind.NumericLiteral) {
-                        write((<LiteralExpression>node).text);
+                    if (name.kind === SyntaxKind.NumericLiteral) {
+                        write((<LiteralExpression>name).text);
                     }
                     else {
-                        writeTextOfNode(currentSourceFile, node);
+                        writeTextOfNode(currentSourceFile, name);
                     }
 
                     write("\"");
                 }
             }
+            
+            function emitExpressionForComputedPropertyName(parent: Node, name: ComputedPropertyName) {
+                // if this is a decorated computed property, we will need to capture the result
+                // of the property expression so that we can apply decorators later. This is to ensure
+                // we don't introduce unintended side effects:
+                //
+                //   class C {
+                //     [_a = x]() { }
+                //   }
+                //
+                // The emit for the decorated computed property decorator is:
+                //
+                //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
+                //
+                if (parent && nodeIsDecorated(parent)) {
+                    if (!computedPropertyNamesToGeneratedNames) {
+                        computedPropertyNamesToGeneratedNames = [];
+                    }
 
-            function isExpressionIdentifier(node: Node): boolean {
-                let parent = node.parent;
+                    let generatedName = computedPropertyNamesToGeneratedNames[getNodeId(name)];
+                    if (generatedName) {
+                        // we have already generated a variable for this node, write that value instead.
+                        write(generatedName);
+                        return;
+                    }
+
+                    generatedName = createAndRecordTempVariable(TempFlags.Auto).text;
+                    computedPropertyNamesToGeneratedNames[getNodeId(name)] = generatedName;
+                    write(generatedName);
+                    write(" = ");
+                }
+
+                emit((<ComputedPropertyName>name).expression);
+            }
+
+            function isExpressionIdentifier(node: Node, parent: Node): boolean {
                 switch (parent.kind) {
                     case SyntaxKind.ArrayLiteralExpression:
                     case SyntaxKind.BinaryExpression:
@@ -1524,10 +1576,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitIdentifier(node: Identifier) {
-                if (!node.parent) {
+                if (nodeIsSynthesized(node) || !node.parent) {
                     write(node.text);
                 }
-                else if (isExpressionIdentifier(node)) {
+                else if (isExpressionIdentifier(node, parentNode)) {
                     emitExpressionIdentifier(node);
                 }
                 else if (isNameOfNestedRedeclaration(node)) {
@@ -1623,10 +1675,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
-                if (node.parent.kind === SyntaxKind.BinaryExpression && !isAssignmentOperator((<BinaryExpression>node.parent).operatorToken.kind)) {
+                if (parentNode.kind === SyntaxKind.BinaryExpression && !isAssignmentOperator((<BinaryExpression>parentNode).operatorToken.kind)) {
                     return true;
                 }
-                else if (node.parent.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>node.parent).condition === node) {
+                else if (parentNode.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>parentNode).condition === node) {
                     return true;
                 }
 
@@ -1787,15 +1839,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (property !== accessors.firstAccessor) {
                             continue;
                         }
+                        pushNode(property);
                         write("Object.defineProperty(");
                         emit(tempVar);
                         write(", ");
                         emitStart(node.name);
-                        emitExpressionForPropertyName(property.name);
+                        emitExpressionForPropertyName(property);
                         emitEnd(property.name);
                         write(", {");
                         increaseIndent();
+                        popNode();
                         if (accessors.getAccessor) {
+                            pushNode(accessors.getAccessor);
                             writeLine();
                             emitLeadingComments(accessors.getAccessor);
                             write("get: ");
@@ -1805,8 +1860,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitEnd(accessors.getAccessor);
                             emitTrailingComments(accessors.getAccessor);
                             write(",");
+                            popNode();
                         }
                         if (accessors.setAccessor) {
+                            pushNode(accessors.getAccessor);
                             writeLine();
                             emitLeadingComments(accessors.setAccessor);
                             write("set: ");
@@ -1816,7 +1873,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitEnd(accessors.setAccessor);
                             emitTrailingComments(accessors.setAccessor);
                             write(",");
+                            popNode();
                         }
+                        pushNode(property);
                         writeLine();
                         write("enumerable: true,");
                         writeLine();
@@ -1825,12 +1884,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         writeLine();
                         write("})");
                         emitEnd(property);
+                        popNode();
                     }
                     else {
+                        pushNode(property);
                         emitLeadingComments(property);
                         emitStart(property.name);
                         emit(tempVar);
-                        emitMemberAccessForPropertyName(property.name);
+                        emitMemberAccessForPropertyName(property);
                         emitEnd(property.name);
 
                         write(" = ");
@@ -1847,6 +1908,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         else {
                             Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
                         }
+                        popNode();
                     }
 
                     emitEnd(property);
@@ -1955,7 +2017,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
                 write("[");
-                emitExpressionForPropertyName(node);
+                emitExpressionForComputedPropertyName(parentNode, node);
                 write("]");
             }
 
@@ -2280,7 +2342,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // If the node is synthesized, it means the emitter put the parentheses there,
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
-                if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
+                if (!nodeIsSynthesized(node) && parentNode.kind !== SyntaxKind.ArrowFunction) {
                     if (node.expression.kind === SyntaxKind.TypeAssertionExpression || node.expression.kind === SyntaxKind.AsExpression) {
                         let operand = (<TypeAssertion>node.expression).expression;
 
@@ -2304,8 +2366,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             operand.kind !== SyntaxKind.DeleteExpression &&
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
-                            !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
-                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
+                            !(operand.kind === SyntaxKind.CallExpression && parentNode.kind === SyntaxKind.NewExpression) &&
+                            !(operand.kind === SyntaxKind.FunctionExpression && parentNode.kind === SyntaxKind.CallExpression)) {
                             emit(operand);
                             return;
                         }
@@ -2335,24 +2397,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.expression);
             }
 
-            function isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node: Node): boolean {
+            function isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node: Node, parent: Node): boolean {
                 if (!isCurrentFileSystemExternalModule() || node.kind !== SyntaxKind.Identifier || nodeIsSynthesized(node)) {
                     return false;
                 }
 
                 const isVariableDeclarationOrBindingElement =
-                    node.parent && (node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BindingElement);
+                    parent && (parent.kind === SyntaxKind.VariableDeclaration || parent.kind === SyntaxKind.BindingElement);
 
                 const targetDeclaration =
                     isVariableDeclarationOrBindingElement
-                        ? <Declaration>node.parent
+                        ? <Declaration>parent
                         : resolver.getReferencedValueDeclaration(<Identifier>node);
 
                 return isSourceFileLevelDeclarationInSystemJsModule(targetDeclaration, /*isExported*/ true);
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand, node);
 
                 if (exportChanged) {
                     // emit
@@ -2394,7 +2456,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand, node);
                 if (exportChanged) {
                     // export function returns the value that was passes as the second argument
                     // however for postfix unary expressions result value should be the value before modification.
@@ -2455,13 +2517,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
+                    let parent = parentNode;
+                    emitDestructuring(node, parent.kind === SyntaxKind.ExpressionStatement, parent);
                 }
                 else {
                     const exportChanged =
                         node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
                         node.operatorToken.kind <= SyntaxKind.LastAssignment &&
-                        isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
+                        isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left, node);
 
                     if (exportChanged) {
                         // emit assignment 'x <op> y' as 'exports("x", x <op> y)'
@@ -2527,12 +2590,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
+                let parent = parentNode;
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
-                scopeEmitStart(node.parent);
+                scopeEmitStart(parent);
                 if (node.kind === SyntaxKind.ModuleBlock) {
-                    Debug.assert(node.parent.kind === SyntaxKind.ModuleDeclaration);
-                    emitCaptureThisForNodeIfNecessary(node.parent);
+                    Debug.assert(parent.kind === SyntaxKind.ModuleDeclaration);
+                    emitCaptureThisForNodeIfNecessary(parent);
                 }
                 emitLines(node.statements);
                 if (node.kind === SyntaxKind.ModuleBlock) {
@@ -2816,7 +2880,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (isBindingPattern(declaration.name)) {
                             // This works whether the declaration is a var, let, or const.
                             // It will use rhsIterationValue _a[_i] as the initializer.
-                            emitDestructuring(declaration, /*isAssignmentExpressionStatement*/ false, rhsIterationValue);
+                            emitDestructuring(declaration, /*isAssignmentExpressionStatement*/ false, variableDeclarationList, rhsIterationValue);
                         }
                         else {
                             // The following call does not include the initializer, so we have
@@ -2841,7 +2905,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
-                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined);
+                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*parent*/ undefined, /*value*/ undefined);
                     }
                     else {
                         emitNodeWithoutSourceMap(assignmentExpression);
@@ -2962,7 +3026,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.variableDeclaration);
                 emitToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : endPos);
                 write(" ");
-                emitBlock(node.block);
+                emitNodeWithoutSourceMap(node.block);
             }
 
             function emitDebuggerStatement(node: Node) {
@@ -2976,22 +3040,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.statement);
             }
 
-            function getContainingModule(node: Node): ModuleDeclaration {
-                do {
-                    node = node.parent;
-                } while (node && node.kind !== SyntaxKind.ModuleDeclaration);
-                return <ModuleDeclaration>node;
-            }
-
-            function emitContainingModuleName(node: Node) {
-                let container = getContainingModule(node);
+            function emitContainingModuleName() {
+                let container = findAncestorNode(isModuleDeclaration);
                 write(container ? getGeneratedNameForNode(container) : "exports");
             }
 
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
-                    let container = getContainingModule(node);
+                    let container = findAncestorNode(isModuleDeclaration);
                     if (container) {
                         write(getGeneratedNameForNode(container));
                         write(".");
@@ -3018,7 +3075,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitStart(node);
 
                     // emit call to exporter only for top level nodes
-                    if (compilerOptions.module === ModuleKind.System && node.parent === currentSourceFile) {
+                    if (compilerOptions.module === ModuleKind.System && parentNode === currentSourceFile) {
                         // emit export default <smth> as
                         // export("default", <smth>)
                         write(`${exportFunctionForFile}("`);
@@ -3066,7 +3123,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         else {
                             emitStart(specifier.name);
-                            emitContainingModuleName(specifier);
+                            emitContainingModuleName();
                             write(".");
                             emitNodeWithoutSourceMap(specifier.name);
                             emitEnd(specifier.name);
@@ -3078,7 +3135,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
+            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, parent: Node, value?: Expression) {
                 let emitCount = 0;
 
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
@@ -3096,22 +3153,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 if (root.kind === SyntaxKind.BinaryExpression) {
-                    emitAssignmentExpression(<BinaryExpression>root);
+                    emitAssignmentExpression(<BinaryExpression>root, parent);
                 }
                 else {
                     Debug.assert(!isAssignmentExpressionStatement);
                     emitBindingElement(<BindingElement>root, value);
                 }
 
-                function emitAssignment(name: Identifier, value: Expression) {
+                function emitAssignment(name: Identifier, value: Expression, parent: Node) {
                     if (emitCount++) {
                         write(", ");
                     }
 
                     const isVariableDeclarationOrBindingElement =
-                        name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
+                        parent && (parent.kind === SyntaxKind.VariableDeclaration || parent.kind === SyntaxKind.BindingElement);
 
-                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
+                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name, parent);
 
                     if (exportChanged) {
                         write(`${exportFunctionForFile}("`);
@@ -3120,7 +3177,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (isVariableDeclarationOrBindingElement) {
-                        emitModuleMemberName(<Declaration>name.parent);
+                        emitModuleMemberName(<Declaration>parent);
                     }
                     else {
                         emit(name);
@@ -3140,7 +3197,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (!canDefineTempVariablesInPlace) {
                             recordTempDeclaration(identifier);
                         }
-                        emitAssignment(identifier, expr);
+                        emitAssignment(identifier, expr, /*parent*/ undefined);
                         expr = identifier;
                     }
                     return expr;
@@ -3205,7 +3262,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             let propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
+                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName), p);
                         }
                     }
                 }
@@ -3221,16 +3278,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         let e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
+                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)), target);
                             }
                             else if (i === elements.length - 1) {
-                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i));
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i), target);
                             }
                         }
                     }
                 }
 
-                function emitDestructuringAssignment(target: Expression, value: Expression) {
+                function emitDestructuringAssignment(target: Expression, value: Expression, parent: Node) {
                     if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                         value = createDefaultValueCheck(value, (<BinaryExpression>target).right);
                         target = (<BinaryExpression>target).left;
@@ -3242,25 +3299,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value);
                     }
                     else {
-                        emitAssignment(<Identifier>target, value);
+                        emitAssignment(<Identifier>target, value, parent);
                     }
                 }
 
-                function emitAssignmentExpression(root: BinaryExpression) {
+                function emitAssignmentExpression(root: BinaryExpression, parent: Node) {
                     let target = root.left;
                     let value = root.right;
                     if (isAssignmentExpressionStatement) {
-                        emitDestructuringAssignment(target, value);
+                        emitDestructuringAssignment(target, value, root);
                     }
                     else {
-                        if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
+                        if (parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
                         value = ensureIdentifier(value);
-                        emitDestructuringAssignment(target, value);
+                        emitDestructuringAssignment(target, value, root);
                         write(", ");
                         emit(value);
-                        if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
+                        if (parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write(")");
                         }
                     }
@@ -3302,7 +3359,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        emitAssignment(<Identifier>target.name, value);
+                        emitAssignment(<Identifier>target.name, value, target);
                     }
                 }
             }
@@ -3310,7 +3367,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitVariableDeclaration(node: VariableDeclaration) {
                 if (isBindingPattern(node.name)) {
                     if (languageVersion < ScriptTarget.ES6) {
-                        emitDestructuring(node, /*isAssignmentExpressionStatement*/ false);
+                        emitDestructuring(node, /*isAssignmentExpressionStatement*/ false, parentNode);
                     }
                     else {
                         emit(node.name);
@@ -3339,7 +3396,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
 
-                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.name);
+                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.name, node);
 
                     if (exportChanged) {
                         write(`${exportFunctionForFile}("`);
@@ -3380,7 +3437,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function isES6ExportedDeclaration(node: Node) {
                 return !!(node.flags & NodeFlags.Export) &&
                     languageVersion >= ScriptTarget.ES6 &&
-                    node.parent.kind === SyntaxKind.SourceFile;
+                    parentNode.kind === SyntaxKind.SourceFile;
             }
 
             function emitVariableStatement(node: VariableStatement) {
@@ -3407,7 +3464,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(";");
                     }
                 }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                if (languageVersion < ScriptTarget.ES6 && parentNode === currentSourceFile) {
                     forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
             }
@@ -3467,6 +3524,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             return;
                         }
 
+                        pushNode(parameter);
                         let { name: paramName, initializer } = parameter;
                         if (isBindingPattern(paramName)) {
                             // In cases where a binding pattern is simply '[]' or '{}',
@@ -3478,7 +3536,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 write("var ");
 
                                 if (hasBindingElements) {
-                                    emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                                    emitDestructuring(parameter, /*isAssignmentExpressionStatement*/ false, node, tempParameters[tempIndex]);
                                 }
                                 else {
                                     emit(tempParameters[tempIndex]);
@@ -3505,6 +3563,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitEnd(parameter);
                             write("; }");
                         }
+                        popNode();
                     });
                 }
             }
@@ -3563,7 +3622,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function shouldEmitAsArrowFunction(node: FunctionLikeDeclaration): boolean {
                 return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
-
+            
             function emitDeclarationName(node: Declaration) {
                 if (node.name) {
                     emitNodeWithoutSourceMap(node.name);
@@ -3616,7 +3675,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitSignatureAndBody(node);
-                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
+                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && parentNode === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -3973,7 +4032,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 });
             }
 
-            function emitMemberAccessForPropertyName(memberName: DeclarationName) {
+            function emitMemberAccessForPropertyName(member: Declaration) {
+                let memberName = member.name;
                 // TODO: (jfreeman,drosen): comment on why this is emitNodeWithoutSourceMap instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
@@ -3981,7 +4041,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("]");
                 }
                 else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
-                    emitComputedPropertyName(<ComputedPropertyName>memberName);
+                    write("[");
+                    pushNode(memberName);
+                    emitExpressionForComputedPropertyName(member, <ComputedPropertyName>memberName);
+                    popNode();
+                    write("]");
                 }
                 else {
                     write(".");
@@ -4022,7 +4086,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write("this");
                     }
                 }
-                emitMemberAccessForPropertyName(property.name);
+                pushNode(property);
+                emitMemberAccessForPropertyName(property);
                 emitEnd(property.name);
                 write(" = ");
                 emit(property.initializer);
@@ -4032,6 +4097,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 emitEnd(property);
                 emitTrailingComments(property);
+                popNode();
             }
 
             function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
@@ -4045,12 +4111,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             return emitOnlyPinnedOrTripleSlashComments(member);
                         }
 
+                        pushNode(member);
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
                         emitClassMemberPrefix(node, member);
-                        emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                        emitMemberAccessForPropertyName(member);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
                         emitStart(member);
@@ -4059,21 +4126,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitEnd(member);
                         write(";");
                         emitTrailingComments(member);
+                        popNode();
                     }
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
+                            pushNode(member);
                             writeLine();
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
                             emitClassMemberPrefix(node, member);
                             write(", ");
-                            emitExpressionForPropertyName((<AccessorDeclaration>member).name);
+                            emitExpressionForPropertyName(member);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
                             increaseIndent();
+                            popNode();
                             if (accessors.getAccessor) {
+                                pushNode(accessors.getAccessor);
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
                                 write("get: ");
@@ -4083,8 +4154,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
                                 write(",");
+                                popNode();
                             }
                             if (accessors.setAccessor) {
+                                pushNode(accessors.setAccessor);
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
                                 write("set: ");
@@ -4094,7 +4167,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 emitEnd(accessors.setAccessor);
                                 emitTrailingComments(accessors.setAccessor);
                                 write(",");
+                                popNode();
                             }
+                            pushNode(member);
                             writeLine();
                             write("enumerable: true,");
                             writeLine();
@@ -4103,6 +4178,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             writeLine();
                             write("});");
                             emitEnd(member);
+                            popNode();
                         }
                     }
                 });
@@ -4110,6 +4186,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitMemberFunctionsForES6AndHigher(node: ClassLikeDeclaration) {
                 for (let member of node.members) {
+                    pushNode(member);
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
@@ -4141,6 +4218,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         writeLine();
                         write(";");
                     }
+                    popNode();
                 }
             }
 
@@ -4192,12 +4270,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (languageVersion < ScriptTarget.ES6) {
                     write("function ");
                     emitDeclarationName(node);
+                    pushNode(ctor);
                     emitSignatureParameters(ctor);
+                    popNode();
                 }
                 else {
                     write("constructor");
                     if (ctor) {
+                        pushNode(ctor);
                         emitSignatureParameters(ctor);
+                        popNode();
                     }
                     else {
                         // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
@@ -4219,20 +4301,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
+                    pushNode(ctor);
+                    pushNode(ctor.body);
                     emitDetachedComments(ctor.body.statements);
+                    popNode();
+                    popNode();
                 }
                 emitCaptureThisForNodeIfNecessary(node);
                 if (ctor) {
+                    pushNode(ctor);
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
                     if (baseTypeElement) {
                         var superCall = findInitialSuperCall(ctor);
                         if (superCall) {
                             writeLine();
+                            pushNode(ctor.body);
                             emit(superCall);
+                            popNode();
                         }
                     }
                     emitParameterPropertyAssignments(ctor);
+                    popNode();
                 }
                 else {
                     if (baseTypeElement) {
@@ -4253,7 +4343,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (superCall) {
                         statements = statements.slice(1);
                     }
+                    pushNode(ctor);
                     emitLines(statements);
+                    popNode();
                 }
                 emitTempDeclarations(/*newLine*/ true);
                 writeLine();
@@ -4392,7 +4484,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let baseTypeNode = getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write(" extends ");
+                    pushNode(baseTypeNode);
                     emit(baseTypeNode.expression);
+                    popNode();
                 }
 
                 write(" {");
@@ -4521,7 +4615,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitStart(node);
                 write(")(");
                 if (baseTypeNode) {
+                    pushNode(baseTypeNode);
                     emit(baseTypeNode.expression);
+                    popNode();
                 }
                 write(")");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -4533,7 +4629,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitExportMemberAssignment(<ClassDeclaration>node);
                 }
 
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
+                if (languageVersion < ScriptTarget.ES6 && parentNode === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
             }
@@ -4682,7 +4778,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitStart(member.name);
                         emitClassMemberPrefix(node, member);
                         write(", ");
-                        emitExpressionForPropertyName(member.name);
+                        emitExpressionForPropertyName(member);
                         emitEnd(member.name);
                         write(",");
                         increaseIndent();
@@ -4709,7 +4805,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitStart(member.name);
                     emitClassMemberPrefix(node, member);
                     write(", ");
-                    emitExpressionForPropertyName(member.name);
+                    emitExpressionForPropertyName(member);
                     emitEnd(member.name);
 
                     if (member.kind !== SyntaxKind.PropertyDeclaration) {
@@ -4717,7 +4813,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitStart(member.name);
                         emitClassMemberPrefix(node, member);
                         write(", ");
-                        emitExpressionForPropertyName(member.name);
+                        emitExpressionForPropertyName(member);
                         emitEnd(member.name);
                         write("))");
                         decreaseIndent();
@@ -5109,7 +5205,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitEnd(node);
                     write(";");
                 }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                if (languageVersion < ScriptTarget.ES6 && parentNode === currentSourceFile) {
                     if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
                         // write the call to exporter for enum
                         writeLine();
@@ -5124,17 +5220,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitEnumMember(node: EnumMember) {
-                let enumParent = <EnumDeclaration>node.parent;
+                let enumParent = <EnumDeclaration>parentNode;
                 emitStart(node);
                 write(getGeneratedNameForNode(enumParent));
                 write("[");
                 write(getGeneratedNameForNode(enumParent));
                 write("[");
-                emitExpressionForPropertyName(node.name);
+                emitExpressionForPropertyName(node);
                 write("] = ");
                 writeEnumMemberDeclarationValue(node);
                 write("] = ");
-                emitExpressionForPropertyName(node.name);
+                emitExpressionForPropertyName(node);
                 emitEnd(node);
                 write(";");
             }
@@ -5231,7 +5327,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
+                if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && parentNode === currentSourceFile) {
                     if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
                         writeLine();
                         write(`${exportFunctionForFile}("`);
@@ -5435,7 +5531,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 if (resolver.isValueAliasDeclaration(specifier)) {
                                     writeLine();
                                     emitStart(specifier);
-                                    emitContainingModuleName(specifier);
+                                    emitContainingModuleName();
                                     write(".");
                                     emitNodeWithoutSourceMap(specifier.name);
                                     write(" = ");
@@ -5529,7 +5625,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(")");
                         }
                         else {
-                            emitContainingModuleName(node);
+                            emitContainingModuleName();
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("[\"default\"] = ");
                             } else {
@@ -5664,7 +5760,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations: (Identifier | Declaration)[]): string {
+            function emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations: Declaration[]): string {
                 // when resolving exports local exported entries/indirect exported entries in the module
                 // should always win over entries with similar names that were added via star exports
                 // to support this we store names of local/indirect exported entries in a set.
@@ -5792,7 +5888,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function processTopLevelVariableAndFunctionDeclarations(node: SourceFile): (Identifier | Declaration)[] {
+            function processTopLevelVariableAndFunctionDeclarations(node: SourceFile): Declaration[] {
                 // per ES6 spec:
                 // 15.2.1.16.4 ModuleDeclarationInstantiation() Concrete Method
                 // - var declarations are initialized to undefined - 14.a.ii
@@ -5802,52 +5898,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // in theory we should hoist only exported functions and its dependencies
                 // in practice to simplify things we'll hoist all source level functions and variable declaration
                 // including variables declarations for module and class declarations
-                let hoistedVars: (Identifier | ClassDeclaration | ModuleDeclaration | EnumDeclaration)[];
+                debugger;
+                let nodeStack: Node[] = [];
+                let seen: Map<string> = {};
+                let hasWrittenVar = false;
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
-                let exportedDeclarations: (Identifier | Declaration)[];
+                let exportedDeclarations: Declaration[];
 
                 visit(node);
 
-                if (hoistedVars) {
-                    writeLine();
-                    write("var ");
-                    let seen: Map<string> = {};
-                    for (let i = 0; i < hoistedVars.length; ++i) {
-                        let local = hoistedVars[i];
-                        let name = local.kind === SyntaxKind.Identifier
-                            ? <Identifier>local
-                            : <Identifier>(<ClassDeclaration | ModuleDeclaration | EnumDeclaration>local).name;
-
-                        if (name) {
-                            // do not emit duplicate entries (in case of declaration merging) in the list of hoisted variables
-                            let text = unescapeIdentifier(name.text);
-                            if (hasProperty(seen, text)) {
-                                continue;
-                            }
-                            else {
-                                seen[text] = text;
-                            }
-                        }
-
-                        if (i !== 0) {
-                            write(", ");
-                        }
-
-                        if (local.kind === SyntaxKind.ClassDeclaration || local.kind === SyntaxKind.ModuleDeclaration || local.kind === SyntaxKind.EnumDeclaration) {
-                            emitDeclarationName(<ClassDeclaration | ModuleDeclaration | EnumDeclaration>local);
-                        }
-                        else {
-                            emit(local);
-                        }
-
-                        let flags = getCombinedNodeFlags(local.kind === SyntaxKind.Identifier ? local.parent : local);
-                        if (flags & NodeFlags.Export) {
-                            if (!exportedDeclarations) {
-                                exportedDeclarations = [];
-                            }
-                            exportedDeclarations.push(local);
-                        }
-                    }
+                if (hasWrittenVar) {
                     write(";");
                 }
 
@@ -5880,65 +5940,71 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         hoistedFunctionDeclarations.push(<FunctionDeclaration>node);
                         return;
                     }
-
-                    if (node.kind === SyntaxKind.ClassDeclaration) {
-                        if (!hoistedVars) {
-                            hoistedVars = [];
-                        }
-
-                        hoistedVars.push(<ClassDeclaration>node);
-                        return;
-                    }
-
-                    if (node.kind === SyntaxKind.EnumDeclaration) {
-                        if (shouldEmitEnumDeclaration(<EnumDeclaration>node)) {
-                            if (!hoistedVars) {
-                                hoistedVars = [];
-                            }
-
-                            hoistedVars.push(<ModuleDeclaration>node);
-                        }
-
-                        return;
-                    }
-
-                    if (node.kind === SyntaxKind.ModuleDeclaration) {
-                        if (shouldEmitModuleDeclaration(<ModuleDeclaration>node)) {
-                            if (!hoistedVars) {
-                                hoistedVars = [];
-                            }
-
-                            hoistedVars.push(<ModuleDeclaration>node);
-                        }
-                        return;
-                    }
-
-                    if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
-                        if (shouldHoistVariable(<VariableDeclaration | BindingElement>node, /*checkIfSourceFileLevelDecl*/ false)) {
-                            let name = (<VariableDeclaration | BindingElement>node).name;
-                            if (name.kind === SyntaxKind.Identifier) {
-                                if (!hoistedVars) {
-                                    hoistedVars = [];
-                                }
-
-                                hoistedVars.push(<Identifier>name);
+                    
+                    nodeStack.push(node);
+                    hoist: if (shouldHoistNode(node)) {
+                        let name = <Identifier>node.name;
+                        if (name && name.kind === SyntaxKind.Identifier) {
+                            // do not emit duplicate entries (in case of declaration merging) in the list of hoisted variables
+                            let text = unescapeIdentifier(name.text);
+                            if (hasProperty(seen, text)) {
+                                break hoist;
                             }
                             else {
-                                forEachChild(name, visit);
+                                seen[text] = text;
                             }
                         }
-                        return;
-                    }
 
-                    if (isBindingPattern(node)) {
+                        if (!hasWrittenVar) {
+                            writeLine();
+                            write("var ");
+                            hasWrittenVar = true;
+                        }
+                        else {
+                            write(", ");
+                        }
+                                
+                        emitDeclarationName(node);
+        
+                        let flags = getCombinedNodeFlagsForNodeStack(nodeStack);
+                        if (flags & NodeFlags.Export) {
+                            if (!exportedDeclarations) {
+                                exportedDeclarations = [];
+                            }
+                            exportedDeclarations.push(node);
+                        }
+                    }
+                    else if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                        forEachChild((<VariableDeclaration | BindingElement>node).name, visit);
+                    }
+                    else if (isBindingPattern(node)) {
                         forEach((<BindingPattern>node).elements, visit);
-                        return;
                     }
-
-                    if (!isDeclaration(node)) {
+                    else if (!isDeclaration(node)) {
                         forEachChild(node, visit);
                     }
+                    nodeStack.pop();
                 }
+            }
+            
+            function shouldHoistNode(node: Node): node is Declaration {
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        return true;
+                
+                    case SyntaxKind.EnumDeclaration:
+                        return shouldEmitEnumDeclaration(<EnumDeclaration>node);
+                
+                    case SyntaxKind.ModuleDeclaration:
+                        return shouldEmitModuleDeclaration(<ModuleDeclaration>node);
+                
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                        return shouldHoistVariable(<VariableDeclaration | BindingElement>node, /*checkIfSourceFileLevelDecl*/ false)
+                            && (<VariableDeclaration | BindingElement>node).name.kind === SyntaxKind.Identifier;
+                }
+                
+                return false;
             }
 
             function shouldHoistVariable(node: VariableDeclaration | VariableDeclarationList | BindingElement, checkIfSourceFileLevelDecl: boolean): boolean {
@@ -6515,12 +6581,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
+                pushNode(node);
+                
                 let emitComments = shouldEmitLeadingAndTrailingComments(node);
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
 
                 emitJavaScriptWorker(node);
+                
+                popNode();
 
                 if (emitComments) {
                     emitTrailingComments(node);
@@ -6558,9 +6628,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // been taken care of when we emitted the 'return' statement for the function
                 // expression body.
                 if (node.kind !== SyntaxKind.Block &&
-                    node.parent &&
-                    node.parent.kind === SyntaxKind.ArrowFunction &&
-                    (<ArrowFunction>node.parent).body === node &&
+                    parentNode &&
+                    parentNode.kind === SyntaxKind.ArrowFunction &&
+                    (<ArrowFunction>parentNode).body === node &&
                     compilerOptions.target <= ScriptTarget.ES5) {
 
                     return false;

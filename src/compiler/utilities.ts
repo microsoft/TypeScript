@@ -367,6 +367,30 @@ namespace ts {
 
         return flags;
     }
+    
+    export function getCombinedNodeFlagsForNodeStack(nodeStack: Node[]): NodeFlags {
+        let i = nodeStack.length - 1;
+        let node = nodeStack[i--];
+        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
+            node = nodeStack[i--];
+        }
+        
+        let flags = node.flags;
+        if (node && node.kind === SyntaxKind.VariableDeclaration) {
+            node = nodeStack[i--];
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= node.flags;
+            node = nodeStack[i--];
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= node.flags;
+        }
+
+        return flags;
+    }
 
     export function isConst(node: Node): boolean {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
@@ -1177,6 +1201,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+    
+    export function isModuleDeclaration(node: Node): node is ModuleDeclaration {
+        return node && node.kind === SyntaxKind.ModuleDeclaration;
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
