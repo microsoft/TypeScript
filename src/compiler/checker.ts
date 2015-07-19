@@ -4076,10 +4076,6 @@ namespace ts {
             }
         }
 
-        function compareTypeIds(type1: Type, type2: Type): number {
-            return type1.id - type2.id;
-        }
-
         // We always deduplicate the constituent type set based on object identity, but we'll also deduplicate
         // based on the structure of the types unless the noDeduplication flag is true, which is the case when
         // creating a union type from a type node and when instantiating a union type. In both of those cases,
@@ -4101,7 +4097,6 @@ namespace ts {
             else {
                 removeDuplicateTypes(typeSet);
             }
-            typeSet.sort(compareTypeIds);
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
