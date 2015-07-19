@@ -2198,8 +2198,8 @@ var x222 = (<Array<Base>>undefined) || [d1, d2];
 >d2 : Derived2
 
 var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
->x223 : (Derived1 | Derived2)[] | { [n: number]: Base; }
->(<{ [n: number]: Base; }>undefined) || [d1, d2] : (Derived1 | Derived2)[] | { [n: number]: Base; }
+>x223 : { [n: number]: Base; } | (Derived1 | Derived2)[]
+>(<{ [n: number]: Base; }>undefined) || [d1, d2] : { [n: number]: Base; } | (Derived1 | Derived2)[]
 >(<{ [n: number]: Base; }>undefined) : { [n: number]: Base; }
 ><{ [n: number]: Base; }>undefined : { [n: number]: Base; }
 >n : number

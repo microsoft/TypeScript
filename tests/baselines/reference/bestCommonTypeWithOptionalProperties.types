@@ -34,36 +34,36 @@ var b1 = [x, y, z];
 >z : Z
 
 var b2 = [x, z, y];
->b2 : (X | Y | Z)[]
->[x, z, y] : (X | Y | Z)[]
+>b2 : (X | Z | Y)[]
+>[x, z, y] : (X | Z | Y)[]
 >x : X
 >z : Z
 >y : Y
 
 var b3 = [y, x, z];
->b3 : (X | Y | Z)[]
->[y, x, z] : (X | Y | Z)[]
+>b3 : (Y | X | Z)[]
+>[y, x, z] : (Y | X | Z)[]
 >y : Y
 >x : X
 >z : Z
 
 var b4 = [y, z, x];
->b4 : (X | Y | Z)[]
->[y, z, x] : (X | Y | Z)[]
+>b4 : (Y | Z | X)[]
+>[y, z, x] : (Y | Z | X)[]
 >y : Y
 >z : Z
 >x : X
 
 var b5 = [z, x, y];
->b5 : (X | Y | Z)[]
->[z, x, y] : (X | Y | Z)[]
+>b5 : (Z | X | Y)[]
+>[z, x, y] : (Z | X | Y)[]
 >z : Z
 >x : X
 >y : Y
 
 var b6 = [z, y, x];
->b6 : (X | Y | Z)[]
->[z, y, x] : (X | Y | Z)[]
+>b6 : (Z | Y | X)[]
+>[z, y, x] : (Z | Y | X)[]
 >z : Z
 >y : Y
 >x : X

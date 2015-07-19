@@ -45,7 +45,7 @@ var result1 = true ? x : a;
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
->true ? {} : 1 : number | {}
+>true ? {} : 1 : {} | number
 >true : boolean
 >{} : {}
 >1 : number
@@ -63,8 +63,8 @@ true ? { a: 1 } : { a: 2, b: 'string' };
 >'string' : string
 
 var result2 = true ? {} : 1;
->result2 : number | {}
->true ? {} : 1 : number | {}
+>result2 : {} | number
+>true ? {} : 1 : {} | number
 >true : boolean
 >{} : {}
 >1 : number
@@ -111,14 +111,14 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 //Cond ? Expr1 : Expr2,  Expr2 is supertype
 //Be Not contextually typed
 true ? a : x;
->true ? a : x : X | A
+>true ? a : x : A | X
 >true : boolean
 >a : A
 >x : X
 
 var result5 = true ? a : x;
->result5 : X | A
->true ? a : x : X | A
+>result5 : A | X
+>true ? a : x : A | X
 >true : boolean
 >a : A
 >x : X
@@ -218,7 +218,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : string | number
+>true ? 1 : 'string' : number | string
 >true : boolean
 >1 : number
 >'string' : string

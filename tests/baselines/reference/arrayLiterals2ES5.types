@@ -24,8 +24,8 @@ var a1 = ["hello", "world"]
 >"world" : string
 
 var a2 = [, , , ...a0, "hello"];
->a2 : (string | number)[]
->[, , , ...a0, "hello"] : (string | number)[]
+>a2 : (number | string)[]
+>[, , , ...a0, "hello"] : (number | string)[]
 > : undefined
 > : undefined
 > : undefined
@@ -151,8 +151,8 @@ interface myArray2 extends Array<Number|String> { }
 >String : String
 
 var d0 = [1, true, ...temp,];  // has type (string|number|boolean)[]
->d0 : (string | number | boolean)[]
->[1, true, ...temp,] : (string | number | boolean)[]
+>d0 : (number | boolean | string)[]
+>[1, true, ...temp,] : (number | boolean | string)[]
 >1 : number
 >true : boolean
 >...temp : string
@@ -214,8 +214,8 @@ var d8: number[][] = [[...temp1]]
 >temp1 : number[]
 
 var d9 = [[...temp1], ...["hello"]];
->d9 : (string | number[])[]
->[[...temp1], ...["hello"]] : (string | number[])[]
+>d9 : (number[] | string)[]
+>[[...temp1], ...["hello"]] : (number[] | string)[]
 >[...temp1] : number[]
 >...temp1 : number
 >temp1 : number[]

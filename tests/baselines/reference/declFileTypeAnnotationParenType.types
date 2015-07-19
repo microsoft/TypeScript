@@ -23,9 +23,9 @@ var y = [() => new c()];
 >c : typeof c
 
 var k: (() => c) | string = (() => new c()) || "";
->k : string | (() => c)
+>k : (() => c) | string
 >c : c
->(() => new c()) || "" : string | (() => c)
+>(() => new c()) || "" : (() => c) | string
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
@@ -33,8 +33,8 @@ var k: (() => c) | string = (() => new c()) || "";
 >"" : string
 
 var l = (() => new c()) || "";
->l : string | (() => c)
->(() => new c()) || "" : string | (() => c)
+>l : (() => c) | string
+>(() => new c()) || "" : (() => c) | string
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
