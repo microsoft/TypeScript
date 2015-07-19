@@ -8,7 +8,7 @@
 let c = classification
 verify.syntacticClassificationsAre(
     c.keyword("class"), c.className("A"), c.punctuation("{"),
-    c.text("a"), c.punctuation(":"),
+    c.identifier("a"), c.punctuation(":"),
     c.punctuation("}"),
-    c.text("c"), c.operator("=")
+    c.identifier("c"), c.operator("=")
     );

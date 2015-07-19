@@ -1,5 +1,9 @@
 //// [classAbstractInstantiations1.ts]
 
+//
+// Calling new with (non)abstract classes.
+//
+
 abstract class A {}
 
 class B extends A {}
@@ -21,6 +25,9 @@ c = new B;
 
 
 //// [classAbstractInstantiations1.js]
+//
+// Calling new with (non)abstract classes.
+//
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

@@ -5,7 +5,7 @@
 
 namespace ts {
     /* @internal */
-    export var optionDeclarations: CommandLineOption[] = [
+    export let optionDeclarations: CommandLineOption[] = [
         {
             name: "charset",
             type: "string",
@@ -222,11 +222,11 @@ namespace ts {
     ];
 
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
-        var options: CompilerOptions = {};
-        var fileNames: string[] = [];
-        var errors: Diagnostic[] = [];
-        var shortOptionNames: Map<string> = {};
-        var optionNameMap: Map<CommandLineOption> = {};
+        let options: CompilerOptions = {};
+        let fileNames: string[] = [];
+        let errors: Diagnostic[] = [];
+        let shortOptionNames: Map<string> = {};
+        let optionNameMap: Map<CommandLineOption> = {};
 
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
@@ -242,9 +242,9 @@ namespace ts {
         };
 
         function parseStrings(args: string[]) {
-            var i = 0;
+            let i = 0;
             while (i < args.length) {
-                var s = args[i++];
+                let s = args[i++];
                 if (s.charCodeAt(0) === CharacterCodes.at) {
                     parseResponseFile(s.slice(1));
                 }
@@ -257,7 +257,7 @@ namespace ts {
                     }
 
                     if (hasProperty(optionNameMap, s)) {
-                        var opt = optionNameMap[s];
+                        let opt = optionNameMap[s];
 
                         // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
                         if (!args[i] && opt.type !== "boolean") {
@@ -276,8 +276,8 @@ namespace ts {
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
-                                var map = <Map<number>>opt.type;
-                                var key = (args[i++] || "").toLowerCase();
+                                let map = <Map<number>>opt.type;
+                                let key = (args[i++] || "").toLowerCase();
                                 if (hasProperty(map, key)) {
                                     options[opt.name] = map[key];
                                 }
@@ -297,19 +297,19 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            var text = sys.readFile(fileName);
+            let text = sys.readFile(fileName);
 
             if (!text) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
                 return;
             }
 
-            var args: string[] = [];
-            var pos = 0;
+            let args: string[] = [];
+            let pos = 0;
             while (true) {
                 while (pos < text.length && text.charCodeAt(pos) <= CharacterCodes.space) pos++;
                 if (pos >= text.length) break;
-                var start = pos;
+                let start = pos;
                 if (text.charCodeAt(start) === CharacterCodes.doubleQuote) {
                     pos++;
                     while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.doubleQuote) pos++;
@@ -335,8 +335,9 @@ namespace ts {
       * @param fileName The path to the config file
       */
     export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
+        let text = '';
         try {
-            var text = sys.readFile(fileName);
+            text = sys.readFile(fileName);
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
@@ -362,10 +363,10 @@ namespace ts {
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param basePath A root directory to resolve relative path entries in the config
-      *    file to. e.g. outDir 
+      *    file to. e.g. outDir
       */
     export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
-        var errors: Diagnostic[] = [];
+        let errors: Diagnostic[] = [];
 
         return {
             options: getCompilerOptions(),
@@ -374,22 +375,22 @@ namespace ts {
         };
 
         function getCompilerOptions(): CompilerOptions {
-            var options: CompilerOptions = {};
-            var optionNameMap: Map<CommandLineOption> = {};
+            let options: CompilerOptions = {};
+            let optionNameMap: Map<CommandLineOption> = {};
             forEach(optionDeclarations, option => {
                 optionNameMap[option.name] = option;
             });
-            var jsonOptions = json["compilerOptions"];
+            let jsonOptions = json["compilerOptions"];
             if (jsonOptions) {
-                for (var id in jsonOptions) {
+                for (let id in jsonOptions) {
                     if (hasProperty(optionNameMap, id)) {
-                        var opt = optionNameMap[id];
-                        var optType = opt.type;
-                        var value = jsonOptions[id];
-                        var expectedType = typeof optType === "string" ? optType : "string";
+                        let opt = optionNameMap[id];
+                        let optType = opt.type;
+                        let value = jsonOptions[id];
+                        let expectedType = typeof optType === "string" ? optType : "string";
                         if (typeof value === expectedType) {
                             if (typeof optType !== "string") {
-                                var key = value.toLowerCase();
+                                let key = value.toLowerCase();
                                 if (hasProperty(optType, key)) {
                                     value = optType[key];
                                 }
@@ -435,7 +436,7 @@ namespace ts {
                     }
                     else if (fileExtensionIs(name, ".ts")) {
                         if (!contains(sysFiles, name + "x")) {
-                            fileNames.push(name)
+                            fileNames.push(name);
                         }
                     }
                     else {

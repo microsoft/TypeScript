@@ -74,7 +74,7 @@ fs.readFile('src/compiler/diagnosticInformationMap.generated.ts', 'utf-8', (err,
         console.log('Consumed ' + allSrc.length + ' characters of source');
 
         let count = 0;
-        console.log('== List of errors not used in source ==')
+        console.log('== List of errors not used in source ==');
         for (let errName of errorNames) {
             if (allSrc.indexOf(errName) < 0) {
                 console.log(errName);
@@ -84,4 +84,3 @@ fs.readFile('src/compiler/diagnosticInformationMap.generated.ts', 'utf-8', (err,
         console.log(count + ' of ' + errorNames.length + ' errors are not used in source');
     });
 });
-

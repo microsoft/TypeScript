@@ -4,7 +4,7 @@
 function f([]) {
 >f : ([]: any[]) => void
 
-	var x, y, z;
+    var x, y, z;
 >x : any
 >y : any
 >z : any

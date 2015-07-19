@@ -1,0 +1,79 @@
+=== tests/cases/compiler/fixingTypeParametersRepeatedly3.ts ===
+interface Base {
+>Base : Base
+
+    baseProp;
+>baseProp : any
+}
+interface Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    toBase?(): Base;
+>toBase : () => Base
+>Base : Base
+}
+
+var derived: Derived;
+>derived : Derived
+>Derived : Derived
+
+declare function foo<T>(x: T, func: (p: T) => T): T;
+>foo : <T>(x: T, func: (p: T) => T) => T
+>T : T
+>x : T
+>T : T
+>func : (p: T) => T
+>p : T
+>T : T
+>T : T
+>T : T
+
+var result = foo(derived, d => d.toBase());
+>result : Derived
+>foo(derived, d => d.toBase()) : Derived
+>foo : <T>(x: T, func: (p: T) => T) => T
+>derived : Derived
+>d => d.toBase() : (d: Derived) => Base
+>d : Derived
+>d.toBase() : Base
+>d.toBase : () => Base
+>d : Derived
+>toBase : () => Base
+
+// bar should type check just like foo.
+// result2 should have the same type as result
+declare function bar<T>(x: T, func: (p: T) => T): T;
+>bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>T : T
+>x : T
+>T : T
+>func : (p: T) => T
+>p : T
+>T : T
+>T : T
+>T : T
+
+declare function bar<T>(x: T, func: (p: T) => T): T;
+>bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>T : T
+>x : T
+>T : T
+>func : (p: T) => T
+>p : T
+>T : T
+>T : T
+>T : T
+
+var result2 = bar(derived, d => d.toBase());
+>result2 : Derived
+>bar(derived, d => d.toBase()) : Derived
+>bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>derived : Derived
+>d => d.toBase() : (d: Derived) => Base
+>d : Derived
+>d.toBase() : Base
+>d.toBase : () => Base
+>d : Derived
+>toBase : () => Base
+
