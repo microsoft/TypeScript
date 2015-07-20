@@ -6759,17 +6759,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
-                // If we're removing comments, then we want to strip out all but the pinned or
-                // triple slash comments.
-                if (ranges && onlyPinnedOrTripleSlashComments) {
-                    ranges = filter(ranges, isPinnedOrTripleSlashComment);
-                    if (ranges.length === 0) {
-                        return undefined;
-                    }
-                }
+            function filterComments(ranges: CommentRange[], removeComments: boolean, isTopOfFileComments: boolean): CommentRange[] {
+                // If removeComments flag is false, then do not filter out any comment
+                if (!removeComments || !ranges) return ranges;
 
-                return ranges;
+                // IF removeComments flag is true, then filter out comment by following:
+                //      - Pinned comments : keep all
+                //      - /// comments : keep it if the comments are at the top of the file otherwise remove
+                //      - normal comments: remove all
+                if (removeComments) {
+                    if (isTopOfFileComments) {
+                        ranges = filter(ranges, isTripleSlashOrPinnedComments);
+                    }
+                    else {
+                        ranges = filter(ranges, isPinnedComments);
+                    }
+                    return ranges.length === 0 ? undefined : ranges;
+                }
+            }
+
+            function isPinnedComments(comment: CommentRange) {
+                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+                    return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+                }
+            }
+
+            /**
+             * Determine if the given comment is a triple-slash or pinned comment
+             *
+             * @return true if the comment is a triple-slash comment at the top of the file or a pinned comment else false
+             **/
+            function isTripleSlashOrPinnedComments(comment: CommentRange) {
+                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+                // so that we don't end up computing comment string and doing match for all // comments
+                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                    comment.pos + 2 < comment.end &&
+                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
+                    let textSubStr = currentSourceFile.text.substring(comment.pos, comment.end);
+                    return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                        textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
+                        true : false;
+                }
+                return isPinnedComments(comment);
             }
 
             function getLeadingCommentsToEmit(node: Node) {
@@ -6798,27 +6829,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitOnlyPinnedOrTripleSlashComments(node: Node) {
-                emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ true);
+                emitLeadingCommentsWorker(node, /*removeComments:*/ true);
             }
 
             function emitLeadingComments(node: Node) {
-                return emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                return emitLeadingCommentsWorker(node, compilerOptions.removeComments);
             }
 
-            function emitLeadingCommentsWorker(node: Node, onlyPinnedOrTripleSlashComments: boolean) {
+            function emitLeadingCommentsWorker(node: Node, removeComments: boolean) {
                 // If the caller only wants pinned or triple slash comments, then always filter
                 // down to that set.  Otherwise, filter based on the current compiler options.
-                let leadingComments = filterComments(getLeadingCommentsToEmit(node), onlyPinnedOrTripleSlashComments);
+                let leadingComments = filterComments(getLeadingCommentsToEmit(node), /*removeComments:*/ removeComments, /*isTopOfFileComments:*/ node.pos === 0);
 
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator:*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
-                let trailingComments = filterComments(getTrailingCommentsToEmit(node), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                let trailingComments = filterComments(getTrailingCommentsToEmit(node), /*removeComments*/ compilerOptions.removeComments, /*isTopOfFileComments:*/ node.pos === 0);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
@@ -6835,7 +6866,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
 
-                leadingComments = filterComments(leadingComments, compilerOptions.removeComments);
+                leadingComments = filterComments(leadingComments, /*removeComments:*/ compilerOptions.removeComments, pos === 0);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -6884,21 +6915,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             }
                         }
                     }
-                }
-            }
-
-            function isPinnedOrTripleSlashComment(comment: CommentRange) {
-                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-                    return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-                }
-                // Omit /// comment if compilerOptions.removeComments is true.
-                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-                // so that we don't end up computing comment string and doing match for all // comments
-                if (!compilerOptions.removeComments && (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
-                    comment.pos + 2 < comment.end &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
-                    currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx))) {
-                    return true;
                 }
             }
         }

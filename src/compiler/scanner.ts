@@ -532,9 +532,11 @@ namespace ts {
     // false, whitespace is skipped until the first line break and comments between that location
     // and the next token are returned.If trailing is true, comments occurring between the given
     // position and the next line break are returned.The return value is an array containing a
-    // TextRange for each comment. Single-line comment ranges include the beginning '//' characters
-    // but not the ending line break. Multi - line comment ranges include the beginning '/* and
-    // ending '*/' characters.The return value is undefined if no comments were found.
+    // TextRange for each comment.
+    //
+    // Single - line comment ranges include the beginning '//' characters but not the ending line break.
+    // Multi  - line comment ranges include the beginning '/* and ending '*/' characters.
+    //          The return value is undefined if no comments were found.
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
