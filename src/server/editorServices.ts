@@ -281,6 +281,7 @@ namespace ts.server {
     export class Project {
         compilerService: CompilerService;
         projectFilename: string;
+        projectFileWatcher: FileWatcher;
         program: ts.Program;
         filenameToSourceFile: ts.Map<ts.SourceFile> = {};
         updateGraphSeq = 0;
@@ -453,6 +454,11 @@ namespace ts.server {
             }
         }
 
+        watchedConfigFileChanged(configFileName: string) {
+            this.log("Config File Changed: " + configFileName);
+            this.updateConfigFile(configFileName);
+        }
+
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
         }
@@ -529,6 +535,18 @@ namespace ts.server {
             }
             this.configuredProjects = configuredProjects;
         }
+        
+        removeConfiguredProject(configFilename: string) {
+            let matchedProjects =  this.configuredProjects.filter( project => project.projectFilename == configFilename );
+            if (matchedProjects.length > 0) {
+                let projectToRemove = matchedProjects[0];
+                projectToRemove.projectFileWatcher.close();
+                
+                let filenames = projectToRemove.getFileNameList();
+                filenames.forEach(filename => this.closeOpenFile(this.getScriptInfo(filename)));
+                filenames.forEach(filename => this.openClientFile(filename));                
+            }
+        }
 
         setConfiguredProjectRoot(info: ScriptInfo) {
              for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
@@ -583,7 +601,6 @@ namespace ts.server {
         /**
           * Remove this file from the set of open, non-configured files.
           * @param info The file that has been closed or newly configured
-          * @param openedByConfig True if info has become a root of a configured project
           */
         closeOpenFile(info: ScriptInfo) {
             var openFileRoots: ScriptInfo[] = [];
@@ -906,41 +923,75 @@ namespace ts.server {
             return false;
         }
 
-        openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
+        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, error?: ProjectOpenResult } {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
             var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.readConfigFile(configFilename);
             if (rawConfig.error) {
-                return rawConfig.error;
+                return { succeeded: false, error: rawConfig.error };
             }
             else {
                 var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                    return { errorMsg: "tsconfig option errors" };
+                    return { succeeded: false, error: { errorMsg: "tsconfig option errors" }};
                 }
-                else if (parsedCommandLine.fileNames) {
+                else if (parsedCommandLine.fileNames == null) {
+                    return { succeeded: false, error: { errorMsg: "no files found" }}
+                }
+                else {
                     var projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
                         compilerOptions: parsedCommandLine.options
                     };
-                    var proj = this.createProject(configFilename, projectOptions);
-                    for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
-                        var rootFilename = parsedCommandLine.fileNames[i];
-                        if (this.host.fileExists(rootFilename)) {
-                            var info = this.openFile(rootFilename, clientFileName == rootFilename);
-                            proj.addRoot(info);
-                        }
-                        else {
-                            return { errorMsg: "specified file " + rootFilename + " not found" };
-                        }
+                    return { succeeded: true, projectOptions };
+                }
+            }
+
+        }
+
+        openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
+            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
+            if (!succeeded) {
+                return error;
+            } 
+            else {
+                let proj = this.createProject(configFilename, projectOptions);
+                for (let i = 0, len = projectOptions.files.length; i < len; i++) {
+                    let rootFilename = projectOptions.files[i];
+                    if (this.host.fileExists(rootFilename)) {
+                        let info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
+                        proj.addRoot(info);
                     }
-                    proj.finishGraph();
-                    return { success: true, project: proj };
+                    else {
+                        return { errorMsg: "specified file " + rootFilename + " not found" };
+                    }
+                }
+                proj.finishGraph();
+                proj.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedConfigFileChanged(configFilename));
+                return { success: true, project: proj };
+            }
+        }
+        
+        updateConfigFile(configFilename: string): ProjectOpenResult {
+            let matchedProjects = this.configuredProjects.filter(project => project.projectFilename == configFilename);
+            if (matchedProjects !== null) {
+                let matchedProject = matchedProjects[0];
+                // if the config file is deleted, remove the project and update project structure
+                if (!this.host.fileExists(configFilename)) {
+                    this.log("Config file deleted");
+                    this.removeConfiguredProject(configFilename);
                 }
                 else {
-                    return { errorMsg: "no files found" };
+                    let { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
+                    if (!succeeded) {
+                        return error;
+                    }
+                    else {
+                        matchedProject.setProjectOptions(projectOptions);
+                    }
                 }
+                this.updateProjectStructure();
             }
         }
 
