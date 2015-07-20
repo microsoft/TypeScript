@@ -13,8 +13,8 @@
     ],
     "emittedFiles": [
         "glo_m4.js",
-        "glo_m4.d.ts",
         "useModule.js",
+        "glo_m4.d.ts",
         "useModule.d.ts"
     ]
 }

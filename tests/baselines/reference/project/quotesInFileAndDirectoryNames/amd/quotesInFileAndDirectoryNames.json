@@ -13,8 +13,8 @@
     ],
     "emittedFiles": [
         "li'b/class'A.js",
-        "li'b/class'A.d.ts",
         "m'ain.js",
+        "li'b/class'A.d.ts",
         "m'ain.d.ts"
     ]
 }

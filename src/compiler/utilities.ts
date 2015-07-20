@@ -2315,4 +2315,13 @@ namespace ts {
             }
         }
     }
+
+    export function getTypeAnnotationFromAccessor(getAccessor: AccessorDeclaration, setAccessor: AccessorDeclaration): TypeNode {
+        if (getAccessor && getAccessor.type) {
+            return getAccessor.type // Getter - return type
+        }
+        if (setAccessor && setAccessor.parameters.length > 0) {
+            return setAccessor.parameters[0].type;
+        }
+    }
 }

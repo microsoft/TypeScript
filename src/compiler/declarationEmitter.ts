@@ -2,11 +2,6 @@
 
 /* @internal */
 namespace ts {
-    interface DeclarationEmit {
-        hasDeclarationDiagnostics: boolean;
-        output: string;
-    }
-
     interface NodeLinks {
         visibleChildren?: Node[];
         visited?: boolean;
@@ -14,19 +9,24 @@ namespace ts {
         hasExportDeclarations?: boolean;
     }
 
-    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
-        let diagnostics: Diagnostic[] = [];
-        let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
-        return diagnostics;
+    interface PreprocessResults {
+        sourceFiles: SourceFile[];
+        nodeLinks: NodeLinks[];
+        resolver: EmitResolver;
     }
 
     const emptyHandler = () => { };
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
+    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults,  host: EmitHost, diagnostics: Diagnostic[]): void {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
+        let enclosingDeclaration: Node;
+        let currentSourceFile: SourceFile;
 
+        let resolver = preprocessResults.resolver;
+        let nodeLinks = preprocessResults.nodeLinks;
+
+        // setup the writer
         let writer = createNewTextWriterWithSymbolWriter();
         let write = writer.write;
         let writeTextOfNode = writer.writeTextOfNode;
@@ -34,38 +34,25 @@ namespace ts {
         let increaseIndent = writer.increaseIndent;
         let decreaseIndent = writer.decreaseIndent;
 
-        let enclosingDeclaration: Node;
-        let currentSourceFile: SourceFile;
-        let hasDeclarationDiagnostics = false;
+        // Emit any triple-slash references
+        emitTripleSlashReferences(preprocessResults.sourceFiles);
 
-        let nodeLinks: NodeLinks[] = [];
+        for (let sourceFile of preprocessResults.sourceFiles) {
+            // emit the declarations from this file
+            emitSourceFile(sourceFile);
+        }
+
+        // write the output to disk
+        writeFile(host, diagnostics, outputFileName, writer.getText(), compilerOptions.emitBOM);
+
+        return;
+
         function getNodeLinks(node: Node): NodeLinks {
             let nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
-        // Emit any triple-slash references
-        emitTripleSlashReferences(root);
-
-        if (root) {
-            // Emitting just a single file, so emit references in this file only
-            emitSourceFile(root);
-        }
-        else {
-            // Emit references corresponding to this file
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    emitSourceFile(sourceFile);
-                }
-            });
-        }
-
-        return {
-            hasDeclarationDiagnostics,
-            output: writer.getText(),
-        };
-
-        function emitTripleSlashReferences(root: SourceFile) {
+        function emitTripleSlashReferences(sourceFiles: SourceFile[]) {
             if (compilerOptions.noResolve) {
                 // Nothing to do
                 return;
@@ -74,17 +61,9 @@ namespace ts {
             let emittedReferencedFiles: SourceFile[] = [];
             let addedGlobalFileReference = false;
 
-            if (root) {
-                // Emitting just a single file, so emit references in this file only
-                emitTripleSlashReferncesInFile(root);
-            }
-            else {
-                // Emit references corresponding to this file
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emitTripleSlashReferncesInFile(sourceFile);
-                    }
-                });
+            // Emit references corresponding to this file
+            for (let sourceFile of sourceFiles) {
+                emitTripleSlashReferncesInFile(sourceFile);
             }
 
             return;
@@ -99,7 +78,7 @@ namespace ts {
                     }
 
                     let shouldEmitRefrence: boolean
-                    
+
                     if (isDeclarationFile(referencedFile) || shouldEmitToOwnFile(referencedFile, compilerOptions)) {
                         // If the reference file is a declaration file or an external module,
                         // we know there is going to be a .d.ts file matching it. Emit that reference
@@ -127,7 +106,7 @@ namespace ts {
                         : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
 
                 declFileName = getRelativePathToDirectoryOrUrl(
-                    getDirectoryPath(normalizeSlashes(jsFilePath)),
+                    getDirectoryPath(normalizeSlashes(outputFileName)),
                     declFileName,
                     host.getCurrentDirectory(),
                     host.getCanonicalFileName,
@@ -158,24 +137,6 @@ namespace ts {
             writer.writeParameter = writer.write;
             writer.writeSymbol = writer.write;
             return writer;
-        }
-
-        function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
-            return {
-                writeLine: emptyHandler,
-                writeKeyword: emptyHandler,
-                writeOperator: emptyHandler,
-                writePunctuation: emptyHandler,
-                writeSpace: emptyHandler,
-                writeStringLiteral: emptyHandler,
-                writeParameter: emptyHandler,
-                writeSymbol: emptyHandler,
-                decreaseIndent: emptyHandler,
-                increaseIndent: emptyHandler,
-                clear: emptyHandler,
-                trackTypeSymbol,
-                trackInaccesibleSymbol
-            };
         }
 
         function emitTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode) {
@@ -800,15 +761,6 @@ namespace ts {
             }
         }
 
-        function getTypeAnnotationFromAccessor(getAccessor: AccessorDeclaration, setAccessor: AccessorDeclaration): TypeNode {
-            if (getAccessor && getAccessor.type) {
-                return getAccessor.type // Getter - return type
-            }
-            if (setAccessor && setAccessor.parameters.length > 0) {
-                return setAccessor.parameters[0].type;
-            }
-        }
-
         function emitAccessorDeclaration(node: AccessorDeclaration) {
             if (hasDynamicName(node)) {
                 return;
@@ -1063,6 +1015,56 @@ namespace ts {
             }
         }
 
+        function writeChildDeclarations(node: Node): void {
+            forEach(sortDeclarations(getNodeLinks(node).visibleChildren), emitNode);
+        }
+
+        function emitSourceFile(sourceFile: SourceFile): void {
+            currentSourceFile = sourceFile;
+            enclosingDeclaration = sourceFile;
+
+            // write the declarations
+            writeChildDeclarations(sourceFile);
+        }
+
+        function compareDeclarations(d1: Node, d2: Node): Comparison {
+            return compareValues(d1.pos, d2.pos) || Comparison.EqualTo;
+        }
+
+        function sortDeclarations(nodes: Node[]): Node[] {
+            return nodes && nodes.sort(compareDeclarations);
+        }
+    }
+
+    function preprocessDeclarations(sourceFiles: SourceFile[], resolver: EmitResolver, diagnostics: Diagnostic[], compilerOptions: CompilerOptions): PreprocessResults {
+        let currentSourceFile: SourceFile;
+        let nodeLinks: NodeLinks[] = [];
+
+        for (let sourceFile of sourceFiles) {
+            preprocessSourceFile(sourceFile);
+        }
+
+        return {
+            sourceFiles,
+            nodeLinks,
+            resolver
+        };
+
+        function getNodeLinks(node: Node): NodeLinks {
+            let nodeId = getNodeId(node);
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
+        }
+
+        function hasInternalAnnotation(range: CommentRange) {
+            let text = currentSourceFile.text;
+            let comment = text.substring(range.pos, range.end);
+            return comment.indexOf("@internal") >= 0;
+        }
+
+        function isInternal(node: Node) {
+            return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
+        }
+
         function collectReferencedDeclarations(node: Node): void {
             let currentErrorNode: Node;
             let typeWriter = createVoidSymbolWriter(trackTypeSymbol, trackInaccesibleSymbol);
@@ -1079,6 +1081,24 @@ namespace ts {
                 if (currentErrorNode) {
                     reportUnamedDeclarationMessage(currentErrorNode);
                 }
+            }
+
+            function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
+                return {
+                    writeLine: emptyHandler,
+                    writeKeyword: emptyHandler,
+                    writeOperator: emptyHandler,
+                    writePunctuation: emptyHandler,
+                    writeSpace: emptyHandler,
+                    writeStringLiteral: emptyHandler,
+                    writeParameter: emptyHandler,
+                    writeSymbol: emptyHandler,
+                    decreaseIndent: emptyHandler,
+                    increaseIndent: emptyHandler,
+                    clear: emptyHandler,
+                    trackTypeSymbol,
+                    trackInaccesibleSymbol
+                };
             }
 
             function visitNode(node: Node): void {
@@ -1440,8 +1460,6 @@ namespace ts {
         function reportDeclarationAccessiblityMessage(referencedDeclaration: Declaration, errorNode: Node): void {
             Debug.assert(referencedDeclaration.name && referencedDeclaration.name.kind === SyntaxKind.Identifier);
 
-            hasDeclarationDiagnostics = true;
-
             let referencedDeclarationName = (<Identifier>referencedDeclaration.name).text;
             let container = errorNode;
 
@@ -1534,7 +1552,6 @@ namespace ts {
         }
 
         function reportUnamedDeclarationMessage(errorNode: Node): void {
-            hasDeclarationDiagnostics = true;
             let container = errorNode;
 
             while (container) {
@@ -1654,37 +1671,68 @@ namespace ts {
             links.visibleChildren.push(child);
         }
 
-        function compareDeclarations(d1: Node, d2: Node): Comparison {
-            return compareValues(d1.pos, d2.pos) || Comparison.EqualTo;
-        }
-
-        function sortDeclarations(nodes: Node[]): Node[] {
-            return nodes && nodes.sort(compareDeclarations);
-        }
-
-        function writeChildDeclarations(node: Node): void {
-            forEach(sortDeclarations(getNodeLinks(node).visibleChildren), emitNode);
-        }
-
-        function emitSourceFile(sourceFile: SourceFile): void {
+        function preprocessSourceFile(sourceFile: SourceFile): void {
             currentSourceFile = sourceFile;
-            enclosingDeclaration = sourceFile;
 
             // Collect all visible declarations
             collectTopLevelChildDeclarations(sourceFile);
+        }
+    }
 
-            // write the declarations
-            writeChildDeclarations(sourceFile);
+    function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, action: (name: string, sources: SourceFile[]) => void) {
+        let compilerOptions = host.getCompilerOptions();
+        if (targetSourceFile) {
+            // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
+            // only emit the outputs of this file
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                let outputFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".d.ts");
+                action(outputFilePath, [targetSourceFile]);
+                return;
+            }
+            // Fall through to the --out case, i.e. shouldEmitToOwnFile()=== false
+        }
+        else {
+            // No targetSourceFile, we need to emit all files
+            for (let sourceFile of host.getSourceFiles()) {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    let outputFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".d.ts");
+                    action(outputFilePath, [sourceFile]);
+                }
+            }
+        }
+
+        if (compilerOptions.out) {
+            // Emit any files that did not have their own output file
+            // all these files will emit to a single output file specified by compiler options.out
+            let outputFilePath = removeFileExtension(compilerOptions.out) + ".d.ts"
+            let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
+            action(outputFilePath, sourceFiles);;
+        }
+    }
+
+    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
+        let diagnostics: Diagnostic[] = [];
+        forEachExpectedOutputFile(host, targetSourceFile, (outputFileName, sourceFiles) => {
+            preprocessDeclarations(sourceFiles, resolver, diagnostics, host.getCompilerOptions());
+        });
+        
+        if (targetSourceFile) {
+            return filter(diagnostics, d => d.file === targetSourceFile);
+        }
+        else {
+            return diagnostics;
         }
     }
 
     /* @internal */
-    export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
-        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
-        // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
-        // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.hasDeclarationDiagnostics) {
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", emitDeclarationResult.output, host.getCompilerOptions().emitBOM);
-        }
+    export function emitDeclarations(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile, diagnostics: Diagnostic[]): void {
+        forEachExpectedOutputFile(host, targetSourceFile, (outputFileName, sourceFiles) => {
+            let fileDiagnostics: Diagnostic[] = [];
+            let preprocessResult = preprocessDeclarations(sourceFiles, resolver, fileDiagnostics, host.getCompilerOptions());
+            if (fileDiagnostics.length === 0) {
+                writeDeclarations(outputFileName, preprocessResult, host, fileDiagnostics);
+            }
+            diagnostics.push.apply(diagnostics, fileDiagnostics);
+        });
     }
 }
