@@ -951,6 +951,20 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    export function isDefineCall(expression: CallExpression): boolean {
+        // In .js files, calls to the identifier 'define' are treated specially
+        // Walk up to the source file parent
+        let parent = expression.parent;
+        while(parent && parent.kind !== SyntaxKind.SourceFile) {
+            parent = parent.parent;
+        }
+        
+        return isJavaScript((<SourceFile>parent).fileName) &&
+            expression.expression.kind === SyntaxKind.Identifier &&
+            (<Identifier>expression.expression).text === 'define' &&
+            expression.arguments.length > 0;
+    }
+
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;

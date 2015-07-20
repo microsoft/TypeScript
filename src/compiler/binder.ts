@@ -6,8 +6,8 @@ namespace ts {
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
-        Instantiated    = 1,
-        ConstEnumOnly   = 2
+        Instantiated = 1,
+        ConstEnumOnly = 2
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
@@ -74,7 +74,7 @@ namespace ts {
         // If the current node is a container that also container that also contains locals.  Examples:
         //
         //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals   = IsContainer | HasLocals
+        IsContainerWithLocals = IsContainer | HasLocals
     }
 
     export function bindSourceFile(file: SourceFile) {
@@ -97,7 +97,7 @@ namespace ts {
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
         let isJavaScriptFile = isJavaScript(file.fileName);
-        let classifiableNames: Map<string> = {}; 
+        let classifiableNames: Map<string> = {};
 
         if (!file.locals) {
             bind(file);
@@ -149,6 +149,7 @@ namespace ts {
                 }
                 return (<Identifier | LiteralExpression>node.name).text;
             }
+
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return "__constructor";
@@ -176,6 +177,24 @@ namespace ts {
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
+                case SyntaxKind.CallExpression:
+                    Debug.assert(isDefineCall(<CallExpression>node));
+                    if ((<CallExpression>node).arguments[0].kind === SyntaxKind.StringLiteral) {
+                        let moduleName = (<StringLiteral>(<CallExpression>node).arguments[0]).text;
+                        console.log('define module name is (local) ' + moduleName);
+                        return '"' + moduleName + '"';
+                    }
+                    else {
+                        let parent = node.parent;
+                        while (parent && parent.kind !== SyntaxKind.SourceFile) {
+                            parent = parent.parent;
+                        }
+
+                        let sourceFileName = removeFileExtension((<SourceFile>parent).fileName);
+                        console.log('define module name (global) is ' + sourceFileName);
+
+                        return sourceFileName && ('"' + sourceFileName + '"');
+                    }
             }
         }
 
@@ -187,7 +206,7 @@ namespace ts {
             Debug.assert(!hasDynamicName(node));
 
             // The exported symbol for an export default function/class node is always named "default"
-            let name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+            let name = (node.flags & NodeFlags.Default && parent) ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -212,10 +231,10 @@ namespace ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
-                
+
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;   
-                } 
+                    classifiableNames[name] = name;
+                }
 
                 if (symbol.flags & excludes) {
                     if (node.name) {
@@ -350,7 +369,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocRecordType:
                     return ContainerFlags.IsContainer;
-                    
+
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -614,7 +633,7 @@ namespace ts {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
-                    // fall through.
+                // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
@@ -836,6 +855,7 @@ namespace ts {
 
         function bindWorker(node: Node) {
             switch (node.kind) {
+                /* Strict mode checks */
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
@@ -852,6 +872,12 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+
+                case SyntaxKind.CallExpression:
+                    if (isDefineCall(<CallExpression>node)) {
+                        return bindDefineCall(<CallExpression>node);
+                    }
+                    break;
 
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
@@ -967,6 +993,20 @@ namespace ts {
             if (node.name) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
+        }
+
+        function bindDefineCall(node: CallExpression) {
+            console.log('bind a define call');
+            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule | SymbolFlags.ExportValue, SymbolFlags.None);
+            symbol.isDefineModule = true;
+
+            // If this was a file-level module, hook up the file symbol to this module
+            // TODO not always
+            let parent = node.parent;
+            while(parent && parent.kind !== SyntaxKind.SourceFile) {
+                parent = parent.parent;
+            }
+            parent.symbol = symbol;
         }
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {

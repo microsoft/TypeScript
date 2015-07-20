@@ -3476,6 +3476,7 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
+
                     expression = finishNode(callExpr);
                     continue;
                 }
@@ -3483,6 +3484,7 @@ namespace ts {
                     let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
+
                     expression = finishNode(callExpr);
                     continue;
                 }
