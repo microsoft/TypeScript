@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/doNotEmitTripleSlashCommentsEvenInAmbientDeclaration.ts] ////
+//// [tests/cases/compiler/emitTripleSlashCommentsEvenInAmbientDeclaration.ts] ////
 
 //// [file0.ts]
 
@@ -10,3 +10,4 @@ declare var OData: any;
 
 //// [file0.js]
 //// [file1.js]
+/// <reference path="file0.ts" />

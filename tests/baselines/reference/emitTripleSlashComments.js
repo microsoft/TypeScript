@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/doNotEmitTripleSlashComments.ts] ////
+//// [tests/cases/compiler/emitTripleSlashComments.ts] ////
 
 //// [file0.ts]
 
@@ -14,4 +14,7 @@ var OData: any;
 //// [file0.js]
 //// [file2.js]
 //// [file1.js]
+/// <reference path="file0.ts" />
+/// <reference path="file2.ts" />
+/// <amd-dependency path="/js/libs/hgn.js!app/templates/home" name="compiler"/>
 var OData;
