@@ -5009,7 +5009,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             /** Serializes the return type of function. Used by the __metadata decorator for a method. */
             function emitSerializedReturnTypeOfNode(node: Node): string | string[] {
-                if (node && isFunctionLike(node)) {
+                if (node && isFunctionLike(node) && (<FunctionLikeDeclaration>node).type) {
                     emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
                     return;
                 }
