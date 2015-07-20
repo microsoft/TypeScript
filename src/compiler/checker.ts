@@ -60,18 +60,8 @@ namespace ts {
             getDiagnostics,
             getGlobalDiagnostics,
 
-            // Get the narrowed type of symbol at given location instead of just getting
-            // the type of the symbol.
-            // eg.
-            // function foo(a: string | number) {
-            //     if (typeof a === "string") {
-            //         a/**/
-            //     }
-            // }
-            // getTypeOfSymbol for a would return type of parameter symbol string | number
-            // Unless we provide location /**/, checker wouldn't know how to narrow the type
-            // By using getNarrowedTypeOfSymbol would return string since it would be able to narrow
-            // it by typeguard in the if true condition
+            // The language service will always care about the narrowed type of a symbol, because that is
+            // the type the language says the symbol should have.
             getTypeOfSymbolAtLocation: getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
@@ -215,7 +205,9 @@ namespace ts {
         let assignableRelation: Map<RelationComparisonResult> = {};
         let identityRelation: Map<RelationComparisonResult> = {};
 
-        enum TypeSystemPropertyName {
+        type TypeSystemEntity = Symbol | Type | Signature;
+
+        const enum TypeSystemPropertyName {
             Type,
             ResolvedBaseConstructorType,
             DeclaredType,
@@ -2242,18 +2234,18 @@ namespace ts {
             if (propertyName === TypeSystemPropertyName.Type) {
                 return getSymbolLinks(<Symbol>target).type;
             }
-            else if (propertyName === TypeSystemPropertyName.DeclaredType) {
+            if (propertyName === TypeSystemPropertyName.DeclaredType) {
                 return getSymbolLinks(<Symbol>target).declaredType;
             }
-            else if (propertyName === TypeSystemPropertyName.ResolvedBaseConstructorType) {
+            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstructorType) {
                 Debug.assert(!!((<Type>target).flags & TypeFlags.Class));
                 return (<InterfaceType>target).resolvedBaseConstructorType;
             }
-            else if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
+            if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
                 return (<Signature>target).resolvedReturnType;
             }
 
-            Debug.fail("Unhandled TypeSystemObjectKind");
+            Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
         }
 
         // Pop an entry from the type resolution stack and return its associated result value. The result value will
