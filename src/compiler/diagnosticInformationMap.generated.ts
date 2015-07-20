@@ -254,6 +254,7 @@ namespace ts {
         Only_a_void_function_can_be_called_with_the_new_keyword: { code: 2350, category: DiagnosticCategory.Error, key: "Only a void function can be called with the 'new' keyword." },
         Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature: { code: 2351, category: DiagnosticCategory.Error, key: "Cannot use 'new' with an expression whose type lacks a call or construct signature." },
         Neither_type_0_nor_type_1_is_assignable_to_the_other: { code: 2352, category: DiagnosticCategory.Error, key: "Neither type '{0}' nor type '{1}' is assignable to the other." },
+        Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1: { code: 2353, category: DiagnosticCategory.Error, key: "Object literal may only specify known properties and '{0}' does not exist in type '{1}'." },
         No_best_common_type_exists_among_return_expressions: { code: 2354, category: DiagnosticCategory.Error, key: "No best common type exists among return expressions." },
         A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement: { code: 2355, category: DiagnosticCategory.Error, key: "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement." },
         An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type: { code: 2356, category: DiagnosticCategory.Error, key: "An arithmetic operand must be of type 'any', 'number' or an enum type." },

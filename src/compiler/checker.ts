@@ -4698,7 +4698,7 @@ namespace ts {
                 for (let prop of getPropertiesOfObjectType(source)) {
                     if (!isKnownProperty(target, prop.name)) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
+                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(prop), typeToString(target));
                         }
                         return true;
                     }
