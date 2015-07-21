@@ -1425,6 +1425,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxExpression:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PostfixUnaryExpression:
@@ -1484,6 +1485,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
                 else if (languageVersion < ScriptTarget.ES6) {
+                    debugger;
                     let declaration = resolver.getReferencedImportDeclaration(node);
                     if (declaration) {
                         if (declaration.kind === SyntaxKind.ImportClause) {
