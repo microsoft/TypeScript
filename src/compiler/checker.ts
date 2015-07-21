@@ -14037,7 +14037,11 @@ namespace ts {
                 return true;
             }
             // const enums and modules that contain only const enums are not considered values from the emit perespective
-            return target !== unknownSymbol && target && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
+            // unless 'preserveConstEnums' option is set to true
+            return target !== unknownSymbol && 
+                target && 
+                target.flags & SymbolFlags.Value && 
+                (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(target));
         }
 
         function isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean {
