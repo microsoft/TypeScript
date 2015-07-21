@@ -383,6 +383,7 @@ module Underscore {
         evaluate?: RegExp;
         interpolate?: RegExp;
         escape?: RegExp;
+        variable?: string;
     }
 
     export interface Static {

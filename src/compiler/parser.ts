@@ -3295,7 +3295,7 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             let expression = parseTokenNode<PrimaryExpression>();
-            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken) {
+            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken || token === SyntaxKind.OpenBracketToken) {
                 return expression;
             }
 

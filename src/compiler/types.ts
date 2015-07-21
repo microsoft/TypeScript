@@ -1762,10 +1762,12 @@ namespace ts {
         FromSignature           = 0x00040000,  // Created for signature assignment check
         ObjectLiteral           = 0x00080000,  // Originates in an object literal
         /* @internal */
-        ContainsUndefinedOrNull = 0x00100000,  // Type is or contains Undefined or Null type
+        FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsObjectLiteral   = 0x00200000,  // Type is or contains object literal type
-        ESSymbol                = 0x00400000,  // Type of symbol primitive introduced in ES6
+        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
+        /* @internal */
+        ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
+        ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1858,6 +1860,14 @@ namespace ts {
         numberIndexType?: Type;            // Numeric index type
     }
 
+    /* @internal */
+    // Object literals are initially marked fresh. Freshness disappears following an assignment,
+    // before a type assertion, or when when an object literal's type is widened. The regular
+    // version of a fresh type is identical except for the TypeFlags.FreshObjectLiteral flag.
+    export interface FreshObjectLiteralType extends ResolvedType {
+        regularType: ResolvedType;  // Regular version of fresh type
+    }
+
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
@@ -1912,6 +1922,9 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        context?: InferenceContext; // The inference context this mapper was created from.
+                                    // Only inference mappers have this set (in createInferenceMapper).
+                                    // The identity mapper and regular instantiation mappers do not need it.
     }
 
     /* @internal */
@@ -2208,6 +2221,7 @@ namespace ts {
 
     export interface CompilerHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;

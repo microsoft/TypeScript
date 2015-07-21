@@ -26,9 +26,8 @@ module FourSlash {
     export interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)
         content: string;
-
         fileName: string;
-
+        version: number;
         // File-specific options (name/value pairs)
         fileOptions: { [index: string]: string; };
     }
@@ -671,19 +670,19 @@ module FourSlash {
 
             let completions = this.getCompletionListAtCaret();
             if ((!completions || completions.entries.length === 0) && negative) {
-                this.raiseError("Completion list is empty at Caret");
-            } else if ((completions && completions.entries.length !== 0) && !negative) {
-
+                this.raiseError("Completion list is empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition);
+            }
+            else if (completions && completions.entries.length !== 0 && !negative) {
                 let errorMsg = "\n" + "Completion List contains: [" + completions.entries[0].name;
                 for (let i = 1; i < completions.entries.length; i++) {
                     errorMsg += ", " + completions.entries[i].name;
                 }
                 errorMsg += "]\n";
 
-                Harness.IO.log(errorMsg);
-                this.raiseError("Completion list is not empty at Caret");
+                this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
             }
         }
+
 
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             let completions = this.getCompletionListAtCaret();

@@ -1105,6 +1105,7 @@ namespace ts {
     }
 
     export interface HighlightSpan {
+        fileName?: string;
         textSpan: TextSpan;
         kind: string;
     }
@@ -1411,7 +1412,9 @@ namespace ts {
           * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+
+        reportStats(): string;
     }
 
     // TODO: move these to enums
@@ -3234,8 +3237,19 @@ namespace ts {
                     // We are *only* completing on properties from the type being destructured.
                     isNewIdentifierLocation = false;
 
-                    typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                    existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                    let rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
+                    if (isVariableLike(rootDeclaration)) {
+                        // We don't want to complete using the type acquired by the shape 
+                        // of the binding pattern; we are only interested in types acquired
+                        // through type declaration or inference.
+                        if (rootDeclaration.initializer || rootDeclaration.type) {
+                            typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                            existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                        }
+                    }
+                    else {
+                        Debug.fail("Root declaration is not variable-like.")
+                    }
                 }
                 else {
                     Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);

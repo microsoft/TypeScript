@@ -3012,6 +3012,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return result;
             }
 
+            function emitEs6ExportDefaultCompat(node: Node) {
+                if (node.parent.kind === SyntaxKind.SourceFile) {
+                    Debug.assert(!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
+                    // only allow export default at a source file level
+                    if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
+                        if (!currentSourceFile.symbol.exports["___esModule"]) {
+                            if (languageVersion === ScriptTarget.ES5) {
+                                // default value of configurable, enumerable, writable are `false`. 
+                                write("Object.defineProperty(exports, \"__esModule\", { value: true });");
+                                writeLine();
+                            }
+                            else if (languageVersion === ScriptTarget.ES3) {
+                                write("exports.__esModule = true;");
+                                writeLine();
+                            }
+                        }
+                    }
+                }
+            }
+
             function emitExportMemberAssignment(node: FunctionLikeDeclaration | ClassDeclaration) {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
@@ -3034,9 +3054,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         if (node.flags & NodeFlags.Default) {
+                            emitEs6ExportDefaultCompat(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("exports[\"default\"]");
-                            } else {
+                            }
+                            else {
                                 write("exports.default");
                             }
                         }
@@ -3249,7 +3271,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitAssignmentExpression(root: BinaryExpression) {
                     let target = root.left;
                     let value = root.right;
-                    if (isAssignmentExpressionStatement) {
+
+                    if (isEmptyObjectLiteralOrArrayLiteral(target)) {
+                        emit(value);
+                    }
+                    else if (isAssignmentExpressionStatement) {
                         emitDestructuringAssignment(target, value);
                     }
                     else {
@@ -4215,10 +4241,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
+                let startIndex = 0;
+
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
+                    // Emit all the directive prologues (like "use strict").  These have to come before
+                    // any other preamble code we write (like parameter initializers).
+                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
@@ -4253,7 +4284,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (superCall) {
                         statements = statements.slice(1);
                     }
-                    emitLines(statements);
+                    emitLinesStartingAt(statements, startIndex);
                 }
                 emitTempDeclarations(/*newLine*/ true);
                 writeLine();
@@ -5529,6 +5560,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(")");
                         }
                         else {
+                            emitEs6ExportDefaultCompat(node);
                             emitContainingModuleName(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("[\"default\"] = ");
@@ -5747,6 +5779,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(`function ${exportStarFunction}(m) {`);
                     increaseIndent();
                     writeLine();
+                    write(`var exports = {};`);
+                    writeLine();
                     write(`for(var n in m) {`);
                     increaseIndent();
                     writeLine();
@@ -5754,10 +5788,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (localNames) {
                         write(`&& !${localNames}.hasOwnProperty(n)`);
                     }
-                    write(`) ${exportFunctionForFile}(n, m[n]);`);
+                    write(`) exports[n] = m[n];`);
                     decreaseIndent();
                     writeLine();
                     write("}");
+                    writeLine();
+                    write(`${exportFunctionForFile}(exports);`)
                     decreaseIndent();
                     writeLine();
                     write("}");
@@ -6090,16 +6126,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if ((<ExportDeclaration>importNode).exportClause) {
                                 // export {a, b as c} from 'foo'
                                 // emit as:
-                                // exports('a', _foo["a"])
-                                // exports('c', _foo["b"])
+                                // var reexports = {}
+                                // reexports['a'] = _foo["a"];
+                                // reexports['c'] = _foo["b"];
+                                // exports_(reexports);
+                                let reexportsVariableName = makeUniqueName("reexports");
+                                writeLine();
+                                write(`var ${reexportsVariableName} = {};`)
+                                writeLine();
                                 for (let e of (<ExportDeclaration>importNode).exportClause.elements) {
-                                    writeLine();
-                                    write(`${exportFunctionForFile}("`);
+                                    write(`${reexportsVariableName}["`);
                                     emitNodeWithoutSourceMap(e.name);
-                                    write(`", ${parameterName}["`);
+                                    write(`"] = ${parameterName}["`);
                                     emitNodeWithoutSourceMap(e.propertyName || e.name);
-                                    write(`"]);`);
+                                    write(`"];`);
+                                    writeLine();
                                 }
+                                write(`${exportFunctionForFile}(${reexportsVariableName});`);
                             }
                             else {
                                 writeLine();

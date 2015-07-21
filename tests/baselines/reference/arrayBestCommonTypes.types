@@ -294,8 +294,8 @@ module EmptyTypes {
 
             // Order matters here so test all the variants
             var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
->a1 : { x: any; y: string; }[]
->[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : { x: any; y: string; }[]
+>a1 : ({ x: number; y: string; } | { x: string; y: string; } | { x: any; y: string; })[]
+>[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : ({ x: number; y: string; } | { x: string; y: string; } | { x: any; y: string; })[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
 >0 : number
@@ -313,8 +313,8 @@ module EmptyTypes {
 >'a' : string
 
             var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
->a2 : { x: any; y: string; }[]
->[{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>a2 : ({ x: any; y: string; } | { x: number; y: string; } | { x: string; y: string; })[]
+>[{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }] : ({ x: any; y: string; } | { x: number; y: string; } | { x: string; y: string; })[]
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >x : any
 >anyObj : any
@@ -332,8 +332,8 @@ module EmptyTypes {
 >'a' : string
 
             var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];
->a3 : { x: any; y: string; }[]
->[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>a3 : ({ x: number; y: string; } | { x: any; y: string; } | { x: string; y: string; })[]
+>[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : ({ x: number; y: string; } | { x: any; y: string; } | { x: string; y: string; })[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
 >0 : number
@@ -366,22 +366,22 @@ module EmptyTypes {
 >base2 : typeof base2
 
             var b1 = [baseObj, base2Obj, ifaceObj];
->b1 : iface[]
->[baseObj, base2Obj, ifaceObj] : iface[]
+>b1 : base[]
+>[baseObj, base2Obj, ifaceObj] : base[]
 >baseObj : base
 >base2Obj : base2
 >ifaceObj : iface
 
             var b2 = [base2Obj, baseObj, ifaceObj];
->b2 : iface[]
->[base2Obj, baseObj, ifaceObj] : iface[]
+>b2 : base2[]
+>[base2Obj, baseObj, ifaceObj] : base2[]
 >base2Obj : base2
 >baseObj : base
 >ifaceObj : iface
 
             var b3 = [baseObj, ifaceObj, base2Obj];
->b3 : iface[]
->[baseObj, ifaceObj, base2Obj] : iface[]
+>b3 : base[]
+>[baseObj, ifaceObj, base2Obj] : base[]
 >baseObj : base
 >ifaceObj : iface
 >base2Obj : base2
@@ -639,7 +639,7 @@ module NonEmptyTypes {
 >x : number
 >y : base
 >base : base
->[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : ({ x: number; y: derived; } | { x: number; y: base; })[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
 >7 : number
@@ -658,7 +658,7 @@ module NonEmptyTypes {
 >x : boolean
 >y : base
 >base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: base; }[]
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: boolean; y: derived; } | { x: boolean; y: base; })[]
 >{ x: true, y: new derived() } : { x: boolean; y: derived; }
 >x : boolean
 >true : boolean
@@ -697,8 +697,8 @@ module NonEmptyTypes {
 
             // Order matters here so test all the variants
             var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
->a1 : { x: any; y: string; }[]
->[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : { x: any; y: string; }[]
+>a1 : ({ x: number; y: string; } | { x: string; y: string; } | { x: any; y: string; })[]
+>[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : ({ x: number; y: string; } | { x: string; y: string; } | { x: any; y: string; })[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
 >0 : number
@@ -716,8 +716,8 @@ module NonEmptyTypes {
 >'a' : string
 
             var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
->a2 : { x: any; y: string; }[]
->[{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>a2 : ({ x: any; y: string; } | { x: number; y: string; } | { x: string; y: string; })[]
+>[{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }] : ({ x: any; y: string; } | { x: number; y: string; } | { x: string; y: string; })[]
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >x : any
 >anyObj : any
@@ -735,8 +735,8 @@ module NonEmptyTypes {
 >'a' : string
 
             var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];
->a3 : { x: any; y: string; }[]
->[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>a3 : ({ x: number; y: string; } | { x: any; y: string; } | { x: string; y: string; })[]
+>[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : ({ x: number; y: string; } | { x: any; y: string; } | { x: string; y: string; })[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
 >0 : number
@@ -769,29 +769,29 @@ module NonEmptyTypes {
 >base2 : typeof base2
 
             var b1 = [baseObj, base2Obj, ifaceObj];
->b1 : iface[]
->[baseObj, base2Obj, ifaceObj] : iface[]
+>b1 : (base | base2 | iface)[]
+>[baseObj, base2Obj, ifaceObj] : (base | base2 | iface)[]
 >baseObj : base
 >base2Obj : base2
 >ifaceObj : iface
 
             var b2 = [base2Obj, baseObj, ifaceObj];
->b2 : iface[]
->[base2Obj, baseObj, ifaceObj] : iface[]
+>b2 : (base2 | base | iface)[]
+>[base2Obj, baseObj, ifaceObj] : (base2 | base | iface)[]
 >base2Obj : base2
 >baseObj : base
 >ifaceObj : iface
 
             var b3 = [baseObj, ifaceObj, base2Obj];
->b3 : iface[]
->[baseObj, ifaceObj, base2Obj] : iface[]
+>b3 : (base | iface | base2)[]
+>[baseObj, ifaceObj, base2Obj] : (base | iface | base2)[]
 >baseObj : base
 >ifaceObj : iface
 >base2Obj : base2
 
             var b4 = [ifaceObj, baseObj, base2Obj];
->b4 : iface[]
->[ifaceObj, baseObj, base2Obj] : iface[]
+>b4 : (iface | base | base2)[]
+>[ifaceObj, baseObj, base2Obj] : (iface | base | base2)[]
 >ifaceObj : iface
 >baseObj : base
 >base2Obj : base2
