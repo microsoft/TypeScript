@@ -1005,7 +1005,7 @@
         "category": "Error",
         "code": 2352
     },
-    "Object literal may only specify known properties and '{0}' does not exist in type '{1}'.": {
+    "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
     },
