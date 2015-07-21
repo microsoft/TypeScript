@@ -1942,6 +1942,18 @@ module FourSlash {
             }
         }
 
+        public verfiyDocCommentScaffolding(position: number, expected: ts.TextInsertion) {
+            let actual = this.languageService.getDocCommentScaffoldingAtPosition(this.activeFile.fileName, position);
+
+            if (actual.newText !== expected.newText) {
+                this.raiseError('verfiyDocCommentScaffolding failed - expected insertion:\n' + expected.newText + 'actual insertion:\n' + actual.newText);
+            }
+
+            if (actual.cursorOffset !== expected.cursorOffset) {
+                this.raiseError('verfiyDocCommentScaffolding failed - expected cursorOffset: ' + expected.cursorOffset + ',\tactual cursorOffset:' + actual.cursorOffset);
+            }
+        }
+
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
             this.taoInvalidReason = 'verifyMatchingBracePosition NYI';
 

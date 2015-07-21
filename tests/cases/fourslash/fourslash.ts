@@ -269,10 +269,10 @@ module FourSlashInterface {
         }
 
         /**
-            Compiles the current file and evaluates 'expr' in a context containing
-            the emitted output, then compares (using ===) the result of that expression
-            to 'value'. Do not use this function with external modules as it is not supported.
-        */
+         * Compiles the current file and evaluates 'expr' in a context containing
+         * the emitted output, then compares (using ===) the result of that expression
+         * to 'value'. Do not use this function with external modules as it is not supported.
+         */
         public eval(expr: string, value: any) {
             FourSlash.currentTestState.verifyEval(expr, value);
         }
@@ -363,6 +363,11 @@ module FourSlashInterface {
 
         public setVerifyDocComments(val: boolean) {
             FourSlash.currentTestState.setVerifyDocComments(val);
+        }
+
+        // Will fix in fourslash-referencing
+        public DocCommentScaffolding(position: number, expected: ts.TextInsertion) {
+            FourSlash.currentTestState.verifyDocCommentScaffolding(position, expected);
         }
 
         public getScriptLexicalStructureListCount(count: number) {
