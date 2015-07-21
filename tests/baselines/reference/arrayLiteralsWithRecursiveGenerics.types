@@ -77,8 +77,8 @@ var myDerivedList: DerivedList<number>;
 >DerivedList : DerivedList<U>
 
 var as = [list, myDerivedList]; // List<number>[]
->as : List<number>[]
->[list, myDerivedList] : List<number>[]
+>as : (List<number> | DerivedList<number>)[]
+>[list, myDerivedList] : (List<number> | DerivedList<number>)[]
 >list : List<number>
 >myDerivedList : DerivedList<number>
 

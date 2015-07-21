@@ -5,9 +5,8 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(16,1): error
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(19,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(20,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(21,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(24,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(25,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(26,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(24,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(26,40): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(29,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(30,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(31,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -35,7 +34,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(69,12): erro
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (35 errors) ====
+==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (34 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -75,13 +74,11 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     var unionOfDifferentNumberOfSignatures: { new (a: number): number; } | { new (a: number): Date; new (a: string): boolean; };
     new unionOfDifferentNumberOfSignatures(); // error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     new unionOfDifferentNumberOfSignatures(10); // error - no call signatures
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     new unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                                           ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
     var unionWithDifferentParameterCount: { new (a: string): string; } | { new (a: string, b: number): number; };
     new unionWithDifferentParameterCount();// no  call signature

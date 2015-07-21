@@ -1,0 +1,75 @@
+=== tests/cases/compiler/inferentialTypingUsingApparentType3.ts ===
+interface Field<T> {
+>Field : Field<T>
+>T : T
+
+    clean(input: T): T
+>clean : (input: T) => T
+>input : T
+>T : T
+>T : T
+}
+
+class CharField implements Field<string> {
+>CharField : CharField
+>Field : Field<T>
+
+    clean(input: string) {
+>clean : (input: string) => string
+>input : string
+
+        return "Yup";
+>"Yup" : string
+    }
+}
+
+class NumberField implements Field<number> {
+>NumberField : NumberField
+>Field : Field<T>
+
+    clean(input: number) {
+>clean : (input: number) => number
+>input : number
+
+        return 123;
+>123 : number
+    }
+}
+
+class ObjectField<A, T extends { [name: string]: Field<any> }> {
+>ObjectField : ObjectField<A, T>
+>A : A
+>T : T
+>name : string
+>Field : Field<T>
+
+    constructor(public fields: T) { }
+>fields : T
+>T : T
+}
+
+var person = new ObjectField({
+>person : ObjectField<{}, { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }>
+>new ObjectField({    id: new NumberField(),    name: new CharField()}) : ObjectField<{}, { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }>
+>ObjectField : typeof ObjectField
+>{    id: new NumberField(),    name: new CharField()} : { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }
+
+    id: new NumberField(),
+>id : NumberField
+>new NumberField() : NumberField
+>NumberField : typeof NumberField
+
+    name: new CharField()
+>name : CharField
+>new CharField() : CharField
+>CharField : typeof CharField
+
+});
+
+person.fields.id;
+>person.fields.id : NumberField
+>person.fields : { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }
+>person : ObjectField<{}, { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }>
+>fields : { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }
+>id : NumberField
+

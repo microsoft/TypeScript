@@ -29,4 +29,4 @@ declare class c {
 declare var x: (() => c)[];
 declare var y: (() => c)[];
 declare var k: (() => c) | string;
-declare var l: string | (() => c);
+declare var l: (() => c) | string;

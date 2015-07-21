@@ -17,3 +17,4 @@ verify.completionListContains("property2");
 verify.not.completionListContains("property1");
 verify.not.completionListContains("propertyOfI_2");
 verify.not.completionListContains("propertyOfI_1");
+verify.not.completionListAllowsNewIdentifier();
