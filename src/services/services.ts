@@ -1035,7 +1035,7 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
-        getDocCommentScaffoldingAtPosition(fileName: string, position: number): string;
+        getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion;
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -1081,6 +1081,11 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface TextInsertion {
+        newText: string;
+        cursorOffset: number;
     }
 
     export interface RenameLocation {
@@ -6755,9 +6760,9 @@ namespace ts {
          * @param position The (character-indexed) position in the file where the check should
          * be performed.
          */
-        function getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
-            const nullResult = "/**";
-            const emptyCompletion = "/** */";
+        function getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion {
+            const nullResult      = { newText: "/**",    cursorOffset: 3 };
+            const emptyCompletion = { newText: "/** */", cursorOffset: 3 };
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
@@ -6783,9 +6788,15 @@ namespace ts {
             let docParams = parameters.map((p, index) =>
                 indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + "\n");
 
-            let result = "/**\n" + docParams.reduce((prev, cur) => prev + cur, "") + indentationStr + " */";
+            let result = 
+                /* opening comment */               "/**\n" + 
+                /* first line for function info */  indentationStr + " * \n" + 
+                /* paramters */                     docParams.reduce((prev, cur) => prev + cur, "") +
+                /* closing comment */               indentationStr + " */";
+            
+            let cursorOffset = /* "/**\n" */ 4 + indentationStr.length + /* " * " */ 3;
 
-            return result;
+            return {newText: result, cursorOffset: cursorOffset };
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {

@@ -205,6 +205,9 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        /**
+         * Returns JSON-encoded value of the type TextInsertion.
+         */
         getDocCommentScaffoldingAtPosition(fileName: string, position: number): string;
 
         getEmitOutput(fileName: string): string;
@@ -816,12 +819,8 @@ namespace ts {
         public getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getDocCommentScaffoldingAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    var commentText = this.languageService.getDocCommentScaffoldingAtPosition(fileName, position);
-                    return commentText;
-                }
-                
-            )
+                () => this.languageService.getDocCommentScaffoldingAtPosition(fileName, position)
+            );
         }
 
         /// NAVIGATE TO

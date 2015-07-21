@@ -381,7 +381,7 @@ module Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
+        getDocCommentScaffoldingAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentScaffoldingAtPosition(fileName, position));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
