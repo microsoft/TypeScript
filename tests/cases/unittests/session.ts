@@ -30,8 +30,8 @@ module ts.server {
 	};
 	
 	describe('the Session class', () => {
-		let session:Session,
-			lastSent:protocol.Message;
+		let session: Session,
+			lastSent: protocol.Message;
 
 		beforeEach(() => {
 			session = new Session(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
@@ -111,10 +111,10 @@ module ts.server {
 						type: 'command'
 					};
 					session.onMessage(JSON.stringify(req));
-					req.seq+=2;
+					req.seq += 2;
 					req.arguments = {};
 					session.onMessage(JSON.stringify(req));
-					req.seq+=2;
+					req.seq += 2;
 					req.arguments = null;
 					session.onMessage(JSON.stringify(req));
 				}
@@ -147,7 +147,7 @@ module ts.server {
 
 		describe('exit', () => {
 			it('is a noop which can be handled by subclasses', () => {
-				session.exit(); //does nothing, should keep running tests
+				session.exit(); // Does nothing, should keep running tests
 				expect(session).to.exist;
 			});
 		});
@@ -156,7 +156,7 @@ module ts.server {
 			it('is an overrideable handle which sends protocol messages over the wire', () => {
 				let msg = {seq: 0, type: 'none'},
 				strmsg = JSON.stringify(msg),
-				len = 1+Buffer.byteLength(strmsg, 'utf8'),
+				len = 1 + Buffer.byteLength(strmsg, 'utf8'),
 				resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
 				session.send = Session.prototype.send;
@@ -246,7 +246,7 @@ module ts.server {
 	describe('how Session is extendable via subclassing', () => {
 		let TestSession = class extends Session {
 			lastSent: protocol.Message;
-			customHandler:string = 'testhandler';
+			customHandler: string = 'testhandler';
 			constructor(){
 				super(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
 				this.addProtocolHandler(this.customHandler, () => {
@@ -338,8 +338,9 @@ module ts.server {
 			}
 			
 			handleRequest(msg: protocol.Request) {
+				let response: protocol.Response;
 				try {
-					var {response} = this.executeCommand(msg);
+					response = this.executeCommand(msg).response;
 				} catch (e) {
 					this.output(undefined, msg.command, msg.seq, e.toString());
 					return;
@@ -351,27 +352,27 @@ module ts.server {
 
 			consumeQueue() {
 				while (this.queue.length > 0) {
-					let elem = this.queue[this.queue.length-1];
-					this.queue = this.queue.slice(0,this.queue.length-1);
+					let elem = this.queue[this.queue.length - 1];
+					this.queue = this.queue.slice(0, this.queue.length - 1);
 					this.handleRequest(elem);
 				}
 			}
 		},
 		InProcClient = class {
-			private server: Session&{enqueue: (msg: protocol.Request) => void};
+			private server: Session & {enqueue: (msg: protocol.Request) => void};
 			private seq: number = 0;
 			private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
 			private eventHandlers: ts.Map<(args: any) => void> = {};
 
 			handle(msg: protocol.Message): void {
 				if (msg.type === 'response') {
-					var response = <protocol.Response>msg;
+					let response = <protocol.Response>msg;
 					if (this.callbacks[response.request_seq]) {
 						this.callbacks[response.request_seq](response);
 						delete this.callbacks[response.request_seq];
 					}
 				} else if (msg.type === 'event') {
-					var event = <protocol.Event>msg;
+					let event = <protocol.Event>msg;
 					this.emit(event.event, event.body);
 				}
 			}
@@ -387,7 +388,7 @@ module ts.server {
 				this.eventHandlers[name] = handler;
 			}
 
-			connect(session: Session&{enqueue: (msg: protocol.Request) => void}): void {
+			connect(session: Session & {enqueue: (msg: protocol.Request) => void}): void {
 				this.server = session;
 			}
 			
@@ -417,20 +418,20 @@ module ts.server {
 			},
 			responses = 0;
 
-			//Connect the client
+			// Connect the client
 			cli.connect(session);
 			
-			//add an event handler
+			// Add an event handler
 			cli.on('testevent', (eventinfo) => {
 				expect(eventinfo).to.equal(toEvent);
 				responses++;
 				expect(responses).to.equal(1);
 			});
 			
-			//trigger said event from the server
-			session.event(toEvent,'testevent');
+			// Trigger said event from the server
+			session.event(toEvent, 'testevent');
 			
-			//Queue an echo command
+			// Queue an echo command
 			cli.execute('echo', toEcho, (resp) => {
 				assert(resp.success, resp.message);
 				responses++;
@@ -438,7 +439,7 @@ module ts.server {
 				expect(resp.body).to.deep.equal(toEcho);
 			});
 			
-			//Queue a configure command
+			// Queue a configure command
 			cli.execute('configure', {
 				hostInfo: 'unit test',
 				formatOptions: {
@@ -451,7 +452,7 @@ module ts.server {
 				done();
 			});
 			
-			//Consume the queue and trigger the callbacks
+			// Consume the queue and trigger the callbacks
 			session.consumeQueue();
 		});
 	});
