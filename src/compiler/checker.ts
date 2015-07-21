@@ -7261,7 +7261,7 @@ namespace ts {
                 if (links.jsxFlags & JsxFlags.ClassElement) {
                     let elemInstanceType = getJsxElementInstanceType(node);
 
-                    if (isTypeAny(elemInstanceType)) {
+                    if (!elemInstanceType || isTypeAny(elemInstanceType)) {
                         return links.resolvedJsxType = anyType;
                     }
 
