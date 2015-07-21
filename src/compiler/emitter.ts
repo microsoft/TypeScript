@@ -6763,17 +6763,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // If removeComments flag is false, then do not filter out any comment
                 if (!removeComments || !ranges) return ranges;
 
-                // IF removeComments flag is true, then filter out comment by following:
+                // If removeComments flag is true, then filter out comment by following:
                 //      - Pinned comments : keep all
                 //      - /// comments : keep it if the comments are at the top of the file otherwise remove
                 //      - normal comments: remove all
                 if (removeComments) {
-                    if (isTopOfFileComments) {
-                        ranges = filter(ranges, isTripleSlashOrPinnedComments);
-                    }
-                    else {
-                        ranges = filter(ranges, isPinnedComments);
-                    }
+                    ranges = isTopOfFileComments ? filter(ranges, isTripleSlashOrPinnedComments) : filter(ranges, isPinnedComments);
                     return ranges.length === 0 ? undefined : ranges;
                 }
             }
