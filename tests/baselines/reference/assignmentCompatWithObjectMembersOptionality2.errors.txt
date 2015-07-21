@@ -1,3 +1,18 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(33,5): error TS2322: Type 'D' is not assignable to type 'C'.
+  Weak type 'C' has no properties in common with 'D'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(34,5): error TS2322: Type 'E' is not assignable to type 'C'.
+  Weak type 'C' has no properties in common with 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(35,5): error TS2322: Type 'F' is not assignable to type 'C'.
+  Weak type 'C' has no properties in common with 'F'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(38,5): error TS2322: Type 'D' is not assignable to type '{ opt?: Base; }'.
+  Weak type '{ opt?: Base; }' has no properties in common with 'D'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(39,5): error TS2322: Type 'E' is not assignable to type '{ opt?: Base; }'.
+  Weak type '{ opt?: Base; }' has no properties in common with 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(40,5): error TS2322: Type 'F' is not assignable to type '{ opt?: Base; }'.
+  Weak type '{ opt?: Base; }' has no properties in common with 'F'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(43,5): error TS2322: Type 'D' is not assignable to type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(44,5): error TS2322: Type 'E' is not assignable to type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(45,5): error TS2322: Type 'F' is not assignable to type '{ opt?: Base; }'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(74,5): error TS2322: Type 'D' is not assignable to type 'C'.
   Property 'opt' is missing in type 'D'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(75,5): error TS2322: Type 'E' is not assignable to type 'C'.
@@ -18,7 +33,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Property 'opt' is missing in type 'F'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts (9 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts (18 errors) ====
     // M is optional and S contains no property with the same name as M
     // N is optional and T contains no property with the same name as N
     
@@ -52,18 +67,42 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
         // all ok
         c = d;
+        ~
+!!! error TS2322: Type 'D' is not assignable to type 'C'.
+!!! error TS2322:   Weak type 'C' has no properties in common with 'D'.
         c = e;
+        ~
+!!! error TS2322: Type 'E' is not assignable to type 'C'.
+!!! error TS2322:   Weak type 'C' has no properties in common with 'E'.
         c = f;
+        ~
+!!! error TS2322: Type 'F' is not assignable to type 'C'.
+!!! error TS2322:   Weak type 'C' has no properties in common with 'F'.
         c = a;
     
         a = d;
+        ~
+!!! error TS2322: Type 'D' is not assignable to type '{ opt?: Base; }'.
+!!! error TS2322:   Weak type '{ opt?: Base; }' has no properties in common with 'D'.
         a = e;
+        ~
+!!! error TS2322: Type 'E' is not assignable to type '{ opt?: Base; }'.
+!!! error TS2322:   Weak type '{ opt?: Base; }' has no properties in common with 'E'.
         a = f;
+        ~
+!!! error TS2322: Type 'F' is not assignable to type '{ opt?: Base; }'.
+!!! error TS2322:   Weak type '{ opt?: Base; }' has no properties in common with 'F'.
         a = c;
     
         b = d;
+        ~
+!!! error TS2322: Type 'D' is not assignable to type '{ opt?: Base; }'.
         b = e;
+        ~
+!!! error TS2322: Type 'E' is not assignable to type '{ opt?: Base; }'.
         b = f;
+        ~
+!!! error TS2322: Type 'F' is not assignable to type '{ opt?: Base; }'.
         b = a;
         b = c;
     }

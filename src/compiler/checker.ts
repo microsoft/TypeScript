@@ -4846,8 +4846,13 @@ namespace ts {
                 let result = Ternary.True;
                 let properties = getPropertiesOfObjectType(target);
                 let requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectLiteral);
+                let foundMatchingProperty = !isWeak(target);
                 for (let targetProp of properties) {
                     let sourceProp = getPropertyOfType(source, targetProp.name);
+
+                    if (sourceProp) {
+                        foundMatchingProperty = true;
+                    }
 
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
@@ -4920,6 +4925,14 @@ namespace ts {
                         }
                     }
                 }
+
+                if (!foundMatchingProperty && getPropertiesOfType(source).length > 0) {
+                    if (reportErrors) {
+                        reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
+                    }
+                    return Ternary.False;
+                }
+
                 return result;
             }
 
@@ -5210,6 +5223,17 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        // A type is 'weak' if it is an object type with at least one optional property
+        // and no required properties or index signatures
+        function isWeak(type: Type) {
+            let props = getPropertiesOfType(type);
+            return type.flags & TypeFlags.ObjectType &&
+                props.length > 0 &&
+                !forEach(props, p => !(p.flags & SymbolFlags.Optional)) &&
+                !getIndexTypeOfType(type, IndexKind.String) &&
+                !getIndexTypeOfType(type, IndexKind.Number);
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
