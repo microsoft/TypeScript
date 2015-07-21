@@ -1,3 +1,21 @@
+/// <reference path="../../../src/harness/fourslashRunner.ts"/>
+
+// declare var FourSlash;
+// module ts {
+//     export interface SymbolDisplayPart {
+//         text: string;
+//         kind: string;
+//     }
+// }
+
+// DO NOT EDIT ABOVE THIS LINE!
+// We want type-completion while we edit this file, but at compile time we don't want to include the above reference
+// because we are compiling this file in "--out" mode and don't want to rope in the entire codebase
+// for each fourslash test.
+// So, the compile script manually modifies the aboce code so that we compile correctly.
+
+//---------------------------------------------
+
 // Welcome to the FourSlash syntax guide!
 
 // A line in the source text is indicated by four slashes (////)
@@ -29,7 +47,7 @@
 // type 'fs.' as an alternate way of accessing the top-level objects
 // (e.g. 'fs.goTo.eof();')
 
-declare var FourSlash;
+//---------------------------------------
 
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
@@ -698,12 +716,7 @@ module fs {
     export var format = new FourSlashInterface.format();
     export var cancellation = new FourSlashInterface.cancellation();
 }
-module ts {
-    export interface SymbolDisplayPart {
-        text: string;
-        kind: string;
-    }
-}
+
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);
 }
