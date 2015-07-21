@@ -1691,7 +1691,7 @@
     },
     "A member initializer in a 'const' enum declaration cannot reference members declared after it, including members defined in other 'const' enums.": {
         "category": "Error",
-        "code": 2474
+        "code": 2651
     },    
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
