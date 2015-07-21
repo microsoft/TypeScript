@@ -1,4 +1,4 @@
-/// <reference path="../../../src/harness/fourslashRunner.ts"/>
+/// <reference path="../../../src/harness/fourslash.ts"/>
 
 // declare var FourSlash;
 // module ts {
@@ -60,7 +60,6 @@ enum EmitReturnStatus {
 }
 
 module FourSlashInterface {
-    declare var FourSlash;
 
     export interface Marker {
         fileName: string;
@@ -219,15 +218,6 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
         }
 
-        public implementorsCountIs(count: number) {
-            FourSlash.currentTestState.verifyImplementorsCountIs(count);
-        }
-
-        // Add tests for this.
-        public currentParameterIsVariable() {
-            FourSlash.currentTestState.verifyCurrentParameterIsVariable(!this.negative);
-        }
-
         public signatureHelpPresent() {
             FourSlash.currentTestState.verifySignatureHelpPresent(!this.negative);
         }
@@ -379,14 +369,11 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public setVerifyDocComments(val: boolean) {
-            FourSlash.currentTestState.setVerifyDocComments(val);
-        }
-
         public getScriptLexicalStructureListCount(count: number) {
             FourSlash.currentTestState.verifyGetScriptLexicalStructureListCount(count);
         }
 
+        // TODO: figure out what to do with the unused arguments.
         public getScriptLexicalStructureListContains(
             name: string,
             kind: string,
@@ -394,13 +381,7 @@ module FourSlashInterface {
             parentName?: string,
             isAdditionalSpan?: boolean,
             markerPosition?: number) {
-            FourSlash.currentTestState.verifGetScriptLexicalStructureListContains(
-                name,
-                kind,
-                fileName,
-                parentName,
-                isAdditionalSpan,
-                markerPosition);
+            FourSlash.currentTestState.verifyGetScriptLexicalStructureListContains(name, kind);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
