@@ -1,24 +1,3 @@
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(39,25): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(39,25): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(40,21): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(41,29): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(63,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(67,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(71,32): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(71,62): error TS4030: Type of parameter 'param1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(71,91): error TS4030: Type of parameter 'param2' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(114,71): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(123,86): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(129,25): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(130,21): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(131,29): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(134,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(136,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(138,32): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(138,75): error TS4030: Type of parameter 'param1' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(138,117): error TS4030: Type of parameter 'param2' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(141,78): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(143,93): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(164,21): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(165,17): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(166,25): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
@@ -79,30 +58,9 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(240,71):
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(240,113): error TS4030: Type of parameter 'param2' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(243,74): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(274,21): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(274,21): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(275,17): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(276,25): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(298,44): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(302,31): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(306,28): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(306,58): error TS4030: Type of parameter 'param1' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(306,87): error TS4030: Type of parameter 'param2' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(349,67): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(358,82): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(364,21): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(365,17): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(366,25): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(369,44): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(371,31): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(373,28): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(373,71): error TS4030: Type of parameter 'param1' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(373,113): error TS4030: Type of parameter 'param2' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(376,74): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts (61 errors) ====
+==== tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts (40 errors) ====
     
     class privateClass {
     }
@@ -457,16 +415,8 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
     
         export interface publicInterfaceWithPrivateParmeterTypes {
             new (param: privateClass): publicClass;
-                        ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-                        ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             (param: privateClass): publicClass;
-                    ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             myMethod(param: privateClass): void;
-                            ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -489,24 +439,14 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
     
         export class publicClassWithWithPrivateParmeterTypes {
             static myPublicStaticMethod(param: privateClass) {
-                                               ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private static myPrivateStaticMethod(param: privateClass) {
             }
             myPublicMethod(param: privateClass) {
-                                  ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private myPrivateMethod(param: privateClass) {
             }
             constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
-                               ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-                                                             ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param1' references inaccessible name 'privateClass'.
-                                                                                          ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param2' references inaccessible name 'privateClass'.
             }
         }
     
@@ -550,8 +490,6 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
         }
     
         export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
-                                                                      ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         }
         export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
         }
@@ -561,48 +499,26 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
         }
     
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-                                                                                     ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
         declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
         declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass;
-                        ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             (param: privateModule.publicClass): publicClass;
-                    ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             myMethod(param: privateModule.publicClass): void;
-                            ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(param: privateModule.publicClass) {
-                                               ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             myPublicMethod(param: privateModule.publicClass) {
-                                  ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
-                               ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-                                                                          ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param1' references inaccessible name 'privateModule'.
-                                                                                                                    ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param2' references inaccessible name 'privateModule'.
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
-                                                                             ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-                                                                                            ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass;
@@ -622,7 +538,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
         declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
     }
     
-==== tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts (41 errors) ====
+==== tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts (20 errors) ====
     class publicClassInGlobal {
     }
     interface publicInterfaceWithPublicParmeterTypesInGlobal {
@@ -662,16 +578,8 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
     
             export interface publicInterfaceWithPrivateParmeterTypes {
                 new (param: privateClass): publicClass;
-                            ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-                            ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 (param: privateClass): publicClass;
-                        ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
                 myMethod(param: privateClass): void;
-                                ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
     
             export interface publicInterfaceWithPublicParmeterTypes {
@@ -694,24 +602,14 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
     
             export class publicClassWithWithPrivateParmeterTypes {
                 static myPublicStaticMethod(param: privateClass) {
-                                                   ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
                 }
                 private static myPrivateStaticMethod(param: privateClass) {
                 }
                 myPublicMethod(param: privateClass) {
-                                      ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
                 }
                 private myPrivateMethod(param: privateClass) {
                 }
                 constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
-                                   ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
-                                                                 ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param1' references inaccessible name 'privateClass'.
-                                                                                              ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param2' references inaccessible name 'privateClass'.
                 }
             }
     
@@ -755,8 +653,6 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
             }
     
             export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
-                                                                          ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
             }
@@ -766,48 +662,26 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(378,89):
             }
     
             export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-                                                                                         ~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
             declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
             declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
     
             export interface publicInterfaceWithPrivateModuleParameterTypes {
                 new (param: privateModule.publicClass): publicClass;
-                            ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 (param: privateModule.publicClass): publicClass;
-                        ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 myMethod(param: privateModule.publicClass): void;
-                                ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             export class publicClassWithPrivateModuleParameterTypes {
                 static myPublicStaticMethod(param: privateModule.publicClass) {
-                                                   ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 }
                 myPublicMethod(param: privateModule.publicClass) {
-                                      ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
                 }
                 constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
-                                   ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
-                                                                              ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param1' references inaccessible name 'privateModule'.
-                                                                                                                        ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param2' references inaccessible name 'privateModule'.
                 }
             }
             export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) {
-                                                                                 ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-                                                                                                ~~~~~~~~~~~~~
-!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
     
             interface privateInterfaceWithPrivateModuleParameterTypes {
                 new (param: privateModule.publicClass): publicClass;

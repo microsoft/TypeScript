@@ -7,6 +7,7 @@ namespace ts {
         visited?: boolean;
         collected?: boolean;
         hasExportDeclarations?: boolean;
+        errorReported?: boolean;
     }
 
     interface PreprocessResults {
@@ -1039,6 +1040,7 @@ namespace ts {
     function preprocessDeclarations(sourceFiles: SourceFile[], resolver: EmitResolver, diagnostics: Diagnostic[], compilerOptions: CompilerOptions): PreprocessResults {
         let currentSourceFile: SourceFile;
         let nodeLinks: NodeLinks[] = [];
+        let declarationsToProcess: { declaration: Node; errorNode?: Node }[] = [];
 
         for (let sourceFile of sourceFiles) {
             preprocessSourceFile(sourceFile);
@@ -1298,8 +1300,15 @@ namespace ts {
             }
 
             function collectDeclarations(symbol: Symbol, errorNode: Node): void {
-                forEach(symbol.declarations, d => collectDeclaration(d, errorNode));
+                forEach(symbol.declarations, declaration => {
+                    collectDeclatation(declaration, errorNode);
+                });
             }
+        }
+
+        function collectDeclatation(declaration:Node, errorNode?: Node) {
+            declarationsToProcess.push({ declaration, errorNode });
+            //preprocessDeclaration(declaration, errorNode);
         }
 
         function isDeclarationExported(node: Node): boolean {
@@ -1421,31 +1430,31 @@ namespace ts {
          *
          */
         function canWriteDeclaration(node: Node): boolean {
+            if (node.kind === SyntaxKind.SourceFile ||
+                node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ImportDeclaration) {
+                return true;
+            }
+
             if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                 node = node.parent.parent;
             }
 
-            // If the declaration is exported from its parent, we can
-            // safelly write a declaration for it
-            if (isDeclarationExported(node)) {
-                return true;
-            }
-
-            if (node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ImportDeclaration) {
-                return true;
-            }
-
-            // If the parent module has an export declaration  or export
-            // assingment, then the scoping rules change, and only declarations
-            // with export modifier are visible, so we can safely write 
-            // a declaration of a non-exported entity without exposing it
             let parent = getEnclosingDeclaration(node);
-            if (parent) {
-                return (parent.kind === SyntaxKind.ModuleDeclaration || parent.kind === SyntaxKind.SourceFile) &&
-                    hasExportDeclatations(parent);
+
+            if (!isDeclarationExported(node)) {
+                // If the parent module has an export declaration  or export
+                // assingment, then the scoping rules change, and only declarations
+                // with export modifier are visible, so we can safely write 
+                // a declaration of a non-exported entity without exposing it
+                if (!((parent.kind === SyntaxKind.ModuleDeclaration || parent.kind === SyntaxKind.SourceFile) &&
+                    hasExportDeclatations(parent))) {
+                    return false;
+                }
             }
 
-            return false;
+            // The declaration is exported from its parent, or can be written without
+            // an export modifier. Now check if the parent is visible as well.
+            return canWriteDeclaration(parent);
         }
 
         function getNameText(node: ParameterDeclaration|PropertyDeclaration|VariableDeclaration|FunctionDeclaration| AccessorDeclaration| MethodDeclaration): string {
@@ -1597,44 +1606,64 @@ namespace ts {
             Debug.fail("Could not find container node");
         }
 
-        function collectDeclaration(node: Node, errorNode?: Node): void {
-            if (node.kind === SyntaxKind.TypeParameter || node.kind === SyntaxKind.Parameter) {
+        function preprocessDeclaration(declaration: Node, errorNode?: Node): void {
+            if (declaration.kind === SyntaxKind.TypeParameter || declaration.kind === SyntaxKind.Parameter) {
                 return;
             }
 
-            // Make sure this declaration can be emitted, that is it is accessible
-            // and is connected to its parent, or else report a accessibility error
-            ensureDeclarationVisible(node, errorNode);
+            // Always report the error, even if the node was visited before, so that 
+            // diffrent references to the same declaration are flagged
+            if (errorNode && reportDeclarationAccessiblityError(declaration, errorNode)) {
+                return;
+            }
 
             // If this declaration is from a diffrent file, we will get to it later. 
-            if (getSourceFileOfNode(node) !== currentSourceFile) {
+            // Skip it for now.
+            if (getSourceFileOfNode(declaration) !== currentSourceFile) {
                 return;
             }
 
-            let links = getNodeLinks(node);
+            let links = getNodeLinks(declaration);
             if (!links.collected) {
                 links.collected = true;
 
+                // Make sure this declaration can be emitted, that is it is accessible
+                // and is connected to its parent, or else report a accessibility error
+                ensureDeclarationVisible(declaration, errorNode);
+
                 // Collect any dependencies
-                collectReferencedDeclarations(node);
+                collectReferencedDeclarations(declaration);
 
                 // Collect children as well
-                switch (node.kind) {
+                switch (declaration.kind) {
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.VariableStatement:
-                        collectTopLevelChildDeclarations(node);
+                        collectTopLevelChildDeclarations(declaration);
                         break;
                 }
             }
         }
 
+        function reportDeclarationAccessiblityError(declaration: Node, errorNode: Node): boolean {
+            let node = errorNode;
+            while (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = node.parent;
+            }
+            let links = getNodeLinks(node);
+            if (!links.errorReported && !canWriteDeclaration(declaration)) {
+                links.errorReported = true;
+                reportDeclarationAccessiblityMessage(<Declaration>declaration, errorNode);
+            }
+            return links.errorReported;
+        }
+
         function collectTopLevelChildDeclarations(node: Node): void {
             forEachTopLevelDeclaration(node, child => {
                 if (isDeclarationExported(child)) {
-                    collectDeclaration(child);
+                    collectDeclatation(child);
                 }
             });
         }
@@ -1654,13 +1683,6 @@ namespace ts {
                     attachVisibleChild(parent, node);
                 }
             }
-
-            // Always report the error, even if the node was visited before
-            if (errorNode) {
-                if (!canWriteDeclaration(node)) {
-                    reportDeclarationAccessiblityMessage(<Declaration>node, errorNode);
-                }
-            }
         }
 
         function attachVisibleChild(node: Node, child: Node): void {
@@ -1676,6 +1698,11 @@ namespace ts {
 
             // Collect all visible declarations
             collectTopLevelChildDeclarations(sourceFile);
+
+            while (declarationsToProcess.length > 0) {
+                let {declaration, errorNode} = declarationsToProcess.shift();
+                preprocessDeclaration(declaration, errorNode);
+            }
         }
     }
 

@@ -1,13 +1,10 @@
-tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts(3,30): error TS4025: Type of variable 'm' references inaccessible name 'Inner'.
 tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts(6,26): error TS4025: Type of variable 'f' references inaccessible name 'Inner'.
 
 
-==== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts (2 errors) ====
+==== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts (1 errors) ====
     module Outer {
         module Inner {
             export var m: typeof Inner;
-                                 ~~~~~
-!!! error TS4025: Type of variable 'm' references inaccessible name 'Inner'.
         }
     
         export var f: typeof Inner;

@@ -18,20 +18,9 @@ tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(91,50): error T
 tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(92,22): error TS4038: Return type of method 'myMethod2' references inaccessible name 'privateClassInPublicModuleT'.
 tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(93,49): error TS4038: Return type of method 'myMethod3' references inaccessible name 'privateClassInPublicModule'.
 tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(125,89): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(145,73): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClassInPrivateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(145,73): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(148,22): error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModuleT'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(148,22): error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(148,51): error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(149,22): error TS4038: Return type of method 'myMethod2' references inaccessible name 'privateClassInPrivateModuleT'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(150,50): error TS4038: Return type of method 'myMethod3' references inaccessible name 'privateClassInPrivateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(157,22): error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModuleT'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(157,51): error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModule'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(158,22): error TS4038: Return type of method 'myMethod2' references inaccessible name 'privateClassInPrivateModuleT'.
-tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(159,50): error TS4038: Return type of method 'myMethod3' references inaccessible name 'privateClassInPrivateModule'.
 
 
-==== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts (31 errors) ====
+==== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts (20 errors) ====
     class privateClass {
     }
     
@@ -217,25 +206,11 @@ tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(159,50): error 
         }
     
         export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
-                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClassInPrivateModule'.
-                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
             myMethod(val: T): T;
             myMethod0(): publicClassInPrivateModuleT<T>;
             myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModuleT'.
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateModule'.
-                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModule'.
             myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod2' references inaccessible name 'privateClassInPrivateModuleT'.
             myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
-                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod3' references inaccessible name 'privateClassInPrivateModule'.
             myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
         }
     
@@ -243,16 +218,8 @@ tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(159,50): error 
             myMethod(val: T): T;
             myMethod0(): publicClassInPrivateModuleT<T>
             myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModuleT'.
-                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod1' references inaccessible name 'privateClassInPrivateModule'.
             myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod2' references inaccessible name 'privateClassInPrivateModuleT'.
             myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
-                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod3' references inaccessible name 'privateClassInPrivateModule'.
             myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
         }
     
