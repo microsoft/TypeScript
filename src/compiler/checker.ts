@@ -5041,10 +5041,18 @@ namespace ts {
                 if (relation === identityRelation) {
                     return signaturesIdenticalTo(source, target, kind);
                 }
-                if (target === anyFunctionType || source === anyFunctionType) {
+                if (source === anyFunctionType || (relation === assignableRelation && target === anyFunctionType)) {
                     return Ternary.True;
                 }
+
                 let sourceSignatures = getSignaturesOfType(source, kind);
+                if (target === anyFunctionType) {
+                    Debug.assert(relation === subtypeRelation);
+                    if (sourceSignatures.length > 0) {
+                        return Ternary.False;
+                    }
+                }
+
                 let targetSignatures = getSignaturesOfType(target, kind);
                 let result = Ternary.True;
                 let saveErrorInfo = errorInfo;
