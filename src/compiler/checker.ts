@@ -1993,15 +1993,12 @@ namespace ts {
             }
 
             return _displayBuilder || (_displayBuilder = {
-                symbolToString: symbolToString,
-                typeToString: typeToString,
                 buildSymbolDisplay: buildSymbolDisplay,
                 buildTypeDisplay: buildTypeDisplay,
                 buildTypeParameterDisplay: buildTypeParameterDisplay,
                 buildParameterDisplay: buildParameterDisplay,
                 buildDisplayForParametersAndDelimiters: buildDisplayForParametersAndDelimiters,
                 buildDisplayForTypeParametersAndDelimiters: buildDisplayForTypeParametersAndDelimiters,
-                buildDisplayForTypeArgumentsAndDelimiters: buildDisplayForTypeArgumentsAndDelimiters,
                 buildTypeParameterDisplayFromSymbol: buildTypeParameterDisplayFromSymbol,
                 buildSignatureDisplay: buildSignatureDisplay,
                 buildReturnTypeDisplay: buildReturnTypeDisplay
@@ -3115,42 +3112,55 @@ namespace ts {
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
         }
 
-        function signatureListsIdentical(s: Signature[], t: Signature[]): boolean {
-            if (s.length !== t.length) {
-                return false;
-            }
-            for (let i = 0; i < s.length; i++) {
-                if (!compareSignatures(s[i], t[i], /*compareReturnTypes*/ false, compareTypes)) {
-                    return false;
+        function findMatchingSignature(signature: Signature, signatureList: Signature[]): Signature {
+            for (let s of signatureList) {
+                // Only signatures with no type parameters may differ in return types
+                if (compareSignatures(signature, s, /*compareReturnTypes*/ !!signature.typeParameters, compareTypes)) {
+                    return s;
                 }
             }
-            return true;
         }
 
-        // If the lists of call or construct signatures in the given types are all identical except for return types,
-        // and if none of the signatures are generic, return a list of signatures that has substitutes a union of the
-        // return types of the corresponding signatures in each resulting signature.
-        function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
-            let signatureLists = map(types, t => getSignaturesOfType(t, kind));
-            let signatures = signatureLists[0];
-            for (let signature of signatures) {
-                if (signature.typeParameters) {
-                    return emptyArray;
-                }
-            }
+        function findMatchingSignatures(signature: Signature, signatureLists: Signature[][]): Signature[] {
+            let result: Signature[] = undefined;
             for (let i = 1; i < signatureLists.length; i++) {
-                if (!signatureListsIdentical(signatures, signatureLists[i])) {
-                    return emptyArray;
+                let match = findMatchingSignature(signature, signatureLists[i]);
+                if (!match) {
+                    return undefined;
                 }
-            }
-            let result = map(signatures, cloneSignature);
-            for (var i = 0; i < result.length; i++) {
-                let s = result[i];
-                // Clear resolved return type we possibly got from cloneSignature
-                s.resolvedReturnType = undefined;
-                s.unionSignatures = map(signatureLists, signatures => signatures[i]);
+                if (!result) {
+                    result = [signature];
+                }
+                if (match !== signature) {
+                    result.push(match);
+                }
             }
             return result;
+        }
+
+        // The signatures of a union type are those signatures that are present and identical in each of the
+        // constituent types, except that non-generic signatures may differ in return types. When signatures
+        // differ in return types, the resulting return type is the union of the constituent return types.
+        function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
+            let signatureLists = map(types, t => getSignaturesOfType(t, kind));
+            let result: Signature[] = undefined;
+            for (let source of signatureLists[0]) {
+                let unionSignatures = findMatchingSignatures(source, signatureLists);
+                if (unionSignatures) {
+                    let signature: Signature = undefined;
+                    if (unionSignatures.length === 1 || source.typeParameters) {
+                        signature = source;
+                    }
+                    else {
+                        signature = cloneSignature(source);
+                        // Clear resolved return type we possibly got from cloneSignature
+                        signature.resolvedReturnType = undefined;
+                        signature.unionSignatures = unionSignatures;
+                    }
+                    (result || (result = [])).push(signature);
+                }
+            }
+            return result || emptyArray;
         }
 
         function getUnionIndexType(types: Type[], kind: IndexKind): Type {
@@ -3310,9 +3320,6 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            if (type.flags & TypeFlags.Union) {
-                type = getReducedTypeOfUnionType(<UnionType>type);
-            }
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
                     type = getConstraintOfTypeParameter(<TypeParameter>type);
@@ -3415,6 +3422,29 @@ namespace ts {
                 return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
             }
             return undefined;
+        }
+
+        // Check if a property with the given name is known anywhere in the given type. In an object
+        // type, a property is considered known if the object type is empty, if it has any index
+        // signatures, or if the property is actually declared in the type. In a union or intersection
+        // type, a property is considered known if it is known in any constituent type.
+        function isKnownProperty(type: Type, name: string): boolean {
+            if (type.flags & TypeFlags.ObjectType && type !== globalObjectType) {
+                var resolved = resolveStructuredTypeMembers(type);
+                return !!(resolved.properties.length === 0 ||
+                    resolved.stringIndexType ||
+                    resolved.numberIndexType ||
+                    getPropertyOfType(type, name));
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                for (let t of (<UnionOrIntersectionType>type).types) {
+                    if (isKnownProperty(t, name)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
         }
 
         function getSignaturesOfStructuredType(type: Type, kind: SignatureKind): Signature[] {
@@ -4026,26 +4056,79 @@ namespace ts {
             }
         }
 
-        function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
+        function isObjectLiteralTypeDuplicateOf(source: ObjectType, target: ObjectType): boolean {
+            let sourceProperties = getPropertiesOfObjectType(source);
+            let targetProperties = getPropertiesOfObjectType(target);
+            if (sourceProperties.length !== targetProperties.length) {
+                return false;
+            }
+            for (let sourceProp of sourceProperties) {
+                let targetProp = getPropertyOfObjectType(target, sourceProp.name);
+                if (!targetProp ||
+                    getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected) ||
+                    !isTypeDuplicateOf(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function isTupleTypeDuplicateOf(source: TupleType, target: TupleType): boolean {
+            let sourceTypes = source.elementTypes;
+            let targetTypes = target.elementTypes;
+            if (sourceTypes.length !== targetTypes.length) {
+                return false;
+            }
+            for (var i = 0; i < sourceTypes.length; i++) {
+                if (!isTypeDuplicateOf(sourceTypes[i], targetTypes[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Returns true if the source type is a duplicate of the target type. A source type is a duplicate of
+        // a target type if the the two are identical, with the exception that the source type may have null or
+        // undefined in places where the target type doesn't. This is by design an asymmetric relationship.
+        function isTypeDuplicateOf(source: Type, target: Type): boolean {
+            if (source === target) {
+                return true;
+            }
+            if (source.flags & TypeFlags.Undefined || source.flags & TypeFlags.Null && !(target.flags & TypeFlags.Undefined)) {
+                return true;
+            }
+            if (source.flags & TypeFlags.ObjectLiteral && target.flags & TypeFlags.ObjectType) {
+                return isObjectLiteralTypeDuplicateOf(<ObjectType>source, <ObjectType>target);
+            }
+            if (isArrayType(source) && isArrayType(target)) {
+                return isTypeDuplicateOf((<TypeReference>source).typeArguments[0], (<TypeReference>target).typeArguments[0]);
+            }
+            if (isTupleType(source) && isTupleType(target)) {
+                return isTupleTypeDuplicateOf(<TupleType>source, <TupleType>target);
+            }
+            return isTypeIdenticalTo(source, target);
+        }
+
+        function isTypeDuplicateOfSomeType(candidate: Type, types: Type[]): boolean {
             for (let type of types) {
-                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
+                if (candidate !== type && isTypeDuplicateOf(candidate, type)) {
                     return true;
                 }
             }
             return false;
         }
 
-        function removeSubtypes(types: Type[]) {
+        function removeDuplicateTypes(types: Type[]) {
             let i = types.length;
             while (i > 0) {
                 i--;
-                if (isSubtypeOfAny(types[i], types)) {
+                if (isTypeDuplicateOfSomeType(types[i], types)) {
                     types.splice(i, 1);
                 }
             }
         }
 
-        function containsTypeAny(types: Type[]) {
+        function containsTypeAny(types: Type[]): boolean {
             for (let type of types) {
                 if (isTypeAny(type)) {
                     return true;
@@ -4064,30 +4147,26 @@ namespace ts {
             }
         }
 
-        function compareTypeIds(type1: Type, type2: Type): number {
-            return type1.id - type2.id;
-        }
-
-        // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
-        // is true when creating a union type from a type node and when instantiating a union type. In both of those
-        // cases subtype reduction has to be deferred to properly support recursive union types. For example, a
-        // type alias of the form "type Item = string | (() => Item)" cannot be reduced during its declaration.
-        function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
+        // We always deduplicate the constituent type set based on object identity, but we'll also deduplicate
+        // based on the structure of the types unless the noDeduplication flag is true, which is the case when
+        // creating a union type from a type node and when instantiating a union type. In both of those cases,
+        // structural deduplication has to be deferred to properly support recursive union types. For example,
+        // a type of the form "type Item = string | (() => Item)" cannot be deduplicated during its declaration.
+        function getUnionType(types: Type[], noDeduplication?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
             }
             let typeSet: Type[] = [];
             addTypesToSet(typeSet, types, TypeFlags.Union);
-            typeSet.sort(compareTypeIds);
-            if (noSubtypeReduction) {
-                if (containsTypeAny(typeSet)) {
-                    return anyType;
-                }
+            if (containsTypeAny(typeSet)) {
+                return anyType;
+            }
+            if (noDeduplication) {
                 removeAllButLast(typeSet, undefinedType);
                 removeAllButLast(typeSet, nullType);
             }
             else {
-                removeSubtypes(typeSet);
+                removeDuplicateTypes(typeSet);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
@@ -4097,38 +4176,19 @@ namespace ts {
             if (!type) {
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(typeSet));
                 type.types = typeSet;
-                type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
-        }
-
-        // Subtype reduction is basically an optimization we do to avoid excessively large union types, which take longer
-        // to process and look strange in quick info and error messages. Semantically there is no difference between the
-        // reduced type and the type itself. So, when we detect a circularity we simply say that the reduced type is the
-        // type itself.
-        function getReducedTypeOfUnionType(type: UnionType): Type {
-            if (!type.reducedType) {
-                type.reducedType = circularType;
-                let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
-                if (type.reducedType === circularType) {
-                    type.reducedType = reducedType;
-                }
-            }
-            else if (type.reducedType === circularType) {
-                type.reducedType = type;
-            }
-            return type.reducedType;
         }
 
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noSubtypeReduction*/ true);
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noDeduplication*/ true);
             }
             return links.resolvedType;
         }
 
-        // We do not perform supertype reduction on intersection types. Intersection types are created only by the &
+        // We do not perform structural deduplication on intersection types. Intersection types are created only by the &
         // type operator and we can't reduce those because we want to support recursive intersection types. For example,
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
@@ -4409,7 +4469,7 @@ namespace ts {
                     return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noSubtypeReduction*/ true);
+                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noDeduplication*/ true);
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType));
@@ -4554,6 +4614,16 @@ namespace ts {
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
 
+            function reportRelationError(message: DiagnosticMessage, source: Type, target: Type) {
+                let sourceType = typeToString(source);
+                let targetType = typeToString(target);
+                if (sourceType === targetType) {
+                    sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                    targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                }
+                reportError(message || Diagnostics.Type_0_is_not_assignable_to_type_1, sourceType, targetType);
+            }
+
             // Compare two types and return
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
@@ -4573,7 +4643,23 @@ namespace ts {
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
+
+                if (relation !== identityRelation && source.flags & TypeFlags.FreshObjectLiteral) {
+                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
+                        if (reportErrors) {
+                            reportRelationError(headMessage, source, target);
+                        }
+                        return Ternary.False;
+                    }
+                    // Above we check for excess properties with respect to the entire target type. When union
+                    // and intersection types are further deconstructed on the target side, we don't want to
+                    // make the check again (as it might fail for a partial target type). Therefore we obtain
+                    // the regular source type and proceed with that.
+                    source = getRegularTypeOfObjectLiteral(source);
+                }
+
                 let saveErrorInfo = errorInfo;
+
                 if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // We have type references to same target type, see if relationship holds for all type arguments
                     if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
@@ -4650,16 +4736,20 @@ namespace ts {
                 }
 
                 if (reportErrors) {
-                    headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    let sourceType = typeToString(source);
-                    let targetType = typeToString(target);
-                    if (sourceType === targetType) {
-                        sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                        targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                    }
-                    reportError(headMessage, sourceType, targetType);
+                    reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
+            }
+
+            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
+                for (let prop of getPropertiesOfObjectType(source)) {
+                    if (!isKnownProperty(target, prop.name)) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(prop), typeToString(target));
+                        }
+                        return true;
+                    }
+                }
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
@@ -5356,6 +5446,24 @@ namespace ts {
          */
         function isTupleType(type: Type): type is TupleType {
             return !!(type.flags & TypeFlags.Tuple);
+        }
+
+        function getRegularTypeOfObjectLiteral(type: Type): Type {
+            if (type.flags & TypeFlags.FreshObjectLiteral) {
+                let regularType = (<FreshObjectLiteralType>type).regularType;
+                if (!regularType) {
+                    regularType = <ResolvedType>createType((<ResolvedType>type).flags & ~TypeFlags.FreshObjectLiteral);
+                    regularType.symbol = (<ResolvedType>type).symbol;
+                    regularType.members = (<ResolvedType>type).members;
+                    regularType.properties = (<ResolvedType>type).properties;
+                    regularType.callSignatures = (<ResolvedType>type).callSignatures;
+                    regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
+                    regularType.stringIndexType = (<ResolvedType>type).stringIndexType;
+                    regularType.numberIndexType = (<ResolvedType>type).numberIndexType;
+                }
+                return regularType;
+            }
+            return type;
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -6984,7 +7092,7 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
             return result;
 
             function getIndexType(kind: IndexKind) {
@@ -8867,7 +8975,7 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
-            let exprType = checkExpression(node.expression);
+            let exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
             let targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
@@ -9692,7 +9800,7 @@ namespace ts {
                     return getUnionType([leftType, rightType]);
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
-                    return rightType;
+                    return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
                     return rightType;
             }

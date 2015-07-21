@@ -1105,6 +1105,7 @@ namespace ts {
     }
 
     export interface HighlightSpan {
+        fileName?: string;
         textSpan: TextSpan;
         kind: string;
     }
@@ -1411,7 +1412,9 @@ namespace ts {
           * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+
+        reportStats(): string;
     }
 
     // TODO: move these to enums
