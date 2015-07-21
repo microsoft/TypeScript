@@ -1858,6 +1858,14 @@ namespace ts {
         numberIndexType?: Type;            // Numeric index type
     }
 
+    /* @internal */
+    export interface ResolveFilter {
+        excludeInherited: { [symbolId: number]: boolean };
+        callSignatures: Signature[];
+        constructSignatures: Signature[];
+        excludeLater: { [symbolId: number]: boolean };
+    }
+
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
