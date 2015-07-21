@@ -15,10 +15,12 @@ export default function f2() {
 //// [m1.js]
 function f1() {
 }
+exports.__esModule = true;
 exports["default"] = f1;
 //// [m2.js]
 var m1_1 = require("./m1");
 function f2() {
     m1_1["default"]();
 }
+exports.__esModule = true;
 exports["default"] = f2;

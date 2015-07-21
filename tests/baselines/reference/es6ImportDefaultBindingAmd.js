@@ -14,6 +14,7 @@ import defaultBinding2 from "es6ImportDefaultBindingAmd_0"; // elide this import
 //// [es6ImportDefaultBindingAmd_0.js]
 define(["require", "exports"], function (require, exports) {
     var a = 10;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = a;
 });
 //// [es6ImportDefaultBindingAmd_1.js]
