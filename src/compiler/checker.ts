@@ -5041,6 +5041,12 @@ namespace ts {
                 if (relation === identityRelation) {
                     return signaturesIdenticalTo(source, target, kind);
                 }
+
+                // In type argument inference, we need to take a common supertype of multiple candidates. It is possible
+                // that one of these candidates is anyFunctionType, and the other is a function type with actual signatures.
+                // Intuitively, the one with signatures is a better inference. We encode that here by saying that a type
+                // with signatures is never a subtype of anyFunctionType (but it is assignable). This makes the type with
+                // signatures win over anyFunctionType.
                 if (source === anyFunctionType || (relation === assignableRelation && target === anyFunctionType)) {
                     return Ternary.True;
                 }
