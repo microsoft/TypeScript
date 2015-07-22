@@ -7196,12 +7196,7 @@ namespace ts {
                 }
             }
 
-            // Check that the constructor/factory returns an object type
             let returnType = getUnionType(signatures.map(s => getReturnTypeOfSignature(s)));
-            if (!isTypeAny(returnType) && !(returnType.flags & TypeFlags.ObjectType)) {
-                error(node.tagName, Diagnostics.The_return_type_of_a_JSX_element_constructor_must_return_an_object_type);
-                return undefined;
-            }
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
             let elemClassType = getJsxGlobalElementClassType();
