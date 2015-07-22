@@ -1115,6 +1115,7 @@ namespace ts {
                         return visitExportAssignment(<ExportAssignment>node);
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportClause:
+                    case SyntaxKind.ImportSpecifier:
                         // Nothing to visit, import declarations are only pulled in if referenced
                         return;
 
@@ -1123,6 +1124,7 @@ namespace ts {
                         return visitNodes((<InterfaceDeclaration|ClassDeclaration>node).typeParameters) ||
                             forEach((<InterfaceDeclaration|ClassDeclaration>node).heritageClauses, visitHeritageClause);
 
+                    case SyntaxKind.VariableStatement:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.EnumMember:
@@ -1298,12 +1300,12 @@ namespace ts {
                     collectDeclarations(target, errorNode);
                 }
             }
+        }
 
-            function collectDeclarations(symbol: Symbol, errorNode: Node): void {
-                forEach(symbol.declarations, declaration => {
-                    collectDeclatation(declaration, errorNode);
-                });
-            }
+        function collectDeclarations(symbol: Symbol, errorNode: Node): void {
+            forEach(symbol.declarations, declaration => {
+                collectDeclatation(declaration, errorNode);
+            });
         }
 
         function collectDeclatation(declaration:Node, errorNode?: Node) {
@@ -1677,10 +1679,10 @@ namespace ts {
                 // parent's visible declarations.
                 // also make sure the parent is reachable from a top-level
                 // declaration
-                var parent = getEnclosingDeclaration(node);
-                if (parent) {
+                let parent = getEnclosingDeclaration(node);
+                attachVisibleChild(parent, node);
+                if (parent.kind !== SyntaxKind.SourceFile) {
                     ensureDeclarationVisible(parent, errorNode);
-                    attachVisibleChild(parent, node);
                 }
             }
         }
@@ -1708,6 +1710,7 @@ namespace ts {
 
     function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, action: (name: string, sources: SourceFile[]) => void) {
         let compilerOptions = host.getCompilerOptions();
+
         if (targetSourceFile) {
             // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
             // only emit the outputs of this file
@@ -1733,7 +1736,7 @@ namespace ts {
             // all these files will emit to a single output file specified by compiler options.out
             let outputFilePath = removeFileExtension(compilerOptions.out) + ".d.ts"
             let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
-            action(outputFilePath, sourceFiles);;
+            action(outputFilePath, sourceFiles);
         }
     }
 
