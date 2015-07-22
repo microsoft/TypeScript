@@ -18,7 +18,7 @@ namespace ts {
 
     const emptyHandler = () => { };
 
-    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults,  host: EmitHost, diagnostics: Diagnostic[]): void {
+    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults, host: EmitHost, diagnostics: Diagnostic[]): void {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
         let enclosingDeclaration: Node;
@@ -1044,6 +1044,8 @@ namespace ts {
         let nodeLinks: NodeLinks[] = [];
         let declarationsToProcess: { declaration: Node; errorNode?: Node }[] = [];
 
+        let typeWriter = createVoidSymbolWriter(undefined, undefined);
+
         for (let sourceFile of sourceFiles) {
             preprocessSourceFile(sourceFile);
         }
@@ -1069,11 +1071,35 @@ namespace ts {
             return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
         }
 
+
+        function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
+            return {
+                writeLine: emptyHandler,
+                writeKeyword: emptyHandler,
+                writeOperator: emptyHandler,
+                writePunctuation: emptyHandler,
+                writeSpace: emptyHandler,
+                writeStringLiteral: emptyHandler,
+                writeParameter: emptyHandler,
+                writeSymbol: emptyHandler,
+                decreaseIndent: emptyHandler,
+                increaseIndent: emptyHandler,
+                clear: emptyHandler,
+                trackTypeSymbol,
+                trackInaccesibleSymbol
+            };
+        }
+
         function collectReferencedDeclarations(node: Node): void {
             let currentErrorNode: Node;
-            let typeWriter = createVoidSymbolWriter(trackTypeSymbol, trackInaccesibleSymbol);
+            typeWriter.trackInaccesibleSymbol = trackInaccesibleSymbol;
+            typeWriter.trackTypeSymbol = trackTypeSymbol;
 
-            return visitNode(node);
+            visitNode(node);
+
+            typeWriter.trackInaccesibleSymbol = typeWriter.trackTypeSymbol = undefined;
+
+            return;
 
             function trackTypeSymbol(symbol: Symbol) {
                 if (currentErrorNode) {
@@ -1085,24 +1111,6 @@ namespace ts {
                 if (currentErrorNode) {
                     reportUnamedDeclarationMessage(currentErrorNode);
                 }
-            }
-
-            function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
-                return {
-                    writeLine: emptyHandler,
-                    writeKeyword: emptyHandler,
-                    writeOperator: emptyHandler,
-                    writePunctuation: emptyHandler,
-                    writeSpace: emptyHandler,
-                    writeStringLiteral: emptyHandler,
-                    writeParameter: emptyHandler,
-                    writeSymbol: emptyHandler,
-                    decreaseIndent: emptyHandler,
-                    increaseIndent: emptyHandler,
-                    clear: emptyHandler,
-                    trackTypeSymbol,
-                    trackInaccesibleSymbol
-                };
             }
 
             function visitNode(node: Node): void {
@@ -1311,8 +1319,8 @@ namespace ts {
         }
 
         function collectDeclatation(declaration:Node, errorNode?: Node) {
-            //declarationsToProcess.push({ declaration, errorNode });
-            preprocessDeclaration(declaration, errorNode);
+            declarationsToProcess.push({ declaration, errorNode });
+            //preprocessDeclaration(declaration, errorNode);
         }
 
         function isDeclarationExported(node: Node): boolean {
@@ -1352,14 +1360,14 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                    if (node.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent)) {
+                    if (node.flags & NodeFlags.Export) {
                         return true;
                     }
-                    else if ((node.flags & NodeFlags.Export) !== 0) {
+                    else if (node.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent)) {
                         return true;
                     }
                     else if (node.parent.kind === SyntaxKind.ModuleBlock && isInAmbientContext(node.parent)) {
-                        return !hasExportDeclatations(node.parent);
+                        return !hasExportDeclatations(node.parent.parent);
                     }
                     break;
             }
@@ -1410,6 +1418,10 @@ namespace ts {
         }
 
         function hasExportDeclatations(node: Node): boolean {
+            if (!isExternalModuleDeclaration(node)) {
+                return false;
+            }
+
             let links = getNodeLinks(node);
             if (typeof links.hasExportDeclarations === "undefined") {
                 let foundExportDeclarations = false;
@@ -1450,8 +1462,7 @@ namespace ts {
                 // assingment, then the scoping rules change, and only declarations
                 // with export modifier are visible, so we can safely write 
                 // a declaration of a non-exported entity without exposing it
-                if (!((parent.kind === SyntaxKind.ModuleDeclaration || parent.kind === SyntaxKind.SourceFile) &&
-                    hasExportDeclatations(parent))) {
+                if (! hasExportDeclatations(parent)) {
                     return false;
                 }
             }
@@ -1715,9 +1726,11 @@ namespace ts {
         function attachVisibleChild(node: Node, child: Node): void {
             let links = getNodeLinks(node);
             if (!links.visibleChildren) {
-                links.visibleChildren = [];
+                links.visibleChildren = [child];
             }
-            links.visibleChildren.push(child);
+            else {
+                links.visibleChildren.push(child);
+            }
         }
 
         function preprocessSourceFile(sourceFile: SourceFile): void {
