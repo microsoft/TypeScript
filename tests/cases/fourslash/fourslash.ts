@@ -30,6 +30,7 @@
 // (e.g. 'fs.goTo.eof();')
 
 //---------------------------------------
+// For API editors:
 // When editting this file, and only while editing this file, enable the reference comments
 // and comment out the declarations in this section to get proper type information.
 // Undo these changes before compiling/committing/editing any other fourslash tests.
