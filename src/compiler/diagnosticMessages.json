@@ -2446,7 +2446,7 @@
         "category": "Error",
         "code": 17004
     },
-    "A constructor can not contain super call when a class extends null": {
+    "A constructor cannot contain 'super' call when a class extends 'null'": {
       "category": "Error",
       "code": 17005
     }

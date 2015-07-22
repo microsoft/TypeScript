@@ -10250,11 +10250,13 @@ namespace ts {
             // constructors of derived classes must contain at least one super call somewhere in their function body.
             let containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
-                let baseConstructorType = getBaseConstructorTypeOfClass(containingClassDecl);
+                let symbol = getSymbolOfNode(containingClassDecl);
+                let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+                let baseConstructorType = getBaseConstructorTypeOfClass(type);
 
                 if (containsSuperCall(node.body)) {
                     if (baseConstructorType === nullType) {
-                        error(node, Diagnostics.A_constructor_can_not_contain_super_call_when_a_class_extends_null);
+                        error(node, Diagnostics.A_constructor_cannot_contain_super_call_when_a_class_extends_null);
                     }
 
                     // The first statement in the body of a constructor must be a super call if both of the following are true:

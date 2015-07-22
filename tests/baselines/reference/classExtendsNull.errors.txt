@@ -1,4 +1,4 @@
-tests/cases/compiler/classExtendsNull.ts(2,5): error TS17005: A constructor can not contain super call when a class extends null
+tests/cases/compiler/classExtendsNull.ts(2,5): error TS17005: A constructor cannot contain 'super' call when a class extends 'null'
 
 
 ==== tests/cases/compiler/classExtendsNull.ts (1 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/classExtendsNull.ts(2,5): error TS17005: A constructor can 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS17005: A constructor can not contain super call when a class extends null
+!!! error TS17005: A constructor cannot contain 'super' call when a class extends 'null'
     }
     
     class D extends null {
