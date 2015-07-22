@@ -10682,10 +10682,18 @@ namespace ts {
             // to denote disjoint declarationSpaces (without making new enum type).
             let exportedDeclarationSpaces = SymbolFlags.None;
             let nonExportedDeclarationSpaces = SymbolFlags.None;
+            let defaultExportedDeclarationFlags = SymbolFlags.None;
             for (let d of symbol.declarations) {
                 let declarationSpaces = getDeclarationSpaces(d);
-                if (getEffectiveDeclarationFlags(d, NodeFlags.Export)) {
-                    exportedDeclarationSpaces |= declarationSpaces;
+                let effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, NodeFlags.Export | NodeFlags.Default);
+
+                if (effectiveDeclarationFlags & NodeFlags.Export) {
+                    if (effectiveDeclarationFlags & NodeFlags.Default) {
+                        defaultExportedDeclarationFlags |= declarationSpaces;
+                    }
+                    else {
+                        exportedDeclarationSpaces |= declarationSpaces;
+                    }
                 }
                 else {
                     nonExportedDeclarationSpaces |= declarationSpaces;
@@ -10693,11 +10701,16 @@ namespace ts {
             }
 
             let commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            let commonDeclarationSpaceForDefault = defaultExportedDeclarationFlags & (exportedDeclarationSpaces | nonExportedDeclarationSpaces);
 
-            if (commonDeclarationSpace) {
+            if (commonDeclarationSpace || commonDeclarationSpaceForDefault) {
                 // declaration spaces for exported and non-exported declarations intersect
                 for (let d of symbol.declarations) {
-                    if (getDeclarationSpaces(d) & commonDeclarationSpace) {
+                    let declarationSpaces = getDeclarationSpaces(d);
+                    if (declarationSpaces & commonDeclarationSpaceForDefault) {
+                        error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration, declarationNameToString(d.name));
+                    }
+                    else if (declarationSpaces & commonDeclarationSpace) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
                     }
                 }
