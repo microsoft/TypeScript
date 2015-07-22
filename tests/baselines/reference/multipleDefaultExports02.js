@@ -18,9 +18,11 @@ Entity();
 //// [m1.js]
 function foo() {
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = foo;
 function bar() {
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = bar;
 //// [m2.js]
 var m1_1 = require("m1");

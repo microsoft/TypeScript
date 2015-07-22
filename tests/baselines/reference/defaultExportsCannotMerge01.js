@@ -34,6 +34,7 @@ Entity.y;
 function Decl() {
     return 0;
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Decl;
 var Decl;
 (function (Decl) {
