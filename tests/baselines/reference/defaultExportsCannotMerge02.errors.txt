@@ -1,0 +1,38 @@
+tests/cases/conformance/es6/modules/m2.ts(3,1): error TS2348: Value of type 'typeof Decl' is not callable. Did you mean to include 'new'?
+tests/cases/conformance/es6/modules/m2.ts(6,8): error TS2503: Cannot find namespace 'Entity'.
+tests/cases/conformance/es6/modules/m2.ts(8,13): error TS2339: Property 'p1' does not exist on type 'Decl'.
+tests/cases/conformance/es6/modules/m2.ts(8,20): error TS2339: Property 'p2' does not exist on type 'Decl'.
+
+
+==== tests/cases/conformance/es6/modules/m1.ts (0 errors) ====
+    
+    export default class Decl {
+    }
+    
+    export interface Decl {
+        p1: number;
+        p2: number;
+    }
+    
+    export namespace Decl {
+        interface I {
+        }
+    }
+    
+==== tests/cases/conformance/es6/modules/m2.ts (4 errors) ====
+    import Entity from "m1"
+    
+    Entity();
+    ~~~~~~~~
+!!! error TS2348: Value of type 'typeof Decl' is not callable. Did you mean to include 'new'?
+    
+    var x: Entity;
+    var y: Entity.I;
+           ~~~~~~
+!!! error TS2503: Cannot find namespace 'Entity'.
+    var z = new Entity();
+    var sum = z.p1 + z.p2
+                ~~
+!!! error TS2339: Property 'p1' does not exist on type 'Decl'.
+                       ~~
+!!! error TS2339: Property 'p2' does not exist on type 'Decl'.
