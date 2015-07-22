@@ -112,6 +112,8 @@ namespace ts {
         emptyGenericType.instantiations = {};
 
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
+        // in getContainsLiteralFlagsOfTypes, and it is checked in inferFromTypes.
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -5658,10 +5660,16 @@ namespace ts {
 
             function inferFromTypes(source: Type, target: Type) {
                 if (target.flags & TypeFlags.TypeParameter) {
-                    // If target is a type parameter, make an inference
+                    // If target is a type parameter, make an inference, unless the source type contains
+                    // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
+                    // Because the anyFunctionType is internal, it should not be exposed to the user by adding
+                    // it as an inference candidate. Hopefully, a better candidate will come along that does
+                    // not contain anyFunctionType when we come back to this argument for its second round
+                    // of inference.
                     if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                         return;
                     }
+
                     let typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
