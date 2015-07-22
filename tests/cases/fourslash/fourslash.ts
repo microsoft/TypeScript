@@ -1,21 +1,3 @@
-/// <reference path="../../../src/harness/fourslash.ts"/>
-
-// declare var FourSlash;
-// module ts {
-//     export interface SymbolDisplayPart {
-//         text: string;
-//         kind: string;
-//     }
-// }
-
-// DO NOT EDIT ABOVE THIS LINE!
-// We want type-completion while we edit this file, but at compile time we don't want to include the above reference
-// because we are compiling this file in "--out" mode and don't want to rope in the entire codebase
-// for each fourslash test.
-// So, the compile script manually modifies the aboce code so that we compile correctly.
-
-//---------------------------------------------
-
 // Welcome to the FourSlash syntax guide!
 
 // A line in the source text is indicated by four slashes (////)
@@ -48,6 +30,32 @@
 // (e.g. 'fs.goTo.eof();')
 
 //---------------------------------------
+// When editting this file, and only while editing this file, enable the reference comments
+// and comment out the declarations in this section to get proper type information.
+// Undo these changes before compiling/committing/editing any other fourslash tests.
+// The test suite will likely crash if you try 'jake runtests' with reference comments enabled.
+//
+// Explanation:
+// We want type-completion while we edit this file, but at compile time/while editting fourslash tests,
+// we don't want to include the following reference because we are compiling this file in "--out" mode and don't want to rope
+// in the entire codebase into the compilattion each fourslash test. Additionally, we don't want to expose the
+// src/harness/fourslash.ts API's (or the rest of the compiler) because they are unstable and complicate the
+// fourslash testing DSL. Finally, in this case, runtime reflection is (much) faster.
+//
+// TODO: figure out a better solution to the API exposure problem.
+
+// /// <reference path="../../../built/local/typescriptServices.d.ts"/>
+// /// <reference path="../../../src/harness/fourslash.ts"/>
+
+declare var FourSlash;
+module ts {
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: string;
+    }
+}
+
+//---------------------------------------------
 
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
