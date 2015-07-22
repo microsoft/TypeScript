@@ -68,6 +68,7 @@ namespace ts {
             getPropertyOfType,
             getSignaturesOfType,
             getIndexTypeOfType,
+            getBaseTypes,
             getReturnTypeOfSignature,
             getSymbolsInScope,
             getSymbolAtLocation,
