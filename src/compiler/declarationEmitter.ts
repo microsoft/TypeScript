@@ -1350,14 +1350,14 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                    if (node.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent)) {
+                    if (node.flags & NodeFlags.Export) {
                         return true;
                     }
-                    else if ((node.flags & NodeFlags.Export) !== 0) {
+                    else if (node.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent)) {
                         return true;
                     }
                     else if (node.parent.kind === SyntaxKind.ModuleBlock && isInAmbientContext(node.parent)) {
-                        return !hasExportDeclatations(node.parent);
+                        return !hasExportDeclatations(node.parent.parent);
                     }
                     break;
             }
@@ -1407,7 +1407,16 @@ namespace ts {
             return undefined;
         }
 
+        function isExternalModuleDeclaration(node: Node) {
+            return (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) ||
+                (node.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>node));
+        }
+
         function hasExportDeclatations(node: Node): boolean {
+            if (!isExternalModuleDeclaration(node)) {
+                return false;
+            }
+
             let links = getNodeLinks(node);
             if (typeof links.hasExportDeclarations === "undefined") {
                 let foundExportDeclarations = false;
@@ -1448,8 +1457,7 @@ namespace ts {
                 // assingment, then the scoping rules change, and only declarations
                 // with export modifier are visible, so we can safely write 
                 // a declaration of a non-exported entity without exposing it
-                if (!((parent.kind === SyntaxKind.ModuleDeclaration || parent.kind === SyntaxKind.SourceFile) &&
-                    hasExportDeclatations(parent))) {
+                if (! hasExportDeclatations(parent)) {
                     return false;
                 }
             }
