@@ -18,7 +18,7 @@ namespace ts {
 
     const emptyHandler = () => { };
 
-    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults,  host: EmitHost, diagnostics: Diagnostic[]): void {
+    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults, host: EmitHost, diagnostics: Diagnostic[]): void {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
         let enclosingDeclaration: Node;
@@ -1042,6 +1042,8 @@ namespace ts {
         let nodeLinks: NodeLinks[] = [];
         let declarationsToProcess: { declaration: Node; errorNode?: Node }[] = [];
 
+        let typeWriter = createVoidSymbolWriter(undefined, undefined);
+
         for (let sourceFile of sourceFiles) {
             preprocessSourceFile(sourceFile);
         }
@@ -1067,11 +1069,35 @@ namespace ts {
             return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
         }
 
+
+        function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
+            return {
+                writeLine: emptyHandler,
+                writeKeyword: emptyHandler,
+                writeOperator: emptyHandler,
+                writePunctuation: emptyHandler,
+                writeSpace: emptyHandler,
+                writeStringLiteral: emptyHandler,
+                writeParameter: emptyHandler,
+                writeSymbol: emptyHandler,
+                decreaseIndent: emptyHandler,
+                increaseIndent: emptyHandler,
+                clear: emptyHandler,
+                trackTypeSymbol,
+                trackInaccesibleSymbol
+            };
+        }
+
         function collectReferencedDeclarations(node: Node): void {
             let currentErrorNode: Node;
-            let typeWriter = createVoidSymbolWriter(trackTypeSymbol, trackInaccesibleSymbol);
+            typeWriter.trackInaccesibleSymbol = trackInaccesibleSymbol;
+            typeWriter.trackTypeSymbol = trackTypeSymbol;
 
-            return visitNode(node);
+            visitNode(node);
+
+            typeWriter.trackInaccesibleSymbol = typeWriter.trackTypeSymbol = undefined;
+
+            return;
 
             function trackTypeSymbol(symbol: Symbol) {
                 if (currentErrorNode) {
@@ -1083,24 +1109,6 @@ namespace ts {
                 if (currentErrorNode) {
                     reportUnamedDeclarationMessage(currentErrorNode);
                 }
-            }
-
-            function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
-                return {
-                    writeLine: emptyHandler,
-                    writeKeyword: emptyHandler,
-                    writeOperator: emptyHandler,
-                    writePunctuation: emptyHandler,
-                    writeSpace: emptyHandler,
-                    writeStringLiteral: emptyHandler,
-                    writeParameter: emptyHandler,
-                    writeSymbol: emptyHandler,
-                    decreaseIndent: emptyHandler,
-                    increaseIndent: emptyHandler,
-                    clear: emptyHandler,
-                    trackTypeSymbol,
-                    trackInaccesibleSymbol
-                };
             }
 
             function visitNode(node: Node): void {
@@ -1698,9 +1706,11 @@ namespace ts {
         function attachVisibleChild(node: Node, child: Node): void {
             let links = getNodeLinks(node);
             if (!links.visibleChildren) {
-                links.visibleChildren = [];
+                links.visibleChildren = [child];
             }
-            links.visibleChildren.push(child);
+            else {
+                links.visibleChildren.push(child);
+            }
         }
 
         function preprocessSourceFile(sourceFile: SourceFile): void {
