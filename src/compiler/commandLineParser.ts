@@ -64,6 +64,14 @@ namespace ts {
             paramType: Diagnostics.LOCATION,
         },
         {
+            name: "mainModule",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
+            paramType: Diagnostics.LOCATION,
+            experimental: true
+        },
+        {
             name: "module",
             shortName: "m",
             type: {

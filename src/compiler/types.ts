@@ -1551,6 +1551,7 @@ namespace ts {
         getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
         getSymbolAtLocation(node: Node): Symbol;
         getLocalTargetOfAliasDeclaration(node: Declaration): Symbol;
+        getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
     export const enum SymbolFlags {
@@ -1959,6 +1960,7 @@ namespace ts {
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
+        /* @internal */ mainModule?: string;
         module?: ModuleKind;
         newLine?: NewLineKind;
         noEmit?: boolean;

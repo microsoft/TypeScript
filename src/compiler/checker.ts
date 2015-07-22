@@ -13870,6 +13870,7 @@ namespace ts {
                 getTypeReferenceSerializationKind,
                 getSymbolAtLocation,
                 getLocalTargetOfAliasDeclaration,
+                getAliasedSymbol: resolveAlias,
             };
         }
 
