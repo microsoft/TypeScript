@@ -324,7 +324,7 @@ class AnotherClass { private x }
 var f7: (x: number) => string | number = x => { // should be (x: number) => number | string
 >f7 : (x: number) => string | number
 >x : number
->x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
+>x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => number | string
 >x : number
 
     if (x < 0) { return x; }
@@ -342,7 +342,7 @@ var f7: (x: number) => string | number = x => { // should be (x: number) => numb
 var f8: (x: number) => any = x => { // should be (x: number) => Base
 >f8 : (x: number) => any
 >x : number
->x => { // should be (x: number) => Base    return new Base();    return new Derived2();} : (x: number) => Base
+>x => { // should be (x: number) => Base    return new Base();    return new Derived2();} : (x: number) => Base | Derived2
 >x : number
 
     return new Base();
@@ -356,7 +356,7 @@ var f8: (x: number) => any = x => { // should be (x: number) => Base
 var f9: (x: number) => any = x => { // should be (x: number) => Base
 >f9 : (x: number) => any
 >x : number
->x => { // should be (x: number) => Base    return new Base();    return new Derived();    return new Derived2();} : (x: number) => Base
+>x => { // should be (x: number) => Base    return new Base();    return new Derived();    return new Derived2();} : (x: number) => Base | Derived | Derived2
 >x : number
 
     return new Base();
