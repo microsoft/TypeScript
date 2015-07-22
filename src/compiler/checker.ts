@@ -10708,7 +10708,7 @@ namespace ts {
                 for (let d of symbol.declarations) {
                     let declarationSpaces = getDeclarationSpaces(d);
                     if (declarationSpaces & commonDeclarationSpaceForDefault) {
-                        error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration, declarationNameToString(d.name));
+                        error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration, declarationNameToString(d.name));
                     }
                     else if (declarationSpaces & commonDeclarationSpace) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));

@@ -1685,7 +1685,7 @@
         "category": "Error",
         "code": 2650
     },
-    "Merged declaration '{0}' cannot include a default export declaration.": {
+    "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0};' declaration.": {
         "category": "Error",
         "code": 2651
     },
