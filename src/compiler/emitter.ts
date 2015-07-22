@@ -5429,17 +5429,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (isES6ExportedDeclaration(node)) {
-                        write("export ");
-                        write("var ");
+                    
+                    // variable declaration for import-equals declaration can be hoisted in system modules
+                    // in this case 'var' should be omitted and emit should contain only initialization
+                    let variableDeclarationIsHoisted = shouldHoistVariable(node, /*checkIfSourceFileLevelDecl*/ true);
+                    
+                    // is it top level export import v = a.b.c in system module?
+                    // if yes - it needs to be rewritten as exporter('v', v = a.b.c)
+                    let isExported = isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ true);
+                    
+                    if (!variableDeclarationIsHoisted) {
+                        Debug.assert(!isExported);
+                                                
+                        if (isES6ExportedDeclaration(node)) {
+                            write("export ");
+                            write("var ");
+                        }
+                        else if (!(node.flags & NodeFlags.Export)) {
+                            write("var ");
+                        }
                     }
-                    else if (!(node.flags & NodeFlags.Export)) {
-                        write("var ");
+                                       
+                    
+                    if (isExported) {
+                        write(`${exportFunctionForFile}("`);
+                        emitNodeWithoutSourceMap(node.name);
+                        write(`", `);
                     }
+
                     emitModuleMemberName(node);
                     write(" = ");
                     emit(node.moduleReference);
-                    write(";");
+
+                    if (isExported) {
+                        write(")");
+                    }
+                                        
+                    write(";");                    
                     emitEnd(node);
                     emitExportImportAssignments(node);
                     emitTrailingComments(node);
@@ -5965,6 +5991,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         return;
                     }
+                    
+                    if (isInternalModuleImportEqualsDeclaration(node)) {
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+                        
+                        hoistedVars.push(node.name);
+                        return;
+                    }
 
                     if (isBindingPattern(node)) {
                         forEach((<BindingPattern>node).elements, visit);
@@ -6169,14 +6204,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 for (let i = startIndex; i < node.statements.length; ++i) {
                     let statement = node.statements[i];
-                    // - imports/exports are not emitted for system modules
+                    // - external module related imports/exports are not emitted for system modules
                     // - function declarations are not emitted because they were already hoisted
                     switch (statement.kind) {
                         case SyntaxKind.ExportDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
                         case SyntaxKind.FunctionDeclaration:
                             continue;
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            if (!isInternalModuleImportEqualsDeclaration(statement)) {
+                                continue;
+                            }
                     }
                     writeLine();
                     emit(statement);
