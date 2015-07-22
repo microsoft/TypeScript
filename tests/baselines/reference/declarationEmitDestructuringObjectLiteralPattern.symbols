@@ -21,24 +21,33 @@ var { x6, y6 } = { x6: 5, y6: "hello" };
 >y6 : Symbol(y6, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 4, 25))
 
 var { x7: a1 } = { x7: 5, y7: "hello" };
+>x7 : Symbol(x7, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 5, 18))
 >a1 : Symbol(a1, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 5, 5))
 >x7 : Symbol(x7, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 5, 18))
 >y7 : Symbol(y7, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 5, 25))
 
 var { y8: b1 } = { x8: 5, y8: "hello" };
+>y8 : Symbol(y8, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 6, 25))
 >b1 : Symbol(b1, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 6, 5))
 >x8 : Symbol(x8, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 6, 18))
 >y8 : Symbol(y8, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 6, 25))
 
 var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
+>x9 : Symbol(x9, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 7, 26))
 >a2 : Symbol(a2, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 7, 5))
+>y9 : Symbol(y9, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 7, 33))
 >b2 : Symbol(b2, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 7, 13))
 >x9 : Symbol(x9, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 7, 26))
 >y9 : Symbol(y9, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 7, 33))
 
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+>a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 46))
 >x11 : Symbol(x11, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 5))
+>b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 52))
+>a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 57))
 >y11 : Symbol(y11, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 18))
+>b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 69))
+>a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 74))
 >z11 : Symbol(z11, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 31))
 >a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 46))
 >b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 9, 52))

@@ -30,9 +30,11 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
         'z': true
     };
     function exportStar_1(m) {
+        var exports = {};
         for(var n in m) {
-            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
+        exports_1(exports);
     }
     return {
         setters:[

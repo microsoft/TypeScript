@@ -1,0 +1,7 @@
+=== tests/cases/conformance/types/tuple/tupleElementTypes4.ts ===
+function f([a, b] = [0, undefined]) { }
+>f : Symbol(f, Decl(tupleElementTypes4.ts, 0, 0))
+>a : Symbol(a, Decl(tupleElementTypes4.ts, 0, 12))
+>b : Symbol(b, Decl(tupleElementTypes4.ts, 0, 14))
+>undefined : Symbol(undefined)
+

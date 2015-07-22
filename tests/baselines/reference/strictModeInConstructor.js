@@ -74,8 +74,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        this.s = 9;
         "use strict"; // No error
+        this.s = 9;
         _super.call(this);
     }
     return B;

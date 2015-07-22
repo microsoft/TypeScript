@@ -12,6 +12,7 @@ interface FindFileResult {
 }
 
 interface IOLog {
+    timestamp: string;
     arguments: string[];
     executingPath: string;
     currentDirectory: string;
