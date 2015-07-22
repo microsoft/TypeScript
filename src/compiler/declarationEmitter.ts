@@ -30,7 +30,9 @@ namespace ts {
         // setup the writer
         let writer = createNewTextWriterWithSymbolWriter();
         let write = writer.write;
-        let writeTextOfNode = writer.writeTextOfNode;
+        let writeTextOfNode = (sourceFile: SourceFile, node: Node) => {
+            writer.writeTextOfNode(getSourceFileOfNode(node), node);
+        };
         let writeLine = writer.writeLine;
         let increaseIndent = writer.increaseIndent;
         let decreaseIndent = writer.decreaseIndent;
@@ -365,7 +367,7 @@ namespace ts {
 
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
-            if (node.parent === currentSourceFile) {
+            if (node.parent === getSourceFileOfNode(node)) {
                 // If the node is exported
                 if (node.flags & NodeFlags.Export) {
                     write("export ");
@@ -1309,8 +1311,8 @@ namespace ts {
         }
 
         function collectDeclatation(declaration:Node, errorNode?: Node) {
-            declarationsToProcess.push({ declaration, errorNode });
-            //preprocessDeclaration(declaration, errorNode);
+            //declarationsToProcess.push({ declaration, errorNode });
+            preprocessDeclaration(declaration, errorNode);
         }
 
         function isDeclarationExported(node: Node): boolean {
@@ -1619,10 +1621,22 @@ namespace ts {
                 return;
             }
 
-            // If this declaration is from a diffrent file, we will get to it later. 
-            // Skip it for now.
-            if (getSourceFileOfNode(declaration) !== currentSourceFile) {
-                return;
+            if (compilerOptions.mainModule) {
+                if (declaration.kind === SyntaxKind.ImportSpecifier) {
+                    let symbol = resolver.getSymbolAtLocation((<ImportOrExportSpecifier>declaration).name);
+                    let target = symbol && resolver.getAliasedSymbol(symbol);
+                    if (target) {
+                        collectDeclarations(target, errorNode);
+                    }
+                    return;
+                }
+            }
+            else {
+                // If this declaration is from a diffrent file, we will get to it later. 
+                // Skip it for now.
+                if (getSourceFileOfNode(declaration) !== currentSourceFile) {
+                    return;
+                }
             }
 
             let links = getNodeLinks(declaration);
@@ -1670,6 +1684,11 @@ namespace ts {
             });
         }
 
+        function isExternalModuleDeclaration(node: Node) {
+            return (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) ||
+                (node.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>node));
+        }
+
         function ensureDeclarationVisible(node: Node, errorNode: Node): void {
             let links = getNodeLinks(node);
             if (!links.visited) {
@@ -1679,7 +1698,13 @@ namespace ts {
                 // parent's visible declarations.
                 // also make sure the parent is reachable from a top-level
                 // declaration
+
                 let parent = getEnclosingDeclaration(node);
+                if (compilerOptions.mainModule &&
+                    parent !== currentSourceFile &&
+                    isExternalModuleDeclaration(parent)) {
+                    parent = currentSourceFile;
+                }
                 attachVisibleChild(parent, node);
                 if (parent.kind !== SyntaxKind.SourceFile) {
                     ensureDeclarationVisible(parent, errorNode);
@@ -1710,6 +1735,15 @@ namespace ts {
 
     function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, action: (name: string, sources: SourceFile[]) => void) {
         let compilerOptions = host.getCompilerOptions();
+
+        if (compilerOptions.mainModule) {
+            let mainModuleSourceFile = host.getSourceFile(compilerOptions.mainModule);
+            if (mainModuleSourceFile) {
+                let outputFilePath = getOwnEmitOutputFilePath(mainModuleSourceFile, host, ".d.ts");
+                action(outputFilePath, [mainModuleSourceFile]);
+                return;
+            }
+        }
 
         if (targetSourceFile) {
             // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
