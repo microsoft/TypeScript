@@ -1,7 +1,7 @@
 ///<reference path="fourslash.ts" />
 
-// We can resolve modules declared in .d.ts file
-// using the dependency array in 'define'
+// When a module name is 'require', it acts as a function that
+// can produce a module as if it were imported
 
 // @allowNonTsExtensions: true
 // @Filename: node.d.ts
@@ -11,12 +11,11 @@
 //// }
 
 // @Filename: Foo.js
-//// define('myMod', ['fs'], function(ff) {
+//// define('myMod', ['require'], function(r) {
+////    let ff = r('fs');
 ////    let y = ff/**/;
-//// });
+//// }
 
 goTo.marker();
-debug.printCurrentQuickInfo();
 edit.insert('.');
 verify.completionListContains("readFile", /*displayText:*/ undefined, /*documentation*/ undefined, "function");
-

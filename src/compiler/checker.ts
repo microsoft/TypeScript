@@ -107,6 +107,13 @@ namespace ts {
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
+        // In JS files using the CommonJS wrapper for RequireJS, these types
+        // represent sentinels for the special arguments 'exports', 'module', and 'require'
+        let cjsExportsType = createIntrinsicType(TypeFlags.Any, "CommonJS.Exports");
+        let cjsModuleType = createIntrinsicType(TypeFlags.Any, "CommonJS.Module");
+        let cjsRequireType = createIntrinsicType(TypeFlags.Any, "CommonJS.Require");
+        let cjsRequireSignature: Signature = <any>{parameters: [{ name: 'moduleName', type: stringType } ]};
+
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
@@ -2421,6 +2428,26 @@ namespace ts {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
                     }
                 }
+
+                // In a JS file, we might need to add types to parameters of a function expression that is
+                // an argument to 'define'
+                if (func.kind === SyntaxKind.FunctionExpression &&
+                    func.parent &&
+                    func.parent.kind === SyntaxKind.CallExpression) {
+                    
+                    console.log('rescue a define call?');
+                    if (isDefineCall(<CallExpression>func.parent)) {
+                        console.log('rescuing a define call for sure now');
+                        assignDefineCallParameterTypes(<FunctionExpression>func);
+                        let links = getSymbolLinks(declaration.symbol);
+                        if (links.type) {
+                            console.log('now it has a type: ' + typeToString(links.type));
+                            debugger;
+                            return links.type;
+                        }
+                    }
+                }
+
                 // Use contextual parameter type if one is available
                 let type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
@@ -2692,11 +2719,28 @@ namespace ts {
             if(callExpr.arguments.length === 0) {
                 return unknownType;
             }
+
+            // If the last arg isn't a function expr, dunno
+            // TODO: Might be an object literal, think about that
             let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
             if(lastArg.kind !== SyntaxKind.FunctionExpression) {
                 return unknownType;
             }
-            return getReturnTypeFromBody(lastArg);
+
+            // If there are any expressionful return statements in this function,
+            // we'll use those
+            let bodyReturnType = getReturnTypeFromBody(lastArg);
+            if (bodyReturnType !== voidType) {
+                return bodyReturnType;
+            }
+
+            // Look for assignments in the body to 'module.exports'
+            function traverse(node: Node) {
+                if(node.kind === SyntaxKind.LastAssignment) {
+                    
+                }
+                forEachChild(node, traverse);               
+            }
         }
 
         function getTypeOfDefineModule(symbol: Symbol): Type {
@@ -3733,7 +3777,25 @@ namespace ts {
             return result;
         }
 
+        function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
+            console.log('Resolving ' + getTextOfNode(name));
+            let moduleSym = resolveExternalModuleName(name, name, /*includeJs*/ true);
+            if (moduleSym) {
+                console.log('Resolved to (name) ' + symbolToString(moduleSym));
+                let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
+                if (moduleSymSym) {
+                    return getTypeOfSymbol(moduleSymSym);
+                }
+            }
+
+            return anyType;
+        }
+
         function getReturnTypeOfSignature(signature: Signature): Type {
+            if(signature === cjsRequireSignature) {
+                return anyType;
+            }
+
             if (!signature.resolvedReturnType) {
                 if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
                     return unknownType;
@@ -8982,6 +9044,10 @@ namespace ts {
             }
 
             let funcType = checkExpression(node.expression);
+            if (funcType === cjsRequireType) {
+                return cjsRequireSignature;
+            }
+
             let apparentType = getApparentType(funcType);
 
             if (apparentType === unknownType) {
@@ -9224,6 +9290,13 @@ namespace ts {
                     return anyType;
                 }
             }
+
+            if (signature === cjsRequireSignature) {
+                if(node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                    return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
+                }
+            }
+
             return getReturnTypeOfSignature(signature);
         }
 
@@ -9254,39 +9327,46 @@ namespace ts {
             Debug.assert(callExpr.kind === SyntaxKind.CallExpression, 'Parent is a call expr');
             Debug.assert(isDefineCall(callExpr), 'Parent is a defined call');
 
+            if(isCommonJsWrapper(funcExpr)) {
+                // CommonJS wrapper
+                getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsRequireType;
+
+                if(funcExpr.parameters.length > 1) {
+                    getSymbolLinks(funcExpr.parameters[1].symbol).type = cjsExportsType;
+                }
+
+                if(funcExpr.parameters.length > 2) {
+                    getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsModuleType;
+                }
+            }
+
             let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
-            if (moduleNames) {
-                Debug.assert(moduleNames.kind === SyntaxKind.ArrayLiteralExpression, 'Module names is an array literal');
+            // define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
+            if (moduleNames && moduleNames.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (let i = 0; i < funcExpr.parameters.length; i++) {
                     if (moduleNames.elements.length === i) {
+                        // We exhausted the list of modules. TODO: Issue an error; this is bad.
                         break;
                     }
+
+                    let links = getSymbolLinks(funcExpr.parameters[i].symbol);
 
                     if (moduleNames.elements[i].kind === SyntaxKind.StringLiteral) {
                         let moduleName = getTextOfNode(moduleNames.elements[i]);
                         console.log('Resolve ' + moduleName);
 
-                        if (moduleName === 'require') {
-                            // 
+                        let unquotedName = moduleName.substr(1, moduleName.length - 2);
+                        if (unquotedName === 'require') {
+                            links.type = cjsRequireType;
                         }
-                        else if (moduleName === 'exports') {
-                            // 
+                        else if (unquotedName === 'exports') {
+                            links.type = cjsExportsType;
                         }
-                        else if (moduleName === 'module') {
-                            // 
+                        else if (unquotedName === 'module') {
+                            links.type = cjsModuleType;
                         }
                         else {
-                            let moduleSym = resolveExternalModuleName(moduleNames.elements[i], moduleNames.elements[i], /*includeJs*/ true);
-                            console.log('Resolved to ' + moduleSym);
-                            if (moduleSym) {
-                                console.log('Resolved to (name) ' + symbolToString(moduleSym));
-                                let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
-                                console.log('Resresolved to ' + symbolToString(moduleSymSym));
-
-                                let links = getSymbolLinks(funcExpr.parameters[i].symbol);
-                                links.type = getTypeOfSymbol(moduleSymSym);
-                                console.log(symbolToString(funcExpr.parameters[i].symbol) + ' is now of type ' + typeToString(links.type));
-                            }
+                            links.type = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[i]);
                         }
                     }
                 }
@@ -13987,7 +14067,7 @@ namespace ts {
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                            
+
                         // fall through; this fall-through is necessary because we would like to handle
                         // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:

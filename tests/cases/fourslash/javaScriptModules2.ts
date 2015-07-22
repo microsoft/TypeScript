@@ -6,10 +6,10 @@
 // @allowNonTsExtensions: true
 
 // @Filename: Foo.js
-//// define('myMod', ['fs'], function(ff) {
+//// define('myMod', function() {
 ////    return {x: 'hello'};
 //// });
-//// define(['myMod'], function(mm) {
+//// define('qq', ['myMod'], function(mm) {
 ////    var yy = mm.x;
 ////    yy/**/;
 //// }
