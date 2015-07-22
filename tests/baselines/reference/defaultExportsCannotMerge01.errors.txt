@@ -1,12 +1,16 @@
+tests/cases/conformance/es6/modules/m1.ts(2,25): error TS2651: Merged declaration 'Decl' cannot include a default export declaration.
+tests/cases/conformance/es6/modules/m1.ts(11,18): error TS2651: Merged declaration 'Decl' cannot include a default export declaration.
 tests/cases/conformance/es6/modules/m2.ts(5,8): error TS2304: Cannot find name 'Entity'.
 tests/cases/conformance/es6/modules/m2.ts(6,8): error TS2503: Cannot find namespace 'Entity'.
 tests/cases/conformance/es6/modules/m2.ts(8,8): error TS2339: Property 'x' does not exist on type '() => number'.
 tests/cases/conformance/es6/modules/m2.ts(9,8): error TS2339: Property 'y' does not exist on type '() => number'.
 
 
-==== tests/cases/conformance/es6/modules/m1.ts (0 errors) ====
+==== tests/cases/conformance/es6/modules/m1.ts (2 errors) ====
     
     export default function Decl() {
+                            ~~~~
+!!! error TS2651: Merged declaration 'Decl' cannot include a default export declaration.
         return 0;
     }
     
@@ -16,6 +20,8 @@ tests/cases/conformance/es6/modules/m2.ts(9,8): error TS2339: Property 'y' does 
     }
     
     export namespace Decl {
+                     ~~~~
+!!! error TS2651: Merged declaration 'Decl' cannot include a default export declaration.
         export var x = 10;
         export var y = 20;
     
