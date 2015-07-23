@@ -29,6 +29,7 @@ var Buffer: BufferConstructor = require('buffer').Buffer;
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
 var assert: typeof _chai.assert = _chai.assert;
+var expect: typeof _chai.expect = _chai.expect;
 declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
 

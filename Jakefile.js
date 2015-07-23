@@ -138,6 +138,7 @@ var harnessSources = harnessCoreSources.concat([
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
+    "session.ts",
     "versionCache.ts",
     "convertToBase64.ts",
     "transpile.ts"
