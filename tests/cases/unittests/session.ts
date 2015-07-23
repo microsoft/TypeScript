@@ -155,13 +155,6 @@ namespace ts.server {
             });
         });
 
-        describe("exit", () => {
-            it("is a noop which can be handled by subclasses", () => {
-                session.exit(); // Does nothing, should keep running tests
-                expect(session).to.exist;
-            });
-        });
-
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
                 const msg = {seq: 0, type: "none"};
