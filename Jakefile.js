@@ -775,9 +775,9 @@ task("lint", [], function() {
     function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
 
     var lintTargets = compilerSources.concat(harnessCoreSources);
-    for(var i in lintTargets) {
+    for (var i in lintTargets) {
         var f = lintTargets[i];
-        var cmd = 'tslint -f ' + f;
+        var cmd = 'tslint -c tslint.json ' + f;
         exec(cmd, success(f), failure(f));
     }
 }, { async: true });
