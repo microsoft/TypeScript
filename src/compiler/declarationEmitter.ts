@@ -8,6 +8,7 @@ namespace ts {
         collected?: boolean;
         hasExportDeclarations?: boolean;
         errorReported?: boolean;
+        declarationFlags?: NodeFlags;
     }
 
     interface PreprocessResults {
@@ -398,19 +399,16 @@ namespace ts {
         }
 
         function emitModuleElementDeclarationFlags(node: Node) {
-            // If the node is parented in the current source file we need to emit export declare or just export
-            if (node.parent === getSourceFileOfNode(node)) {
-                // If the node is exported
-                if (node.flags & NodeFlags.Export) {
-                    write("export ");
-                }
+            let links = getNodeLinks(node);
 
-                if (node.flags & NodeFlags.Default) {
-                    write("default ");
-                }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
-                    write("declare ");
-                }
+            if (links.declarationFlags & NodeFlags.Export) {
+                write("export ");
+            }
+            if (links.declarationFlags & NodeFlags.Default) {
+                write("default ");
+            }
+            if (links.declarationFlags & NodeFlags.Ambient) {
+                write("declare ");
             }
         }
 
@@ -434,9 +432,7 @@ namespace ts {
             // note usage of writer. methods instead of aliases created, just to make sure we are using 
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
-            if (node.flags & NodeFlags.Export) {
-                write("export ");
-            }
+            emitModuleElementDeclarationFlags(node);
             write("import ");
             writeTextOfNode(node.name);
             write(" = ");
@@ -1676,6 +1672,34 @@ namespace ts {
             }
         }
 
+        function setDeclarationFlags(node: Node): void {
+            if (node.kind === SyntaxKind.VariableDeclaration) {
+                setDeclarationFlags(getEnclosingDeclaration(node));
+                return;
+            }
+
+            let links = getNodeLinks(node);
+
+            // If the node is parented in the current source file we need to emit export declare or just export
+            if (node.parent.kind === SyntaxKind.SourceFile) {
+                // If the node is exported
+                if (node.flags & NodeFlags.Export) {
+                    links.declarationFlags |= NodeFlags.Export;
+                }
+
+                if (node.flags & NodeFlags.Default) {
+                    links.declarationFlags |= NodeFlags.Default;
+                }
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && node.kind !== SyntaxKind.ImportEqualsDeclaration) {
+                    links.declarationFlags |= NodeFlags.Ambient;
+                }
+            }
+
+            if (node.kind === SyntaxKind.ImportEqualsDeclaration && node.flags & NodeFlags.Export) {
+                links.declarationFlags |= NodeFlags.Export;
+            }
+        }
+
         function reportDeclarationAccessiblityError(declaration: Node, errorNode: Node): boolean {
             let node = errorNode;
             while (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccessExpression) {
@@ -1718,6 +1742,8 @@ namespace ts {
                     isExternalModuleDeclaration(parent)) {
                     parent = currentSourceFile;
                 }
+                setDeclarationFlags(node);
+
                 attachVisibleChild(parent, node);
                 if (parent.kind !== SyntaxKind.SourceFile) {
                     ensureDeclarationVisible(parent, errorNode);
