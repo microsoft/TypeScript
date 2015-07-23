@@ -379,7 +379,7 @@ module FourSlashInterface {
         }
 
         // Will fix in fourslash-referencing
-        public DocCommentScaffolding(position: number, expectedText: string, expectedOffset: number) {
+        public DocCommentScaffolding(expectedText: string, expectedOffset: number) {
             FourSlash.currentTestState.verifyDocCommentScaffolding({ newText: expectedText, cursorOffset: expectedOffset });
         }
 

@@ -432,7 +432,7 @@ namespace ts {
         extraCheck: (c: CommentRange) => boolean): boolean {
         let token = getTokenAtPosition(sourceFile, position);
 
-        if (token && position < token.getStart()) {
+        if (token && position <= token.getStart()) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
             return forEach(commentRanges, c => c.pos < position &&
@@ -442,6 +442,7 @@ namespace ts {
                 //    // asdf   ^\n
                 //
                 // But for multi-line comments, we don't want to be inside the comment in the following case:
+                //
                 //    /* asdf */^
                 //
                 // Internally, we represent the end of the comment at the newline and closing '/', respectively.

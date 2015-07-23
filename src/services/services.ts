@@ -6778,7 +6778,7 @@ namespace ts {
             let nodeAtPos = getTokenAtPosition(sourceFile, position);
             let containingFunction = <FunctionDeclaration>getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
 
-            if (hasDocComment(sourceFile, position) || !containingFunction) {
+            if (hasDocComment(sourceFile, position) || !containingFunction || containingFunction.getStart() < position) {
                 return emptyCompletion;
             }
 

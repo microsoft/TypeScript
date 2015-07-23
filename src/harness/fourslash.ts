@@ -1945,7 +1945,7 @@ module FourSlash {
             let actual = this.languageService.getDocCommentScaffoldingAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (actual.newText !== expected.newText) {
-                this.raiseError('verifyDocCommentScaffolding failed - expected insertion:\n' + expected.newText + 'actual insertion:\n' + actual.newText);
+                this.raiseError('verifyDocCommentScaffolding failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
             }
 
             if (actual.cursorOffset !== expected.cursorOffset) {
