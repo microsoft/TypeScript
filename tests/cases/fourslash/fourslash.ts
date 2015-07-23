@@ -39,7 +39,7 @@
 // Explanation:
 // We want type-completion while we edit this file, but at compile time/while editting fourslash tests,
 // we don't want to include the following reference because we are compiling this file in "--out" mode and don't want to rope
-// in the entire codebase into the compilattion each fourslash test. Additionally, we don't want to expose the
+// in the entire codebase into the compilation each fourslash test. Additionally, we don't want to expose the
 // src/harness/fourslash.ts API's (or the rest of the compiler) because they are unstable and complicate the
 // fourslash testing DSL. Finally, in this case, runtime reflection is (much) faster.
 //
