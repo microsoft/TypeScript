@@ -1,6 +1,6 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts.server {
+namespace ts.server {
     let lastWrittenToHost: string;
     const mockHost: ServerHost = {
         args: [],
@@ -256,8 +256,8 @@ module ts.server {
     describe("how Session is extendable via subclassing", () => {
         class TestSession extends Session {
             lastSent: protocol.Message;
-            customHandler: string = "testhandler";
-            constructor(){
+            customHandler = "testhandler";
+            constructor() {
                 super(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler(this.customHandler, () => {
                     return {response: undefined, responseRequired: true};
@@ -315,7 +315,7 @@ module ts.server {
     describe("an example of using the Session API to create an in-process server", () => {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
-            constructor(private client: {handle: (msg: protocol.Message) => void}) {
+            constructor(private client: InProcClient) {
                 super(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
@@ -355,7 +355,7 @@ module ts.server {
         
         class InProcClient {
             private server: InProcSession;
-            private seq: number = 0;
+            private seq = 0;
             private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
             private eventHandlers: ts.Map<(args: any) => void> = {};
 
