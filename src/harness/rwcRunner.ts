@@ -74,10 +74,11 @@ module RWC {
                     });
 
                     // Add files to compilation
+                    let isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
                     for (let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
-                        var resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
-                        let inInputList = ts.forEach(inputFiles, inputFile => inputFile.unitName === resolvedPath);
+                        const resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
+                        let inInputList = ts.forEach(inputFiles, isInInputList(resolvedPath));
 
                         if (!Harness.isLibraryFile(fileRead.path)) {
                             if (inInputList) {

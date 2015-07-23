@@ -24,6 +24,8 @@
 /// <reference path='sourceMapRecorder.ts'/>
 /// <reference path='runnerbase.ts'/>
 
+// Block scoped definitions work poorly for global variables, temporarily enable var
+/* tslint:disable:no-var-keyword */
 var Buffer: BufferConstructor = require('buffer').Buffer;
 
 // this will work in the browser via browserify
@@ -32,6 +34,7 @@ var assert: typeof _chai.assert = _chai.assert;
 var expect: typeof _chai.expect = _chai.expect;
 declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
+/* tslint:enable:no-var-keyword */
 
 module Utils {
     // Setup some globals based on the current environment
@@ -412,6 +415,7 @@ module Harness {
         log(text: string): void;
         getMemoryUsage?(): number;
     }
+    export var IO: IO;
 
     module IOImpl {
         declare class Enumerator {
@@ -690,7 +694,6 @@ module Harness {
         }
     }
 
-    export var IO: IO;
     switch (Utils.getExecutionEnvironment()) {
         case Utils.ExecutionEnvironment.CScript:
             IO = IOImpl.CScript;

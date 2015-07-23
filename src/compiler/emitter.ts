@@ -1248,7 +1248,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // Don't emit empty strings
                             if (children[i].kind === SyntaxKind.JsxText) {
                                 let text = getTextToEmit(<JsxText>children[i]);
-                                if(text !== undefined) {
+                                if (text !== undefined) {
                                     write(', "');
                                     write(text);
                                     write('"');
@@ -4255,11 +4255,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
+                let superCall: ExpressionStatement;
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
                     if (baseTypeElement) {
-                        var superCall = findInitialSuperCall(ctor);
+                        superCall = findInitialSuperCall(ctor);
                         if (superCall) {
                             writeLine();
                             emit(superCall);
@@ -4936,7 +4937,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         let temp = createAndRecordTempVariable(TempFlags.Auto);
                         write("(typeof (");
                         emitNodeWithoutSourceMap(temp);
-                        write(" = ")
+                        write(" = ");
                         emitEntityNameAsExpression(typeName, /*useFallback*/ true);
                         write(") === 'function' && ");
                         emitNodeWithoutSourceMap(temp);
@@ -4995,7 +4996,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // 
                 // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
                 if (node) {
-                    var valueDeclaration: FunctionLikeDeclaration;
+                    let valueDeclaration: FunctionLikeDeclaration;
                     if (node.kind === SyntaxKind.ClassDeclaration) {
                         valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
                     }
@@ -5004,8 +5005,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     
                     if (valueDeclaration) {
-                        var parameters = valueDeclaration.parameters;
-                        var parameterCount = parameters.length;
+                        const parameters = valueDeclaration.parameters;
+                        const parameterCount = parameters.length;
                         if (parameterCount > 0) {
                             for (var i = 0; i < parameterCount; i++) {
                                 if (i > 0) {
@@ -5013,7 +5014,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 }
                                 
                                 if (parameters[i].dotDotDotToken) {
-                                    var parameterType = parameters[i].type;
+                                    let parameterType = parameters[i].type;
                                     if (parameterType.kind === SyntaxKind.ArrayType) {
                                         parameterType = (<ArrayTypeNode>parameterType).elementType;
                                     }
@@ -5825,7 +5826,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     write("}");
                     writeLine();
-                    write(`${exportFunctionForFile}(exports);`)
+                    write(`${exportFunctionForFile}(exports);`);
                     decreaseIndent();
                     writeLine();
                     write("}");
@@ -6173,7 +6174,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 // exports_(reexports);
                                 let reexportsVariableName = makeUniqueName("reexports");
                                 writeLine();
-                                write(`var ${reexportsVariableName} = {};`)
+                                write(`var ${reexportsVariableName} = {};`);
                                 writeLine();
                                 for (let e of (<ExportDeclaration>importNode).exportClause.elements) {
                                     write(`${reexportsVariableName}["`);
