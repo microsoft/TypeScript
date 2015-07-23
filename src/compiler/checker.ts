@@ -1994,15 +1994,15 @@ namespace ts {
             }
 
             return _displayBuilder || (_displayBuilder = {
-                buildSymbolDisplay: buildSymbolDisplay,
-                buildTypeDisplay: buildTypeDisplay,
-                buildTypeParameterDisplay: buildTypeParameterDisplay,
-                buildParameterDisplay: buildParameterDisplay,
-                buildDisplayForParametersAndDelimiters: buildDisplayForParametersAndDelimiters,
-                buildDisplayForTypeParametersAndDelimiters: buildDisplayForTypeParametersAndDelimiters,
-                buildTypeParameterDisplayFromSymbol: buildTypeParameterDisplayFromSymbol,
-                buildSignatureDisplay: buildSignatureDisplay,
-                buildReturnTypeDisplay: buildReturnTypeDisplay
+                buildSymbolDisplay,
+                buildTypeDisplay,
+                buildTypeParameterDisplay,
+                buildParameterDisplay,
+                buildDisplayForParametersAndDelimiters,
+                buildDisplayForTypeParametersAndDelimiters,
+                buildTypeParameterDisplayFromSymbol,
+                buildSignatureDisplay,
+                buildReturnTypeDisplay
             });
         }
 
@@ -14771,17 +14771,15 @@ namespace ts {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
                     }
                 }
-                else if (parameter.questionToken || parameter.initializer) {
+                else if (parameter.questionToken) {
                     seenOptionalParameter = true;
 
-                    if (parameter.questionToken && parameter.initializer) {
+                    if (parameter.initializer) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
                     }
                 }
-                else {
-                    if (seenOptionalParameter) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
-                    }
+                else if (seenOptionalParameter && !parameter.initializer) {
+                    return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
                 }
             }
         }
