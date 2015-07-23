@@ -48,6 +48,7 @@ namespace ts {
         getConstructSignatures(): Signature[];
         getStringIndexType(): Type;
         getNumberIndexType(): Type;
+        getBaseTypes(): ObjectType[]
     }
 
     export interface Signature {
@@ -681,6 +682,11 @@ namespace ts {
         }
         getNumberIndexType(): Type {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
+        }
+        getBaseTypes(): ObjectType[] {
+            return this.flags & (TypeFlags.Class | TypeFlags.Interface)
+                ? this.checker.getBaseTypes(<TypeObject & InterfaceType>this)
+                : undefined;
         }
     }
 
