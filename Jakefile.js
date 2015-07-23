@@ -336,17 +336,17 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
         complete();
     });
     ex.run();
-}, {async: true})
+}, {async: true});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
-task("generate-diagnostics", [diagnosticInfoMapTs])
+task("generate-diagnostics", [diagnosticInfoMapTs]);
 
 
 // Publish nightly
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
 var packageJson = "package.json";
-var programTs = path.join(compilerDirectory, "program.ts")
+var programTs = path.join(compilerDirectory, "program.ts");
 
 file(configureNightlyTs);
 
@@ -476,11 +476,11 @@ file(specMd, [word2mdJs, specWord], function () {
     child_process.exec(cmd, function () {
         complete();
     });
-}, {async: true})
+}, {async: true});
 
 
 desc("Generates a Markdown version of the Language Specification");
-task("generate-spec", [specMd])
+task("generate-spec", [specMd]);
 
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
@@ -612,7 +612,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
-desc("Generates code coverage data via instanbul")
+desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
@@ -655,7 +655,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
 function getDiffTool() {
     var program = process.env['DIFF']
     if (!program) {
-        fail("Add the 'DIFF' environment variable to the path of the program you want to use.")
+        fail("Add the 'DIFF' environment variable to the path of the program you want to use.");
     }
     return program;
 }
@@ -664,14 +664,14 @@ function getDiffTool() {
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
-    console.log(cmd)
+    console.log(cmd);
     exec(cmd);
 }, {async: true});
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
-    console.log(cmd)
+    console.log(cmd);
     exec(cmd);
 }, {async: true});
 
