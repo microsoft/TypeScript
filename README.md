@@ -63,7 +63,8 @@ jake runtests         # Run tests using the built compiler and test infrastructu
                       # Use host=<hostName> or tests=<testPath>. 
 jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
                         parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
-jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests. 
+jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
+jake lint             # Runs tslint on the TypeScript source
 jake -T               # List the above commands. 
 ```
 
