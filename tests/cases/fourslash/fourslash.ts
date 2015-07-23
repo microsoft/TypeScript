@@ -380,7 +380,7 @@ module FourSlashInterface {
 
         // Will fix in fourslash-referencing
         public DocCommentScaffolding(position: number, expectedText: string, expectedOffset: number) {
-            FourSlash.currentTestState.verifyDocCommentScaffolding(position, { newText: expectedText, cursorOffset: expectedOffset });
+            FourSlash.currentTestState.verifyDocCommentScaffolding({ newText: expectedText, cursorOffset: expectedOffset });
         }
 
         public getScriptLexicalStructureListCount(count: number) {

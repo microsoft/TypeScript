@@ -1941,15 +1941,15 @@ module FourSlash {
             }
         }
 
-        public verfiyDocCommentScaffolding(position: number, expected: ts.TextInsertion) {
-            let actual = this.languageService.getDocCommentScaffoldingAtPosition(this.activeFile.fileName, position);
+        public verifyDocCommentScaffolding(expected: ts.TextInsertion) {
+            let actual = this.languageService.getDocCommentScaffoldingAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (actual.newText !== expected.newText) {
-                this.raiseError('verfiyDocCommentScaffolding failed - expected insertion:\n' + expected.newText + 'actual insertion:\n' + actual.newText);
+                this.raiseError('verifyDocCommentScaffolding failed - expected insertion:\n' + expected.newText + 'actual insertion:\n' + actual.newText);
             }
 
             if (actual.cursorOffset !== expected.cursorOffset) {
-                this.raiseError('verfiyDocCommentScaffolding failed - expected cursorOffset: ' + expected.cursorOffset + ',\tactual cursorOffset:' + actual.cursorOffset);
+                this.raiseError('verifyDocCommentScaffolding failed - expected cursorOffset: ' + expected.cursorOffset + ',\tactual cursorOffset:' + actual.cursorOffset);
             }
         }
 
