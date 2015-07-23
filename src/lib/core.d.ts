@@ -971,14 +971,14 @@ interface JSON {
       * @param replacer A function that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer: (key: string, value: any) => any, space: any): string;
+    stringify(value: any, replacer: (key: string, value: any) => any, space: string | number): string;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
       * @param replacer Array that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer: any[], space: any): string;
+    stringify(value: any, replacer: any[], space: string | number): string;
 }
 /**
   * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.

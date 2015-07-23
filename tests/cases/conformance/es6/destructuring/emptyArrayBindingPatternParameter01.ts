@@ -1,5 +1,5 @@
 
 
 function f([]) {
-	var x, y, z;
+    var x, y, z;
 }

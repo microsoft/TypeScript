@@ -6,10 +6,10 @@ function bar([x, z, ...w]) { }
 >w : any[]
 
 function foo([x, ...y] = [1, "string", true]) { }
->foo : ([x, ...y]?: (string | number | boolean)[]) => void
->x : string | number | boolean
->y : (string | number | boolean)[]
->[1, "string", true] : (string | number | boolean)[]
+>foo : ([x, ...y]?: (number | string | boolean)[]) => void
+>x : number | string | boolean
+>y : (number | string | boolean)[]
+>[1, "string", true] : (number | string | boolean)[]
 >1 : number
 >"string" : string
 >true : boolean
