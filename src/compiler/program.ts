@@ -8,7 +8,7 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "1.5.3";
+    export const version = "1.6.0";
 
     export function findConfigFile(searchPath: string): string {
         let fileName = "tsconfig.json";
