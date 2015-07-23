@@ -3,4 +3,4 @@
 // @Filename: emptyFile.ts
 /////*0*/
 
-verify.DocCommentScaffolding(0, { newText: "/** */", cursorOffset: 3});
+verify.DocCommentScaffolding("/** */", 3);
