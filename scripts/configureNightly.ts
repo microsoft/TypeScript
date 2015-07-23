@@ -27,11 +27,6 @@ function main(): void {
     // Modify the package.json structure
     packageJsonValue.version = nightlyVersion;
 
-    if (packageJsonValue.name !== "typescript-nightly") {
-        packageJsonValue.name = "typescript-nightly";
-        packageJsonValue.keywords.push("nightly", "alpha", "beta", "prerelease");
-    }
-
     // Acquire and modify the source file that exposes the version string.
     const tsFilePath = ts.normalizePath(sys.args[1]);
     const tsFileContents = sys.readFile(tsFilePath);
@@ -40,7 +35,16 @@ function main(): void {
 
     // Ensure we are actually changing something - the user probably wants to know that the update failed.
     if (tsFileContents === modifiedTsFileContents) {
-        throw `File '${tsFilePath}' did not contain pattern ${versionAssignmentRegExp}`;
+        let err = `\n  '${tsFilePath}' was not updated while configuring for a nightly publish.\n    `;
+
+        if (tsFileContents.match(versionAssignmentRegExp)) {
+            err += `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
+        }
+        else {
+            err += `The file seems to no longer have a string matching '${versionAssignmentRegExp}'.`;
+        }
+
+        throw err + "\n";
     }
 
     // Finally write the changes to disk.
@@ -51,19 +55,19 @@ function main(): void {
 function getNightlyVersionString(versionString: string): string {
     // If the version string already contains "-nightly",
     // then get the base string and update based on that.
-    const dashNightlyPos = versionString.indexOf("-nightly");
+    const dashNightlyPos = versionString.indexOf("-dev");
     if (dashNightlyPos >= 0) {
         versionString = versionString.slice(0, dashNightlyPos);
     }
 
     // We're going to append a representation of the current time at the end of the current version.
     // String.prototype.toISOString() returns a 24-character string formatted as 'YYYY-MM-DDTHH:mm:ss.sssZ',
-    // but we'd prefer to just use hyphens as separators instead of 'T', ':', and '.'.
-    // The trailing 'Z' in this string can be removed; UTC time will always be implicit here.
+    // but we'd prefer to just remove separators and limit ourselves to YYYYMMDD.
+    // UTC time will always be implicit here.
     const now = new Date();
-    const timeStr = now.toISOString().slice(0, -1).replace(/:|T|\./g, "-");
+    const timeStr = now.toISOString().replace(/:|T|\.|-/g, "").slice(0, 8);
 
-    return `${versionString}-nightly-${timeStr}`;
+    return `${versionString}-dev.${timeStr}`;
 }
 
 main();

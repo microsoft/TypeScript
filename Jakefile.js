@@ -361,23 +361,24 @@ compileFile(/*outfile*/configureNightlyJs,
             /*preserveConstEnums*/ undefined,
             /*keepComments*/ false,
             /*noResolve*/ false,
-            /*stripInternal*/ false,
-            /*callback*/ function () {
-                var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
-                console.log(cmd);
-                exec(cmd, completeHandler, errorHandler)
-            });
+            /*stripInternal*/ false);
 
-task("setDebugModeTrue", function() {
+task("setDebugMode", function() {
     useDebugMode = true;
 });
 
-desc("Configure, build, test, and publish the nightly release.");
-task("publish-nightly", [configureNightlyJs, "LKG", "clean", "setDebugModeTrue", "runtests"], function () {
-    var cmd = "npm publish";
+task("configure-nightly", [configureNightlyJs], function() {
+    var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
     console.log(cmd);
-    exec(cmd, completeHandler, errorHandler)
-}, {async: true});
+    exec(cmd);
+}, { async: true });
+
+desc("Configure, build, test, and publish the nightly release.");
+task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests"], function () {
+    var cmd = "npm publish --tag next";
+    console.log(cmd);
+    exec(cmd);
+});
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
