@@ -30,7 +30,7 @@ namespace ts {
     declare var global: any;
     declare var __filename: string;
     declare var Buffer: {  
-        new (str: string, encoding ?: string): any;  
+        new (str: string, encoding?: string): any;  
     };
 
     declare class Enumerator {
@@ -190,7 +190,7 @@ namespace ts {
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
-            const _os = require('os');
+            const _os = require("os");
 
             const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -228,7 +228,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = '\uFEFF' + data;
+                    data = "\uFEFF" + data;
                 }
 
                 _fs.writeFileSync(fileName, data, "utf8");
@@ -271,7 +271,7 @@ namespace ts {
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {  
-                    const buffer = new Buffer(s, 'utf8');  
+                    const buffer = new Buffer(s, "utf8");  
                     let offset: number = 0;
                     let toWrite: number = buffer.length;
                     let written = 0;

@@ -523,7 +523,7 @@ namespace ts {
         if (path.lastIndexOf("file:///", 0) === 0) {
             return "file:///".length;
         }
-        let idx = path.indexOf('://');
+        let idx = path.indexOf("://");
         if (idx !== -1) {
             return idx + "://".length;
         }

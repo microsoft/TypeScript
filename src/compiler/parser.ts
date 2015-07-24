@@ -3340,7 +3340,7 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                     return parseJsxElementOrSelfClosingElement();
             }
-            Debug.fail('Unknown JSX child kind ' + token);
+            Debug.fail("Unknown JSX child kind " + token);
         }
 
         function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
@@ -6011,7 +6011,7 @@ namespace ts {
             return;
 
             function visitNode(node: IncrementalNode) {
-                let text = '';
+                let text = "";
                 if (aggressiveChecks && shouldCheckNode(node)) {
                     text = oldText.substring(node.pos, node.end);
                 }

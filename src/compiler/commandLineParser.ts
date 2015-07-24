@@ -335,7 +335,7 @@ namespace ts {
       * @param fileName The path to the config file
       */
     export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
-        let text = '';
+        let text = "";
         try {
             text = sys.readFile(fileName);
         }

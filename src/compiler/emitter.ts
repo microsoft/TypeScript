@@ -380,7 +380,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     function base64VLQFormatEncode(inValue: number) {
                         function base64FormatEncode(inValue: number) {
                             if (inValue < 64) {
-                                return 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.charAt(inValue);
+                                return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(inValue);
                             }
                             throw TypeError(inValue + ": not a 64 based value");
                         }
@@ -895,7 +895,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Any template literal or string literal with an extended escape
                 // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-                    return getQuotedEscapedLiteralText('"', node.text, '"');
+                    return getQuotedEscapedLiteralText("\"", node.text, "\"");
                 }
 
                 // If we don't need to downlevel and we can reach the original source text using
@@ -908,15 +908,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // or an escaped quoted form of the original text if it's string-like.
                 switch (node.kind) {
                     case SyntaxKind.StringLiteral:
-                        return getQuotedEscapedLiteralText('"', node.text, '"');
+                        return getQuotedEscapedLiteralText("\"", node.text, "\"");
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return getQuotedEscapedLiteralText('`', node.text, '`');
+                        return getQuotedEscapedLiteralText("`", node.text, "`");
                     case SyntaxKind.TemplateHead:
-                        return getQuotedEscapedLiteralText('`', node.text, '${');
+                        return getQuotedEscapedLiteralText("`", node.text, "${");
                     case SyntaxKind.TemplateMiddle:
-                        return getQuotedEscapedLiteralText('}', node.text, '${');
+                        return getQuotedEscapedLiteralText("}", node.text, "${");
                     case SyntaxKind.TemplateTail:
-                        return getQuotedEscapedLiteralText('}', node.text, '`');
+                        return getQuotedEscapedLiteralText("}", node.text, "`");
                     case SyntaxKind.NumericLiteral:
                         return node.text;
                 }
@@ -947,7 +947,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 text = text.replace(/\r\n?/g, "\n");
                 text = escapeString(text);
 
-                write('"' + text + '"');
+                write(`"${text}"`);
             }
 
             function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
@@ -1134,9 +1134,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier|QualifiedName) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
-                        write('"');
+                        write("\"");
                         emit(name);
-                        write('"');
+                        write("\"");
                     }
                     else {
                         emit(name);
@@ -1148,9 +1148,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 /// about keywords, just non-identifier characters
                 function emitAttributeName(name: Identifier) {
                     if (/[A-Za-z_]+[\w*]/.test(name.text)) {
-                        write('"');
+                        write("\"");
                         emit(name);
-                        write('"');
+                        write("\"");
                     }
                     else {
                         emit(name);
@@ -1249,9 +1249,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if (children[i].kind === SyntaxKind.JsxText) {
                                 let text = getTextToEmit(<JsxText>children[i]);
                                 if (text !== undefined) {
-                                    write(', "');
+                                    write(", \"");
                                     write(text);
-                                    write('"');
+                                    write("\"");
                                 }
                             }
                             else {
@@ -1491,7 +1491,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (declaration.kind === SyntaxKind.ImportClause) {
                             // Identifier references default import
                             write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
-                            write(languageVersion === ScriptTarget.ES3 ? '["default"]' : ".default");
+                            write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
                             return;
                         }
                         else if (declaration.kind === SyntaxKind.ImportSpecifier) {
@@ -6440,7 +6440,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (isLineBreak(c)) {
                         if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
                             let part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
-                            result = (result ? result + '" + \' \' + "' : '') + part;
+                            result = (result ? result + "\" + ' ' + \"" : "") + part;
                         }
                         firstNonWhitespace = -1;
                     }
@@ -6453,7 +6453,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 if (firstNonWhitespace !== -1) {
                     let part = text.substr(firstNonWhitespace);
-                    result = (result ? result + '" + \' \' + "' : '') + part;
+                    result = (result ? result + "\" + ' ' + \"" : "") + part;
                 }
 
                 return result;
@@ -6478,9 +6478,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
-                        write('"');
+                        write("\"");
                         write(trimReactWhitespace(node));
-                        write('"');
+                        write("\"");
                         break;
 
                     case JsxEmit.Preserve:
@@ -6495,9 +6495,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     switch (compilerOptions.jsx) {
                         case JsxEmit.Preserve:
                         default:
-                            write('{');
+                            write("{");
                             emit(node.expression);
-                            write('}');
+                            write("}");
                             break;
                         case JsxEmit.React:
                             emit(node.expression);
