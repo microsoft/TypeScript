@@ -271,7 +271,7 @@ namespace ts {
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {
                     // 1 is a standard descriptor for stdout
-                    _fs.writeSync(1, s);
+                    process.stdout.write(s);
                 },
                 writesToTty: () => _tty.isatty(1),
                 readFile,
