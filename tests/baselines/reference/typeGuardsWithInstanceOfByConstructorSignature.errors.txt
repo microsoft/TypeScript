@@ -6,8 +6,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(85,10): error TS2339: Property 'bar' does not exist on type 'D'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(111,10): error TS2339: Property 'bar1' does not exist on type 'E1 | E2'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(112,10): error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(134,11): error TS2339: Property 'foo' does not exist on type 'string | F'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(135,11): error TS2339: Property 'bar' does not exist on type 'string | F'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(134,11): error TS2339: Property 'foo' does not exist on type 'F | string'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(135,11): error TS2339: Property 'bar' does not exist on type 'F | string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(160,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(182,11): error TS2339: Property 'bar' does not exist on type 'H'.
 
@@ -164,10 +164,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
     if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
         obj11.foo;
               ~~~
-!!! error TS2339: Property 'foo' does not exist on type 'string | F'.
+!!! error TS2339: Property 'foo' does not exist on type 'F | string'.
         obj11.bar;
               ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'string | F'.
+!!! error TS2339: Property 'bar' does not exist on type 'F | string'.
     }
     
     var obj12: any;

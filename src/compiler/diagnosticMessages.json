@@ -1005,6 +1005,10 @@
         "category": "Error",
         "code": 2352
     },
+    "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
+        "category": "Error",
+        "code": 2353
+    },
     "No best common type exists among return expressions.": {
         "category": "Error",
         "code": 2354
@@ -1617,7 +1621,7 @@
         "category": "Error",
         "code": 2516
     },
-    "Constructor objects of abstract type cannot be assigned to constructor objects of non-abstract type": {
+    "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
         "code":2517
     },
@@ -2020,10 +2024,6 @@
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
-    },
-    "Option 'sourceMap' cannot be specified with option 'isolatedModules'.": {
-        "category": "Error",
-        "code": 5043
     },
     "Option 'declaration' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",

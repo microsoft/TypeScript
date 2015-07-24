@@ -1,6 +1,4 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
-[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/pr)](http://issuestats.com/github/microsoft/typescript)
-[![Issue Stats](http://issuestats.com/github/Microsoft/TypeScript/badge/issue)](http://issuestats.com/github/microsoft/typescript)
 [![npm version](https://badge.fury.io/js/typescript.svg)](http://badge.fury.io/js/typescript)
 [![Downloads](http://img.shields.io/npm/dm/TypeScript.svg)](https://npmjs.org/package/typescript)
 
@@ -65,7 +63,8 @@ jake runtests         # Run tests using the built compiler and test infrastructu
                       # Use host=<hostName> or tests=<testPath>. 
 jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
                         parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
-jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests. 
+jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
+jake lint             # Runs tslint on the TypeScript source.
 jake -T               # List the above commands. 
 ```
 
