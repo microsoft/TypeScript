@@ -216,7 +216,34 @@ namespace ts {
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node;
+
+    /**
+      * Gets the nearest enclosing block scope container that has the provided node
+      * as a descendant, that is not the provided node.
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      */
     export function getEnclosingBlockScopeContainer(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): Node;
+
+    /**
+      * Gets the nearest enclosing block scope container that has the provided node
+      * as a descendant, that is not the provided node.
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
     export function getEnclosingBlockScopeContainer(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): Node {
         let current = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
         while (current) {
@@ -335,15 +362,43 @@ namespace ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
-    // nodes like variable declarations and binding elements can returned a view of their flags
-    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
-    // stored on the variable declaration directly, but on the containing variable statement
-    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
-    // list.  By calling this function, all those flags are combined so that the client can treat
-    // the node as if it actually had those flags.
+    /** 
+      * Returns the node flags for this node and all relevant parent nodes.
+      */
     export function getCombinedNodeFlags(node: Node): NodeFlags;
+
+    /**
+      * Returns the node flags for this node and all relevant parent nodes. 
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      */
     export function getCombinedNodeFlags(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): NodeFlags;
+
+    /**
+      * Returns the node flags for this node and all relevant parent nodes. 
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks 
+      * This is done so that nodes like variable declarations and binding elements can return 
+      * a view of their flags that includes the modifiers from their container.  i.e. flags like
+      * export/declare aren't stored on the variable declaration directly, but on the containing 
+      * variable statement (if it has one).  Similarly, flags for let/const are store on the 
+      * variable declaration list.  By calling this function, all those flags are combined so 
+      * that the client can treat the node as if it actually had those flags.
+      * 
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
     export function getCombinedNodeFlags(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): NodeFlags {
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
             node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
@@ -849,8 +904,37 @@ namespace ts {
         return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
+    /**
+      * Returns whether the node is part of an expression.
+      * @param node The node to test
+      */
     export function isExpression(node: Node): boolean;
+
+    /**
+      * Returns whether the node is part of an expression.
+      * @param node The node to test
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      */
     export function isExpression(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): boolean;
+
+    /**
+      * Returns whether the node is part of an expression.
+      * @param node The node to test
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
     export function isExpression(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
         let parent: Node;
         switch (node.kind) {
@@ -1961,6 +2045,22 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
+    /**
+      * Tests whether the node is an ExpressionWithTypeArguments node that is part of the `extends` 
+      * clause of a class.
+      * @param node The node to test
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
         if (node.kind === SyntaxKind.ExpressionWithTypeArguments) {
             let parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
