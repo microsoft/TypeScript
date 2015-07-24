@@ -3517,7 +3517,19 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
-            return hasQuestionToken(node) || !!node.initializer;
+            if (hasQuestionToken(node)) {
+                return true;
+            }
+
+            if (node.initializer) {
+                let signatureDeclaration = <SignatureDeclaration>node.parent;
+                let signature = getSignatureFromDeclaration(signatureDeclaration);
+                let parameterIndex = signatureDeclaration.parameters.indexOf(node);
+                Debug.assert(parameterIndex >= 0);
+                return parameterIndex >= signature.minArgumentCount;
+            }
+
+            return false;
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -3535,10 +3547,15 @@ namespace ts {
                     if (param.type && param.type.kind === SyntaxKind.StringLiteral) {
                         hasStringLiterals = true;
                     }
-                    if (minArgumentCount < 0) {
-                        if (param.initializer || param.questionToken || param.dotDotDotToken) {
+
+                    if (param.initializer || param.questionToken || param.dotDotDotToken) {
+                        if (minArgumentCount < 0) {
                             minArgumentCount = i;
                         }
+                    }
+                    else {
+                        // If we see any required parameters, it means the prior ones were not in fact optional.
+                        minArgumentCount = -1;
                     }
                 }
 
