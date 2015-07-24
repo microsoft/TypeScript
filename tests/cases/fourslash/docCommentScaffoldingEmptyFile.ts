@@ -3,4 +3,5 @@
 // @Filename: emptyFile.ts
 /////*0*/
 
-verify.DocCommentScaffolding("/** */", 3);
+goTo.marker("0");
+verify.noDocCommentScaffolding();

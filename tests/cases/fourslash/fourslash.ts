@@ -382,6 +382,18 @@ module FourSlashInterface {
         public DocCommentScaffolding(expectedText: string, expectedOffset: number) {
             FourSlash.currentTestState.verifyDocCommentScaffolding({ newText: expectedText, cursorOffset: expectedOffset });
         }
+        
+        public noDocCommentScaffolding() {
+            const expectedText = "";
+            const expectedOffset = 0;
+            this.DocCommentScaffolding(expectedText, expectedOffset);
+        }
+        
+        public emptyTemplateDocCommentScaffolding() {
+            const expectedText = "/** */";
+            const expectedOffset = 3;
+            this.DocCommentScaffolding(expectedText, expectedOffset);
+        }
 
         public getScriptLexicalStructureListCount(count: number) {
             FourSlash.currentTestState.verifyGetScriptLexicalStructureListCount(count);

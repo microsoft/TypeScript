@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: emptyFile.ts
+// @Filename: justAComment.ts
 //// /* /*0*/ */
+
 goTo.marker("0");
-verify.DocCommentScaffolding("/**", 3);
+verify.noDocCommentScaffolding();

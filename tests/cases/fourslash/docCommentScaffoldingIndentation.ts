@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: emptyFile.ts
+// @Filename: indents.ts
 /////*0*/
 ////    /*1*/
-////        /*2*/function /*3*/foo/*4*/(/*5*/) /*6*/{ /*7*/}/*8*/
+////        /*2*/function foo() { }
 
 const noIndentEmptyScaffolding = "/**\n * \n */";
 const oneIndentEmptyScaffolding = "/**\n     * \n     */";
