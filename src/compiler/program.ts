@@ -602,10 +602,6 @@ namespace ts {
 
         function verifyCompilerOptions() {
             if (options.isolatedModules) {
-                if (options.sourceMap) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceMap_cannot_be_specified_with_option_isolatedModules));
-                }
-
                 if (options.declaration) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_declaration_cannot_be_specified_with_option_isolatedModules));
                 }
