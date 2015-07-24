@@ -30,8 +30,7 @@ class C1 {
 
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3?:number) { return C1M5A1 + C1M5A2; }
 
-    // Negative test
-    // "Optional parameters may only be followed by other optional parameters"
+    // Uninitialized parameter makes the initialized one required
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3:number) { return C1M5A1 + C1M5A2; }
 }
 
