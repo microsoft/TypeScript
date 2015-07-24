@@ -509,7 +509,6 @@ namespace ts {
         Option_noEmit_cannot_be_specified_with_option_out_or_outDir: { code: 5040, category: DiagnosticCategory.Error, key: "Option 'noEmit' cannot be specified with option 'out' or 'outDir'." },
         Option_noEmit_cannot_be_specified_with_option_declaration: { code: 5041, category: DiagnosticCategory.Error, key: "Option 'noEmit' cannot be specified with option 'declaration'." },
         Option_project_cannot_be_mixed_with_source_files_on_a_command_line: { code: 5042, category: DiagnosticCategory.Error, key: "Option 'project' cannot be mixed with source files on a command line." },
-        Option_sourceMap_cannot_be_specified_with_option_isolatedModules: { code: 5043, category: DiagnosticCategory.Error, key: "Option 'sourceMap' cannot be specified with option 'isolatedModules'." },
         Option_declaration_cannot_be_specified_with_option_isolatedModules: { code: 5044, category: DiagnosticCategory.Error, key: "Option 'declaration' cannot be specified with option 'isolatedModules'." },
         Option_noEmitOnError_cannot_be_specified_with_option_isolatedModules: { code: 5045, category: DiagnosticCategory.Error, key: "Option 'noEmitOnError' cannot be specified with option 'isolatedModules'." },
         Option_out_cannot_be_specified_with_option_isolatedModules: { code: 5046, category: DiagnosticCategory.Error, key: "Option 'out' cannot be specified with option 'isolatedModules'." },

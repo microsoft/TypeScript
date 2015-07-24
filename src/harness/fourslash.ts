@@ -1875,7 +1875,7 @@ module FourSlash {
             }
         }
 
-        private verifyProjectInfo(expected: string[]) {
+        public verifyProjectInfo(expected: string[]) {
             if (this.testType === FourSlashTestType.Server) {
                 let actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(
                     this.activeFile.fileName,
@@ -2057,11 +2057,8 @@ module FourSlash {
             return result;
         }
 
-        public verifGetScriptLexicalStructureListContains(
-            name: string,
-            kind: string,
-            markerPosition?: number) {
-            this.taoInvalidReason = 'verifGetScriptLexicalStructureListContains impossible';
+        public verifyGetScriptLexicalStructureListContains(name: string, kind: string) {
+            this.taoInvalidReason = 'verifyGetScriptLexicalStructureListContains impossible';
 
             let items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
 
@@ -2263,7 +2260,7 @@ module FourSlash {
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
         }
 
-        private getMarkerByName(markerName: string) {
+        public getMarkerByName(markerName: string) {
             let markerPos = this.testData.markerPositions[markerName];
             if (markerPos === undefined) {
                 let markerNames: string[] = [];

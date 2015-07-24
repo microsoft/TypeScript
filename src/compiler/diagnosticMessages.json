@@ -2025,10 +2025,6 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'sourceMap' cannot be specified with option 'isolatedModules'.": {
-        "category": "Error",
-        "code": 5043
-    },
     "Option 'declaration' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5044

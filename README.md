@@ -8,6 +8,19 @@
 
 [TypeScript](http://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](http://www.typescriptlang.org/Playground), and stay up to date via [our blog](http://blogs.msdn.com/typescript) and [twitter account](https://twitter.com/typescriptlang).
 
+## Installing
+
+For the latest stable version:
+
+```
+npm install -g typescript
+```
+
+For our nightly builds:
+
+```
+npm install -g typescript@next
+```
 
 ## Contribute
 
@@ -63,7 +76,8 @@ jake runtests         # Run tests using the built compiler and test infrastructu
                       # Use host=<hostName> or tests=<testPath>. 
 jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
                         parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
-jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests. 
+jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
+jake lint             # Runs tslint on the TypeScript source.
 jake -T               # List the above commands. 
 ```
 
