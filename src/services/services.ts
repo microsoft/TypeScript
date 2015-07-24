@@ -6786,19 +6786,19 @@ namespace ts {
             log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             // Check if in a context where we don't want to perform any insertion
-            if (isInString(sourceFile, position) || isInComment(sourceFile, position)) {
+            if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
                 return nullResult;
             }
 
             let nodeAtPos = getTokenAtPosition(sourceFile, position);
-
-            if (!nodeAtPos || nodeAtPos.getStart() < position) {
+            let nodeStart = nodeAtPos.getStart()
+            if (!nodeAtPos || nodeStart < position) {
                 return nullResult;
             }
 
             let containingFunction = <FunctionDeclaration>getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
 
-            if (hasDocComment(sourceFile, position) || !containingFunction || containingFunction.getStart() < position) {
+            if (!containingFunction || containingFunction.getStart() < position) {
                 return nullResult;
             }
 
@@ -6815,7 +6815,8 @@ namespace ts {
                 /* opening comment */               "/**\n" + 
                 /* first line for function info */  indentationStr + " * \n" + 
                 /* paramters */                     docParams.reduce((prev, cur) => prev + cur, "") +
-                /* closing comment */               indentationStr + " */";
+                /* closing comment */               indentationStr + " */" +
+                /* newline if at decl start */      (nodeStart === position ? "\n" + indentationStr : "");
             
             let cursorOffset = /* "/**\n" */ 4 + indentationStr.length + /* " * " */ 3;
 
