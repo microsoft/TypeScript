@@ -6764,14 +6764,23 @@ namespace ts {
 
         /**
          * Checks if position points to a valid position to add JSDoc comments, and if so,
-         * returns the appropriate scaffolding. Otherwise returns a default string.
-         * @param fileName The file in which to perofrm the check
+         * returns the appropriate scaffolding. Otherwise returns an empty string.
+         * Valid positions are
+         * * outside of comments, statements, and expressions, and
+         * * preceding a function declaration.
+         * 
+         * In VS, we additionally check that:
+         * * The line is all whitespace up to 'position' before performing the insertion.
+         * * If the keystroke sequence "/\*\*" induced the call, we also check that the next
+         * non-whitespace character is '*', which (approximately) indicates whether we added 
+         * the second '*' to complete an existing (JSDoc) comment.
+         * @param fileName The file in which to perform the check.
          * @param position The (character-indexed) position in the file where the check should
          * be performed.
          */
         function getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion {
-            const nullResult      = { newText: "/**",    cursorOffset: 3 };
-            const emptyCompletion = { newText: "/** */", cursorOffset: 3 };
+            // Indicates the position is not appropriate to insert a comment (eg: a string or a regex).
+            const nullResult: TextInsertion = { newText: "", cursorOffset: 0 };
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
@@ -6782,10 +6791,15 @@ namespace ts {
             }
 
             let nodeAtPos = getTokenAtPosition(sourceFile, position);
+
+            if (!nodeAtPos || nodeAtPos.getStart() < position) {
+                return nullResult;
+            }
+
             let containingFunction = <FunctionDeclaration>getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
 
             if (hasDocComment(sourceFile, position) || !containingFunction || containingFunction.getStart() < position) {
-                return emptyCompletion;
+                return nullResult;
             }
 
             let parameters = containingFunction.parameters;
