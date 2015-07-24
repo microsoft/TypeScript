@@ -2,58 +2,120 @@
 
 module ts {
     describe("Transpile", () => {
-
-        function runTest(input: string, compilerOptions: ts.CompilerOptions = {}, fileName?: string,  moduleName?: string, expectedOutput?: string, expectedDiagnosticCodes: number[] = []): void {
-            let diagnostics: Diagnostic[] = [];
-            let result = transpile(input, compilerOptions, fileName || "file.ts", diagnostics, moduleName);
-
+        
+        interface TranspileTestSettings {
+            options?: TranspileOptions;
+            expectedOutput?: string;
+            expectedDiagnosticCodes?: number[];
+        }
+        
+        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes?: number[]) {
+            if(!expectedDiagnosticCodes) {
+                return;
+            }
+            
             for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
                 assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
             }
-            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
-
-            if (expectedOutput !== undefined) {
-                assert.equal(result, expectedOutput);
-            }
+            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");            
         }
+        
+        function test(input: string, testSettings: TranspileTestSettings): void {
+            let diagnostics: Diagnostic[] = [];
+            
+            let transpileOptions: TranspileOptions = testSettings.options || {}; 
+            let transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);
+            
+            transpileOptions.reportDiagnostics = true;
+            let transpileModuleResult = transpileModule(input, transpileOptions);
+            
+            checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
+            checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes);
+            
+            if (testSettings.expectedOutput !== undefined) {
+                assert.equal(transpileResult, testSettings.expectedOutput);
+                assert.equal(transpileModuleResult.outputText, testSettings.expectedOutput);
+            }
+            
+            // check source maps
+            if (!transpileOptions.compilerOptions) {
+                transpileOptions.compilerOptions = {};
+            }
+            
+            if (!transpileOptions.fileName) {
+                transpileOptions.fileName = "file.ts";
+            }
+            
+            transpileOptions.compilerOptions.sourceMap = true;            
+            let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
+            assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
+            
+            let expectedSourceMapFileName = removeFileExtension(transpileOptions.fileName) + ".js.map";
+            let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;           
+                        
+            if (testSettings.expectedOutput !== undefined) {
+                assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);    
+            }
+            else {
+                // expected output is not set, just verify that output text has sourceMappingURL as a last line
+                let output = transpileModuleResultWithSourceMap.outputText;
+                assert.isTrue(output.length >= expectedSourceMappingUrlLine.length);
+                if (output.length === expectedSourceMappingUrlLine.length) {
+                    assert.equal(output, expectedSourceMappingUrlLine);
+                }
+                else {
+                    let suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine                                
+                    assert.isTrue(output.indexOf(suffix, output.length - suffix.length) !== -1);
+                }
+            }       
 
+        }
+        
         it("Generates correct compilerOptions diagnostics", () => {
             // Expecting 5047: "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher."
-            runTest(`var x = 0;`, {}, /*fileName*/ undefined, /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/ [5047]);
+            test(`var x = 0;`, { expectedDiagnosticCodes: [5047] });
         });
 
         it("Generates no diagnostics with valid inputs", () => {
             // No errors
-            runTest(`var x = 0;`, { module: ModuleKind.CommonJS }, /*fileName*/ undefined, /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/ []);
+            test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
         });
 
         it("Generates no diagnostics for missing file references", () => {
-            runTest(`/// <reference path="file2.ts" />
-var x = 0;`,
-                { module: ModuleKind.CommonJS }, /*fileName*/ undefined, /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/ []);
+            test(`/// <reference path="file2.ts" />
+var x = 0;`, 
+                { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
         });
 
         it("Generates no diagnostics for missing module imports", () => {
-            runTest(`import {a} from "module2";`,
-                { module: ModuleKind.CommonJS }, /*fileName*/ undefined,/*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/ []);
+            test(`import {a} from "module2";`,
+                { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
         });
 
         it("Generates expected syntactic diagnostics", () => {
-            runTest(`a b`,
-                { module: ModuleKind.CommonJS }, /*fileName*/ undefined, /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/ [1005]); /// 1005: ';' Expected
+            test(`a b`,
+                { options: { compilerOptions: { module: ModuleKind.CommonJS } }, expectedDiagnosticCodes: [1005] }); /// 1005: ';' Expected
         });
 
         it("Does not generate semantic diagnostics", () => {
-            runTest(`var x: string = 0;`,
-                { module: ModuleKind.CommonJS }, /*fileName*/ undefined, /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/ []);
+            test(`var x: string = 0;`,
+                { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
         });
 
         it("Generates module output", () => {
-            runTest(`var x = 0;`, { module: ModuleKind.AMD }, /*fileName*/ undefined, /*moduleName*/undefined, `define(["require", "exports"], function (require, exports) {\r\n    var x = 0;\r\n});\r\n`);
+            test(`var x = 0;`, 
+                { 
+                    options: { compilerOptions: { module: ModuleKind.AMD } }, 
+                    expectedOutput: `define(["require", "exports"], function (require, exports) {\r\n    var x = 0;\r\n});\r\n`
+                });
         });
 
         it("Uses correct newLine character", () => {
-            runTest(`var x = 0;`, { module: ModuleKind.CommonJS, newLine: NewLineKind.LineFeed }, /*fileName*/ undefined, /*moduleName*/undefined, `var x = 0;\n`, /*expectedDiagnosticCodes*/ []);
+            test(`var x = 0;`, 
+                { 
+                    options: { compilerOptions: { module: ModuleKind.CommonJS, newLine: NewLineKind.LineFeed } }, 
+                    expectedOutput: `var x = 0;\n`
+                });
         });
 
         it("Sets module name", () => {
@@ -66,12 +128,15 @@ var x = 0;`,
                 `        }\n` +
                 `    }\n` +
                 `});\n`;
-            runTest("var x = 1;", { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, /*fileName*/ undefined, "NamedModule", output)
+            test("var x = 1;", 
+                { 
+                    options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, moduleName: "NamedModule" }, 
+                    expectedOutput: output
+                })
         });
 
         it("No extra errors for file without extension", () => {
-            runTest(`var x = 0;`, { module: ModuleKind.CommonJS }, "file", /*moduleName*/undefined, /*expectedOutput*/ undefined, /*expectedDiagnosticCodes*/[]);
+            test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "file" } });
         });
-
     });
 }

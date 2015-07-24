@@ -51,9 +51,11 @@ System.register(['bar'], function(exports_1) {
         'foo': true
     };
     function exportStar_1(m) {
+        var exports = {};
         for(var n in m) {
-            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
+        exports_1(exports);
     }
     return {
         setters:[
@@ -72,9 +74,11 @@ System.register(['bar'], function(exports_1) {
         'y1': true
     };
     function exportStar_1(m) {
+        var exports = {};
         for(var n in m) {
-            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
+        exports_1(exports);
     }
     return {
         setters:[
@@ -96,15 +100,19 @@ System.register(['a', 'bar'], function(exports_1) {
         'z': true
     };
     function exportStar_1(m) {
+        var exports = {};
         for(var n in m) {
-            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
+        exports_1(exports);
     }
     return {
         setters:[
             function (_a_1) {
-                exports_1("x", _a_1["x"]);
-                exports_1("z", _a_1["y"]);
+                var reexports_1 = {};
+                reexports_1["x"] = _a_1["x"];
+                reexports_1["z"] = _a_1["y"];
+                exports_1(reexports_1);
             },
             function (_bar_1) {
                 exportStar_1(_bar_1);
@@ -123,8 +131,10 @@ System.register(['a'], function(exports_1) {
     return {
         setters:[
             function (_a_1) {
-                exports_1("s", _a_1["s"]);
-                exports_1("s2", _a_1["s1"]);
+                var reexports_1 = {};
+                reexports_1["s"] = _a_1["s"];
+                reexports_1["s2"] = _a_1["s1"];
+                exports_1(reexports_1);
             }],
         execute: function() {
             exports_1("z", z);
@@ -136,9 +146,11 @@ System.register(['a'], function(exports_1) {
 System.register(['a'], function(exports_1) {
     function foo() { }
     function exportStar_1(m) {
+        var exports = {};
         for(var n in m) {
-            if (n !== "default") exports_1(n, m[n]);
+            if (n !== "default") exports[n] = m[n];
         }
+        exports_1(exports);
     }
     return {
         setters:[
