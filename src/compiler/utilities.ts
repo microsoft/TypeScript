@@ -215,8 +215,37 @@ namespace ts {
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
-    export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node.parent;
+    export function getEnclosingBlockScopeContainer(node: Node): Node;
+
+    /**
+      * Gets the nearest enclosing block scope container that has the provided node
+      * as a descendant, that is not the provided node.
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      */
+    export function getEnclosingBlockScopeContainer(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): Node;
+
+    /**
+      * Gets the nearest enclosing block scope container that has the provided node
+      * as a descendant, that is not the provided node.
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
+    export function getEnclosingBlockScopeContainer(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): Node {
+        let current = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -233,12 +262,12 @@ namespace ts {
                 case SyntaxKind.Block:
                     // function block is not considered block-scope container
                     // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                    if (!isFunctionLike(current.parent)) {
+                    if (!isFunctionLike(getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : current.parent)) {
                         return current;
                     }
             }
 
-            current = current.parent;
+            current = getAncestorOrSelf ? getAncestorOrSelf(++offset) : current.parent;
         }
     }
 
@@ -333,32 +362,56 @@ namespace ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
+    /** 
+      * Returns the node flags for this node and all relevant parent nodes.
+      */
+    export function getCombinedNodeFlags(node: Node): NodeFlags;
+
+    /**
+      * Returns the node flags for this node and all relevant parent nodes. 
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      */
+    export function getCombinedNodeFlags(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): NodeFlags;
+
+    /**
+      * Returns the node flags for this node and all relevant parent nodes. 
+      * @param node The starting node
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks 
+      * This is done so that nodes like variable declarations and binding elements can return 
+      * a view of their flags that includes the modifiers from their container.  i.e. flags like
+      * export/declare aren't stored on the variable declaration directly, but on the containing 
+      * variable statement (if it has one).  Similarly, flags for let/const are store on the 
+      * variable declaration list.  By calling this function, all those flags are combined so 
+      * that the client can treat the node as if it actually had those flags.
+      * 
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
+    export function getCombinedNodeFlags(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): NodeFlags {
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
         }
-
-        return node;
-    }
-
-    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
-    // nodes like variable declarations and binding elements can returned a view of their flags
-    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
-    // stored on the variable declaration directly, but on the containing variable statement
-    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
-    // list.  By calling this function, all those flags are combined so that the client can treat
-    // the node as if it actually had those flags.
-    export function getCombinedNodeFlags(node: Node): NodeFlags {
-        node = walkUpBindingElementsAndPatterns(node);
 
         let flags = node.flags;
         if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
         }
 
         if (node && node.kind === SyntaxKind.VariableDeclarationList) {
             flags |= node.flags;
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
         }
 
         if (node && node.kind === SyntaxKind.VariableStatement) {
@@ -577,7 +630,7 @@ namespace ts {
         }
     }
 
-    export function isVariableLike(node: Node): boolean {
+    export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.BindingElement:
@@ -869,7 +922,39 @@ namespace ts {
         return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
-    export function isExpression(node: Node): boolean {
+    /**
+      * Returns whether the node is part of an expression.
+      * @param node The node to test
+      */
+    export function isExpression(node: Node): boolean;
+
+    /**
+      * Returns whether the node is part of an expression.
+      * @param node The node to test
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      */
+    export function isExpression(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): boolean;
+
+    /**
+      * Returns whether the node is part of an expression.
+      * @param node The node to test
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
+    export function isExpression(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
+        let parent: Node;
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
@@ -906,18 +991,22 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
-                while (node.parent.kind === SyntaxKind.QualifiedName) {
-                    node = node.parent;
+                parent = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
+                while (parent.kind === SyntaxKind.QualifiedName) {
+                    node = parent;
+                    parent = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
                 }
-                return node.parent.kind === SyntaxKind.TypeQuery;
+                return parent.kind === SyntaxKind.TypeQuery;
+                
             case SyntaxKind.Identifier:
-                if (node.parent.kind === SyntaxKind.TypeQuery) {
+                parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
+                if (parent.kind === SyntaxKind.TypeQuery) {
                     return true;
                 }
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
-                let parent = node.parent;
+                parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Parameter:
@@ -958,9 +1047,9 @@ namespace ts {
                     case SyntaxKind.Decorator:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent, getAncestorOrSelf, offset + 1);
                     default:
-                        if (isExpression(parent)) {
+                        if (isExpression(parent, getAncestorOrSelf, offset)) {
                             return true;
                         }
                 }
@@ -983,7 +1072,7 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportEqualsDeclaration(node: Node) {
+    export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
@@ -1442,7 +1531,7 @@ namespace ts {
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
-
+    
     export function nodeIsSynthesized(node: Node): boolean {
         return node && node.pos === -1;
     }
@@ -1965,10 +2054,31 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
-        return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
-            (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent);
+    /**
+      * Tests whether the node is an ExpressionWithTypeArguments node that is part of the `extends` 
+      * clause of a class.
+      * @param node The node to test
+      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
+      * only when traversing the ancestors of the current node in the emitter.
+      * @param offset The offset in the node stack used to get the ancestor of the current node
+      * from the emitter's node stack.
+      * @remarks
+      * The emitter tracks the parent of the current node as it descends into the source file, 
+      * so that we can properly emit synthesized nodes that may not have parent pointers.
+      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
+      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
+      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
+      * offset of two (2) refers to the grandparent, and so on.
+      */
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
+        if (node.kind === SyntaxKind.ExpressionWithTypeArguments) {
+            let parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
+            if ((<HeritageClause>parent).token === SyntaxKind.ExtendsKeyword) {
+                let grandparent = getAncestorOrSelf ? getAncestorOrSelf(offset + 2) : parent.parent;
+                return isClassLike(grandparent);
+            }
+        }
+        return false;
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
@@ -1992,6 +2102,17 @@ namespace ts {
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
         return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
+
+    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
+        let kind = expression.kind;
+        if (kind === SyntaxKind.ObjectLiteralExpression) {
+            return (<ObjectLiteralExpression>expression).properties.length === 0;
+        }
+        if (kind === SyntaxKind.ArrayLiteralExpression) {
+            return (<ArrayLiteralExpression>expression).elements.length === 0;
+        }
+        return false;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {

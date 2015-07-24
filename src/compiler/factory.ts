@@ -58,7 +58,6 @@ namespace ts {
             }
             
             newNode.flags = flags;
-            newNode.parent = oldNode.parent;
             newNode.original = oldNode;
             
             mergeCommentRanges(oldNode, newNode);

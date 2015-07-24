@@ -518,15 +518,21 @@ namespace ts {
                 }
                 else {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-
-                    let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
-                    if (node.symbol.constEnumOnlyModule === undefined) {
-                        // non-merged case - use the current state
-                        node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
+                    if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)) {
+                        // if module was already merged with some function, class or non-const enum
+                        // treat is a non-const-enum-only
+                        node.symbol.constEnumOnlyModule = false;
                     }
                     else {
-                        // merged case: module is const enum only if all its pieces are non-instantiated or const enum
-                        node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
+                        let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
+                        if (node.symbol.constEnumOnlyModule === undefined) {
+                            // non-merged case - use the current state
+                            node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
+                        }
+                        else {
+                            // merged case: module is const enum only if all its pieces are non-instantiated or const enum
+                            node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
+                        }
                     }
                 }
             }

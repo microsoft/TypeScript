@@ -146,6 +146,7 @@ var harnessSources = harnessCoreSources.concat([
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
+    "session.ts",
     "versionCache.ts",
     "convertToBase64.ts",
     "transpile.ts"
@@ -416,6 +417,45 @@ file(transformGeneratedTs, [factoryGeneratedTs]);
 
 desc("Generates a TypeScript file that contains factory methods to create each Syntax Node.")
 task("generate-factory", [factoryGeneratedTs, transformGeneratedTs]);
+
+
+// Publish nightly
+var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
+var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
+var packageJson = "package.json";
+var programTs = path.join(compilerDirectory, "program.ts");
+
+file(configureNightlyTs);
+
+compileFile(/*outfile*/configureNightlyJs,
+            /*sources*/ [configureNightlyTs],
+            /*prereqs*/ [configureNightlyTs],
+            /*prefixes*/ [],
+            /*useBuiltCompiler*/ false,
+            /*noOutFile*/ false,
+            /*generateDeclarations*/ false,
+            /*outDir*/ undefined,
+            /*preserveConstEnums*/ undefined,
+            /*keepComments*/ false,
+            /*noResolve*/ false,
+            /*stripInternal*/ false);
+
+task("setDebugMode", function() {
+    useDebugMode = true;
+});
+
+task("configure-nightly", [configureNightlyJs], function() {
+    var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
+    console.log(cmd);
+    exec(cmd);
+}, { async: true });
+
+desc("Configure, build, test, and publish the nightly release.");
+task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests"], function () {
+    var cmd = "npm publish --tag next";
+    console.log(cmd);
+    exec(cmd);
+});
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
@@ -823,9 +863,9 @@ task("lint", [], function() {
     function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
 
     var lintTargets = compilerSources.concat(harnessCoreSources);
-    for(var i in lintTargets) {
+    for (var i in lintTargets) {
         var f = lintTargets[i];
-        var cmd = 'tslint -f ' + f;
+        var cmd = 'tslint -c tslint.json ' + f;
         exec(cmd, success(f), failure(f));
     }
 }, { async: true });
