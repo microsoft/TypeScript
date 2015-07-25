@@ -7,7 +7,7 @@
 
 const noIndentEmptyScaffolding = "/**\n * \n */";
 const oneIndentEmptyScaffolding = "/**\n     * \n     */";
-const twoIndentEmptyScaffolding = "/**\n         * \n         */";
+const twoIndentEmptyScaffolding = "/**\n         * \n         */\n        ";
 const noIndentOffset = 7;
 const oneIndentOffset = noIndentOffset + 4;
 const twoIndentOffset = oneIndentOffset + 4;
