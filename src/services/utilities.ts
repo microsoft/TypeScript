@@ -421,7 +421,7 @@ namespace ts {
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
-        return isInCommentHelper(sourceFile, position, c => true);
+        return isInCommentHelper(sourceFile, position, /*extraCheck*/ c => true);
     }
 
     /**
