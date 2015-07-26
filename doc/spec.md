@@ -4284,8 +4284,8 @@ Note that the construct signatures in the constructor function types have the sa
 A constructor declaration declares the constructor function of a class.
 
 &emsp;&emsp;*ConstructorDeclaration:*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}  
-&emsp;&emsp;&emsp;`*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`;`
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`;`
 
 Constructor declarations that specify a body are called ***constructor implementations*** and constructor declarations without a body are called ***constructor overloads***. It is possible to specify multiple constructor overloads in a class, but a class can have at most one constructor implementation. All constructor declarations in a class must specify the same set of modifiers. Only public constructors are supported and private or protected constructors result in an error.
 
@@ -4467,8 +4467,8 @@ class Employee {
 A member function declaration declares an instance member function or a static member function.
 
 &emsp;&emsp;*MemberFunctionDeclaration:*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}  
-&emsp;&emsp;&emsp;`*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`;`
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`;`
 
 A member function declaration is processed in the same manner as an ordinary function declaration (section [6](#6)), except that in a member function `this` has a known type.
 
@@ -5768,9 +5768,9 @@ Ambient declarations are written using the `declare` keyword and can declare var
 An ambient variable declaration introduces a variable in the containing declaration space.
 
 &emsp;&emsp;*AmbientVariableDeclaration:*  
-&emsp;&emsp;&emsp;`var`&emsp;*AmbientBindingList*&emsp;`;  
-&emsp;&emsp;&emsp;let`&emsp;*AmbientBindingList*&emsp;`;  
-&emsp;&emsp;&emsp;const`&emsp;*AmbientBindingList*&emsp;`;`
+&emsp;&emsp;&emsp;`var`&emsp;*AmbientBindingList*&emsp;`;`  
+&emsp;&emsp;&emsp;`let`&emsp;*AmbientBindingList*&emsp;`;`  
+&emsp;&emsp;&emsp;`const`&emsp;*AmbientBindingList*&emsp;`;`
 
 &emsp;&emsp;*AmbientBindingList:*  
 &emsp;&emsp;&emsp;*AmbientBinding*  
@@ -6184,8 +6184,8 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*IndexMemberDeclaration*
 
 &emsp;&emsp;*ConstructorDeclaration:*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}  
-&emsp;&emsp;&emsp;`*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`;`
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`constructor`&emsp;`(`&emsp;*ParameterList<sub>opt</sub>*&emsp;`)`&emsp;`;`
 
 &emsp;&emsp;*PropertyMemberDeclaration:*  
 &emsp;&emsp;&emsp;*MemberVariableDeclaration*  
@@ -6196,8 +6196,8 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initializer<sub>opt</sub>*&emsp;`;`
 
 &emsp;&emsp;*MemberFunctionDeclaration:*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}  
-&emsp;&emsp;&emsp;`*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`;`
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`;`
 
 &emsp;&emsp;*MemberAccessorDeclaration:*  
 &emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*GetAccessor*  
@@ -6415,9 +6415,9 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`declare`&emsp;*AmbientNamespaceDeclaration*
 
 &emsp;&emsp;*AmbientVariableDeclaration:*  
-&emsp;&emsp;&emsp;`var`&emsp;*AmbientBindingList*&emsp;`;  
-&emsp;&emsp;&emsp;let`&emsp;*AmbientBindingList*&emsp;`;  
-&emsp;&emsp;&emsp;const`&emsp;*AmbientBindingList*&emsp;`;`
+&emsp;&emsp;&emsp;`var`&emsp;*AmbientBindingList*&emsp;`;`  
+&emsp;&emsp;&emsp;`let`&emsp;*AmbientBindingList*&emsp;`;`  
+&emsp;&emsp;&emsp;`const`&emsp;*AmbientBindingList*&emsp;`;`
 
 &emsp;&emsp;*AmbientBindingList:*  
 &emsp;&emsp;&emsp;*AmbientBinding*  
