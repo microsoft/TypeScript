@@ -6,7 +6,7 @@ July, 2015
 
 <br/>
 
-Microsoft is making this Specification available under the Open Web Foundation Final Specification Agreement Version 1.0 ("OWF 1.0") as of October 1, 2012. The OWF 1.0 is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
+Microsoft is making this Specification available under the Open Web Foundation Final Specification Agreement Version 1.0 ("OWF 1.0") as of October 1, 2012. The OWF 1.0 is available at [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0](http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0).
 
 TypeScript is a trademark of Microsoft Corporation.
 
@@ -770,7 +770,7 @@ TypeScript also supports *external* modules, which are files that contain top-le
 
 # <a name="2"/>2 Basic Concepts
 
-The remainder of this document is the formal specification of the TypeScript programming language and is intended to be read as an adjunct to the ECMAScript Language Specification (specifically, the ECMA-262 Standard, 6th Edition). This document describes the syntactic grammar added by TypeScript along with the compile-time processing and type checking performed by the TypeScript compiler, but it only minimally discusses the run-time behavior of programs since that is covered by the ECMAScript specification.
+The remainder of this document is the formal specification of the TypeScript programming language and is intended to be read as an adjunct to the [ECMAScript Language Specification](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf) (specifically, the ECMA-262 Standard, 6th Edition). This document describes the syntactic grammar added by TypeScript along with the compile-time processing and type checking performed by the TypeScript compiler, but it only minimally discusses the run-time behavior of programs since that is covered by the ECMAScript specification.
 
 ## <a name="2.1"/>2.1 Grammar Conventions
 
@@ -788,9 +788,9 @@ Similar to the ECMAScript grammar, if the phrase "*[no LineTerminator here]*" ap
 
 ## <a name="2.2"/>2.2 Reserved Words
 
-*TODO: Include list of reserved words.
+*TODO: Include [list of reserved words](https://github.com/Microsoft/TypeScript/issues/2536)*.
 
-## <a name="2.3"/>2.3 *Declarations
+## <a name="2.3"/>2.3 Declarations
 
 Declarations introduce names in their associated ***declaration spaces***. A name must be unique in its declaration space and can denote a ***value***, a ***type***, or a ***namespace***, or some combination thereof. Effectively, a single name can have as many as three distinct meanings. For example:
 
@@ -910,7 +910,7 @@ As the rules above imply, locally declared entities in a namespace are closer in
 var x = 1;  
 namespace M {  
     export var x = 2;  
-    console.log(x);     // 2  
+    console.log(x);     // 2  
 }  
 namespace M {  
     console.log(x);     // 2  
@@ -923,9 +923,9 @@ namespace M {
 
 ## <a name="2.5"/>2.5 Computed Names and Symbols
 
-*TODO: Computed names and Symbols.
+*TODO: [Computed names](https://github.com/Microsoft/TypeScript/issues/1082) and [Symbols](https://github.com/Microsoft/TypeScript/pull/1978)*.
 
-*Computed names of the form `[Symbol.XXX]` are called well known symbols. Well known symbols are treated like special identifiers.
+Computed names of the form `[Symbol.XXX]` are called well known symbols. Well known symbols are treated like special identifiers.
 
 A declaration that specifies a computed name that isn't well known doesn't introduce a property in its containing type. However, if the containing type has an indexer, the type of the property will be included in the union type for the indexer.
 
@@ -1033,7 +1033,7 @@ var c = abc.charAt(2);  // Property of String interface
 
 ### <a name="3.2.4"/>3.2.4 The Symbol Type
 
-*TODO: Symbols.*
+*TODO: [Symbols](https://github.com/Microsoft/TypeScript/pull/1978)*.
 
 ### <a name="3.2.5"/>3.2.5 The Void Type
 
@@ -1255,7 +1255,7 @@ var c = x.c;  // Error, no property c in union type
 
 Note that 'x.a' has a union type because the type of 'a' is different in 'A' and 'B', whereas 'x.b' simply has type number because that is the type of 'b' in both 'A' and 'B'. Also note that there is no property 'x.c' because only 'A' has a property 'c'.
 
-When used as a contextual type (section [4.23](#4.23)), a union type has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically, a union type used as a contextual type has the apparent members defined in section [3.11.1](#3.11.1), except that a particular member need only be present in one or more constituent types instead of all constituent types.
+When used as a contextual type (section [4.23](#4.23)), a union type has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically, a union type used as a contextual type has the apparent members defined in section [3.11.1](#3.11.1), except that a particular member need only be present in one or more constituent types instead of all constituent types.
 
 ## <a name="3.5"/>3.5 Intersection Types
 
@@ -1474,13 +1474,13 @@ The `any`, `number`, `boolean`, `string`, `symbol` and `void` keywords reference
 &emsp;&emsp;&emsp;`any`  
 &emsp;&emsp;&emsp;`number`  
 &emsp;&emsp;&emsp;`boolean`  
-&emsp;&emsp;&emsp;`string  
-&emsp;&emsp;&emsp;symbol`  
+&emsp;&emsp;&emsp;`string`  
+&emsp;&emsp;&emsp;`symbol`  
 &emsp;&emsp;&emsp;`void`
 
 The predefined type keywords are reserved and cannot be used as names of user defined types.
 
-### <a name="3.8.2"/>3.8.2 Type References
+### <a name="3.8.2"/>3.8.2 Type References
 
 A type reference references a named type or type parameter through its name and, in the case of a generic type, supplies a type argument list.
 
@@ -1837,9 +1837,9 @@ When a parameter type annotation specifies a string literal type, the containing
 
 A parameter can be marked optional by following its name or binding pattern with a question mark (`?`) or by including an initializer. Initializers (including binding property or element initializers) are permitted only when the parameter list occurs in conjunction with a function body, i.e. only in a *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, or *ConstructorImplementation* grammar production.
 
-*TODO: Update to reflect binding parameter cannot be optional in implementation signature.
+*TODO: Update to reflect [binding parameter cannot be optional in implementation signature](https://github.com/Microsoft/TypeScript/issues/2797)*.
 
-#### <a name="3.9.2.3"/>3.9.2.3 *Return Type
+#### <a name="3.9.2.3"/>3.9.2.3 Return Type
 
 If present, a call signature's return type annotation specifies the type of the value computed and returned by a call operation. A `void` return type annotation is used to indicate that a function has no return value.
 
@@ -1877,7 +1877,7 @@ The type parameters, parameter list, and return type of a construct signature ar
 
 A type containing construct signatures is said to be a ***constructor type***.
 
-### <a name="3.9.4"/>3.9.4 Index Signatures
+### <a name="3.9.4"/>3.9.4 Index Signatures
 
 An index signature defines a type constraint for properties in the containing type.
 
@@ -2142,9 +2142,9 @@ Also note that type parameters are not considered object types. Thus, the only s
 
 Types are required to be assignment compatible in certain circumstances, such as expression and variable types in assignment statements and argument and parameter types in function calls.
 
-*TODO: Update this section with rules for strict object literal assignment checking.
+*TODO: Update this section with rules for [strict object literal assignment checking](https://github.com/Microsoft/TypeScript/pull/3823)*.
 
-S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if one of the following is true:
+*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if one of the following is true:
 
 * *S* and *T* are identical types.
 * *S* or *T* is the Any type.
@@ -2393,7 +2393,7 @@ If a get accessor is declared for a property, the return type of the get accesso
 
 When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.9.4](#3.9.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
 
-## <a name="4.6"/>4.6 Array Literals
+## <a name="4.6"/>4.6 Array Literals
 
 An array literal
 
@@ -2418,9 +2418,9 @@ The resulting type an array literal expression is determined as follows:
 
 A spread element must specify an expression of an array-like type (section [3.3.2](#3.3.2)), or otherwise an error occurs.
 
-*TODO: Document spreading an iterator into an array literal.
+*TODO: Document spreading an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into an array literal*.
 
-*The rules above mean that an array literal is always of an array type, unless it is contextually typed by a tuple-like type. For example
+The rules above mean that an array literal is always of an array type, unless it is contextually typed by a tuple-like type. For example
 
 ```TypeScript
 var a = [1, 2];                          // number[]  
@@ -2444,7 +2444,7 @@ var b = [0, 1].concat(a, [5, 6]);
 
 ## <a name="4.7"/>4.7 Template Literals
 
-*TODO: Template literals.*
+*TODO: [Template literals](https://github.com/Microsoft/TypeScript/pull/960)*.
 
 ## <a name="4.8"/>4.8 Parentheses
 
@@ -2483,9 +2483,9 @@ Super property accesses are typically used to access overridden base class membe
 
 The JavaScript code generated for a super property access is specified in section [8.6.2](#8.6.2).
 
-*TODO: Update section to include bracket notation in super property access.
+*TODO: Update section to include [bracket notation in super property access](https://github.com/Microsoft/TypeScript/issues/3970)*.
 
-## <a name="4.10"/>4.10 *Function Expressions
+## <a name="4.10"/>4.10 Function Expressions
 
 Function expressions are extended from JavaScript to optionally include parameter and return type annotations.
 
@@ -2611,9 +2611,9 @@ could be parsed as an arrow function expression with a type parameter or a type 
 
 ## <a name="4.12"/>4.12 Class Expressions
 
-*TODO: Document class expressions.
+*TODO: Document [class expressions](https://github.com/Microsoft/TypeScript/issues/497)*.
 
-## <a name="4.13"/>4.13 *Property Access
+## <a name="4.13"/>4.13 Property Access
 
 A property access uses either dot notation or bracket notation. A property access expression is always classified as a reference.
 
@@ -2643,9 +2643,9 @@ where *object* and *index* are expressions, is used to access the property with 
 * Otherwise, if *index* is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 * Otherwise, the property access is invalid and a compile-time error occurs.
 
-*TODO: Indexing with symbols.
+*TODO: Indexing with [symbols](https://github.com/Microsoft/TypeScript/pull/1978)*.
 
-*The rules above mean that properties are strongly typed when accessed using bracket notation with the literal representation of their name. For example:
+The rules above mean that properties are strongly typed when accessed using bracket notation with the literal representation of their name. For example:
 
 ```TypeScript
 var type = {  
@@ -2665,7 +2665,7 @@ var s = data[0];  // string
 var n = data[1];  // number
 ```
 
-## <a name="4.14"/>4.14 The new Operator
+## <a name="4.14"/>4.14 The new Operator
 
 A `new` operation has one of the following forms:
 
@@ -2705,9 +2705,9 @@ If *func* has apparent call signatures (section [3.11.1](#3.11.1)) the call is a
 
 The purpose of overload resolution in a function call is to ensure that at least one signature is applicable, to provide contextual types for the arguments, and to determine the result type of the function call, which could differ between the multiple applicable signatures. Overload resolution has no impact on the run-time behavior of a function call. Since JavaScript doesn't support function overloading, all that matters at run-time is the name of the function.
 
-*TODO: Describe use of wildcard function types in overload resolution.
+*TODO: Describe use of [wildcard function types](https://github.com/Microsoft/TypeScript/issues/3970) in overload resolution*.
 
-*The compile-time processing of a typed function call consists of the following steps:
+The compile-time processing of a typed function call consists of the following steps:
 
 * First, a list of candidate signatures is constructed from the call signatures in the function type in declaration order. For classes and interfaces, inherited signatures are considered to follow explicitly declared signatures in `extends` clause order.
   * A non-generic signature is a candidate when
@@ -2730,15 +2730,15 @@ A signature is said to be an ***applicable signature*** with respect to an argum
 * the number of arguments is not greater than the number of parameters, and
 * for each argument expression *e* and its corresponding parameter *P,* when *e* is contextually typed (section [4.23](#4.23)) by the type of *P*, no errors ensue and the type of *e* is assignable to (section [3.11.4](#3.11.4)) the type of *P*.
 
-*TODO: Spread operator in function calls and spreading an iterator into a function call.
+*TODO: [Spread operator in function calls](https://github.com/Microsoft/TypeScript/pull/1931) and spreading an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into a function call*.
 
-### <a name="4.15.2"/>4.15.2 *Type Argument Inference
+### <a name="4.15.2"/>4.15.2 Type Argument Inference
 
 Given a signature &lt; *T<sub>1</sub>* , *T<sub>2</sub>* , … , *T<sub>n</sub>* > ( *p<sub>1</sub>* : *P<sub>1</sub>* , *p<sub>2</sub>* : *P<sub>2</sub>* , … , *p<sub>m</sub>* : *P<sub>m</sub>* ), where each parameter type *P* references zero or more of the type parameters *T*, and an argument list ( *e<sub>1</sub>* , *e<sub>2</sub>* , … , *e<sub>m</sub>* ), the task of type argument inference is to find a set of type arguments *A<sub>1</sub>*…*A<sub>n</sub>* to substitute for *T<sub>1</sub>*…*T<sub>n</sub>* such that the argument list becomes an applicable signature.
 
-*TODO: Update type argument inference and overload resolution rules.
+*TODO: Update [type argument inference and overload resolution rules](https://github.com/Microsoft/TypeScript/issues/1186)*.
 
-*Type argument inference produces a set of candidate types for each type parameter. Given a type parameter *T* and set of candidate types, the actual inferred type argument is determined as follows:
+Type argument inference produces a set of candidate types for each type parameter. Given a type parameter *T* and set of candidate types, the actual inferred type argument is determined as follows:
 
 * If the set of candidate argument types is empty, the inferred type argument for *T* is *T*'s constraint.
 * Otherwise, if at least one of the candidate types is a supertype of all of the other candidate types, let *C* denote the first such candidate type. If *C* satisfies *T*'s constraint, the inferred type argument for *T* is *C*. Otherwise, the inferred type argument for *T* is *T*'s constraint.
@@ -2881,9 +2881,9 @@ if (shape instanceof Circle) {
 
 ## <a name="4.17"/>4.17 JSX Expressions
 
-*TODO: Document JSX expressions.
+*TODO: Document [JSX expressions](https://github.com/Microsoft/TypeScript/issues/3203)*.
 
-## <a name="4.18"/>4.18 *Unary Operators
+## <a name="4.18"/>4.18 Unary Operators
 
 The subsections that follow specify the compile-time processing rules of the unary operators. In general, if the operand of a unary operator does not meet the stated requirements, a compile-time error occurs and the result of the operation defaults to type Any in further processing.
 
@@ -3361,9 +3361,9 @@ A ***destructuring variable declaration*** introduces zero or more named variabl
 
 Each binding property or element that specifies an identifier introduces a variable by that name. The type of the variable is the widened form (section [3.12](#3.12)) of the type associated with the binding property or element, as defined in the following.
 
-*TODO: Document destructuring an iterator into an array.
+*TODO: Document destructuring an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into an array*.
 
-*The type *T* associated with a destructuring variable declaration is determined as follows:
+The type *T* associated with a destructuring variable declaration is determined as follows:
 
 * If the declaration includes a type annotation, *T* is that type.
 * Otherwise, if the declaration includes an initializer expression, *T* is the type of that initializer expression.
@@ -3452,7 +3452,7 @@ var _a = getSomeObject(),
     z = _d === void 0 ? 10 : _d;
 ```
 
-### <a name="5.2.3"/>5.2.3 Implied Type
+### <a name="5.2.3"/>5.2.3 Implied Type
 
 A variable, parameter, binding property, or binding element declaration that specifies a binding pattern has an ***implied type*** which is determined as follows:
 
@@ -3496,9 +3496,9 @@ Let and const declarations are exended to include optional type annotations.
 &emsp;&emsp;*DestructuringLexicalBinding:*  
 &emsp;&emsp;&emsp;*BindingPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initializer<sub>opt</sub>*
 
-*TODO: Document scoping and types of let and const declarations.
+*TODO: Document scoping and types of [let and const declarations](https://github.com/Microsoft/TypeScript/pull/904)*.
 
-## <a name="5.4"/>5.4 *If, Do, and While Statements
+## <a name="5.4"/>5.4 If, Do, and While Statements
 
 Expressions controlling 'if', 'do', and 'while' statements can be of any type (and not just type Boolean).
 
@@ -3526,9 +3526,9 @@ for (var v in expr) statement
 
 ## <a name="5.7"/>5.7 For-Of Statements
 
-*TODO: Document for-of statements.
+*TODO: Document [for-of statements](https://github.com/Microsoft/TypeScript/issues/7)*.
 
-## <a name="5.8"/>5.8 *Continue Statements
+## <a name="5.8"/>5.8 Continue Statements
 
 A 'continue' statement is required to be nested, directly or indirectly (but not crossing function boundaries), within an iteration ('do', 'while', 'for', or 'for-in') statement. When a 'continue' statement includes a target label, that target label must appear in the label set of an enclosing (but not crossing function boundaries) iteration statement.
 
@@ -3812,13 +3812,11 @@ where *Parameter* is the parameter name and *Default* is the default value expre
 
 ## <a name="6.7"/>6.7 Generator Functions
 
-*TODO: Document generator functions.*
+*TODO: Document [generator functions](https://github.com/Microsoft/TypeScript/issues/2873)*.
 
 ## <a name="6.8"/>6.8 Type Guard Functions
 
-*TODO: Document type guard functions.
-
-*
+*TODO: Document [type guard functions](https://github.com/Microsoft/TypeScript/issues/1007)*.
 
 <br/>
 
@@ -4000,9 +3998,9 @@ function asMoverShaker(obj: any): MoverShaker {
 
 TypeScript extends JavaScript classes to include type parameters, implements clauses, accessibility modifiers, member variable declarations, and parameter property declarations in constructors.
 
-*TODO: Document abstract classes.
+*TODO: Document [abstract classes](https://github.com/Microsoft/TypeScript/issues/3578)*.
 
-## <a name="8.1"/>8.1 *Class Declarations
+## <a name="8.1"/>8.1 Class Declarations
 
 A class declaration declares a ***class type*** and a ***constructor function***.
 
@@ -4054,9 +4052,9 @@ the identifier 'Point' in the type annotation refers to the class instance type,
 
 ### <a name="8.1.1"/>8.1.1 Class Heritage Specification
 
-*TODO: Update this section to reflect expressions in class extends clauses.
+*TODO: Update this section to reflect [expressions in class extends clauses](https://github.com/Microsoft/TypeScript/pull/3516)*.
 
-*The heritage specification of a class consists of optional `extends` and `implements` clauses. The `extends` clause specifies the base class of the class and the `implements` clause specifies a set of interfaces for which to validate the class provides an implementation.
+The heritage specification of a class consists of optional `extends` and `implements` clauses. The `extends` clause specifies the base class of the class and the `implements` clause specifies a set of interfaces for which to validate the class provides an implementation.
 
 &emsp;&emsp;*ClassHeritage:*  *( Modified )*  
 &emsp;&emsp;&emsp;*ClassExtendsClause<sub>opt</sub>*&emsp;*ImplementsClause<sub>opt</sub>*
@@ -4918,7 +4916,7 @@ var Color;
 
 # <a name="10"/>10 Namespaces
 
-Namespaces provide a mechanism for organizing code and declarations in hierarchies of named containers. Namespaces have named members that each denote a value, a type, or a namespace, or some combination thereof, and those members may be local or exported. The body of a namespace corresponds to a function that is executed once, thereby providing a mechanism for maintaining local state with assured isolation. Namespaces can be thought of as a formalization of the immediately-invoked function expression (IIFE) pattern.
+Namespaces provide a mechanism for organizing code and declarations in hierarchies of named containers. Namespaces have named members that each denote a value, a type, or a namespace, or some combination thereof, and those members may be local or exported. The body of a namespace corresponds to a function that is executed once, thereby providing a mechanism for maintaining local state with assured isolation. Namespaces can be thought of as a formalization of the [immediately-invoked function expression](https://en.wikipedia.org/wiki/Immediately-invoked_function_expression) (IIFE) pattern.
 
 ## <a name="10.1"/>10.1 Namespace Declarations
 
@@ -5160,9 +5158,9 @@ Assuming the two source files are part of the same program, the two declarations
 
 Declaration merging does not apply to local aliases created by import alias declarations. In other words, it is not possible have an import alias declaration and a namespace declaration for the same name within the same namespace body.
 
-*TODO: Clarify rules for alias resolution.
+*TODO: Clarify rules for [alias resolution](https://github.com/Microsoft/TypeScript/issues/3158)*.
 
-*Declaration merging also extends to namespace declarations with the same qualified name relative to a common root as a function, class, or enum declaration:
+Declaration merging also extends to namespace declarations with the same qualified name relative to a common root as a function, class, or enum declaration:
 
 * When merging a function and a namespace, the type of the function object is merged with the instance type of the namespace. In effect, the overloads or implementation of the function provide the call signatures and the exported members of the namespace provide the properties of the combined type.
 * When merging a class and a namespace, the type of the constructor function object is merged with the instance type of the namespace. In effect, the overloads or implementation of the class constructor provide the construct signatures, and the static members of the class and exported members of the namespace provide the properties of the combined type. It is an error to have static class members and exported namespace members with the same name.
@@ -5386,7 +5384,7 @@ The desired module code generation pattern is selected through a compiler option
 
 ### <a name="11.3.1"/>11.3.1 Module Names
 
-Modules are identified and referenced using module names. The following definition is aligned with that provided in the CommonJS Modules 1.0 specification.
+Modules are identified and referenced using module names. The following definition is aligned with that provided in the [CommonJS Modules](http://www.commonjs.org/specs/modules/1.0/) 1.0 specification.
 
 * A module name is a string of terms delimited by forward slashes.
 * Module names may not have file-name extensions like ".js".
@@ -5662,7 +5660,7 @@ Note that there is no requirement that the import alias use the same name as the
 
 ### <a name="11.3.6"/>11.3.6 CommonJS Modules
 
-The CommonJS Modules definition specifies a methodology for writing JavaScript modules with implied privacy, the ability to import other modules, and the ability to explicitly export members. A CommonJS compliant system provides a 'require' function that can be used to synchronously load other modules to obtain their singleton module instance, as well as an 'exports' variable to which a module can add properties to define its external API.
+The [CommonJS Modules](http://www.commonjs.org/specs/modules/1.0/) definition specifies a methodology for writing JavaScript modules with implied privacy, the ability to import other modules, and the ability to explicitly export members. A CommonJS compliant system provides a 'require' function that can be used to synchronously load other modules to obtain their singleton module instance, as well as an 'exports' variable to which a module can add properties to define its external API.
 
 The 'main' and 'log' example from section [11.3](#11.3) above generates the following JavaScript code when compiled for the CommonJS Modules pattern:
 
@@ -5724,7 +5722,7 @@ var p = { x: 10, y: 20 };
 
 ### <a name="11.3.7"/>11.3.7 AMD Modules
 
-The Asynchronous Module Definition (AMD) specification extends the CommonJS Modules specification with a pattern for authoring asynchronously loadable modules with associated dependencies. Using the AMD pattern, modules are emitted as calls to a global 'define' function taking an array of dependencies, specified as module names, and a callback function containing the module body. The global 'define' function is provided by including an AMD compliant loader in the application. The loader arranges to asynchronously load the module's dependencies and, upon completion, calls the callback function passing resolved module instances as arguments in the order they were listed in the dependency array.
+The [Asynchronous Module Definition](https://github.com/amdjs/amdjs-api/wiki/AMD) (AMD) specification extends the CommonJS Modules specification with a pattern for authoring asynchronously loadable modules with associated dependencies. Using the AMD pattern, modules are emitted as calls to a global 'define' function taking an array of dependencies, specified as module names, and a callback function containing the module body. The global 'define' function is provided by including an AMD compliant loader in the application. The loader arranges to asynchronously load the module's dependencies and, upon completion, calls the callback function passing resolved module instances as arguments in the order they were listed in the dependency array.
 
 The "main" and "log" example from above generates the following JavaScript code when compiled for the AMD pattern.
 
@@ -5898,7 +5896,7 @@ declare module "io" {
 
 # <a name="A"/>A Grammar
 
-This appendix contains a summary of the grammar found in the main document. As described in section [2.1](#2.1), the TypeScript grammar is a superset of the grammar defined in the ECMAScript Language Specification (specifically, the ECMA-262 Standard, 6th Edition) and this appendix lists only productions that are new or modified from the ECMAScript grammar.
+This appendix contains a summary of the grammar found in the main document. As described in section [2.1](#2.1), the TypeScript grammar is a superset of the grammar defined in the [ECMAScript Language Specification](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf) (specifically, the ECMA-262 Standard, 6th Edition) and this appendix lists only productions that are new or modified from the ECMAScript grammar.
 
 ## <a name="A.1"/>A.1 Types
 
@@ -5954,8 +5952,8 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`any`  
 &emsp;&emsp;&emsp;`number`  
 &emsp;&emsp;&emsp;`boolean`  
-&emsp;&emsp;&emsp;`string  
-&emsp;&emsp;&emsp;symbol`  
+&emsp;&emsp;&emsp;`string`  
+&emsp;&emsp;&emsp;`symbol`  
 &emsp;&emsp;&emsp;`void`
 
 &emsp;&emsp;*TypeReference:*  
