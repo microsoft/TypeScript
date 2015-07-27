@@ -7323,12 +7323,9 @@ namespace ts {
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
          */
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
-            if (!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement)) {
-                // There is no such thing as an instance type for a non-class element. This
-                // line shouldn't be hit.
-                Debug.fail('Should not call getJsxElementInstanceType on non-class Element');
-                return undefined;
-            }
+            // There is no such thing as an instance type for a non-class element. This
+            // line shouldn't be hit.
+            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), 'Should not call getJsxElementInstanceType on non-class Element');
 
             let classSymbol = getJsxElementTagSymbol(node);
             if (classSymbol === unknownSymbol) {
@@ -7416,7 +7413,7 @@ namespace ts {
                     let elemInstanceType = getJsxElementInstanceType(node);
 
                     if (isTypeAny(elemInstanceType)) {
-                        return links.resolvedJsxType = anyType;
+                        return links.resolvedJsxType = elemInstanceType;
                     }
 
                     let propsName = getJsxElementPropertiesName();
