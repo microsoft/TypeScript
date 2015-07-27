@@ -59,7 +59,10 @@ namespace ts {
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
-            getTypeOfSymbolAtLocation,
+
+            // The language service will always care about the narrowed type of a symbol, because that is
+            // the type the language says the symbol should have.
+            getTypeOfSymbolAtLocation: getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
@@ -69,7 +72,7 @@ namespace ts {
             getSymbolsInScope,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
-            getTypeAtLocation,
+            getTypeAtLocation: getTypeOfNode,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -159,8 +162,9 @@ namespace ts {
         let emitAwaiter = false;
         let emitGenerator = false;
 
-        let resolutionTargets: Object[] = [];
+        let resolutionTargets: TypeSystemEntity[] = [];
         let resolutionResults: boolean[] = [];
+        let resolutionPropertyNames: TypeSystemPropertyName[] = [];
 
         let mergedSymbols: Symbol[] = [];
         let symbolLinks: SymbolLinks[] = [];
@@ -200,6 +204,15 @@ namespace ts {
         let subtypeRelation: Map<RelationComparisonResult> = {};
         let assignableRelation: Map<RelationComparisonResult> = {};
         let identityRelation: Map<RelationComparisonResult> = {};
+
+        type TypeSystemEntity = Symbol | Type | Signature;
+
+        const enum TypeSystemPropertyName {
+            Type,
+            ResolvedBaseConstructorType,
+            DeclaredType,
+            ResolvedReturnType
+        }
 
         initializeTypeChecker();
 
@@ -2177,35 +2190,69 @@ namespace ts {
             }
         }
 
-        // Push an entry on the type resolution stack. If an entry with the given target is not already on the stack,
-        // a new entry with that target and an associated result value of true is pushed on the stack, and the value
-        // true is returned. Otherwise, a circularity has occurred and the result values of the existing entry and
-        // all entries pushed after it are changed to false, and the value false is returned. The target object provides
-        // a unique identity for a particular type resolution result: Symbol instances are used to track resolution of
-        // SymbolLinks.type, SymbolLinks instances are used to track resolution of SymbolLinks.declaredType, and
-        // Signature instances are used to track resolution of Signature.resolvedReturnType.
-        function pushTypeResolution(target: Object): boolean {
-            let i = 0;
-            let count = resolutionTargets.length;
-            while (i < count && resolutionTargets[i] !== target) {
-                i++;
-            }
-            if (i < count) {
-                do {
-                    resolutionResults[i++] = false;
+        /**
+         * Push an entry on the type resolution stack. If an entry with the given target and the given property name
+         * is already on the stack, and no entries in between already have a type, then a circularity has occurred. 
+         * In this case, the result values of the existing entry and all entries pushed after it are changed to false,
+         * and the value false is returned. Otherwise, the new entry is just pushed onto the stack, and true is returned.
+         * In order to see if the same query has already been done before, the target object and the propertyName both
+         * must match the one passed in.
+         *
+         * @param target The symbol, type, or signature whose type is being queried
+         * @param propertyName The property name that should be used to query the target for its type
+         */
+        function pushTypeResolution(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
+            let resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName);
+            if (resolutionCycleStartIndex >= 0) {
+                // A cycle was found
+                let { length } = resolutionTargets;
+                for (let i = resolutionCycleStartIndex; i < length; i++) {
+                    resolutionResults[i] = false;
                 }
-                while (i < count);
                 return false;
             }
             resolutionTargets.push(target);
             resolutionResults.push(true);
+            resolutionPropertyNames.push(propertyName);
             return true;
+        }
+
+        function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
+            for (let i = resolutionTargets.length - 1; i >= 0; i--) {
+                if (hasType(resolutionTargets[i], resolutionPropertyNames[i])) {
+                    return -1;
+                }
+                if (resolutionTargets[i] === target && resolutionPropertyNames[i] === propertyName) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): Type {
+            if (propertyName === TypeSystemPropertyName.Type) {
+                return getSymbolLinks(<Symbol>target).type;
+            }
+            if (propertyName === TypeSystemPropertyName.DeclaredType) {
+                return getSymbolLinks(<Symbol>target).declaredType;
+            }
+            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstructorType) {
+                Debug.assert(!!((<Type>target).flags & TypeFlags.Class));
+                return (<InterfaceType>target).resolvedBaseConstructorType;
+            }
+            if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
+                return (<Signature>target).resolvedReturnType;
+            }
+
+            Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
         }
 
         // Pop an entry from the type resolution stack and return its associated result value. The result value will
         // be true if no circularities were detected, or false if a circularity was found.
         function popTypeResolution(): boolean {
             resolutionTargets.pop();
+            resolutionPropertyNames.pop();
             return resolutionResults.pop();
         }
 
@@ -2274,10 +2321,6 @@ namespace ts {
                 // fact an iterable or array (depending on target language).
                 let elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
                 if (!declaration.dotDotDotToken) {
-                    if (isTypeAny(elementType)) {
-                        return elementType;
-                    }
-
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     let propName = "" + indexOf(pattern.elements, declaration);
                     type = isTupleLikeType(parentType)
@@ -2307,6 +2350,7 @@ namespace ts {
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
             }
+
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
                 // checkRightHandSideOfForOf will return undefined if the for-of expression type was
                 // missing properties/signatures required to get its iteratedType (like
@@ -2314,13 +2358,16 @@ namespace ts {
                 // or it may have led to an error inside getElementTypeOfIterable.
                 return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
             }
+
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
+            
             // Use type from type annotation if one is present
             if (declaration.type) {
                 return getTypeFromTypeNode(declaration.type);
             }
+
             if (declaration.kind === SyntaxKind.Parameter) {
                 let func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
@@ -2336,14 +2383,22 @@ namespace ts {
                     return type;
                 }
             }
+            
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 return checkExpressionCached(declaration.initializer);
             }
+            
             // If it is a short-hand property assignment, use the type of the identifier
             if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return checkIdentifier(<Identifier>declaration.name);
             }
+
+            // If the declaration specifies a binding pattern, use the type implied by the binding pattern
+            if (isBindingPattern(declaration.name)) {
+                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
+            }
+
             // No type specified and nothing can be inferred
             return undefined;
         }
@@ -2429,13 +2484,10 @@ namespace ts {
                 // tools see the actual type.
                 return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
             }
-            // If no type was specified and nothing could be inferred, and if the declaration specifies a binding pattern, use
-            // the type implied by the binding pattern
-            if (isBindingPattern(declaration.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
-            }
+            
             // Rest parameters default to type any[], other parameters default to type any
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
+            
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors && compilerOptions.noImplicitAny) {
                 let root = getRootDeclaration(declaration);
@@ -2463,7 +2515,7 @@ namespace ts {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
                 // Handle variable, parameter or property
-                if (!pushTypeResolution(symbol)) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
                 let type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
@@ -2504,7 +2556,7 @@ namespace ts {
         function getTypeOfAccessors(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (!pushTypeResolution(symbol)) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
                 let getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
@@ -2720,7 +2772,7 @@ namespace ts {
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
                 }
-                if (!pushTypeResolution(type)) {
+                if (!pushTypeResolution(type, TypeSystemPropertyName.ResolvedBaseConstructorType)) {
                     return unknownType;
                 }
                 let baseConstructorType = checkExpression(baseTypeNode.expression);
@@ -2847,7 +2899,7 @@ namespace ts {
             if (!links.declaredType) {
                 // Note that we use the links object as the target here because the symbol object is used as the unique
                 // identity for resolution of the 'type' property in SymbolLinks.
-                if (!pushTypeResolution(links)) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.DeclaredType)) {
                     return unknownType;
                 }
                 let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
@@ -3534,7 +3586,7 @@ namespace ts {
 
         function getReturnTypeOfSignature(signature: Signature): Type {
             if (!signature.resolvedReturnType) {
-                if (!pushTypeResolution(signature)) {
+                if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
                     return unknownType;
                 }
                 let type: Type;
@@ -4179,7 +4231,7 @@ namespace ts {
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
-                    let symbol = getSymbolInfo(node);
+                    let symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
@@ -4244,7 +4296,7 @@ namespace ts {
         }
 
         function createInferenceMapper(context: InferenceContext): TypeMapper {
-            return t => {
+            let mapper: TypeMapper = t => {
                 for (let i = 0; i < context.typeParameters.length; i++) {
                     if (t === context.typeParameters[i]) {
                         context.inferences[i].isFixed = true;
@@ -4253,6 +4305,9 @@ namespace ts {
                 }
                 return t;
             };
+            
+            mapper.context = context;
+            return mapper;
         }
 
         function identityMapper(type: Type): Type {
@@ -5463,7 +5518,9 @@ namespace ts {
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             let inferences: TypeInferences[] = [];
             for (let unused of typeParameters) {
-                inferences.push({ primary: undefined, secondary: undefined, isFixed: false });
+                inferences.push({
+                    primary: undefined, secondary: undefined, isFixed: false
+                });
             }
             return {
                 typeParameters,
@@ -5829,47 +5886,6 @@ namespace ts {
                 }
                 return false;
             }
-        }
-
-        function resolveLocation(node: Node) {
-            // Resolve location from top down towards node if it is a context sensitive expression
-            // That helps in making sure not assigning types as any when resolved out of order
-            let containerNodes: Node[] = [];
-            for (let parent = node.parent; parent; parent = parent.parent) {
-                if ((isExpression(parent) || isObjectLiteralMethod(node)) &&
-                    isContextSensitive(<Expression>parent)) {
-                    containerNodes.unshift(parent);
-                }
-            }
-
-            ts.forEach(containerNodes, node => { getTypeOfNode(node); });
-        }
-
-        function getSymbolAtLocation(node: Node): Symbol {
-            resolveLocation(node);
-            return getSymbolInfo(node);
-        }
-
-        function getTypeAtLocation(node: Node): Type {
-            resolveLocation(node);
-            return getTypeOfNode(node);
-        }
-
-        function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
-            resolveLocation(node);
-            // Get the narrowed type of symbol at given location instead of just getting
-            // the type of the symbol.
-            // eg.
-            // function foo(a: string | number) {
-            //     if (typeof a === "string") {
-            //         a/**/
-            //     }
-            // }
-            // getTypeOfSymbol for a would return type of parameter symbol string | number
-            // Unless we provide location /**/, checker wouldn't know how to narrow the type
-            // By using getNarrowedTypeOfSymbol would return string since it would be able to narrow
-            // it by typeguard in the if true condition
-            return getNarrowedTypeOfSymbol(symbol, node);
         }
 
         // Get the narrowed type of a given symbol at a given location
@@ -6764,10 +6780,23 @@ namespace ts {
             return result;
         }
 
-        // Presence of a contextual type mapper indicates inferential typing, except the identityMapper object is
-        // used as a special marker for other purposes.
+        /**
+         * Detect if the mapper implies an inference context. Specifically, there are 4 possible values
+         * for a mapper. Let's go through each one of them:
+         *
+         *    1. undefined - this means we are not doing inferential typing, but we may do contextual typing,
+         *       which could cause us to assign a parameter a type
+         *    2. identityMapper - means we want to avoid assigning a parameter a type, whether or not we are in
+         *       inferential typing (context is undefined for the identityMapper)
+         *    3. a mapper created by createInferenceMapper - we are doing inferential typing, we want to assign
+         *       types to parameters and fix type parameters (context is defined)
+         *    4. an instantiation mapper created by createTypeMapper or createTypeEraser - this should never be
+         *       passed as the contextual mapper when checking an expression (context is undefined for these)
+         *
+         * isInferentialContext is detecting if we are in case 3
+         */
         function isInferentialContext(mapper: TypeMapper) {
-            return mapper && mapper !== identityMapper;
+            return mapper && mapper.context;
         }
 
         // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
@@ -8487,6 +8516,9 @@ namespace ts {
             if (!produceDiagnostics) {
                 for (let candidate of candidates) {
                     if (hasCorrectArity(node, args, candidate)) {
+                        if (candidate.typeParameters && typeArguments) {
+                            candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
+                        }
                         return candidate;
                     }
                 }
@@ -8856,13 +8888,52 @@ namespace ts {
             let len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 let parameter = signature.parameters[i];
-                let links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeAtPosition(context, i), mapper);
+                let contextualParameterType = getTypeAtPosition(context, i);
+                assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
                 let parameter = lastOrUndefined(signature.parameters);
-                let links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeOfSymbol(lastOrUndefined(context.parameters)), mapper);
+                let contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
+                assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
+            }
+        }
+
+        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper) {
+            let links = getSymbolLinks(parameter);
+            if (!links.type) {
+                links.type = instantiateType(contextualType, mapper);
+            }
+            else if (isInferentialContext(mapper)) {
+                // Even if the parameter already has a type, it might be because it was given a type while
+                // processing the function as an argument to a prior signature during overload resolution.
+                // If this was the case, it may have caused some type parameters to be fixed. So here,
+                // we need to ensure that type parameters at the same positions get fixed again. This is
+                // done by calling instantiateType to attach the mapper to the contextualType, and then
+                // calling inferTypes to force a walk of contextualType so that all the correct fixing
+                // happens. The choice to pass in links.type may seem kind of arbitrary, but it serves
+                // to make sure that all the correct positions in contextualType are reached by the walk.
+                // Here is an example:
+                //
+                //      interface Base {
+                //          baseProp;
+                //      }
+                //      interface Derived extends Base {
+                //          toBase(): Base;
+                //      }
+                //
+                //      var derived: Derived;
+                //
+                //      declare function foo<T>(x: T, func: (p: T) => T): T;
+                //      declare function foo<T>(x: T, func: (p: T) => T): T;
+                //
+                //      var result = foo(derived, d => d.toBase());
+                //
+                // We are typing d while checking the second overload. But we've already given d
+                // a type (Derived) from the first overload. However, we still want to fix the
+                // T in the second overload so that we do not infer Base as a candidate for T
+                // (inferring Base would make type argument inference inconsistent between the two
+                // overloads).
+                inferTypes(mapper.context, links.type, instantiateType(contextualType, mapper));
             }
         }
 
@@ -9082,27 +9153,36 @@ namespace ts {
 
             let links = getNodeLinks(node);
             let type = getTypeOfSymbol(node.symbol);
-            // Check if function expression is contextually typed and assign parameter types if so
-            if (!(links.flags & NodeCheckFlags.ContextChecked)) {
+            let contextSensitive = isContextSensitive(node);
+            let mightFixTypeParameters = contextSensitive && isInferentialContext(contextualMapper);
+
+            // Check if function expression is contextually typed and assign parameter types if so.
+            // See the comment in assignTypeToParameterAndFixTypeParameters to understand why we need to
+            // check mightFixTypeParameters.
+            if (mightFixTypeParameters || !(links.flags & NodeCheckFlags.ContextChecked)) {
                 let contextualSignature = getContextualSignature(node);
                 // If a type check is started at a function expression that is an argument of a function call, obtaining the
                 // contextual type may recursively get back to here during overload resolution of the call. If so, we will have
                 // already assigned contextual types.
-                if (!(links.flags & NodeCheckFlags.ContextChecked)) {
+                let contextChecked = !!(links.flags & NodeCheckFlags.ContextChecked);
+                if (mightFixTypeParameters || !contextChecked) {
                     links.flags |= NodeCheckFlags.ContextChecked;
                     if (contextualSignature) {
                         let signature = getSignaturesOfType(type, SignatureKind.Call)[0];
-                        if (isContextSensitive(node)) {
+                        if (contextSensitive) {
                             assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
                         }
-                        if (!node.type && !signature.resolvedReturnType) {
+                        if (mightFixTypeParameters || !node.type && !signature.resolvedReturnType) {
                             let returnType = getReturnTypeFromBody(node, contextualMapper);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
                         }
                     }
-                    checkSignatureDeclaration(node);
+
+                    if (!contextChecked) {
+                        checkSignatureDeclaration(node);
+                    }
                 }
             }
 
@@ -9792,7 +9872,7 @@ namespace ts {
         }
 
         function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration, type: Type, contextualMapper?: TypeMapper) {
-            if (contextualMapper && contextualMapper !== identityMapper) {
+            if (isInferentialContext(contextualMapper)) {
                 let signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
                     let contextualType = getContextualType(<Expression>node);
@@ -10037,7 +10117,7 @@ namespace ts {
                             }
                             else {
                                 checkTypeAssignableTo(typePredicate.type,
-                                    getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
+                                    getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
                                     typePredicateNode.type);
                             }
                         }
@@ -13667,7 +13747,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolInfo(node: Node) {
+        function getSymbolAtLocation(node: Node) {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -13678,10 +13758,22 @@ namespace ts {
                 return getSymbolOfNode(node.parent);
             }
 
-            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
-                return node.parent.kind === SyntaxKind.ExportAssignment
-                    ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
-                    : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node);
+            if (node.kind === SyntaxKind.Identifier) {
+                if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
+                    return node.parent.kind === SyntaxKind.ExportAssignment
+                        ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
+                        : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node);
+                }
+                else if (node.parent.kind === SyntaxKind.BindingElement &&
+                        node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
+                        node === (<BindingElement>node.parent).propertyName) {
+                    let typeOfPattern = getTypeOfNode(node.parent.parent);
+                    let propertyDeclaration = typeOfPattern && getPropertyOfType(typeOfPattern, (<Identifier>node).text);
+
+                    if (propertyDeclaration) {
+                        return propertyDeclaration;
+                    }
+                }
             }
 
             switch (node.kind) {
@@ -13758,24 +13850,24 @@ namespace ts {
             }
 
             if (isTypeDeclaration(node)) {
-                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
                 let symbol = getSymbolOfNode(node);
                 return getDeclaredTypeOfSymbol(symbol);
             }
 
             if (isTypeDeclarationName(node)) {
-                let symbol = getSymbolInfo(node);
+                let symbol = getSymbolAtLocation(node);
                 return symbol && getDeclaredTypeOfSymbol(symbol);
             }
 
             if (isDeclaration(node)) {
-                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
                 let symbol = getSymbolOfNode(node);
                 return getTypeOfSymbol(symbol);
             }
 
             if (isDeclarationName(node)) {
-                let symbol = getSymbolInfo(node);
+                let symbol = getSymbolAtLocation(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
 
@@ -13784,7 +13876,7 @@ namespace ts {
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
-                let symbol = getSymbolInfo(node);
+                let symbol = getSymbolAtLocation(node);
                 let declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }

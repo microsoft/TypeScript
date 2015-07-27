@@ -1591,6 +1591,8 @@ declare module "typescript" {
          * not happen and the entire document will be re - parsed.
          */
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
     module ScriptSnapshot {
         function fromString(text: string): IScriptSnapshot;

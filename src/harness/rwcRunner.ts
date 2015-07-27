@@ -123,7 +123,7 @@ module RWC {
                         content = ts.sys.readFile(unitName);
                     }
                     catch (e) {
-                        // Leave content undefined.
+                        content = ts.sys.readFile(fileName);
                     }
                     return { unitName, content };
                 }
