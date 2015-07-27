@@ -12,7 +12,9 @@ module ts {
             compilerOptions: CompilerOptions,
             fileNames: string[],
             excludes: string[],
-            expectedCompilerOptionOutput: ExpectedCompilerOptionsOutput): void {
+            expectedCompilerOptionOutput: ExpectedCompilerOptionsOutput,
+            expectedFileNames: string[],
+            expectedExcludes: string[]): void {
 
             let writer = createTextWriter("\n");
             let optionNameMap = getOptionNameMap().optionNameMap;
@@ -38,10 +40,10 @@ module ts {
             }
             expectedOutput += "    }";
 
-            if (fileNames) {
+            if (expectedFileNames) {
                 expectedOutput += ",\n";
                 expectedOutput += `    "files": [\n`;
-                for (let fileName of fileNames) {
+                for (let fileName of expectedFileNames) {
                     expectedOutput += `        "${fileName}",\n`;
                 }
                 expectedOutput += "    ]";
@@ -72,7 +74,9 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
-                });
+                },
+                null,
+                null);
         });
 
         it("should override default compiler options @projectInit", () => {
@@ -90,7 +94,9 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
-                });
+                },
+                null,
+                null);
         });
 
         it("should be able to generate newline option @projectInit", () => {
@@ -108,7 +114,9 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
-                });
+                },
+                null,
+                null);
 
             assertConfigFile(
                 {
@@ -124,7 +132,9 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
-                });
+                },
+                null,
+                null);
         });
 
         it("should generate a `files` property @projectInit", () => {
@@ -139,10 +149,12 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false
-                });
+                },
+                ["file1.ts", "file2.ts"],
+                null);
         });
 
-        it("should generete exclude options @projectInit", () => {
+        it("should generate exclude options @projectInit", () => {
             assertConfigFile(
                 {},
                 null,
@@ -154,10 +166,12 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false
-                });
+                },
+                null,
+                ["node_modules"]);
         });
 
-        it("should not genereate compiler options for `version`, `watch`, `init` and `help` @projectInit", () => {
+        it("should not generate compiler options for `version`, `watch`, `init` and `help` @projectInit", () => {
             assertConfigFile(
                 {
                     version: true,
@@ -174,7 +188,31 @@ module ts {
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false
-                });
+                },
+                null,
+                null);
+        });
+
+        it("should not generate a files property if the files length is zero @projectInit", () => {
+            assertConfigFile(
+                {
+                    version: true,
+                    watch: true,
+                    init: true,
+                    help: true,
+                },
+                [],
+                null,
+                {
+                    module: "commonjs",
+                    target: "es3",
+                    noImplicitAny: true,
+                    outDir: "built",
+                    rootDir: ".",
+                    sourceMap: false
+                },
+                null,
+                null);
         });
     });
 }

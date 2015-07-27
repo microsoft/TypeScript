@@ -23,7 +23,7 @@ namespace ts {
             writeLine();
             increaseIndent();
             writeCompilerOptions();
-            if (fileNames) {
+            if (fileNames && fileNames.length > 0) {
                 write(",");
                 writeLine();
                 writeFileNames();
