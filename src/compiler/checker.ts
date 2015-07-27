@@ -10863,9 +10863,6 @@ namespace ts {
                 return;
             }
 
-            // Exports should be checked only if enclosing module contains both exported and non exported declarations.
-            // In case if all declarations are non-exported check is unnecessary.
-
             // if localSymbol is defined on node then node itself is exported - check is required
             let symbol = node.localSymbol;
             if (!symbol) {
@@ -10885,27 +10882,45 @@ namespace ts {
 
             // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace
             // to denote disjoint declarationSpaces (without making new enum type).
-            let exportedDeclarationSpaces: SymbolFlags = 0;
-            let nonExportedDeclarationSpaces: SymbolFlags = 0;
-            forEach(symbol.declarations, d => {
+            let exportedDeclarationSpaces = SymbolFlags.None;
+            let nonExportedDeclarationSpaces = SymbolFlags.None;
+            let defaultExportedDeclarationSpaces = SymbolFlags.None;
+            for (let d of symbol.declarations) {
                 let declarationSpaces = getDeclarationSpaces(d);
-                if (getEffectiveDeclarationFlags(d, NodeFlags.Export)) {
-                    exportedDeclarationSpaces |= declarationSpaces;
+                let effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, NodeFlags.Export | NodeFlags.Default);
+
+                if (effectiveDeclarationFlags & NodeFlags.Export) {
+                    if (effectiveDeclarationFlags & NodeFlags.Default) {
+                        defaultExportedDeclarationSpaces |= declarationSpaces;
+                    }
+                    else {
+                        exportedDeclarationSpaces |= declarationSpaces;
+                    }
                 }
                 else {
                     nonExportedDeclarationSpaces |= declarationSpaces;
                 }
-            });
+            }
 
-            let commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            // Spaces for anyting not declared a 'default export'.
+            let nonDefaultExportedDeclarationSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
+            
+            let commonDeclarationSpacesForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            let commonDeclarationSpacesForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationSpaces;
 
-            if (commonDeclarationSpace) {
+            if (commonDeclarationSpacesForExportsAndLocals || commonDeclarationSpacesForDefaultAndNonDefault) {
                 // declaration spaces for exported and non-exported declarations intersect
-                forEach(symbol.declarations, d => {
-                    if (getDeclarationSpaces(d) & commonDeclarationSpace) {
+                for (let d of symbol.declarations) {
+                    let declarationSpaces = getDeclarationSpaces(d);
+                    
+                    // Only error on the declarations that conributed to the intersecting spaces.
+                    if (declarationSpaces & commonDeclarationSpacesForDefaultAndNonDefault) {
+                        error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, declarationNameToString(d.name));
+                    }
+                    else if (declarationSpaces & commonDeclarationSpacesForExportsAndLocals) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
                     }
-                });
+                }
             }
 
             function getDeclarationSpaces(d: Declaration): SymbolFlags {
