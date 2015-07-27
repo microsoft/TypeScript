@@ -7324,7 +7324,9 @@ namespace ts {
          */
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
             if (!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement)) {
-                // There is no such thing as an instance type for a non-class element
+                // There is no such thing as an instance type for a non-class element. This
+                // line shouldn't be hit.
+                Debug.fail('Should not call getJsxElementInstanceType on non-class Element');
                 return undefined;
             }
 
@@ -7349,11 +7351,11 @@ namespace ts {
                 if (signatures.length === 0) {
                     // We found no signatures at all, which is an error
                     error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
-                    return undefined;
+                    return unknownType;
                 }
             }
 
-            let returnType = getUnionType(signatures.map(s => getReturnTypeOfSignature(s)));
+            let returnType = getUnionType(signatures.map(getReturnTypeOfSignature));
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
             let elemClassType = getJsxGlobalElementClassType();
@@ -7413,7 +7415,7 @@ namespace ts {
                 if (links.jsxFlags & JsxFlags.ClassElement) {
                     let elemInstanceType = getJsxElementInstanceType(node);
 
-                    if (!elemInstanceType || isTypeAny(elemInstanceType)) {
+                    if (isTypeAny(elemInstanceType)) {
                         return links.resolvedJsxType = anyType;
                     }
 
