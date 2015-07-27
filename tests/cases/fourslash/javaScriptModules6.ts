@@ -1,12 +1,13 @@
 ///<reference path="fourslash.ts" />
 
-// The type of a module is its assignment to 'module.exports' if there
-// were no 'return' statements in its body
+// The type of a module is its collected property assignments
+// to 'exports'
 
 // @allowNonTsExtensions: true
 // @Filename: Foo.js
-//// define('myMod', ['module'], function(m) {
-////     m.exports = { hello: 'world', size: 42 };
+//// define('myMod', ['exports'], function(e) {
+////     e.hello = 'world';
+////     e.size = 42;
 //// });
 //// define('consumer', ['myMod'], function(mm) {
 ////     let x = mm;

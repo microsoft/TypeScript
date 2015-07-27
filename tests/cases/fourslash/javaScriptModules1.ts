@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts" />
 
-// We can resolve modules declared in .d.ts file
+// We can resolve modules declared in .d.ts files
 // using the dependency array in 'define'
 
 // @allowNonTsExtensions: true
@@ -16,7 +16,6 @@
 //// });
 
 goTo.marker();
-debug.printCurrentQuickInfo();
 edit.insert('.');
 verify.completionListContains("readFile", /*displayText:*/ undefined, /*documentation*/ undefined, "function");
 

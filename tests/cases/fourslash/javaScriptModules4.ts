@@ -12,10 +12,14 @@
 
 // @Filename: Foo.js
 //// define('myMod', ['require'], function(r) {
+////    let req = /*r*/r;
 ////    let ff = r('fs');
-////    let y = ff/**/;
+////    let y = ff/*ff*/;
 //// }
 
-goTo.marker();
+goTo.marker('r');
+debug.printCurrentQuickInfo();
+
+goTo.marker('ff');
 edit.insert('.');
 verify.completionListContains("readFile", /*displayText:*/ undefined, /*documentation*/ undefined, "function");

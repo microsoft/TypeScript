@@ -1,12 +1,14 @@
 ///<reference path="fourslash.ts" />
 
-// The type of a module is its assignment to 'module.exports' if there
-// were no 'return' statements in its body
+// You can use the CommonJS wrapper by not specifying a dependency array
+// and naming your function arguments require, [exports [, module]]. A
+// module definition can be provided by putting an object into
+// module.exports
 
 // @allowNonTsExtensions: true
 // @Filename: Foo.js
-//// define('myMod', ['module'], function(m) {
-////     m.exports = { hello: 'world', size: 42 };
+//// define('myMod', function(require, exports, module) {
+////     module.exports = {hello: 'world', size: 42, other: []};
 //// });
 //// define('consumer', ['myMod'], function(mm) {
 ////     let x = mm;
@@ -19,6 +21,7 @@ goTo.marker('1');
 edit.insert('.');
 verify.completionListContains("hello", undefined, undefined, 'property');
 verify.completionListContains("size", undefined, undefined, 'property');
+verify.completionListContains("other", undefined, undefined, 'property');
 edit.backspace();
 
 goTo.marker('2');

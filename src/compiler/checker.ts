@@ -107,12 +107,15 @@ namespace ts {
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
-        // In JS files using the CommonJS wrapper for RequireJS, these types
-        // represent sentinels for the special arguments 'exports', 'module', and 'require'
+        // For JS files using the CommonJS wrapper for RequireJS
+        let cjsRequireSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "require");
+        let cjsDefineSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "define");
+        let cjsRequireSignatureArg = createSymbol(SymbolFlags.Variable, 'args')
+        let cjsRequireSignature = createSignature(undefined, undefined, [cjsRequireSignatureArg], anyType, undefined, 0, true, false);
         let cjsExportsType = createIntrinsicType(TypeFlags.Any, "CommonJS.Exports");
-        let cjsModuleType = createIntrinsicType(TypeFlags.Any, "CommonJS.Module");
-        let cjsRequireType = createIntrinsicType(TypeFlags.Any, "CommonJS.Require");
-        let cjsRequireSignature: Signature = <any>{parameters: [{ name: 'moduleName', type: stringType } ]};
+        let cjsRequireType = createAnonymousType(cjsRequireSymbol, emptySymbols, [cjsRequireSignature], emptyArray, undefined, undefined);
+        let cjsDefineType = createIntrinsicType(TypeFlags.Any, "CommonJS.Define");
+        let cjsModuleType = createCommonJSModuleType();
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -950,6 +953,10 @@ namespace ts {
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+
+            if(moduleName.indexOf('!') >= 0) {
+                moduleName = moduleName.substr(0, moduleName.indexOf('!'));
+            }
 
             if (!moduleName) return;
             let isRelative = isExternalModuleNameRelative(moduleName);
@@ -2441,8 +2448,8 @@ namespace ts {
                         assignDefineCallParameterTypes(<FunctionExpression>func);
                         let links = getSymbolLinks(declaration.symbol);
                         if (links.type) {
-                            console.log('now it has a type: ' + typeToString(links.type));
                             debugger;
+                            console.log('now it has a type: ' + typeToString(links.type));
                             return links.type;
                         }
                     }
@@ -2712,35 +2719,79 @@ namespace ts {
         }
 
         function resolveDefineModule(symbol: Symbol): Type {
+            // Can't meaningfully define the same module more than once
             if(symbol.declarations.length !== 1) {
                 return unknownType;
             }
+
+            // If the invocation of 'define' has zero args ('define()')... we
+            // shouldn't really be here, but it's meaninguless
             let callExpr = <CallExpression>symbol.declarations[0];
             if(callExpr.arguments.length === 0) {
                 return unknownType;
             }
 
-            // If the last arg isn't a function expr, dunno
-            // TODO: Might be an object literal, think about that
+            // If the last arg isn't a function expr, just resolve
+            // its type and define that as the shape of the module
             let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
             if(lastArg.kind !== SyntaxKind.FunctionExpression) {
-                return unknownType;
+                let resultType = getTypeOfExpression(lastArg);
+                // If this type is a function type, we want to use its return type since
+                // it's going to get invoked anyway
+                let signatures = getSignaturesOfType(resultType, SignatureKind.Call);
+                if (signatures.length > 0) {
+                    return getReturnTypeOfSignature(signatures[0]);
+                }
+                else {
+                    return resultType;
+                }
             }
 
             // If there are any expressionful return statements in this function,
-            // we'll use those
+            // we'll use those as the shape of the module
             let bodyReturnType = getReturnTypeFromBody(lastArg);
             if (bodyReturnType !== voidType) {
                 return bodyReturnType;
             }
 
-            // Look for assignments in the body to 'module.exports'
+            // Collect assignments in the body to 'module.exports' or 'exports.propName' or 'module.exports.propName'
+            let assignedModuleType: Type = undefined;
+            let exportAssignedProperties: Symbol[] = [];
+            let exportAssignedPropTable: SymbolTable = {};
             function traverse(node: Node) {
-                if(node.kind === SyntaxKind.LastAssignment) {
-                    
+                if(node.kind === SyntaxKind.BinaryExpression &&
+                   (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    let lhs = (<BinaryExpression>node).left;
+                    if(lhs.kind === SyntaxKind.PropertyAccessExpression) {
+                        let propertyName = (<PropertyAccessExpression>lhs).name.text;
+                        let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
+                        if (operandType === cjsModuleType && propertyName === 'exports') {
+                            assignedModuleType = getTypeOfNode((<BinaryExpression>node).right);
+                        }
+                        else if (operandType === cjsExportsType) {
+                            let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propertyName);
+                            prop.type = getTypeOfNode((<BinaryExpression>node).right);
+                            exportAssignedProperties.push(prop);
+                            exportAssignedPropTable[propertyName] = prop;
+                        }
+                    }
                 }
-                forEachChild(node, traverse);               
+                forEachChild(node, traverse);
             }
+            traverse(lastArg.body);
+
+            // Someone assigned to 'module.exports', so ignore other assignments
+            if (assignedModuleType) {
+                return assignedModuleType;
+            }
+
+            // Otherwise return the collected property assignments
+            if (exportAssignedProperties.length > 0) {
+                return createAnonymousType(lastArg.symbol, exportAssignedPropTable, [], [], undefined, undefined);
+            }
+
+            // Empty module?
+            return emptyObjectType;
         }
 
         function getTypeOfDefineModule(symbol: Symbol): Type {
@@ -9045,7 +9096,8 @@ namespace ts {
 
             let funcType = checkExpression(node.expression);
             if (funcType === cjsRequireType) {
-                return cjsRequireSignature;
+                // return cjsRequireSignature;
+                debugger;
             }
 
             let apparentType = getApparentType(funcType);
@@ -9322,6 +9374,14 @@ namespace ts {
                 pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
         }
 
+        function createCommonJSModuleType() {
+            let symbolTable: SymbolTable = {};
+            let sym = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, 'exports');
+            sym.type = cjsExportsType;
+            symbolTable['exports'] = sym;
+            return createAnonymousType(createSymbol(SymbolFlags.None, 'CommonJS:Module'), symbolTable, emptyArray, emptyArray, undefined, undefined);
+        }
+
         function assignDefineCallParameterTypes(funcExpr: FunctionExpression) {
             let callExpr = <CallExpression>funcExpr.parent;
             Debug.assert(callExpr.kind === SyntaxKind.CallExpression, 'Parent is a call expr');
@@ -9336,7 +9396,7 @@ namespace ts {
                 }
 
                 if(funcExpr.parameters.length > 2) {
-                    getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsModuleType;
+                    getSymbolLinks(funcExpr.parameters[2].symbol).type = cjsModuleType;
                 }
             }
 
@@ -14792,6 +14852,15 @@ namespace ts {
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
+
+            // Hook up 'require' and 'define' in JavaScript projects
+            if (compilerOptions.allowNonTsExtensions) {
+                getSymbolLinks(cjsRequireSymbol).type = cjsRequireType;
+                getSymbolLinks(cjsDefineSymbol).type = cjsDefineType;
+                globals[cjsRequireSymbol.name] = cjsRequireSymbol;
+                globals[cjsDefineSymbol.name] = cjsDefineSymbol;
+            }
+
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
