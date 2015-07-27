@@ -1647,7 +1647,7 @@ namespace ts {
 
                 // Make sure this declaration can be emitted, that is it is accessible
                 // and is connected to its parent, or else report a accessibility error
-                ensureDeclarationVisible(declaration, errorNode);
+                ensureDeclarationVisible(declaration);
 
                 // Collect any dependencies
                 collectReferencedDeclarations(declaration);
@@ -1686,7 +1686,7 @@ namespace ts {
             });
         }
 
-        function ensureDeclarationVisible(node: Node, errorNode: Node): void {
+        function ensureDeclarationVisible(node: Node): void {
             let links = getNodeLinks(node);
             if (!links.visited) {
                 links.visited = true;
@@ -1698,7 +1698,7 @@ namespace ts {
                 let parent = getEnclosingDeclaration(node);
                 attachVisibleChild(parent, node);
                 if (parent.kind !== SyntaxKind.SourceFile) {
-                    ensureDeclarationVisible(parent, errorNode);
+                    ensureDeclarationVisible(parent);
                 }
             }
         }
