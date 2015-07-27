@@ -13,6 +13,7 @@
 //// });
 
 goTo.marker();
+debug.printCurrentQuickInfo();
 edit.insert('.');
 verify.completionListContains("hello", undefined, undefined, 'property');
 verify.completionListContains("size", undefined, undefined, 'property');

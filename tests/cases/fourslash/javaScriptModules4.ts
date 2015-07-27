@@ -1,4 +1,4 @@
-///<reference path="fourslash.ts" />
+/// <reference path="fourslash.ts" />
 
 // When a module name is 'require', it acts as a function that
 // can produce a module as if it were imported
@@ -18,7 +18,6 @@
 //// }
 
 goTo.marker('r');
-debug.printCurrentQuickInfo();
 
 goTo.marker('ff');
 edit.insert('.');

@@ -108,14 +108,14 @@ namespace ts {
         let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         // For JS files using the CommonJS wrapper for RequireJS
-        let cjsRequireSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "require");
-        let cjsDefineSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "define");
-        let cjsRequireSignatureArg = createSymbol(SymbolFlags.Variable, 'args')
-        let cjsRequireSignature = createSignature(undefined, undefined, [cjsRequireSignatureArg], anyType, undefined, 0, true, false);
-        let cjsExportsType = createIntrinsicType(TypeFlags.Any, "CommonJS.Exports");
-        let cjsRequireType = createAnonymousType(cjsRequireSymbol, emptySymbols, [cjsRequireSignature], emptyArray, undefined, undefined);
-        let cjsDefineType = createIntrinsicType(TypeFlags.Any, "CommonJS.Define");
-        let cjsModuleType = createCommonJSModuleType();
+        //let cjsRequireSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "require");
+        //let cjsDefineSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "define");
+        //let cjsRequireSignatureArg = createSymbol(SymbolFlags.Variable, 'args')
+        //let cjsRequireSignature = createSignature(undefined, undefined, [cjsRequireSignatureArg], anyType, undefined, 0, true, false);
+        //let cjsExportsType = createIntrinsicType(TypeFlags.Any, "CommonJS.Exports");
+        //let cjsRequireType = createAnonymousType(cjsRequireSymbol, emptySymbols, [cjsRequireSignature], emptyArray, undefined, undefined);
+        //let cjsDefineType = createIntrinsicType(TypeFlags.Any, "CommonJS.Define");
+        //let cjsModuleType = createCommonJSModuleType();
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -2442,14 +2442,12 @@ namespace ts {
                     func.parent &&
                     func.parent.kind === SyntaxKind.CallExpression) {
                     
-                    console.log('rescue a define call?');
                     if (isDefineCall(<CallExpression>func.parent)) {
-                        console.log('rescuing a define call for sure now');
+                        console.log('Assign types to define call: ' + getTextOfNode(func.parent).substr(0, 20));
                         assignDefineCallParameterTypes(<FunctionExpression>func);
                         let links = getSymbolLinks(declaration.symbol);
                         if (links.type) {
-                            debugger;
-                            console.log('now it has a type: ' + typeToString(links.type));
+                            console.log(' -> Computed type of module reference is ' + typeToString(links.type));
                             return links.type;
                         }
                     }
@@ -2758,11 +2756,14 @@ namespace ts {
             let assignedModuleType: Type = undefined;
             let exportAssignedProperties: Symbol[] = [];
             let exportAssignedPropTable: SymbolTable = {};
+            let cjsModuleType = getExportedTypeFromNamespace('CommonJS', 'Module');
+            let cjsExportsType = getExportedTypeFromNamespace('CommonJS', 'Exports');
             function traverse(node: Node) {
                 if(node.kind === SyntaxKind.BinaryExpression &&
                    (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
                     let lhs = (<BinaryExpression>node).left;
                     if(lhs.kind === SyntaxKind.PropertyAccessExpression) {
+                        debugger;
                         let propertyName = (<PropertyAccessExpression>lhs).name.text;
                         let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
                         if (operandType === cjsModuleType && propertyName === 'exports') {
@@ -3843,10 +3844,6 @@ namespace ts {
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
-            if(signature === cjsRequireSignature) {
-                return anyType;
-            }
-
             if (!signature.resolvedReturnType) {
                 if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
                     return unknownType;
@@ -4266,9 +4263,13 @@ namespace ts {
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
-            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            let typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            let typeSymbol = getExportedSymbolFromNamespace(namespace, name);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
+        }
+
+        function getExportedSymbolFromNamespace(namespace: string, name: string): Symbol {
+            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            return namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type | SymbolFlags.Value);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -9095,13 +9096,8 @@ namespace ts {
             }
 
             let funcType = checkExpression(node.expression);
-            if (funcType === cjsRequireType) {
-                // return cjsRequireSignature;
-                debugger;
-            }
 
             let apparentType = getApparentType(funcType);
-
             if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
@@ -9343,7 +9339,8 @@ namespace ts {
                 }
             }
 
-            if (signature === cjsRequireSignature) {
+            let exprType = getTypeOfExpression(node.expression);
+            if(exprType === getExportedTypeFromNamespace('CommonJS', 'Require')) {
                 if(node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
                     return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
                 }
@@ -9374,13 +9371,14 @@ namespace ts {
                 pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
         }
 
+        /*
         function createCommonJSModuleType() {
             let symbolTable: SymbolTable = {};
             let sym = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, 'exports');
             sym.type = cjsExportsType;
             symbolTable['exports'] = sym;
             return createAnonymousType(createSymbol(SymbolFlags.None, 'CommonJS:Module'), symbolTable, emptyArray, emptyArray, undefined, undefined);
-        }
+        }*/
 
         function assignDefineCallParameterTypes(funcExpr: FunctionExpression) {
             let callExpr = <CallExpression>funcExpr.parent;
@@ -9389,14 +9387,14 @@ namespace ts {
 
             if(isCommonJsWrapper(funcExpr)) {
                 // CommonJS wrapper
-                getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsRequireType;
+                getSymbolLinks(funcExpr.parameters[0].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Require');
 
                 if(funcExpr.parameters.length > 1) {
-                    getSymbolLinks(funcExpr.parameters[1].symbol).type = cjsExportsType;
+                    getSymbolLinks(funcExpr.parameters[1].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Exports');
                 }
 
                 if(funcExpr.parameters.length > 2) {
-                    getSymbolLinks(funcExpr.parameters[2].symbol).type = cjsModuleType;
+                    getSymbolLinks(funcExpr.parameters[2].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Module');
                 }
             }
 
@@ -9413,19 +9411,23 @@ namespace ts {
 
                     if (moduleNames.elements[i].kind === SyntaxKind.StringLiteral) {
                         let moduleName = getTextOfNode(moduleNames.elements[i]);
-                        console.log('Resolve ' + moduleName);
+                        console.log('Resolve define module reference ' + moduleName + '"');
 
                         let unquotedName = moduleName.substr(1, moduleName.length - 2);
                         if (unquotedName === 'require') {
-                            links.type = cjsRequireType;
+                            links.type = getExportedTypeFromNamespace('CommonJS', 'Require');
+                            console.log('Assigned special name "require", of type ' + typeToString(links.type));
                         }
                         else if (unquotedName === 'exports') {
-                            links.type = cjsExportsType;
+                            links.type = getExportedTypeFromNamespace('CommonJS', 'Exports');
+                            console.log('Assigned special name "exports", of type ' + typeToString(links.type));
                         }
                         else if (unquotedName === 'module') {
-                            links.type = cjsModuleType;
+                            links.type = getExportedTypeFromNamespace('CommonJS', 'Module');
+                            console.log('Assigned special name "module", of type ' + typeToString(links.type));
                         }
                         else {
+                            console.log(' -> resolve this module by name');
                             links.type = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[i]);
                         }
                     }
@@ -14848,18 +14850,19 @@ namespace ts {
             });
 
             // Initialize special symbols
+            if (compilerOptions.allowNonTsExtensions) {
+                if (compilerOptions.module === ModuleKind.AMD) {
+                    globals['require'] = getExportedSymbolFromNamespace('AMD', 'require');
+                    globals['define'] = getExportedSymbolFromNamespace('AMD', 'define');
+                } else if(compilerOptions.module === ModuleKind.CommonJS) {
+                    globals['require'] = getExportedSymbolFromNamespace('CommonJS', 'require');
+                }
+            }
+
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
-
-            // Hook up 'require' and 'define' in JavaScript projects
-            if (compilerOptions.allowNonTsExtensions) {
-                getSymbolLinks(cjsRequireSymbol).type = cjsRequireType;
-                getSymbolLinks(cjsDefineSymbol).type = cjsDefineType;
-                globals[cjsRequireSymbol.name] = cjsRequireSymbol;
-                globals[cjsDefineSymbol.name] = cjsDefineSymbol;
-            }
 
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
