@@ -3,7 +3,7 @@
 
 namespace ts {
     export interface SourceFile {
-        fileWatcher: FileWatcher;
+        fileWatcher?: FileWatcher;
     }
 
     /**
