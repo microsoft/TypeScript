@@ -614,5 +614,6 @@ namespace ts {
         Expected_corresponding_JSX_closing_tag_for_0: { code: 17002, category: DiagnosticCategory.Error, key: "Expected corresponding JSX closing tag for '{0}'." },
         JSX_attribute_expected: { code: 17003, category: DiagnosticCategory.Error, key: "JSX attribute expected." },
         Cannot_use_JSX_unless_the_jsx_flag_is_provided: { code: 17004, category: DiagnosticCategory.Error, key: "Cannot use JSX unless the '--jsx' flag is provided." },
+        A_constructor_cannot_contain_a_super_call_when_its_class_extends_null: { code: 17005, category: DiagnosticCategory.Error, key: "A constructor cannot contain a 'super' call when its class extends 'null'" },
     };
 }

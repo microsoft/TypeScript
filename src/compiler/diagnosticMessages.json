@@ -1,4 +1,4 @@
-{
+ {
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -2449,5 +2449,9 @@
     "Cannot use JSX unless the '--jsx' flag is provided.": {
         "category": "Error",
         "code": 17004
+    },
+    "A constructor cannot contain a 'super' call when its class extends 'null'": {
+      "category": "Error",
+      "code": 17005
     }
 }
