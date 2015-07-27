@@ -261,26 +261,25 @@ namespace ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            let children = this.getChildren();
-            for (let child of children) {
-                if (child.kind < SyntaxKind.FirstNode) {
-                    return child;
-                }
-
-                return child.getFirstToken(sourceFile);
+            let children = this.getChildren(sourceFile);
+            if (!children.length) {
+                return undefined;
             }
+
+            let child = children[0];
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getFirstToken(sourceFile);
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
             let children = this.getChildren(sourceFile);
-            for (let i = children.length - 1; i >= 0; i--) {
-                let child = children[i];
-                if (child.kind < SyntaxKind.FirstNode) {
-                    return child;
-                }
 
-                return child.getLastToken(sourceFile);
+            let child = lastOrUndefined(children);
+            if (!child) { 
+                return undefined; 
             }
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
     }
 

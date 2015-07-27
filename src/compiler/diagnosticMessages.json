@@ -1165,7 +1165,7 @@
         "category": "Error",
         "code": 2394
     },
-    "Individual declarations in merged declaration {0} must be all exported or all local.": {
+    "Individual declarations in merged declaration '{0}' must be all exported or all local.": {
         "category": "Error",
         "code": 2395
     },
@@ -1688,6 +1688,10 @@
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
+    },
+    "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead.": {
+        "category": "Error",
+        "code": 2651
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
