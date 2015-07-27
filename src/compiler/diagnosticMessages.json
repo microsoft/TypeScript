@@ -1,4 +1,4 @@
-{
+ {
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -2446,7 +2446,7 @@
         "category": "Error",
         "code": 17004
     },
-    "A constructor cannot contain 'super' call when a class extends 'null'": {
+    "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
     }
