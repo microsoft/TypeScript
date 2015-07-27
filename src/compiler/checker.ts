@@ -10870,14 +10870,14 @@ namespace ts {
             // to denote disjoint declarationSpaces (without making new enum type).
             let exportedDeclarationSpaces = SymbolFlags.None;
             let nonExportedDeclarationSpaces = SymbolFlags.None;
-            let defaultExportedDeclarationFlags = SymbolFlags.None;
+            let defaultExportedDeclarationSpaces = SymbolFlags.None;
             for (let d of symbol.declarations) {
                 let declarationSpaces = getDeclarationSpaces(d);
                 let effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, NodeFlags.Export | NodeFlags.Default);
 
                 if (effectiveDeclarationFlags & NodeFlags.Export) {
                     if (effectiveDeclarationFlags & NodeFlags.Default) {
-                        defaultExportedDeclarationFlags |= declarationSpaces;
+                        defaultExportedDeclarationSpaces |= declarationSpaces;
                     }
                     else {
                         exportedDeclarationSpaces |= declarationSpaces;
@@ -10888,17 +10888,22 @@ namespace ts {
                 }
             }
 
-            let commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
-            let commonDeclarationSpaceForDefault = defaultExportedDeclarationFlags & (exportedDeclarationSpaces | nonExportedDeclarationSpaces);
+            // Spaces for anyting not declared a 'default export'.
+            let nonDefaultExportedDeclarationsSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
+            
+            let commonDeclarationSpaceForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            let commonDeclarationSpaceForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationsSpaces;
 
-            if (commonDeclarationSpace || commonDeclarationSpaceForDefault) {
+            if (commonDeclarationSpaceForExportsAndLocals || commonDeclarationSpaceForDefaultAndNonDefault) {
                 // declaration spaces for exported and non-exported declarations intersect
                 for (let d of symbol.declarations) {
                     let declarationSpaces = getDeclarationSpaces(d);
-                    if (declarationSpaces & commonDeclarationSpaceForDefault) {
+                    
+                    // Only error on the declarations that conributed to the intersecting spaces.
+                    if (declarationSpaces & commonDeclarationSpaceForDefaultAndNonDefault) {
                         error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration, declarationNameToString(d.name));
                     }
-                    else if (declarationSpaces & commonDeclarationSpace) {
+                    else if (declarationSpaces & commonDeclarationSpaceForExportsAndLocals) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
                     }
                 }
