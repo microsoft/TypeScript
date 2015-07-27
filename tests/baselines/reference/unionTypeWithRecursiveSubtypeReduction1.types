@@ -39,7 +39,7 @@ var t: Class | Property;
 >Property : Property
 
 t.parent;
->t.parent : Class | Namespace
+>t.parent : Namespace | Module | Class
 >t : Class | Property
->parent : Class | Namespace
+>parent : Namespace | Module | Class
 

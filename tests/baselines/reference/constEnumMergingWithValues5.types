@@ -1,0 +1,13 @@
+=== tests/cases/compiler/constEnumMergingWithValues5.ts ===
+
+module foo {
+>foo : typeof foo
+
+    const enum E { X }
+>E : E
+>X : E
+}
+
+export = foo
+>foo : typeof foo
+

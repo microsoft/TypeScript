@@ -216,7 +216,7 @@ acceptingTypeGuardFunction(isA);
 
 // Binary expressions
 let union2: C | B;
->union2 : B | C
+>union2 : C | B
 >C : C
 >B : B
 
@@ -226,6 +226,6 @@ let union3: boolean | B = isA(union2) || union2;
 >isA(union2) || union2 : boolean | B
 >isA(union2) : boolean
 >isA : (p1: any) => p1 is A
->union2 : B | C
+>union2 : C | B
 >union2 : B
 
