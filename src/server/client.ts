@@ -202,9 +202,7 @@ namespace ts.server {
             return  {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body,
-                fileName: fileName,
-                position: position
+                entries: response.body
             };
         }
      

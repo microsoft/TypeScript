@@ -84,8 +84,8 @@ var [...c1] = [1,2,3];
 >3 : number
 
 var [...c2] = [1,2,3, "string"]; 
->c2 : (string | number)[]
->[1,2,3, "string"] : (string | number)[]
+>c2 : (number | string)[]
+>[1,2,3, "string"] : (number | string)[]
 >1 : number
 >2 : number
 >3 : number
@@ -113,9 +113,9 @@ var temp1 = [true, false, true]
 >true : boolean
 
 var [d3, d4] = [1, "string", ...temp1];
->d3 : string | number | boolean
->d4 : string | number | boolean
->[1, "string", ...temp1] : (string | number | boolean)[]
+>d3 : number | string | boolean
+>d4 : number | string | boolean
+>[1, "string", ...temp1] : (number | string | boolean)[]
 >1 : number
 >"string" : string
 >...temp1 : boolean

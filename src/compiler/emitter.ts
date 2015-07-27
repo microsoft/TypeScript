@@ -1425,6 +1425,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxExpression:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PostfixUnaryExpression:
@@ -3012,6 +3013,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return result;
             }
 
+            function emitEs6ExportDefaultCompat(node: Node) {
+                if (node.parent.kind === SyntaxKind.SourceFile) {
+                    Debug.assert(!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
+                    // only allow export default at a source file level
+                    if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
+                        if (!currentSourceFile.symbol.exports["___esModule"]) {
+                            if (languageVersion === ScriptTarget.ES5) {
+                                // default value of configurable, enumerable, writable are `false`. 
+                                write("Object.defineProperty(exports, \"__esModule\", { value: true });");
+                                writeLine();
+                            }
+                            else if (languageVersion === ScriptTarget.ES3) {
+                                write("exports.__esModule = true;");
+                                writeLine();
+                            }
+                        }
+                    }
+                }
+            }
+
             function emitExportMemberAssignment(node: FunctionLikeDeclaration | ClassDeclaration) {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
@@ -3034,9 +3055,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         if (node.flags & NodeFlags.Default) {
+                            emitEs6ExportDefaultCompat(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("exports[\"default\"]");
-                            } else {
+                            }
+                            else {
                                 write("exports.default");
                             }
                         }
@@ -3249,7 +3272,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitAssignmentExpression(root: BinaryExpression) {
                     let target = root.left;
                     let value = root.right;
-                    if (isAssignmentExpressionStatement) {
+
+                    if (isEmptyObjectLiteralOrArrayLiteral(target)) {
+                        emit(value);
+                    }
+                    else if (isAssignmentExpressionStatement) {
                         emitDestructuringAssignment(target, value);
                     }
                     else {
@@ -5403,17 +5430,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (isES6ExportedDeclaration(node)) {
-                        write("export ");
-                        write("var ");
+                    
+                    // variable declaration for import-equals declaration can be hoisted in system modules
+                    // in this case 'var' should be omitted and emit should contain only initialization
+                    let variableDeclarationIsHoisted = shouldHoistVariable(node, /*checkIfSourceFileLevelDecl*/ true);
+                    
+                    // is it top level export import v = a.b.c in system module?
+                    // if yes - it needs to be rewritten as exporter('v', v = a.b.c)
+                    let isExported = isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ true);
+                    
+                    if (!variableDeclarationIsHoisted) {
+                        Debug.assert(!isExported);
+                                                
+                        if (isES6ExportedDeclaration(node)) {
+                            write("export ");
+                            write("var ");
+                        }
+                        else if (!(node.flags & NodeFlags.Export)) {
+                            write("var ");
+                        }
                     }
-                    else if (!(node.flags & NodeFlags.Export)) {
-                        write("var ");
+                                       
+                    
+                    if (isExported) {
+                        write(`${exportFunctionForFile}("`);
+                        emitNodeWithoutSourceMap(node.name);
+                        write(`", `);
                     }
+
                     emitModuleMemberName(node);
                     write(" = ");
                     emit(node.moduleReference);
-                    write(";");
+
+                    if (isExported) {
+                        write(")");
+                    }
+                                        
+                    write(";");                    
                     emitEnd(node);
                     emitExportImportAssignments(node);
                     emitTrailingComments(node);
@@ -5534,6 +5587,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(")");
                         }
                         else {
+                            emitEs6ExportDefaultCompat(node);
                             emitContainingModuleName(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("[\"default\"] = ");
@@ -5752,6 +5806,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(`function ${exportStarFunction}(m) {`);
                     increaseIndent();
                     writeLine();
+                    write(`var exports = {};`);
+                    writeLine();
                     write(`for(var n in m) {`);
                     increaseIndent();
                     writeLine();
@@ -5759,10 +5815,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (localNames) {
                         write(`&& !${localNames}.hasOwnProperty(n)`);
                     }
-                    write(`) ${exportFunctionForFile}(n, m[n]);`);
+                    write(`) exports[n] = m[n];`);
                     decreaseIndent();
                     writeLine();
                     write("}");
+                    writeLine();
+                    write(`${exportFunctionForFile}(exports);`)
                     decreaseIndent();
                     writeLine();
                     write("}");
@@ -5934,6 +5992,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         return;
                     }
+                    
+                    if (isInternalModuleImportEqualsDeclaration(node)) {
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+                        
+                        hoistedVars.push(node.name);
+                        return;
+                    }
 
                     if (isBindingPattern(node)) {
                         forEach((<BindingPattern>node).elements, visit);
@@ -6095,16 +6162,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if ((<ExportDeclaration>importNode).exportClause) {
                                 // export {a, b as c} from 'foo'
                                 // emit as:
-                                // exports('a', _foo["a"])
-                                // exports('c', _foo["b"])
+                                // var reexports = {}
+                                // reexports['a'] = _foo["a"];
+                                // reexports['c'] = _foo["b"];
+                                // exports_(reexports);
+                                let reexportsVariableName = makeUniqueName("reexports");
+                                writeLine();
+                                write(`var ${reexportsVariableName} = {};`)
+                                writeLine();
                                 for (let e of (<ExportDeclaration>importNode).exportClause.elements) {
-                                    writeLine();
-                                    write(`${exportFunctionForFile}("`);
+                                    write(`${reexportsVariableName}["`);
                                     emitNodeWithoutSourceMap(e.name);
-                                    write(`", ${parameterName}["`);
+                                    write(`"] = ${parameterName}["`);
                                     emitNodeWithoutSourceMap(e.propertyName || e.name);
-                                    write(`"]);`);
+                                    write(`"];`);
+                                    writeLine();
                                 }
+                                write(`${exportFunctionForFile}(${reexportsVariableName});`);
                             }
                             else {
                                 writeLine();
@@ -6131,14 +6205,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 for (let i = startIndex; i < node.statements.length; ++i) {
                     let statement = node.statements[i];
-                    // - imports/exports are not emitted for system modules
+                    // - external module related imports/exports are not emitted for system modules
                     // - function declarations are not emitted because they were already hoisted
                     switch (statement.kind) {
                         case SyntaxKind.ExportDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
                         case SyntaxKind.FunctionDeclaration:
                             continue;
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            if (!isInternalModuleImportEqualsDeclaration(statement)) {
+                                continue;
+                            }
                     }
                     writeLine();
                     emit(statement);

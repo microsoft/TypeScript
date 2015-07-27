@@ -31,27 +31,27 @@ var b: B;
 //Cond ? Expr1 : Expr2,  Expr1 is supertype
 //Be Not contextually typed
 true ? x : a;
->true ? x : a : X
+>true ? x : a : X | A
 >true : boolean
 >x : X
 >a : A
 
 var result1 = true ? x : a;
->result1 : X
->true ? x : a : X
+>result1 : X | A
+>true ? x : a : X | A
 >true : boolean
 >x : X
 >a : A
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
->true ? {} : 1 : {}
+>true ? {} : 1 : {} | number
 >true : boolean
 >{} : {}
 >1 : number
 
 true ? { a: 1 } : { a: 2, b: 'string' };
->true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
+>true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
 >true : boolean
 >{ a: 1 } : { a: number; }
 >a : number
@@ -63,15 +63,15 @@ true ? { a: 1 } : { a: 2, b: 'string' };
 >'string' : string
 
 var result2 = true ? {} : 1;
->result2 : {}
->true ? {} : 1 : {}
+>result2 : {} | number
+>true ? {} : 1 : {} | number
 >true : boolean
 >{} : {}
 >1 : number
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
->result3 : { a: number; }
->true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
+>result3 : { a: number; } | { a: number; b: string; }
+>true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
 >true : boolean
 >{ a: 1 } : { a: number; }
 >a : number
@@ -86,7 +86,7 @@ var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
 var resultIsX1: X = true ? x : a;
 >resultIsX1 : X
 >X : X
->true ? x : a : X
+>true ? x : a : X | A
 >true : boolean
 >x : X
 >a : A
@@ -95,7 +95,7 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >result4 : (t: A) => any
 >t : A
 >A : A
->true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
+>true ? (m) => m.propertyX : (n) => n.propertyA : ((m: A) => any) | ((n: A) => number)
 >true : boolean
 >(m) => m.propertyX : (m: A) => any
 >m : A
@@ -111,27 +111,27 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 //Cond ? Expr1 : Expr2,  Expr2 is supertype
 //Be Not contextually typed
 true ? a : x;
->true ? a : x : X
+>true ? a : x : A | X
 >true : boolean
 >a : A
 >x : X
 
 var result5 = true ? a : x;
->result5 : X
->true ? a : x : X
+>result5 : A | X
+>true ? a : x : A | X
 >true : boolean
 >a : A
 >x : X
 
 //Expr1 and Expr2 are literals
 true ? 1 : {};
->true ? 1 : {} : {}
+>true ? 1 : {} : number | {}
 >true : boolean
 >1 : number
 >{} : {}
 
 true ? { a: 2, b: 'string' } : { a: 1 };
->true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >true : boolean
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
@@ -143,15 +143,15 @@ true ? { a: 2, b: 'string' } : { a: 1 };
 >1 : number
 
 var result6 = true ? 1 : {};
->result6 : {}
->true ? 1 : {} : {}
+>result6 : number | {}
+>true ? 1 : {} : number | {}
 >true : boolean
 >1 : number
 >{} : {}
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; }
->true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
+>result7 : { a: number; b: string; } | { a: number; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >true : boolean
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
@@ -166,7 +166,7 @@ var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
 var resultIsX2: X = true ? x : a;
 >resultIsX2 : X
 >X : X
->true ? x : a : X
+>true ? x : a : X | A
 >true : boolean
 >x : X
 >a : A
@@ -175,7 +175,7 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >result8 : (t: A) => any
 >t : A
 >A : A
->true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
+>true ? (m) => m.propertyA : (n) => n.propertyX : ((m: A) => number) | ((n: A) => any)
 >true : boolean
 >(m) => m.propertyA : (m: A) => number
 >m : A
@@ -218,7 +218,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : string | number
+>true ? 1 : 'string' : number | string
 >true : boolean
 >1 : number
 >'string' : string
