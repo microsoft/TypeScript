@@ -11,11 +11,17 @@ namespace ts {
         declarationFlags?: NodeFlags;
     }
 
+    interface SymbolLinks {
+        ommited?: boolean;
+        newName?: string;
+    }
+
     interface PreprocessResults {
         sourceFiles: SourceFile[];
         nodeLinks: NodeLinks[];
         resolver: EmitResolver;
         mainModule?: SourceFile;
+        symbolLinks: SymbolLinks[];
     }
 
     const emptyHandler = () => { };
@@ -46,6 +52,7 @@ namespace ts {
 
         let resolver = preprocessResults.resolver;
         let nodeLinks = preprocessResults.nodeLinks;
+        let symbolLinks = preprocessResults.symbolLinks;
 
         // setup the writer
         let writer = createNewTextWriterWithSymbolWriter();
@@ -95,6 +102,11 @@ namespace ts {
         function getNodeLinks(node: Node): NodeLinks {
             let nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
+        }
+
+        function getSymbolLinks(symbol: Symbol): SymbolLinks {
+            let id = getSymbolId(symbol);
+            return symbolLinks[id] || (symbolLinks[id] = {});
         }
 
         function emitTripleSlashReferences(sourceFiles: SourceFile[]) {
@@ -235,6 +247,14 @@ namespace ts {
                 write(node.text);
             }
             else {
+                if (compilerOptions.mainModule) {
+                    let target = resolver.getSymbolAtLocation(node);
+                    let newName = target && getSymbolLinks(target).newName;
+                    if (newName) {
+                        write(newName);
+                        return;
+                    }
+                }
                 writeTextOfNode(node);
             }
         }
@@ -291,6 +311,14 @@ namespace ts {
                     return emitTypePredicate(<TypePredicateNode>type);
             }
 
+            function isOmmited(node: Node): boolean {
+                if (compilerOptions.mainModule) {
+                    let symbol = resolver.getSymbolAtLocation(node);
+                    return getSymbolLinks(symbol).ommited;
+                }
+                return false;
+            }
+
             function emitEntityName(entityName: EntityName | Expression) {
                 if (entityName.kind === SyntaxKind.Identifier) {
                     emitIdentifier(<Identifier>entityName);
@@ -298,8 +326,10 @@ namespace ts {
                 else {
                     let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
                     let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                    emitEntityName(left);
-                    write(".");
+                    if (!isOmmited(left)) {
+                        emitEntityName(left);
+                        write(".");
+                    }
                     emitIdentifier(right);
                 }
             }
@@ -1069,6 +1099,7 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let mainModule: SourceFile;
         let nodeLinks: NodeLinks[] = [];
+        let symbolLinks: SymbolLinks[] = [];
         let declarationsToProcess: { declaration: Node; errorNode?: Node }[] = [];
 
         let typeWriter = createVoidSymbolWriter(undefined, undefined);
@@ -1087,12 +1118,18 @@ namespace ts {
             mainModule,
             sourceFiles,
             nodeLinks,
-            resolver
+            resolver,
+            symbolLinks
         };
 
         function getNodeLinks(node: Node): NodeLinks {
             let nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
+        }
+
+        function getSymbolLinks(symbol: Symbol): SymbolLinks {
+            let id = getSymbolId(symbol);
+            return symbolLinks[id] || (symbolLinks[id] = {});
         }
 
         function getSourceFile(node: Node): SourceFile {
@@ -1714,6 +1751,7 @@ namespace ts {
                     // This is a top level declaration, we can just rename it
                     if (node.name.text !== target.name) {
                         // add a rename entry trget.name -> declaration.name.text
+                        getSymbolLinks(symbol).newName = target.name;
                     }
                 }
 
@@ -1721,6 +1759,13 @@ namespace ts {
 
                 collectDeclarations(target, errorNode);
             }
+        }
+
+        function isImportTargetADeclarationFile(node: ImportSpecifier| NamespaceImport): boolean {
+            let parent = <ImportDeclaration>getAncestor(node, SyntaxKind.ImportDeclaration);
+            let symbol = parent && resolver.getSymbolAtLocation(parent.moduleSpecifier);
+            let sourceFile = symbol && symbol.valueDeclaration && getSourceFile(symbol.valueDeclaration);
+            return sourceFile && isDeclarationFile(sourceFile);
         }
 
         function preprocessDeclaration(declaration: Node, errorNode?: Node): void {
@@ -1734,16 +1779,26 @@ namespace ts {
                 return;
             }
 
-            if (compilerOptions.mainModule) {
-                if (isExternalModuleImportOrExportSpecifier(declaration) && !isDeclarationFile(getSourceFileOfNode(declaration))) {
-                    collectExternalImportOrExportTargets(declaration, errorNode);
+            // If this declaration is from a diffrent file, we will get to it later. 
+            // Skip it for now.
+            if (!compilerOptions.mainModule && getSourceFileOfNode(declaration) !== currentSourceFile) {
+                return;
+            }
+            else if (compilerOptions.mainModule) {
+                if (isDeclarationFile(getSourceFileOfNode(declaration))) {
                     return;
                 }
-            }
-            else {
-                // If this declaration is from a diffrent file, we will get to it later. 
-                // Skip it for now.
-                if (getSourceFileOfNode(declaration) !== currentSourceFile) {
+                else if (declaration.kind === SyntaxKind.NamespaceImport &&
+                    !isImportTargetADeclarationFile(<NamespaceImport>declaration)) {
+                    let target = resolver.getSymbolAtLocation((<NamespaceImport>declaration).name);
+                    if (target && target.declarations) {
+                        getSymbolLinks(target).ommited = true;
+                    }
+                    return;
+                }
+                else if (isExternalModuleImportOrExportSpecifier(declaration) &&
+                    !isImportTargetADeclarationFile(<ImportOrExportSpecifier>declaration)) {
+                    collectExternalImportOrExportTargets(declaration, errorNode);
                     return;
                 }
             }
