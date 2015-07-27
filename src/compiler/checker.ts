@@ -10889,21 +10889,21 @@ namespace ts {
             }
 
             // Spaces for anyting not declared a 'default export'.
-            let nonDefaultExportedDeclarationsSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
+            let nonDefaultExportedDeclarationSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
             
-            let commonDeclarationSpaceForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
-            let commonDeclarationSpaceForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationsSpaces;
+            let commonDeclarationSpacesForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            let commonDeclarationSpacesForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationSpaces;
 
-            if (commonDeclarationSpaceForExportsAndLocals || commonDeclarationSpaceForDefaultAndNonDefault) {
+            if (commonDeclarationSpacesForExportsAndLocals || commonDeclarationSpacesForDefaultAndNonDefault) {
                 // declaration spaces for exported and non-exported declarations intersect
                 for (let d of symbol.declarations) {
                     let declarationSpaces = getDeclarationSpaces(d);
                     
                     // Only error on the declarations that conributed to the intersecting spaces.
-                    if (declarationSpaces & commonDeclarationSpaceForDefaultAndNonDefault) {
+                    if (declarationSpaces & commonDeclarationSpacesForDefaultAndNonDefault) {
                         error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration, declarationNameToString(d.name));
                     }
-                    else if (declarationSpaces & commonDeclarationSpaceForExportsAndLocals) {
+                    else if (declarationSpaces & commonDeclarationSpacesForExportsAndLocals) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
                     }
                 }
