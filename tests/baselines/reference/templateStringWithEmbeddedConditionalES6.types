@@ -2,7 +2,7 @@
 var x = `abc${ true ? false : " " }def`;
 >x : string
 >`abc${ true ? false : " " }def` : string
->true ? false : " " : string | boolean
+>true ? false : " " : boolean | string
 >true : boolean
 >false : boolean
 >" " : string

@@ -17,6 +17,7 @@ var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello"
 >a2 : Symbol(a2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 5))
 >b2 : Symbol(b2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 10))
 >x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 15))
+>y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 91))
 >c2 : Symbol(c2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 20))
 >x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 41))
 >y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 50))

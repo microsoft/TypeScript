@@ -2125,8 +2125,8 @@ var x216 = <Genric<Base>>{ func: n => { return [d1, d2]; } };
 >d2 : Derived2
 
 var x217 = (<() => Base[]>undefined) || function() { return [d1, d2] };
->x217 : () => Base[]
->(<() => Base[]>undefined) || function() { return [d1, d2] } : () => Base[]
+>x217 : (() => Base[]) | (() => (Derived1 | Derived2)[])
+>(<() => Base[]>undefined) || function() { return [d1, d2] } : (() => Base[]) | (() => (Derived1 | Derived2)[])
 >(<() => Base[]>undefined) : () => Base[]
 ><() => Base[]>undefined : () => Base[]
 >Base : Base
@@ -2137,8 +2137,8 @@ var x217 = (<() => Base[]>undefined) || function() { return [d1, d2] };
 >d2 : Derived2
 
 var x218 = (<() => Base[]>undefined) || function named() { return [d1, d2] };
->x218 : () => Base[]
->(<() => Base[]>undefined) || function named() { return [d1, d2] } : () => Base[]
+>x218 : (() => Base[]) | (() => (Derived1 | Derived2)[])
+>(<() => Base[]>undefined) || function named() { return [d1, d2] } : (() => Base[]) | (() => (Derived1 | Derived2)[])
 >(<() => Base[]>undefined) : () => Base[]
 ><() => Base[]>undefined : () => Base[]
 >Base : Base
@@ -2150,8 +2150,8 @@ var x218 = (<() => Base[]>undefined) || function named() { return [d1, d2] };
 >d2 : Derived2
 
 var x219 = (<{ (): Base[]; }>undefined) || function() { return [d1, d2] };
->x219 : () => Base[]
->(<{ (): Base[]; }>undefined) || function() { return [d1, d2] } : () => Base[]
+>x219 : (() => Base[]) | (() => (Derived1 | Derived2)[])
+>(<{ (): Base[]; }>undefined) || function() { return [d1, d2] } : (() => Base[]) | (() => (Derived1 | Derived2)[])
 >(<{ (): Base[]; }>undefined) : () => Base[]
 ><{ (): Base[]; }>undefined : () => Base[]
 >Base : Base
@@ -2162,8 +2162,8 @@ var x219 = (<{ (): Base[]; }>undefined) || function() { return [d1, d2] };
 >d2 : Derived2
 
 var x220 = (<{ (): Base[]; }>undefined) || function named() { return [d1, d2] };
->x220 : () => Base[]
->(<{ (): Base[]; }>undefined) || function named() { return [d1, d2] } : () => Base[]
+>x220 : (() => Base[]) | (() => (Derived1 | Derived2)[])
+>(<{ (): Base[]; }>undefined) || function named() { return [d1, d2] } : (() => Base[]) | (() => (Derived1 | Derived2)[])
 >(<{ (): Base[]; }>undefined) : () => Base[]
 ><{ (): Base[]; }>undefined : () => Base[]
 >Base : Base
@@ -2175,8 +2175,8 @@ var x220 = (<{ (): Base[]; }>undefined) || function named() { return [d1, d2] };
 >d2 : Derived2
 
 var x221 = (<Base[]>undefined) || [d1, d2];
->x221 : Base[]
->(<Base[]>undefined) || [d1, d2] : Base[]
+>x221 : Base[] | (Derived1 | Derived2)[]
+>(<Base[]>undefined) || [d1, d2] : Base[] | (Derived1 | Derived2)[]
 >(<Base[]>undefined) : Base[]
 ><Base[]>undefined : Base[]
 >Base : Base
@@ -2186,8 +2186,8 @@ var x221 = (<Base[]>undefined) || [d1, d2];
 >d2 : Derived2
 
 var x222 = (<Array<Base>>undefined) || [d1, d2];
->x222 : Base[]
->(<Array<Base>>undefined) || [d1, d2] : Base[]
+>x222 : Base[] | (Derived1 | Derived2)[]
+>(<Array<Base>>undefined) || [d1, d2] : Base[] | (Derived1 | Derived2)[]
 >(<Array<Base>>undefined) : Base[]
 ><Array<Base>>undefined : Base[]
 >Array : T[]
@@ -2198,8 +2198,8 @@ var x222 = (<Array<Base>>undefined) || [d1, d2];
 >d2 : Derived2
 
 var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
->x223 : { [n: number]: Base; }
->(<{ [n: number]: Base; }>undefined) || [d1, d2] : { [n: number]: Base; }
+>x223 : { [n: number]: Base; } | (Derived1 | Derived2)[]
+>(<{ [n: number]: Base; }>undefined) || [d1, d2] : { [n: number]: Base; } | (Derived1 | Derived2)[]
 >(<{ [n: number]: Base; }>undefined) : { [n: number]: Base; }
 ><{ [n: number]: Base; }>undefined : { [n: number]: Base; }
 >n : number
@@ -2210,8 +2210,8 @@ var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
 >d2 : Derived2
 
 var x224 = (<{n: Base[]; } >undefined) || { n: [d1, d2] };
->x224 : { n: Base[]; }
->(<{n: Base[]; } >undefined) || { n: [d1, d2] } : { n: Base[]; }
+>x224 : { n: Base[]; } | { n: (Derived1 | Derived2)[]; }
+>(<{n: Base[]; } >undefined) || { n: [d1, d2] } : { n: Base[]; } | { n: (Derived1 | Derived2)[]; }
 >(<{n: Base[]; } >undefined) : { n: Base[]; }
 ><{n: Base[]; } >undefined : { n: Base[]; }
 >n : Base[]

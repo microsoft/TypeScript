@@ -1,8 +1,9 @@
 tests/cases/conformance/jsx/tsxElementResolution9.tsx(11,2): error TS2601: The return type of a JSX element constructor must return an object type.
 tests/cases/conformance/jsx/tsxElementResolution9.tsx(18,2): error TS2601: The return type of a JSX element constructor must return an object type.
+tests/cases/conformance/jsx/tsxElementResolution9.tsx(25,2): error TS2601: The return type of a JSX element constructor must return an object type.
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution9.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/tsxElementResolution9.tsx (3 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements { }
@@ -32,4 +33,6 @@ tests/cases/conformance/jsx/tsxElementResolution9.tsx(18,2): error TS2601: The r
     }
     var Obj3: Obj3;
     <Obj3 x={42} />; // OK
+     ~~~~
+!!! error TS2601: The return type of a JSX element constructor must return an object type.
     

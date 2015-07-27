@@ -87,24 +87,24 @@ var a = baz(1, 1, g);      // Should be number
 >g : <T>(x: T, y: T) => T
 
 var b: number | string;
->b : string | number
+>b : number | string
 
 var b = foo(g);            // Should be number | string
->b : string | number
->foo(g) : string | number
+>b : number | string
+>foo(g) : number | string
 >foo : <T>(cb: (x: number, y: string) => T) => T
 >g : <T>(x: T, y: T) => T
 
 var b = bar(1, "one", g);  // Should be number | string
->b : string | number
->bar(1, "one", g) : string | number
+>b : number | string
+>bar(1, "one", g) : number | string
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : number
 >"one" : string
 >g : <T>(x: T, y: T) => T
 
 var b = bar("one", 1, g);  // Should be number | string
->b : string | number
+>b : number | string
 >bar("one", 1, g) : string | number
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : string
@@ -112,11 +112,11 @@ var b = bar("one", 1, g);  // Should be number | string
 >g : <T>(x: T, y: T) => T
 
 var b = baz(b, b, g);      // Should be number | string
->b : string | number
->baz(b, b, g) : string | number
+>b : number | string
+>baz(b, b, g) : number | string
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
->b : string | number
->b : string | number
+>b : number | string
+>b : number | string
 >g : <T>(x: T, y: T) => T
 
 var d: number[] | string[];
@@ -138,7 +138,7 @@ var d = bar(1, "one", h);  // Should be number[] | string[]
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
 >d : number[] | string[]
->bar("one", 1, h) : number[] | string[]
+>bar("one", 1, h) : string[] | number[]
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : string
 >1 : number
