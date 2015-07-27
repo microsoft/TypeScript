@@ -144,6 +144,17 @@ namespace ts {
         let hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
         let timerHandle: number;                    // Handle for 0.25s wait timer
 
+        if (commandLine.options.init) {
+            let file = `${sys.getCurrentDirectory()}/tsconfig.json`;
+            if (sys.fileExists(file)) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.You_already_have_a_tsconfig_json_file_defined));
+            }
+            else {
+                writeConfigFile(file, commandLine.options, commandLine.fileNames);
+            }
+            return sys.exit(ExitStatus.Success);
+        }
+
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));

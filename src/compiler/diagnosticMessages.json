@@ -161,7 +161,7 @@
     },
     "Type '{0}' is not a valid async function return type.": {
         "category": "Error",
-        "code": 1055  
+        "code": 1055
     },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
@@ -2057,6 +2057,10 @@
         "category": "Error",
         "code": 5051
     },
+    "You already have a tsconfig.json file defined.": {
+        "category": "Error",
+        "code": 5052
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2277,6 +2281,10 @@
     "Enables experimental support for ES7 async functions.": {
         "category": "Message",
         "code": 6068
+    },
+    "Initializes a TypeScript project and creates a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6069
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

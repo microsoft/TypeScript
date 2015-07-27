@@ -26,6 +26,12 @@ namespace ts {
         return undefined;
     }
 
+    export function writeConfigFile(file: string, compilerOptions: CompilerOptions, fileNames: string[]): void {
+        let writer = createTextWriter("\n");
+        buildConfigFile(writer, compilerOptions, fileNames, ["node_modules"]);
+        sys.writeFile(file, writer.getText());
+    }
+
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};

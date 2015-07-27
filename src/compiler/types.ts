@@ -1529,8 +1529,8 @@ namespace ts {
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
-    
-    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
+
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator
       * metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
@@ -1574,7 +1574,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
     }
 
     export const enum SymbolFlags {
@@ -1989,6 +1989,7 @@ namespace ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
@@ -2073,7 +2074,6 @@ namespace ts {
         errors: Diagnostic[];
     }
 
-    /* @internal */
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values

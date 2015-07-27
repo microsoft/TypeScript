@@ -31,6 +31,11 @@ namespace ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "init",
+            type: "boolean",
+            description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
+        },
+        {
             name: "inlineSourceMap",
             type: "boolean",
         },
@@ -221,19 +226,36 @@ namespace ts {
         }
     ];
 
-    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
-        let options: CompilerOptions = {};
-        let fileNames: string[] = [];
-        let errors: Diagnostic[] = [];
-        let shortOptionNames: Map<string> = {};
-        let optionNameMap: Map<CommandLineOption> = {};
+    export interface OptionNameMap {
+        optionNameMap: Map<CommandLineOption>;
+        shortOptionNames: Map<string>;
+    }
 
+    let optionNameMapCache: OptionNameMap;
+    export function getOptionNameMap(): OptionNameMap {
+        if (optionNameMapCache) {
+            return optionNameMapCache;
+        }
+
+        let optionNameMap: Map<CommandLineOption> = {};
+        let shortOptionNames: Map<string> = {};
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
                 shortOptionNames[option.shortName] = option.name;
             }
         });
+
+        optionNameMapCache = { optionNameMap, shortOptionNames };
+        return optionNameMapCache;
+    }
+
+    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
+        let options: CompilerOptions = {};
+        let fileNames: string[] = [];
+        let errors: Diagnostic[] = [];
+        let { optionNameMap, shortOptionNames } = getOptionNameMap();
+
         parseStrings(commandLine);
         return {
             options,
@@ -346,12 +368,114 @@ namespace ts {
     }
 
     /**
+      * Remove whitespace, comments and trailing commas from JSON text.
+      * @param text JSON text string.
+      */
+    function stripJsonTrivia(text: string): string {
+        let ch: number;
+        let pos = 0;
+        let end = text.length - 1;
+        let result = '';
+        let pendingCommaInsertion = false;
+
+        while (pos <= end) {
+            ch = text.charCodeAt(pos);
+
+            if(isWhiteSpace(ch) || isLineBreak(ch)) {
+                pos++;
+                continue;
+            }
+
+            if(ch === CharacterCodes.slash) {
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    pos += 2;
+
+                    while (pos <= end) {
+                        if (isLineBreak(text.charCodeAt(pos))) {
+                            break;
+                        }
+                        pos++;
+                    }
+                    continue;
+                }
+                else if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
+                    pos += 2;
+
+                    while (pos <= end) {
+                        ch = text.charCodeAt(pos);
+
+                        if (ch === CharacterCodes.asterisk &&
+                            text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+
+                            pos += 2;
+                            break;
+                        }
+                        pos++;
+                    }
+                    continue;
+                }
+            }
+
+            if (pendingCommaInsertion) {
+                if (ch !== CharacterCodes.closeBracket &&
+                    ch !== CharacterCodes.closeBrace) {
+
+                    result += ',';
+                }
+                pendingCommaInsertion = false;
+            }
+
+            switch (ch) {
+                case CharacterCodes.comma:
+                    pendingCommaInsertion = true;
+                    break;
+
+                case CharacterCodes.doubleQuote:
+                    result += text[pos];
+                    pos++;
+
+                    while (pos <= end) {
+                        ch = text.charCodeAt(pos);
+                        if (ch === CharacterCodes.backslash) {
+                            switch (text.charCodeAt(pos + 1)) {
+                                case CharacterCodes.doubleQuote:
+                                    result += "\\\"";
+                                    pos += 2;
+                                    continue;
+                                case CharacterCodes.backslash:
+                                    result += "\\\\";
+                                    pos += 2;
+                                    continue;
+                            }
+                            pos++;
+                        }
+                        result += text[pos];
+
+                        if (ch === CharacterCodes.doubleQuote) {
+                            break;
+                        }
+
+                        pos++;
+                    }
+                    break;
+
+                default:
+                    result += text[pos];
+            }
+
+            pos++;
+        }
+        return result;
+    }
+
+    /**
       * Parse the text of the tsconfig.json file
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
     export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
+            jsonText = stripJsonTrivia(jsonText);
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
         catch (e) {
