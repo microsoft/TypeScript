@@ -262,7 +262,7 @@ namespace ts {
 
         public getFirstToken(sourceFile?: SourceFile): Node {
             let children = this.getChildren(sourceFile);
-            if (!(children.length > 0)) {
+            if (!children.length) {
                 return undefined;
             }
 
