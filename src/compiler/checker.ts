@@ -13871,6 +13871,7 @@ namespace ts {
                 getSymbolAtLocation,
                 getLocalTargetOfAliasDeclaration,
                 getAliasedSymbol: resolveAlias,
+                getExportsOfModule: getExportsOfModuleAsArray
             };
         }
 

@@ -1552,6 +1552,7 @@ namespace ts {
         getSymbolAtLocation(node: Node): Symbol;
         getLocalTargetOfAliasDeclaration(node: Declaration): Symbol;
         getAliasedSymbol(symbol: Symbol): Symbol;
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
     }
 
     export const enum SymbolFlags {

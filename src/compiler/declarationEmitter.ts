@@ -15,6 +15,7 @@ namespace ts {
         sourceFiles: SourceFile[];
         nodeLinks: NodeLinks[];
         resolver: EmitResolver;
+        mainModule?: SourceFile;
     }
 
     const emptyHandler = () => { };
@@ -28,6 +29,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.VariableStatement:
                     return node.parent;
                 default:
@@ -60,9 +62,14 @@ namespace ts {
         // Emit any triple-slash references
         emitTripleSlashReferences(preprocessResults.sourceFiles);
 
-        for (let sourceFile of preprocessResults.sourceFiles) {
-            // emit the declarations from this file
-            emitSourceFile(sourceFile);
+        if (compilerOptions.mainModule) {
+            emitSourceFile(preprocessResults.mainModule);
+        }
+        else {
+            for (let sourceFile of preprocessResults.sourceFiles) {
+                // emit the declarations from this file
+                emitSourceFile(sourceFile);
+            }
         }
 
         // write the output to disk
@@ -223,6 +230,28 @@ namespace ts {
             }
         }
 
+        function emitIdentifier(node: Identifier) {
+            if (nodeIsSynthesized(node)) {
+                write(node.text);
+            }
+            else {
+                writeTextOfNode(node);
+            }
+        }
+
+        function emitLiteral(node: LiteralExpression) {
+            writeTextOfNode(node);
+        }
+
+        function emitLiteralOrIdentifier(node: LiteralExpression|Identifier) {
+            if (node.kind === SyntaxKind.Identifier) {
+                emitIdentifier(node);
+            }
+            else {
+                emitLiteral(node);
+            }
+        }
+
         function emitType(type: TypeNode | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -262,30 +291,16 @@ namespace ts {
                     return emitTypePredicate(<TypePredicateNode>type);
             }
 
-            function writeEntityName(entityName: EntityName | Expression) {
-                if (entityName.kind === SyntaxKind.Identifier) {
-                    writeTextOfNode(entityName);
-                }
-                else {
-                    let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
-                    let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                    writeEntityName(left);
-                    write(".");
-                    writeTextOfNode(right);
-                }
-            }
-
             function emitEntityName(entityName: EntityName | Expression) {
-
                 if (entityName.kind === SyntaxKind.Identifier) {
-                    writeTextOfNode(entityName);
+                    emitIdentifier(<Identifier>entityName);
                 }
                 else {
                     let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
                     let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
                     emitEntityName(left);
                     write(".");
-                    writeTextOfNode(right);
+                    emitIdentifier(right);
                 }
             }
 
@@ -311,7 +326,7 @@ namespace ts {
             }
 
             function emitTypePredicate(type: TypePredicateNode) {
-                writeTextOfNode(type.parameterName);
+                emitIdentifier(type.parameterName);
                 write(" is ");
                 emitType(type.type);
             }
@@ -380,7 +395,7 @@ namespace ts {
         function emitExportAssignment(node: ExportAssignment) {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
-                writeTextOfNode(node.expression);
+                emitIdentifier(<Identifier>node.expression);
             }
             else {
                 // Expression
@@ -434,7 +449,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("import ");
-            writeTextOfNode(node.name);
+            emitIdentifier(node.name);
             write(" = ");
             if (isInternalModuleImportEqualsDeclaration(node)) {
                 emitType(<EntityName>node.moduleReference);
@@ -442,7 +457,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(getExternalModuleImportEqualsDeclarationExpression(node));
+                emitLiteral(<LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node));
                 write(");");
             }
             writer.writeLine();
@@ -461,7 +476,7 @@ namespace ts {
             let index: number;
             if ((index = indexOf(children, node.importClause)) === 0) {
                 children.shift(); // remove it
-                writeTextOfNode(node.importClause.name);
+                emitIdentifier(node.importClause.name);
                 if (children.length) {
                     // If the default binding was emitted, write the separated
                     write(", ");
@@ -472,7 +487,7 @@ namespace ts {
                 if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
                     indexOf(children, node.importClause.namedBindings) >= 0) {
                     write("* as ");
-                    writeTextOfNode((<NamespaceImport>node.importClause.namedBindings).name);
+                    emitIdentifier((<NamespaceImport>node.importClause.namedBindings).name);
                 }
                 else if (children.length) {
                     write("{ ");
@@ -482,17 +497,17 @@ namespace ts {
             }
 
             write(" from ");
-            writeTextOfNode(node.moduleSpecifier);
+            emitLiteral(<LiteralExpression>node.moduleSpecifier);
             write(";");
             writer.writeLine();
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
             if (node.propertyName) {
-                writeTextOfNode(node.propertyName);
+                emitIdentifier(node.propertyName);
                 write(" as ");
             }
-            writeTextOfNode(node.name);
+            emitIdentifier(node.name);
         }
 
         function emitExportSpecifier(node: ExportSpecifier) {
@@ -512,7 +527,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(node.moduleSpecifier);
+                emitLiteral(<LiteralExpression>node.moduleSpecifier);
             }
             write(";");
             writer.writeLine();
@@ -527,11 +542,11 @@ namespace ts {
             else {
                 write("module ");
             }
-            writeTextOfNode(node.name);
+            emitLiteralOrIdentifier(node.name);
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
-                writeTextOfNode(node.name);
+                emitIdentifier(<Identifier>node.name);
             }
             write(" {");
             writeLine();
@@ -546,7 +561,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
-            writeTextOfNode(node.name);
+            emitIdentifier(node.name);
             write(" = ");
             emitType(node.type);
             write(";");
@@ -560,7 +575,7 @@ namespace ts {
                 write("const ");
             }
             write("enum ");
-            writeTextOfNode(node.name);
+            emitIdentifier(node.name);
             write(" {");
             writeLine();
             increaseIndent();
@@ -573,7 +588,7 @@ namespace ts {
 
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
-            writeTextOfNode(node.name);
+            emitLiteralOrIdentifier(<LiteralExpression|Identifier>node.name);
             let enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
@@ -592,7 +607,7 @@ namespace ts {
                 increaseIndent();
                 emitJsDocComments(node);
                 decreaseIndent();
-                writeTextOfNode(node.name);
+                emitIdentifier(node.name);
                 // If there is constraint present and this is not a type parameter of the private method emit the constraint
                 if (node.constraint && !isPrivateMethodTypeParameter(node)) {
                     write(" extends ");
@@ -641,7 +656,7 @@ namespace ts {
             }
 
             write("class ");
-            writeTextOfNode(node.name);
+            emitIdentifier(node.name);
             emitTypeParameters(node.typeParameters);
             let baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
@@ -662,7 +677,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("interface ");
-            writeTextOfNode(node.name);
+            emitIdentifier(node.name);
             emitTypeParameters(node.typeParameters);
             emitHeritageClause(getInterfaceBaseTypeNodes(node), /*isImplementsList*/ false, node);
             write(" {");
@@ -698,7 +713,7 @@ namespace ts {
                 // If this node is a computed name, it can only be a symbol, because we've already skipped
                 // it if it's not a well known symbol. In that case, the text of the name will be exactly
                 // what we want, namely the name expression enclosed in brackets.
-                writeTextOfNode(node.name);
+                emitIdentifier(<Identifier>node.name);
                 // If optional property emit ?
                 if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
                     write("?");
@@ -733,7 +748,7 @@ namespace ts {
                         emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
                     else {
-                        writeTextOfNode(bindingElement.name);
+                        emitIdentifier(<Identifier>bindingElement.name);
                         emitTypeOfDeclaration(bindingElement, /*type*/ undefined);
                     }
                 }
@@ -792,7 +807,7 @@ namespace ts {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(node);
-                writeTextOfNode(node.name);
+                emitLiteralOrIdentifier(<LiteralExpression|Identifier>node.name);
                 if (!(node.flags & NodeFlags.Private)) {
                     let type = getTypeAnnotationFromAccessor(accessors.getAccessor, accessors.setAccessor);
                     emitTypeOfDeclaration(node, type);
@@ -819,13 +834,13 @@ namespace ts {
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
-                    writeTextOfNode(node.name);
+                    emitLiteralOrIdentifier(<LiteralExpression|Identifier>node.name);
                 }
                 else if (node.kind === SyntaxKind.Constructor) {
                     write("constructor");
                 }
                 else {
-                    writeTextOfNode(node.name);
+                    emitLiteralOrIdentifier(<LiteralExpression|Identifier>node.name);
                     if (hasQuestionToken(node)) {
                         write("?");
                     }
@@ -894,7 +909,7 @@ namespace ts {
                 emitBindingPattern(<BindingPattern>node.name);
             }
             else {
-                writeTextOfNode(node.name);
+                emitIdentifier(<Identifier>node.name);
             }
             if (node.initializer || hasQuestionToken(node)) {
                 write("?");
@@ -946,7 +961,7 @@ namespace ts {
                         // Example:
                         //      original: function foo({y: [a,b,c]}) {}
                         //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
-                        writeTextOfNode(bindingElement.propertyName);
+                        emitIdentifier(bindingElement.propertyName);
                         write(": ");
 
                         // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
@@ -972,7 +987,7 @@ namespace ts {
                             if (bindingElement.dotDotDotToken) {
                                 write("...");
                             }
-                            writeTextOfNode(bindingElement.name);
+                            emitIdentifier(<Identifier>bindingElement.name);
                         }
                     }
                 }
@@ -1050,18 +1065,26 @@ namespace ts {
         }
     }
 
-    function preprocessDeclarations(sourceFiles: SourceFile[], resolver: EmitResolver, diagnostics: Diagnostic[], compilerOptions: CompilerOptions): PreprocessResults {
+    function preprocessDeclarations(sourceFiles: SourceFile[], resolver: EmitResolver, host: EmitHost, diagnostics: Diagnostic[], compilerOptions: CompilerOptions): PreprocessResults {
         let currentSourceFile: SourceFile;
+        let mainModule: SourceFile;
         let nodeLinks: NodeLinks[] = [];
         let declarationsToProcess: { declaration: Node; errorNode?: Node }[] = [];
 
         let typeWriter = createVoidSymbolWriter(undefined, undefined);
 
-        for (let sourceFile of sourceFiles) {
-            preprocessSourceFile(sourceFile);
+        if (compilerOptions.mainModule) {
+            mainModule = host.getSourceFile(compilerOptions.mainModule)
+            preprocessModule(mainModule);
+        }
+        else {
+            for (let sourceFile of sourceFiles) {
+                preprocessSourceFile(sourceFile);
+            }
         }
 
         return {
+            mainModule,
             sourceFiles,
             nodeLinks,
             resolver
@@ -1142,6 +1165,7 @@ namespace ts {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ExportSpecifier:
                         // Nothing to visit, import declarations are only pulled in if referenced
                         return;
 
@@ -1328,7 +1352,7 @@ namespace ts {
             }
         }
 
-        function collectDeclarations(symbol: Symbol, errorNode: Node): void {
+        function collectDeclarations(symbol: Symbol, errorNode?: Node): void {
             forEach(symbol.declarations, declaration => {
                 collectDeclatation(declaration, errorNode);
             });
@@ -1365,6 +1389,7 @@ namespace ts {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportClause:
                 case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
                 case SyntaxKind.VariableDeclaration:
                     return true;
 
@@ -1619,6 +1644,85 @@ namespace ts {
             Debug.fail("Could not find container node");
         }
 
+        function isExternalModuleImportOrExportSpecifier(node: Node): node is ImportOrExportSpecifier {
+            if (node.kind === SyntaxKind.ImportSpecifier || node.kind === SyntaxKind.ExportSpecifier) {
+                let parent = getEnclosingDeclaration(node);
+                return !!(<ExportDeclaration|ImportDeclaration>parent).moduleSpecifier;
+            }
+
+            return false;
+        }
+
+        function isChildOfNamespaceDeclaration(symbol: Symbol): boolean {
+            return forEach(symbol.declarations, declaration  => {
+                let parent = getAncestor(declaration, SyntaxKind.ModuleDeclaration);
+                return !parent || !isExternalModuleDeclaration(parent);
+            });
+        }
+
+        function createAliasDeclarationForNode(name: string, node: Declaration): ImportEqualsDeclaration {
+            let nameNode: Identifier|QualifiedName;
+            let current = node.parent;
+            while (!isExternalModuleDeclaration(current)) {
+                if (current.kind === SyntaxKind.ModuleDeclaration) {
+                    let currentName = createIdentifierNode((<ModuleDeclaration>current).name.text);
+                    if (nameNode) {
+                        nameNode = createQualifiedNameNode(nameNode, currentName);
+                    }
+                    else {
+                        nameNode = currentName;
+                    }
+                }
+                current = current.parent;
+            }
+            nameNode = createQualifiedNameNode(nameNode, createIdentifierNode((<Identifier>node.name).text));
+
+            let aliasNode = <ImportEqualsDeclaration>createSynthesizedNode(SyntaxKind.ImportEqualsDeclaration);
+            aliasNode.name = createIdentifierNode(name);
+            aliasNode.moduleReference = nameNode;
+
+            return aliasNode;
+
+            function createIdentifierNode(name: string): Identifier {
+                let node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                node.text = name;
+                return node;
+            }
+
+            function createQualifiedNameNode(left: Identifier|QualifiedName, right: Identifier): QualifiedName {
+                Debug.assert(!!left && !!right);
+                let node = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+                node.left = left;
+                node.right = right;
+                return node;
+            }
+        }
+
+        function collectExternalImportOrExportTargets(node: ImportOrExportSpecifier, errorNode: Node): void {
+            let symbol = resolver.getSymbolAtLocation(node.name);
+            let target = symbol && resolver.getAliasedSymbol(symbol);
+            if (target && target.declarations) {
+                if (!isChildOfNamespaceDeclaration(target)) {
+                    // This is a declaration within a namespace, we need to create
+                    // an alias declaration for it
+                    let alias = createAliasDeclarationForNode(node.name.text, target.declarations[0]);
+                    // add it to visible children
+                    alias.parent = currentSourceFile;
+                    ensureDeclarationVisible(alias);
+                }
+                else {
+                    // This is a top level declaration, we can just rename it
+                    if (node.name.text !== target.name) {
+                        // add a rename entry trget.name -> declaration.name.text
+                    }
+                }
+
+                // ToDo: adjust flags
+
+                collectDeclarations(target, errorNode);
+            }
+        }
+
         function preprocessDeclaration(declaration: Node, errorNode?: Node): void {
             if (declaration.kind === SyntaxKind.TypeParameter || declaration.kind === SyntaxKind.Parameter) {
                 return;
@@ -1631,12 +1735,8 @@ namespace ts {
             }
 
             if (compilerOptions.mainModule) {
-                if (declaration.kind === SyntaxKind.ImportSpecifier) {
-                    let symbol = resolver.getSymbolAtLocation((<ImportOrExportSpecifier>declaration).name);
-                    let target = symbol && resolver.getAliasedSymbol(symbol);
-                    if (target) {
-                        collectDeclarations(target, errorNode);
-                    }
+                if (isExternalModuleImportOrExportSpecifier(declaration) && !isDeclarationFile(getSourceFileOfNode(declaration))) {
+                    collectExternalImportOrExportTargets(declaration, errorNode);
                     return;
                 }
             }
@@ -1654,7 +1754,7 @@ namespace ts {
 
                 // Make sure this declaration can be emitted, that is it is accessible
                 // and is connected to its parent, or else report a accessibility error
-                ensureDeclarationVisible(declaration, errorNode);
+                ensureDeclarationVisible(declaration);
 
                 // Collect any dependencies
                 collectReferencedDeclarations(declaration);
@@ -1726,7 +1826,7 @@ namespace ts {
                 (node.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>node));
         }
 
-        function ensureDeclarationVisible(node: Node, errorNode: Node): void {
+        function ensureDeclarationVisible(node: Node): void {
             let links = getNodeLinks(node);
             if (!links.visited) {
                 links.visited = true;
@@ -1746,7 +1846,7 @@ namespace ts {
 
                 attachVisibleChild(parent, node);
                 if (parent.kind !== SyntaxKind.SourceFile) {
-                    ensureDeclarationVisible(parent, errorNode);
+                    ensureDeclarationVisible(parent);
                 }
             }
         }
@@ -1772,6 +1872,21 @@ namespace ts {
                 preprocessDeclaration(declaration, errorNode);
             }
         }
+
+        function preprocessModule(sourceFile: SourceFile): void {
+            currentSourceFile = sourceFile;
+
+            // Collect all exoirted declarations
+            let exports = resolver.getExportsOfModule(sourceFile.symbol);
+            for (let symbol of exports) {
+                collectDeclarations(symbol);
+            }
+
+            while (declarationsToProcess.length > 0) {
+                let {declaration, errorNode} = declarationsToProcess.shift();
+                preprocessDeclaration(declaration, errorNode);
+            }
+        }
     }
 
     function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, action: (name: string, sources: SourceFile[]) => void) {
@@ -1781,7 +1896,8 @@ namespace ts {
             let mainModuleSourceFile = host.getSourceFile(compilerOptions.mainModule);
             if (mainModuleSourceFile) {
                 let outputFilePath = getOwnEmitOutputFilePath(mainModuleSourceFile, host, ".d.ts");
-                action(outputFilePath, [mainModuleSourceFile]);
+                let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isDeclarationFile(sourceFile));
+                action(outputFilePath, sourceFiles);
                 return;
             }
         }
@@ -1818,7 +1934,7 @@ namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         let diagnostics: Diagnostic[] = [];
         forEachExpectedOutputFile(host, targetSourceFile, (outputFileName, sourceFiles) => {
-            preprocessDeclarations(sourceFiles, resolver, diagnostics, host.getCompilerOptions());
+            preprocessDeclarations(sourceFiles, resolver, host, diagnostics, host.getCompilerOptions());
         });
         
         if (targetSourceFile) {
@@ -1833,7 +1949,7 @@ namespace ts {
     export function emitDeclarations(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile, diagnostics: Diagnostic[]): void {
         forEachExpectedOutputFile(host, targetSourceFile, (outputFileName, sourceFiles) => {
             let fileDiagnostics: Diagnostic[] = [];
-            let preprocessResult = preprocessDeclarations(sourceFiles, resolver, fileDiagnostics, host.getCompilerOptions());
+            let preprocessResult = preprocessDeclarations(sourceFiles, resolver, host, fileDiagnostics, host.getCompilerOptions());
             if (fileDiagnostics.length === 0) {
                 writeDeclarations(outputFileName, preprocessResult, host, fileDiagnostics);
             }
