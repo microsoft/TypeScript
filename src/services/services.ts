@@ -5530,7 +5530,7 @@ namespace ts {
                 }
 
                 function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
-                    return isInCommentHelper(sourceFile, position, isNonReferenceComment);
+                    return !!isInCommentHelper(sourceFile, position, isNonReferenceComment);
 
                     function isNonReferenceComment(c: CommentRange): boolean {
                         let commentText = sourceFile.text.substring(c.pos, c.end);
@@ -6723,7 +6723,7 @@ namespace ts {
             }
         }
 
-        function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
+        function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions): number {
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
@@ -6734,6 +6734,29 @@ namespace ts {
             log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
+        }
+        
+        /**
+         * Attempts to get Doc Comment indentation at the 'position' in 'fileName'
+         * and returns the number of spaces if a valid value exists, and -1 otherwise.
+         */
+        function getDocCommentIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions): number {
+            let start = new Date().getTime();
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            log("getDocCommentIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+
+            start = new Date().getTime();
+            
+            var DocCommentRange = isInDocComment(sourceFile,position);
+            if(!DocCommentRange) {
+                return -1;
+            }
+
+            var commentIndent = getLineAndCharacterOfPosition(sourceFile, DocCommentRange.pos).character;
+            
+            log("getDocCommentIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
+            
+            return commentIndent;
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {

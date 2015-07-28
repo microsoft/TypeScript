@@ -423,19 +423,24 @@ namespace ts {
     export function isInComment(sourceFile: SourceFile, position: number) {
         return isInCommentHelper(sourceFile, position, /*extraCheck*/ c => true);
     }
+    
+    export function isInDocComment(sourceFile: SourceFile, position: number) {
+        return isInCommentHelper(sourceFile, position, /*extraCheck*/ c => 
+            c.kind === SyntaxKind.MultiLineCommentTrivia && sourceFile.text.slice(c.pos, Math.min(c.end, c.pos + 3)) === "/**");
+    }
 
     /**
      * Returns true if the cursor at position in sourceFile is within a comment that additionally
      * satisfies extraCheck, and false otherwise.
      */
     export function isInCommentHelper(sourceFile: SourceFile, position: number, 
-        extraCheck: (c: CommentRange) => boolean): boolean {
+        extraCheck: (c: CommentRange) => boolean): CommentRange {
         let token = getTokenAtPosition(sourceFile, position);
 
         if (token && position <= token.getStart()) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
-            return forEach(commentRanges, c => c.pos < position &&
+            return forEach(commentRanges, c => (c.pos < position &&
                 // The end marker of a single-line comment does not include the newline character.
                 // In the following case, we are inside a comment (^ denotes the cursor position):
                 //
@@ -447,10 +452,8 @@ namespace ts {
                 //
                 // Internally, we represent the end of the comment at the newline and closing '/', respectively.
                 (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
-                extraCheck(c));
+                extraCheck(c)) ? c : undefined);
         }
-
-        return false;
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
