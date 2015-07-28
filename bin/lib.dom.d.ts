@@ -14455,7 +14455,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onvolumechange: (ev: Event) => any;
     onwaiting: (ev: Event) => any;
     opener: Window;
-    orientation: string;
+    orientation: number;
     outerHeight: number;
     outerWidth: number;
     pageXOffset: number;
