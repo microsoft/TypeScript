@@ -4770,6 +4770,10 @@ namespace ts {
         }
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
+            if(symbol === getExportedSymbolFromNamespace('AMD', 'require')) {
+                console.log('no');
+                Debug.fail('what are you doing?!');
+            }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 let links = getSymbolLinks(symbol);
                 // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
@@ -14851,11 +14855,14 @@ namespace ts {
 
             // Initialize special symbols
             if (compilerOptions.allowNonTsExtensions) {
-                if (compilerOptions.module === ModuleKind.AMD) {
-                    globals['require'] = getExportedSymbolFromNamespace('AMD', 'require');
-                    globals['define'] = getExportedSymbolFromNamespace('AMD', 'define');
-                } else if(compilerOptions.module === ModuleKind.CommonJS) {
-                    globals['require'] = getExportedSymbolFromNamespace('CommonJS', 'require');
+                let req = getExportedSymbolFromNamespace('AMD', 'require');
+                if (req) {
+                    globals['require'] = req;
+                }
+                
+                let def = getExportedSymbolFromNamespace('AMD', 'define');
+                if (def) {
+                    globals['define'] = def;
                 }
             }
 

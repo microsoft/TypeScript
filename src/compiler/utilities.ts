@@ -979,7 +979,7 @@ namespace ts {
         
         return isJavaScript((<SourceFile>parent).fileName) &&
             expression.expression.kind === SyntaxKind.Identifier &&
-            (<Identifier>expression.expression).text === 'define' &&
+            ((<Identifier>expression.expression).text === 'define' || (<Identifier>expression.expression).text === 'require') &&
             expression.arguments.length > 0;
     }
 
