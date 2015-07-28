@@ -1314,7 +1314,6 @@ namespace ts {
             }
 
             switch (node.kind) {
-                case SyntaxKind.SourceFile:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1357,27 +1356,23 @@ namespace ts {
             return false;
         }
 
-        function forEachTopLevelDeclaration(node: Node, action: (node: Node) => void): void {
+        function forEachTopLevelDeclaration<T>(node: Node, action: (node: Node) => T): T {
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
-                    forEach((<SourceFile>node).statements, action);
-                    break;
+                    return forEach((<SourceFile>node).statements, action);
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ClassDeclaration:
-                    forEach((<InterfaceDeclaration|EnumDeclaration|ClassDeclaration>node).members, action);
-                    break;
+                    return forEach((<InterfaceDeclaration|EnumDeclaration|ClassDeclaration>node).members, action);
                 case SyntaxKind.VariableStatement:
-                    forEach((<VariableStatement>node).declarationList.declarations, action);
-                    break;
+                    return forEach((<VariableStatement>node).declarationList.declarations, action);
                 case SyntaxKind.ModuleDeclaration:
                     if ((<ModuleDeclaration>node).body.kind === SyntaxKind.ModuleBlock) {
-                        forEach((<ModuleBlock>(<ModuleDeclaration>node).body).statements, action);
+                        return forEach((<ModuleBlock>(<ModuleDeclaration>node).body).statements, action);
                     }
                     else {
-                        action((<ModuleDeclaration>node).body);
+                        return action((<ModuleDeclaration>node).body);
                     }
-                    break;
             }
         }
 
@@ -1410,15 +1405,10 @@ namespace ts {
             }
 
             let links = getNodeLinks(node);
-            if (typeof links.hasExportDeclarations === "undefined") {
-                let foundExportDeclarations = false;
-                /// TODO: swithc this to return a value if truthy
-                forEachTopLevelDeclaration(node, n => {
-                    if (n.kind === SyntaxKind.ExportAssignment || n.kind === SyntaxKind.ExportDeclaration) {
-                        foundExportDeclarations = true;
-                    }
+            if (links.hasExportDeclarations === undefined) {
+                links.hasExportDeclarations = !!forEachTopLevelDeclaration(node, n => {
+                    return (n.kind === SyntaxKind.ExportAssignment || n.kind === SyntaxKind.ExportDeclaration);
                 });
-                links.hasExportDeclarations = foundExportDeclarations
             }
             return links.hasExportDeclarations;
         }
