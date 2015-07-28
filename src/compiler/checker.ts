@@ -592,7 +592,19 @@ namespace ts {
                         declarationNameToString(propertyName), typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     return undefined;
                 }
-                if (result.flags & SymbolFlags.BlockScopedVariable) {
+
+                // Only check for block-scoped variable if we are looking for the
+                // name with variable meaning
+                //      For example,
+                //          declare module foo {
+                //              interface bar {}
+                //          }
+                //      let foo/*1*/: foo/*2*/.bar;
+                // The foo at /*1*/ and /*2*/ will share same symbol with two meaning
+                // block - scope variable and namespace module. However, only when we
+                // try to resolve name in /*1*/ which is used in variable position,
+                // we want to check for block- scoped
+                if (meaning & SymbolFlags.BlockScopedVariable && result.flags & SymbolFlags.BlockScopedVariable) {
                     checkResolvedBlockScopedVariable(result, errorLocation);
                 }
             }
