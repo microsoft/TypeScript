@@ -4616,7 +4616,7 @@ namespace ts {
             let errorInfo: DiagnosticMessageChain;
             let sourceStack: ObjectType[];
             let targetStack: ObjectType[];
-            let maybeStack: Map<RelationComparisonResult>[];
+            let maybeStack: Map<Ternary>[];
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
@@ -4908,7 +4908,7 @@ namespace ts {
                     for (let i = 0; i < depth; i++) {
                         // If source and target are already being compared, consider them related with assumptions
                         if (maybeStack[i][id]) {
-                            return Ternary.Maybe;
+                            return maybeStack[i][id];
                         }
                     }
                     if (depth === 100) {
@@ -4925,16 +4925,16 @@ namespace ts {
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
                 maybeStack[depth] = {};
-                maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 let saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
                 let result: Ternary;
                 if (expandingFlags === 3) {
-                    result = Ternary.Maybe;
+                    maybeStack[depth - 1][id] = result = Ternary.InfinitelyExpanding;
                 }
                 else {
+                    maybeStack[depth - 1][id] = Ternary.Maybe;
                     result = propertiesRelatedTo(source, target, reportErrors);
                     if (result) {
                         result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
@@ -4953,9 +4953,15 @@ namespace ts {
                 depth--;
                 if (result) {
                     let maybeCache = maybeStack[depth];
-                    // If result is definitely true, copy assumptions to global cache, else copy to next level up
-                    let destinationCache = (result === Ternary.True || depth === 0) ? relation : maybeStack[depth - 1];
-                    copyMap(maybeCache, destinationCache);
+                    if (result === Ternary.True || depth === 0) {
+                        copyMap(maybeCache, relation, RelationComparisonResult.Succeeded, Ternary.Maybe);
+                        if (depth > 0) {
+                            copyMap(maybeCache, maybeStack[depth - 1], Ternary.InfinitelyExpanding, Ternary.InfinitelyExpanding);
+                        }
+                    }
+                    else {
+                        copyMap(maybeCache, maybeStack[depth - 1]);
+                    }
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it

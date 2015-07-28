@@ -13,7 +13,8 @@ namespace ts {
      */
     export const enum Ternary {
         False = 0,
-        Maybe = 1,
+        InfinitelyExpanding = 1,
+        Maybe = 3,
         True = -1
     }
 
@@ -308,9 +309,13 @@ namespace ts {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
+    export function copyMap<T>(source: Map<T>, target: Map<T>): void;
+    export function copyMap<T, U>(source: Map<T>, target: Map<U>, newValue: U, compareValue: T): void;
+    export function copyMap<T, U>(source: Map<T>, target: Map<U | T>, newValue?: U, compareValue?: T): void {
         for (let p in source) {
-            target[p] = source[p];
+            if (arguments.length === 2 || source[p] === compareValue) {
+                target[p] = newValue || source[p];
+            }
         }
     }
 
