@@ -2190,7 +2190,7 @@ namespace ts {
 
         /**
          * Push an entry on the type resolution stack. If an entry with the given target and the given property name
-         * is already on the stack, and no entries in between already have a type, then a circularity has occurred. 
+         * is already on the stack, and no entries in between already have a type, then a circularity has occurred.
          * In this case, the result values of the existing entry and all entries pushed after it are changed to false,
          * and the value false is returned. Otherwise, the new entry is just pushed onto the stack, and true is returned.
          * In order to see if the same query has already been done before, the target object and the propertyName both
@@ -2360,7 +2360,7 @@ namespace ts {
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
-            
+
             // Use type from type annotation if one is present
             if (declaration.type) {
                 return getTypeFromTypeNode(declaration.type);
@@ -2381,12 +2381,12 @@ namespace ts {
                     return type;
                 }
             }
-            
+
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 return checkExpressionCached(declaration.initializer);
             }
-            
+
             // If it is a short-hand property assignment, use the type of the identifier
             if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return checkIdentifier(<Identifier>declaration.name);
@@ -2482,10 +2482,10 @@ namespace ts {
                 // tools see the actual type.
                 return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
             }
-            
+
             // Rest parameters default to type any[], other parameters default to type any
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
-            
+
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors && compilerOptions.noImplicitAny) {
                 let root = getRootDeclaration(declaration);
@@ -4366,7 +4366,7 @@ namespace ts {
                 }
                 return t;
             };
-            
+
             mapper.context = context;
             return mapper;
         }
@@ -5051,7 +5051,7 @@ namespace ts {
                 let saveErrorInfo = errorInfo;
 
                 // Because the "abstractness" of a class is the same across all construct signatures
-                // (internally we are checking the corresponding declaration), it is enough to perform 
+                // (internally we are checking the corresponding declaration), it is enough to perform
                 // the check and report an error once over all pairs of source and target construct signatures.
                 let sourceSig = sourceSignatures[0];
                 // Note that in an extends-clause, targetSignatures is stripped, so the check never proceeds.
@@ -5997,12 +5997,19 @@ namespace ts {
             }
         }
 
+
+
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             let type = getTypeOfSymbol(symbol);
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
+                    // `firstNarrowedTypeFromIfStatement` is only used when type is of union type.
+                    if (type.flags & TypeFlags.Union) {
+                        var firstNarrowedTypeFromIfStatement: Type;
+                    }
+
                     loop: while (node.parent) {
                         let child = node;
                         node = node.parent;
@@ -6011,7 +6018,70 @@ namespace ts {
                             case SyntaxKind.IfStatement:
                                 // In a branch of an if statement, narrow based on controlling expression
                                 if (child !== (<IfStatement>node).expression) {
+
+                                    // Union types that got narrowed to one type is no longer union types. We want to return a
+                                    // void type in case if the type returned by one if-statement clause is the same as the
+                                    // narrowed type, given that the original type was a union type.
+                                    //
+                                    // Example:
+                                    //
+                                    //     let x: A | B | C;
+                                    //
+                                    //     if (isA(x)) { // isA(...) returns A and the narrowing type has the value of A so narrow to void type.
+                                    //
+                                    //     }
+                                    //     else if (isB(x)) { //  narrow to A
+                                    //
+                                    //     }
+                                    //     else if (isC(x)) { // narrow to A | B
+                                    //
+                                    //     }
+                                    //     else { // type begins with A | B | C
+                                    //
+                                    //          x // is void
+                                    //     }
+                                    //
+                                    if (!(type.flags & TypeFlags.Union)) {
+                                        // Get the original type again because we don't want to store it on a variable higher
+                                        // up to minimize memory allocation.
+                                        let originalType = getTypeOfSymbol(symbol);
+
+                                        if (originalType.flags & TypeFlags.Union &&
+                                            // Use the original type to check the narrowed type instead of the ongoing narrowing type.
+                                            // This is to deal with cases like below:
+                                            //
+                                            //     if (isB(x)) // narrow to A.
+                                            //     else if (isB(x)) // narrow to A
+                                            //
+                                            // Which is the same as:
+                                            //
+                                            //     if (isA(x)) // narrow to A (but also removes A).
+                                            //     else if (isB(x)) // narrow to A
+                                            //
+                                            // But we want only the latter to narrow the type to void.
+                                            //
+                                            type === narrowType(originalType, (<IfStatement>node).expression, /*assumeTrue*/ true) &&
+                                            // If the first narrowed type yield a distinct type(not a union type). And it encounters
+                                            // a narrowed type that yields the same type in some upper branches. It would then narrow
+                                            // the type to void instead of the distinct type. The below check, guards us from narrowing
+                                            // it to void instead of the distinct type.
+                                            //
+                                            //     if (isA(x)) // narrow to void
+                                            //     else if (isB(x)) // narrow to A
+                                            //     else if (isA(x)) { // narrow to A
+                                            //         x // is void, but should be A
+                                            //     }
+                                            //
+                                            type !== firstNarrowedTypeFromIfStatement) {
+
+                                            return voidType;
+                                        }
+                                    }
+
                                     narrowedType = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
+                                    if (type.flags & TypeFlags.Union && !firstNarrowedTypeFromIfStatement) {
+                                        firstNarrowedTypeFromIfStatement = narrowedType;
+                                    }
                                 }
                                 break;
                             case SyntaxKind.ConditionalExpression:
@@ -10465,7 +10535,7 @@ namespace ts {
                         }
                         if (!superCallStatement) {
                             error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
-                        } 
+                        }
                         else {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
                             markThisReferencesAsErrors(superCallStatement.expression);
@@ -13068,7 +13138,7 @@ namespace ts {
             Debug.assert(node.kind === SyntaxKind.Identifier);
             return <Identifier>node;
         }
-        
+
         function checkExternalImportOrExportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
             let moduleName = getExternalModuleName(node);
             if (!nodeIsMissing(moduleName) && moduleName.kind !== SyntaxKind.StringLiteral) {
@@ -13679,7 +13749,7 @@ namespace ts {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             // If we didn't come from static member of class or interface,
-                            // add the type parameters into the symbol table 
+                            // add the type parameters into the symbol table
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
                             // Note: that the memberFlags come from previous iteration.
                             if (!(memberFlags & NodeFlags.Static)) {
@@ -14160,9 +14230,9 @@ namespace ts {
             }
             // const enums and modules that contain only const enums are not considered values from the emit perespective
             // unless 'preserveConstEnums' option is set to true
-            return target !== unknownSymbol && 
-                target && 
-                target.flags & SymbolFlags.Value && 
+            return target !== unknownSymbol &&
+                target &&
+                target.flags & SymbolFlags.Value &&
                 (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(target));
         }
 
@@ -14233,7 +14303,7 @@ namespace ts {
         function isFunctionType(type: Type): boolean {
             return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
-        
+
         function getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             let symbol = resolveEntityName(node.typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
