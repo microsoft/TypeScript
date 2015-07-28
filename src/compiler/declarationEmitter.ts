@@ -8,6 +8,7 @@ namespace ts {
         collected?: boolean;
         hasExportDeclarations?: boolean;
         errorReported?: boolean;
+        isInternal?: boolean;
     }
 
     interface PreprocessResults {
@@ -116,16 +117,6 @@ namespace ts {
                 write(`/// <reference path="${ declFileName }" />`);
                 writeLine();
             }
-        }
-
-        function hasInternalAnnotation(range: CommentRange) {
-            let text = currentSourceFile.text;
-            let comment = text.substring(range.pos, range.end);
-            return comment.indexOf("@internal") >= 0;
-        }
-
-        function isInternal(node: Node) {
-            return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
         }
 
         function createNewTextWriterWithSymbolWriter(): EmitTextWriter & SymbolWriter {
@@ -966,10 +957,6 @@ namespace ts {
         }
 
         function emitNode(node: Node) {
-            if (compilerOptions.stripInternal && isInternal(node)) {
-                return;
-            }
-
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
@@ -1059,16 +1046,17 @@ namespace ts {
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
-        function hasInternalAnnotation(range: CommentRange) {
-            let text = currentSourceFile.text;
-            let comment = text.substring(range.pos, range.end);
-            return comment.indexOf("@internal") >= 0;
+        function isInternal(node: Node): boolean {
+            let links = getNodeLinks(node);
+            if (links.isInternal === undefined) {
+                let sourceText = getSourceFileOfNode(node).text;
+                links.isInternal = forEach(getLeadingCommentRanges(sourceText, node.pos), range => {
+                    let comment = sourceText.substring(range.pos, range.end);
+                    return comment.indexOf("@internal") >= 0;
+                });
+            }
+            return links.isInternal;
         }
-
-        function isInternal(node: Node) {
-            return forEach(getLeadingCommentRanges(currentSourceFile.text, node.pos), hasInternalAnnotation)
-        }
-
 
         function createVoidSymbolWriter(trackTypeSymbol: (s: Symbol) => void, trackInaccesibleSymbol: (s: Symbol) => void): SymbolWriter {
             return {
@@ -1318,15 +1306,11 @@ namespace ts {
 
         function collectDeclatation(declaration:Node, errorNode?: Node) {
             declarationsToProcess.push({ declaration, errorNode });
-            //preprocessDeclaration(declaration, errorNode);
         }
 
         function isDeclarationExported(node: Node): boolean {
             if (compilerOptions.stripInternal && isInternal(node)) {
-                // TODO: this is the correct place for this check, enable this 
-                // after updating the code to make internal on local declarations instead
-                // of containers
-                //return false;
+                return false;
             }
 
             switch (node.kind) {
