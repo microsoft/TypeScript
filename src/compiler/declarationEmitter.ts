@@ -1371,7 +1371,7 @@ namespace ts {
             else {
                 writeTextOfNode(currentSourceFile, node.name);
             }
-            if (node.initializer || hasQuestionToken(node)) {
+            if (resolver.isOptionalParameter(node)) {
                 write("?");
             }
             decreaseIndent();

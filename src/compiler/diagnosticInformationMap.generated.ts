@@ -294,7 +294,7 @@ namespace ts {
         Multiple_constructor_implementations_are_not_allowed: { code: 2392, category: DiagnosticCategory.Error, key: "Multiple constructor implementations are not allowed." },
         Duplicate_function_implementation: { code: 2393, category: DiagnosticCategory.Error, key: "Duplicate function implementation." },
         Overload_signature_is_not_compatible_with_function_implementation: { code: 2394, category: DiagnosticCategory.Error, key: "Overload signature is not compatible with function implementation." },
-        Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local: { code: 2395, category: DiagnosticCategory.Error, key: "Individual declarations in merged declaration {0} must be all exported or all local." },
+        Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local: { code: 2395, category: DiagnosticCategory.Error, key: "Individual declarations in merged declaration '{0}' must be all exported or all local." },
         Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters: { code: 2396, category: DiagnosticCategory.Error, key: "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters." },
         Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference: { code: 2399, category: DiagnosticCategory.Error, key: "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference." },
         Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference: { code: 2400, category: DiagnosticCategory.Error, key: "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference." },
@@ -425,6 +425,8 @@ namespace ts {
         JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property: { code: 2607, category: DiagnosticCategory.Error, key: "JSX element class does not support attributes because it does not have a '{0}' property" },
         The_global_type_JSX_0_may_not_have_more_than_one_property: { code: 2608, category: DiagnosticCategory.Error, key: "The global type 'JSX.{0}' may not have more than one property" },
         Cannot_emit_namespaced_JSX_elements_in_React: { code: 2650, category: DiagnosticCategory.Error, key: "Cannot emit namespaced JSX elements in React" },
+        A_member_initializer_in_a_const_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_const_enums: { code: 2651, category: DiagnosticCategory.Error, key: "A member initializer in a 'const' enum declaration cannot reference members declared after it, including members defined in other 'const' enums." },
+        Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead: { code: 2652, category: DiagnosticCategory.Error, key: "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -509,7 +511,6 @@ namespace ts {
         Option_noEmit_cannot_be_specified_with_option_out_or_outDir: { code: 5040, category: DiagnosticCategory.Error, key: "Option 'noEmit' cannot be specified with option 'out' or 'outDir'." },
         Option_noEmit_cannot_be_specified_with_option_declaration: { code: 5041, category: DiagnosticCategory.Error, key: "Option 'noEmit' cannot be specified with option 'declaration'." },
         Option_project_cannot_be_mixed_with_source_files_on_a_command_line: { code: 5042, category: DiagnosticCategory.Error, key: "Option 'project' cannot be mixed with source files on a command line." },
-        Option_sourceMap_cannot_be_specified_with_option_isolatedModules: { code: 5043, category: DiagnosticCategory.Error, key: "Option 'sourceMap' cannot be specified with option 'isolatedModules'." },
         Option_declaration_cannot_be_specified_with_option_isolatedModules: { code: 5044, category: DiagnosticCategory.Error, key: "Option 'declaration' cannot be specified with option 'isolatedModules'." },
         Option_noEmitOnError_cannot_be_specified_with_option_isolatedModules: { code: 5045, category: DiagnosticCategory.Error, key: "Option 'noEmitOnError' cannot be specified with option 'isolatedModules'." },
         Option_out_cannot_be_specified_with_option_isolatedModules: { code: 5046, category: DiagnosticCategory.Error, key: "Option 'out' cannot be specified with option 'isolatedModules'." },
@@ -614,5 +615,6 @@ namespace ts {
         Expected_corresponding_JSX_closing_tag_for_0: { code: 17002, category: DiagnosticCategory.Error, key: "Expected corresponding JSX closing tag for '{0}'." },
         JSX_attribute_expected: { code: 17003, category: DiagnosticCategory.Error, key: "JSX attribute expected." },
         Cannot_use_JSX_unless_the_jsx_flag_is_provided: { code: 17004, category: DiagnosticCategory.Error, key: "Cannot use JSX unless the '--jsx' flag is provided." },
+        A_constructor_cannot_contain_a_super_call_when_its_class_extends_null: { code: 17005, category: DiagnosticCategory.Error, key: "A constructor cannot contain a 'super' call when its class extends 'null'" },
     };
 }
