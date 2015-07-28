@@ -68,6 +68,7 @@ namespace ts {
             getPropertyOfType,
             getSignaturesOfType,
             getIndexTypeOfType,
+            getBaseTypes,
             getReturnTypeOfSignature,
             getSymbolsInScope,
             getSymbolAtLocation,
@@ -10439,7 +10440,8 @@ namespace ts {
             if (getClassExtendsHeritageClauseElement(<ClassDeclaration>node.parent)) {
 
                 if (containsSuperCall(node.body)) {
-                    // The first statement in the body of a constructor must be a super call if both of the following are true:
+                    // The first statement in the body of a constructor (excluding prologue directives) must be a super call
+                    // if both of the following are true:
                     // - The containing class is a derived class.
                     // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.
@@ -10447,14 +10449,26 @@ namespace ts {
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
                         forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
 
+                    // Skip past any prologue directives to find the first statement
+                    // to ensure that it was a super call.
                     if (superCallShouldBeFirst) {
                         let statements = (<Block>node.body).statements;
-                        if (!statements.length || statements[0].kind !== SyntaxKind.ExpressionStatement || !isSuperCallExpression((<ExpressionStatement>statements[0]).expression)) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
+                        let superCallStatement: ExpressionStatement;
+                        for (let statement of statements) {
+                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                                superCallStatement = <ExpressionStatement>statement;
+                                break;
+                            }
+                            if (!isPrologueDirective(statement)) {
+                                break;
+                            }
                         }
+                        if (!superCallStatement) {
+                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
+                        } 
                         else {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
-                            markThisReferencesAsErrors((<ExpressionStatement>statements[0]).expression);
+                            markThisReferencesAsErrors(superCallStatement.expression);
                         }
                     }
                 }
