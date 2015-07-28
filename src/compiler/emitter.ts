@@ -1425,6 +1425,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxSpreadAttribute:
                     case SyntaxKind.JsxExpression:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:

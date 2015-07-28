@@ -11,4 +11,7 @@ declare module 'mod' {
 import Main from 'mod';
 declare var Foo, React;
 // Should see mod_1['default'] in emit here
-<Foo handler={Main}></Foo>
+<Foo handler={Main}></Foo>;
+// Should see mod_1['default'] in emit here
+<Foo {...Main}></Foo>;
+
