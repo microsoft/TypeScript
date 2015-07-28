@@ -25,6 +25,7 @@ tests/baselines/reference/projectOutput/*
 tests/baselines/local/projectOutput/*
 tests/services/baselines/prototyping/local/*
 tests/services/browser/typescriptServices.js
+scripts/configureNightly.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests.js

@@ -186,8 +186,8 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 >i : number
 >fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined), 10) : number
 >fun : { <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, g: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
->(Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined) : (x: <T>(p: T) => T) => any
->Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined : (x: <T>(p: T) => T) => any
+>(Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
+>Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
 >Math.random() < 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number
@@ -209,8 +209,8 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >j : number
 >fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), 10) : number
 >fun : { <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, g: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
->(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
->Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
+>(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
+>Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
 >Math.random() < 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number
@@ -234,8 +234,8 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >k : number
 >fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10) : number
 >fun : { <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, g: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
->(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
->Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
+>(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
+>Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
 >Math.random() < 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number
@@ -265,9 +265,9 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 >l : number
 >fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10) : number
 >fun : { <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(f: (x: <T>(p: T) => T) => <T>(p: T) => T, g: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
->((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))) : (x: <T>(p: T) => T) => any
->(Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined))) : (x: <T>(p: T) => T) => any
->Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)) : (x: <T>(p: T) => T) => any
+>((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
+>(Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined))) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
+>Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => any)
 >Math.random() < 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number

@@ -34,35 +34,35 @@ var [x16, y16, z16, ...a8] = [1, 2, 3];
 >3 : number
 
 var [...a9] = [1, "hello", true];
->a9 : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>a9 : (number | string | boolean)[]
+>[1, "hello", true] : (number | string | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
 
 var [x17, ...a10] = [1, "hello", true];
->x17 : string | number | boolean
->a10 : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>x17 : number | string | boolean
+>a10 : (number | string | boolean)[]
+>[1, "hello", true] : (number | string | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
 
 var [x18, y18, ...a12] = [1, "hello", true];
->x18 : string | number | boolean
->y18 : string | number | boolean
->a12 : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>x18 : number | string | boolean
+>y18 : number | string | boolean
+>a12 : (number | string | boolean)[]
+>[1, "hello", true] : (number | string | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
 
 var [x19, y19, z19, ...a13] = [1, "hello", true];
->x19 : string | number | boolean
->y19 : string | number | boolean
->z19 : string | number | boolean
->a13 : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>x19 : number | string | boolean
+>y19 : number | string | boolean
+>z19 : number | string | boolean
+>a13 : (number | string | boolean)[]
+>[1, "hello", true] : (number | string | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
