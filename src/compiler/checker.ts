@@ -10449,9 +10449,17 @@ namespace ts {
             // TS 1.0 spec (April 2014): 8.3.2
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
-            if (getClassExtendsHeritageClauseElement(<ClassDeclaration>node.parent)) {
+            let containingClassDecl = <ClassDeclaration>node.parent;
+            if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
+                let containingClassSymbol = getSymbolOfNode(containingClassDecl);
+                let containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
+                let baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
 
                 if (containsSuperCall(node.body)) {
+                    if (baseConstructorType === nullType) {
+                        error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+                    }
+
                     // The first statement in the body of a constructor (excluding prologue directives) must be a super call
                     // if both of the following are true:
                     // - The containing class is a derived class.
@@ -10484,7 +10492,7 @@ namespace ts {
                         }
                     }
                 }
-                else {
+                else if (baseConstructorType !== nullType) {
                     error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
                 }
             }
@@ -12777,28 +12785,7 @@ namespace ts {
                     }
                     let initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForEnumMemberInitializer(initializer);
-                        if (autoValue === undefined) {
-                            if (enumIsConst) {
-                                error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
-                            }
-                            else if (!ambient) {
-                                // Only here do we need to check that the initializer is assignable to the enum type.
-                                // If it is a constant value (not undefined), it is syntactically constrained to be a number.
-                                // Also, we do not need to check this for ambients because there is already
-                                // a syntax error if it is not a constant.
-                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
-                            }
-                        }
-                        else if (enumIsConst) {
-                            if (isNaN(autoValue)) {
-                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN);
-                            }
-                            else if (!isFinite(autoValue)) {
-                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
-                            }
-                        }
-
+                        autoValue = computeConstantValueForEnumMemberInitializer(initializer, enumType, enumIsConst, ambient);
                     }
                     else if (ambient && !enumIsConst) {
                         autoValue = undefined;
@@ -12812,8 +12799,36 @@ namespace ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
-            function getConstantValueForEnumMemberInitializer(initializer: Expression): number {
-                return evalConstant(initializer);
+            function computeConstantValueForEnumMemberInitializer(initializer: Expression, enumType: Type, enumIsConst: boolean, ambient: boolean): number {
+                // Controls if error should be reported after evaluation of constant value is completed
+                // Can be false if another more precise error was already reported during evaluation.
+                let reportError = true;
+                let value = evalConstant(initializer);
+
+                if (reportError) {
+                    if (value === undefined) {
+                        if (enumIsConst) {
+                            error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
+                        }
+                        else if (!ambient) {
+                            // Only here do we need to check that the initializer is assignable to the enum type.
+                            // If it is a constant value (not undefined), it is syntactically constrained to be a number.
+                            // Also, we do not need to check this for ambients because there is already
+                            // a syntax error if it is not a constant.
+                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
+                        }
+                    }
+                    else if (enumIsConst) {
+                        if (isNaN(value)) {
+                            error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN);
+                        }
+                        else if (!isFinite(value)) {
+                            error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
+                        }
+                    }
+                }
+
+                return value;
 
                 function evalConstant(e: Node): number {
                     switch (e.kind) {
@@ -12922,6 +12937,8 @@ namespace ts {
 
                             // illegal case: forward reference
                             if (!isDefinedBefore(propertyDecl, member)) {
+                                reportError = false;
+                                error(e, Diagnostics.A_member_initializer_in_a_const_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_const_enums);
                                 return undefined;
                             }
 
