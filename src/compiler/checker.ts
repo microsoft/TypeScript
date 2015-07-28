@@ -91,7 +91,8 @@ namespace ts {
             getExportsOfModule: getExportsOfModuleAsArray,
 
             getJsxElementAttributesType,
-            getJsxIntrinsicTagNames
+            getJsxIntrinsicTagNames,
+            isOptionalParameter
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -14402,6 +14403,7 @@ namespace ts {
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
+                isOptionalParameter
             };
         }
 

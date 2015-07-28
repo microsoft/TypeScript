@@ -1431,6 +1431,7 @@ namespace ts {
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
+        isOptionalParameter(node: ParameterDeclaration): boolean;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -1574,7 +1575,8 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
+        isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
     export const enum SymbolFlags {

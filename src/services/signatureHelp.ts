@@ -569,15 +569,7 @@ namespace ts.SignatureHelp {
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
                     let parameters = candidateSignature.parameters;
-                    if (parameters.length > 0) {
-                        signatureHelpParameters = [];
-                        for (let i = 0; i < parameters.length; i++) {
-                            signatureHelpParameters.push(createSignatureHelpParameterAtIndex(candidateSignature, i));
-                        }
-                    }
-                    else {
-                        signatureHelpParameters = emptyArray;
-                    }
+                    signatureHelpParameters = parameters.length > 0 ? map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
 
@@ -615,21 +607,15 @@ namespace ts.SignatureHelp {
                 argumentCount
             };
 
-            function createSignatureHelpParameterAtIndex(signature: Signature, parameterIndex: number): SignatureHelpParameter {
-                let parameter = signature.parameters[parameterIndex];
+            function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
                 let displayParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
-
-                let parameterDeclaration = <ParameterDeclaration>parameter.valueDeclaration;
-                let isOptional =
-                    hasQuestionToken(parameterDeclaration) ||
-                    parameterDeclaration.initializer && parameterIndex >= signature.minArgumentCount;
 
                 return {
                     name: parameter.name,
                     documentation: parameter.getDocumentationComment(),
                     displayParts,
-                    isOptional
+                    isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
                 };
             }
 
