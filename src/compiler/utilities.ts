@@ -988,15 +988,13 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
-                    return (<ParameterDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return (<PropertyDeclaration>node).questionToken !== undefined;
+                    return (<ParameterDeclaration | MethodDeclaration | PropertyDeclaration>node).questionToken !== undefined;
             }
         }
 

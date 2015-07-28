@@ -91,7 +91,8 @@ namespace ts {
             getExportsOfModule: getExportsOfModuleAsArray,
 
             getJsxElementAttributesType,
-            getJsxIntrinsicTagNames
+            getJsxIntrinsicTagNames,
+            isOptionalParameter
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -1998,15 +1999,15 @@ namespace ts {
             }
 
             return _displayBuilder || (_displayBuilder = {
-                buildSymbolDisplay: buildSymbolDisplay,
-                buildTypeDisplay: buildTypeDisplay,
-                buildTypeParameterDisplay: buildTypeParameterDisplay,
-                buildParameterDisplay: buildParameterDisplay,
-                buildDisplayForParametersAndDelimiters: buildDisplayForParametersAndDelimiters,
-                buildDisplayForTypeParametersAndDelimiters: buildDisplayForTypeParametersAndDelimiters,
-                buildTypeParameterDisplayFromSymbol: buildTypeParameterDisplayFromSymbol,
-                buildSignatureDisplay: buildSignatureDisplay,
-                buildReturnTypeDisplay: buildReturnTypeDisplay
+                buildSymbolDisplay,
+                buildTypeDisplay,
+                buildTypeParameterDisplay,
+                buildParameterDisplay,
+                buildDisplayForParametersAndDelimiters,
+                buildDisplayForTypeParametersAndDelimiters,
+                buildTypeParameterDisplayFromSymbol,
+                buildSignatureDisplay,
+                buildReturnTypeDisplay
             });
         }
 
@@ -3521,7 +3522,19 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
-            return hasQuestionToken(node) || !!node.initializer;
+            if (hasQuestionToken(node)) {
+                return true;
+            }
+
+            if (node.initializer) {
+                let signatureDeclaration = <SignatureDeclaration>node.parent;
+                let signature = getSignatureFromDeclaration(signatureDeclaration);
+                let parameterIndex = signatureDeclaration.parameters.indexOf(node);
+                Debug.assert(parameterIndex >= 0);
+                return parameterIndex >= signature.minArgumentCount;
+            }
+
+            return false;
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -3539,10 +3552,15 @@ namespace ts {
                     if (param.type && param.type.kind === SyntaxKind.StringLiteral) {
                         hasStringLiterals = true;
                     }
-                    if (minArgumentCount < 0) {
-                        if (param.initializer || param.questionToken || param.dotDotDotToken) {
+
+                    if (param.initializer || param.questionToken || param.dotDotDotToken) {
+                        if (minArgumentCount < 0) {
                             minArgumentCount = i;
                         }
+                    }
+                    else {
+                        // If we see any required parameters, it means the prior ones were not in fact optional.
+                        minArgumentCount = -1;
                     }
                 }
 
@@ -14413,6 +14431,7 @@ namespace ts {
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
+                isOptionalParameter
             };
         }
 
@@ -14808,17 +14827,15 @@ namespace ts {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
                     }
                 }
-                else if (parameter.questionToken || parameter.initializer) {
+                else if (parameter.questionToken) {
                     seenOptionalParameter = true;
 
-                    if (parameter.questionToken && parameter.initializer) {
+                    if (parameter.initializer) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
                     }
                 }
-                else {
-                    if (seenOptionalParameter) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
-                    }
+                else if (seenOptionalParameter && !parameter.initializer) {
+                    return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
                 }
             }
         }
