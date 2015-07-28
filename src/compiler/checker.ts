@@ -113,6 +113,10 @@ namespace ts {
         emptyGenericType.instantiations = {};
 
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
+        // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
+        anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
+
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         let anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
@@ -3757,22 +3761,23 @@ namespace ts {
             }
         }
 
-        // This function is used to propagate widening flags when creating new object types references and union types.
-        // It is only necessary to do so if a constituent type might be the undefined type, the null type, or the type
-        // of an object literal (since those types have widening related information we need to track).
-        function getWideningFlagsOfTypes(types: Type[]): TypeFlags {
+        // This function is used to propagate certain flags when creating new object type references and union types.
+        // It is only necessary to do so if a constituent type might be the undefined type, the null type, the type
+        // of an object literal or the anyFunctionType. This is because there are operations in the type checker
+        // that care about the presence of such types at arbitrary depth in a containing type.
+        function getPropagatingFlagsOfTypes(types: Type[]): TypeFlags {
             let result: TypeFlags = 0;
             for (let type of types) {
                 result |= type.flags;
             }
-            return result & TypeFlags.RequiresWidening;
+            return result & TypeFlags.PropagatingFlags;
         }
 
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
             let id = getTypeListId(typeArguments);
             let type = target.instantiations[id];
             if (!type) {
-                let flags = TypeFlags.Reference | getWideningFlagsOfTypes(typeArguments);
+                let flags = TypeFlags.Reference | getPropagatingFlagsOfTypes(typeArguments);
                 type = target.instantiations[id] = <TypeReference>createObjectType(flags, target.symbol);
                 type.target = target;
                 type.typeArguments = typeArguments;
@@ -4026,7 +4031,7 @@ namespace ts {
             let id = getTypeListId(elementTypes);
             let type = tupleTypes[id];
             if (!type) {
-                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getWideningFlagsOfTypes(elementTypes));
+                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getPropagatingFlagsOfTypes(elementTypes));
                 type.elementTypes = elementTypes;
             }
             return type;
@@ -4175,7 +4180,7 @@ namespace ts {
             let id = getTypeListId(typeSet);
             let type = unionTypes[id];
             if (!type) {
-                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(typeSet));
+                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getPropagatingFlagsOfTypes(typeSet));
                 type.types = typeSet;
             }
             return type;
@@ -4209,7 +4214,7 @@ namespace ts {
             let id = getTypeListId(typeSet);
             let type = intersectionTypes[id];
             if (!type) {
-                type = intersectionTypes[id] = <IntersectionType>createObjectType(TypeFlags.Intersection | getWideningFlagsOfTypes(typeSet));
+                type = intersectionTypes[id] = <IntersectionType>createObjectType(TypeFlags.Intersection | getPropagatingFlagsOfTypes(typeSet));
                 type.types = typeSet;
             }
             return type;
@@ -5656,11 +5661,17 @@ namespace ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
-                if (source === anyFunctionType) {
-                    return;
-                }
                 if (target.flags & TypeFlags.TypeParameter) {
-                    // If target is a type parameter, make an inference
+                    // If target is a type parameter, make an inference, unless the source type contains
+                    // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
+                    // Because the anyFunctionType is internal, it should not be exposed to the user by adding
+                    // it as an inference candidate. Hopefully, a better candidate will come along that does
+                    // not contain anyFunctionType when we come back to this argument for its second round
+                    // of inference.
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType) {
+                        return;
+                    }
+
                     let typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
@@ -7093,7 +7104,7 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.PropagatingFlags);
             return result;
 
             function getIndexType(kind: IndexKind) {
