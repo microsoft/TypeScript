@@ -493,7 +493,7 @@ module Harness {
             export let readFile: typeof IO.readFile = ts.sys.readFile;
             export let writeFile: typeof IO.writeFile = ts.sys.writeFile;
             export let fileExists: typeof IO.fileExists = fs.existsSync;
-            export let log: typeof IO.log = console.log.bind(console);
+            export let log: typeof IO.log = s => console.log(s);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -673,7 +673,7 @@ module Harness {
             };
             export let listFiles = Utils.memoize(_listFilesImpl);
 
-            export let log = console.log.bind(console);
+            export let log = s => console.log(s);
 
             export function readFile(file: string) {
                 let response = Http.getFileFromServerSync(serverRoot + file);
