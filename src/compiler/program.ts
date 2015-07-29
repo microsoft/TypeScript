@@ -40,7 +40,12 @@ namespace ts {
     }
 
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
-
+        
+        // module names that contain '!' are used to reference resources and are not resolved to actual files on disk
+        if (moduleName.indexOf('!') != -1) {
+            return { resolvedFileName: undefined, failedLookupLocations: [] };
+        }
+        
         let searchPath = getDirectoryPath(containingFile);
         let searchName: string;
 
@@ -50,8 +55,13 @@ namespace ts {
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
             referencedSourceFile = forEach(supportedExtensions, extension => {
+                if (extension === ".tsx" && !compilerOptions.jsx) {
+                    // resolve .tsx files only if jsx support is enabled 
+                    // 'logical not' handles both undefined and None cases
+                    return undefined;
+                }
+                
                 let candidate = searchName + extension;
-                let ok = host.fileExists(candidate) ? candidate : undefined;
                 if (host.fileExists(candidate)) {
                     return candidate;
                 }
