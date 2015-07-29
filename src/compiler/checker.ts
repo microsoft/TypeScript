@@ -6028,13 +6028,10 @@ namespace ts {
                                     //     let x: A | B | C;
                                     //
                                     //     if (isA(x)) { // isA(...) returns A and the narrowing type has the value of A so narrow to void type.
-                                    //
                                     //     }
                                     //     else if (isB(x)) { //  narrow to A
-                                    //
                                     //     }
-                                    //     else if (isC(x)) { // narrow to A | B
-                                    //
+                                    //     else if (isC(x))  // narrow to A | B
                                     //     }
                                     //     else { // type begins with A | B | C
                                     //
@@ -6050,13 +6047,31 @@ namespace ts {
                                             // Use the original type to check the narrowed type instead of the ongoing narrowing type.
                                             // This is to deal with cases like below:
                                             //
-                                            //     if (isB(x)) // narrow to A.
-                                            //     else if (isB(x)) // narrow to A
+                                            //     let x: A | B | C;
+                                            //
+                                            //     if (isB(x)) { // narrow to A.
+                                            //     }
+                                            //     else if (isB(x)) { // narrow to A
+                                            //     }
+                                            //     else if (isC(x)) { // narrow to A | B
+                                            //     }
+                                            //     else { // type begins with A | B | C
+                                            //         x
+                                            //     }
                                             //
                                             // Which is the same as:
                                             //
-                                            //     if (isA(x)) // narrow to A (but also removes A).
-                                            //     else if (isB(x)) // narrow to A
+                                            //     let x: A | B | C;
+                                            //
+                                            //     if (isA(x)) { // narrow to A (but also removes A).
+                                            //     }
+                                            //     else if (isB(x)) { // narrow to A
+                                            //     }
+                                            //     else if (isC(x)) {// narrow to A | B
+                                            //     }
+                                            //     else { // type begins with A | B | C
+                                            //         x
+                                            //     }
                                             //
                                             // But we want only the latter to narrow the type to void.
                                             //
@@ -6066,9 +6081,12 @@ namespace ts {
                                             // the type to void instead of the distinct type. The below check, guards us from narrowing
                                             // it to void instead of the distinct type.
                                             //
-                                            //     if (isA(x)) // narrow to void
-                                            //     else if (isB(x)) // narrow to A
+                                            //     if (isA(x)) { // narrow to void
+                                            //     }
+                                            //     else if (isB(x)) { // narrow to A
+                                            //     }
                                             //     else if (isA(x)) { // narrow to A
+                                            //
                                             //         x // is void, but should be A
                                             //     }
                                             //
