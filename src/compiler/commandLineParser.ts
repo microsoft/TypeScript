@@ -422,6 +422,9 @@ namespace ts {
                 if (json["files"] instanceof Array) {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
+                else {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, 'files', 'Array'));                    
+                }
             }
             else {
                 let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
