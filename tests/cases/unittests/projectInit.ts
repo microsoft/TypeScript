@@ -1,6 +1,5 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\compiler\emitter.ts" />
-/// <reference path="..\..\..\src\compiler\commandLineParser.ts" />
+/// <reference path="..\..\..\src\compiler\program.ts" />
 
 module ts {
     describe('Project initializer', () => {
@@ -38,23 +37,36 @@ module ts {
                     expectedOutput += expectedCompilerOptionOutput[option].toString() + ",\n";
                 }
             }
+            expectedOutput = expectedOutput.slice(0, expectedOutput.lastIndexOf(',')) + "\n";
             expectedOutput += "    }";
 
             if (expectedFileNames) {
                 expectedOutput += ",\n";
                 expectedOutput += `    "files": [\n`;
-                for (let fileName of expectedFileNames) {
-                    expectedOutput += `        "${fileName}",\n`;
-                }
+
+                forEach(expectedFileNames, (fileName, index) => {
+                    expectedOutput += `        "${fileName}"`;
+                    if (index < expectedFileNames.length - 1) {
+                        expectedOutput += ",";
+                    }
+                    expectedOutput += "\n";
+                });
+
                 expectedOutput += "    ]";
             }
 
             if (excludes) {
                 expectedOutput += ",\n";
                 expectedOutput += `    "exclude": [\n`;
-                for (let exclude of excludes) {
-                    expectedOutput += `        "${exclude}",\n`;
-                }
+
+                forEach(excludes, (exclude, index) => {
+                    expectedOutput += `        "${exclude}"`;
+                    if (index < excludes.length - 1) {
+                        expectedOutput += ",";
+                    }
+                    expectedOutput += "\n";
+                });
+
                 expectedOutput += "    ]";
             }
             expectedOutput += "\n}";
@@ -70,7 +82,7 @@ module ts {
                 {
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
@@ -90,7 +102,7 @@ module ts {
                 {
                     module: "amd", // overrides commonjs
                     target: "es5", // overrides es3
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
@@ -110,7 +122,7 @@ module ts {
                     newLine: "CRLF",
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
@@ -128,7 +140,7 @@ module ts {
                     newLine: "LF",
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false,
@@ -145,7 +157,7 @@ module ts {
                 {
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false
@@ -162,7 +174,7 @@ module ts {
                 {
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false
@@ -184,7 +196,7 @@ module ts {
                 {
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
                     sourceMap: false
@@ -206,10 +218,10 @@ module ts {
                 {
                     module: "commonjs",
                     target: "es3",
-                    noImplicitAny: true,
+                    noImplicitAny: false,
                     outDir: "built",
                     rootDir: ".",
-                    sourceMap: false
+                    sourceMap: false,
                 },
                 null,
                 null);

@@ -150,7 +150,9 @@ namespace ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.You_already_have_a_tsconfig_json_file_defined));
             }
             else {
-                writeConfigFile(file, commandLine.options, commandLine.fileNames);
+                let writer = createTextWriter("\n");
+                buildConfigFile(writer, compilerOptions, commandLine.fileNames, ["node_modules"]);
+                sys.writeFile(file, writer.getText());
             }
             return sys.exit(ExitStatus.Success);
         }

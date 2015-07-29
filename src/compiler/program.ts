@@ -1,5 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
+/// <reference path="core.ts" />
 
 namespace ts {
     /* @internal */ export let programTime = 0;
@@ -26,10 +27,219 @@ namespace ts {
         return undefined;
     }
 
-    export function writeConfigFile(file: string, compilerOptions: CompilerOptions, fileNames: string[]): void {
-        let writer = createTextWriter("\n");
-        buildConfigFile(writer, compilerOptions, fileNames, ["node_modules"]);
-        sys.writeFile(file, writer.getText());
+    export const defaultInitCompilerOptions: CompilerOptions = {
+        module: ModuleKind.CommonJS,
+        target: ScriptTarget.ES3,
+        noImplicitAny: false,
+        outDir: "built",
+        rootDir: ".",
+        sourceMap: false,
+    }
+
+    export function buildConfigFile(writer: EmitTextWriter, compilerOptions: CompilerOptions, fileNames?: string[], excludes?: string[]) {
+        compilerOptions = extend(compilerOptions, defaultInitCompilerOptions);
+        let { write, writeLine, increaseIndent, decreaseIndent } = writer;
+        let { optionNameMap } = getOptionNameMap();
+        writeConfigFile();
+
+        function writeConfigFile() {
+            write("{");
+            writeLine();
+            increaseIndent();
+            writeCompilerOptions();
+            if (fileNames && fileNames.length > 0) {
+                write(",");
+                writeLine();
+                writeFileNames();
+            }
+            if (excludes) {
+                write(",");
+                writeLine();
+                writeExcludeOptions();
+            }
+            writeLine();
+            decreaseIndent();
+            write("}");
+        }
+
+        function writeCompilerOptions() {
+            write(`"compilerOptions": {`);
+            writeLine();
+            increaseIndent();
+
+            let length = 0;
+            for (var option in compilerOptions) {
+                length++;
+            }
+
+            let i = 0;
+            for (var option in compilerOptions) {
+                switch (option) {
+                    case "init":
+                    case "watch":
+                    case "help":
+                    case "version":
+                        i++;
+                        continue;
+
+                    case "module":
+                    case "target":
+                    case "newLine":
+                        writeComplexCompilerOption(option, i < length - 1);
+                        break;
+
+                    default:
+                        writeSimpleCompilerOption(option,  i < length - 1);
+
+                }
+                i++;
+            }
+
+            decreaseIndent();
+            write("}");
+        }
+
+        function writeOptionalOptionDescription(option: string) {
+            option = option.toLowerCase();
+            if (optionNameMap[option].description &&
+                optionNameMap[option].description.key) {
+
+                write(`// ${optionNameMap[option].description.key}`);
+                writeLine();
+            }
+        }
+
+        /**
+         * Write simple compiler option. A simple compiler option is an option
+         * with boolean or non string set value.
+         */
+        function writeSimpleCompilerOption(option: string,  writeComma: boolean) {
+            writeOptionalOptionDescription(option);
+
+            write(`"${option}": `);
+            if (typeof compilerOptions[option] === "string") {
+                write(`"${compilerOptions[option]}"`);
+            }
+            else {
+                if (compilerOptions[option]) {
+                    write("true");
+                }
+                else {
+                    write("false");
+                }
+            }
+
+            if (writeComma) {
+                write(",");
+            }
+            writeLine();
+        }
+
+        /**
+         * Write complex compiler option. A complex compiler option is an option
+         * which maps to a TypeScript enum type.
+         */
+        function writeComplexCompilerOption(option: string, writeComma: boolean) {
+            writeOptionalOptionDescription(option);
+
+            outer: switch (option) {
+                case "module":
+                    var moduleValue: string;
+                    switch (compilerOptions.module) {
+                        case ModuleKind.None:
+                            break outer;
+                        case ModuleKind.CommonJS:
+                            moduleValue = "commonjs";
+                            break;
+                        case ModuleKind.System:
+                            moduleValue = "system";
+                            break;
+                        case ModuleKind.UMD:
+                            moduleValue = "umd";
+                            break;
+                        default:
+                            moduleValue = "amd";
+                            break;
+                    }
+                    write(`"module": "${moduleValue}"`);
+                    if (writeComma) {
+                        write(",");
+                    }
+                    writeLine();
+                    break;
+
+                case "target":
+                    var targetValue: string;
+                    switch (compilerOptions.target) {
+                        case ScriptTarget.ES5:
+                            targetValue = "es5";
+                            break;
+                        case ScriptTarget.ES6:
+                            targetValue = "es6";
+                            break;
+                        default:
+                            targetValue = "es3";
+                            break;
+                    }
+                    write(`"target": "${targetValue}"`);
+                    if (writeComma) {
+                        write(",");
+                    }
+                    writeLine();
+                    break;
+
+                case "newLine":
+                    var newlineValue: string;
+                    switch (compilerOptions.newLine) {
+                        case NewLineKind.CarriageReturnLineFeed:
+                            newlineValue = "CRLF";
+                            break;
+                        default:
+                            newlineValue = "LF";
+                            break;
+                    }
+                    write(`"newLine": "${newlineValue}"`);
+                    if (writeComma) {
+                        write(",");
+                    }
+                    writeLine();
+                    break;
+            }
+        }
+
+        function writeFileNames() {
+            write(`"files": [`);
+            writeLine();
+            increaseIndent();
+
+            forEach(fileNames, (fileName, index) => {
+                write(`"${fileName}"`);
+                if (index < fileNames.length - 1) {
+                    write(",");
+                }
+                writeLine();
+            });
+
+            decreaseIndent();
+            write("]");
+        }
+
+        function writeExcludeOptions() {
+            write(`"exclude": [`);
+            writeLine();
+            increaseIndent();
+
+            forEach(excludes, (exclude, index) => {
+                write(`"${exclude}"`);
+                if (index < excludes.length - 1) {
+                    write(",");
+                }
+                writeLine();
+            });
+
+            decreaseIndent();
+            write("]");
+        }
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {

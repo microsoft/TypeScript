@@ -386,49 +386,35 @@ namespace ts {
                 continue;
             }
 
-            if(ch === CharacterCodes.slash) {
-                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                    pos += 2;
-
-                    while (pos <= end) {
-                        if (isLineBreak(text.charCodeAt(pos))) {
-                            break;
-                        }
-                        pos++;
-                    }
-                    continue;
-                }
-                else if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
-                    pos += 2;
-
-                    while (pos <= end) {
-                        ch = text.charCodeAt(pos);
-
-                        if (ch === CharacterCodes.asterisk &&
-                            text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-
-                            pos += 2;
-                            break;
-                        }
-                        pos++;
-                    }
-                    continue;
-                }
-            }
-
-            if (pendingCommaInsertion) {
-                if (ch !== CharacterCodes.closeBracket &&
-                    ch !== CharacterCodes.closeBrace) {
-
-                    result += ',';
-                }
-                pendingCommaInsertion = false;
-            }
-
             switch (ch) {
-                case CharacterCodes.comma:
-                    pendingCommaInsertion = true;
-                    break;
+                case CharacterCodes.slash:
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                        pos += 2;
+
+                        while (pos <= end) {
+                            if (isLineBreak(text.charCodeAt(pos))) {
+                                break;
+                            }
+                            pos++;
+                        }
+                        break;
+                    }
+                    else if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
+                        pos += 2;
+
+                        while (pos <= end) {
+                            ch = text.charCodeAt(pos);
+
+                            if (ch === CharacterCodes.asterisk &&
+                                text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+
+                                pos += 2;
+                                break;
+                            }
+                            pos++;
+                        }
+                        break;
+                    }
 
                 case CharacterCodes.doubleQuote:
                     result += text[pos];

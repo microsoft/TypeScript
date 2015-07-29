@@ -143,7 +143,7 @@ var harnessSources = harnessCoreSources.concat([
     "convertToBase64.ts",
     "transpile.ts",
     "projectInit.ts",
-    "jsonWithCommentsAndTrailingCommas.ts"
+    "jsonWithComments.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
