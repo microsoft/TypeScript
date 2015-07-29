@@ -1,5 +1,7 @@
 //@filename: file.tsx
 //@jsx: preserve
+//@sourceMap: true
+
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
