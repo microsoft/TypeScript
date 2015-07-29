@@ -1,10 +1,8 @@
 tests/cases/compiler/assignmentCompat1.ts(4,1): error TS2322: Type '{ [index: string]: any; }' is not assignable to type '{ one: number; }'.
   Property 'one' is missing in type '{ [index: string]: any; }'.
-tests/cases/compiler/assignmentCompat1.ts(5,1): error TS2322: Type '{ one: number; }' is not assignable to type '{ [index: string]: any; }'.
-  Index signature is missing in type '{ one: number; }'.
 
 
-==== tests/cases/compiler/assignmentCompat1.ts (2 errors) ====
+==== tests/cases/compiler/assignmentCompat1.ts (1 errors) ====
     var x = {one: 1};
     var y: {[index:string]: any};
     
@@ -13,6 +11,3 @@ tests/cases/compiler/assignmentCompat1.ts(5,1): error TS2322: Type '{ one: numbe
 !!! error TS2322: Type '{ [index: string]: any; }' is not assignable to type '{ one: number; }'.
 !!! error TS2322:   Property 'one' is missing in type '{ [index: string]: any; }'.
     y = x;
-    ~
-!!! error TS2322: Type '{ one: number; }' is not assignable to type '{ [index: string]: any; }'.
-!!! error TS2322:   Index signature is missing in type '{ one: number; }'.
