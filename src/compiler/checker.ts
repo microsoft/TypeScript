@@ -6006,9 +6006,8 @@ namespace ts {
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
                     // `firstNarrowedTypeFromIfStatement` is only used when type is of union type.
-                    if (type.flags & TypeFlags.Union) {
-                        var firstNarrowedTypeFromIfStatement: Type;
-                    }
+                    let originalType = type;
+                    let firstNarrowedTypeFromIfStatement: Type;
 
                     loop: while (node.parent) {
                         let child = node;
@@ -6039,10 +6038,6 @@ namespace ts {
                                     //     }
                                     //
                                     if (!(type.flags & TypeFlags.Union)) {
-                                        // Get the original type again because we don't want to store it on a variable higher
-                                        // up to minimize memory allocation.
-                                        let originalType = getTypeOfSymbol(symbol);
-
                                         if (originalType.flags & TypeFlags.Union &&
                                             // Use the original type to check the narrowed type instead of the ongoing narrowing type.
                                             // This is to deal with cases like below:
