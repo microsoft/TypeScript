@@ -5276,7 +5276,7 @@ namespace ts {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
-                if (targetType) {
+                if (targetType && !(targetType.flags & TypeFlags.Any)) {
                     let sourceStringType = getIndexTypeOfType(source, IndexKind.String);
                     let sourceNumberType = getIndexTypeOfType(source, IndexKind.Number);
                     if (!(sourceStringType || sourceNumberType)) {
