@@ -4954,17 +4954,16 @@ namespace ts {
                 }
                 expandingFlags = saveExpandingFlags;
                 depth--;
-                if (result) {
+                if (result === TypeComparisonResult.True) {
+                    // If the result is True, the only thing that could possibly be in the tempCache
+                    // is the Maybe for the comparison we are currently doing. This follows from the
+                    // way we & and | the results.
+                    relation[id] = ReportedComparisonResult.Succeeded;
+                }
+                else if (result) {
+                    // The result is Maybe or InfinitelyExpanding
                     let tempCache = tempResultsStack[depth];
-                    if (result === TypeComparisonResult.True) {
-                        // If the result is True without assumptions and without use of the infinitely
-                        // expanding heuristic, we assume that all Maybe and InfinitelyExpanding results
-                        // at this level are universally true as well.
-                        for (let id in tempCache) {
-                            relation[id] = ReportedComparisonResult.Succeeded;
-                        }
-                    }
-                    else if (depth === 0) {
+                    if (depth === 0) {
                         // If something is true with assumptions, but there are no assumptions, then
                         // it is true without assumptions. This is where Maybe is distinguished from
                         // InfinitelyExpanding. The Maybe results are copied to the global cache because
