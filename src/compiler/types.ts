@@ -1551,7 +1551,7 @@ namespace ts {
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
         getSymbolAtLocation(node: Node): Symbol;
-        getLocalTargetOfAliasDeclaration(node: Declaration): Symbol;
+        getAliasedSymbol(s: Symbol): Symbol;
     }
 
     export const enum SymbolFlags {

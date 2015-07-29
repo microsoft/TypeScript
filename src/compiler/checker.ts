@@ -784,37 +784,6 @@ namespace ts {
             }
         }
 
-
-        // TODO: this needs to be rewriteen
-        function getLocalTargetOfAliasDeclaration(node: Declaration): Symbol {
-            switch (node.kind) {
-                case SyntaxKind.ImportEqualsDeclaration:
-                    //return ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) ? undefined :
-                    //    getSymbolOfPartOfRightHandSideOfImportEquals(, <ImportEqualsDeclaration>node);
-
-                    let entityName = <EntityName>(<ImportEqualsDeclaration>node).moduleReference
-                    if (entityName.kind === SyntaxKind.Identifier && isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
-                        entityName = <QualifiedName>entityName.parent;
-                    }
-                    // Check for case 1 and 3 in the above example
-                    if (entityName.kind === SyntaxKind.Identifier || entityName.parent.kind === SyntaxKind.QualifiedName) {
-                        return resolveEntityName(entityName, SymbolFlags.Namespace | SymbolFlags.Alias);
-                    }
-                    else {
-                        // Case 2 in above example
-                        // entityName.kind could be a QualifiedName or a Missing identifier
-                        Debug.assert(entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration);
-                        return resolveEntityName(entityName, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
-                    }
-
-                case SyntaxKind.ExportSpecifier:
-                    return (<ExportDeclaration>(<ExportSpecifier>node).parent.parent).moduleSpecifier ? undefined :
-                        resolveEntityName((<ExportSpecifier>node).propertyName || (<ExportSpecifier>node).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
-                case SyntaxKind.ExportAssignment:
-                    return resolveEntityName(<Identifier>(<ExportAssignment>node).expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
-            }
-        }
-
         function resolveSymbol(symbol: Symbol): Symbol {
             return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
         }
@@ -877,7 +846,7 @@ namespace ts {
         }
 
         // This function is only for imports with entity names
-        function getSymbolOfPartOfRightHandSideOfImportEquals(entityName: EntityName, importDeclaration?: ImportEqualsDeclaration): Symbol {
+        function getSymbolOfPartOfRightHandSideOfImportEquals(entityName: EntityName, importDeclaration?: ImportEqualsDeclaration, includeAliases?: boolean): Symbol {
             if (!importDeclaration) {
                 importDeclaration = <ImportEqualsDeclaration>getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
                 Debug.assert(importDeclaration !== undefined);
@@ -893,13 +862,13 @@ namespace ts {
             }
             // Check for case 1 and 3 in the above example
             if (entityName.kind === SyntaxKind.Identifier || entityName.parent.kind === SyntaxKind.QualifiedName) {
-                return resolveEntityName(entityName, SymbolFlags.Namespace);
+                return resolveEntityName(entityName, SymbolFlags.Namespace | (includeAliases ? SymbolFlags.Alias : SymbolFlags.None));
             }
             else {
-                // Case 2 in above example
+                // Case 2 in above example 
                 // entityName.kind could be a QualifiedName or a Missing identifier
                 Debug.assert(entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration);
-                return resolveEntityName(entityName, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+                return resolveEntityName(entityName, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | (includeAliases ? SymbolFlags.Alias : SymbolFlags.None));
             }
         }
 
@@ -13581,7 +13550,7 @@ namespace ts {
                 if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                     return node.parent.kind === SyntaxKind.ExportAssignment
                         ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
-                        : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node);
+                        : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node, /*importDeclaration*/ undefined, /*includeAliases*/ true);
                 }
                 else if (node.parent.kind === SyntaxKind.BindingElement &&
                         node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
@@ -14087,7 +14056,7 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 getSymbolAtLocation,
-                getLocalTargetOfAliasDeclaration,
+                getAliasedSymbol: resolveAlias,
             };
         }
 

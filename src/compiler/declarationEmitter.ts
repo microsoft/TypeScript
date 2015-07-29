@@ -1288,9 +1288,22 @@ namespace ts {
             }
 
             function collectAliasDeclaration(node: ImportOrExportSpecifier|ImportEqualsDeclaration|ExportAssignment, errorNode: Node) {
-                let target = resolver.getLocalTargetOfAliasDeclaration(node);
+                let target = getLocalTargetOfAliasDeclaration(node);
                 if (target) {
                     collectDeclarations(target, errorNode);
+                }
+            }
+
+            function getLocalTargetOfAliasDeclaration(node: Declaration): Symbol {
+                switch (node.kind) {
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return resolver.getSymbolAtLocation((<ImportEqualsDeclaration>node).moduleReference);
+                    case SyntaxKind.ExportSpecifier:
+                        let target = (<ExportDeclaration>(<ExportSpecifier>node).parent.parent).moduleSpecifier ? undefined :
+                            resolver.getSymbolAtLocation((<ExportSpecifier>node).propertyName || (<ExportSpecifier>node).name);
+                        return target && resolver.getAliasedSymbol(target);
+                    case SyntaxKind.ExportAssignment:
+                        return resolver.getSymbolAtLocation(<Identifier>(<ExportAssignment>node).expression);
                 }
             }
         }
