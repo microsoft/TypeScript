@@ -5,8 +5,7 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "out": "../../built/local/tsc.js",
-        "sourceMap": true,
-        "mapRoot": "file:///C:\\ts\\built\\local"
+        "sourceMap": true
     },
     "files": [
         "core.ts",
