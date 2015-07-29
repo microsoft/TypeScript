@@ -153,6 +153,7 @@ namespace ts {
                 let writer = createTextWriter("\n");
                 buildConfigFile(writer, compilerOptions, commandLine.fileNames, ["node_modules"]);
                 sys.writeFile(file, writer.getText());
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
             }
             return sys.exit(ExitStatus.Success);
         }

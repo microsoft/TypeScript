@@ -574,6 +574,7 @@ namespace ts {
         Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower: { code: 6067, category: DiagnosticCategory.Message, key: "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower." },
         Enables_experimental_support_for_ES7_async_functions: { code: 6068, category: DiagnosticCategory.Message, key: "Enables experimental support for ES7 async functions." },
         Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file: { code: 6069, category: DiagnosticCategory.Message, key: "Initializes a TypeScript project and creates a tsconfig.json file." },
+        Successfully_created_a_tsconfig_json_file: { code: 6070, category: DiagnosticCategory.Message, key: "Successfully created a tsconfig.json file." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },

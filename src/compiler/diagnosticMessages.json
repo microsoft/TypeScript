@@ -2286,6 +2286,10 @@
         "category": "Message",
         "code": 6069
     },
+    "Successfully created a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6070
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
