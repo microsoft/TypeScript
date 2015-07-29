@@ -27,10 +27,12 @@ TypeScript is a trademark of Microsoft Corporation.
   * [1.10 Modules](#1.10)
 * [2 Basic Concepts](#2)
   * [2.1 Grammar Conventions](#2.1)
-  * [2.2 Reserved Words](#2.2)
+  * [2.2 Names](#2.2)
+    * [2.2.1 Reserved Words](#2.2.1)
+    * [2.2.2 Property Names](#2.2.2)
+    * [2.2.3 Computed Property Names](#2.2.3)
   * [2.3 Declarations](#2.3)
   * [2.4 Scopes](#2.4)
-  * [2.5 Computed Names and Symbols](#2.5)
 * [3 Types](#3)
   * [3.1 The Any Type](#3.1)
   * [3.2 Primitive Types](#3.2)
@@ -178,6 +180,7 @@ TypeScript is a trademark of Microsoft Corporation.
     * [8.4.1 Member Variable Declarations](#8.4.1)
     * [8.4.2 Member Function Declarations](#8.4.2)
     * [8.4.3 Member Accessor Declarations](#8.4.3)
+    * [8.4.4 Dynamic Property Declarations](#8.4.4)
   * [8.5 Index Member Declarations](#8.5)
   * [8.6 Code Generation](#8.6)
     * [8.6.1 Classes Without Extends Clauses](#8.6.1)
@@ -786,9 +789,94 @@ The '*( Modified )*' annotation indicates that an existing grammar production is
 
 Similar to the ECMAScript grammar, if the phrase "*[no LineTerminator here]*" appears in the right-hand side of a production of the syntactic grammar, it indicates that the production is not a match if a *LineTerminator* occurs in the input stream at the indicated position.
 
-## <a name="2.2"/>2.2 Reserved Words
+## <a name="2.2"/>2.2 Names
 
-*TODO: Include [list of reserved words](https://github.com/Microsoft/TypeScript/issues/2536)*.
+A core purpose of the TypeScript compiler is to track the named entities in a program and validate that they are used according to their designated meaning. Names in TypeScript can be written in several ways, depending on context. Specifically, a name can be written as
+
+* an *IdentifierName*,
+* a *StringLiteral* in a property name,
+* a *NumericLiteral* in a property name, or
+* a *ComputedPropertyName* that denotes a well-known symbol ([2.2.3](#2.2.3)).
+
+Most commonly, names are written to conform with the *Identifier* production, which is any *IdentifierName* that isn't a reserved word.
+
+### <a name="2.2.1"/>2.2.1 Reserved Words
+
+The following keywords are reserved and cannot be used as an *Identifier*:
+
+```TypeScript
+break             case              catch             class  
+const             continue          debugger          default  
+delete            do                else              enum  
+export            extends           false             finally  
+for               function          if                import  
+in                instanceof        new               null  
+return            super             switch            this  
+throw             true              try               typeof  
+var               void              while             with
+```
+
+The following keywords cannot be used as identifiers in strict mode code, but are otherwise not restricted:
+
+```TypeScript
+implements        interface         let               package  
+private           protected         public            static  
+yield
+```
+
+The following keywords cannot be used as user defined type names, but are otherwise not restricted:
+
+```TypeScript
+any               boolean           number            string  
+symbol
+```
+
+The following keywords have special meaning in certain contexts, but are valid identifiers:
+
+```TypeScript
+abstract          as                async             await  
+constructor       declare           from              get  
+is                module            namespace         of  
+require           set               type
+```
+
+### <a name="2.2.2"/>2.2.2 Property Names
+
+The *PropertyName* production from the ECMAScript grammar is reproduced below:
+
+&emsp;&emsp;*PropertyName:*  
+&emsp;&emsp;&emsp;*LiteralPropertyName*  
+&emsp;&emsp;&emsp;*ComputedPropertyName*
+
+&emsp;&emsp;*LiteralPropertyName:*  
+&emsp;&emsp;&emsp;*IdentifierName*  
+&emsp;&emsp;&emsp;*StringLiteral*  
+&emsp;&emsp;&emsp;*NumericLiteral*
+
+&emsp;&emsp;*ComputedPropertyName:*  
+&emsp;&emsp;&emsp;`[`&emsp;*AssignmentExpression*&emsp;`]`
+
+A property name can be any identifier (including a reserved word), a string literal, a numeric literal, or a computed property name. String literals may be used to give properties names that are not valid identifiers, such as names containing blanks. Numeric literal property names are equivalent to string literal property names with the string representation of the numeric literal, as defined in the ECMAScript specification.
+
+### <a name="2.2.3"/>2.2.3 Computed Property Names
+
+ECMAScript 6 permits object literals and classes to declare members with computed property names. A computed property name specifies an expression that computes the actual property name at run-time. Because the final property name isn't known at compile-time, TypeScript can only perform limited checks for entities declared with computed property names. However, a subset of computed property names known as ***well-known symbols*** can be used anywhere a *PropertyName* is expected, including property names within types. A computed property name is a well-known symbol if it is of the form
+
+```TypeScript
+[ Symbol . xxx ]
+```
+
+In a well-known symbol, the identifier to the right of the dot must denote a property of the primitive type `symbol` in the type of the global variable 'Symbol', or otherwise an error occurs.
+
+In a *PropertyName* that specifies a *ComputedPropertyName*, the computed property name is required to denote a well-known symbol unless the property name occurs in a property assignment of an object literal ([4.5](#4.5)) or a property member declaration in a non-ambient class ([8.4](#8.4)).
+
+Below is an example of an interface that declares a property with a well-known symbol name:
+
+```TypeScript
+interface Iterable<T> {  
+    [Symbol.iterator](): Iterator<T>;  
+}
+```
 
 ## <a name="2.3"/>2.3 Declarations
 
@@ -920,14 +1008,6 @@ namespace M {
     console.log(x);     // 3  
 }
 ```
-
-## <a name="2.5"/>2.5 Computed Names and Symbols
-
-*TODO: [Computed names](https://github.com/Microsoft/TypeScript/issues/1082) and [Symbols](https://github.com/Microsoft/TypeScript/pull/1978)*.
-
-Computed names of the form `[Symbol.XXX]` are called well known symbols. Well known symbols are treated like special identifiers.
-
-A declaration that specifies a computed name that isn't well known doesn't introduce a property in its containing type. However, if the containing type has an indexer, the type of the property will be included in the union type for the indexer.
 
 <br/>
 
@@ -1707,7 +1787,7 @@ Here, 'g' and 'g.x' have the same recursive type, and likewise 'h' and 'h()' hav
 
 ## <a name="3.9"/>3.9 Specifying Members
 
-The members of an object type literal (section [3.8.3](#3.8.3)) are specified as a combination of property, call, construct, index, and method signatures.
+The members of an object type literal (section [3.8.3](#3.8.3)) are specified as a combination of property, call, construct, index, and method signatures. 
 
 ### <a name="3.9.1"/>3.9.1 Property Signatures
 
@@ -1716,17 +1796,10 @@ A property signature declares the name and type of a property member.
 &emsp;&emsp;*PropertySignature:*  
 &emsp;&emsp;&emsp;*PropertyName*&emsp;`?`*<sub>opt</sub>*&emsp;*TypeAnnotation<sub>opt</sub>*
 
-&emsp;&emsp;*PropertyName:*  
-&emsp;&emsp;&emsp;*IdentifierName*  
-&emsp;&emsp;&emsp;*StringLiteral*  
-&emsp;&emsp;&emsp;*NumericLiteral*
-
 &emsp;&emsp;*TypeAnnotation:*  
 &emsp;&emsp;&emsp;`:`&emsp;*Type*
 
-The *PropertyName* production, reproduced above from the ECMAScript grammar, permits a property name to be any identifier (including a reserved word), a string literal, or a numeric literal. String literals can be used to give properties names that are not valid identifiers, such as names containing blanks. Numeric literal property names are equivalent to string literal property names with the string representation of the numeric literal, as defined in the ECMAScript specification.
-
-The *PropertyName* of a property signature must be unique within its containing type. If the property name is followed by a question mark, the property is optional. Otherwise, the property is required.
+The *PropertyName* ([2.2.2](#2.2.2)) of a property signature must be unique within its containing type, and must denote a well-known symbol if it is a computed property name ([2.2.3](#2.2.3)). If the property name is followed by a question mark, the property is optional. Otherwise, the property is required.
 
 If a property signature omits a *TypeAnnotation*, the Any type is assumed.
 
@@ -1903,7 +1976,7 @@ A method signature is shorthand for declaring a property of a function type.
 &emsp;&emsp;*MethodSignature:*  
 &emsp;&emsp;&emsp;*PropertyName*&emsp;`?`*<sub>opt</sub>*&emsp;*CallSignature*
 
-If the identifier is followed by a question mark, the property is optional. Otherwise, the property is required. Only object type literals and interfaces can declare optional properties.
+If the *PropertyName* is a computed property name ([2.2.3](#2.2.3)), it must specify a well-known symbol. If the *PropertyName* is followed by a question mark, the property is optional. Otherwise, the property is required. Only object type literals and interfaces can declare optional properties.
 
 A method signature of the form
 
@@ -2392,6 +2465,12 @@ A get accessor declaration is processed in the same manner as an ordinary functi
 If a get accessor is declared for a property, the return type of the get accessor becomes the type of the property. If only a set accessor is declared for a property, the parameter type (which may be type Any if no type annotation is present) of the set accessor becomes the type of the property.
 
 When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.9.4](#3.9.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
+
+If the *PropertyName* of a property assignment is a computed property name that doesn't denote a well-known symbol ([2.2.3](#2.2.3)), the construct is considered a ***dynamic property assignment***. The following rules apply to dynamic property assignments:
+
+* A dynamic property assignment does not introduce a property in the type of the object literal.
+* The property name expression of a dynamic property assignment must be of type Any or the String, Number, or Symbol primitive type.
+* The name associated with a dynamic property assignment is considered to be a numeric property name if the property name expression is of type Any or the Number primitive type.
 
 ## <a name="4.6"/>4.6 Array Literals
 
@@ -4546,6 +4625,14 @@ A static member accessor declaration declares a property in the constructor func
 
 Get and set accessors are emitted as calls to 'Object.defineProperty' in the generated JavaScript, as described in section [8.6.1](#8.6.1).
 
+### <a name="8.4.4"/>8.4.4 Dynamic Property Declarations
+
+If the *PropertyName* of a property member declaration is a computed property name that doesn't denote a well-known symbol ([2.2.3](#2.2.3)), the construct is considered a ***dynamic property declaration***. The following rules apply to dynamic property declarations:
+
+* A dynamic property declaration does not introduce a property in the class instance type or constructor function type.
+* The property name expression of a dynamic property assignment must be of type Any or the String, Number, or Symbol primitive type.
+* The name associated with a dynamic property declarations is considered to be a numeric property name if the property name expression is of type Any or the Number primitive type.
+
 ## <a name="8.5"/>8.5 Index Member Declarations
 
 An index member declaration introduces an index signature (section [3.9.4](#3.9.4)) in the class instance type.
@@ -4804,6 +4891,8 @@ The body of an enum declaration defines zero or more enum members which are the 
 
 &emsp;&emsp;*EnumValue:*  
 &emsp;&emsp;&emsp;*AssignmentExpression*
+
+The *PropertyName* of an enum member cannot be a computed property name ([2.2.3](#2.2.3)).
 
 Enum members are either ***constant members*** or ***computed members***. Constant members have known constant values that are substituted in place of references to the members in the generated JavaScript code. Computed members have values that are computed at run-time and not known at compile-time. No substitution is performed for references to computed members.
 
