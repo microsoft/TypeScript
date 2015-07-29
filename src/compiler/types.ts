@@ -431,7 +431,7 @@ namespace ts {
 
 
     /* @internal */
-    export const enum RelationComparisonResult {
+    export const enum ReportedComparisonResult {
         Succeeded = 1, // Should be truthy
         Failed = 2,
         FailedAndReported = 3

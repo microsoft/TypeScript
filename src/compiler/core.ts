@@ -3,7 +3,7 @@
 /* @internal */
 namespace ts {
     /**
-     * Ternary values are defined such that
+     * TypeComparisonResult values are defined such that
      * x & y is False if either x or y is False.
      * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
      * x & y is True if both x and y are True.
@@ -11,7 +11,7 @@ namespace ts {
      * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
      * x | y is True if either x or y is True.
      */
-    export const enum Ternary {
+    export const enum TypeComparisonResult {
         False = 0,
         InfinitelyExpanding = 1,
         Maybe = 3,
