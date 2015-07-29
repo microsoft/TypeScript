@@ -4953,10 +4953,16 @@ namespace ts {
                 depth--;
                 if (result) {
                     let maybeCache = maybeStack[depth];
-                    if (result === Ternary.True || depth === 0) {
-                        copyMap(maybeCache, relation, RelationComparisonResult.Succeeded, Ternary.Maybe);
-                        if (depth > 0) {
-                            copyMap(maybeCache, maybeStack[depth - 1], Ternary.InfinitelyExpanding, Ternary.InfinitelyExpanding);
+                    if (result === Ternary.True) {
+                        for (let id in maybeCache) {
+                            relation[id] = RelationComparisonResult.Succeeded;
+                        }
+                    }
+                    else if (depth === 0) {
+                        for (let id in maybeCache) {
+                            if (maybeCache[id] === Ternary.Maybe) {
+                                relation[id] = RelationComparisonResult.Succeeded;
+                            }
                         }
                     }
                     else {

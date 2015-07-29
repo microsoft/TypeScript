@@ -309,13 +309,9 @@ namespace ts {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void;
-    export function copyMap<T, U>(source: Map<T>, target: Map<U>, newValue: U, compareValue: T): void;
-    export function copyMap<T, U>(source: Map<T>, target: Map<U | T>, newValue?: U, compareValue?: T): void {
+    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
         for (let p in source) {
-            if (arguments.length === 2 || source[p] === compareValue) {
-                target[p] = newValue || source[p];
-            }
+            target[p] = source[p];
         }
     }
 
