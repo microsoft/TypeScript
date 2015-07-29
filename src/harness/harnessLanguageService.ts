@@ -417,6 +417,7 @@ module Harness.LanguageService {
             var convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
                 importedFiles: [],
+                ambientExternalModules: [],
                 isLibFile: shimResult.isLibFile
             };
 

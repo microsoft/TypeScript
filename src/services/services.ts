@@ -121,6 +121,7 @@ namespace ts {
     export interface PreProcessedFileInfo {
         referencedFiles: FileReference[];
         importedFiles: FileReference[];
+        ambientExternalModules: string[];
         isLibFile: boolean
     }    
 
@@ -2007,6 +2008,7 @@ namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
         let referencedFiles: FileReference[] = [];
         let importedFiles: FileReference[] = [];
+        let ambientExternalModules: string[];
         let isNoDefaultLib = false;
 
         function processTripleSlashDirectives(): void {
@@ -2023,6 +2025,13 @@ namespace ts {
                 }
             });
         }
+        
+        function recordAmbientExternalModule(): void {
+            if (!ambientExternalModules) {
+                ambientExternalModules = [];
+            }
+            ambientExternalModules.push(scanner.getTokenValue());
+        }
 
         function recordModuleName() {
             let importPath = scanner.getTokenValue();
@@ -2033,7 +2042,7 @@ namespace ts {
                 end: pos + importPath.length
             });
         }
-
+        
         function processImport(): void {
             scanner.setText(sourceText);
             let token = scanner.scan();
@@ -2049,7 +2058,18 @@ namespace ts {
             //    export {a as b} from "mod"
 
             while (token !== SyntaxKind.EndOfFileToken) {
-                if (token === SyntaxKind.ImportKeyword) {
+                if (token === SyntaxKind.DeclareKeyword) {
+                    // declare module "mod"
+                    token = scanner.scan();
+                    if (token === SyntaxKind.ModuleKeyword) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.StringLiteral) {
+                            recordAmbientExternalModule();
+                            continue;
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.ImportKeyword) {
                     token = scanner.scan();
                     if (token === SyntaxKind.StringLiteral) {
                         // import "mod";
@@ -2057,7 +2077,7 @@ namespace ts {
                         continue;
                     }
                     else {
-                        if (token === SyntaxKind.Identifier) {
+                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
                             token = scanner.scan();
                             if (token === SyntaxKind.FromKeyword) {
                                 token = scanner.scan();
@@ -2114,7 +2134,7 @@ namespace ts {
                             token = scanner.scan();
                             if (token === SyntaxKind.AsKeyword) {
                                 token = scanner.scan();
-                                if (token === SyntaxKind.Identifier) {
+                                if (token === SyntaxKind.Identifier || isKeyword(token)) {
                                     token = scanner.scan();
                                     if (token === SyntaxKind.FromKeyword) {
                                         token = scanner.scan();
@@ -2170,7 +2190,7 @@ namespace ts {
             processImport();
         }
         processTripleSlashDirectives();
-        return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib };
+        return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules };
     }
 
     /// Helpers

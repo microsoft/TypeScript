@@ -903,7 +903,7 @@ namespace ts {
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                return resolveModuleName(fileName, moduleName, compilerOptions, this.host);
+                return resolveModuleName(normalizeSlashes(fileName), moduleName, compilerOptions, this.host);
             }); 
         }
 
@@ -915,6 +915,7 @@ namespace ts {
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
+                        ambientExternalModules: result.ambientExternalModules,
                         isLibFile: result.isLibFile
                     };
 
