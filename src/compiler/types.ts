@@ -1431,6 +1431,7 @@ namespace ts {
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
+        isOptionalParameter(node: ParameterDeclaration): boolean;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -1552,6 +1553,7 @@ namespace ts {
         getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
         getSymbolAtLocation(node: Node): Symbol;
         getAliasedSymbol(s: Symbol): Symbol;
+        isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1748,7 +1750,9 @@ namespace ts {
         ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
-        ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
+        /* @internal */
+        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
+        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1760,7 +1764,9 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
+        /* @internal */
+        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
     // Properties common to all types

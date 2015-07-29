@@ -6846,6 +6846,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
+            /**
+             * Removes all but the pinned or triple slash comments.
+             * @param ranges The array to be filtered
+             * @param onlyPinnedOrTripleSlashComments whether the filtering should be performed.
+             */
             function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
                 // If we're removing comments, then we want to strip out all but the pinned or
                 // triple slash comments.
