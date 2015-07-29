@@ -3,13 +3,14 @@
 /* @internal */
 namespace ts {
     /**
-     * TypeComparisonResult values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
+     * TypeComparisonResult values are listed from "least true" to "most true". They are defined
+     * such that & will take the "less true" of the two operands, and | will take the "more true"
+     * of the two operands. For example:
+     *
+     *  False & True === False
+     *  False | True === True
+     *  InfinitelyExpanding & True === InfinitelyExpanding
+     *  Maybe | False === Maybe
      */
     export const enum TypeComparisonResult {
         False = 0,

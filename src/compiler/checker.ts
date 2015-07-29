@@ -4616,7 +4616,7 @@ namespace ts {
             let errorInfo: DiagnosticMessageChain;
             let sourceStack: ObjectType[];
             let targetStack: ObjectType[];
-            let maybeStack: Map<TypeComparisonResult>[];
+            let tempResultsStack: Map<TypeComparisonResult>[];
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
@@ -4662,7 +4662,8 @@ namespace ts {
 
             // Compare two types and return
             // TypeComparisonResult.True if they are related with no assumptions,
-            // TypeComparisonResult.Maybe if they are related with assumptions of other relationships, or
+            // TypeComparisonResult.Maybe if they are related with assumptions of other relationships,
+            // TypeComparisonResult.InfinitelyExpanding if they are related by the infinitely expanding heuristic, or
             // TypeComparisonResult.False if they are not related.
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): TypeComparisonResult {
                 let result: TypeComparisonResult;
@@ -4906,9 +4907,11 @@ namespace ts {
                 }
                 if (depth > 0) {
                     for (let i = 0; i < depth; i++) {
-                        // If source and target are already being compared, consider them related with assumptions
-                        if (maybeStack[i][id]) {
-                            return maybeStack[i][id];
+                        // If source and target are already being compared, or they have been compared already
+                        // within the same top level comparison, but have not been cached globally, use the result
+                        // from the temp cache. This result is either Maybe or InfinitelyExpanding.
+                        if (tempResultsStack[i][id]) {
+                            return tempResultsStack[i][id];
                         }
                     }
                     if (depth === 100) {
@@ -4919,22 +4922,22 @@ namespace ts {
                 else {
                     sourceStack = [];
                     targetStack = [];
-                    maybeStack = [];
+                    tempResultsStack = [];
                     expandingFlags = 0;
                 }
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
-                maybeStack[depth] = {};
+                tempResultsStack[depth] = {};
                 depth++;
                 let saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
                 let result: TypeComparisonResult;
                 if (expandingFlags === 3) {
-                    maybeStack[depth - 1][id] = result = TypeComparisonResult.InfinitelyExpanding;
+                    tempResultsStack[depth - 1][id] = result = TypeComparisonResult.InfinitelyExpanding;
                 }
                 else {
-                    maybeStack[depth - 1][id] = TypeComparisonResult.Maybe;
+                    tempResultsStack[depth - 1][id] = TypeComparisonResult.Maybe;
                     result = propertiesRelatedTo(source, target, reportErrors);
                     if (result) {
                         result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
@@ -4952,21 +4955,32 @@ namespace ts {
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
-                    let maybeCache = maybeStack[depth];
+                    let tempCache = tempResultsStack[depth];
                     if (result === TypeComparisonResult.True) {
-                        for (let id in maybeCache) {
+                        // If the result is True without assumptions and without use of the infinitely
+                        // expanding heuristic, we assume that all Maybe and InfinitelyExpanding results
+                        // at this level are universally true as well.
+                        for (let id in tempCache) {
                             relation[id] = ReportedComparisonResult.Succeeded;
                         }
                     }
                     else if (depth === 0) {
-                        for (let id in maybeCache) {
-                            if (maybeCache[id] === TypeComparisonResult.Maybe) {
+                        // If something is true with assumptions, but there are no assumptions, then
+                        // it is true without assumptions. This is where Maybe is distinguished from
+                        // InfinitelyExpanding. The Maybe results are copied to the global cache because
+                        // they are assumption free. But the InfinitelyExpanding results get thrown away
+                        // because a different comparison might not consider the same pair of types
+                        // infinitely expanding.
+                        for (let id in tempCache) {
+                            if (tempCache[id] === TypeComparisonResult.Maybe) {
                                 relation[id] = ReportedComparisonResult.Succeeded;
                             }
                         }
                     }
                     else {
-                        copyMap(maybeCache, maybeStack[depth - 1]);
+                        // Remember the Maybe and InfinitelyExpanding results as long as they
+                        // lead to truthy results.
+                        copyMap(tempCache, tempResultsStack[depth - 1]);
                     }
                 }
                 else {
