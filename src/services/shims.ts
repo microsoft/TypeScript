@@ -297,7 +297,7 @@ namespace ts {
 
         public error(s: string): void {
             this.shimHost.error(s);
-        }        
+        }
 
         public getProjectVersion(): string {
             if (!this.shimHost.getProjectVersion) {
@@ -549,7 +549,7 @@ namespace ts {
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
             var newLine = this.getNewLine();
             return ts.realizeDiagnostics(diagnostics, newLine);
-        }        
+        }  
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(

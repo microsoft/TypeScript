@@ -127,7 +127,7 @@ namespace ts {
         importedFiles: FileReference[];
         ambientExternalModules: string[];
         isLibFile: boolean
-    }    
+    }
 
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
@@ -2097,7 +2097,7 @@ namespace ts {
                 end: pos + importPath.length
             });
         }
-        
+
         function processImport(): void {
             scanner.setText(sourceText);
             let token = scanner.scan();
