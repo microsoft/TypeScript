@@ -2479,10 +2479,10 @@ module FourSlash {
         // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
         if (containTSConfigJson(files)) {
             let directive = getNonFileNameOptionInFileList(files);
-            if (directive == null) {
+            if (!directive) {
                 directive = getNonFileNameOptionInObject(globalOptions);
             }
-            if (directive !== null) {
+            if (directive) {
                 throw Error("It is not allowed to use tsconfig.json along with directive '" + directive + "'");
             }
         }
@@ -2497,22 +2497,11 @@ module FourSlash {
     }
 
     function containTSConfigJson(files: FourSlashFile[]): boolean {
-        for (let i = 0; i < files.length; ++i) {
-            if (files[i].fileOptions['Filename'] === 'tsconfig.json') {
-                return true;
-            }
-        }
-        return false;
+        return ts.forEach(files, f => f.fileOptions['Filename'] === 'tsconfig.json');
     }
 
     function getNonFileNameOptionInFileList(files: FourSlashFile[]): string {
-        for (let i = 0; i < files.length; ++i) {
-            let option = getNonFileNameOptionInObject(files[i].fileOptions);
-            if (option !== null) {
-                return option;
-            }
-        }
-        return null;
+        return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
     }
 
     function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string {
@@ -2521,7 +2510,7 @@ module FourSlash {
                 return option;
             }
         }
-        return null;
+        return undefined;
     }
 
     const enum State {
