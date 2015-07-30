@@ -7324,10 +7324,9 @@ namespace ts {
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
          */
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
-            if (!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement)) {
-                // There is no such thing as an instance type for a non-class element
-                return undefined;
-            }
+            // There is no such thing as an instance type for a non-class element. This
+            // line shouldn't be hit.
+            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), 'Should not call getJsxElementInstanceType on non-class Element');
 
             let classSymbol = getJsxElementTagSymbol(node);
             if (classSymbol === unknownSymbol) {
@@ -7350,16 +7349,11 @@ namespace ts {
                 if (signatures.length === 0) {
                     // We found no signatures at all, which is an error
                     error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
-                    return undefined;
+                    return unknownType;
                 }
             }
 
-            // Check that the constructor/factory returns an object type
-            let returnType = getUnionType(signatures.map(s => getReturnTypeOfSignature(s)));
-            if (!isTypeAny(returnType) && !(returnType.flags & TypeFlags.ObjectType)) {
-                error(node.tagName, Diagnostics.The_return_type_of_a_JSX_element_constructor_must_return_an_object_type);
-                return undefined;
-            }
+            let returnType = getUnionType(signatures.map(getReturnTypeOfSignature));
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
             let elemClassType = getJsxGlobalElementClassType();
@@ -7420,7 +7414,7 @@ namespace ts {
                     let elemInstanceType = getJsxElementInstanceType(node);
 
                     if (isTypeAny(elemInstanceType)) {
-                        return links.resolvedJsxType = anyType;
+                        return links.resolvedJsxType = elemInstanceType;
                     }
 
                     let propsName = getJsxElementPropertiesName();
@@ -10437,9 +10431,17 @@ namespace ts {
             // TS 1.0 spec (April 2014): 8.3.2
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
-            if (getClassExtendsHeritageClauseElement(<ClassDeclaration>node.parent)) {
+            let containingClassDecl = <ClassDeclaration>node.parent;
+            if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
+                let containingClassSymbol = getSymbolOfNode(containingClassDecl);
+                let containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
+                let baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
 
                 if (containsSuperCall(node.body)) {
+                    if (baseConstructorType === nullType) {
+                        error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+                    }
+
                     // The first statement in the body of a constructor (excluding prologue directives) must be a super call
                     // if both of the following are true:
                     // - The containing class is a derived class.
@@ -10472,7 +10474,7 @@ namespace ts {
                         }
                     }
                 }
-                else {
+                else if (baseConstructorType !== nullType) {
                     error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
                 }
             }
@@ -10863,9 +10865,6 @@ namespace ts {
                 return;
             }
 
-            // Exports should be checked only if enclosing module contains both exported and non exported declarations.
-            // In case if all declarations are non-exported check is unnecessary.
-
             // if localSymbol is defined on node then node itself is exported - check is required
             let symbol = node.localSymbol;
             if (!symbol) {
@@ -10885,27 +10884,45 @@ namespace ts {
 
             // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace
             // to denote disjoint declarationSpaces (without making new enum type).
-            let exportedDeclarationSpaces: SymbolFlags = 0;
-            let nonExportedDeclarationSpaces: SymbolFlags = 0;
-            forEach(symbol.declarations, d => {
+            let exportedDeclarationSpaces = SymbolFlags.None;
+            let nonExportedDeclarationSpaces = SymbolFlags.None;
+            let defaultExportedDeclarationSpaces = SymbolFlags.None;
+            for (let d of symbol.declarations) {
                 let declarationSpaces = getDeclarationSpaces(d);
-                if (getEffectiveDeclarationFlags(d, NodeFlags.Export)) {
-                    exportedDeclarationSpaces |= declarationSpaces;
+                let effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, NodeFlags.Export | NodeFlags.Default);
+
+                if (effectiveDeclarationFlags & NodeFlags.Export) {
+                    if (effectiveDeclarationFlags & NodeFlags.Default) {
+                        defaultExportedDeclarationSpaces |= declarationSpaces;
+                    }
+                    else {
+                        exportedDeclarationSpaces |= declarationSpaces;
+                    }
                 }
                 else {
                     nonExportedDeclarationSpaces |= declarationSpaces;
                 }
-            });
+            }
 
-            let commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            // Spaces for anyting not declared a 'default export'.
+            let nonDefaultExportedDeclarationSpaces = exportedDeclarationSpaces | nonExportedDeclarationSpaces;
+            
+            let commonDeclarationSpacesForExportsAndLocals = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
+            let commonDeclarationSpacesForDefaultAndNonDefault = defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationSpaces;
 
-            if (commonDeclarationSpace) {
+            if (commonDeclarationSpacesForExportsAndLocals || commonDeclarationSpacesForDefaultAndNonDefault) {
                 // declaration spaces for exported and non-exported declarations intersect
-                forEach(symbol.declarations, d => {
-                    if (getDeclarationSpaces(d) & commonDeclarationSpace) {
+                for (let d of symbol.declarations) {
+                    let declarationSpaces = getDeclarationSpaces(d);
+                    
+                    // Only error on the declarations that conributed to the intersecting spaces.
+                    if (declarationSpaces & commonDeclarationSpacesForDefaultAndNonDefault) {
+                        error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, declarationNameToString(d.name));
+                    }
+                    else if (declarationSpaces & commonDeclarationSpacesForExportsAndLocals) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
                     }
-                });
+                }
             }
 
             function getDeclarationSpaces(d: Declaration): SymbolFlags {
