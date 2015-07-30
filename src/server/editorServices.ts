@@ -981,6 +981,7 @@ module ts.server {
             TabSize: 4,
             NewLineCharacter: ts.sys.newLine,
             ConvertTabsToSpaces: true,
+            CheckForDtsUpdates: true,
             InsertSpaceAfterCommaDelimiter: true,
             InsertSpaceAfterSemicolonInForStatements: true,
             InsertSpaceBeforeAndAfterBinaryOperators: true,

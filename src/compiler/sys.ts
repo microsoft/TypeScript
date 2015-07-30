@@ -8,7 +8,11 @@ module ts {
         write(s: string): void;
         readFile(fileName: string, encoding?: string): string;
         writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile? (fileName: string, callback: (fileName: string) => void): FileWatcher;
+        watchFile?(fileName: string, callback: (fileName: string) => void): FileWatcher;
+        getTempDir(): string;
+        /// Gets the last time the file was modified, in Unix Time
+        getFileWriteTime?(fileName: string): number;
+        https?(url: string, callback: (err: any, data: string) => void): void;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -52,6 +56,10 @@ module ts {
             var args: string[] = [];
             for (var i = 0; i < WScript.Arguments.length; i++) {
                 args[i] = WScript.Arguments.Item(i);
+            }
+
+            function getTempDir(): string {
+                return fso.GetSpecialFolder(2 /* TemporaryFolder */);
             }
 
             function readFile(fileName: string, encoding?: string): string {
@@ -143,6 +151,7 @@ module ts {
                 write(s: string): void {
                     WScript.StdOut.Write(s);
                 },
+                getTempDir,
                 readFile,
                 writeFile,
                 resolvePath(path: string): string {
@@ -179,6 +188,7 @@ module ts {
             var _fs = require("fs");
             var _path = require("path");
             var _os = require('os');
+            var _https = require('https');
 
             var platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -222,6 +232,10 @@ module ts {
                 _fs.writeFileSync(fileName, data, "utf8");
             }
 
+            function getTempDir(): string {
+                return _os.tmpdir();
+            }
+
             function readDirectory(path: string, extension?: string): string[] {
                 var result: string[] = [];
                 visitDirectory(path);
@@ -247,6 +261,20 @@ module ts {
                 }
             }
 
+            function getFileWriteTime(path: string): number {
+                return Math.floor(Date.parse(_fs.statSync(path).mtime) / 1000);
+            }
+
+            function https(url: string, callback: (err: any, data: string) => void) {
+                _https.get(url, (res: any) => {
+                    var body = '';
+                    res.on('data', (data: string) => {
+                        body = body + data;
+                    });
+                    res.on('end', () => callback(undefined, body));
+                }).on('error', (err: any) => callback(err, undefined));
+            }
+
             return {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -255,6 +283,7 @@ module ts {
                     // 1 is a standard descriptor for stdout
                     _fs.writeSync(1, s);
                 },
+                getTempDir,
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
@@ -273,6 +302,8 @@ module ts {
                         callback(fileName);
                     };
                 },
+                https,
+                getFileWriteTime,
                 resolvePath: function (path: string): string {
                     return _path.resolve(path);
                 },

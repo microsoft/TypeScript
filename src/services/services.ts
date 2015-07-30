@@ -1028,6 +1028,7 @@ module ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        CheckForDtsUpdates: boolean;
     }
 
     export interface FormatCodeOptions extends EditorOptions {
