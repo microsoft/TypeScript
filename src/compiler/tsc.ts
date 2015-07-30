@@ -356,7 +356,8 @@ namespace ts {
 
         function compileProgram(): ExitStatus {
             // First get any syntactic errors.
-            let diagnostics = program.getSyntacticDiagnostics();
+            let diagnostics = program.getSyntacticDiagnostics().concat(
+                program.getOptionsDiagnostics());
             reportDiagnostics(diagnostics);
 
             // If we didn't have any syntactic errors, then also try getting the global and
