@@ -130,7 +130,7 @@ namespace ts {
             moduleElementDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
-        }
+        };
 
         function hasInternalAnnotation(range: CommentRange) {
             let text = currentSourceFile.text;
@@ -772,7 +772,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isConst(node)) {
-                write("const ")
+                write("const ");
             }
             write("enum ");
             writeTextOfNode(currentSourceFile, node.name);
@@ -1351,7 +1351,7 @@ namespace ts {
 
                 return {
                     diagnosticMessage,
-                    errorNode: <Node>node.name || node,
+                    errorNode: <Node>node.name || node
                 };
             }
         }
@@ -1371,7 +1371,7 @@ namespace ts {
             else {
                 writeTextOfNode(currentSourceFile, node.name);
             }
-            if (node.initializer || hasQuestionToken(node)) {
+            if (resolver.isOptionalParameter(node)) {
                 write("?");
             }
             decreaseIndent();
@@ -1573,7 +1573,7 @@ namespace ts {
                 ? referencedFile.fileName // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),

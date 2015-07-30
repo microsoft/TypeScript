@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(8,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
   Types of property 'pop' are incompatible.
-    Type '() => string | number' is not assignable to type '() => number'.
-      Type 'string | number' is not assignable to type 'number'.
+    Type '() => number | string' is not assignable to type '() => number'.
+      Type 'number | string' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
   Property '0' is missing in type 'number[]'.
@@ -19,8 +19,8 @@ tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionConte
         ~~~~
 !!! error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
 !!! error TS2322:   Types of property 'pop' are incompatible.
-!!! error TS2322:     Type '() => string | number' is not assignable to type '() => number'.
-!!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:     Type '() => number | string' is not assignable to type '() => number'.
+!!! error TS2322:       Type 'number | string' is not assignable to type 'number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     
     // In a contextually typed array literal expression containing one or more spread elements,

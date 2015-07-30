@@ -41,6 +41,7 @@ export { a, b, c, d, e1, e2, f1, f2 };
 
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = "hello";
 });
 //// [t3.js]
