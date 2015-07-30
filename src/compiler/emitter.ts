@@ -4867,9 +4867,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
             
             function emitSerializedTypeNode(node: TypeNode) {
-                
-                if(!node) {
-                    return; //don't write anything on the stream when type is not defined
+                if (!node) {
+                    return;
                 }
                 
                 switch (node.kind) {
