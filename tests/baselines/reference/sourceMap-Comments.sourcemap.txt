@@ -241,18 +241,13 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                        //line comment 1
 1->^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        
-3 >                        ^^^^^^^^^^^^^^^^
-4 >                                        ^->
+2 >                        ^^^^^^^^^^^^^^^^
+3 >                                        ^->
 1->:
-  >                    //line comment 1
-  >                    //line comment 2
   >                    
-2 >                        
-3 >                        //line comment 1
-1->Emitted(14, 25) Source(11, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(14, 25) Source(9, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(14, 41) Source(9, 37) + SourceIndex(0) name (sas.tools.Test.doX)
+2 >                        //line comment 1
+1->Emitted(14, 25) Source(9, 21) + SourceIndex(0) name (sas.tools.Test.doX)
+2 >Emitted(14, 41) Source(9, 37) + SourceIndex(0) name (sas.tools.Test.doX)
 ---
 >>>                        //line comment 2
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -290,16 +285,12 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                        //a comment
 1->^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        
-3 >                        ^^^^^^^^^^^
+2 >                        ^^^^^^^^^^^
 1->:
-  >                    //a comment
   >                    
-2 >                        
-3 >                        //a comment
-1->Emitted(18, 25) Source(14, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(18, 25) Source(13, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(18, 36) Source(13, 32) + SourceIndex(0) name (sas.tools.Test.doX)
+2 >                        //a comment
+1->Emitted(18, 25) Source(13, 21) + SourceIndex(0) name (sas.tools.Test.doX)
+2 >Emitted(18, 36) Source(13, 32) + SourceIndex(0) name (sas.tools.Test.doX)
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
