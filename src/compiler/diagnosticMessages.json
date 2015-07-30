@@ -1689,9 +1689,13 @@
         "category": "Error",
         "code": 2650
     },
-    "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead.": {
+    "A member initializer in a 'const' enum declaration cannot reference members declared after it, including members defined in other 'const' enums.": {
         "category": "Error",
         "code": 2651
+    },    
+    "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead.": {
+        "category": "Error",
+        "code": 2652
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
