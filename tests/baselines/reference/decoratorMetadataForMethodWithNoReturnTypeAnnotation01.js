@@ -1,4 +1,4 @@
-//// [emitVoid0ReturnType.ts]
+//// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts]
 
 declare var decorator: any;
 
@@ -14,7 +14,7 @@ class MyClass {
 }
 
 
-//// [emitVoid0ReturnType.js]
+//// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js]
 var MyClass = (function () {
     function MyClass(test, test2) {
     }
