@@ -2,11 +2,9 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(7,61): error TS4002
 tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(43,71): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(62,65): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClassInPublicModule'.
 tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,75): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(118,65): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClassInPrivateModule'.
-tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(118,65): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts (6 errors) ====
+==== tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts (4 errors) ====
     class privateClass {
     }
     
@@ -133,10 +131,6 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(118,65): error TS40
         }
     
         export class publicClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
-                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClassInPrivateModule'.
-                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
             myMethod(val: T): T {
                 return val;
             }

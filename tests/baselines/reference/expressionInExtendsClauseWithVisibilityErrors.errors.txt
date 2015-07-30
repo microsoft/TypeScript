@@ -1,8 +1,7 @@
 tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(16,30): error TS4020: Extends clause references inaccessible name 'C'.
-tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(16,30): error TS4020: Extends clause references inaccessible name 'I'.
 
 
-==== tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts (2 errors) ====
+==== tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts (1 errors) ====
     
     interface I {
     }
@@ -21,8 +20,6 @@ tests/cases/compiler/expressionInExtendsClauseWithVisibilityErrors.ts(16,30): er
     export class MyClass extends getClass(2) <string, I> {
                                  ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4020: Extends clause references inaccessible name 'C'.
-                                 ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4020: Extends clause references inaccessible name 'I'.
     }
     
     

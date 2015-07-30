@@ -34,19 +34,9 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(285,58): error TS
 tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(288,47): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(290,34): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(321,24): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(321,24): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(321,41): error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(322,20): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(322,37): error TS4047: Return type of call signature references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(323,28): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(323,45): error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(345,47): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(349,34): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(388,71): error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
 
 
-==== tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts (46 errors) ====
+==== tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts (36 errors) ====
     class privateClass {
     }
     
@@ -440,22 +430,8 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(388,71): error TS
     
         export interface publicInterfaceWithPrivateTypeParameters {
             new <T extends privateClass>(): privateClass; 
-                           ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-                           ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateModule'.
-                                            ~~~~~~~~~~~~
-!!! error TS4044: Return type of construct signature references inaccessible name 'privateClass'.
             <T extends privateClass>(): privateClass;
-                       ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-                                        ~~~~~~~~~~~~
-!!! error TS4047: Return type of call signature references inaccessible name 'privateClass'.
             myMethod<T extends privateClass>(): privateClass; 
-                               ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
-                                                ~~~~~~~~~~~~
-!!! error TS4038: Return type of method 'myMethod' references inaccessible name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicTypeParameters {
@@ -478,14 +454,10 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(388,71): error TS
     
         export class publicClassWithWithPrivateTypeParameters {
             static myPublicStaticMethod<T extends privateClass>() { 
-                                                  ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
             }
             private static myPrivateStaticMethod<T extends privateClass>() {
             }
             myPublicMethod<T extends privateClass>() {  
-                                     ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
             }
             private myPrivateMethod<T extends privateClass>() {
             }
@@ -525,8 +497,6 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(388,71): error TS
         }
     
         export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() { 
-                                                                          ~~~~~~~~~~~~
-!!! error TS4002: Constraint of type parameter 'T' references inaccessible name 'privateClass'.
         }
     
         export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {

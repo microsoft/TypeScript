@@ -13,8 +13,8 @@
     ],
     "emittedFiles": [
         "private_m4.js",
-        "private_m4.d.ts",
         "useModule.js",
+        "private_m4.d.ts",
         "useModule.d.ts"
     ]
 }

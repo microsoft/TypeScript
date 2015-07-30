@@ -83,15 +83,15 @@ var arr6 = [c, d];  // (C | D)[]
 >d : D
 
 var arr7 = [c, d, e]; // (C | D)[]
->arr7 : (C | D)[]
->[c, d, e] : (C | D)[]
+>arr7 : (C | D | E)[]
+>[c, d, e] : (C | D | E)[]
 >c : C
 >d : D
 >e : E
 
 var arr8 = [c, e]; // C[]
->arr8 : C[]
->[c, e] : C[]
+>arr8 : (C | E)[]
+>[c, e] : (C | E)[]
 >c : C
 >e : E
 

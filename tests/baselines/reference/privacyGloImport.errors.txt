@@ -1,8 +1,12 @@
 tests/cases/compiler/privacyGloImport.ts(49,29): error TS4000: Import declaration 'm1_im2_private' references inaccessible name 'm1_M2_private'.
+tests/cases/compiler/privacyGloImport.ts(50,16): error TS4025: Type of variable 'm1_im2_private_v1_public' references inaccessible name 'c1'.
+tests/cases/compiler/privacyGloImport.ts(51,16): error TS4025: Type of variable 'm1_im2_private_v2_public' references inaccessible name 'c1'.
+tests/cases/compiler/privacyGloImport.ts(52,16): error TS4025: Type of variable 'm1_im2_private_v3_public' references inaccessible name 'f1'.
+tests/cases/compiler/privacyGloImport.ts(53,16): error TS4025: Type of variable 'm1_im2_private_v4_public' references inaccessible name 'c1'.
 tests/cases/compiler/privacyGloImport.ts(80,35): error TS4000: Import declaration 'm1_im2_public' references inaccessible name 'm1_M2_private'.
 
 
-==== tests/cases/compiler/privacyGloImport.ts (2 errors) ====
+==== tests/cases/compiler/privacyGloImport.ts (6 errors) ====
     module m1 {
         export module m1_M1_public {
             export class c1 {
@@ -55,9 +59,17 @@ tests/cases/compiler/privacyGloImport.ts(80,35): error TS4000: Import declaratio
                                 ~~~~~~~~~~~~~
 !!! error TS4000: Import declaration 'm1_im2_private' references inaccessible name 'm1_M2_private'.
         export var m1_im2_private_v1_public = m1_im2_private.c1;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'm1_im2_private_v1_public' references inaccessible name 'c1'.
         export var m1_im2_private_v2_public = new m1_im2_private.c1();
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'm1_im2_private_v2_public' references inaccessible name 'c1'.
         export var m1_im2_private_v3_public = m1_im2_private.f1;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'm1_im2_private_v3_public' references inaccessible name 'f1'.
         export var m1_im2_private_v4_public = m1_im2_private.f1();
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4025: Type of variable 'm1_im2_private_v4_public' references inaccessible name 'c1'.
         var m1_im2_private_v1_private = m1_im2_private.c1;
         var m1_im2_private_v2_private = new m1_im2_private.c1();
         var m1_im2_private_v3_private = m1_im2_private.f1;

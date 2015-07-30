@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringInArray.ts ===
 var x = [1, 2, `abc${ 123 }def`];
->x : (string | number)[]
->[1, 2, `abc${ 123 }def`] : (string | number)[]
+>x : (number | string)[]
+>[1, 2, `abc${ 123 }def`] : (number | string)[]
 >1 : number
 >2 : number
 >`abc${ 123 }def` : string

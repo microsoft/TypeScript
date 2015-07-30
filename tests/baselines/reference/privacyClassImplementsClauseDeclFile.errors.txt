@@ -2,14 +2,11 @@ tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts(14,77): 
 tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(15,77): error TS4019: Implements clause references inaccessible name 'privateInterfaceInPublicModule'.
 tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(20,79): error TS4019: Implements clause references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(23,78): error TS4019: Implements clause references inaccessible name 'privateInterfaceInPublicModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(41,77): error TS4019: Implements clause references inaccessible name 'privateInterfaceInPrivateModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(41,77): error TS4019: Implements clause references inaccessible name 'privateModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(46,79): error TS4019: Implements clause references inaccessible name 'privateModule'.
 tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(63,65): error TS4019: Implements clause references inaccessible name 'privateInterface'.
 tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(68,75): error TS4019: Implements clause references inaccessible name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts (8 errors) ====
+==== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts (5 errors) ====
     
     export module publicModule {
         export interface publicInterfaceInPublicModule {
@@ -57,17 +54,11 @@ tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(68,7
         export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
         }
         export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule { 
-                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4019: Implements clause references inaccessible name 'privateInterfaceInPrivateModule'.
-                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4019: Implements clause references inaccessible name 'privateModule'.
         }
     
         class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
         }
         export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
-                                                                                  ~~~~~~~~~~~~~
-!!! error TS4019: Implements clause references inaccessible name 'privateModule'.
         }
     }
     
