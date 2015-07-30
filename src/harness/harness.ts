@@ -673,7 +673,7 @@ module Harness {
             };
             export let listFiles = Utils.memoize(_listFilesImpl);
 
-            export let log = s => console.log(s);
+            export let log = (s: string) => console.log(s);
 
             export function readFile(file: string) {
                 let response = Http.getFileFromServerSync(serverRoot + file);
