@@ -37,6 +37,11 @@
         "tslint": "latest"
     },
     "scripts": {
-        "test": "jake runtests"
+        "pretest": "jake tests",
+        "test": "jake runtests",
+        "build": "npm run build:compiler && npm run build:tests",
+        "build:compiler": "jake local",
+        "build:tests": "jake tests",
+        "clean": "jake clean"
     }
 }
