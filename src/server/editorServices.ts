@@ -803,9 +803,6 @@ namespace ts.server {
             } else {
                 this.log("no config file");
             }
-            if (configFileName) {
-                configFileName = getAbsolutePath(configFileName, searchPath);
-            }
             if (configFileName && (!this.configProjectIsActive(configFileName))) {
                 var configResult = this.openConfigFile(configFileName, fileName);
                 if (!configResult.success) {
@@ -910,7 +907,8 @@ namespace ts.server {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.readConfigFile(configFilename);
+            var contents = this.host.readFile(configFilename)
+            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
             if (rawConfig.error) {
                 return rawConfig.error;
             }

@@ -261,26 +261,25 @@ namespace ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            let children = this.getChildren();
-            for (let child of children) {
-                if (child.kind < SyntaxKind.FirstNode) {
-                    return child;
-                }
-
-                return child.getFirstToken(sourceFile);
+            let children = this.getChildren(sourceFile);
+            if (!children.length) {
+                return undefined;
             }
+
+            let child = children[0];
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getFirstToken(sourceFile);
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
             let children = this.getChildren(sourceFile);
-            for (let i = children.length - 1; i >= 0; i--) {
-                let child = children[i];
-                if (child.kind < SyntaxKind.FirstNode) {
-                    return child;
-                }
 
-                return child.getLastToken(sourceFile);
+            let child = lastOrUndefined(children);
+            if (!child) { 
+                return undefined; 
             }
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
     }
 
@@ -1767,18 +1766,31 @@ namespace ts {
         sourceFile.version = version;
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
-
+    
+    export interface TranspileOptions {
+        compilerOptions?: CompilerOptions;
+        fileName?: string;
+        reportDiagnostics?: boolean;
+        moduleName?: string;
+    }
+    
+    export interface TranspileOutput {
+        outputText: string;
+        diagnostics?: Diagnostic[];
+        sourceMapText?: string;
+    }
+    
     /*
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
-     * Extra compiler options that will unconditionally be used bu this function are:
+     * Extra compiler options that will unconditionally be used by this function are:
      * - isolatedModules = true
      * - allowNonTsExtensions = true
      * - noLib = true
      * - noResolve = true
-     */
-    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
-        let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
+     */    
+    export function transpileModule(input: string, transpileOptions?: TranspileOptions): TranspileOutput {
+        let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
@@ -1794,23 +1806,30 @@ namespace ts {
         options.noResolve = true;
 
         // Parse
-        let inputFileName = fileName || "module.ts";
+        let inputFileName = transpileOptions.fileName || "module.ts";
         let sourceFile = createSourceFile(inputFileName, input, options.target);
-        if (moduleName) {
-            sourceFile.moduleName = moduleName;
+        if (transpileOptions.moduleName) {
+            sourceFile.moduleName = transpileOptions.moduleName;
         }
 
         let newLine = getNewLineCharacter(options);
 
         // Output
         let outputText: string;
+        let sourceMapText: string;
 
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
             getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
-                Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
-                outputText = text;
+                if (fileExtensionIs(name, ".map")) {
+                    Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
+                    sourceMapText = text;
+                }
+                else {
+                    Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                    outputText = text;
+                }
             },
             getDefaultLibFileName: () => "lib.d.ts",
             useCaseSensitiveFileNames: () => false,
@@ -1820,16 +1839,29 @@ namespace ts {
         };
 
         let program = createProgram([inputFileName], options, compilerHost);
-
-        addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
-        addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
-
+        
+        let diagnostics: Diagnostic[];
+        if (transpileOptions.reportDiagnostics) {
+            diagnostics = [];
+            addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
+            addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
+        }
         // Emit
         program.emit();
 
         Debug.assert(outputText !== undefined, "Output generation failed");
 
-        return outputText;
+        return { outputText, diagnostics, sourceMapText };        
+    }
+
+    /*
+     * This is a shortcut function for transpileModule - it accepts transpileOptions as parameters and returns only outputText part of the result. 
+     */
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
+        let output = transpileModule(input, { compilerOptions, fileName, reportDiagnostics: !!diagnostics, moduleName });
+        // addRange correctly handles cases when wither 'from' or 'to' argument is missing
+        addRange(diagnostics, output.diagnostics);
+        return output.outputText;
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {

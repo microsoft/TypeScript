@@ -493,7 +493,7 @@ module Harness {
             export let readFile: typeof IO.readFile = ts.sys.readFile;
             export let writeFile: typeof IO.writeFile = ts.sys.writeFile;
             export let fileExists: typeof IO.fileExists = fs.existsSync;
-            export let log: typeof IO.log = console.log;
+            export let log: typeof IO.log = s => console.log(s);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -673,7 +673,7 @@ module Harness {
             };
             export let listFiles = Utils.memoize(_listFilesImpl);
 
-            export let log = console.log;
+            export let log = (s: string) => console.log(s);
 
             export function readFile(file: string) {
                 let response = Http.getFileFromServerSync(serverRoot + file);
@@ -1451,7 +1451,7 @@ module Harness {
         }
 
         export function isJSMap(fileName: string) {
-            return stringEndsWith(fileName, '.js.map');
+            return stringEndsWith(fileName, '.js.map') || stringEndsWith(fileName, '.jsx.map');
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
