@@ -6,9 +6,13 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(path: string, encoding?: string): string;
-        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
+        readFile(fileName: string, encoding?: string): string;
+        writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void;
+        watchFile?(fileName: string, callback: (fileName: string) => void): FileWatcher;
+        getTempDir(): string;
+        /// Gets the last time the file was modified, in Unix Time
+        getFileWriteTime?(fileName: string): number;
+        https?(url: string, callback: (err: any, data: string) => void): void;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -57,6 +61,10 @@ namespace ts {
             let args: string[] = [];
             for (let i = 0; i < WScript.Arguments.length; i++) {
                 args[i] = WScript.Arguments.Item(i);
+            }
+
+            function getTempDir(): string {
+                return fso.GetSpecialFolder(2 /* TemporaryFolder */);
             }
 
             function readFile(fileName: string, encoding?: string): string {
@@ -157,6 +165,7 @@ namespace ts {
                 write(s: string): void {
                     WScript.StdOut.Write(s);
                 },
+                getTempDir,
                 readFile,
                 writeFile,
                 resolvePath(path: string): string {
@@ -242,6 +251,10 @@ namespace ts {
                 return useCaseSensitiveFileNames ? path.toLowerCase() : path;
             }
 
+            function getTempDir(): string {
+                return _os.tmpdir();
+            }
+
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 let result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
@@ -288,8 +301,22 @@ namespace ts {
                     });
                     response.on('end', () => callback && callback(undefined, body));
                 });
-                req.on('error', (err: any) => callback && callback(err, undefined)); 
+                req.on('error', (err: any) => callback && callback(err, undefined));
                 req.write(data);
+            }
+            
+            function getFileWriteTime(path: string): number {
+                return Math.floor(Date.parse(_fs.statSync(path).mtime) / 1000);
+            }
+
+            function https(url: string, callback: (err: any, data: string) => void) {
+                _https.get(url, (res: any) => {
+                    var body = '';
+                    res.on('data', (data: string) => {
+                        body = body + data;
+                    });
+                    res.on('end', () => callback(undefined, body));
+                }).on('error', (err: any) => callback(err, undefined));
             }
 
             return {
@@ -307,6 +334,7 @@ namespace ts {
                         toWrite -= written;
                     }
                 },  
+                getTempDir,
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
@@ -325,6 +353,8 @@ namespace ts {
                         callback(fileName);
                     };
                 },
+                https,
+                getFileWriteTime,
                 resolvePath: function (path: string): string {
                     return _path.resolve(path);
                 },

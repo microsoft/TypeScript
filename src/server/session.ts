@@ -97,6 +97,7 @@ module ts.server {
         export const Saveto = "saveto";
         export const SignatureHelp = "signatureHelp";
         export const TypeDefinition = "typeDefinition";
+        export const UpdateDts = "updatedts";
         export const ProjectInfo = "projectInfo";
         export const Unknown = "unknown";
     }
@@ -200,6 +201,42 @@ module ts.server {
     export interface ServerHost extends ts.System {
     }
 
+    interface DtsHistoryRecord {
+        /// Filename
+        n: string;
+        /// Path (the parent folder of this file)
+        p: string;
+        /// History (list of dtsHash values; newest in index 0)
+        h: string[];
+    }
+    type DtsHistory = DtsHistoryRecord[];
+
+    function dtsHash(s: string) {
+        // This is a whitespace-ignoring hash function so we can still correctly detect
+        // .d.ts files that have been auto-formatted or line-ending-normalized
+        var h = 0;
+        for (var i = 0, n = s.length; i < n; i++) {
+            var c = s.charCodeAt(i);
+            switch (c) {
+                // Characters we'll ignore
+                case 0x00: // Null
+                case 0x09: // Tab
+                case 0x0A: // LF
+                case 0x0D: // CR
+                case 0x20: // Space
+                case 0xFEFF: // BOM bytes
+                    break;
+                default:
+                    var high = h & 0xFF000000;
+                    h = (h << 8) & 0x7FFFFFFF;
+                    h = h ^ (high >> 24);
+                    h = h ^ c;
+                    break;
+            }
+        }
+        return h.toString(36);
+    }
+
     export class Session {
         projectService: ProjectService;
         pendingOperation = false;
@@ -208,6 +245,7 @@ module ts.server {
         errorTimer: any; /*NodeJS.Timer | number*/
         immediateId: any;
         changeSeq = 0;
+        dtsVersionHistory: DtsHistory = undefined;
 
         constructor(
             private host: ServerHost, 
@@ -216,7 +254,7 @@ module ts.server {
             private logger: Logger
         ) {
             this.projectService =
-            new ProjectService(host, logger, (eventName, project, fileName) => {
+                new ProjectService(host, logger, (eventName, project, fileName) => {
                 this.handleEvent(eventName, project, fileName);
             });
         }
@@ -312,9 +350,109 @@ module ts.server {
             }
         }
 
+        static matchFileByHash(file: string, index: DtsHistory, host: System): { fileName: string; path: string; commitsBehind: number; } {
+            // See if a file with this name is in the index
+            var lastSlash = Math.max(file.lastIndexOf('/'), file.lastIndexOf('\\'), -1);
+            var filenameOnly = file.substr(lastSlash + 1);
+            for (var i = 0; i < index.length; i++) {
+                if (index[i].n === filenameOnly) {
+                    // Filename match; calculate its hash and see if it's from a non-current version
+                    var crc = dtsHash(host.readFile(file, 'utf-8'));
+                    for (var j = 0; j < index[i].h.length; j++) {
+                        if (crc === index[i].h[j]) {
+                            return { fileName: filenameOnly, path: index[i].p, commitsBehind: j };
+                        }
+                    }
+                    break;
+                }
+            }
+            return undefined;
+        }
+
+        private fetchingDts = false;
+        upToDateCheck(file: string, project: Project) {
+            if (this.projectService.getFormatCodeOptions(ts.normalizePath(file)).CheckForDtsUpdates === false) return;
+
+            var doUpToDateCheck = () => {
+                try {
+                    var info = Session.matchFileByHash(file, this.dtsVersionHistory, this.host);
+                    if (info && info.commitsBehind > 0) {
+                        // Not up to date
+                        this.event({
+                            file: file, diagnostics: [{
+                                start: { line: 1, offset: 0 },
+                                end: { line: 2, offset: 0 },
+                                text: 'File ' + file + ' is ' + info.commitsBehind + ' commits out-of-date'
+                            }]
+                        }, 'infoDiag');
+                    }
+                } catch (err) {
+                    this.logError(err, "up-to-date check");
+                }
+            };
+
+            try {
+                if (this.host.https && /\.d\.ts$/i.test(file)) { // Is this a .d.ts file?
+                    if (this.dtsVersionHistory === undefined && !this.fetchingDts) { // Do we need to download the version history?
+                        var filename = this.host.getTempDir() + '/dts-versions.json';
+                        if (this.host.fileExists(filename)) {
+                            // Read index from disk
+                            this.dtsVersionHistory = JSON.parse(this.host.readFile(filename, 'utf-8'));
+                            doUpToDateCheck();
+                        } else {
+                            // Fetch from web
+                            this.fetchingDts = true;
+                            var indexUrl = 'https://typescript-dts.azurewebsites.net/index/';
+                            if (this.host.getFileWriteTime) {
+                                // Use file timestamp to avoid re-downloading entire index our copy is up-to-date
+                                indexUrl = indexUrl + this.host.getFileWriteTime(filename);
+                            }
+                            this.host.https(indexUrl, (err, data) => {
+                                this.fetchingDts = false;
+                                if (err) {
+                                    // Define this so we don't retry continuously
+                                    this.dtsVersionHistory = [];
+                                } else {
+                                    if (data.length > 0) { // length will be 0 if we're up-to-date
+                                        this.host.writeFile(filename, data);
+                                        this.dtsVersionHistory = JSON.parse(data);
+                                    }
+                                }
+                            });
+                        }
+                    } else if (this.dtsVersionHistory) {
+                        doUpToDateCheck();
+                    }
+                }
+            }
+            catch (err) {
+                this.logError(err, "up-to-date check");
+            }
+        }
+
+        updateDts(line: number, offset: number, fileName: string) {
+            if (this.projectService.getFormatCodeOptions(ts.normalizePath(fileName)).CheckForDtsUpdates === false) return;
+
+            var fileInfo = Session.matchFileByHash(fileName, this.dtsVersionHistory, this.host);
+            if (fileInfo) {
+                // Note: trailing slash is important!
+                var urlUrl = 'https://typescript-dts.azurewebsites.net/urlOf/' + fileInfo.path + '/' + fileInfo.fileName + '/';
+                this.host.https(urlUrl, (err, downloadUrl) => {
+                    this.host.https(downloadUrl, (err, fileData) => {
+                        this.host.writeFile(fileName, fileData || err);
+                    });
+                });
+            } else {
+                // File was probably modified into an unrecognized one?
+                var failReason = this.dtsVersionHistory ? 'File was not a recognized hash' : 'DTS version history not available';
+                this.logError(new Error(failReason), 'up-to-date check');
+            }
+        }
+
         errorCheck(file: string, project: Project) {
             this.syntacticCheck(file, project);
             this.semanticCheck(file, project);
+            this.upToDateCheck(file, project);
         }
 
         updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
@@ -345,6 +483,7 @@ module ts.server {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
+                            this.upToDateCheck(checkSpec.fileName, checkSpec.project);
                             this.immediateId = undefined;
                             if (checkList.length > index) {
                                 this.errorTimer = setTimeout(checkOne, followMs);
@@ -656,7 +795,8 @@ module ts.server {
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                                 SendMetrics: formatOptions.SendMetrics,
-                                TelemetryUserID: formatOptions.TelemetryUserID
+                                TelemetryUserID: formatOptions.TelemetryUserID,
+                                CheckForDtsUpdates: formatOptions.CheckForDtsUpdates
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
@@ -1027,6 +1167,10 @@ module ts.server {
                 var navBarArgs = <protocol.FileRequestArgs>request.arguments;
                 return {response: this.getNavigationBarItems(navBarArgs.file)};
             },
+            [CommandNames.UpdateDts]: (request: protocol.Request) => {
+                var updateDtsArgs = <protocol.UpdateDtsArgs>request.arguments;
+                return { response: this.updateDts(updateDtsArgs.line, updateDtsArgs.offset, updateDtsArgs.file)};
+            },
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                 return {response: this.getOccurrences(line, offset, fileName)};
@@ -1091,3 +1235,4 @@ module ts.server {
         }
     }
 }
+

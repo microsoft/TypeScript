@@ -1128,6 +1128,7 @@ namespace ts {
         ConvertTabsToSpaces: boolean;
         SendMetrics: boolean;
         TelemetryUserID: string;
+        CheckForDtsUpdates: boolean;
     }
 
     export interface FormatCodeOptions extends EditorOptions {
