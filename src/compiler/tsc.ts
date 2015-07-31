@@ -359,19 +359,18 @@ namespace ts {
             
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
-            reportDiagnostics(diagnostics);
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
                 diagnostics = program.getGlobalDiagnostics();
-                reportDiagnostics(diagnostics);
 
                 if (diagnostics.length === 0) {
                     diagnostics = program.getSemanticDiagnostics();
-                    reportDiagnostics(diagnostics);
                 }
             }
+
+            reportDiagnostics(diagnostics);
 
             // If the user doesn't want us to emit, then we're done at this point.
             if (compilerOptions.noEmit) {
