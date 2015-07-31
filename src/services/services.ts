@@ -3393,6 +3393,7 @@ namespace ts {
                         case SyntaxKind.SlashToken:
                         case SyntaxKind.Identifier:
                         case SyntaxKind.JsxAttribute:
+                        case SyntaxKind.JsxSpreadAttribute:
                             if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
@@ -3402,7 +3403,7 @@ namespace ts {
                         // its parent is a JsxExpression, whose parent is a JsxAttribute,
                         // whose parent is a JsxOpeningLikeElement
                         case SyntaxKind.StringLiteral:
-                            if (parent && parent.kind === SyntaxKind.JsxAttribute) {
+                            if (parent && ((parent.kind === SyntaxKind.JsxAttribute) || (parent.kind === SyntaxKind.JsxSpreadAttribute))) {
                                 return <JsxOpeningLikeElement>parent.parent;
                             }
 
@@ -3412,9 +3413,13 @@ namespace ts {
                             if (parent &&
                                 parent.kind === SyntaxKind.JsxExpression && 
                                 parent.parent && 
-                                parent.parent.kind === SyntaxKind.JsxAttribute) {
+                                (parent.parent.kind === SyntaxKind.JsxAttribute)) {
 
                                 return <JsxOpeningLikeElement>parent.parent.parent;
+                            }
+
+                            if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
                             }
 
                             break;
