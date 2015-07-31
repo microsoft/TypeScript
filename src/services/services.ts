@@ -3392,16 +3392,24 @@ namespace ts {
                         case SyntaxKind.LessThanSlashToken:
                         case SyntaxKind.SlashToken:
                         case SyntaxKind.Identifier:
-                            if(parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
+                        case SyntaxKind.JsxAttribute:
+                            if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
                             break;
 
+                        // The context token is the closing } or " of an attribute, which means
+                        // its parent is a JsxExpression, whose parent is a JsxAttribute,
+                        // whose parent is a JsxOpeningLikeElement
+                        case SyntaxKind.StringLiteral:
+                            if (parent && parent.kind === SyntaxKind.JsxAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
+
+                            break;
+
                         case SyntaxKind.CloseBraceToken:
-                            // The context token is the closing } of an attribute, which means
-                            // its parent is a JsxExpression, whose parent is a JsxAttribute,
-                            // whose parent is a JsxOpeningLikeElement
-                            if(parent &&
+                            if (parent &&
                                 parent.kind === SyntaxKind.JsxExpression && 
                                 parent.parent && 
                                 parent.parent.kind === SyntaxKind.JsxAttribute) {
