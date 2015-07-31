@@ -17,5 +17,4 @@
 //// var x = <[|MyC/**/lass|] name='hello'></[|MyClass|]>;
 
 goTo.marker();
-debugger;
 verify.renameLocations(false, false);
