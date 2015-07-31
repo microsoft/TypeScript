@@ -1090,7 +1090,7 @@ namespace ts {
 
     export interface TextInsertion {
         newText: string;
-        cursorOffset: number;
+        offsetInNewText: number;
     }
 
     export interface RenameLocation {
@@ -6801,7 +6801,7 @@ namespace ts {
          * * outside of comments, statements, and expressions, and
          * * preceding a function declaration.
          * 
-         * In VS, we additionally check that:
+         * Hosts should ideally check that:
          * * The line is all whitespace up to 'position' before performing the insertion.
          * * If the keystroke sequence "/\*\*" induced the call, we also check that the next
          * non-whitespace character is '*', which (approximately) indicates whether we added 
@@ -6811,27 +6811,25 @@ namespace ts {
          * be performed.
          */
         function getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion {
-            // Indicates the position is not appropriate to insert a comment (eg: a string or a regex).
-            const nullResult: TextInsertion = { newText: "", cursorOffset: 0 };
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             // Check if in a context where we don't want to perform any insertion
             if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
-                return nullResult;
+                return undefined;
             }
 
-            let nodeAtPos = getTokenAtPosition(sourceFile, position);
-            let nodeStart = nodeAtPos.getStart()
-            if (!nodeAtPos || nodeStart < position) {
-                return nullResult;
+            let tokenAtPos = getTokenAtPosition(sourceFile, position);
+            let tokenStart = tokenAtPos.getStart()
+            if (!tokenAtPos || tokenStart < position) {
+                return undefined;
             }
 
-            let containingFunction = <FunctionDeclaration>getAncestor(nodeAtPos, SyntaxKind.FunctionDeclaration);
+            let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
 
             if (!containingFunction || containingFunction.getStart() < position) {
-                return nullResult;
+                return undefined;
             }
 
             let parameters = containingFunction.parameters;
@@ -6840,19 +6838,21 @@ namespace ts {
 
             let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).match(/\s*/).toString();
 
+            const newLine = host.getNewLine();
+
             let docParams = parameters.map((p, index) =>
-                indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + "\n");
+                indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + newLine);
 
             let result = 
-                /* opening comment */               "/**\n" + 
-                /* first line for function info */  indentationStr + " * \n" + 
+                /* opening comment */               "/**" + newLine + 
+                /* first line for function info */  indentationStr + " * " + newLine + 
                 /* paramters */                     docParams.reduce((prev, cur) => prev + cur, "") +
                 /* closing comment */               indentationStr + " */" +
-                /* newline if at decl start */      (nodeStart === position ? "\n" + indentationStr : "");
+                /* newline if at decl start */      (tokenStart === position ? newLine + indentationStr : "");
             
-            let cursorOffset = /* "/**\n" */ 4 + indentationStr.length + /* " * " */ 3;
+            let cursorOffset = /* "/**" */ 3 + /* newLine */ + newLine.length + indentationStr.length + /* " * " */ 3;
 
-            return {newText: result, cursorOffset: cursorOffset };
+            return {newText: result, offsetInNewText: cursorOffset };
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
