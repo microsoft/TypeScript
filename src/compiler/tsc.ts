@@ -14,7 +14,7 @@ namespace ts {
         let matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
         if (!matchResult) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, 'en', 'ja-jp'));
+            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
             return false;
         }
 
@@ -49,7 +49,7 @@ namespace ts {
         }
 
         // TODO: Add codePage support for readFile?
-        let fileContents = '';
+        let fileContents = "";
         try {
             fileContents = sys.readFile(filePath);
         }
