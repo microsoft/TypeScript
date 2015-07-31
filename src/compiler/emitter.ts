@@ -6479,7 +6479,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     case JsxEmit.Preserve:
                     default: // Emit JSX-preserve as default when no --jsx flag is specified
-                        write(getTextOfNode(node, true));
+                        writer.writeLiteral(getTextOfNode(node, true));
                         break;
                 }
             }
