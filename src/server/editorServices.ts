@@ -86,7 +86,10 @@ namespace ts.server {
         roots: ScriptInfo[] = [];
 
         constructor(public host: ServerHost, public project: Project) {
+            this.getNewLine = () => host.newLine;
         }
+        
+        public getNewLine: () => string;
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));

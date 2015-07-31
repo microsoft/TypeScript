@@ -37,6 +37,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         getCurrentDirectory: () => process.cwd(),
         getCompilationSettings: () => options,
         getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+        getNewLine: () => ts.sys.newLine,
     };
 
     // Create the language service files

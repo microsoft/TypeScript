@@ -961,7 +961,7 @@ namespace ts {
     //
     export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
-        getNewLine?(): string;
+        getNewLine(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;

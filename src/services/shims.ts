@@ -57,7 +57,7 @@ namespace ts {
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
-        getNewLine?(): string;
+        getNewLine(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
     }
@@ -267,7 +267,10 @@ namespace ts {
         private tracingEnabled = false;
 
         constructor(private shimHost: LanguageServiceShimHost) {
+            this.getNewLine = shimHost.getNewLine;
         }
+        
+        public getNewLine: () => string;
 
         public log(s: string): void {
             if (this.loggingEnabled) {
