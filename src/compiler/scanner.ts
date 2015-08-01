@@ -401,6 +401,9 @@ namespace ts {
               case CharacterCodes.greaterThan:
                   // Starts of conflict marker trivia
                   return true;
+              case CharacterCodes.hash:
+                  // Only if its the beginning can we have #! trivia
+                  return pos === 0;
               default:
                   return ch > CharacterCodes.maxAsciiCharacter;
           }
@@ -457,6 +460,13 @@ namespace ts {
                   case CharacterCodes.greaterThan:
                       if (isConflictMarkerTrivia(text, pos)) {
                           pos = scanConflictMarkerTrivia(text, pos);
+                          continue;
+                      }
+                      break;
+
+                  case CharacterCodes.hash:
+                      if (isShebangTrivia(text, pos)) {
+                          pos = scanShebangTrivia(text, pos);
                           continue;
                       }
                       break;
@@ -525,6 +535,20 @@ namespace ts {
             }
         }
 
+        return pos;
+    }
+
+    let shebangTriviaRegex = /^#!.*/;
+
+    function isShebangTrivia(text: string, pos: number) {
+        // Shebangs check must only be done at the start of the file
+        Debug.assert(pos === 0);
+        return shebangTriviaRegex.test(text);
+    }
+
+    function scanShebangTrivia(text: string, pos: number) {
+        let shebang = shebangTriviaRegex.exec(text)[0];
+        pos = pos + shebang.length;
         return pos;
     }
 
@@ -1087,6 +1111,18 @@ namespace ts {
                     return token = SyntaxKind.EndOfFileToken;
                 }
                 let ch = text.charCodeAt(pos);
+
+                // Special handling for shebang
+                if (ch == CharacterCodes.hash &&  pos === 0 && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text ,pos);
+                    if (skipTrivia) {
+                        continue;
+                    }
+                    else {
+                        return token = SyntaxKind.ShebangTrivia;
+                    }
+                }
+
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
