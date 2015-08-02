@@ -74,25 +74,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
+                    emitFile(jsFilePath, [sourceFile]);
                 }
             });
-
             if (compilerOptions.out) {
-                emitFile(compilerOptions.out);
+                let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
+                emitFile(compilerOptions.out, sourceFiles);
             }
         }
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, forEach(host.getSourceFiles(), shouldEmitJsx) ? ".jsx" : ".js");
-                emitFile(jsFilePath, targetSourceFile);
+                emitFile(jsFilePath, [targetSourceFile]);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                emitFile(compilerOptions.out);
+                let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
+                emitFile(compilerOptions.out, sourceFiles);
             }
         }
-
+    
         // Emit declarations
         if (compilerOptions.declaration) {
             emitDeclarations(host, resolver, targetSourceFile, diagnostics);
@@ -127,7 +128,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             return true;
         }
 
-        function emitFile(jsFilePath: string, root?: SourceFile) {
+        function emitFile(jsFilePath: string, sourceFiles: SourceFile[]) {
             let writer = createTextWriter(newLine);
             let write = writer.write;
             let writeTextOfNode = writer.writeTextOfNode;
@@ -199,16 +200,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 initializeEmitterWithSourceMaps();
             }
 
-            if (root) {
+            for (let sourceFile of sourceFiles) {
                 // Do not call emit directly. It does not set the currentSourceFile.
-                emitSourceFile(root);
-            }
-            else {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emitSourceFile(sourceFile);
-                    }
-                });
+                emitSourceFile(sourceFile);
             }
 
             writeLine();
@@ -652,10 +646,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (compilerOptions.mapRoot) {
                     sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                    if (root) { // emitting single module file
+                    if (sourceFiles.length === 1 && shouldEmitToOwnFile(sourceFiles[0], compilerOptions)) { // emitting single module file
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, host, sourceMapDir));
+                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFiles[0], host, sourceMapDir));
                     }
 
                     if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
