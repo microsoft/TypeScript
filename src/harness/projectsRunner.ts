@@ -291,8 +291,9 @@ class ProjectRunner extends RunnerBase {
                 }
                 else {
                     let outputDtsFileName = ts.removeFileExtension(sourceFile.fileName) + ".d.ts";
+                    let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
                     if (outputDtsFile) {
-                        allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
+                        allInputFiles.unshift(outputDtsFile);
                     }
                 }
             });
