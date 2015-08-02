@@ -22,7 +22,6 @@
         "outdir/outAndOutDirFolder/ref/m2.js",
         "bin/outAndOutDirFile.js.map",
         "bin/outAndOutDirFile.js",
-        "outdir/outAndOutDirFolder/ref/m2.d.ts",
         "bin/outAndOutDirFile.d.ts"
     ]
 }

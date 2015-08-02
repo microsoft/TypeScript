@@ -18,9 +18,6 @@
         "../outputdir_module_multifolder_ref/m2.js",
         "test.js",
         "bin/test.js",
-        "ref/m1.d.ts",
-        "../outputdir_module_multifolder_ref/m2.d.ts",
-        "test.d.ts",
         "bin/test.d.ts"
     ]
 }

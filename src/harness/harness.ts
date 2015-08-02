@@ -680,7 +680,7 @@ module Harness {
                 if (response.status === 200) {
                     return response.responseText;
                 } else {
-                    return null;
+                    return undefined;
                 }
             }
 

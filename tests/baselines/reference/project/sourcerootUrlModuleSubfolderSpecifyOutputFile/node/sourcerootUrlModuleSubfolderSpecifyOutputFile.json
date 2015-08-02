@@ -21,8 +21,6 @@
         "test.js",
         "bin/test.js.map",
         "bin/test.js",
-        "ref/m1.d.ts",
-        "test.d.ts",
         "bin/test.d.ts"
     ]
 }

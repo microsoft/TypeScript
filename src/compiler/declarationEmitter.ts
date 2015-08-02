@@ -22,6 +22,7 @@ namespace ts {
     function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults, host: EmitHost, diagnostics: Diagnostic[]): void {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
+        let emitAsAmbientExternalModuleDeclarations = !!compilerOptions.out;
         let enclosingDeclaration: Node;
         let currentSourceFile: SourceFile;
 
@@ -75,14 +76,12 @@ namespace ts {
 
                     // Could not find the file, or has been already emitted
                     if (!referencedFile || contains(emittedReferencedFiles, referencedFile)) {
-                        return false;
+                        return;
                     }
 
-                    let shouldEmitRefrence: boolean
-
-                    if (isDeclarationFile(referencedFile) || shouldEmitToOwnFile(referencedFile, compilerOptions)) {
-                        // If the reference file is a declaration file or an external module,
-                        // we know there is going to be a .d.ts file matching it. Emit that reference
+                    if (isDeclarationFile(referencedFile) || !compilerOptions.out) {
+                        // If the reference file is a declaration file or we are emitting 
+                        // each file to a corresponding declaration file, emit the reference.
                         emitReferencePath(referencedFile);
                         emittedReferencedFiles.push(referencedFile);
                     }
@@ -91,10 +90,8 @@ namespace ts {
 
             function emitReferencePath(referencedFile: SourceFile) {
                 let declFileName = isDeclarationFile(referencedFile)
-                    ? referencedFile.fileName // Declaration file, use declaration file name
-                    : compilerOptions.out
-                        ? removeFileExtension(compilerOptions.out) + ".d.ts" // Global out file
-                        : getOwnEmitOutputFilePath(referencedFile, host, ".d.ts"); // Own output file so get the .d.ts file
+                    ? referencedFile.fileName // Declaration file, use declaration file name as is
+                    : getOwnEmitOutputFilePath(referencedFile, host, ".d.ts"); // Own output file so get the corresponding .d.ts file
                         
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(outputFileName)),
@@ -471,9 +468,7 @@ namespace ts {
         }
 
         function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
-            Debug.assert(moduleSpecifier.kind === SyntaxKind.StringLiteral);
-
-            if (compilerOptions.out) {
+            if (emitAsAmbientExternalModuleDeclarations) {
                 let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
                 if (moduleSymbol && moduleSymbol.valueDeclaration &&
                     moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile &&
@@ -1026,8 +1021,6 @@ namespace ts {
                     return emitEnumMemberDeclaration(<EnumMember>node);
                 case SyntaxKind.ExportAssignment:
                     return emitExportAssignment(<ExportAssignment>node);
-                case SyntaxKind.SourceFile:
-                    return emitSourceFile(<SourceFile>node);
                 default:
                     Debug.fail(`unknown SyntaxKind: ${node.kind} (${ (<any>ts).SyntaxKind ? (<any>ts).SyntaxKind[node.kind] : ""})`);
             }
@@ -1041,8 +1034,13 @@ namespace ts {
             currentSourceFile = sourceFile;
             enclosingDeclaration = sourceFile;
 
-            // write the declarations
-            writeChildDeclarations(sourceFile);
+            if (emitAsAmbientExternalModuleDeclarations && isExternalModule(sourceFile)) {
+                emitExternalModuleDeclaration(sourceFile);
+            }
+            else {
+                // write the declarations
+                writeChildDeclarations(sourceFile);
+            }
         }
 
         function compareDeclarations(d1: Node, d2: Node): Comparison {
@@ -1746,32 +1744,31 @@ namespace ts {
     function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, action: (name: string, sources: SourceFile[]) => void) {
         let compilerOptions = host.getCompilerOptions();
 
-        if (targetSourceFile) {
-            // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
-            // only emit the outputs of this file
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let outputFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".d.ts");
-                action(outputFilePath, [targetSourceFile]);
-                return;
-            }
-            // Fall through to the --out case, i.e. shouldEmitToOwnFile()=== false
+        if (compilerOptions.out) {
+            // If --out is set, it does not matter if we have a targetSoruceFile
+            // passed; we need to emit all files to a single output file
+            let outputFilePath = removeFileExtension(compilerOptions.out) + ".d.ts"
+            let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isDeclarationFile(sourceFile));
+            action(outputFilePath, sourceFiles);
         }
         else {
-            // No targetSourceFile, we need to emit all files
-            for (let sourceFile of host.getSourceFiles()) {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let outputFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".d.ts");
-                    action(outputFilePath, [sourceFile]);
+            if (targetSourceFile) {
+                // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
+                // only emit the outputs of this file
+                if (!isDeclarationFile(targetSourceFile)) {
+                    let outputFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".d.ts");
+                    action(outputFilePath, [targetSourceFile]);
                 }
             }
-        }
-
-        if (compilerOptions.out) {
-            // Emit any files that did not have their own output file
-            // all these files will emit to a single output file specified by compiler options.out
-            let outputFilePath = removeFileExtension(compilerOptions.out) + ".d.ts"
-            let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
-            action(outputFilePath, sourceFiles);
+            else {
+                // No targetSourceFile, we need to emit all files
+                for (let sourceFile of host.getSourceFiles()) {
+                    if (!isDeclarationFile(sourceFile)) {
+                        let outputFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".d.ts");
+                        action(outputFilePath, [sourceFile]);
+                    }
+                }
+            }
         }
     }
 

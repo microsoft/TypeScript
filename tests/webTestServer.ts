@@ -98,10 +98,10 @@ function writeFile(path: string, data: any, opts: { recursive: boolean }) {
     } catch (e) {
         // assume file was written to a directory that exists, if not, start recursively creating them as necessary
         var parts = switchToForwardSlashes(path).split('/');
-        for (var i = 0; i < parts.length; i++) {
+        for (var i = 1; i < parts.length; i++) {
             var subDir = parts.slice(0, i).join('/');
             if (!fs.existsSync(subDir)) {
-                fs.mkdir(subDir);
+                fs.mkdirSync(subDir);
             }
         }
         fs.writeFileSync(path, data);

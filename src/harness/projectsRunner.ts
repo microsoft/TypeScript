@@ -62,7 +62,7 @@ class ProjectRunner extends RunnerBase {
 
         let testFileText: string = null;
         try {
-            testFileText = ts.sys.readFile(testCaseFileName);
+            testFileText = Harness.IO.readFile(testCaseFileName);
         }
         catch (e) {
             assert(false, "Unable to open testcase file: " + testCaseFileName + ": " + e.message);
@@ -214,7 +214,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFileText(fileName: string): string {
                 let text: string = undefined;
                 try {
-                    text = ts.sys.readFile(ts.isRootedDiskPath(fileName)
+                    text = Harness.IO.readFile(ts.isRootedDiskPath(fileName)
                         ? fileName
                         : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
                 }
@@ -261,14 +261,14 @@ class ProjectRunner extends RunnerBase {
                 // Actual writing of file as in tc.ts
                 function ensureDirectoryStructure(directoryname: string) {
                     if (directoryname) {
-                        if (!ts.sys.directoryExists(directoryname)) {
+                        if (!Harness.IO.directoryExists(directoryname)) {
                             ensureDirectoryStructure(ts.getDirectoryPath(directoryname));
-                            ts.sys.createDirectory(directoryname);
+                            Harness.IO.createDirectory(directoryname);
                         }
                     }
                 }
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
-                ts.sys.writeFile(outputFilePath, data, writeByteOrderMark);
+                Harness.IO.writeFile(outputFilePath, data);
 
                 outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
             }
@@ -282,25 +282,17 @@ class ProjectRunner extends RunnerBase {
                 if (Harness.Compiler.isDTS(sourceFile.fileName)) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
-                else if (ts.shouldEmitToOwnFile(sourceFile, compilerResult.program.getCompilerOptions())) {
-                    let emitOutputFilePathWithoutExtension: string = undefined;
-                    if (compilerOptions.outDir) {
-                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
-                        sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
-                    }
-                    else {
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
-                    }
-
-                    let outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
-                }
-                else {
+                else if (compilerOptions.out) {
                     let outputDtsFileName = ts.removeFileExtension(compilerOptions.out) + ".d.ts";
                     let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
-                    if (!ts.contains(allInputFiles, outputDtsFile)) {
+                    if (outputDtsFile && !ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
+                    }
+                }
+                else {
+                    let outputDtsFileName = ts.removeFileExtension(sourceFile.fileName) + ".d.ts";
+                    if (outputDtsFile) {
+                        allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
                     }
                 }
             });
@@ -389,7 +381,7 @@ class ProjectRunner extends RunnerBase {
 
                                 Harness.Baseline.runBaseline('Baseline of emitted result (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                     try {
-                                        return ts.sys.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                        return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
                                     }
                                     catch (e) {
                                         return undefined;
