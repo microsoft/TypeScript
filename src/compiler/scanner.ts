@@ -641,6 +641,16 @@ namespace ts {
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
+    
+    /** Optionally, get the shebang */
+    export function getShebang(text: string): string {
+        if (!shebangTriviaRegex.test(text)) {
+            return undefined;
+        }
+        else {
+            return shebangTriviaRegex.exec(text)[0];
+        }
+    }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||

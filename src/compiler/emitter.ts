@@ -6565,6 +6565,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSourceFileNode(node: SourceFile) {
                 // Start new file on new line
                 writeLine();
+                emitShebang();
                 emitDetachedComments(node);
 
                 // emit prologue directives prior to __extends
@@ -6984,6 +6985,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             }
                         }
                     }
+                }
+            }
+            
+            function emitShebang() {
+                let shebang = getShebang(currentSourceFile.text);
+                if (shebang) {
+                    write(shebang);
                 }
             }
 
