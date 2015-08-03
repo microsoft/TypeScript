@@ -379,7 +379,7 @@ module FourSlashInterface {
         }
 
         public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
-            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, offsetInNewText: expectedOffset });
+            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, caretOffset: expectedOffset });
         }
 
         public noDocCommentTemplate() {

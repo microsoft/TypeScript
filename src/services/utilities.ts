@@ -421,33 +421,32 @@ namespace ts {
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
-        return isInCommentHelper(sourceFile, position, /*extraCheck*/ c => true);
+        return isInCommentHelper(sourceFile, position, /*predicate*/ c => true);
     }
 
     /**
      * Returns true if the cursor at position in sourceFile is within a comment that additionally
-     * satisfies extraCheck, and false otherwise.
+     * satisfies predicate, and false otherwise.
      */
-    export function isInCommentHelper(sourceFile: SourceFile, position: number, 
-        extraCheck: (c: CommentRange) => boolean): boolean {
+    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate: (c: CommentRange) => boolean): boolean {
         let token = getTokenAtPosition(sourceFile, position);
 
         if (token && position <= token.getStart()) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-
+                
+            // The end marker of a single-line comment does not include the newline character.
+            // In the following case, we are inside a comment (^ denotes the cursor position):
+            //
+            //    // asdf   ^\n
+            //
+            // But for multi-line comments, we don't want to be inside the comment in the following case:
+            //
+            //    /* asdf */^
+            //
+            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
             return forEach(commentRanges, c => c.pos < position &&
-                // The end marker of a single-line comment does not include the newline character.
-                // In the following case, we are inside a comment (^ denotes the cursor position):
-                //
-                //    // asdf   ^\n
-                //
-                // But for multi-line comments, we don't want to be inside the comment in the following case:
-                //
-                //    /* asdf */^
-                //
-                // Internally, we represent the end of the comment at the newline and closing '/', respectively.
                 (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
-                extraCheck(c));
+                predicate(c));
         }
 
         return false;
@@ -456,12 +455,15 @@ namespace ts {
     export function hasDocComment(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
 
-        let JSDocPrefixRegex = /^\/\*\*\s*/;
-
         // First, we have to see if this position actually landed in a comment.
         let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
-        return forEach(commentRanges, c => JSDocPrefixRegex.test(sourceFile.text.substring(c.pos, c.end)));
+        return forEach(commentRanges, c => jsDocPrefix);
+        
+        function jsDocPrefix(c: CommentRange): boolean {
+            var text = sourceFile.text;
+            return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
+        }
     }
 
     function nodeHasTokens(n: Node): boolean {

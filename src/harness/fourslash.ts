@@ -1950,20 +1950,20 @@ module FourSlash {
                     return;
                 }
                 else {
-                    this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" offsetInNewText: ' + actual.offsetInNewText + '}');
+                    this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '}');
                 }
             }
             else {
                 if (actual === undefined) {
-                    this.raiseError(name + ' failed - expected the template {newText: \"' + actual.newText + '\" offsetInNewText: ' + actual.offsetInNewText + '} but got nothing instead');
+                    this.raiseError(name + ' failed - expected the template {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '} but got nothing instead');
                 }
 
                 if (actual.newText !== expected.newText) {
                     this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
                 }
 
-                if (actual.offsetInNewText !== expected.offsetInNewText) {
-                    this.raiseError(name + ' failed - expected offsetInNewText: ' + expected.offsetInNewText + ',\nactual offsetInNewText:' + actual.offsetInNewText);
+                if (actual.caretOffset !== expected.caretOffset) {
+                    this.raiseError(name + ' failed - expected caretOffset: ' + expected.caretOffset + ',\nactual caretOffset:' + actual.caretOffset);
                 }
             }
         }

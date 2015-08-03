@@ -1090,7 +1090,8 @@ namespace ts {
 
     export interface TextInsertion {
         newText: string;
-        offsetInNewText: number;
+        /** The position in newText the caret should point to after the insertion. */
+        caretOffset: number;
     }
 
     export interface RenameLocation {
@@ -6758,7 +6759,6 @@ namespace ts {
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
 
@@ -6800,11 +6800,11 @@ namespace ts {
          * Valid positions are
          * * outside of comments, statements, and expressions, and
          * * preceding a function declaration.
-         * 
+         *
          * Hosts should ideally check that:
          * * The line is all whitespace up to 'position' before performing the insertion.
          * * If the keystroke sequence "/\*\*" induced the call, we also check that the next
-         * non-whitespace character is '*', which (approximately) indicates whether we added 
+         * non-whitespace character is '*', which (approximately) indicates whether we added
          * the second '*' to complete an existing (JSDoc) comment.
          * @param fileName The file in which to perform the check.
          * @param position The (character-indexed) position in the file where the check should
@@ -6843,16 +6843,24 @@ namespace ts {
             let docParams = parameters.map((p, index) =>
                 indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + newLine);
 
-            let result = 
-                /* opening comment */               "/**" + newLine + 
-                /* first line for function info */  indentationStr + " * " + newLine + 
-                /* paramters */                     docParams.reduce((prev, cur) => prev + cur, "") +
-                /* closing comment */               indentationStr + " */" +
-                /* newline if at decl start */      (tokenStart === position ? newLine + indentationStr : "");
-            
-            let cursorOffset = /* "/**" */ 3 + /* newLine */ newLine.length + indentationStr.length + /* " * " */ 3;
 
-            return {newText: result, offsetInNewText: cursorOffset };
+            // A doc comment consists of the following
+            // * The opening comment line
+            // * the first line (without a param) for the object's untagged info (this is also where the caret ends up)
+            // * the '@param'-tagged lines
+            // * TODO: other tags.
+            // * the closing comment line
+            // * if the caret was directly in front of the object, then we add an extra line and indentation.
+            let result =
+                "/**" + newLine +
+                indentationStr + " * " + newLine +
+                docParams.reduce((prev, cur) => prev + cur, "") +
+                indentationStr + " */" +
+                (tokenStart === position ? newLine + indentationStr : "");
+
+            let cursorOffset = "/**".length + newLine.length + indentationStr.length + " * ".length;
+
+            return { newText: result, caretOffset: cursorOffset };
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
