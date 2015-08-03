@@ -378,9 +378,8 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        // Will fix in fourslash-referencing
         public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
-            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, cursorOffset: expectedOffset });
+            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, offsetInNewText: expectedOffset });
         }
 
         public noDocCommentTemplate() {

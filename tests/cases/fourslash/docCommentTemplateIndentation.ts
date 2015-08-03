@@ -5,10 +5,10 @@
 ////    /*1*/
 ////        /*2*/function foo() { }
 
-const noIndentEmptyScaffolding = "/**\n * \n */";
-const oneIndentEmptyScaffolding = "/**\n     * \n     */";
-const twoIndentEmptyScaffolding = "/**\n         * \n         */\n        ";
-const noIndentOffset = 7;
+const noIndentEmptyScaffolding = "/**\r\n * \r\n */";
+const oneIndentEmptyScaffolding = "/**\r\n     * \r\n     */";
+const twoIndentEmptyScaffolding = "/**\r\n         * \r\n         */\r\n        ";
+const noIndentOffset = 8;
 const oneIndentOffset = noIndentOffset + 4;
 const twoIndentOffset = oneIndentOffset + 4;
 

@@ -6838,7 +6838,7 @@ namespace ts {
 
             let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).match(/\s*/).toString();
 
-            const newLine = host.getNewLine();
+            const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
 
             let docParams = parameters.map((p, index) =>
                 indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + newLine);
@@ -6850,7 +6850,7 @@ namespace ts {
                 /* closing comment */               indentationStr + " */" +
                 /* newline if at decl start */      (tokenStart === position ? newLine + indentationStr : "");
             
-            let cursorOffset = /* "/**" */ 3 + /* newLine */ + newLine.length + indentationStr.length + /* " * " */ 3;
+            let cursorOffset = /* "/**" */ 3 + /* newLine */ newLine.length + indentationStr.length + /* " * " */ 3;
 
             return {newText: result, offsetInNewText: cursorOffset };
         }
