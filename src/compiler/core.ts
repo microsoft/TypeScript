@@ -794,7 +794,7 @@ namespace ts {
             if (!expression) {
                 let verboseDebugString = "";
                 if (verboseDebugInfo) {
-                    verboseDebugString = getNewLineOrDefault() + "Verbose Debug Information: " + verboseDebugInfo();
+                    verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }
 
                 throw new Error("Debug Failure. False expression: " + (message || "") + verboseDebugString);
