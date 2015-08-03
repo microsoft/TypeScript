@@ -12,4 +12,14 @@ var Bar2 = (function () {
     }
     return Bar2;
 })();
+define("tests/cases/fourslash/inputFile3", ["require", "exports"], function (require, exports) {
+    var M;
+    (function (M) {
+        var C = (function () {
+            function C() {
+            }
+            return C;
+        })();
+    })(M = exports.M || (exports.M = {}));
+});
 

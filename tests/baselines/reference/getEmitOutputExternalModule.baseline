@@ -6,4 +6,14 @@ var Bar = (function () {
     }
     return Bar;
 })();
+define("tests/cases/fourslash/inputFile2", ["require", "exports"], function (require, exports) {
+    var M;
+    (function (M) {
+        var C = (function () {
+            function C() {
+            }
+            return C;
+        })();
+    })(M = exports.M || (exports.M = {}));
+});
 

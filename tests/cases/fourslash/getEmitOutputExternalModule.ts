@@ -2,6 +2,7 @@
 
 // @BaselineFile: getEmitOutputExternalModule.baseline
 // @out: declSingleFile.js
+// @module: amd
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true
@@ -15,5 +16,7 @@
 //// export module M {
 //// 	class C {c}
 //// }
+
+debugger;
 
 verify.baselineGetEmitOutput();

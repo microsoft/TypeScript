@@ -153,12 +153,18 @@ module FourSlash {
                         break;
                     case metadataOptionNames.module:
                         // create appropriate external module target for CompilationSettings
-                        switch (globalOptions[prop]) {
-                            case "AMD":
+                        switch (globalOptions[prop].toLowerCase()) {
+                            case "amd":
                                 settings.module = ts.ModuleKind.AMD;
                                 break;
-                            case "CommonJS":
+                            case "commonjs":
                                 settings.module = ts.ModuleKind.CommonJS;
+                                break;
+                            case "umd":
+                                settings.module = ts.ModuleKind.UMD;
+                                break;
+                            case "system":
+                                settings.module = ts.ModuleKind.System;
                                 break;
                             default:
                                 ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");

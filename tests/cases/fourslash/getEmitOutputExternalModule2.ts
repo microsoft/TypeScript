@@ -2,6 +2,7 @@
 
 // @BaselineFile: getEmitOutputExternalModule2.baseline
 // @out: declSingleFile.js
+// @module: AMD
 
 // @Filename: inputFile1.ts
 //// var x: number = 5;

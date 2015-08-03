@@ -8,5 +8,5 @@ var y;
 
 //// [file1.js]
 export var x;
-//// [all.js]
+//// [file2.js]
 var y;

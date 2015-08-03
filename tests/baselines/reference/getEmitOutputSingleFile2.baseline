@@ -1,7 +1,27 @@
 EmitSkipped: false
-FileName : tests/cases/fourslash/inputFile3.js
-exports.foo = 10;
-exports.bar = "hello world";
+FileName : declSingleFile.js
+var x = 5;
+var Bar = (function () {
+    function Bar() {
+    }
+    return Bar;
+})();
+var x1 = "hello world";
+var Foo = (function () {
+    function Foo() {
+    }
+    return Foo;
+})();
+System.register("inputFile3", [], function(exports_1) {
+    var foo, bar;
+    return {
+        setters:[],
+        execute: function() {
+            exports_1("foo", foo = 10);
+            exports_1("bar", bar = "hello world");
+        }
+    }
+});
 FileName : declSingleFile.d.ts
 declare var x: number;
 declare class Bar {

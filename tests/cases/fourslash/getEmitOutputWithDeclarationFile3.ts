@@ -2,6 +2,7 @@
 
 // @BaselineFile: getEmitOutputWithDeclarationFile3.baseline
 // @out: declSingle.js
+// @module: AMD
 
 // @Filename: decl.d.ts
 //// interface I { a: string; }

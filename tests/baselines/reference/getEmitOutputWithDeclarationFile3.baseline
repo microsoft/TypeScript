@@ -1,5 +1,13 @@
 EmitSkipped: false
 FileName : declSingle.js
+define("tests/cases/fourslash/inputFile2", ["require", "exports"], function (require, exports) {
+    var Foo = (function () {
+        function Foo() {
+        }
+        return Foo;
+    })();
+    exports.Foo = Foo;
+});
 var x = "hello";
 var x1 = 1000;
 
