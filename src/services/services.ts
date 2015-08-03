@@ -1560,13 +1560,6 @@ namespace ts {
 
     /// Language Service
 
-    interface FormattingOptions {
-        useTabs: boolean;
-        spacesPerTab: number;
-        indentSpaces: number;
-        newLineCharacter: string;
-    }
-
     // Information about a specific host file.
     interface HostFileInformation {
         hostFileName: string;
@@ -2535,7 +2528,7 @@ namespace ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
-                getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
+                getNewLine: () => getNewLineOrDefault(host.getNewLine),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory()

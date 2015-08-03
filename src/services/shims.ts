@@ -529,7 +529,7 @@ namespace ts {
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = this.getNewLine();
+            var newLine = getNewLineOrDefault(this.host.getNewLine);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
@@ -569,10 +569,6 @@ namespace ts {
                     // on the managed side versus a full JSON array.
                     return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
                 });
-        }
-
-        private getNewLine(): string {
-            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
         }
 
         public getSyntacticDiagnostics(fileName: string): string {
