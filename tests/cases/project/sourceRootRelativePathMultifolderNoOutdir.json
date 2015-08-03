@@ -7,5 +7,9 @@
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "sourceRoot": "../src"
+    "sourceRoot": "../src",
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

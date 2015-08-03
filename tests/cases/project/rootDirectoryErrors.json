@@ -7,5 +7,9 @@
     "outDir": "outdir/simple",
     "rootDir": "FolderA/FolderB/FolderC",
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

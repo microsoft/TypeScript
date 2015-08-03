@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/RelativePaths",
     "inputFiles": [
         "app.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

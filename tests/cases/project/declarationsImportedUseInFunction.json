@@ -5,5 +5,9 @@
         "useModule.ts"
     ],
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

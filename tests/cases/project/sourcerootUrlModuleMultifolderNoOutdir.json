@@ -7,5 +7,9 @@
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "sourceRoot": "http://typescript.codeplex.com/"
+    "sourceRoot": "http://typescript.codeplex.com/",
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

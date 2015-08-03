@@ -6,7 +6,11 @@
     ],
     "outDir": "outdir/simple",
     "rootDir": "FolderA",
-    "sourceMap":  true,
+    "sourceMap": true,
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

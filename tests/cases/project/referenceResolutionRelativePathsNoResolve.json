@@ -5,7 +5,11 @@
         "foo.ts",
         "../../../bar/bar.ts"
     ],
-    "noResolve":  true,
+    "noResolve": true,
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

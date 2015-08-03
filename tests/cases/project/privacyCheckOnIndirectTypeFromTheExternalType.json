@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/privacyCheck-IndirectReference",
     "inputFiles": [
         "test.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

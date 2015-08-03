@@ -4,5 +4,9 @@
     "inputFiles": [
         "consume.ts"
     ],
-    "runTest": true
+    "runTest": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

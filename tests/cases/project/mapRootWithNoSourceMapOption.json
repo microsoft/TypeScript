@@ -4,5 +4,9 @@
     "inputFiles": [
         "test.ts"
     ],
-    "mapRoot": "../mapFiles"
+    "mapRoot": "../mapFiles",
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

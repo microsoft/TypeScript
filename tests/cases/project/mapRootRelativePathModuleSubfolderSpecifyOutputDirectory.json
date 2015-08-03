@@ -8,5 +8,9 @@
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "mapRoot": "../mapFiles"
+    "mapRoot": "../mapFiles",
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

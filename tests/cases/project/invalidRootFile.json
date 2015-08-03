@@ -5,5 +5,9 @@
         "a",
         "a.t",
         "a.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

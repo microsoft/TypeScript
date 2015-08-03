@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/InvalidReferences",
     "inputFiles": [
         "main.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

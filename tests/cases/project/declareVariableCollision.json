@@ -5,5 +5,9 @@
         "decl.d.ts",
         "in1.d.ts",
         "in2.d.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

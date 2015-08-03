@@ -5,5 +5,9 @@
         "test.ts"
     ],
     "mapRoot": "../mapFiles",
-    "sourceRoot": "../src"
+    "sourceRoot": "../src",
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

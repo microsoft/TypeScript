@@ -4,5 +4,9 @@
     "inputFiles": [
         "useModule.ts"
     ],
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

@@ -9,5 +9,9 @@
     "declaration": true,
     "baselineCheck": true,
     "mapRoot": "tests/cases/projects/outputdir_module_simple/mapFiles",
-    "resolveMapRoot": true
+    "resolveMapRoot": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

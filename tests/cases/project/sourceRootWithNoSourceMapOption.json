@@ -4,5 +4,9 @@
     "inputFiles": [
         "test.ts"
     ],
-    "sourceRoot": "../src"
+    "sourceRoot": "../src",
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

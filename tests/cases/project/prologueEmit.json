@@ -6,5 +6,8 @@
         "__extends.ts"
     ],
     "out": "out.js",
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "amd"
+    ]
 }

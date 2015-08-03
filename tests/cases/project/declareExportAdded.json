@@ -4,5 +4,9 @@
     "inputFiles": [
         "consumer.ts"
     ],
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

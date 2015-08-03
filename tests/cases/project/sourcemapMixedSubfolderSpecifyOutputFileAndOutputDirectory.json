@@ -8,5 +8,8 @@
     "outDir": "outdir/outAndOutDirFolder",
     "sourceMap": true,
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "modules": [
+        "amd"
+    ]
 }

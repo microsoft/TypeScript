@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/CircularReferencing",
     "inputFiles": [
         "consume.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/NoModule",
     "inputFiles": [
         "decl.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/ext-int-ext",
     "inputFiles": [
         "internal2.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

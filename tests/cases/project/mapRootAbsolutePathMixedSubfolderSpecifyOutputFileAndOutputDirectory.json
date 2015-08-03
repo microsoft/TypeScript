@@ -10,5 +10,8 @@
     "declaration": true,
     "baselineCheck": true,
     "mapRoot": "tests/cases/projects/outputdir_mixed_subfolder/mapFiles",
-    "resolveMapRoot": true
+    "resolveMapRoot": true,
+    "modules": [
+        "amd"
+    ]
 }

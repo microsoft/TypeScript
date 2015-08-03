@@ -8,5 +8,9 @@
     "declaration": true,
     "baselineCheck": true,
     "sourceRoot": "tests/cases/projects/outputdir_module_subfolder/src",
-    "resolveSourceRoot": true
+    "resolveSourceRoot": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

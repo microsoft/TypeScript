@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/MultipleLevels",
     "inputFiles": [
         "root.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/relative-nested-ref",
     "inputFiles": [
         "main/consume.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

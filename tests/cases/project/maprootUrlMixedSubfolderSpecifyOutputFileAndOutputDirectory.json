@@ -9,5 +9,8 @@
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "mapRoot": "http://www.typescriptlang.org/"
+    "mapRoot": "http://www.typescriptlang.org/",
+    "modules": [
+        "amd"
+    ]
 }

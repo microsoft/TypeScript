@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/relative-global-ref",
     "inputFiles": [
         "consume.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

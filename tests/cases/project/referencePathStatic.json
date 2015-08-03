@@ -3,5 +3,9 @@
     "projectRoot": "tests/cases/projects/reference-path-static",
     "inputFiles": [
         "test.ts"
+    ],
+    "modules": [
+        "node",
+        "amd"
     ]
 }

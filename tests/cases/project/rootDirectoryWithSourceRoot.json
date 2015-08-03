@@ -7,6 +7,10 @@
     "outDir": "outdir/simple",
     "rootDir": "FolderA",
     "sourceMap": true,
-    "sourceRoot":  "SourceRootPath",
-    "baselineCheck": true
+    "sourceRoot": "SourceRootPath",
+    "baselineCheck": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }

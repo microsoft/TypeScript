@@ -4,5 +4,9 @@
     "inputFiles": [
         "app.ts"
     ],
-    "runTest": true
+    "runTest": true,
+    "modules": [
+        "node",
+        "amd"
+    ]
 }
