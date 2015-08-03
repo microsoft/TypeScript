@@ -346,6 +346,17 @@ namespace ts {
                         // imports has changed
                         return false;
                     }
+                    
+                    if (resolveModuleNameWorker) {
+                        // ensure that module resolution results are still correct
+                        for (let importName of newSourceFile.imports) {
+                            var oldResolution = getResolvedModuleFileName(oldSourceFile, importName.text);
+                            var newResolution = resolveModuleNameWorker(importName.text, newSourceFile.fileName);
+                            if (oldResolution !== newResolution) {
+                                return false;
+                            }    
+                        }                        
+                    }
                     // pass the cache of module resolutions from the old source file
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                 }
@@ -709,7 +720,7 @@ namespace ts {
                 file.resolvedModules = {};
                 let oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
                 for (let moduleName of file.imports) {
-                    resolveModule(moduleName, oldSourceFile && oldSourceFile.resolvedModules);
+                    resolveModule(moduleName);
                 }
                 
             }
@@ -723,13 +734,10 @@ namespace ts {
                 return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
 
-            function resolveModule(moduleNameExpr: LiteralExpression, existingResolutions: Map<string>): void {                
+            function resolveModule(moduleNameExpr: LiteralExpression): void {                
                 Debug.assert(resolveModuleNameWorker !== undefined);
                 
-                let resolvedModuleName = existingResolutions && hasProperty(existingResolutions, moduleNameExpr.text)
-                    ? existingResolutions[moduleNameExpr.text]
-                    : resolveModuleNameWorker(moduleNameExpr.text, file.fileName);
-                    
+                let resolvedModuleName = resolveModuleNameWorker(moduleNameExpr.text, file.fileName);                    
                 setResolvedModuleName(file, moduleNameExpr.text, resolvedModuleName);
                 if (resolvedModuleName) {
                     findModuleSourceFile(resolvedModuleName, moduleNameExpr);

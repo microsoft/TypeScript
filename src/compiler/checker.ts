@@ -5242,7 +5242,7 @@ namespace ts {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.String);
-                if (targetType) {
+                if (targetType && !(targetType.flags & TypeFlags.Any)) {
                     let sourceType = getIndexTypeOfType(source, IndexKind.String);
                     if (!sourceType) {
                         if (reportErrors) {
@@ -5267,7 +5267,7 @@ namespace ts {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
-                if (targetType) {
+                if (targetType && !(targetType.flags & TypeFlags.Any)) {
                     let sourceStringType = getIndexTypeOfType(source, IndexKind.String);
                     let sourceNumberType = getIndexTypeOfType(source, IndexKind.Number);
                     if (!(sourceStringType || sourceNumberType)) {
@@ -6427,22 +6427,79 @@ namespace ts {
             let classType = classDeclaration && <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(classDeclaration));
             let baseClassType = classType && getBaseTypes(classType)[0];
 
+            let container = getSuperContainer(node, /*includeFunctions*/ true);            
+            let needToCaptureLexicalThis = false;
+
+            if (!isCallExpression) {                    
+                // adjust the container reference in case if super is used inside arrow functions with arbitrary deep nesting                                    
+                while (container && container.kind === SyntaxKind.ArrowFunction) {
+                    container = getSuperContainer(container, /*includeFunctions*/ true);
+                    needToCaptureLexicalThis = languageVersion < ScriptTarget.ES6;
+                }
+            }
+            
+            let canUseSuperExpression = isLegalUsageOfSuperExpression(container);
+            let nodeCheckFlag: NodeCheckFlags = 0;
+            
+            // always set NodeCheckFlags for 'super' expression node            
+            if (canUseSuperExpression) {               
+                if ((container.flags & NodeFlags.Static) || isCallExpression) {
+                    nodeCheckFlag = NodeCheckFlags.SuperStatic;
+                }
+                else {
+                    nodeCheckFlag = NodeCheckFlags.SuperInstance;
+                }
+                
+                getNodeLinks(node).flags |= nodeCheckFlag;
+                
+                if (needToCaptureLexicalThis) {
+                    // call expressions are allowed only in constructors so they should always capture correct 'this'
+                    // super property access expressions can also appear in arrow functions -
+                    // in this case they should also use correct lexical this
+                    captureLexicalThis(node.parent, container);
+                }                                
+            }
+            
             if (!baseClassType) {
                 if (!classDeclaration || !getClassExtendsHeritageClauseElement(classDeclaration)) {
                     error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
                 }
+                return unknownType;                
+            }
+            
+            if (!canUseSuperExpression) {
+                if (container && container.kind === SyntaxKind.ComputedPropertyName) {
+                    error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
+                }
+                else if (isCallExpression) {
+                    error(node, Diagnostics.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors);
+                }
+                else {
+                    error(node, Diagnostics.super_property_access_is_permitted_only_in_a_constructor_member_function_or_member_accessor_of_a_derived_class);
+                }
+                
                 return unknownType;
             }
+            
+            if (container.kind === SyntaxKind.Constructor && isInConstructorArgumentInitializer(node, container)) {
+                // issue custom error message for super property access in constructor arguments (to be aligned with old compiler)
+                error(node, Diagnostics.super_cannot_be_referenced_in_constructor_arguments);
+                return unknownType;
+            }
+            
+            return nodeCheckFlag === NodeCheckFlags.SuperStatic
+                ? getBaseConstructorTypeOfClass(classType)
+                : baseClassType;
+            
+            function isLegalUsageOfSuperExpression(container: Node): boolean {
+                if (!container) {
+                    return false;
+                }
 
-            let container = getSuperContainer(node, /*includeFunctions*/ true);
-
-            if (container) {
-                let canUseSuperExpression = false;
-                let needToCaptureLexicalThis: boolean;
                 if (isCallExpression) {
                     // TS 1.0 SPEC (April 2014): 4.8.1
                     // Super calls are only permitted in constructors of derived classes
-                    canUseSuperExpression = container.kind === SyntaxKind.Constructor;
+                    return container.kind === SyntaxKind.Constructor;
                 }
                 else {
                     // TS 1.0 SPEC (April 2014)
@@ -6450,75 +6507,28 @@ namespace ts {
                     // - In a constructor, instance member function, instance member accessor, or instance member variable initializer where this references a derived class instance
                     // - In a static member function or static member accessor
 
-                    // super property access might appear in arrow functions with arbitrary deep nesting
-                    needToCaptureLexicalThis = false;
-                    while (container && container.kind === SyntaxKind.ArrowFunction) {
-                        container = getSuperContainer(container, /*includeFunctions*/ true);
-                        needToCaptureLexicalThis = languageVersion < ScriptTarget.ES6;
-                    }
-
                     // topmost container must be something that is directly nested in the class declaration
                     if (container && isClassLike(container.parent)) {
                         if (container.flags & NodeFlags.Static) {
-                            canUseSuperExpression =
-                            container.kind === SyntaxKind.MethodDeclaration ||
-                            container.kind === SyntaxKind.MethodSignature ||
-                            container.kind === SyntaxKind.GetAccessor ||
-                            container.kind === SyntaxKind.SetAccessor;
+                            return container.kind === SyntaxKind.MethodDeclaration ||
+                                container.kind === SyntaxKind.MethodSignature ||
+                                container.kind === SyntaxKind.GetAccessor ||
+                                container.kind === SyntaxKind.SetAccessor;
                         }
                         else {
-                            canUseSuperExpression =
-                            container.kind === SyntaxKind.MethodDeclaration ||
-                            container.kind === SyntaxKind.MethodSignature ||
-                            container.kind === SyntaxKind.GetAccessor ||
-                            container.kind === SyntaxKind.SetAccessor ||
-                            container.kind === SyntaxKind.PropertyDeclaration ||
-                            container.kind === SyntaxKind.PropertySignature ||
-                            container.kind === SyntaxKind.Constructor;
+                            return container.kind === SyntaxKind.MethodDeclaration ||
+                                container.kind === SyntaxKind.MethodSignature ||
+                                container.kind === SyntaxKind.GetAccessor ||
+                                container.kind === SyntaxKind.SetAccessor ||
+                                container.kind === SyntaxKind.PropertyDeclaration ||
+                                container.kind === SyntaxKind.PropertySignature ||
+                                container.kind === SyntaxKind.Constructor;
                         }
                     }
                 }
-
-                if (canUseSuperExpression) {
-                    let returnType: Type;
-
-                    if ((container.flags & NodeFlags.Static) || isCallExpression) {
-                        getNodeLinks(node).flags |= NodeCheckFlags.SuperStatic;
-                        returnType = getBaseConstructorTypeOfClass(classType);
-                    }
-                    else {
-                        getNodeLinks(node).flags |= NodeCheckFlags.SuperInstance;
-                        returnType = baseClassType;
-                    }
-
-                    if (container.kind === SyntaxKind.Constructor && isInConstructorArgumentInitializer(node, container)) {
-                        // issue custom error message for super property access in constructor arguments (to be aligned with old compiler)
-                        error(node, Diagnostics.super_cannot_be_referenced_in_constructor_arguments);
-                        returnType = unknownType;
-                    }
-
-                    if (!isCallExpression && needToCaptureLexicalThis) {
-                        // call expressions are allowed only in constructors so they should always capture correct 'this'
-                        // super property access expressions can also appear in arrow functions -
-                        // in this case they should also use correct lexical this
-                        captureLexicalThis(node.parent, container);
-                    }
-
-                    return returnType;
-                }
-            }
-
-            if (container && container.kind === SyntaxKind.ComputedPropertyName) {
-                error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
-            }
-            else if (isCallExpression) {
-                error(node, Diagnostics.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors);
-            }
-            else {
-                error(node, Diagnostics.super_property_access_is_permitted_only_in_a_constructor_member_function_or_member_accessor_of_a_derived_class);
-            }
-
-            return unknownType;
+                
+                return false;
+            }            
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available

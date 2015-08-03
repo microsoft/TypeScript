@@ -24,6 +24,7 @@ namespace ts {
             set,
             contains,
             remove,
+            clear,
             forEachValue: forEachValueInMap
         };
 
@@ -50,6 +51,10 @@ namespace ts {
 
         function normalizeKey(key: string) {
             return getCanonicalFileName(normalizeSlashes(key));
+        }
+        
+        function clear() {
+            files = {};
         }
     }
 

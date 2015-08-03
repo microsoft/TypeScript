@@ -14,7 +14,7 @@ namespace ts {
         let matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
         if (!matchResult) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, 'en', 'ja-jp'));
+            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
             return false;
         }
 
@@ -49,7 +49,7 @@ namespace ts {
         }
 
         // TODO: Add codePage support for readFile?
-        let fileContents = '';
+        let fileContents = "";
         try {
             fileContents = sys.readFile(filePath);
         }
@@ -355,21 +355,22 @@ namespace ts {
         return { program, exitStatus };
 
         function compileProgram(): ExitStatus {
-            // First get any syntactic errors.
-            let diagnostics = program.getSyntacticDiagnostics();
-            reportDiagnostics(diagnostics);
+            let diagnostics: Diagnostic[];
+            
+            // First get and report any syntactic errors.
+            diagnostics = program.getSyntacticDiagnostics();
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                let diagnostics = program.getGlobalDiagnostics();
-                reportDiagnostics(diagnostics);
+                diagnostics = program.getGlobalDiagnostics();
 
                 if (diagnostics.length === 0) {
-                    let diagnostics = program.getSemanticDiagnostics();
-                    reportDiagnostics(diagnostics);
+                    diagnostics = program.getSemanticDiagnostics();
                 }
             }
+
+            reportDiagnostics(diagnostics);
 
             // If the user doesn't want us to emit, then we're done at this point.
             if (compilerOptions.noEmit) {

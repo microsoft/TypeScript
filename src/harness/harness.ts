@@ -1458,7 +1458,7 @@ module Harness {
         }
 
         export function isJSMap(fileName: string) {
-            return stringEndsWith(fileName, '.js.map');
+            return stringEndsWith(fileName, '.js.map') || stringEndsWith(fileName, '.jsx.map');
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */

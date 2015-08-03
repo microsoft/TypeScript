@@ -78,15 +78,52 @@ namespace ts.server {
             return this.snap().getChangeRange(oldSnapshot);
         }
     }
-
+    
+    interface TimestampedResolvedModule extends ResolvedModule {
+        lastCheckTime: number; 
+    }
+    
     export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
         roots: ScriptInfo[] = [];
-
+        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;        
+        private moduleResolutionHost: ts.ModuleResolutionHost;
+        
         constructor(public host: ServerHost, public project: Project) {
+            this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
+            this.moduleResolutionHost = {
+                fileExists: fileName => this.fileExists(fileName)
+            }
         }
+        
+        resolveModuleName(moduleName: string, containingFile: string): string {
+            let resolutionsInFile = this.resolvedModuleNames.get(containingFile);
+            if (!resolutionsInFile) {
+                resolutionsInFile = {};
+                this.resolvedModuleNames.set(containingFile, resolutionsInFile);
+            }
+            
+            let resolution = ts.lookUp(resolutionsInFile, moduleName);
+            if (!moduleResolutionIsValid(resolution)) {
+                let compilerOptions = this.getCompilationSettings();
+                let defaultResolver = ts.getDefaultModuleNameResolver(compilerOptions);
+                resolution = <TimestampedResolvedModule>defaultResolver(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                resolution.lastCheckTime = Date.now();
+                resolutionsInFile[moduleName] = resolution;
+            }
+            return resolution.resolvedFileName;
+            
+            function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
+                if (!resolution) {
+                    return false;
+                }
+                
+                // TODO: use lastCheckTime assuming that module resolution results are legal for some period of time
+                return !resolution.resolvedFileName && resolution.failedLookupLocations.length !== 0;
+            }
+        }        
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
@@ -102,6 +139,8 @@ namespace ts.server {
 
         setCompilationSettings(opt: ts.CompilerOptions) {
             this.compilationSettings = opt;
+            // conservatively assume that changing compiler options might affect module resolution strategy
+            this.resolvedModuleNames.clear();
         }
 
         lineAffectsRefs(filename: string, line: number) {
@@ -803,9 +842,6 @@ namespace ts.server {
             } else {
                 this.log("no config file");
             }
-            if (configFileName) {
-                configFileName = getAbsolutePath(configFileName, searchPath);
-            }
             if (configFileName && (!this.configProjectIsActive(configFileName))) {
                 var configResult = this.openConfigFile(configFileName, fileName);
                 if (!configResult.success) {
@@ -910,7 +946,8 @@ namespace ts.server {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.readConfigFile(configFilename);
+            var contents = this.host.readFile(configFilename)
+            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
             if (rawConfig.error) {
                 return rawConfig.error;
             }

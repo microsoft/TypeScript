@@ -977,9 +977,13 @@ namespace ts {
         error? (s: string): void;
         useCaseSensitiveFileNames? (): boolean;
         
-        // LS host should implement one of these methods
+        // LS host can implement one of these methods
+        // if getModuleResolutionHost is implemented then compiler will apply one of built-in ways to resolve module names
+        // and ModuleResolutionHost will be used to ask host specific questions        
+        // if resolveModuleName is implemented - this will mean that host is completely in charge of module name resolution 
+        // if none of these methods are implemented then language service will try to emulate getModuleResolutionHost atop of 'getScriptSnapshot'
+        getModuleResolutionHost?(): ModuleResolutionHost; 
         resolveModuleName?(moduleName: string, containingFile: string): string;
-        getModuleResolutionHost?(): ModuleResolutionHost;  
     }
 
     //
@@ -1935,7 +1939,7 @@ namespace ts {
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
     }
 
-    function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
+    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
         return useCaseSensitivefileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
