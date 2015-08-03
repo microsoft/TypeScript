@@ -6759,6 +6759,7 @@ namespace ts {
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start)); 
 
             start = new Date().getTime();
 
@@ -6813,7 +6814,6 @@ namespace ts {
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            log("getDocCommentTemplateAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             // Check if in a context where we don't want to perform any insertion
             if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
