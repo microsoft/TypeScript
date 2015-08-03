@@ -1040,7 +1040,7 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
-        getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion;
+        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -6796,7 +6796,7 @@ namespace ts {
 
         /**
          * Checks if position points to a valid position to add JSDoc comments, and if so,
-         * returns the appropriate scaffolding. Otherwise returns an empty string.
+         * returns the appropriate template. Otherwise returns an empty string.
          * Valid positions are
          * * outside of comments, statements, and expressions, and
          * * preceding a function declaration.
@@ -6810,10 +6810,10 @@ namespace ts {
          * @param position The (character-indexed) position in the file where the check should
          * be performed.
          */
-        function getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion {
+        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            log("getDocCommentScaffoldingAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+            log("getDocCommentTemplateAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             // Check if in a context where we don't want to perform any insertion
             if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
@@ -7096,7 +7096,7 @@ namespace ts {
             getFormattingEditsForRange,
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
-            getDocCommentScaffoldingAtPosition,
+            getDocCommentTemplateAtPosition,
             getEmitOutput,
             getSourceFile,
             getProgram

@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: functionDecl.ts
-////function /*0*/foo/*1*/(/*2*/) /*3*/{ /*4*/}
+////f/*0*/unction /*1*/foo/*2*/(/*3*/) /*4*/{ /*5*/}
 
 test.markers().forEach((marker) => {
     goTo.position(marker.position);
-    verify.noDocCommentScaffolding();
+    verify.noDocCommentTemplate();
 });

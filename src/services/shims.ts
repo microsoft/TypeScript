@@ -208,7 +208,7 @@ namespace ts {
         /**
          * Returns JSON-encoded value of the type TextInsertion.
          */
-        getDocCommentScaffoldingAtPosition(fileName: string, position: number): string;
+        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
 
         getEmitOutput(fileName: string): string;
     }
@@ -816,10 +816,10 @@ namespace ts {
                 });
         }
 
-        public getDocCommentScaffoldingAtPosition(fileName: string, position: number): string {
+        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getDocCommentScaffoldingAtPosition('" + fileName + "', " + position + ")",
-                () => this.languageService.getDocCommentScaffoldingAtPosition(fileName, position)
+                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
             );
         }
 

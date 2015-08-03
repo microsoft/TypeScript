@@ -379,12 +379,12 @@ module FourSlashInterface {
         }
 
         // Will fix in fourslash-referencing
-        public DocCommentScaffolding(expectedText: string, expectedOffset: number, empty?: boolean) {
-            FourSlash.currentTestState.verifyDocCommentScaffolding(empty ? undefined : { newText: expectedText, cursorOffset: expectedOffset });
+        public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
+            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, cursorOffset: expectedOffset });
         }
 
-        public noDocCommentScaffolding() {
-            this.DocCommentScaffolding(/*expectedText*/ undefined, /*expectedOffset*/ undefined, true);
+        public noDocCommentTemplate() {
+            this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, true);
         }
 
         public getScriptLexicalStructureListCount(count: number) {

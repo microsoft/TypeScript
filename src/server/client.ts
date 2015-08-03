@@ -539,7 +539,7 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
         
-        getDocCommentScaffoldingAtPosition(fileName: string, position: number): TextInsertion {
+        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             throw new Error("Not Implemented Yet."); 
         }
 

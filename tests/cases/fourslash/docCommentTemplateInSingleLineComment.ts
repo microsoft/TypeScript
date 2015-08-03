@@ -10,5 +10,5 @@
 
 test.markers().forEach((marker) => {
     goTo.position(marker.position);
-    verify.noDocCommentScaffolding();
+    verify.noDocCommentTemplate();
 });

@@ -4,4 +4,4 @@
 /////*0*/
 
 goTo.marker("0");
-verify.noDocCommentScaffolding();
+verify.noDocCommentTemplate();

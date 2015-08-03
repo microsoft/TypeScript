@@ -1941,27 +1941,28 @@ module FourSlash {
             }
         }
 
-        public verifyDocCommentScaffolding(expected: ts.TextInsertion) {
-            let actual = this.languageService.getDocCommentScaffoldingAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+        public verifyDocCommentTemplate(expected: ts.TextInsertion) {
+            const name = "verifyDocCommentTemplate";
+            let actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (expected === undefined) {
                 if (actual === undefined) {
                     return;
                 }
                 else {
-                    this.raiseError('verifyDocCommentScaffolding failed - expected no scaffolding but got {newText: \"' + actual.newText + '\" offsetInNewText: ' + actual.offsetInNewText + '}');
+                    this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" offsetInNewText: ' + actual.offsetInNewText + '}');
                 }
             }
             if (expected !== undefined && actual === undefined) {
-                this.raiseError('verifyDocCommentScaffolding failed - expected the scaffolding {newText: \"' + actual.newText + '\" offsetInNewText: ' + actual.offsetInNewText + '} but got nothin instead');
+                this.raiseError(name + ' failed - expected the template {newText: \"' + actual.newText + '\" offsetInNewText: ' + actual.offsetInNewText + '} but got nothing instead');
             }
 
             if (actual.newText !== expected.newText) {
-                this.raiseError('verifyDocCommentScaffolding failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
+                this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
             }
 
             if (actual.offsetInNewText !== expected.offsetInNewText) {
-                this.raiseError('verifyDocCommentScaffolding failed - expected cursorOffset: ' + expected.offsetInNewText + ',\tactual cursorOffset:' + actual.offsetInNewText);
+                this.raiseError(name + ' failed - expected offsetInNewText: ' + expected.offsetInNewText + ',\nactual offsetInNewText:' + actual.offsetInNewText);
             }
         }
 
