@@ -1873,6 +1873,18 @@
         "category": "Error",
         "code": 5051
     },
+    "Option 'out' cannot be specified with option 'outDir'.": {
+        "category": "Error",
+        "code": 5052
+    },
+    "Option 'out' cannot be used when option 'module' is 'CommonJS` or `UMD`.": {
+        "category": "Error",
+        "code": 5053
+    },
+    "Option 'out' cannot be used with module files when option 'target' is 'ES6' or higher.": {
+        "category": "Error",
+        "code": 5054
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",

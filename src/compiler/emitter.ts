@@ -14,6 +14,102 @@ namespace ts {
         _i        = 0x10000000,  // Use/preference flag for '_i'
     }
 
+    function shouldEmitJsx(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        return sourceFile.languageVariant === LanguageVariant.JSX && compilerOptions.jsx === JsxEmit.Preserve;
+    }
+
+    /** @internal */
+    export function shouldEmitToSingleFile(host: EmitHost): boolean {
+        let compilerOptions = host.getCompilerOptions();
+
+        if (!compilerOptions.out) {
+            // if --out is not specified, should not emit to single output file
+            return false;
+        }
+
+        if (compilerOptions.isolatedModules) {
+            // it is invalid to use --out with --isolatedModules
+            return false;
+        }
+
+        if (compilerOptions.module === ModuleKind.CommonJS ||
+            compilerOptions.module === ModuleKind.UMD) {
+            // it is invalid to use --out with --module commonjs/umd
+            return false;
+        }
+
+        if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES6 &&
+            forEach(host.getSourceFiles(), isExternalModule)) {
+            // Can not use single output file if targeting ES6 module system either
+            return false;
+        }
+
+        return true;
+    }
+
+    /** @internal */
+    export function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, isDeclaration:boolean, action: (name: string, sources: SourceFile[]) => void) {
+        let compilerOptions = host.getCompilerOptions();
+
+        if (shouldEmitToSingleFile(host)) {
+            // If --out is set, it does not matter if we have a targetSoruceFile
+            // passed; we need to emit all files to a single output file
+            let outputFilePath = isDeclaration ? removeFileExtension(compilerOptions.out) + ".d.ts" : compilerOptions.out;
+            let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isDeclarationFile(sourceFile));
+            action(outputFilePath, sourceFiles);
+        }
+        else {
+            if (targetSourceFile) {
+                // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
+                // only emit the outputs of this file
+                if (!isDeclarationFile(targetSourceFile)) {
+                    let outputFileExtension = isDeclaration ? ".d.ts" : shouldEmitJsx(targetSourceFile, compilerOptions) ? ".jsx" : ".js";
+                    let outputFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, outputFileExtension);
+                    action(outputFilePath, [targetSourceFile]);
+                }
+            }
+            else {
+                // No targetSourceFile, we need to emit all files
+                for (let sourceFile of host.getSourceFiles()) {
+                    if (!isDeclarationFile(sourceFile)) {
+                        let outputFileExtension = isDeclaration ? ".d.ts" : shouldEmitJsx(sourceFile, compilerOptions) ? ".jsx" : ".js";
+                        let outputFilePath = getOwnEmitOutputFilePath(sourceFile, host, outputFileExtension);
+                        action(outputFilePath, [sourceFile]);
+                    }
+                }
+            }
+        }
+    }
+
+    function getExternalModuleNameFromFilePath(fileName: string, host:EmitHost) {
+        let sourceFilePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
+        let commonSourceDirectory = host.getCommonSourceDirectory();
+        sourceFilePath = sourceFilePath.replace(commonSourceDirectory, "");
+        return removeFileExtension(sourceFilePath);
+    }
+
+    /** @internal */
+    export function generateExternalModuleNameFromSourceFile(sourceFile: SourceFile, host: EmitHost): string {
+        // if we have a module name through a /// <amd-module /> comment, always use it, otherwise
+        // use the file path, get the relative path to the project commonSourceDirectory.
+        return sourceFile.moduleName || getExternalModuleNameFromFilePath(sourceFile.fileName, host);
+    }
+
+    /** @internal */
+    export function generateExternalModuleReferenceNameFromImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, host: EmitHost, resolver:EmitResolver): string {
+        let moduleSpecifier = getExternalModuleName(node);
+        if (moduleSpecifier.kind === SyntaxKind.StringLiteral) {
+            let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
+            if (moduleSymbol && moduleSymbol.valueDeclaration &&
+                moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile &&
+                !isDeclarationFile(<SourceFile>moduleSymbol.valueDeclaration)) {
+                return `"${ generateExternalModuleNameFromSourceFile(<SourceFile>moduleSymbol.valueDeclaration, host) }"`;
+            }
+        }
+
+        return undefined;
+    }
+
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
@@ -67,32 +163,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
-        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
-        let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
-
-        if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, [sourceFile]);
-                }
-            });
-            if (compilerOptions.out) {
-                let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
-                emitFile(compilerOptions.out, sourceFiles);
-            }
-        }
-        else {
-            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, forEach(host.getSourceFiles(), shouldEmitJsx) ? ".jsx" : ".js");
-                emitFile(jsFilePath, [targetSourceFile]);
-            }
-            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
-                emitFile(compilerOptions.out, sourceFiles);
-            }
-        }
+        let emitNamesForExternalModules = shouldEmitToSingleFile(host); // if modules are emitted to the same file, they should have names
+      
+        // Emit all js/jsx files
+        forEachExpectedOutputFile(host, targetSourceFile, /*isDeclaration*/ false, emitFile);
     
         // Emit declarations
         if (compilerOptions.declaration) {
@@ -188,10 +262,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** Called to before starting the lexical scopes as in function/class in the emitted code because of node
               * @param scopeDeclaration node that starts the lexical scope
               * @param scopeName Optional name of this scope instead of deducing one from the declaration node */
-            let scopeEmitStart = function(scopeDeclaration: Node, scopeName?: string) { };
+            let scopeEmitStart = function (scopeDeclaration: Node, scopeName?: string) { };
 
             /** Called after coming out of the scope */
-            let scopeEmitEnd = function() { };
+            let scopeEmitEnd = function () { };
 
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
@@ -1247,7 +1321,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // Don't emit empty strings
                             if (children[i].kind === SyntaxKind.JsxText) {
                                 let text = getTextToEmit(<JsxText>children[i]);
-                                if(text !== undefined) {
+                                if (text !== undefined) {
                                     write(', "');
                                     write(text);
                                     write('"');
@@ -2069,7 +2143,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
-            
+
             function emitQualifiedName(node: QualifiedName) {
                 emit(node.left);
                 write(".");
@@ -2092,12 +2166,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitEntityNameAsExpression(node.left, /*useFallback*/ false);
                 }
-                
+
                 write(".");
                 emitNodeWithoutSourceMap(node.right);
             }
-            
-            function emitEntityNameAsExpression(node: EntityName, useFallback: boolean) {                
+
+            function emitEntityNameAsExpression(node: EntityName, useFallback: boolean) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         if (useFallback) {
@@ -2105,10 +2179,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitExpressionIdentifier(<Identifier>node);
                             write(" !== 'undefined' && ");
                         }
-                        
+
                         emitExpressionIdentifier(<Identifier>node);
                         break;
-                        
+
                     case SyntaxKind.QualifiedName:
                         emitQualifiedNameAsExpression(<QualifiedName>node, useFallback);
                         break;
@@ -4249,7 +4323,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (ctor) {
                     // Emit all the directive prologues (like "use strict").  These have to come before
                     // any other preamble code we write (like parameter initializers).
-                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);                    
+                    startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
@@ -4837,33 +4911,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.ClassDeclaration:
                         write("Function");
                         return;
-                        
-                    case SyntaxKind.PropertyDeclaration:    
+
+                    case SyntaxKind.PropertyDeclaration:
                         emitSerializedTypeNode((<PropertyDeclaration>node).type);
                         return;
-                        
-                    case SyntaxKind.Parameter:              
+
+                    case SyntaxKind.Parameter:
                         emitSerializedTypeNode((<ParameterDeclaration>node).type);
                         return;
-                        
-                    case SyntaxKind.GetAccessor:            
+
+                    case SyntaxKind.GetAccessor:
                         emitSerializedTypeNode((<AccessorDeclaration>node).type);
                         return;
-                        
-                    case SyntaxKind.SetAccessor:            
+
+                    case SyntaxKind.SetAccessor:
                         emitSerializedTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
                         return;
-                        
+
                 }
-                
+
                 if (isFunctionLike(node)) {
                     write("Function");
                     return;
                 }
-                
+
                 write("void 0");
             }
-            
+
             function emitSerializedTypeNode(node: TypeNode) {
                 switch (node.kind) {
                     case SyntaxKind.VoidKeyword:
@@ -4873,17 +4947,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.ParenthesizedType:
                         emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
                         return;
-                        
+
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                         write("Function");
                         return;
-                        
+
                     case SyntaxKind.ArrayType:
                     case SyntaxKind.TupleType:
                         write("Array");
                         return;
-                        
+
                     case SyntaxKind.TypePredicate:
                     case SyntaxKind.BooleanKeyword:
                         write("Boolean");
@@ -4893,11 +4967,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.StringLiteral:
                         write("String");
                         return;
-                        
+
                     case SyntaxKind.NumberKeyword:
                         write("Number");
                         return;
-                        
+
                     case SyntaxKind.SymbolKeyword:
                         write("Symbol");
                         return;
@@ -4905,19 +4979,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.TypeReference:
                         emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
                         return;
-                        
+
                     case SyntaxKind.TypeQuery:
                     case SyntaxKind.TypeLiteral:
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.AnyKeyword:
                         break;
-                        
+
                     default:
                         Debug.fail("Cannot serialize unexpected type node.");
                         break;
                 }
-                
+
                 write("Object");
             }
             
@@ -4940,27 +5014,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
                         emitEntityNameAsExpression(typeName, /*useFallback*/ false);
                         break;
-                        
+
                     case TypeReferenceSerializationKind.VoidType:
                         write("void 0");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.BooleanType:
                         write("Boolean");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.NumberLikeType:
                         write("Number");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.StringLikeType:
                         write("String");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.ArrayLikeType:
                         write("Array");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.ESSymbolType:
                         if (languageVersion < ScriptTarget.ES6) {
                             write("typeof Symbol === 'function' ? Symbol : Object");
@@ -4969,11 +5043,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write("Symbol");
                         }
                         break;
-                        
+
                     case TypeReferenceSerializationKind.TypeWithCallSignature:
                         write("Function");
                         break;
-                        
+
                     case TypeReferenceSerializationKind.ObjectType:
                         write("Object");
                         break;
@@ -4996,7 +5070,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else if (isFunctionLike(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                         valueDeclaration = <FunctionLikeDeclaration>node;
                     }
-                    
+
                     if (valueDeclaration) {
                         var parameters = valueDeclaration.parameters;
                         var parameterCount = parameters.length;
@@ -5005,7 +5079,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 if (i > 0) {
                                     write(", ");
                                 }
-                                
+
                                 if (parameters[i].dotDotDotToken) {
                                     var parameterType = parameters[i].type;
                                     if (parameterType.kind === SyntaxKind.ArrayType) {
@@ -5017,7 +5091,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     else {
                                         parameterType = undefined;
                                     }
-                                    
+
                                     emitSerializedTypeNode(parameterType);
                                 }
                                 else {
@@ -5035,11 +5109,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
                     return;
                 }
-                
+
                 write("void 0");
             }
-            
-            
+
+
             function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
                 // This method emits the serialized type metadata for a decorator target.
                 // The caller should have already tested whether the node has decorators.
@@ -5069,7 +5143,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (writeComma || argumentsWritten) {
                             write(", ");
                         }
-                        
+
                         writeLine();
                         write("__metadata('design:returntype', ");
                         emitSerializedReturnTypeOfNode(node);
@@ -5077,10 +5151,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         argumentsWritten++;
                     }
                 }
-                
+
                 return argumentsWritten;
             }
-            
+
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 emitOnlyPinnedOrTripleSlashComments(node);
             }
@@ -5437,10 +5511,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // is it top level export import v = a.b.c in system module?
                     // if yes - it needs to be rewritten as exporter('v', v = a.b.c)
                     let isExported = isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ true);
-                    
+
                     if (!variableDeclarationIsHoisted) {
                         Debug.assert(!isExported);
-                                                
+
                         if (isES6ExportedDeclaration(node)) {
                             write("export ");
                             write("var ");
@@ -5449,8 +5523,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write("var ");
                         }
                     }
-                                       
-                    
+
+
                     if (isExported) {
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(node.name);
@@ -5464,8 +5538,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (isExported) {
                         write(")");
                     }
-                                        
-                    write(";");                    
+
+                    write(";");
                     emitEnd(node);
                     emitExportImportAssignments(node);
                     emitTrailingComments(node);
@@ -5991,12 +6065,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         return;
                     }
-                    
+
                     if (isInternalModuleImportEqualsDeclaration(node)) {
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }
-                        
+
                         hoistedVars.push(node.name);
                         return;
                     }
@@ -6239,16 +6313,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportFunctionForFile = makeUniqueName("exports");
                 writeLine();
                 write("System.register(");
-                if (node.moduleName) {
-                    write(`"${node.moduleName}", `);
+                let moduleName = emitNamesForExternalModules ? generateExternalModuleNameFromSourceFile(node, host) : node.moduleName;
+                if (moduleName) {
+                    write(`"${moduleName}", `);
                 }
                 write("[");
                 for (let i = 0; i < externalImports.length; ++i) {
-                    let text = getExternalModuleNameText(externalImports[i]);
+                    let externalImport = externalImports[i];
+                    let externalImportName = emitNamesForExternalModules ?
+                        generateExternalModuleReferenceNameFromImport(externalImport, host, resolver) :
+                        getExternalModuleNameText(externalImport);
                     if (i !== 0) {
                         write(", ");
                     }
-                    write(text);
+                    write(externalImportName);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
@@ -6284,17 +6362,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Fill in amd-dependency tags
                 for (let amdDependency of node.amdDependencies) {
                     if (amdDependency.name) {
-                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        aliasedModuleNames.push(`"${amdDependency.path}"`);
                         importAliasNames.push(amdDependency.name);
                     }
                     else {
-                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        unaliasedModuleNames.push(`"${amdDependency.path}"`);
                     }
                 }
 
                 for (let importNode of externalImports) {
                     // Find the name of the external module
-                    let externalModuleName = getExternalModuleNameText(importNode);
+                    let externalModuleName = emitNamesForExternalModules ?
+                        generateExternalModuleReferenceNameFromImport(importNode, host, resolver) :
+                        getExternalModuleNameText(importNode);
 
                     // Find the name of the module alias, if there is one
                     let importAliasName = getLocalNameForExternalImport(importNode);
@@ -6307,7 +6387,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                write("[\"require\", \"exports\"");
+                write(`["require", "exports"`);
                 if (aliasedModuleNames.length) {
                     write(", ");
                     write(aliasedModuleNames.join(", "));
@@ -6328,8 +6408,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 writeLine();
                 write("define(");
-                if (node.moduleName) {
-                    write("\"" + node.moduleName + "\", ");
+                let moduleName = emitNamesForExternalModules ? generateExternalModuleNameFromSourceFile(node, host) : node.moduleName;
+                if (moduleName) {
+                    write("\"" + moduleName + "\", ");
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
                 write(") {");

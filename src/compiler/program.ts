@@ -646,8 +646,20 @@ namespace ts {
             }
 
             let languageVersion = options.target || ScriptTarget.ES3;
-
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
+
+            if (options.out) {
+                if (options.outDir) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_specified_with_option_outDir));
+                }
+                if (options.module === ModuleKind.CommonJS || options.module === ModuleKind.UMD) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_used_when_option_module_is_CommonJS_or_UMD));
+                }
+                if (languageVersion >= ScriptTarget.ES6 && firstExternalModuleSourceFile) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_used_with_module_files_when_option_target_is_ES6_or_higher));
+                }
+            }
+
             if (options.isolatedModules) {
                 if (!options.module && languageVersion < ScriptTarget.ES6) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));

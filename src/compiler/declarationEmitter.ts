@@ -22,7 +22,7 @@ namespace ts {
     function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults, host: EmitHost, diagnostics: Diagnostic[]): void {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
-        let emitAsAmbientExternalModuleDeclarations = !!compilerOptions.out;
+        let emitAsAmbientExternalModuleDeclarations = shouldEmitToSingleFile(host);
         let enclosingDeclaration: Node;
         let currentSourceFile: SourceFile;
 
@@ -36,6 +36,7 @@ namespace ts {
         let writeLine = writer.writeLine;
         let increaseIndent = writer.increaseIndent;
         let decreaseIndent = writer.decreaseIndent;
+
 
         // Emit any triple-slash references
         emitTripleSlashReferences(preprocessResults.sourceFiles);
@@ -391,7 +392,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                emitExternalModuleSpecifier(getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(node);
                 write(");");
             }
             writer.writeLine();
@@ -431,7 +432,7 @@ namespace ts {
             }
 
             write(" from ");
-            emitExternalModuleSpecifier(node.moduleSpecifier);
+            emitExternalModuleSpecifier(node);
             write(";");
             writer.writeLine();
         }
@@ -461,41 +462,31 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                emitExternalModuleSpecifier(node.moduleSpecifier);
+                emitExternalModuleSpecifier(node);
             }
             write(";");
             writer.writeLine();
         }
 
-        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
+        function emitExternalModuleSpecifier(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
+            // If we are emitting to a single file, get the right name for the module
             if (emitAsAmbientExternalModuleDeclarations) {
-                let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
-                if (moduleSymbol && moduleSymbol.valueDeclaration &&
-                    moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile &&
-                    !isDeclarationFile(<SourceFile>moduleSymbol.valueDeclaration)) {
-                    let nonRelativeModuleName = getExternalModuleNameFromPath((<SourceFile>moduleSymbol.valueDeclaration).fileName);
-                    write("\"");
+                let nonRelativeModuleName = generateExternalModuleReferenceNameFromImport(node, host, resolver);
+                if(nonRelativeModuleName) {
                     write(nonRelativeModuleName);
-                    write("\"");
                     return;
                 }
             }
 
-            writeTextOfNode(currentSourceFile, moduleSpecifier);
-        }
-
-        function getExternalModuleNameFromPath(fileName: string) {
-            let sourceFilePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
-            let commonSourceDirectory = host.getCommonSourceDirectory();
-            sourceFilePath = sourceFilePath.replace(commonSourceDirectory, "");
-            return removeFileExtension(sourceFilePath);
+            // otherwise, write the expression
+            writeTextOfNode(currentSourceFile, getExternalModuleName(node));
         }
 
         function emitExternalModuleDeclaration(node: SourceFile) {
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
 
-            write(`declare module "${ getExternalModuleNameFromPath(node.fileName) }"`);
+            write(`declare module "${ generateExternalModuleNameFromSourceFile(node, host) }"`);
             write(" {");
             writeLine();
             increaseIndent();
@@ -1741,40 +1732,9 @@ namespace ts {
         }
     }
 
-    function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, action: (name: string, sources: SourceFile[]) => void) {
-        let compilerOptions = host.getCompilerOptions();
-
-        if (compilerOptions.out) {
-            // If --out is set, it does not matter if we have a targetSoruceFile
-            // passed; we need to emit all files to a single output file
-            let outputFilePath = removeFileExtension(compilerOptions.out) + ".d.ts"
-            let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isDeclarationFile(sourceFile));
-            action(outputFilePath, sourceFiles);
-        }
-        else {
-            if (targetSourceFile) {
-                // If we have a targetSourceFile (e.g calling emitter from language service to getEmitOutput)
-                // only emit the outputs of this file
-                if (!isDeclarationFile(targetSourceFile)) {
-                    let outputFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".d.ts");
-                    action(outputFilePath, [targetSourceFile]);
-                }
-            }
-            else {
-                // No targetSourceFile, we need to emit all files
-                for (let sourceFile of host.getSourceFiles()) {
-                    if (!isDeclarationFile(sourceFile)) {
-                        let outputFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".d.ts");
-                        action(outputFilePath, [sourceFile]);
-                    }
-                }
-            }
-        }
-    }
-
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         let diagnostics: Diagnostic[] = [];
-        forEachExpectedOutputFile(host, targetSourceFile, (outputFileName, sourceFiles) => {
+        forEachExpectedOutputFile(host, targetSourceFile, /* isDeclaration */ true ,(outputFileName, sourceFiles) => {
             preprocessDeclarations(sourceFiles, resolver, diagnostics, host.getCompilerOptions());
         });
         
@@ -1788,7 +1748,7 @@ namespace ts {
 
     /* @internal */
     export function emitDeclarations(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile, diagnostics: Diagnostic[]): void {
-        forEachExpectedOutputFile(host, targetSourceFile, (outputFileName, sourceFiles) => {
+        forEachExpectedOutputFile(host, targetSourceFile, /* isDeclaration */ true, (outputFileName, sourceFiles) => {
             let fileDiagnostics: Diagnostic[] = [];
             let preprocessResult = preprocessDeclarations(sourceFiles, resolver, fileDiagnostics, host.getCompilerOptions());
             if (fileDiagnostics.length === 0) {

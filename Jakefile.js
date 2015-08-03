@@ -211,14 +211,19 @@ var compilerFilename = "tsc.js";
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
     * @param noOutFile: true to compile without using --out
     * @param generateDeclarations: true to compile using --declaration
+    * @param commonJSModule: true to compile using --module CommonJS
     * @param outDir: true to compile using --outDir
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, commonJSModule, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var options = "--module commonjs -noImplicitAny";
+        var options = " --noImplicitAny";
+
+        if (commonJSModule) {
+            options += " --module CommonJS";
+        }
 
         // Keep comments when specifically requested
         // or when in debug mode.
@@ -360,6 +365,7 @@ compileFile(/*outfile*/configureNightlyJs,
             /*useBuiltCompiler*/ false,
             /*noOutFile*/ false,
             /*generateDeclarations*/ false,
+            /*commonJSModule*/ false,
             /*outDir*/ undefined,
             /*preserveConstEnums*/ undefined,
             /*keepComments*/ false,
@@ -397,6 +403,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*useBuiltCompiler*/ true,
             /*noOutFile*/ false,
             /*generateDeclarations*/ true,
+            /*commonJSModule*/ false,
             /*outDir*/ undefined,
             /*preserveConstEnums*/ true,
             /*keepComments*/ true,
@@ -625,7 +632,8 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 // Browser tests
 var nodeServerOutFile = 'tests/webTestServer.js'
 var nodeServerInFile = 'tests/webTestServer.ts'
-compileFile(nodeServerOutFile, [nodeServerInFile], [nodeServerInFile, builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, /*noOutFile*/ true);
+compileFile(nodeServerOutFile, [nodeServerInFile], [nodeServerInFile, builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, /*noOutFile*/ true, /*generateDeclarations*/ false,   /*commonJSModule*/ true);
+
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
     var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
