@@ -538,7 +538,7 @@ namespace ts {
         return pos;
     }
 
-    let shebangTriviaRegex = /^#!.*/;
+    const shebangTriviaRegex = /^#!.*/;
 
     function isShebangTrivia(text: string, pos: number) {
         // Shebangs check must only be done at the start of the file
@@ -644,12 +644,9 @@ namespace ts {
     
     /** Optionally, get the shebang */
     export function getShebang(text: string): string {
-        if (!shebangTriviaRegex.test(text)) {
-            return undefined;
-        }
-        else {
-            return shebangTriviaRegex.exec(text)[0];
-        }
+        return shebangTriviaRegex.test(text)
+            ? shebangTriviaRegex.exec(text)[0]
+            : undefined;
     }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
@@ -1123,7 +1120,7 @@ namespace ts {
                 let ch = text.charCodeAt(pos);
 
                 // Special handling for shebang
-                if (ch == CharacterCodes.hash &&  pos === 0 && isShebangTrivia(text, pos)) {
+                if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
                     pos = scanShebangTrivia(text ,pos);
                     if (skipTrivia) {
                         continue;
