@@ -791,16 +791,15 @@ namespace ts {
             let enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
-                if (!node.initializer || isExpressionLiteralConstant(node.initializer)) {
-                    write(enumMemberValue.toString());
-                    write(",");
-                }
-                else {
+                if (node.initializer && !isExpressionLiteralConstant(node.initializer)) {
                     writeTextOfNode(currentSourceFile, node.initializer);
-                    write(",");
-                    write(" /* " + enumMemberValue.toString() + " */");
+                    write(", /* " + enumMemberValue.toString() + " */");
+                    writeLine();
+                    return;
                 }
+                write(enumMemberValue.toString());
             }
+            write(",");
             writeLine();
         }
 
