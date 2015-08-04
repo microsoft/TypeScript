@@ -5732,6 +5732,14 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
+                else if (source.flags & TypeFlags.Tuple && target.flags & TypeFlags.Tuple && (<TupleType>source).elementTypes.length === (<TupleType>target).elementTypes.length) {
+                    // If source and target are tuples of the same size, infer from element types
+                    let sourceTypes = (<TupleType>source).elementTypes;
+                    let targetTypes = (<TupleType>target).elementTypes;
+                    for (let i = 0; i < sourceTypes.length; i++) {
+                        inferFromTypes(sourceTypes[i], targetTypes[i]);
+                    }
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     let targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeParameterCount = 0;
