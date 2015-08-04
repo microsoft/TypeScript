@@ -791,10 +791,22 @@ namespace ts {
             let enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
-                write(enumMemberValue.toString());
+                if (!node.initializer || isExpressionLiteralConstant(node.initializer)) {
+                    write(enumMemberValue.toString());
+                    write(",");
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.initializer);
+                    write(",");
+                    write(" /* " + enumMemberValue.toString() + " */");
+                }
             }
-            write(",");
             writeLine();
+        }
+
+        function isExpressionLiteralConstant(expr: Node) {
+            return expr.kind === SyntaxKind.NumericLiteral || expr.kind === SyntaxKind.StringLiteral
+                || expr.kind === SyntaxKind.TrueKeyword || expr.kind === SyntaxKind.FalseKeyword;
         }
 
         function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {
