@@ -10441,20 +10441,21 @@ namespace ts {
                 return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
             }
 
+            function containsSuperCallAsComputedPropertyName(n: Declaration): boolean {
+                return n.name && containsSuperCall(n.name);
+            }
+
             function containsSuperCall(n: Node): boolean {
                 if (isSuperCallExpression(n)) {
                     return true;
                 }
-                switch (n.kind) {
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.ClassExpression:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor: return false;
-                    default: return forEachChild(n, containsSuperCall);
+                else if (isFunctionLike(n)) {
+                    return false;
                 }
+                else if (isClassLike(n)) {
+                    return forEach((<ClassLikeDeclaration>n).members, containsSuperCallAsComputedPropertyName);
+                }
+                return forEachChild(n, containsSuperCall);
             }
 
             function markThisReferencesAsErrors(n: Node): void {
