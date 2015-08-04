@@ -2266,7 +2266,7 @@ namespace ts {
         // if getModuleResolutionHost is implemented then compiler will apply one of built-in ways to resolve module names
         // and ModuleResolutionHost will be used to ask host specific questions        
         // if resolveModuleName is implemented - this will mean that host is completely in charge of module name resolution
-        resolveModuleName?(moduleName: string, containingFile: string): string;
+        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
         getModuleResolutionHost?(): ModuleResolutionHost;        
     }
 

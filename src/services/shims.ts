@@ -267,22 +267,16 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
-        private lastRequestedFile: string;
-        private lastRequestedModuleResolutions: Map<string>;
         
-        public resolveModuleName: (moduleName: string, containingFile: string) => string;
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => string[];
         
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect. 
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleName = (moduleName: string, containingFile: string) => {
-                    if (this.lastRequestedFile !== containingFile) {
-                        this.lastRequestedModuleResolutions = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
-                        this.lastRequestedFile = containingFile;
-                    }
-
-                    return this.lastRequestedModuleResolutions[moduleName];
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                    let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                    return map(moduleNames, name => lookUp(resolutionsInFile, name));
                 };
             }
         }

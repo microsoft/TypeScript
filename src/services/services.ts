@@ -983,7 +983,7 @@ namespace ts {
         // if resolveModuleName is implemented - this will mean that host is completely in charge of module name resolution 
         // if none of these methods are implemented then language service will try to emulate getModuleResolutionHost atop of 'getScriptSnapshot'
         getModuleResolutionHost?(): ModuleResolutionHost; 
-        resolveModuleName?(moduleName: string, containingFile: string): string;
+        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
     }
 
     //
@@ -2564,7 +2564,8 @@ namespace ts {
 
             let oldSettings = program && program.getCompilerOptions();
             let newSettings = hostCache.compilationSettings();
-            let changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
+            let changesInCompilationSettingsAffectSyntax = oldSettings && 
+                (oldSettings.target !== newSettings.target || oldSettings.module !== newSettings.module || oldSettings.noResolve !== newSettings.noResolve);
             
             // Now create a new compiler
             let compilerHost: CompilerHost = {
@@ -2578,8 +2579,8 @@ namespace ts {
                 getCurrentDirectory: () => host.getCurrentDirectory(),
             };
             
-            if (host.resolveModuleName) {
-                compilerHost.resolveModuleName = (moduleName, containingFile) => host.resolveModuleName(moduleName, containingFile)
+            if (host.resolveModuleNames) {
+                compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile)
             }
             else if (host.getModuleResolutionHost) {
                 compilerHost.getModuleResolutionHost = () => host.getModuleResolutionHost()

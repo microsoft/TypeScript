@@ -98,30 +98,54 @@ namespace ts.server {
             }
         }
         
-        resolveModuleName(moduleName: string, containingFile: string): string {
-            let resolutionsInFile = this.resolvedModuleNames.get(containingFile);
-            if (!resolutionsInFile) {
-                resolutionsInFile = {};
-                this.resolvedModuleNames.set(containingFile, resolutionsInFile);
+        resolveModuleNames(moduleNames: string[], containingFile: string): string[] {
+            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);            
+            
+            let newResolutions: Map<TimestampedResolvedModule> = {};
+            let resolvedFileNames: string[] = [];
+            
+            let compilerOptions = this.getCompilationSettings();
+            let defaultResolver = ts.getDefaultModuleNameResolver(compilerOptions);
+                        
+            for (let moduleName of moduleNames) {
+                // check if this is a duplicate entry in the list
+                let resolution = lookUp(newResolutions, moduleName);
+                if (!resolution) {
+                    let existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
+                    if (moduleResolutionIsValid(existingResolution)) {
+                        // ok, it is safe to use existing module resolution results  
+                        resolution = existingResolution;
+                    }
+                    else {
+                        resolution = <TimestampedResolvedModule>defaultResolver(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution.lastCheckTime = Date.now();
+                        newResolutions[moduleName] = resolution;                                                
+                    }
+                }
+                
+                ts.Debug.assert(resolution !== undefined);
+                
+                resolvedFileNames.push(resolution.resolvedFileName);                
             }
             
-            let resolution = ts.lookUp(resolutionsInFile, moduleName);
-            if (!moduleResolutionIsValid(resolution)) {
-                let compilerOptions = this.getCompilationSettings();
-                let defaultResolver = ts.getDefaultModuleNameResolver(compilerOptions);
-                resolution = <TimestampedResolvedModule>defaultResolver(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
-                resolution.lastCheckTime = Date.now();
-                resolutionsInFile[moduleName] = resolution;
-            }
-            return resolution.resolvedFileName;
+            // replace old results with a new one
+            this.resolvedModuleNames.set(containingFile, newResolutions);
+            return resolvedFileNames;
             
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
                 if (!resolution) {
                     return false;
                 }
                 
-                // TODO: use lastCheckTime assuming that module resolution results are legal for some period of time
-                return !resolution.resolvedFileName && resolution.failedLookupLocations.length !== 0;
+                if (resolution.resolvedFileName) {
+                    // TODO: consider checking failedLookupLocations  
+                    // TODO: use lastCheckTime to track expiration for module name resolution 
+                    return true;
+                }
+                
+                // consider situation if we have no candidate locations as valid resolution.
+                // after all there is no point to invalidate it if we have no idea where to look for the module.
+                return resolution.failedLookupLocations.length === 0;
             }
         }        
 
