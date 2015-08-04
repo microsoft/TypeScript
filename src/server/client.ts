@@ -528,7 +528,29 @@ namespace ts.server {
         }
 
         getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
-            throw new Error("Not Implemented Yet.");
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
+            var response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
+
+            return response.body.map(entry => { // convert ts.server.protocol.DocumentHighlightsItem to ts.DocumentHighlights
+                return {
+                    fileName: entry.file,
+                    highlightSpans: entry.highlightSpans.map(span => { // convert ts.server.protocol.HighlightSpan to ts.HighlighSpan
+                        var start = this.lineOffsetToPosition(entry.file, span.start);
+                        var end = this.lineOffsetToPosition(entry.file, span.end);
+                        return {
+                            textSpan: ts.createTextSpanFromBounds(start, end),
+                            kind: span.kind
+                        };
+                    })
+                };
+            });
         }
 
         getOutliningSpans(fileName: string): OutliningSpan[] {

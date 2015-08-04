@@ -239,6 +239,28 @@ declare namespace ts.server.protocol {
     }
 
     /**
+      * Get document highlights request; value of command field is
+      * "documentHighlights". Return response giving spans that are relevant
+      * in the file at a given line and column.
+      */
+    export interface DocumentHighlightsRequest extends FileLocationRequest {
+    }
+
+    export interface HighLightSpan extends TextSpan {
+        kind: string
+    }
+
+    export interface DocumentHighlightsItem {
+        file: string,
+        highlightSpans: HighLightSpan[];
+    }
+
+    export interface DocumentHighlightsResponse extends Response {
+        body?: DocumentHighlightsItem[];
+    }
+
+
+    /**
       * Find references request; value of command field is
       * "references". Return response giving the file locations that
       * reference the symbol found in file at location line, col.
