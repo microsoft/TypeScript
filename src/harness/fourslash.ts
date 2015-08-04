@@ -2497,7 +2497,7 @@ module FourSlash {
     }
 
     function containTSConfigJson(files: FourSlashFile[]): boolean {
-        return ts.forEach(files, f => f.fileOptions['Filename'] === 'tsconfig.json');
+        return ts.forEach(files, f => f.fileOptions["Filename"] === "tsconfig.json");
     }
 
     function getNonFileNameOptionInFileList(files: FourSlashFile[]): string {

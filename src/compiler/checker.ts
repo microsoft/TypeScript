@@ -7378,7 +7378,7 @@ namespace ts {
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
             // There is no such thing as an instance type for a non-class element. This
             // line shouldn't be hit.
-            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), 'Should not call getJsxElementInstanceType on non-class Element');
+            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), "Should not call getJsxElementInstanceType on non-class Element");
 
             let classSymbol = getJsxElementTagSymbol(node);
             if (classSymbol === unknownSymbol) {
