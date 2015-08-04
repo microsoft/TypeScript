@@ -13,8 +13,6 @@
         "test.ts"
     ],
     "emittedFiles": [
-        "m1.js",
-        "test.js",
         "bin/test.js",
         "bin/test.d.ts"
     ]

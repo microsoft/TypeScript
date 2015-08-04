@@ -20,6 +20,9 @@ namespace ts {
 
     /** @internal */
     export function shouldEmitToSingleFile(host: EmitHost): boolean {
+        // Though there are errors that have been reported already for wrong 
+        // command combinations, we want to not emit to a single file if any of these
+        // conditions is true to ensue valid emit even in face of options errors.
         let compilerOptions = host.getCompilerOptions();
 
         if (!compilerOptions.out) {
@@ -29,6 +32,11 @@ namespace ts {
 
         if (compilerOptions.isolatedModules) {
             // it is invalid to use --out with --isolatedModules
+            return false;
+        }
+
+        if (compilerOptions.outDir) {
+            // it is invalid to use --out with --outDir
             return false;
         }
 

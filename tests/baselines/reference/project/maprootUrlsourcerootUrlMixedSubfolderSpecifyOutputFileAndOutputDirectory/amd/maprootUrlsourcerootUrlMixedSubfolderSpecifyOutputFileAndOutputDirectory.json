@@ -18,10 +18,14 @@
         "test.ts"
     ],
     "emittedFiles": [
+        "outdir/outAndOutDirFolder/ref/m1.js.map",
+        "outdir/outAndOutDirFolder/ref/m1.js",
         "outdir/outAndOutDirFolder/ref/m2.js.map",
         "outdir/outAndOutDirFolder/ref/m2.js",
-        "bin/outAndOutDirFile.js.map",
-        "bin/outAndOutDirFile.js",
-        "bin/outAndOutDirFile.d.ts"
+        "outdir/outAndOutDirFolder/test.js.map",
+        "outdir/outAndOutDirFolder/test.js",
+        "outdir/outAndOutDirFolder/ref/m1.d.ts",
+        "outdir/outAndOutDirFolder/ref/m2.d.ts",
+        "outdir/outAndOutDirFolder/test.d.ts"
     ]
 }

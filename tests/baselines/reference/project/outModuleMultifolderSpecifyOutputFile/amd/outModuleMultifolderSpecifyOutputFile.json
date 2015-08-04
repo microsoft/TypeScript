@@ -14,9 +14,6 @@
         "test.ts"
     ],
     "emittedFiles": [
-        "ref/m1.js",
-        "../outputdir_module_multifolder_ref/m2.js",
-        "test.js",
         "bin/test.js",
         "bin/test.d.ts"
     ]

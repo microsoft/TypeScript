@@ -1,18 +1,6 @@
 EmitSkipped: false
-FileName : declSingleFile.js
-var x = 5;
-var Bar = (function () {
-    function Bar() {
-    }
-    return Bar;
-})();
-var x1 = "hello world";
-var Foo = (function () {
-    function Foo() {
-    }
-    return Foo;
-})();
-System.register("inputFile3", [], function(exports_1) {
+FileName : tests/cases/fourslash/inputFile3.js
+System.register([], function(exports_1) {
     var foo, bar;
     return {
         setters:[],
@@ -22,19 +10,7 @@ System.register("inputFile3", [], function(exports_1) {
         }
     }
 });
-FileName : declSingleFile.d.ts
-declare var x: number;
-declare class Bar {
-    x: string;
-    y: number;
-}
-declare var x1: string;
-declare class Foo {
-    x: string;
-    y: number;
-}
-declare module "inputFile3" {
-    export var foo: number;
-    export var bar: string;
-}
+FileName : tests/cases/fourslash/inputFile3.d.ts
+export var foo: number;
+export var bar: string;
 
