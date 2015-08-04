@@ -246,13 +246,13 @@ declare namespace ts.server.protocol {
     export interface DocumentHighlightsRequest extends FileLocationRequest {
     }
 
-    export interface HighLightSpan extends TextSpan {
+    export interface HighlightSpan extends TextSpan {
         kind: string
     }
 
     export interface DocumentHighlightsItem {
         file: string,
-        highlightSpans: HighLightSpan[];
+        highlightSpans: HighlightSpan[];
     }
 
     export interface DocumentHighlightsResponse extends Response {

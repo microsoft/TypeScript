@@ -528,29 +528,32 @@ namespace ts.server {
         }
 
         getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
-            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            var args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            let { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
+            let args: protocol.FileLocationRequestArgs = { file: fileName, line, offset };
 
-            var request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
-            var response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
+            let request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
+            let response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
 
-            return response.body.map(entry => { // convert ts.server.protocol.DocumentHighlightsItem to ts.DocumentHighlights
+            let _self = this;
+            return response.body.map(convertToDocumentHighlights);
+
+            function convertToDocumentHighlights(item: ts.server.protocol.DocumentHighlightsItem): ts.DocumentHighlights {
+                let { file, highlightSpans } = item;
+
                 return {
-                    fileName: entry.file,
-                    highlightSpans: entry.highlightSpans.map(span => { // convert ts.server.protocol.HighlightSpan to ts.HighlighSpan
-                        var start = this.lineOffsetToPosition(entry.file, span.start);
-                        var end = this.lineOffsetToPosition(entry.file, span.end);
-                        return {
-                            textSpan: ts.createTextSpanFromBounds(start, end),
-                            kind: span.kind
-                        };
-                    })
+                    fileName: file,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan2)
                 };
-            });
+
+                function convertHighlightSpan2(span: ts.server.protocol.HighlightSpan): ts.HighlightSpan {
+                    let start = _self.lineOffsetToPosition(file, span.start);
+                    let end = _self.lineOffsetToPosition(file, span.end);
+                    return {
+                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        kind: span.kind
+                    };
+                }
+            }
         }
 
         getOutliningSpans(fileName: string): OutliningSpan[] {

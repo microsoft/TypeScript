@@ -425,7 +425,7 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
         }
 
-        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[], kind?: string) {
+        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
             FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
         }
 

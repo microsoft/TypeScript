@@ -354,7 +354,7 @@ namespace ts.server {
 
             let { compilerService } = project;
             let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
-            let filesToSearch = [fileName]; // only search for highlights inside the current file
+            let filesToSearch = [ fileName ]; // only search for highlights inside the current file
             
             let documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
             
@@ -362,22 +362,23 @@ namespace ts.server {
                 return undefined;
             }
 
-            return documentHighlights.map(documentHighlight => { // convert ts.DocumentHighlights to ts.server.protocol.DocumentHighlightsItem
-                var file = documentHighlight.fileName;
+            return documentHighlights.map(convertToDocumentHighlightsItem);
+
+            function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
+                let { fileName, highlightSpans } = documentHighlights;
+
                 return {
-                    file: file,
-                    highlightSpans: documentHighlight.highlightSpans.map(highlightSpan => { // convert to ts.HighlightSpan to ts.server.protocol.HighlightSpan
-                        let { textSpan, kind } = highlightSpan;
-                        let start = compilerService.host.positionToLineOffset(file, textSpan.start);
-                        let end = compilerService.host.positionToLineOffset(file, ts.textSpanEnd(textSpan));
-                        return {
-                            start: start,
-                            end: end,
-                            kind: kind
-                        }
-                    })
+                    file: fileName,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan1)
+                };
+
+                function convertHighlightSpan1(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
+                    let { textSpan, kind } = highlightSpan;
+                    let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                    let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                    return { start, end, kind };
                 }
-            });
+            }
         }
 
         private getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {

@@ -2166,15 +2166,17 @@ module FourSlash {
                 this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - found 0 highlights, expected at least one.');
             }
 
-            for (let i = 0; i < documentHighlights.length; i++) if (documentHighlights[i].fileName === fileName) {
-                let { highlightSpans } = documentHighlights[i];
+            for (let documentHighlight of documentHighlights) {
+                if (documentHighlight.fileName === fileName) {
+                    let { highlightSpans } = documentHighlight;
 
-                for (let highlight of highlightSpans) {
-                    if (highlight && highlight.textSpan.start === start && ts.textSpanEnd(highlight.textSpan) === end) {
-                        if (typeof kind !== "undefined" && highlight.kind !== kind) {
-                            this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ' + highlight.kind + ', expected: ' + kind + '.');
+                    for (let highlight of highlightSpans) {
+                        if (highlight && highlight.textSpan.start === start && ts.textSpanEnd(highlight.textSpan) === end) {
+                            if (typeof kind !== "undefined" && highlight.kind !== kind) {
+                                this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ' + highlight.kind + ', expected: ' + kind + '.');
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
             }
@@ -2187,9 +2189,9 @@ module FourSlash {
             this.taoInvalidReason = 'verifyDocumentHighlightsAtPositionListCount NYI';
 
             let documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNamesToSearch);
-            let actualCount = documentHighlights 
-                ? documentHighlights.reduce((currentCount, currentDocumentHighlights) => { 
-                    return currentCount + currentDocumentHighlights.highlightSpans.length}, 0) 
+            let actualCount = documentHighlights
+                ? documentHighlights.reduce((currentCount, { fileName, highlightSpans }) => {
+                    return currentCount + highlightSpans.length}, 0)
                 : 0;
 
             if (expectedCount !== actualCount) {
