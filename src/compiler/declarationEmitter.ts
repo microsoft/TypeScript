@@ -19,10 +19,9 @@ namespace ts {
 
     const emptyHandler = () => { };
 
-    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults, host: EmitHost, diagnostics: Diagnostic[]): void {
+    function writeDeclarations(outputFileName: string, preprocessResults: PreprocessResults, host: EmitHost, diagnostics: Diagnostic[], emitAsAmbientExternalModuleDeclarations: boolean): void {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
-        let emitAsAmbientExternalModuleDeclarations = shouldEmitToSingleFile(host);
         let enclosingDeclaration: Node;
         let currentSourceFile: SourceFile;
 
@@ -1748,11 +1747,11 @@ namespace ts {
 
     /* @internal */
     export function emitDeclarations(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile, diagnostics: Diagnostic[]): void {
-        forEachExpectedOutputFile(host, targetSourceFile, /* isDeclaration */ true, (outputFileName, sourceFiles) => {
+        forEachExpectedOutputFile(host, targetSourceFile, /* isDeclaration */ true, (outputFileName, sourceFiles, isSingleOutputFile) => {
             let fileDiagnostics: Diagnostic[] = [];
             let preprocessResult = preprocessDeclarations(sourceFiles, resolver, fileDiagnostics, host.getCompilerOptions());
             if (fileDiagnostics.length === 0) {
-                writeDeclarations(outputFileName, preprocessResult, host, fileDiagnostics);
+                writeDeclarations(outputFileName, preprocessResult, host, fileDiagnostics, isSingleOutputFile);
             }
             diagnostics.push.apply(diagnostics, fileDiagnostics);
         });

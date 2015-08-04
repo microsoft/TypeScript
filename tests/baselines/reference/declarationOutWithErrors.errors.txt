@@ -1,0 +1,8 @@
+error TS5055: Option 'declarationOut' cannot be specified without option 'declaration'.
+
+
+!!! error TS5055: Option 'declarationOut' cannot be specified without option 'declaration'.
+==== tests/cases/compiler/declarationOutWithErrors.ts (0 errors) ====
+    
+    export default class A {
+    }

@@ -17,6 +17,13 @@ namespace ts {
             description: Diagnostics.Generates_corresponding_d_ts_file,
         },
         {
+            name: "declarationOut",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Concatenate_and_emit_declarations_to_single_file,
+            paramType: Diagnostics.FILE,
+        },
+        {
             name: "diagnostics",
             type: "boolean",
         },

@@ -1109,6 +1109,10 @@ module Harness {
                             options.declaration = setting.value === 'true';
                             break;
 
+                        case 'declarationout':
+                            options.declarationOut = setting.value;
+                            break;
+
                         case 'newline':
                             if (setting.value.toLowerCase() === 'crlf') {
                                 options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
@@ -1188,8 +1192,14 @@ module Harness {
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
                 currentDirectory?: string) {
-                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
-                    throw new Error('There were no errors and declFiles generated did not match number of js files generated');
+
+                let shouldEmitToSingleDeclarationFile = options.declarationOut || options.out;
+                    
+                if (options.declaration && result.errors.length === 0) {
+                    let expectedDeclarationFiles = shouldEmitToSingleDeclarationFile ? 1 : result.files.length;
+                    if (result.declFilesCode.length !== expectedDeclarationFiles) {
+                        throw new Error(`There were no errors and declFiles generated did not match number of js files generated. Expected: ${expectedDeclarationFiles}, Actual: ${result.declFilesCode.length}.`);
+                    }
                 }
 
                 let declInputFiles: { unitName: string; content: string }[] = [];
@@ -1222,7 +1232,7 @@ module Harness {
                         assert(sourceFile, "Program has no source file with name '" + fileName + "'");
                         // Is this file going to be emitted separately
                         let sourceFileName: string;
-                        if (ts.isExternalModule(sourceFile) || !options.out) {
+                        if (!shouldEmitToSingleDeclarationFile) {
                             if (options.outDir) {
                                 let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.currentDirectoryForProgram);
                                 sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
@@ -1234,7 +1244,7 @@ module Harness {
                         }
                         else {
                             // Goes to single --out file
-                            sourceFileName = options.out;
+                            sourceFileName = options.declarationOut || options.out;
                         }
 
                         let dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
@@ -1520,7 +1530,7 @@ module Harness {
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
             "inlinesources", "emitdecoratormetadata", "experimentaldecorators",
-            "skipdefaultlibcheck", "jsx"];
+            "skipdefaultlibcheck", "jsx", "declarationout"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

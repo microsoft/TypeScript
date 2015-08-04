@@ -1,0 +1,17 @@
+=== tests/cases/compiler/declarationOut/fileA.ts ===
+
+var A = 0;
+>A : number
+>0 : number
+
+=== tests/cases/compiler/declarationOut/fileB.ts ===
+var B = 0;
+>B : number
+>0 : number
+
+=== tests/cases/compiler/declarationOut/fileC.ts ===
+var C = 0;
+>C : number
+>0 : number
+
+

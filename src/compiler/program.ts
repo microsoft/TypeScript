@@ -660,6 +660,10 @@ namespace ts {
                 }
             }
 
+            if (options.declarationOut && !options.declaration) {
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_declarationOut_cannot_be_specified_without_option_declaration));
+            }
+
             if (options.isolatedModules) {
                 if (!options.module && languageVersion < ScriptTarget.ES6) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));

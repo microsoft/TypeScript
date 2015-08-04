@@ -1972,6 +1972,7 @@ namespace ts {
         allowNonTsExtensions?: boolean;
         charset?: string;
         declaration?: boolean;
+        declarationOut?: string;
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;

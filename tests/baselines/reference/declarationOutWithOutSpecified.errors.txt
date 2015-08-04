@@ -1,0 +1,16 @@
+error TS5053: Option 'out' cannot be used when option 'module' is 'CommonJS` or `UMD`.
+
+
+!!! error TS5053: Option 'out' cannot be used when option 'module' is 'CommonJS` or `UMD`.
+==== tests/cases/compiler/declarationOut/fileA.ts (0 errors) ====
+    
+    // Shold emit to "declatation.out.d.ts" and not "out.d.ts"
+    var A = 0;
+    
+==== tests/cases/compiler/declarationOut/fileB.ts (0 errors) ====
+    var B = 0;
+    
+==== tests/cases/compiler/declarationOut/fileC.ts (0 errors) ====
+    var C = 0;
+    
+    

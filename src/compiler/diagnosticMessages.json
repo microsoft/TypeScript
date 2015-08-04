@@ -1885,6 +1885,10 @@
         "category": "Error",
         "code": 5054
     },
+    "Option 'declarationOut' cannot be specified without option 'declaration'.": {
+        "category": "Error",
+        "code": 5055
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2106,7 +2110,11 @@
         "category": "Message",
         "code": 6068
     },
-
+    "Concatenate and emit declarations to single file.": {
+        "category": "Message",
+        "code": 6069
+    },
+    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

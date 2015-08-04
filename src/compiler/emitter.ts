@@ -18,8 +18,7 @@ namespace ts {
         return sourceFile.languageVariant === LanguageVariant.JSX && compilerOptions.jsx === JsxEmit.Preserve;
     }
 
-    /** @internal */
-    export function shouldEmitToSingleFile(host: EmitHost): boolean {
+    function shouldEmitToSingleFile(host: EmitHost): boolean {
         // Though there are errors that have been reported already for wrong 
         // command combinations, we want to not emit to a single file if any of these
         // conditions is true to ensue valid emit even in face of options errors.
@@ -55,16 +54,27 @@ namespace ts {
         return true;
     }
 
-    /** @internal */
-    export function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, isDeclaration:boolean, action: (name: string, sources: SourceFile[]) => void) {
-        let compilerOptions = host.getCompilerOptions();
+    function shouldEmitDeclarationsToSingleFile(host: EmitHost): boolean {
+        return !!host.getCompilerOptions().declarationOut || shouldEmitToSingleFile(host);
+    }
 
-        if (shouldEmitToSingleFile(host)) {
+    /** @internal */
+    export function forEachExpectedOutputFile(host: EmitHost, targetSourceFile: SourceFile, isDeclaration:boolean, action: (name: string, sources: SourceFile[], isSingleOutputFile:boolean) => void) {
+        let compilerOptions = host.getCompilerOptions();
+        let expectSingleOutputFile = isDeclaration ? shouldEmitDeclarationsToSingleFile(host) : shouldEmitToSingleFile(host);
+
+        if (expectSingleOutputFile) {
             // If --out is set, it does not matter if we have a targetSoruceFile
             // passed; we need to emit all files to a single output file
-            let outputFilePath = isDeclaration ? removeFileExtension(compilerOptions.out) + ".d.ts" : compilerOptions.out;
+            let outputFilePath: string;
+            if (isDeclaration) {
+                outputFilePath = compilerOptions.declarationOut || removeFileExtension(compilerOptions.out) + ".d.ts";
+            }
+            else {
+                outputFilePath = compilerOptions.out;
+            }
             let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isDeclarationFile(sourceFile));
-            action(outputFilePath, sourceFiles);
+            action(outputFilePath, sourceFiles, /*isSingleOutputFile*/ true);
         }
         else {
             if (targetSourceFile) {
@@ -73,7 +83,7 @@ namespace ts {
                 if (!isDeclarationFile(targetSourceFile)) {
                     let outputFileExtension = isDeclaration ? ".d.ts" : shouldEmitJsx(targetSourceFile, compilerOptions) ? ".jsx" : ".js";
                     let outputFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, outputFileExtension);
-                    action(outputFilePath, [targetSourceFile]);
+                    action(outputFilePath, [targetSourceFile], /*isSingleOutputFile*/ false);
                 }
             }
             else {
@@ -82,7 +92,7 @@ namespace ts {
                     if (!isDeclarationFile(sourceFile)) {
                         let outputFileExtension = isDeclaration ? ".d.ts" : shouldEmitJsx(sourceFile, compilerOptions) ? ".jsx" : ".js";
                         let outputFilePath = getOwnEmitOutputFilePath(sourceFile, host, outputFileExtension);
-                        action(outputFilePath, [sourceFile]);
+                        action(outputFilePath, [sourceFile], /*isSingleOutputFile*/ false);
                     }
                 }
             }

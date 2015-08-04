@@ -1,0 +1,43 @@
+=== tests/cases/compiler/declarationOut/fileA.ts ===
+
+export default class A {
+>A : A
+}
+
+=== tests/cases/compiler/declarationOut/fileB.ts ===
+import A from "fileA";
+>A : typeof A
+
+export default class B {
+>B : B
+
+    getA() {
+>getA : () => A
+
+        return new A();
+>new A() : A
+>A : typeof A
+    }
+}
+
+=== tests/cases/compiler/declarationOut/fileC.ts ===
+import B from "./fileB";
+>B : typeof B
+
+export default class C {
+>C : C
+
+    getB() {
+>getB : () => B
+
+        return new B();
+>new B() : B
+>B : typeof B
+    }
+}
+
+=== tests/cases/compiler/declarationOut/global.ts ===
+var global = {};
+>global : {}
+>{} : {}
+

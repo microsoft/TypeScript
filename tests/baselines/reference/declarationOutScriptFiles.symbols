@@ -1,0 +1,14 @@
+=== tests/cases/compiler/declarationOut/fileA.ts ===
+
+var A = 0;
+>A : Symbol(A, Decl(fileA.ts, 1, 3))
+
+=== tests/cases/compiler/declarationOut/fileB.ts ===
+var B = 0;
+>B : Symbol(B, Decl(fileB.ts, 0, 3))
+
+=== tests/cases/compiler/declarationOut/fileC.ts ===
+var C = 0;
+>C : Symbol(C, Decl(fileC.ts, 0, 3))
+
+
