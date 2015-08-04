@@ -1275,6 +1275,7 @@ namespace ts {
         /* @internal */ lineMap: number[];
         /* @internal */ classifiableNames?: Map<string>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
+        // It is used to resolve module names in the checker.
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<string>;
         /* @internal */ imports: LiteralExpression[];
