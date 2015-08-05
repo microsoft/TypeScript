@@ -2006,12 +2006,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-                if (compilerOptions.isolatedModules) {
-                    // do not inline enum values in separate compilation mode
-                    return false;
-                }
-
-                let constantValue = resolver.getConstantValue(node);
+                let constantValue = tryGetConstEnumValue(node);
                 if (constantValue !== undefined) {
                     write(constantValue.toString());
                     if (!compilerOptions.removeComments) {
@@ -2021,6 +2016,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return true;
                 }
                 return false;
+            }
+            
+            function tryGetConstEnumValue(node: Node): number {
+                if (compilerOptions.isolatedModules) {
+                    return undefined;
+                }
+                
+                return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression 
+                    ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
+                    : undefined
             }
 
             // Returns 'true' if the code was actually indented, false otherwise.
@@ -2054,10 +2059,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
                 // 1 .toString is a valid property access, emit a space after the literal
+                // Also emit a space if expression is a integer const enum value - it will appear in generated code as numeric literal
                 let shouldEmitSpace: boolean;
-                if (!indentedBeforeDot && node.expression.kind === SyntaxKind.NumericLiteral) {
-                    let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
-                    shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                if (!indentedBeforeDot) {
+                    if (node.expression.kind === SyntaxKind.NumericLiteral) {
+                        // check if numeric literal was originally written with a dot
+                        let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
+                        shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                    }
+                    else {
+                        // check if constant enum value is integer
+                        let constantValue = tryGetConstEnumValue(node.expression);
+                        shouldEmitSpace = constantValue !== undefined && isFinite(constantValue) && Math.floor(constantValue) === constantValue;
+                    }
                 }
 
                 if (shouldEmitSpace) {

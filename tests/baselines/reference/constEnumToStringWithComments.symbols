@@ -1,0 +1,59 @@
+=== tests/cases/compiler/constEnumToStringWithComments.ts ===
+const enum Foo {
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+
+    X = 100,
+>X : Symbol(Foo.X, Decl(constEnumToStringWithComments.ts, 0, 16))
+
+    Y = 0.5,
+>Y : Symbol(Foo.Y, Decl(constEnumToStringWithComments.ts, 1, 12))
+
+    Z = 2.
+>Z : Symbol(Foo.Z, Decl(constEnumToStringWithComments.ts, 2, 12))
+}
+
+let x0 = Foo.X.toString();
+>x0 : Symbol(x0, Decl(constEnumToStringWithComments.ts, 6, 3))
+>Foo.X.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>Foo.X : Symbol(Foo.X, Decl(constEnumToStringWithComments.ts, 0, 16))
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+>X : Symbol(Foo.X, Decl(constEnumToStringWithComments.ts, 0, 16))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+
+let x1 = Foo["X"].toString();
+>x1 : Symbol(x1, Decl(constEnumToStringWithComments.ts, 7, 3))
+>Foo["X"].toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+>"X" : Symbol(Foo.X, Decl(constEnumToStringWithComments.ts, 0, 16))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+
+let y0 = Foo.Y.toString();
+>y0 : Symbol(y0, Decl(constEnumToStringWithComments.ts, 8, 3))
+>Foo.Y.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>Foo.Y : Symbol(Foo.Y, Decl(constEnumToStringWithComments.ts, 1, 12))
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+>Y : Symbol(Foo.Y, Decl(constEnumToStringWithComments.ts, 1, 12))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+
+let y1 = Foo["Y"].toString();
+>y1 : Symbol(y1, Decl(constEnumToStringWithComments.ts, 9, 3))
+>Foo["Y"].toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+>"Y" : Symbol(Foo.Y, Decl(constEnumToStringWithComments.ts, 1, 12))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+
+let z0 = Foo.Z.toString();
+>z0 : Symbol(z0, Decl(constEnumToStringWithComments.ts, 10, 3))
+>Foo.Z.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>Foo.Z : Symbol(Foo.Z, Decl(constEnumToStringWithComments.ts, 2, 12))
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+>Z : Symbol(Foo.Z, Decl(constEnumToStringWithComments.ts, 2, 12))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+
+let z1 = Foo["Z"].toString();
+>z1 : Symbol(z1, Decl(constEnumToStringWithComments.ts, 11, 3))
+>Foo["Z"].toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
+>"Z" : Symbol(Foo.Z, Decl(constEnumToStringWithComments.ts, 2, 12))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+

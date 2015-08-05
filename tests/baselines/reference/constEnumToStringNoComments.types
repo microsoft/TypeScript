@@ -1,0 +1,71 @@
+=== tests/cases/compiler/constEnumToStringNoComments.ts ===
+const enum Foo {
+>Foo : Foo
+
+    X = 100,
+>X : Foo
+>100 : number
+
+    Y = 0.5,
+>Y : Foo
+>0.5 : number
+
+    Z = 2.
+>Z : Foo
+>2. : number
+}
+
+let x0 = Foo.X.toString();
+>x0 : string
+>Foo.X.toString() : string
+>Foo.X.toString : (radix?: number) => string
+>Foo.X : Foo
+>Foo : typeof Foo
+>X : Foo
+>toString : (radix?: number) => string
+
+let x1 = Foo["X"].toString();
+>x1 : string
+>Foo["X"].toString() : string
+>Foo["X"].toString : (radix?: number) => string
+>Foo["X"] : Foo
+>Foo : typeof Foo
+>"X" : string
+>toString : (radix?: number) => string
+
+let y0 = Foo.Y.toString();
+>y0 : string
+>Foo.Y.toString() : string
+>Foo.Y.toString : (radix?: number) => string
+>Foo.Y : Foo
+>Foo : typeof Foo
+>Y : Foo
+>toString : (radix?: number) => string
+
+let y1 = Foo["Y"].toString();
+>y1 : string
+>Foo["Y"].toString() : string
+>Foo["Y"].toString : (radix?: number) => string
+>Foo["Y"] : Foo
+>Foo : typeof Foo
+>"Y" : string
+>toString : (radix?: number) => string
+
+let z0 = Foo.Z.toString();
+>z0 : string
+>Foo.Z.toString() : string
+>Foo.Z.toString : (radix?: number) => string
+>Foo.Z : Foo
+>Foo : typeof Foo
+>Z : Foo
+>toString : (radix?: number) => string
+
+let z1 = Foo["Z"].toString();
+>z1 : string
+>Foo["Z"].toString() : string
+>Foo["Z"].toString : (radix?: number) => string
+>Foo["Z"] : Foo
+>Foo : typeof Foo
+>"Z" : string
+>toString : (radix?: number) => string
+
