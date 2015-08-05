@@ -106,7 +106,6 @@ namespace ts.server {
             let resolvedFileNames: string[] = [];
             
             let compilerOptions = this.getCompilationSettings();
-            let defaultResolver = ts.getDefaultModuleNameResolver(compilerOptions);
                         
             for (let moduleName of moduleNames) {
                 // check if this is a duplicate entry in the list
@@ -118,7 +117,7 @@ namespace ts.server {
                         resolution = existingResolution;
                     }
                     else {
-                        resolution = <TimestampedResolvedModule>defaultResolver(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
                         newResolutions[moduleName] = resolution;                                                
                     }

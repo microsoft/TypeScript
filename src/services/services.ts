@@ -1837,7 +1837,7 @@ namespace ts {
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
             getNewLine: () => newLine,
-
+            // these two methods should never be called in transpile scenarios since 'noResolve' is set to 'true'
             fileExists: (fileName): boolean => { throw new Error("Should never be called."); },
             readFile: (fileName): string => { throw new Error("Should never be called."); }
         };
@@ -2055,11 +2055,6 @@ namespace ts {
             releaseDocument,
             reportStats
         };
-    }
-
-    export function resolveModuleName(fileName: string, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
-        let resolver = getDefaultModuleNameResolver(compilerOptions);
-        return resolver(moduleName, fileName, compilerOptions, host);
     }
 
     export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
@@ -2578,20 +2573,20 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory(),
-                fileExists: (fileName): boolean => { throw new Error("Not implemented"); },
-                readFile: (fileName): string => { throw new Error("Not implemented"); }
+                fileExists: (fileName): boolean => { 
+                    // stub missing host functionality
+                    Debug.assert(!host.resolveModuleNames);
+                    return hostCache.getOrCreateEntry(fileName) !== undefined; 
+                },
+                readFile: (fileName): string => {
+                    // stub missing host functionality
+                    let entry = hostCache.getOrCreateEntry(fileName);
+                    return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                }
             };
 
             if (host.resolveModuleNames) {
                 compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile)
-            }
-            else {
-                // stub missing host functionality
-                compilerHost.fileExists = fileName => hostCache.getOrCreateEntry(fileName) !== undefined;
-                compilerHost.readFile = fileName => {
-                    let entry = hostCache.getOrCreateEntry(fileName);
-                    return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
-                }
             }
 
             let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);

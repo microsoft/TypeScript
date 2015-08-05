@@ -29,18 +29,18 @@ namespace ts {
         return undefined;
     }
     
-    export function getDefaultModuleNameResolver(options: CompilerOptions): ModuleNameResolver {
-        // TODO: return different resolver based on compiler options (i.e. module kind)
-        return resolveModuleName;
-    }
-    
     export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
         let basePath = getDirectoryPath(containingFile);
         let referencedFileName = isRootedDiskPath(moduleName) ? moduleName : combinePaths(basePath, moduleName);
         return normalizePath(referencedFileName);
     }
+    
+    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+        // TODO: use different resolution strategy based on compiler options
+        return legacyNameResolver(moduleName, containingFile, compilerOptions, host);
+    }
 
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+    function legacyNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
         
         // module names that contain '!' are used to reference resources and are not resolved to actual files on disk
         if (moduleName.indexOf('!') != -1) {
@@ -226,10 +226,9 @@ namespace ts {
         if (!options.noResolve) {
             resolveModuleNamesWorker = host.resolveModuleNames;
             if (!resolveModuleNamesWorker) {
-                let defaultResolver = getDefaultModuleNameResolver(options);
                 resolveModuleNamesWorker = (moduleNames, containingFile) => {
                     return map(moduleNames, moduleName => {
-                        let moduleResolution = defaultResolver(moduleName, containingFile, options, host);
+                        let moduleResolution = resolveModuleName(moduleName, containingFile, options, host);
                         return moduleResolution.resolvedFileName;
                     });
                 }
