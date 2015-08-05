@@ -421,14 +421,14 @@ namespace ts {
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
-        return isInCommentHelper(sourceFile, position, /*predicate*/ c => true);
+        return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
     }
 
     /**
      * Returns true if the cursor at position in sourceFile is within a comment that additionally
      * satisfies predicate, and false otherwise.
      */
-    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate: (c: CommentRange) => boolean): boolean {
+    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
         let token = getTokenAtPosition(sourceFile, position);
 
         if (token && position <= token.getStart()) {
@@ -444,9 +444,12 @@ namespace ts {
             //    /* asdf */^
             //
             // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-            return forEach(commentRanges, c => c.pos < position &&
-                (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
-                predicate(c));
+            return predicate ?
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                    predicate(c)) :
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
         }
 
         return false;
@@ -458,7 +461,7 @@ namespace ts {
         // First, we have to see if this position actually landed in a comment.
         let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
-        return forEach(commentRanges, c => jsDocPrefix);
+        return forEach(commentRanges, jsDocPrefix);
         
         function jsDocPrefix(c: CommentRange): boolean {
             var text = sourceFile.text;

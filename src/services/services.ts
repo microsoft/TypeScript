@@ -6826,6 +6826,10 @@ namespace ts {
                 return undefined;
             }
 
+            // TODO: add support for:
+            // * methods
+            // * constructors
+            // * class decls
             let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
 
             if (!containingFunction || containingFunction.getStart() < position) {
@@ -6836,12 +6840,13 @@ namespace ts {
             let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
             let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
-            let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).match(/\s*/).toString();
+            let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
 
+            // TODO: call a helper method instead once PR #4133 gets merged in.
             const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
 
             let docParams = parameters.map((p, index) =>
-                indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index.toString()) + newLine);
+                indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index) + newLine);
 
 
             // A doc comment consists of the following
@@ -6851,16 +6856,15 @@ namespace ts {
             // * TODO: other tags.
             // * the closing comment line
             // * if the caret was directly in front of the object, then we add an extra line and indentation.
+            const preamble = "/**" + newLine +
+                indentationStr + " * ";
             let result =
-                "/**" + newLine +
-                indentationStr + " * " + newLine +
-                docParams.reduce((prev, cur) => prev + cur, "") +
+                preamble + newLine +
+                docParams.join("") +
                 indentationStr + " */" +
                 (tokenStart === position ? newLine + indentationStr : "");
 
-            let cursorOffset = "/**".length + newLine.length + indentationStr.length + " * ".length;
-
-            return { newText: result, caretOffset: cursorOffset };
+            return { newText: result, caretOffset: preamble.length };
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
