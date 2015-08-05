@@ -421,6 +421,10 @@ namespace ts {
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
         }
+        
+        public readFile(fileName: string): string {
+            return this.shimHost.readFile(fileName);
+        }
     }
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {

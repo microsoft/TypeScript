@@ -893,11 +893,7 @@ module Harness {
                 newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
                     newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
                         ts.sys.newLine;
-            
-            let moduleResolutionHost: ts.ModuleResolutionHost = {
-                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-            }
-            
+
             return {
                 getCurrentDirectory,
                 getSourceFile,
@@ -906,7 +902,8 @@ module Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                getModuleResolutionHost: () => moduleResolutionHost
+                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
+                readFile: (fileName: string): string => { throw new Error("NotYetImplemented"); }
             };
         }
 

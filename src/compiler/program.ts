@@ -152,10 +152,7 @@ namespace ts {
 
         const newLine = getNewLineCharacter(options);
         
-        let moduleResolutionHost: ModuleResolutionHost = {
-            fileExists: fileName => sys.fileExists(fileName),
-        }
-        
+    
         return {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
@@ -164,7 +161,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine,
-            getModuleResolutionHost: () => moduleResolutionHost
+            fileExists: fileName => sys.fileExists(fileName),
+            readFile: fileName => sys.readFile(fileName)
         };
     }
 
@@ -228,11 +226,10 @@ namespace ts {
         if (!options.noResolve) {
             resolveModuleNamesWorker = host.resolveModuleNames;
             if (!resolveModuleNamesWorker) {
-                Debug.assert(host.getModuleResolutionHost !== undefined);
                 let defaultResolver = getDefaultModuleNameResolver(options);
                 resolveModuleNamesWorker = (moduleNames, containingFile) => {
                     return map(moduleNames, moduleName => {
-                        let moduleResolution = defaultResolver(moduleName, containingFile, options, host.getModuleResolutionHost());
+                        let moduleResolution = defaultResolver(moduleName, containingFile, options, host);
                         return moduleResolution.resolvedFileName;
                     });
                 }
@@ -248,7 +245,8 @@ namespace ts {
             if ((oldOptions.module !== options.module) || 
                 (oldOptions.noResolve !== options.noResolve) || 
                 (oldOptions.target !== options.target) || 
-                (oldOptions.noLib !== options.noLib)) {
+                (oldOptions.noLib !== options.noLib) ||
+                (oldOptions.jsx !== options.jsx)) {
                 oldProgram = undefined;
             }
         }

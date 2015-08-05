@@ -2244,6 +2244,7 @@ namespace ts {
     
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
+        readFile(fileName: string): string;
     }
     
     export interface ResolvedModule {
@@ -2253,7 +2254,7 @@ namespace ts {
     
     export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
 
-    export interface CompilerHost {
+    export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
@@ -2263,12 +2264,14 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         
-        // Compiler host must implement one of these methods
-        // if getModuleResolutionHost is implemented then compiler will apply one of built-in ways to resolve module names
-        // and ModuleResolutionHost will be used to ask host specific questions        
-        // if resolveModuleName is implemented - this will mean that host is completely in charge of module name resolution
+        /*
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
+         * 'throw new Error("NotImplemented")'  
+         */
         resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
-        getModuleResolutionHost?(): ModuleResolutionHost;        
     }
 
     export interface TextSpan {

@@ -94,12 +94,13 @@ namespace ts.server {
         constructor(public host: ServerHost, public project: Project) {
             this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
             this.moduleResolutionHost = {
-                fileExists: fileName => this.fileExists(fileName)
+                fileExists: fileName => this.fileExists(fileName),
+                readFile: fileName => this.host.readFile(fileName)
             }
         }
         
         resolveModuleNames(moduleNames: string[], containingFile: string): string[] {
-            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);            
+            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
             
             let newResolutions: Map<TimestampedResolvedModule> = {};
             let resolvedFileNames: string[] = [];

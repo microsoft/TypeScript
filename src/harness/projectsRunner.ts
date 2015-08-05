@@ -129,10 +129,6 @@ class ProjectRunner extends RunnerBase {
             getSourceFileText: (fileName: string) => string,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
-            let moduleResolutionHost: ts.ModuleResolutionHost = {
-                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-            }
-
             let program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
             let errors = ts.getPreEmitDiagnostics(program);
 
@@ -196,7 +192,8 @@ class ProjectRunner extends RunnerBase {
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
                     getNewLine: () => ts.sys.newLine,
-                    getModuleResolutionHost: () => moduleResolutionHost
+                    fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
+                    readFile: fileName => Harness.IO.readFile(fileName)
                 };
             }
         }

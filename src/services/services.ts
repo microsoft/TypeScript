@@ -73,7 +73,7 @@ namespace ts {
     }
 
     /**
-     * Represents an immutable snapshot of a script at a specified time.Once acquired, the 
+     * Represents an immutable snapshot of a script at a specified time.Once acquired, the
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
@@ -85,9 +85,9 @@ namespace ts {
         getLength(): number;
 
         /**
-         * Gets the TextChangeRange that describe how the text changed between this text and 
+         * Gets the TextChangeRange that describe how the text changed between this text and
          * an older version.  This information is used by the incremental parser to determine
-         * what sections of the script need to be re-parsed.  'undefined' can be returned if the 
+         * what sections of the script need to be re-parsed.  'undefined' can be returned if the
          * change range cannot be determined.  However, in that case, incremental parsing will
          * not happen and the entire document will be re - parsed.
          */
@@ -276,8 +276,8 @@ namespace ts {
             let children = this.getChildren(sourceFile);
 
             let child = lastOrUndefined(children);
-            if (!child) { 
-                return undefined; 
+            if (!child) {
+                return undefined;
             }
 
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
@@ -337,10 +337,10 @@ namespace ts {
 
             ts.forEach(declarations, (declaration, indexOfDeclaration) => {
                 // Make sure we are collecting doc comment from declaration once,
-                // In case of union property there might be same declaration multiple times 
+                // In case of union property there might be same declaration multiple times
                 // which only varies in type parameter
                 // Eg. let a: Array<string> | Array<number>; a.length
-                // The property length will have two declarations of property length coming 
+                // The property length will have two declarations of property length coming
                 // from Array<T> - Array<string> and Array<number>
                 if (indexOf(declarations, declaration) === indexOfDeclaration) {
                     let sourceFileOfDeclaration = getSourceFileOfNode(declaration);
@@ -362,7 +362,7 @@ namespace ts {
                     // If this is dotted module name, get the doc comments from the parent
                     while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
                         declaration = <ModuleDeclaration>declaration.parent;
-                    } 
+                    }
 
                     // Get the cleaned js doc comment text from the declaration
                     ts.forEach(getJsDocCommentTextRange(
@@ -382,7 +382,7 @@ namespace ts {
                     jsDocComment => {
                         return {
                             pos: jsDocComment.pos + "/*".length, // Consume /* from the comment
-                            end: jsDocComment.end - "*/".length // Trim off comment end indicator 
+                            end: jsDocComment.end - "*/".length // Trim off comment end indicator
                         };
                     });
             }
@@ -487,7 +487,7 @@ namespace ts {
                         pushDocCommentLineText(docComments, docCommentTextOfLine, blankLineCount);
                         blankLineCount = 0;
                     }
-                    else if (!isInParamTag && docComments.length) { 
+                    else if (!isInParamTag && docComments.length) {
                         // This is blank line when there is text already parsed
                         blankLineCount++;
                     }
@@ -503,7 +503,7 @@ namespace ts {
                     if (isParamTag(pos, end, sourceFile)) {
                         let blankLineCount = 0;
                         let recordedParamTag = false;
-                        // Consume leading spaces 
+                        // Consume leading spaces
                         pos = consumeWhiteSpaces(pos + paramTag.length);
                         if (pos >= end) {
                             break;
@@ -561,7 +561,7 @@ namespace ts {
                             while (pos < end) {
                                 let ch = sourceFile.text.charCodeAt(pos);
 
-                                // at line break, set this comment line text and go to next line 
+                                // at line break, set this comment line text and go to next line
                                 if (isLineBreak(ch)) {
                                     if (paramHelpString) {
                                         pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
@@ -627,7 +627,7 @@ namespace ts {
                         paramHelpStringMargin = sourceFile.getLineAndCharacterOfPosition(firstLineParamHelpStringPos).character;
                     }
 
-                    // Now consume white spaces max 
+                    // Now consume white spaces max
                     let startOfLinePos = pos;
                     pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
                     if (pos >= end) {
@@ -976,13 +976,12 @@ namespace ts {
         trace? (s: string): void;
         error? (s: string): void;
         useCaseSensitiveFileNames? (): boolean;
-        
-        // LS host can implement one of these methods
-        // if getModuleResolutionHost is implemented then compiler will apply one of built-in ways to resolve module names
-        // and ModuleResolutionHost will be used to ask host specific questions        
-        // if resolveModuleName is implemented - this will mean that host is completely in charge of module name resolution 
-        // if none of these methods are implemented then language service will try to emulate getModuleResolutionHost atop of 'getScriptSnapshot'
-        getModuleResolutionHost?(): ModuleResolutionHost; 
+
+        /*
+         * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
+         * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
+         * host specific questions using 'getScriptSnapshot'.
+         */
         resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
     }
 
@@ -1000,17 +999,17 @@ namespace ts {
         // diagnostics present for the program level, and not just 'options' diagnostics.
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
-        /** 
+        /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
          */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
-        /** 
+        /**
          * @deprecated Use getEncodedSemanticClassifications instead.
          */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
-        // Encoded as triples of [start, length, ClassificationType].  
+        // Encoded as triples of [start, length, ClassificationType].
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
@@ -1229,7 +1228,7 @@ namespace ts {
      * Represents a single signature to show in signature help.
      * The id is used for subsequent calls into the language service to ask questions about the
      * signature help item in the context of any documents that have been updated.  i.e. after
-     * an edit has happened, while signature help is still active, the host can ask important 
+     * an edit has happened, while signature help is still active, the host can ask important
      * questions like 'what parameter is the user currently contained within?'.
      */
     export interface SignatureHelpItem {
@@ -1283,8 +1282,8 @@ namespace ts {
         /** The text to display in the editor for the collapsed region. */
         bannerText: string;
 
-        /** 
-          * Whether or not this region should be automatically collapsed when 
+        /**
+          * Whether or not this region should be automatically collapsed when
           * the 'Collapse to Definitions' command is invoked.
           */
         autoCollapse: boolean;
@@ -1365,18 +1364,18 @@ namespace ts {
     }
 
     /**
-      * The document registry represents a store of SourceFile objects that can be shared between 
+      * The document registry represents a store of SourceFile objects that can be shared between
       * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
-      * of files in the context. 
-      * SourceFile objects account for most of the memory usage by the language service. Sharing 
-      * the same DocumentRegistry instance between different instances of LanguageService allow 
-      * for more efficient memory utilization since all projects will share at least the library 
+      * of files in the context.
+      * SourceFile objects account for most of the memory usage by the language service. Sharing
+      * the same DocumentRegistry instance between different instances of LanguageService allow
+      * for more efficient memory utilization since all projects will share at least the library
       * file (lib.d.ts).
       *
-      * A more advanced use of the document registry is to serialize sourceFile objects to disk 
+      * A more advanced use of the document registry is to serialize sourceFile objects to disk
       * and re-hydrate them when needed.
       *
-      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it 
+      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
       * to all subsequent createLanguageService calls.
       */
     export interface DocumentRegistry {
@@ -1386,7 +1385,7 @@ namespace ts {
           * the SourceFile if was not found in the registry.
           *
           * @param fileName The name of the file requested
-          * @param compilationSettings Some compilation settings like target affects the 
+          * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
           * @parm scriptSnapshot Text of the file. Only used if the file was not found
@@ -1406,10 +1405,10 @@ namespace ts {
           * to get an updated SourceFile.
           *
           * @param fileName The name of the file requested
-          * @param compilationSettings Some compilation settings like target affects the 
+          * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
-          * @param scriptSnapshot Text of the file. 
+          * @param scriptSnapshot Text of the file.
           * @param version Current version of the file.
           */
         updateDocument(
@@ -1588,7 +1587,7 @@ namespace ts {
         sourceFile: SourceFile;
 
         // The number of language services that this source file is referenced in.   When no more
-        // language services are referencing the file, then the file can be removed from the 
+        // language services are referencing the file, then the file can be removed from the
         // registry.
         languageServiceRefCount: number;
         owners: string[];
@@ -1643,8 +1642,8 @@ namespace ts {
         };
     }
 
-    // Cache host information about scrip Should be refreshed 
-    // at each language service public entry point, since we don't know when 
+    // Cache host information about scrip Should be refreshed
+    // at each language service public entry point, since we don't know when
     // set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
@@ -1723,8 +1722,8 @@ namespace ts {
     }
 
     class SyntaxTreeCache {
-        // For our syntactic only features, we also keep a cache of the syntax tree for the 
-        // currently edited file.  
+        // For our syntactic only features, we also keep a cache of the syntax tree for the
+        // currently edited file.
         private currentFileName: string;
         private currentFileVersion: string;
         private currentFileScriptSnapshot: IScriptSnapshot;
@@ -1769,20 +1768,20 @@ namespace ts {
         sourceFile.version = version;
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
-    
+
     export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
     }
-    
+
     export interface TranspileOutput {
         outputText: string;
         diagnostics?: Diagnostic[];
         sourceMapText?: string;
     }
-    
+
     /*
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
@@ -1791,7 +1790,7 @@ namespace ts {
      * - allowNonTsExtensions = true
      * - noLib = true
      * - noResolve = true
-     */    
+     */
     export function transpileModule(input: string, transpileOptions?: TranspileOptions): TranspileOutput {
         let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
@@ -1800,7 +1799,7 @@ namespace ts {
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
 
-        // We are not returning a sourceFile for lib file when asked by the program, 
+        // We are not returning a sourceFile for lib file when asked by the program,
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
 
@@ -1820,9 +1819,6 @@ namespace ts {
         // Output
         let outputText: string;
         let sourceMapText: string;
-        let moduleResolutionHost: ModuleResolutionHost = {
-            fileExists: fileName => fileName === inputFileName,
-        }
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
             getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
@@ -1841,11 +1837,13 @@ namespace ts {
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
             getNewLine: () => newLine,
-            getModuleResolutionHost: () => moduleResolutionHost 
+
+            fileExists: (fileName): boolean => { throw new Error("Should never be called."); },
+            readFile: (fileName): string => { throw new Error("Should never be called."); }
         };
 
         let program = createProgram([inputFileName], options, compilerHost);
-        
+
         let diagnostics: Diagnostic[];
         if (transpileOptions.reportDiagnostics) {
             diagnostics = [];
@@ -1857,11 +1855,11 @@ namespace ts {
 
         Debug.assert(outputText !== undefined, "Output generation failed");
 
-        return { outputText, diagnostics, sourceMapText };        
+        return { outputText, diagnostics, sourceMapText };
     }
 
     /*
-     * This is a shortcut function for transpileModule - it accepts transpileOptions as parameters and returns only outputText part of the result. 
+     * This is a shortcut function for transpileModule - it accepts transpileOptions as parameters and returns only outputText part of the result.
      */
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
         let output = transpileModule(input, { compilerOptions, fileName, reportDiagnostics: !!diagnostics, moduleName });
@@ -1882,19 +1880,19 @@ namespace ts {
     export let disableIncrementalParsing = false;
 
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
-        // If we were given a text change range, and our version or open-ness changed, then 
+        // If we were given a text change range, and our version or open-ness changed, then
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
                     let newText: string;
-                    
+
                     // grab the fragment from the beginning of the original text to the beginning of the span
                     let prefix = textChangeRange.span.start !== 0
                         ? sourceFile.text.substr(0, textChangeRange.span.start)
                         : "";
-                    
+
                     // grab the fragment from the end of the span till the end of the original text
                     let suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
                         ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
@@ -1908,10 +1906,10 @@ namespace ts {
                         // it was actual edit, fetch the fragment of new text that correspond to new span
                         let changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
                         // combine prefix, changed text and suffix
-                        newText = prefix && suffix 
+                        newText = prefix && suffix
                             ? prefix + changedText + suffix
                             : prefix
-                                ? (prefix + changedText) 
+                                ? (prefix + changedText)
                                 : (changedText + suffix);
                     }
 
@@ -1953,7 +1951,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve;
+            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -2017,7 +2015,7 @@ namespace ts {
                 bucket.set(fileName, entry);
             }
             else {
-                // We have an entry for this file.  However, it may be for a different version of 
+                // We have an entry for this file.  However, it may be for a different version of
                 // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
                 // return it as is.
                 if (entry.sourceFile.version !== version) {
@@ -2058,7 +2056,7 @@ namespace ts {
             reportStats
         };
     }
-    
+
     export function resolveModuleName(fileName: string, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
         let resolver = getDefaultModuleNameResolver(compilerOptions);
         return resolver(moduleName, fileName, compilerOptions, host);
@@ -2084,7 +2082,7 @@ namespace ts {
                 }
             });
         }
-        
+
         function recordAmbientExternalModule(): void {
             if (!ambientExternalModules) {
                 ambientExternalModules = [];
@@ -2556,17 +2554,20 @@ namespace ts {
                 return;
             }
 
-            // IMPORTANT - It is critical from this moment onward that we do not check 
+            // IMPORTANT - It is critical from this moment onward that we do not check
             // cancellation tokens.  We are about to mutate source files from a previous program
             // instance.  If we cancel midway through, we may end up in an inconsistent state where
-            // the program points to old source files that have been invalidated because of 
+            // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
             let oldSettings = program && program.getCompilerOptions();
             let newSettings = hostCache.compilationSettings();
-            let changesInCompilationSettingsAffectSyntax = oldSettings && 
-                (oldSettings.target !== newSettings.target || oldSettings.module !== newSettings.module || oldSettings.noResolve !== newSettings.noResolve);
-            
+            let changesInCompilationSettingsAffectSyntax = oldSettings &&
+                (oldSettings.target !== newSettings.target ||
+                 oldSettings.module !== newSettings.module ||
+                 oldSettings.noResolve !== newSettings.noResolve ||
+                 oldSettings.jsx !== newSettings.jsx);
+
             // Now create a new compiler
             let compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
@@ -2577,26 +2578,25 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory(),
+                fileExists: (fileName): boolean => { throw new Error("Not implemented"); },
+                readFile: (fileName): string => { throw new Error("Not implemented"); }
             };
-            
+
             if (host.resolveModuleNames) {
                 compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile)
             }
-            else if (host.getModuleResolutionHost) {
-                compilerHost.getModuleResolutionHost = () => host.getModuleResolutionHost()
-            }
             else {
-                compilerHost.getModuleResolutionHost = () => {
-                    // stub missing host functionality
-                    return {
-                        fileExists: fileName => hostCache.getOrCreateEntry(fileName) != undefined,
-                    };
+                // stub missing host functionality
+                compilerHost.fileExists = fileName => hostCache.getOrCreateEntry(fileName) !== undefined;
+                compilerHost.readFile = fileName => {
+                    let entry = hostCache.getOrCreateEntry(fileName);
+                    return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 }
             }
-            
+
             let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
 
-            // Release any files we have acquired in the old program but are 
+            // Release any files we have acquired in the old program but are
             // not part of the new program.
             if (program) {
                 let oldSourceFiles = program.getSourceFiles();
@@ -2614,7 +2614,7 @@ namespace ts {
 
             program = newProgram;
 
-            // Make sure all the nodes in the program are both bound, and have their parent 
+            // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
             program.getTypeChecker();
             return;
@@ -2636,7 +2636,7 @@ namespace ts {
                     // Check if the old program had this file already
                     let oldSourceFile = program && program.getSourceFile(fileName);
                     if (oldSourceFile) {
-                        // We already had a source file for this file name.  Go to the registry to 
+                        // We already had a source file for this file name.  Go to the registry to
                         // ensure that we get the right up to date version of it.  We need this to
                         // address the following 'race'.  Specifically, say we have the following:
                         //
@@ -2647,15 +2647,15 @@ namespace ts {
                         //      LS2
                         //
                         // Each LS has a reference to file 'foo.ts' at version 1.  LS2 then updates
-                        // it's version of 'foo.ts' to version 2.  This will cause LS2 and the 
-                        // DocumentRegistry to have version 2 of the document.  HOwever, LS1 will 
+                        // it's version of 'foo.ts' to version 2.  This will cause LS2 and the
+                        // DocumentRegistry to have version 2 of the document.  HOwever, LS1 will
                         // have version 1.  And *importantly* this source file will be *corrupt*.
                         // The act of creating version 2 of the file irrevocably damages the version
                         // 1 file.
                         //
                         // So, later when we call into LS1, we need to make sure that it doesn't use
                         // it's source file any more, and instead defers to DocumentRegistry to get
-                        // either version 1, version 2 (or some other version) depending on what the 
+                        // either version 1, version 2 (or some other version) depending on what the
                         // host says should be used.
                         return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
                     }
@@ -2721,7 +2721,7 @@ namespace ts {
 
         /**
          * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
-         * If '-d' enabled, report both semantic and emitter errors  
+         * If '-d' enabled, report both semantic and emitter errors
          */
         function getSemanticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
@@ -2729,7 +2729,7 @@ namespace ts {
             let targetSourceFile = getValidSourceFile(fileName);
 
             // For JavaScript files, we don't want to report the normal typescript semantic errors.
-            // Instead, we just report errors for using TypeScript-only constructs from within a 
+            // Instead, we just report errors for using TypeScript-only constructs from within a
             // JavaScript file.
             if (isJavaScript(fileName)) {
                 return getJavaScriptSemanticDiagnostics(targetSourceFile);
@@ -3109,7 +3109,7 @@ namespace ts {
                     }
 
                     if (isJavaScriptFile && type.flags & TypeFlags.Union) {
-                        // In javascript files, for union types, we don't just get the members that 
+                        // In javascript files, for union types, we don't just get the members that
                         // the individual types have in common, we also include all the members that
                         // each individual type has.  This is because we're going to add all identifiers
                         // anyways.  So we might as well elevate the members that were at least part
@@ -3164,10 +3164,10 @@ namespace ts {
                 // aggregating completion candidates. This is achieved in 'getScopeNode'
                 // by finding the first node that encompasses a position, accounting for whether a node
                 // is "complete" to decide whether a position belongs to the node.
-                // 
+                //
                 // However, at the end of an identifier, we are interested in the scope of the identifier
                 // itself, but fall outside of the identifier. For instance:
-                // 
+                //
                 //      xyz => x$
                 //
                 // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
@@ -3194,7 +3194,7 @@ namespace ts {
                 /// TODO filter meaning based on the current context
                 let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                 symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
- 
+
                 return true;
             }
 
@@ -3332,7 +3332,7 @@ namespace ts {
 
                     let rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
                     if (isVariableLike(rootDeclaration)) {
-                        // We don't want to complete using the type acquired by the shape 
+                        // We don't want to complete using the type acquired by the shape
                         // of the binding pattern; we are only interested in types acquired
                         // through type declaration or inference.
                         if (rootDeclaration.initializer || rootDeclaration.type) {
@@ -3457,8 +3457,8 @@ namespace ts {
                             // its parent is a JsxExpression, whose parent is a JsxAttribute,
                             // whose parent is a JsxOpeningLikeElement
                             if(parent &&
-                                parent.kind === SyntaxKind.JsxExpression && 
-                                parent.parent && 
+                                parent.kind === SyntaxKind.JsxExpression &&
+                                parent.parent &&
                                 parent.parent.kind === SyntaxKind.JsxAttribute) {
 
                                 return <JsxOpeningLikeElement>parent.parent.parent;
@@ -3503,16 +3503,16 @@ namespace ts {
                             containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
                             containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
-                                                                                                          
+
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
-                                                                                                          
+
                     case SyntaxKind.ColonToken:
                         return containingNodeKind === SyntaxKind.BindingElement;                        // var {x :html|
-                                                                                                          
+
                     case SyntaxKind.OpenBracketToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
-                                                                                                          
+
                     case SyntaxKind.OpenParenToken:
                         return containingNodeKind === SyntaxKind.CatchClause ||
                             isFunction(containingNodeKind);
@@ -3664,7 +3664,7 @@ namespace ts {
 
                 return filter(contextualMemberSymbols, m => !lookUp(existingMemberNames, m.name));
             }
-            
+
             /**
              * Filters out completion suggestions from 'symbols' according to existing JSX attributes.
              *
@@ -3747,7 +3747,7 @@ namespace ts {
             }
 
             function createCompletionEntry(symbol: Symbol, location: Node): CompletionEntry {
-                // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
+                // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
                 // We would like to only show things that can be added after a dot, so for instance numeric properties can
                 // not be accessed with a dot (a.1 <- invalid)
                 let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true, location);
@@ -3755,10 +3755,10 @@ namespace ts {
                     return undefined;
                 }
 
-                // TODO(drosen): Right now we just permit *all* semantic meanings when calling 
-                // 'getSymbolKind' which is permissible given that it is backwards compatible; but 
+                // TODO(drosen): Right now we just permit *all* semantic meanings when calling
+                // 'getSymbolKind' which is permissible given that it is backwards compatible; but
                 // really we should consider passing the meaning for the node so that we don't report
-                // that a suggestion for a value is an interface.  We COULD also just do what 
+                // that a suggestion for a value is an interface.  We COULD also just do what
                 // 'getSymbolModifiers' does, which is to use the first declaration.
 
                 // Use a 'sortText' of 0' so that all symbol completion entries come before any other
@@ -3804,8 +3804,8 @@ namespace ts {
 
                 // Find the symbol with the matching entry name.
                 let target = program.getCompilerOptions().target;
-                // We don't need to perform character checks here because we're only comparing the 
-                // name against 'entryName' (which is known to be good), not building a new 
+                // We don't need to perform character checks here because we're only comparing the
+                // name against 'entryName' (which is known to be good), not building a new
                 // completion entry.
                 let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false, location) === entryName ? s : undefined);
 
@@ -3820,7 +3820,7 @@ namespace ts {
                     };
                 }
             }
-            
+
             // Didn't find a symbol with this name.  See if we can find a keyword instead.
             let keywordCompletion = forEach(keywordCompletions, c => c.name === entryName);
             if (keywordCompletion) {
@@ -3896,7 +3896,7 @@ namespace ts {
                         Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
                     });
                     if (!unionPropertyKind) {
-                        // If this was union of all methods, 
+                        // If this was union of all methods,
                         //make sure it has call signatures before we can label it as method
                         let typeOfUnionProperty = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
                         if (typeOfUnionProperty.getCallSignatures().length) {
@@ -3970,7 +3970,7 @@ namespace ts {
                         let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                         if (!contains(allSignatures, signature.target || signature)) {
-                            // Get the first signature if there 
+                            // Get the first signature if there
                             signature = allSignatures.length ? allSignatures[0] : undefined;
                         }
 
@@ -4346,7 +4346,7 @@ namespace ts {
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
+                // Just add all the declarations.
                 forEach(declarations, declaration => {
                     result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
                 });
@@ -4457,7 +4457,7 @@ namespace ts {
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
             // using go-to-definition at such position should go to the variable declaration of the property value rather than
-            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition 
+            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition
             // is performed at the location of property access, we would like to go to definition of the property in the short-hand
             // assignment. This case and others are handled by the following code.
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
@@ -4523,7 +4523,7 @@ namespace ts {
             if (results) {
                 let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
 
-                // Get occurrences only supports reporting occurrences for the file queried.  So 
+                // Get occurrences only supports reporting occurrences for the file queried.  So
                 // filter down to that list.
                 results = filter(results, r => getCanonicalFileName(ts.normalizeSlashes(r.fileName)) === sourceFile);
             }
@@ -4750,7 +4750,7 @@ namespace ts {
                         if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
                             return parent;
                         }
-                    
+
                         // A throw-statement is only owned by a try-statement if the try-statement has
                         // a catch clause, and if the throw-statement occurs within the try block.
                         if (parent.kind === SyntaxKind.TryStatement) {
@@ -4844,7 +4844,7 @@ namespace ts {
                             return undefined;
                         }
                     }
-                    else { 
+                    else {
                         // unsupported modifier
                         return undefined;
                     }
@@ -5440,13 +5440,13 @@ namespace ts {
                     // If we are past the end, stop looking
                     if (position > end) break;
 
-                    // We found a match.  Make sure it's not part of a larger word (i.e. the char 
+                    // We found a match.  Make sure it's not part of a larger word (i.e. the char
                     // before and after it have to be a non-identifier char).
                     let endPosition = position + symbolNameLength;
 
                     if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
                         (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))) {
-                        // Found a real match.  Keep searching.  
+                        // Found a real match.  Keep searching.
                         positions.push(position);
                     }
                     position = text.indexOf(symbolName, position + symbolNameLength + 1);
@@ -5513,9 +5513,9 @@ namespace ts {
                 return false;
             }
 
-            /** Search within node "container" for references for a search value, where the search value is defined as a 
+            /** Search within node "container" for references for a search value, where the search value is defined as a
               * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
-              * searchLocation: a node where the search value 
+              * searchLocation: a node where the search value
               */
             function getReferencesInNode(container: Node,
                 searchSymbol: Symbol,
@@ -5541,7 +5541,7 @@ namespace ts {
 
                         let referenceLocation = getTouchingPropertyName(sourceFile, position);
                         if (!isValidReferencePosition(referenceLocation, searchText)) {
-                            // This wasn't the start of a token.  Check to see if it might be a 
+                            // This wasn't the start of a token.  Check to see if it might be a
                             // match in a comment or string if that's what the caller is asking
                             // for.
                             if ((findInStrings && isInString(position)) ||
@@ -5883,7 +5883,7 @@ namespace ts {
                     }
                 }
 
-                // If the reference location is in an object literal, try to get the contextual type for the 
+                // If the reference location is in an object literal, try to get the contextual type for the
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
@@ -5900,7 +5900,7 @@ namespace ts {
                         return rootSymbol;
                     }
 
-                    // Finally, try all properties with the same name in any type the containing type extended or implemented, and 
+                    // Finally, try all properties with the same name in any type the containing type extended or implemented, and
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         let result: Symbol[] = [];
@@ -6251,7 +6251,7 @@ namespace ts {
                 }
                 else if (isNameOfModuleDeclaration(nodeForStartPos)) {
                     // If this is name of a module declarations, check if this is right side of dotted module name
-                    // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of 
+                    // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of
                     // Then this name is name from dotted module
                     if (nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
                         (<ModuleDeclaration>nodeForStartPos.parent.parent).body === nodeForStartPos.parent) {
@@ -6294,7 +6294,7 @@ namespace ts {
             // been canceled.  That would be an enormous amount of chattyness, along with the all
             // the overhead of marshalling the data to/from the host.  So instead we pick a few
             // reasonable node kinds to bother checking on.  These node kinds represent high level
-            // constructs that we would expect to see commonly, but just at a far less frequent 
+            // constructs that we would expect to see commonly, but just at a far less frequent
             // interval.
             //
             // For example, in checker.ts (around 750k) we only have around 600 of these constructs.
@@ -6367,7 +6367,7 @@ namespace ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && 
+                        return declaration.kind === SyntaxKind.ModuleDeclaration &&
                             getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated;
                     });
                 }
@@ -6488,8 +6488,8 @@ namespace ts {
                     // Only bother with the trivia if it at least intersects the span of interest.
                     if (isComment(kind)) {
                         classifyComment(token, kind, start, width);
-                            
-                        // Classifying a comment might cause us to reuse the trivia scanner 
+
+                        // Classifying a comment might cause us to reuse the trivia scanner
                         // (because of jsdoc comments).  So after we classify the comment make
                         // sure we set the scanner position back to where it needs to be.
                         triviaScanner.setTextPos(end);
@@ -6540,7 +6540,7 @@ namespace ts {
 
                 for (let tag of docComment.tags) {
                     // As we walk through each tag, classify the portion of text from the end of
-                    // the last tag (or the start of the entire doc comment) as 'comment'.  
+                    // the last tag (or the start of the entire doc comment) as 'comment'.
                     if (tag.pos !== pos) {
                         pushCommentRange(pos, tag.pos - pos);
                     }
@@ -6602,7 +6602,7 @@ namespace ts {
             }
 
             function classifyDisabledMergeCode(text: string, start: number, end: number) {
-                // Classify the line that the ======= marker is on as a comment.  Then just lex 
+                // Classify the line that the ======= marker is on as a comment.  Then just lex
                 // all further tokens and add them to the result.
                 for (var i = start; i < end; i++) {
                     if (isLineBreak(text.charCodeAt(i))) {
@@ -6645,7 +6645,7 @@ namespace ts {
                 }
             }
 
-            // for accurate classification, the actual token should be passed in.  however, for 
+            // for accurate classification, the actual token should be passed in.  however, for
             // cases like 'disabled merge code' classification, we just get the token kind and
             // classify based on that instead.
             function classifyTokenType(tokenKind: SyntaxKind, token?: Node): ClassificationType {
@@ -6860,11 +6860,11 @@ namespace ts {
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            // Note: while getting todo comments seems like a syntactic operation, we actually 
+            // Note: while getting todo comments seems like a syntactic operation, we actually
             // treat it as a semantic operation here.  This is because we expect our host to call
             // this on every single file.  If we treat this syntactically, then that will cause
             // us to populate and throw away the tree in our syntax tree cache for each file.  By
-            // treating this as a semantic operation, we can access any tree without throwing 
+            // treating this as a semantic operation, we can access any tree without throwing
             // anything away.
             synchronizeHostData();
 
@@ -6894,7 +6894,7 @@ namespace ts {
                     //  0) The full match for the entire regexp.
                     //  1) The preamble to the message portion.
                     //  2) The message portion.
-                    //  3...N) The descriptor that was matched - by index.  'undefined' for each 
+                    //  3...N) The descriptor that was matched - by index.  'undefined' for each
                     //         descriptor that didn't match.  an actual value if it did match.
                     //
                     //  i.e. 'undefined' in position 3 above means TODO(jason) didn't match.
@@ -6920,7 +6920,7 @@ namespace ts {
                     }
                     Debug.assert(descriptor !== undefined);
 
-                    // We don't want to match something like 'TODOBY', so we make sure a non 
+                    // We don't want to match something like 'TODOBY', so we make sure a non
                     // letter/digit follows the match.
                     if (isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor.text.length))) {
                         continue;
@@ -6972,11 +6972,11 @@ namespace ts {
                 //      (?:(TODO\(jason\))|(HACK))
                 //
                 // Note that the outermost group is *not* a capture group, but the innermost groups
-                // *are* capture groups.  By capturing the inner literals we can determine after 
+                // *are* capture groups.  By capturing the inner literals we can determine after
                 // matching which descriptor we are dealing with.
                 let literals = "(?:" + map(descriptors, d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
 
-                // After matching a descriptor literal, the following regexp matches the rest of the 
+                // After matching a descriptor literal, the following regexp matches the rest of the
                 // text up to the end of the line (or */).
                 let endOfLineOrEndOfComment = /(?:$|\*\/)/.source
                 let messageRemainder = /(?:.*?)/.source
@@ -7158,7 +7158,7 @@ namespace ts {
 
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
-        /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
+        /// we have a series of divide operator. this list allows us to be more accurate by ruling out
         /// locations where a regexp cannot exist.
         let noRegexTable: boolean[] = [];
         noRegexTable[SyntaxKind.Identifier] = true;
@@ -7204,7 +7204,7 @@ namespace ts {
                     keyword2 === SyntaxKind.ConstructorKeyword ||
                     keyword2 === SyntaxKind.StaticKeyword) {
 
-                    // Allow things like "public get", "public constructor" and "public static".  
+                    // Allow things like "public get", "public constructor" and "public static".
                     // These are all legal.
                     return true;
                 }
@@ -7275,7 +7275,7 @@ namespace ts {
         function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
             return convertClassifications(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
         }
-                
+
         // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
         // we will be more conservative in order to avoid conflicting with the syntactic classifier.
         function getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
@@ -7337,12 +7337,12 @@ namespace ts {
             // token.  So the classification will go back to being an identifier.  The moment the user
             // types again, number will become a keyword, then an identifier, etc. etc.
             //
-            // To try to avoid this problem, we avoid classifying contextual keywords as keywords 
+            // To try to avoid this problem, we avoid classifying contextual keywords as keywords
             // when the user is potentially typing something generic.  We just can't do a good enough
             // job at the lexical level, and so well leave it up to the syntactic classifier to make
             // the determination.
             //
-            // In order to determine if the user is potentially typing something generic, we use a 
+            // In order to determine if the user is potentially typing something generic, we use a
             // weak heuristic where we track < and > tokens.  It's a weak heuristic, but should
             // work well enough in practice.
             let angleBracketStack = 0;
@@ -7360,7 +7360,7 @@ namespace ts {
                         token = SyntaxKind.Identifier;
                     }
                     else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
-                        // We have two keywords in a row.  Only treat the second as a keyword if 
+                        // We have two keywords in a row.  Only treat the second as a keyword if
                         // it's a sequence that could legally occur in the language.  Otherwise
                         // treat it as an identifier.  This way, if someone writes "private var"
                         // we recognize that 'var' is actually an identifier here.
@@ -7368,7 +7368,7 @@ namespace ts {
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
                         token === SyntaxKind.LessThanToken) {
-                        // Could be the start of something generic.  Keep track of that by bumping 
+                        // Could be the start of something generic.  Keep track of that by bumping
                         // up the current count of generic contexts we may be in.
                         angleBracketStack++;
                     }
@@ -7383,7 +7383,7 @@ namespace ts {
                         token === SyntaxKind.BooleanKeyword ||
                         token === SyntaxKind.SymbolKeyword) {
                         if (angleBracketStack > 0 && !syntacticClassifierAbsent) {
-                            // If it looks like we're could be in something generic, don't classify this 
+                            // If it looks like we're could be in something generic, don't classify this
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
                             // causing a noisy experience for the user.
                             token = SyntaxKind.Identifier;
@@ -7491,8 +7491,8 @@ namespace ts {
                 }
 
                 if (start === 0 && offset > 0) {
-                    // We're classifying the first token, and this was a case where we prepended 
-                    // text.  We should consider the start of this token to be at the start of 
+                    // We're classifying the first token, and this was a case where we prepended
+                    // text.  We should consider the start of this token to be at the start of
                     // the original text.
                     start += offset;
                 }
@@ -7615,11 +7615,11 @@ namespace ts {
 
     /// getDefaultLibraryFilePath
     declare let __dirname: string;
-    
+
     /**
       * Get the path of the default library files (lib.d.ts) as distributed with the typescript
       * node package.
-      * The functionality is not supported if the ts module is consumed outside of a node module. 
+      * The functionality is not supported if the ts module is consumed outside of a node module.
       */
     export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.

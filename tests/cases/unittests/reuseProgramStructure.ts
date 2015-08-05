@@ -104,10 +104,6 @@ module ts {
             files[t.name] = file;
         }
         
-        let moduleResolutionHost: ModuleResolutionHost = {
-            fileExists: fileName => hasProperty(files, fileName)
-        }
-        
         return {
             getSourceFile(fileName): SourceFile {
                 return files[fileName];
@@ -130,7 +126,11 @@ module ts {
             getNewLine(): string {
                 return sys.newLine;
             },
-            getModuleResolutionHost: () => moduleResolutionHost
+            fileExists: fileName => hasProperty(files, fileName),
+            readFile: fileName => {
+                let file = lookUp(files, fileName);
+                return file && file.text;
+            }
         }
     }
 

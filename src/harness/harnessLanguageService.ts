@@ -230,7 +230,10 @@ module Harness.LanguageService {
             throw new Error("NYI");
         }        
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }        
-
+        readFile(fileName: string) { 
+            let snapshot = this.nativeHost.getScriptSnapshot(fileName);
+            return snapshot && snapshot.getText(0, snapshot.getLength());
+        }        
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
