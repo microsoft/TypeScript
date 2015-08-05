@@ -10,9 +10,24 @@ const enum Foo {
 >Y : Foo
 >0.5 : number
 
-    Z = 2.
+    Z = 2.,
 >Z : Foo
 >2. : number
+
+    A = -1,
+>A : Foo
+>-1 : number
+>1 : number
+
+    B = -1.5,
+>B : Foo
+>-1.5 : number
+>1.5 : number
+
+    C = -1.
+>C : Foo
+>-1. : number
+>1. : number
 }
 
 let x0 = Foo.X.toString();
@@ -67,5 +82,59 @@ let z1 = Foo["Z"].toString();
 >Foo["Z"] : Foo
 >Foo : typeof Foo
 >"Z" : string
+>toString : (radix?: number) => string
+
+let a0 = Foo.A.toString();
+>a0 : string
+>Foo.A.toString() : string
+>Foo.A.toString : (radix?: number) => string
+>Foo.A : Foo
+>Foo : typeof Foo
+>A : Foo
+>toString : (radix?: number) => string
+
+let a1 = Foo["A"].toString();
+>a1 : string
+>Foo["A"].toString() : string
+>Foo["A"].toString : (radix?: number) => string
+>Foo["A"] : Foo
+>Foo : typeof Foo
+>"A" : string
+>toString : (radix?: number) => string
+
+let b0 = Foo.B.toString();
+>b0 : string
+>Foo.B.toString() : string
+>Foo.B.toString : (radix?: number) => string
+>Foo.B : Foo
+>Foo : typeof Foo
+>B : Foo
+>toString : (radix?: number) => string
+
+let b1 = Foo["B"].toString();
+>b1 : string
+>Foo["B"].toString() : string
+>Foo["B"].toString : (radix?: number) => string
+>Foo["B"] : Foo
+>Foo : typeof Foo
+>"B" : string
+>toString : (radix?: number) => string
+
+let c0 = Foo.C.toString();
+>c0 : string
+>Foo.C.toString() : string
+>Foo.C.toString : (radix?: number) => string
+>Foo.C : Foo
+>Foo : typeof Foo
+>C : Foo
+>toString : (radix?: number) => string
+
+let c1 = Foo["C"].toString();
+>c1 : string
+>Foo["C"].toString() : string
+>Foo["C"].toString : (radix?: number) => string
+>Foo["C"] : Foo
+>Foo : typeof Foo
+>"C" : string
 >toString : (radix?: number) => string
 

@@ -2070,7 +2070,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         // check if constant enum value is integer
                         let constantValue = tryGetConstEnumValue(node.expression);
-                        shouldEmitSpace = constantValue !== undefined && isFinite(constantValue) && Math.floor(constantValue) === constantValue;
+                        // isFinite handles cases when constantValue is undefined
+                        shouldEmitSpace = isFinite(constantValue) && Math.floor(constantValue) === constantValue;
                     }
                 }
 
