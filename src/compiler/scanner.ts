@@ -319,10 +319,10 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * We assume the first line starts at position 0 and 'position' is non-negative.
+     */
     export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
-        Debug.assert(lineStarts.length && lineStarts[0] === 0, "the first line should start at position 0");
-        Debug.assert(0 <= position, "position should be positive");
-        
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found,
