@@ -4710,7 +4710,7 @@ namespace ts {
                     }
                 }
                 else {
-                    // It is necessary to try "each" checks on both sides because there may be nested "some" checks
+                    // It is necessary to try "some" checks on both sides because there may be nested "each" checks
                     // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
                     // A & B = (A & B) | (C & D).
                     if (source.flags & TypeFlags.Intersection) {
@@ -4887,7 +4887,7 @@ namespace ts {
                 if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
                     return Ternary.False;
                 }
-                return isRelatedTo(source.constraint, target.constraint, /*reportErrors*/ false);
+                return isIdenticalTo(source.constraint, target.constraint);
             }
 
             // Determine if two object types are related by structure. First, check if the result is already available in the global cache.
