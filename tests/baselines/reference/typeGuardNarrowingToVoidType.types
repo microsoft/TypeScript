@@ -41,7 +41,7 @@ else if(typeof x === "boolean") {
 }
 else {
     x
->x : void
+>x : {}
 }
 
 if(typeof x === "boolean") {
@@ -84,7 +84,7 @@ else if (typeof x === "string") {
 else if(typeof x === "boolean") {
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : void
+>x : {}
 >"boolean" : string
 
     x.valueOf();
@@ -95,7 +95,7 @@ else if(typeof x === "boolean") {
 }
 else {
     x
->x : void
+>x : {}
 }
 
 class A { a: string; }
@@ -166,7 +166,7 @@ else if(isC(y)) {
 }
 else{
     y
->y : void
+>y : {}
 }
 
 if (isB(y)) {
@@ -211,6 +211,6 @@ else if(isC(y)) {
 }
 else{
     y
->y : void
+>y : {}
 }
 

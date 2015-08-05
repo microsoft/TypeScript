@@ -6018,23 +6018,27 @@ namespace ts {
                                 // In a branch of an if statement, narrow based on controlling expression
                                 if (child !== (<IfStatement>node).expression) {
 
-                                    // Union types that got narrowed to one type is no longer union types. We want to return a
-                                    // void type in case if the type returned by one if-statement clause is the same as the
-                                    // narrowed type, given that the original type was a union type.
+                                    // We want to narrow a type to an empty object type `{}` when we exhaust all types.
+                                    // We can accomplish it by simply check if a clause return the same type as the
+                                    // ongoing narrowing type. Given that the ongoing narrowing type have been narrowed
+                                    // to one distinct type.
                                     //
                                     // Example:
                                     //
                                     //     let x: A | B | C;
                                     //
-                                    //     if (isA(x)) { // isA(...) returns A and the narrowing type has the value of A so narrow to void type.
-                                    //     }
-                                    //     else if (isB(x)) { //  narrow to A
-                                    //     }
-                                    //     else if (isC(x))  // narrow to A | B
-                                    //     }
-                                    //     else { // type begins with A | B | C
+                                    //     if (isA(x)) { // isA(...) clause returns A and the ongoing narrowing type has
+                                    //                   // the value of A and it is a distinct type so narrow x to an
+                                    //                   // empty object type.
                                     //
-                                    //          x // is void
+                                    //     }
+                                    //     else if (isB(x)) { //  narrow x to A
+                                    //     }
+                                    //     else if (isC(x))  // narrow x to A | B
+                                    //     }
+                                    //     else { // x begins with A | B | C
+                                    //
+                                    //          x // an empty object type
                                     //     }
                                     //
                                     if (!(type.flags & TypeFlags.Union)) {
@@ -6044,13 +6048,13 @@ namespace ts {
                                             //
                                             //     let x: A | B | C;
                                             //
-                                            //     if (isB(x)) { // narrow to A.
+                                            //     if (isB(x)) { // narrow x to A.
                                             //     }
-                                            //     else if (isB(x)) { // narrow to A
+                                            //     else if (isB(x)) { // narrow x to A
                                             //     }
-                                            //     else if (isC(x)) { // narrow to A | B
+                                            //     else if (isC(x)) { // narrow x to A | B
                                             //     }
-                                            //     else { // type begins with A | B | C
+                                            //     else { // x begins with A | B | C
                                             //         x
                                             //     }
                                             //
@@ -6058,36 +6062,36 @@ namespace ts {
                                             //
                                             //     let x: A | B | C;
                                             //
-                                            //     if (isA(x)) { // narrow to A (but also removes A).
+                                            //     if (isA(x)) { // narrow x to A (but also removes A).
                                             //     }
-                                            //     else if (isB(x)) { // narrow to A
+                                            //     else if (isB(x)) { // narrow x to A
                                             //     }
-                                            //     else if (isC(x)) {// narrow to A | B
+                                            //     else if (isC(x)) {// narrow x to A | B
                                             //     }
-                                            //     else { // type begins with A | B | C
+                                            //     else { //x begins with A | B | C
                                             //         x
                                             //     }
                                             //
-                                            // But we want only the latter to narrow the type to void.
+                                            // But we want only the latter to narrow the type to an empty object type.
                                             //
                                             type === narrowType(originalType, (<IfStatement>node).expression, /*assumeTrue*/ true) &&
                                             // If the first narrowed type yield a distinct type(not a union type). And it encounters
                                             // a narrowed type that yields the same type in some upper branches. It would then narrow
-                                            // the type to void instead of the distinct type. The below check, guards us from narrowing
-                                            // it to void instead of the distinct type.
+                                            // the type to an empty object type instead of the distinct type. The below check, guards
+                                            // us from narrowing it to an empty object type instead of the distinct type.
                                             //
-                                            //     if (isA(x)) { // narrow to void
+                                            //     if (isA(x)) { // narrow x to an empty object type
                                             //     }
-                                            //     else if (isB(x)) { // narrow to A
+                                            //     else if (isB(x)) { // narrow x to A
                                             //     }
-                                            //     else if (isA(x)) { // narrow to A
+                                            //     else if (isA(x)) { // narrow x to A
                                             //
-                                            //         x // is void, but should be A
+                                            //         x // is an empty object type, but should be A
                                             //     }
                                             //
                                             type !== firstNarrowedTypeFromIfStatement) {
 
-                                            return voidType;
+                                            return emptyObjectType;
                                         }
                                     }
 
