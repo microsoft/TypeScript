@@ -14,6 +14,12 @@ class Derived2 implements Base {
 	optional: number;
 }
 
+class Animal {
+	move;
+}
+class Mammal extends Animal { milk; }
+class Giraffe extends Mammal { neck; }
+
 function fn1(x: Array<number>|Array<string>|boolean) {
 	if(x instanceof Array) {
 		// 1.5: y: Array<number>|Array<string>
@@ -54,8 +60,41 @@ function fn5(x: Derived1) {
 	}
 }
 
+function fn6(x: Animal|Mammal) {
+	if(x instanceof Giraffe) {
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+	}
+}
+
+function fn7(x: Array<number>|Array<string>) {
+	if(x instanceof Array) {
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+	}
+}
+
+interface Alpha { a }
+interface Beta { b }
+interface Gamma { c }
+class ABC { a; b; c; }
+function fn8(x: Alpha|Beta|Gamma) {
+	if(x instanceof ABC) {
+		let y = x;
+	}
+}
+
+
+
 
 //// [instanceOfAssignability.js]
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 // Derived1 is assignable to, but not a subtype of, Base
 var Derived1 = (function () {
     function Derived1() {
@@ -68,6 +107,25 @@ var Derived2 = (function () {
     }
     return Derived2;
 })();
+var Animal = (function () {
+    function Animal() {
+    }
+    return Animal;
+})();
+var Mammal = (function (_super) {
+    __extends(Mammal, _super);
+    function Mammal() {
+        _super.apply(this, arguments);
+    }
+    return Mammal;
+})(Animal);
+var Giraffe = (function (_super) {
+    __extends(Giraffe, _super);
+    function Giraffe() {
+        _super.apply(this, arguments);
+    }
+    return Giraffe;
+})(Mammal);
 function fn1(x) {
     if (x instanceof Array) {
         // 1.5: y: Array<number>|Array<string>
@@ -100,6 +158,30 @@ function fn5(x) {
     if (x instanceof Derived2) {
         // 1.5: y: Derived1
         // Want: ???
+        var y = x;
+    }
+}
+function fn6(x) {
+    if (x instanceof Giraffe) {
+        // 1.5: y: Derived1
+        // Want: ???
+        var y = x;
+    }
+}
+function fn7(x) {
+    if (x instanceof Array) {
+        // 1.5: y: Array<number>|Array<string>
+        // Want: y: Array<number>|Array<string>
+        var y = x;
+    }
+}
+var ABC = (function () {
+    function ABC() {
+    }
+    return ABC;
+})();
+function fn8(x) {
+    if (x instanceof ABC) {
         var y = x;
     }
 }

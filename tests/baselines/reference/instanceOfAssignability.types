@@ -29,6 +29,22 @@ class Derived2 implements Base {
 >optional : number
 }
 
+class Animal {
+>Animal : Animal
+
+	move;
+>move : any
+}
+class Mammal extends Animal { milk; }
+>Mammal : Mammal
+>Animal : Animal
+>milk : any
+
+class Giraffe extends Mammal { neck; }
+>Giraffe : Giraffe
+>Mammal : Mammal
+>neck : any
+
 function fn1(x: Array<number>|Array<string>|boolean) {
 >fn1 : (x: number[] | string[] | boolean) => void
 >x : number[] | string[] | boolean
@@ -121,4 +137,80 @@ function fn5(x: Derived1) {
 >x : Derived1
 	}
 }
+
+function fn6(x: Animal|Mammal) {
+>fn6 : (x: Animal | Mammal) => void
+>x : Animal | Mammal
+>Animal : Animal
+>Mammal : Mammal
+
+	if(x instanceof Giraffe) {
+>x instanceof Giraffe : boolean
+>x : Animal | Mammal
+>Giraffe : typeof Giraffe
+
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+>y : Giraffe
+>x : Giraffe
+	}
+}
+
+function fn7(x: Array<number>|Array<string>) {
+>fn7 : (x: number[] | string[]) => void
+>x : number[] | string[]
+>Array : T[]
+>Array : T[]
+
+	if(x instanceof Array) {
+>x instanceof Array : boolean
+>x : number[] | string[]
+>Array : ArrayConstructor
+
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+>y : number[] | string[]
+>x : number[] | string[]
+	}
+}
+
+interface Alpha { a }
+>Alpha : Alpha
+>a : any
+
+interface Beta { b }
+>Beta : Beta
+>b : any
+
+interface Gamma { c }
+>Gamma : Gamma
+>c : any
+
+class ABC { a; b; c; }
+>ABC : ABC
+>a : any
+>b : any
+>c : any
+
+function fn8(x: Alpha|Beta|Gamma) {
+>fn8 : (x: Alpha | Beta | Gamma) => void
+>x : Alpha | Beta | Gamma
+>Alpha : Alpha
+>Beta : Beta
+>Gamma : Gamma
+
+	if(x instanceof ABC) {
+>x instanceof ABC : boolean
+>x : Alpha | Beta | Gamma
+>ABC : typeof ABC
+
+		let y = x;
+>y : ABC
+>x : ABC
+	}
+}
+
+
 

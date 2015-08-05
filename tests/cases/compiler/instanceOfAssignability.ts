@@ -13,6 +13,12 @@ class Derived2 implements Base {
 	optional: number;
 }
 
+class Animal {
+	move;
+}
+class Mammal extends Animal { milk; }
+class Giraffe extends Mammal { neck; }
+
 function fn1(x: Array<number>|Array<string>|boolean) {
 	if(x instanceof Array) {
 		// 1.5: y: Array<number>|Array<string>
@@ -52,3 +58,31 @@ function fn5(x: Derived1) {
 		let y = x;
 	}
 }
+
+function fn6(x: Animal|Mammal) {
+	if(x instanceof Giraffe) {
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+	}
+}
+
+function fn7(x: Array<number>|Array<string>) {
+	if(x instanceof Array) {
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+	}
+}
+
+interface Alpha { a }
+interface Beta { b }
+interface Gamma { c }
+class ABC { a; b; c; }
+function fn8(x: Alpha|Beta|Gamma) {
+	if(x instanceof ABC) {
+		let y = x;
+	}
+}
+
+

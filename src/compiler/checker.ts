@@ -6210,9 +6210,9 @@ namespace ts {
                 // If the current type is a union type, remove all constituents that aren't assignable to target. If that produces
                 // 0 candidates, fall back to the assignability check
                 if (originalType.flags & TypeFlags.Union) {
-                    let assignableConsituents = filter((<UnionType>originalType).types, t => isTypeAssignableTo(t, narrowedTypeCandidate));
-                    if (assignableConsituents.length) {
-                        return getUnionType(assignableConsituents);
+                    let assignableConstituents = filter((<UnionType>originalType).types, t => isTypeAssignableTo(t, narrowedTypeCandidate));
+                    if (assignableConstituents.length) {
+                        return getUnionType(assignableConstituents);
                     }
                 }
                 
