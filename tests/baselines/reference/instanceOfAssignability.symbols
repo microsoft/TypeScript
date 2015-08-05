@@ -1,0 +1,119 @@
+=== tests/cases/compiler/instanceOfAssignability.ts ===
+interface Base {
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	foo: string|number;
+>foo : Symbol(foo, Decl(instanceOfAssignability.ts, 0, 16))
+
+	optional?: number;
+>optional : Symbol(optional, Decl(instanceOfAssignability.ts, 1, 20))
+}
+
+// Derived1 is assignable to, but not a subtype of, Base
+class Derived1 implements Base {
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	foo: string;
+>foo : Symbol(foo, Decl(instanceOfAssignability.ts, 6, 32))
+}
+// Derived2 is a subtype of Base that is not assignable to Derived1
+class Derived2 implements Base {
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	foo: number;
+>foo : Symbol(foo, Decl(instanceOfAssignability.ts, 10, 32))
+
+	optional: number;
+>optional : Symbol(optional, Decl(instanceOfAssignability.ts, 11, 13))
+}
+
+function fn1(x: Array<number>|Array<string>|boolean) {
+>fn1 : Symbol(fn1, Decl(instanceOfAssignability.ts, 13, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 15, 13))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+
+	if(x instanceof Array) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 15, 13))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 19, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 15, 13))
+	}
+}
+
+function fn2(x: Base) {
+>fn2 : Symbol(fn2, Decl(instanceOfAssignability.ts, 21, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 23, 13))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	if(x instanceof Derived1) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 23, 13))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+		// 1.5: y: Base
+		// Want: y: Derived1
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 27, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 23, 13))
+	}
+}
+
+function fn3(x: Base|Derived1) {
+>fn3 : Symbol(fn3, Decl(instanceOfAssignability.ts, 29, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 31, 13))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+	if(x instanceof Derived2) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 31, 13))
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+
+		// 1.5: y: Derived2
+		// Want: Derived2
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 35, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 31, 13))
+	}
+}
+
+function fn4(x: Base|Derived2) {
+>fn4 : Symbol(fn4, Decl(instanceOfAssignability.ts, 37, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 39, 13))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+
+	if(x instanceof Derived1) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 39, 13))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+		// 1.5: y: {}
+		// Want: Derived1
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 43, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 39, 13))
+	}
+}
+
+function fn5(x: Derived1) {
+>fn5 : Symbol(fn5, Decl(instanceOfAssignability.ts, 45, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 47, 13))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+	if(x instanceof Derived2) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 47, 13))
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 51, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 47, 13))
+	}
+}
+

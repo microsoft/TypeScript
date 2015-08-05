@@ -1,0 +1,124 @@
+=== tests/cases/compiler/instanceOfAssignability.ts ===
+interface Base {
+>Base : Base
+
+	foo: string|number;
+>foo : string | number
+
+	optional?: number;
+>optional : number
+}
+
+// Derived1 is assignable to, but not a subtype of, Base
+class Derived1 implements Base {
+>Derived1 : Derived1
+>Base : Base
+
+	foo: string;
+>foo : string
+}
+// Derived2 is a subtype of Base that is not assignable to Derived1
+class Derived2 implements Base {
+>Derived2 : Derived2
+>Base : Base
+
+	foo: number;
+>foo : number
+
+	optional: number;
+>optional : number
+}
+
+function fn1(x: Array<number>|Array<string>|boolean) {
+>fn1 : (x: number[] | string[] | boolean) => void
+>x : number[] | string[] | boolean
+>Array : T[]
+>Array : T[]
+
+	if(x instanceof Array) {
+>x instanceof Array : boolean
+>x : number[] | string[] | boolean
+>Array : ArrayConstructor
+
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+>y : number[] | string[]
+>x : number[] | string[]
+	}
+}
+
+function fn2(x: Base) {
+>fn2 : (x: Base) => void
+>x : Base
+>Base : Base
+
+	if(x instanceof Derived1) {
+>x instanceof Derived1 : boolean
+>x : Base
+>Derived1 : typeof Derived1
+
+		// 1.5: y: Base
+		// Want: y: Derived1
+		let y = x;
+>y : Derived1
+>x : Derived1
+	}
+}
+
+function fn3(x: Base|Derived1) {
+>fn3 : (x: Base | Derived1) => void
+>x : Base | Derived1
+>Base : Base
+>Derived1 : Derived1
+
+	if(x instanceof Derived2) {
+>x instanceof Derived2 : boolean
+>x : Base | Derived1
+>Derived2 : typeof Derived2
+
+		// 1.5: y: Derived2
+		// Want: Derived2
+		let y = x;
+>y : Derived2
+>x : Derived2
+	}
+}
+
+function fn4(x: Base|Derived2) {
+>fn4 : (x: Base | Derived2) => void
+>x : Base | Derived2
+>Base : Base
+>Derived2 : Derived2
+
+	if(x instanceof Derived1) {
+>x instanceof Derived1 : boolean
+>x : Base | Derived2
+>Derived1 : typeof Derived1
+
+		// 1.5: y: {}
+		// Want: Derived1
+		let y = x;
+>y : Derived1
+>x : Derived1
+	}
+}
+
+function fn5(x: Derived1) {
+>fn5 : (x: Derived1) => void
+>x : Derived1
+>Derived1 : Derived1
+
+	if(x instanceof Derived2) {
+>x instanceof Derived2 : boolean
+>x : Derived1
+>Derived2 : typeof Derived2
+
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+>y : Derived1
+>x : Derived1
+	}
+}
+

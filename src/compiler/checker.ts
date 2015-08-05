@@ -6207,14 +6207,20 @@ namespace ts {
             }
 
             function getNarrowedType(originalType: Type, narrowedTypeCandidate: Type) {
-                // Narrow to the target type if it's a subtype of the current type
-                if (isTypeSubtypeOf(narrowedTypeCandidate, originalType)) {
+                // If the current type is a union type, remove all constituents that aren't assignable to target. If that produces
+                // 0 candidates, fall back to the assignability check
+                if (originalType.flags & TypeFlags.Union) {
+                    let assignableConsituents = filter((<UnionType>originalType).types, t => isTypeAssignableTo(t, narrowedTypeCandidate));
+                    if (assignableConsituents.length) {
+                        return getUnionType(assignableConsituents);
+                    }
+                }
+                
+                if (isTypeAssignableTo(narrowedTypeCandidate, originalType)) {
+                    // Narrow to the target type if it's assignable to the current type
                     return narrowedTypeCandidate;
                 }
-                // If the current type is a union type, remove all constituents that aren't subtypes of the target.
-                if (originalType.flags & TypeFlags.Union) {
-                    return getUnionType(filter((<UnionType>originalType).types, t => isTypeSubtypeOf(t, narrowedTypeCandidate)));
-                }
+
                 return originalType;
             }
 
