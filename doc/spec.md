@@ -773,7 +773,7 @@ In this case, the compiler assumes that the namespace object resides in global v
 
 ## <a name="1.11"/>1.11 Modules
 
-TypeScript also supports ECMAScript 6 modules, which are files that contain top-level *export* and *import *directives. For this type of module the TypeScript compiler can emit both ECMAScript 6 compliant code and down-level ECMAScript 3 or 5 compliant code for a variety of module loading systems, including CommonJS, Asynchronous Module Definition (AMD), and Universal Module Definition (UMD).
+TypeScript also supports ECMAScript 6 modules, which are files that contain top-level *export* and *import* directives. For this type of module the TypeScript compiler can emit both ECMAScript 6 compliant code and down-level ECMAScript 3 or 5 compliant code for a variety of module loading systems, including CommonJS, Asynchronous Module Definition (AMD), and Universal Module Definition (UMD).
 
 <br/>
 
@@ -1119,7 +1119,7 @@ var c = abc.charAt(2);  // Property of String interface
 
 ### <a name="3.2.4"/>3.2.4 The Symbol Type
 
-The Symbol primitive type corresponds to the similarly named JavaScript primitive type and represents unique keys that may be used as identifiers for object properties.
+The Symbol primitive type corresponds to the similarly named JavaScript primitive type and represents unique tokens that may be used as keys for object properties.
 
 The `symbol` keyword references the Symbol primitive type. Symbol values are obtained using the global object 'Symbol' which has a number of methods and properties and can be invoked as a function. In particular, the global object 'Symbol' defines a number of well-known symbols ([2.2.3](#2.2.3)) that can be used in a manner similar to identifiers. Note that the 'Symbol' object is available only in ECMAScript 6 environments.
 
