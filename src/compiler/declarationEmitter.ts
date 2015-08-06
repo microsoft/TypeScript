@@ -754,6 +754,7 @@ namespace ts {
             emitModuleElementDeclarationFlags(node);
             write("type ");
             writeTextOfNode(currentSourceFile, node.name);
+            emitTypeParameters(node.typeParameters);
             write(" = ");
             emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
             write(";");
