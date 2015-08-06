@@ -61,7 +61,7 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
         
-        getModuleResolutionsForFile?(fileName: string): string;        
+        getModuleResolutionsForFile?(fileName: string): string;
     }
 
     /** Public interface of the the of a config service shim instance.*/

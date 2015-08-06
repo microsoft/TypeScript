@@ -200,6 +200,7 @@ namespace ts.server {
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
                 this.filenameToScript[info.fileName] = undefined;
+                this.resolvedModuleNames.remove(info.fileName);
             }
         }
 
