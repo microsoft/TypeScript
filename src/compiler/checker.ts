@@ -7273,10 +7273,19 @@ namespace ts {
             else if (elementAttributesType && !isTypeAny(elementAttributesType)) {
                 let correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
                 correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
-                // If there's no corresponding property with this name, error
-                if (!correspondingPropType && isUnhyphenatedJsxName(node.name.text)) {
-                    error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
-                    return unknownType;
+                if (isUnhyphenatedJsxName(node.name.text)) {
+                    // Maybe there's a string indexer?
+                    let indexerType = getIndexTypeOfType(elementAttributesType, IndexKind.String);
+                    if (indexerType) {
+                        correspondingPropType = indexerType
+                    }
+                    else {
+                        // If there's no corresponding property with this name, error
+                        if (!correspondingPropType) {
+                            error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
+                            return unknownType;
+                        }
+                    }
                 }
             }
 
