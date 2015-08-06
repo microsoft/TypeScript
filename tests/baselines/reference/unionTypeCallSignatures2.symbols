@@ -1,0 +1,78 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures2.ts ===
+interface A {
+>A : Symbol(A, Decl(unionTypeCallSignatures2.ts, 0, 0))
+
+    (x: number): number;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 1, 5))
+
+    (x: string, y?: string): boolean;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 2, 5))
+>y : Symbol(y, Decl(unionTypeCallSignatures2.ts, 2, 15))
+
+    (x: Date): void;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 3, 5))
+>Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+
+    <T>(x: T[]): T[];
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 4, 5))
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 4, 8))
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 4, 5))
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 4, 5))
+}
+
+interface B {
+>B : Symbol(B, Decl(unionTypeCallSignatures2.ts, 5, 1))
+
+    (x: number): number;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 8, 5))
+
+    (x: string): string;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 9, 5))
+
+    (x: Date): void;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 10, 5))
+>Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+
+    <T>(x: T[]): T[];
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 11, 5))
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 11, 8))
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 11, 5))
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 11, 5))
+}
+
+interface C {
+>C : Symbol(C, Decl(unionTypeCallSignatures2.ts, 12, 1))
+
+    (x: string, ...y: string[]): number;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 15, 5))
+>y : Symbol(y, Decl(unionTypeCallSignatures2.ts, 15, 15))
+
+    (x: number, s?: string): number;
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 16, 5))
+>s : Symbol(s, Decl(unionTypeCallSignatures2.ts, 16, 15))
+
+    <T>(x: T[]): T[];
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 17, 5))
+>x : Symbol(x, Decl(unionTypeCallSignatures2.ts, 17, 8))
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 17, 5))
+>T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 17, 5))
+}
+
+var f: A | B | C;
+>f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+>A : Symbol(A, Decl(unionTypeCallSignatures2.ts, 0, 0))
+>B : Symbol(B, Decl(unionTypeCallSignatures2.ts, 5, 1))
+>C : Symbol(C, Decl(unionTypeCallSignatures2.ts, 12, 1))
+
+var n = f(42);             // number
+>n : Symbol(n, Decl(unionTypeCallSignatures2.ts, 21, 3))
+>f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+
+var s = f("abc");          // boolean | string | number
+>s : Symbol(s, Decl(unionTypeCallSignatures2.ts, 22, 3))
+>f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+
+var a = f([true, false]);  // boolean[]
+>a : Symbol(a, Decl(unionTypeCallSignatures2.ts, 23, 3))
+>f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+

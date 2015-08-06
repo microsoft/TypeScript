@@ -1,0 +1,86 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures2.ts ===
+interface A {
+>A : A
+
+    (x: number): number;
+>x : number
+
+    (x: string, y?: string): boolean;
+>x : string
+>y : string
+
+    (x: Date): void;
+>x : Date
+>Date : Date
+
+    <T>(x: T[]): T[];
+>T : T
+>x : T[]
+>T : T
+>T : T
+}
+
+interface B {
+>B : B
+
+    (x: number): number;
+>x : number
+
+    (x: string): string;
+>x : string
+
+    (x: Date): void;
+>x : Date
+>Date : Date
+
+    <T>(x: T[]): T[];
+>T : T
+>x : T[]
+>T : T
+>T : T
+}
+
+interface C {
+>C : C
+
+    (x: string, ...y: string[]): number;
+>x : string
+>y : string[]
+
+    (x: number, s?: string): number;
+>x : number
+>s : string
+
+    <T>(x: T[]): T[];
+>T : T
+>x : T[]
+>T : T
+>T : T
+}
+
+var f: A | B | C;
+>f : A | B | C
+>A : A
+>B : B
+>C : C
+
+var n = f(42);             // number
+>n : number
+>f(42) : number
+>f : A | B | C
+>42 : number
+
+var s = f("abc");          // boolean | string | number
+>s : boolean | string | number
+>f("abc") : boolean | string | number
+>f : A | B | C
+>"abc" : string
+
+var a = f([true, false]);  // boolean[]
+>a : boolean[]
+>f([true, false]) : boolean[]
+>f : A | B | C
+>[true, false] : boolean[]
+>true : boolean
+>false : boolean
+

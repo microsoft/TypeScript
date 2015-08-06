@@ -16,10 +16,9 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(40,12): erro
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(41,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(42,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(43,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(46,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(47,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(48,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(49,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(47,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(48,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(49,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(55,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(56,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(59,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -27,14 +26,13 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(60,12): erro
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(61,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(62,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(63,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(66,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(67,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(68,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(69,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(67,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(68,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(69,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (34 errors) ====
+==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (32 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -117,17 +115,15 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     
     var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
     strOrNum = new unionWithOptionalParameter3('hello'); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     strOrNum = new unionWithOptionalParameter3('hello', 10); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = new unionWithOptionalParameter3('hello', "hello"); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = new unionWithOptionalParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var unionWithRestParameter1: { new (a: string, ...b: number[]): string; } | { new (a: string, ...b: number[]): number };
     strOrNum = new unionWithRestParameter1('hello');
@@ -159,17 +155,15 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     
     var unionWithRestParameter3: { new (a: string, ...b: number[]): string; } | { new (a: string): number };
     strOrNum = new unionWithRestParameter3('hello'); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     strOrNum = new unionWithRestParameter3('hello', 10); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = new unionWithRestParameter3('hello', 10, 11); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = new unionWithRestParameter3('hello', "hello"); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = new unionWithRestParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

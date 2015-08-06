@@ -16,10 +16,9 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(40,12): error TS2
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(41,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(42,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(43,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(46,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(47,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(48,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(49,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(47,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(48,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(49,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(55,45): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(56,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(59,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
@@ -27,14 +26,13 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(60,12): error TS2
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(61,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(62,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(63,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(66,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(67,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(67,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (34 errors) ====
+==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (32 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -80,7 +78,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2
                                        ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
-        var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
+    var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
     unionWithDifferentParameterCount();// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
@@ -91,7 +89,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     
-        var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
+    var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
     strOrNum = unionWithOptionalParameter1('hello');
     strOrNum = unionWithOptionalParameter1('hello', 10);
     strOrNum = unionWithOptionalParameter1('hello', "hello"); // error in parameter type
@@ -116,18 +114,16 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     
     var unionWithOptionalParameter3: { (a: string, b?: number): string; } | { (a: string): number; };
-    strOrNum = unionWithOptionalParameter3('hello'); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+    strOrNum = unionWithOptionalParameter3('hello');
     strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithOptionalParameter3('hello', "hello"); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithOptionalParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var unionWithRestParameter1: { (a: string, ...b: number[]): string; } | { (a: string, ...b: number[]): number };
     strOrNum = unionWithRestParameter1('hello');
@@ -158,18 +154,18 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     
     var unionWithRestParameter3: { (a: string, ...b: number[]): string; } | { (a: string): number };
-    strOrNum = unionWithRestParameter3('hello'); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+    strOrNum = unionWithRestParameter3('hello');
     strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithRestParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    
+    
