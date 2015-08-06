@@ -1,0 +1,179 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowingToVoidType.ts ===
+let x: number | string | boolean;
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+if (typeof x === "number") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.toPrecision();
+>x.toPrecision : Symbol(Number.toPrecision, Decl(lib.d.ts, 475, 51))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>toPrecision : Symbol(Number.toPrecision, Decl(lib.d.ts, 475, 51))
+}
+else if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.charCodeAt(1);
+>x.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, 285, 32))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, 285, 32))
+}
+else if(typeof x === "boolean") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.valueOf();
+>x.valueOf : Symbol(Boolean.valueOf, Decl(lib.d.ts, 445, 19))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>valueOf : Symbol(Boolean.valueOf, Decl(lib.d.ts, 445, 19))
+}
+else {
+    x
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+}
+
+if(typeof x === "boolean") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.valueOf();
+>x.valueOf : Symbol(Boolean.valueOf, Decl(lib.d.ts, 445, 19))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>valueOf : Symbol(Boolean.valueOf, Decl(lib.d.ts, 445, 19))
+}
+else if (typeof x === "number") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.toPrecision();
+>x.toPrecision : Symbol(Number.toPrecision, Decl(lib.d.ts, 475, 51))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>toPrecision : Symbol(Number.toPrecision, Decl(lib.d.ts, 475, 51))
+}
+else if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.charCodeAt(1);
+>x.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, 285, 32))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, 285, 32))
+}
+else if(typeof x === "boolean") {
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+
+    x.valueOf();
+>x.valueOf : Symbol(Boolean.valueOf, Decl(lib.d.ts, 445, 19))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+>valueOf : Symbol(Boolean.valueOf, Decl(lib.d.ts, 445, 19))
+}
+else {
+    x
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 0, 3))
+}
+
+class A { a: string; }
+>A : Symbol(A, Decl(typeGuardNarrowingToVoidType.ts, 29, 1))
+>a : Symbol(a, Decl(typeGuardNarrowingToVoidType.ts, 31, 9))
+
+class B { b: string; }
+>B : Symbol(B, Decl(typeGuardNarrowingToVoidType.ts, 31, 22))
+>b : Symbol(b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+
+class C { c: string; }
+>C : Symbol(C, Decl(typeGuardNarrowingToVoidType.ts, 32, 22))
+>c : Symbol(c, Decl(typeGuardNarrowingToVoidType.ts, 33, 9))
+
+declare function isA(x: any): x is A;
+>isA : Symbol(isA, Decl(typeGuardNarrowingToVoidType.ts, 33, 22))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 35, 21))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 35, 21))
+>A : Symbol(A, Decl(typeGuardNarrowingToVoidType.ts, 29, 1))
+
+declare function isB(x: any): x is B;
+>isB : Symbol(isB, Decl(typeGuardNarrowingToVoidType.ts, 35, 37))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 36, 21))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 36, 21))
+>B : Symbol(B, Decl(typeGuardNarrowingToVoidType.ts, 31, 22))
+
+declare function isC(x: any): x is C;
+>isC : Symbol(isC, Decl(typeGuardNarrowingToVoidType.ts, 36, 37))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 37, 21))
+>x : Symbol(x, Decl(typeGuardNarrowingToVoidType.ts, 37, 21))
+>C : Symbol(C, Decl(typeGuardNarrowingToVoidType.ts, 32, 22))
+
+let y: A | B | C;
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>A : Symbol(A, Decl(typeGuardNarrowingToVoidType.ts, 29, 1))
+>B : Symbol(B, Decl(typeGuardNarrowingToVoidType.ts, 31, 22))
+>C : Symbol(C, Decl(typeGuardNarrowingToVoidType.ts, 32, 22))
+
+if (isA(y)) {
+>isA : Symbol(isA, Decl(typeGuardNarrowingToVoidType.ts, 33, 22))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.a;
+>y.a : Symbol(A.a, Decl(typeGuardNarrowingToVoidType.ts, 31, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>a : Symbol(A.a, Decl(typeGuardNarrowingToVoidType.ts, 31, 9))
+}
+else if(isB(y)){
+>isB : Symbol(isB, Decl(typeGuardNarrowingToVoidType.ts, 35, 37))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.b;
+>y.b : Symbol(B.b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>b : Symbol(B.b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+}
+else if(isC(y)) {
+>isC : Symbol(isC, Decl(typeGuardNarrowingToVoidType.ts, 36, 37))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.c;
+>y.c : Symbol(C.c, Decl(typeGuardNarrowingToVoidType.ts, 33, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>c : Symbol(C.c, Decl(typeGuardNarrowingToVoidType.ts, 33, 9))
+}
+else{
+    y
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+}
+
+if (isB(y)) {
+>isB : Symbol(isB, Decl(typeGuardNarrowingToVoidType.ts, 35, 37))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.b;
+>y.b : Symbol(B.b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>b : Symbol(B.b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+}
+else if (isA(y)) {
+>isA : Symbol(isA, Decl(typeGuardNarrowingToVoidType.ts, 33, 22))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.a;
+>y.a : Symbol(A.a, Decl(typeGuardNarrowingToVoidType.ts, 31, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>a : Symbol(A.a, Decl(typeGuardNarrowingToVoidType.ts, 31, 9))
+}
+else if(isB(y)){
+>isB : Symbol(isB, Decl(typeGuardNarrowingToVoidType.ts, 35, 37))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.b;
+>y.b : Symbol(B.b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>b : Symbol(B.b, Decl(typeGuardNarrowingToVoidType.ts, 32, 9))
+}
+else if(isC(y)) {
+>isC : Symbol(isC, Decl(typeGuardNarrowingToVoidType.ts, 36, 37))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+
+    y.c;
+>y.c : Symbol(C.c, Decl(typeGuardNarrowingToVoidType.ts, 33, 9))
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+>c : Symbol(C.c, Decl(typeGuardNarrowingToVoidType.ts, 33, 9))
+}
+else{
+    y
+>y : Symbol(y, Decl(typeGuardNarrowingToVoidType.ts, 39, 3))
+}
+

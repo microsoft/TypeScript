@@ -1,0 +1,216 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowingToVoidType.ts ===
+let x: number | string | boolean;
+>x : number | string | boolean
+
+if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : string
+>x : number | string | boolean
+>"number" : string
+
+    x.toPrecision();
+>x.toPrecision() : string
+>x.toPrecision : (precision?: number) => string
+>x : number
+>toPrecision : (precision?: number) => string
+}
+else if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | boolean
+>"string" : string
+
+    x.charCodeAt(1);
+>x.charCodeAt(1) : number
+>x.charCodeAt : (index: number) => number
+>x : string
+>charCodeAt : (index: number) => number
+>1 : number
+}
+else if(typeof x === "boolean") {
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : boolean
+>"boolean" : string
+
+    x.valueOf();
+>x.valueOf() : boolean
+>x.valueOf : () => boolean
+>x : boolean
+>valueOf : () => boolean
+}
+else {
+    x
+>x : {}
+}
+
+if(typeof x === "boolean") {
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : number | string | boolean
+>"boolean" : string
+
+    x.valueOf();
+>x.valueOf() : boolean
+>x.valueOf : () => boolean
+>x : boolean
+>valueOf : () => boolean
+}
+else if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : string
+>x : number | string
+>"number" : string
+
+    x.toPrecision();
+>x.toPrecision() : string
+>x.toPrecision : (precision?: number) => string
+>x : number
+>toPrecision : (precision?: number) => string
+}
+else if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string
+>"string" : string
+
+    x.charCodeAt(1);
+>x.charCodeAt(1) : number
+>x.charCodeAt : (index: number) => number
+>x : string
+>charCodeAt : (index: number) => number
+>1 : number
+}
+else if(typeof x === "boolean") {
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : {}
+>"boolean" : string
+
+    x.valueOf();
+>x.valueOf() : boolean
+>x.valueOf : () => boolean
+>x : boolean
+>valueOf : () => boolean
+}
+else {
+    x
+>x : {}
+}
+
+class A { a: string; }
+>A : A
+>a : string
+
+class B { b: string; }
+>B : B
+>b : string
+
+class C { c: string; }
+>C : C
+>c : string
+
+declare function isA(x: any): x is A;
+>isA : (x: any) => x is A
+>x : any
+>x : any
+>A : A
+
+declare function isB(x: any): x is B;
+>isB : (x: any) => x is B
+>x : any
+>x : any
+>B : B
+
+declare function isC(x: any): x is C;
+>isC : (x: any) => x is C
+>x : any
+>x : any
+>C : C
+
+let y: A | B | C;
+>y : A | B | C
+>A : A
+>B : B
+>C : C
+
+if (isA(y)) {
+>isA(y) : boolean
+>isA : (x: any) => x is A
+>y : A | B | C
+
+    y.a;
+>y.a : string
+>y : A
+>a : string
+}
+else if(isB(y)){
+>isB(y) : boolean
+>isB : (x: any) => x is B
+>y : B | C
+
+    y.b;
+>y.b : string
+>y : B
+>b : string
+}
+else if(isC(y)) {
+>isC(y) : boolean
+>isC : (x: any) => x is C
+>y : C
+
+    y.c;
+>y.c : string
+>y : C
+>c : string
+}
+else{
+    y
+>y : {}
+}
+
+if (isB(y)) {
+>isB(y) : boolean
+>isB : (x: any) => x is B
+>y : A | B | C
+
+    y.b;
+>y.b : string
+>y : B
+>b : string
+}
+else if (isA(y)) {
+>isA(y) : boolean
+>isA : (x: any) => x is A
+>y : A | C
+
+    y.a;
+>y.a : string
+>y : A
+>a : string
+}
+else if(isB(y)){
+>isB(y) : boolean
+>isB : (x: any) => x is B
+>y : C
+
+    y.b;
+>y.b : string
+>y : B
+>b : string
+}
+else if(isC(y)) {
+>isC(y) : boolean
+>isC : (x: any) => x is C
+>y : C
+
+    y.c;
+>y.c : string
+>y : C
+>c : string
+}
+else{
+    y
+>y : {}
+}
+
