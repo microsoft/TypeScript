@@ -4945,8 +4945,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
-                let typeName = node.typeName;
-                let result = resolver.getTypeReferenceSerializationKind(node);
+                let location: Node = node.parent;
+                while (isDeclaration(location) || isTypeNode(location)) {
+                    location = location.parent;
+                }
+
+                // Clone the type name and parent it to a location outside of the current declaration.
+                let typeName = cloneEntityName(node.typeName);
+                typeName.parent = location;
+
+                let result = resolver.getTypeReferenceSerializationKind(typeName);
                 switch (result) {
                     case TypeReferenceSerializationKind.Unknown:
                         let temp = createAndRecordTempVariable(TempFlags.Auto);
@@ -5078,6 +5086,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         argumentsWritten++;
                     }
                     if (shouldEmitParamTypesMetadata(node)) {
+                        debugger;
                         if (writeComma || argumentsWritten) {
                             write(", ");
                         }

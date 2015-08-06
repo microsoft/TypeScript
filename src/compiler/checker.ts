@@ -14351,15 +14351,17 @@ namespace ts {
             return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
         
-        function getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind {
+        function getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
-            let symbol = resolveEntityName(node.typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
-            let constructorType = symbol ? getTypeOfSymbol(symbol) : undefined;
+            let valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
+            let constructorType = valueSymbol ? getTypeOfSymbol(valueSymbol) : undefined;
             if (constructorType && isConstructorType(constructorType)) {
                 return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
             }
 
-            let type = getTypeFromTypeNode(node);
+            // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
+            let typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true);
+            let type = getDeclaredTypeOfSymbol(typeSymbol);
             if (type === unknownType) {
                 return TypeReferenceSerializationKind.Unknown;
             }
