@@ -6759,7 +6759,7 @@ namespace ts {
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
             let start = new Date().getTime();
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start)); 
+            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
 
@@ -6799,12 +6799,12 @@ namespace ts {
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
          * Valid positions are
-         * * outside of comments, statements, and expressions, and
-         * * preceding a function declaration.
+         * - outside of comments, statements, and expressions, and
+         * - preceding a function declaration.
          *
          * Hosts should ideally check that:
-         * * The line is all whitespace up to 'position' before performing the insertion.
-         * * If the keystroke sequence "/\*\*" induced the call, we also check that the next
+         * - The line is all whitespace up to 'position' before performing the insertion.
+         * - If the keystroke sequence "/\*\*" induced the call, we also check that the next
          * non-whitespace character is '*', which (approximately) indicates whether we added
          * the second '*' to complete an existing (JSDoc) comment.
          * @param fileName The file in which to perform the check.
@@ -6827,9 +6827,9 @@ namespace ts {
             }
 
             // TODO: add support for:
-            // * methods
-            // * constructors
-            // * class decls
+            // - methods
+            // - constructors
+            // - class decls
             let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
 
             if (!containingFunction || containingFunction.getStart() < position) {
