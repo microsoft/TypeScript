@@ -527,9 +527,9 @@ namespace ts.server {
             });
         }
 
-        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
             let { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
-            let args: protocol.FileLocationRequestArgs = { file: fileName, line, offset };
+            let args: protocol.DocumentHighlightsRequestArgs = { file: fileName, line, offset, filesToSearch };
 
             let request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
             let response = this.processResponse<protocol.DocumentHighlightsResponse>(request);

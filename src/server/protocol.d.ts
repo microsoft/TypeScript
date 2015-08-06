@@ -157,6 +157,17 @@ declare namespace ts.server.protocol {
     }
 
     /**
+      * Arguments in document highlight request; include: filesToSearch, file,
+      * line, offset.
+      */
+    export interface DocumentHighlightsRequestArgs extends FileLocationRequestArgs {
+        /**
+         * List of files to search for document highlights.
+         */
+        filesToSearch: string[];
+    }
+
+    /**
       * Go to definition request; value of command field is
       * "definition". Return response giving the file locations that
       * define the symbol found in file at location line, col.
@@ -244,6 +255,7 @@ declare namespace ts.server.protocol {
       * in the file at a given line and column.
       */
     export interface DocumentHighlightsRequest extends FileLocationRequest {
+        arguments: DocumentHighlightsRequestArgs
     }
 
     export interface HighlightSpan extends TextSpan {
@@ -251,14 +263,20 @@ declare namespace ts.server.protocol {
     }
 
     export interface DocumentHighlightsItem {
+        /**
+          * File containing highlight spans.
+          */
         file: string,
+
+        /**
+          * Spans to highlight in file.
+          */
         highlightSpans: HighlightSpan[];
     }
 
     export interface DocumentHighlightsResponse extends Response {
         body?: DocumentHighlightsItem[];
     }
-
 
     /**
       * Find references request; value of command field is

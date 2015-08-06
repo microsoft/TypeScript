@@ -344,7 +344,7 @@ namespace ts.server {
             });
         }
 
-        private getDocumentHighlights(line: number, offset: number, fileName: string): protocol.DocumentHighlightsItem[] {
+        private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
             fileName = ts.normalizePath(fileName);
             let project = this.projectService.getProjectForFile(fileName);
 
@@ -354,7 +354,6 @@ namespace ts.server {
 
             let { compilerService } = project;
             let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
-            let filesToSearch = [ fileName ]; // only search for highlights inside the current file
             
             let documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
             
@@ -976,8 +975,8 @@ namespace ts.server {
                 return {response: this.getOccurrences(line, offset, fileName), responseRequired: true};
             },
             [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
-                var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getDocumentHighlights(line, offset, fileName), responseRequired: true};
+                var { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
+                return {response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true};
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
