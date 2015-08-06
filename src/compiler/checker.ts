@@ -211,6 +211,9 @@ namespace ts {
         let assignableRelation: Map<RelationComparisonResult> = {};
         let identityRelation: Map<RelationComparisonResult> = {};
 
+        // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
+        let _displayBuilder: SymbolDisplayBuilder;
+
         type TypeSystemEntity = Symbol | Type | Signature;
 
         const enum TypeSystemPropertyName {
@@ -965,7 +968,7 @@ namespace ts {
             if (!moduleName) return;
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                let symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
+                let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
                     return symbol;
                 }
@@ -1490,8 +1493,6 @@ namespace ts {
             return undefined;
         }
 
-        // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
-        let _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
             function getNameOfSymbol(symbol: Symbol): string {
@@ -3448,7 +3449,7 @@ namespace ts {
         // type, a property is considered known if it is known in any constituent type.
         function isKnownProperty(type: Type, name: string): boolean {
             if (type.flags & TypeFlags.ObjectType && type !== globalObjectType) {
-                var resolved = resolveStructuredTypeMembers(type);
+                const resolved = resolveStructuredTypeMembers(type);
                 return !!(resolved.properties.length === 0 ||
                     resolved.stringIndexType ||
                     resolved.numberIndexType ||
@@ -4668,19 +4669,21 @@ namespace ts {
                 let result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
-                if (relation !== identityRelation) {
-                    if (isTypeAny(target)) return Ternary.True;
-                    if (source === undefinedType) return Ternary.True;
-                    if (source === nullType && target !== undefinedType) return Ternary.True;
-                    if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
-                    if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
-                    if (relation === assignableRelation) {
-                        if (isTypeAny(source)) return Ternary.True;
-                        if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
-                    }
+                if (relation === identityRelation) {
+                    return isIdenticalTo(source, target);
                 }
 
-                if (relation !== identityRelation && source.flags & TypeFlags.FreshObjectLiteral) {
+                if (isTypeAny(target)) return Ternary.True;
+                if (source === undefinedType) return Ternary.True;
+                if (source === nullType && target !== undefinedType) return Ternary.True;
+                if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
+                if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
+                if (relation === assignableRelation) {
+                    if (isTypeAny(source)) return Ternary.True;
+                    if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
+                }
+
+                if (source.flags & TypeFlags.FreshObjectLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
@@ -4696,83 +4699,96 @@ namespace ts {
 
                 let saveErrorInfo = errorInfo;
 
-                if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
-                    // We have type references to same target type, see if relationship holds for all type arguments
-                    if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
+                // Note that the "each" checks must precede the "some" checks to produce the correct results
+                if (source.flags & TypeFlags.Union) {
+                    if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
-                    if (result = typeParameterRelatedTo(<TypeParameter>source, <TypeParameter>target, reportErrors)) {
+                else if (target.flags & TypeFlags.Intersection) {
+                    if (result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors)) {
                         return result;
-                    }
-                }
-                else if (relation !== identityRelation) {
-                    // Note that the "each" checks must precede the "some" checks to produce the correct results
-                    if (source.flags & TypeFlags.Union) {
-                        if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
-                            return result;
-                        }
-                    }
-                    else if (target.flags & TypeFlags.Intersection) {
-                        if (result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors)) {
-                            return result;
-                        }
-                    }
-                    else {
-                        // It is necessary to try "each" checks on both sides because there may be nested "some" checks
-                        // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
-                        // A & B = (A & B) | (C & D).
-                        if (source.flags & TypeFlags.Intersection) {
-                            // If target is a union type the following check will report errors so we suppress them here
-                            if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
-                                return result;
-                            }
-                        }
-                        if (target.flags & TypeFlags.Union) {
-                            if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors)) {
-                                return result;
-                            }
-                        }
                     }
                 }
                 else {
-                    if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
-                        source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
-                        if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
-                            if (result &= eachTypeRelatedToSomeType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source)) {
-                                return result;
-                            }
+                    // It is necessary to try "some" checks on both sides because there may be nested "each" checks
+                    // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
+                    // A & B = (A & B) | (C & D).
+                    if (source.flags & TypeFlags.Intersection) {
+                        // If target is a union type the following check will report errors so we suppress them here
+                        if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
+                            return result;
+                        }
+                    }
+                    if (target.flags & TypeFlags.Union) {
+                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors)) {
+                            return result;
                         }
                     }
                 }
 
-                // Even if relationship doesn't hold for unions, type parameters, or generic type references,
-                // it may hold in a structural comparison.
-                // Report structural errors only if we haven't reported any errors yet
-                let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                // Identity relation does not use apparent type
-                let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
-                // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
-                // relates to X. Thus, we include intersection types on the source side here.
-                if (sourceOrApparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
-                    if (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
+                if (source.flags & TypeFlags.TypeParameter) {
+                    let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
+                    if (!constraint || constraint.flags & TypeFlags.Any) {
+                        constraint = emptyObjectType;
+                    }
+                    // Report constraint errors only if the constraint is not the empty object type
+                    let reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                    if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.TypeParameter && sourceOrApparentType.flags & TypeFlags.UnionOrIntersection) {
-                    // We clear the errors first because the following check often gives a better error than
-                    // the union or intersection comparison above if it is applicable.
-                    errorInfo = saveErrorInfo;
-                    if (result = isRelatedTo(sourceOrApparentType, target, reportErrors)) {
-                        return result;
+                else {
+                    if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                        // We have type references to same target type, see if relationship holds for all type arguments
+                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
+                            return result;
+                        }
+                    }
+                    // Even if relationship doesn't hold for unions, intersections, or generic type references,
+                    // it may hold in a structural comparison.
+                    let apparentType = getApparentType(source);
+                    // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
+                    // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
+                    // relates to X. Thus, we include intersection types on the source side here.
+                    if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
+                        // Report structural errors only if we haven't reported any errors yet
+                        let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
+                        if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
                     }
                 }
 
                 if (reportErrors) {
                     reportRelationError(headMessage, source, target);
+                }
+                return Ternary.False;
+            }
+
+            function isIdenticalTo(source: Type, target: Type): Ternary {
+                let result: Ternary;
+                if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+                    if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                        // We have type references to same target type, see if all type arguments are identical
+                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, /*reportErrors*/ false)) {
+                            return result;
+                        }
+                    }
+                    return objectTypeRelatedTo(<ObjectType>source, <ObjectType>target, /*reportErrors*/ false);
+                }
+                if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
+                    return typeParameterIdenticalTo(<TypeParameter>source, <TypeParameter>target);
+                }
+                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
+                    source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
+                    if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
+                        if (result &= eachTypeRelatedToSomeType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source)) {
+                            return result;
+                        }
+                    }
                 }
                 return Ternary.False;
             }
@@ -4861,29 +4877,18 @@ namespace ts {
                 return result;
             }
 
-            function typeParameterRelatedTo(source: TypeParameter, target: TypeParameter, reportErrors: boolean): Ternary {
-                if (relation === identityRelation) {
-                    if (source.symbol.name !== target.symbol.name) {
-                        return Ternary.False;
-                    }
-                    // covers case when both type parameters does not have constraint (both equal to noConstraintType)
-                    if (source.constraint === target.constraint) {
-                        return Ternary.True;
-                    }
-                    if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
-                        return Ternary.False;
-                    }
-                    return isRelatedTo(source.constraint, target.constraint, reportErrors);
-                }
-                else {
-                    while (true) {
-                        let constraint = getConstraintOfTypeParameter(source);
-                        if (constraint === target) return Ternary.True;
-                        if (!(constraint && constraint.flags & TypeFlags.TypeParameter)) break;
-                        source = <TypeParameter>constraint;
-                    }
+            function typeParameterIdenticalTo(source: TypeParameter, target: TypeParameter): Ternary {
+                if (source.symbol.name !== target.symbol.name) {
                     return Ternary.False;
                 }
+                // covers case when both type parameters does not have constraint (both equal to noConstraintType)
+                if (source.constraint === target.constraint) {
+                    return Ternary.True;
+                }
+                if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
+                    return Ternary.False;
+                }
+                return isIdenticalTo(source.constraint, target.constraint);
             }
 
             // Determine if two object types are related by structure. First, check if the result is already available in the global cache.
@@ -5732,6 +5737,14 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
+                else if (source.flags & TypeFlags.Tuple && target.flags & TypeFlags.Tuple && (<TupleType>source).elementTypes.length === (<TupleType>target).elementTypes.length) {
+                    // If source and target are tuples of the same size, infer from element types
+                    let sourceTypes = (<TupleType>source).elementTypes;
+                    let targetTypes = (<TupleType>target).elementTypes;
+                    for (let i = 0; i < sourceTypes.length; i++) {
+                        inferFromTypes(sourceTypes[i], targetTypes[i]);
+                    }
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     let targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeParameterCount = 0;
@@ -6207,14 +6220,20 @@ namespace ts {
             }
 
             function getNarrowedType(originalType: Type, narrowedTypeCandidate: Type) {
-                // Narrow to the target type if it's a subtype of the current type
-                if (isTypeSubtypeOf(narrowedTypeCandidate, originalType)) {
+                // If the current type is a union type, remove all constituents that aren't assignable to target. If that produces
+                // 0 candidates, fall back to the assignability check
+                if (originalType.flags & TypeFlags.Union) {
+                    let assignableConstituents = filter((<UnionType>originalType).types, t => isTypeAssignableTo(t, narrowedTypeCandidate));
+                    if (assignableConstituents.length) {
+                        return getUnionType(assignableConstituents);
+                    }
+                }
+                
+                if (isTypeAssignableTo(narrowedTypeCandidate, originalType)) {
+                    // Narrow to the target type if it's assignable to the current type
                     return narrowedTypeCandidate;
                 }
-                // If the current type is a union type, remove all constituents that aren't subtypes of the target.
-                if (originalType.flags & TypeFlags.Union) {
-                    return getUnionType(filter((<UnionType>originalType).types, t => isTypeSubtypeOf(t, narrowedTypeCandidate)));
-                }
+
                 return originalType;
             }
 
@@ -7337,7 +7356,7 @@ namespace ts {
                     }
 
                     // Wasn't found
-                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, (<Identifier>node.tagName).text, 'JSX.' + JsxNames.IntrinsicElements);
+                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, (<Identifier>node.tagName).text, "JSX." + JsxNames.IntrinsicElements);
                     return unknownSymbol;
                 }
                 else {
@@ -7377,7 +7396,7 @@ namespace ts {
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
             // There is no such thing as an instance type for a non-class element. This
             // line shouldn't be hit.
-            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), 'Should not call getJsxElementInstanceType on non-class Element');
+            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), "Should not call getJsxElementInstanceType on non-class Element");
 
             let classSymbol = getJsxElementTagSymbol(node);
             if (classSymbol === unknownSymbol) {
@@ -7557,7 +7576,7 @@ namespace ts {
             // be marked as 'used' so we don't incorrectly elide its import. And if there
             // is no 'React' symbol in scope, we should issue an error.
             if (compilerOptions.jsx === JsxEmit.React) {
-                let reactSym = resolveName(node.tagName, 'React', SymbolFlags.Value, Diagnostics.Cannot_find_name_0, 'React');
+                let reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
                 if (reactSym) {
                     getSymbolLinks(reactSym).referenced = true;
                 }

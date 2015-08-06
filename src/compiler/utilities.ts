@@ -1866,7 +1866,7 @@ namespace ts {
 
         function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
             let end = Math.min(comment.end, nextLineStart - 1);
-            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, "");
             if (currentLineText) {
                 // trimmed forward and ending spaces text
                 writer.write(currentLineText);

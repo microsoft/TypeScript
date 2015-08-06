@@ -1121,7 +1121,7 @@ namespace ts {
 
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
-                    pos = scanShebangTrivia(text ,pos);
+                    pos = scanShebangTrivia(text, pos);
                     if (skipTrivia) {
                         continue;
                     }
