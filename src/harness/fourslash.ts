@@ -2172,7 +2172,7 @@ module FourSlash {
                     for (let highlight of highlightSpans) {
                         if (highlight && highlight.textSpan.start === start && ts.textSpanEnd(highlight.textSpan) === end) {
                             if (typeof kind !== "undefined" && highlight.kind !== kind) {
-                                this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ' + highlight.kind + ', expected: ' + kind + '.');
+                                this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ${highlight.kind}, expected: ${kind}.`);
                             }
                             return;
                         }
