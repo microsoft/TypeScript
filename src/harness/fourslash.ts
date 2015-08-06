@@ -2152,7 +2152,7 @@ module FourSlash {
         }
 
         private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: string[]) {
-            let filesToSearch = fileNamesToSearch.map(name => this.basePath + "/" + name);
+            let filesToSearch = fileNamesToSearch.map(name => ts.combinePaths(this.basePath, name));
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
 
