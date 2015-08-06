@@ -2122,33 +2122,78 @@ module FourSlash {
         public verifyOccurrencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
             this.taoInvalidReason = "verifyOccurrencesAtPositionListContains NYI";
 
-            let occurances = this.getOccurancesAtCurrentPosition();
+            let occurrences = this.getOccurancesAtCurrentPosition();
 
-            if (!occurances || occurances.length === 0) {
-                this.raiseError("verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.");
+            if (!occurrences || occurrences.length === 0) {
+                this.raiseError('verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.');
             }
 
-            for (let i = 0; i < occurances.length; i++) {
-                let occurance = occurances[i];
-                if (occurance && occurance.fileName === fileName && occurance.textSpan.start === start && ts.textSpanEnd(occurance.textSpan) === end) {
-                    if (typeof isWriteAccess !== "undefined" && occurance.isWriteAccess !== isWriteAccess) {
-                        this.raiseError(`verifyOccurancesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ${occurance.isWriteAccess}, expected: ${isWriteAccess}.`);
+            for (let occurrence of occurrences) {
+                if (occurrence && occurrence.fileName === fileName && occurrence.textSpan.start === start && ts.textSpanEnd(occurrence.textSpan) === end) {
+                    if (typeof isWriteAccess !== "undefined" && occurrence.isWriteAccess !== isWriteAccess) {
+                        this.raiseError(`verifyOccurrencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${occurrence.isWriteAccess}, expected: ${isWriteAccess}.`);
                     }
                     return;
                 }
             }
 
             let missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            this.raiseError(`verifyOccurancesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem)} in the returned list: (${JSON.stringify(occurances)})`);
+            this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem)} in the returned list: (${JSON.stringify(occurrences)})`);
         }
 
         public verifyOccurrencesAtPositionListCount(expectedCount: number) {
             this.taoInvalidReason = "verifyOccurrencesAtPositionListCount NYI";
 
-            let occurances = this.getOccurancesAtCurrentPosition();
-            let actualCount = occurances ? occurances.length : 0;
+            let occurrences = this.getOccurancesAtCurrentPosition();
+            let actualCount = occurrences ? occurrences.length : 0;
             if (expectedCount !== actualCount) {
                 this.raiseError(`verifyOccurrencesAtPositionListCount failed - actual: ${actualCount}, expected:${expectedCount}`);
+            }
+        }
+
+        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: string[]) {
+            let filesToSearch = fileNamesToSearch.map(name => ts.combinePaths(this.basePath, name));
+            return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
+        }
+
+        public verifyDocumentHighlightsAtPositionListContains(fileName: string, start: number, end: number, fileNamesToSearch: string[], kind?: string) {
+            this.taoInvalidReason = 'verifyDocumentHighlightsAtPositionListContains NYI';
+
+            let documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNamesToSearch);
+
+            if (!documentHighlights || documentHighlights.length === 0) {
+                this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - found 0 highlights, expected at least one.');
+            }
+
+            for (let documentHighlight of documentHighlights) {
+                if (documentHighlight.fileName === fileName) {
+                    let { highlightSpans } = documentHighlight;
+
+                    for (let highlight of highlightSpans) {
+                        if (highlight && highlight.textSpan.start === start && ts.textSpanEnd(highlight.textSpan) === end) {
+                            if (typeof kind !== "undefined" && highlight.kind !== kind) {
+                                this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ' + highlight.kind + ', expected: ' + kind + '.');
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+
+            let missingItem = { fileName: fileName, start: start, end: end, kind: kind };
+            this.raiseError('verifyOccurancesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(documentHighlights) + ')');
+        }
+
+        public verifyDocumentHighlightsAtPositionListCount(expectedCount: number, fileNamesToSearch: string[]) {
+            this.taoInvalidReason = 'verifyDocumentHighlightsAtPositionListCount NYI';
+
+            let documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNamesToSearch);
+            let actualCount = documentHighlights 
+                ? documentHighlights.reduce((currentCount, { highlightSpans }) => currentCount + highlightSpans.length, 0) 
+                : 0;
+
+            if (expectedCount !== actualCount) {
+                this.raiseError('verifyDocumentHighlightsAtPositionListCount failed - actual: ' + actualCount + ', expected:' + expectedCount);
             }
         }
 

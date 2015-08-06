@@ -89,6 +89,7 @@ namespace ts.server {
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
+        export const DocumentHighlights = "documentHighlights";
         export const Open = "open";
         export const Quickinfo = "quickinfo";
         export const References = "references";
@@ -313,7 +314,7 @@ namespace ts.server {
             }));
         }
 
-        private getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[]{
+        private getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[] {
             fileName = ts.normalizePath(fileName);
             let project = this.projectService.getProjectForFile(fileName);
 
@@ -341,6 +342,42 @@ namespace ts.server {
                     isWriteAccess
                 }
             });
+        }
+
+        private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
+            fileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(fileName);
+
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            let { compilerService } = project;
+            let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
+            
+            let documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
+            
+            if (!documentHighlights) {
+                return undefined;
+            }
+
+            return documentHighlights.map(convertToDocumentHighlightsItem);
+
+            function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
+                let { fileName, highlightSpans } = documentHighlights;
+
+                return {
+                    file: fileName,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                };
+
+                function convertHighlightSpan(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
+                    let { textSpan, kind } = highlightSpan;
+                    let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                    let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                    return { start, end, kind };
+                }
+            }
         }
 
         private getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
@@ -936,6 +973,10 @@ namespace ts.server {
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                 return {response: this.getOccurrences(line, offset, fileName), responseRequired: true};
+            },
+            [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
+                var { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
+                return {response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true};
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;

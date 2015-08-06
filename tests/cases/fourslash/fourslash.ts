@@ -421,6 +421,14 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyOccurrencesAtPositionListCount(expectedCount);
         }
 
+        public documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
+        }
+
+        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
+        }
+
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
             FourSlash.currentTestState.verifyCompletionEntryDetails(entryName, text, documentation, kind);
         }
