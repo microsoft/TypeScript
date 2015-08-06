@@ -14,11 +14,11 @@ System.register(['file1', 'file2'], function(exports_1) {
     var file1_1, n2;
     return {
         setters:[
-            function (_file1_1) {
-                file1_1 = _file1_1;
+            function (file1_1_1) {
+                file1_1 = file1_1_1;
             },
-            function (_n2) {
-                n2 = _n2;
+            function (n2_1) {
+                n2 = n2_1;
             }],
         execute: function() {
             exports_1("x", file1_1.x);

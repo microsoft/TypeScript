@@ -38,8 +38,8 @@ System.register(['./foo'], function(exports_1) {
     var Bar;
     return {
         setters:[
-            function (_foo_1) {
-                foo_1 = _foo_1;
+            function (foo_1_1) {
+                foo_1 = foo_1_1;
             }],
         execute: function() {
             Bar = (function (_super) {
