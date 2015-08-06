@@ -750,6 +750,8 @@ namespace ts {
         }
 
         function writeTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            let prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
@@ -759,6 +761,7 @@ namespace ts {
             emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
             write(";");
             writeLine();
+            enclosingDeclaration = prevEnclosingDeclaration;
 
             function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                 return {
