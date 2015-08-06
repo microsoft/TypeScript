@@ -4,20 +4,31 @@
         "comment-format": [true,
             "check-space"
         ],
-        "indent": true,
+        "indent": [true,
+            "spaces"
+        ],
         "one-line": [true,
             "check-open-brace"
         ],
         "no-unreachable": true,
         "no-use-before-declare": true,
         "no-var-keyword": true,
-        "quotemark": true,
+        "quotemark": [true,
+            "double"
+        ],
         "semicolon": true,
         "whitespace": [true,
             "check-branch",
             "check-operator",
             "check-separator",
             "check-type"
-        ]
+        ],
+        "typedef-whitespace": [true, {
+            "call-signature": "nospace",
+            "index-signature": "nospace",
+            "parameter": "nospace",
+            "property-declaration": "nospace",
+            "variable-declaration": "nospace"
+        }]
   }
 }

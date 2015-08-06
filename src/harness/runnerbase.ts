@@ -33,7 +33,7 @@ abstract class RunnerBase {
         
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         let localHost = /http:\/localhost:\d+/g;
-        fixedPath = fixedPath.replace(localHost, '');
+        fixedPath = fixedPath.replace(localHost, "");
         return fixedPath;
     }
 }

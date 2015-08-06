@@ -30,6 +30,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,12): error TS2304:
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,16): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,2): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,10): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,13): error TS1005: '>' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,14): error TS2304: Cannot find name 'c'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,16): error TS1109: Expression expected.
@@ -43,6 +44,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,8): error TS2304: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,10): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,2): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,4): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,7): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,9): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,3): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,4): error TS2304: Cannot find name 'foo'.
@@ -71,7 +73,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002: Expected corresponding JSX closing tag for 'a'.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (71 errors) ====
+==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (73 errors) ====
     declare var React: any;
     
     </>;
@@ -148,6 +150,8 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
 !!! error TS2304: Cannot find name 'a'.
         ~
 !!! error TS1003: Identifier expected.
+             ~
+!!! error TS2304: Cannot find name 'a'.
                 ~
 !!! error TS1005: '>' expected.
                  ~
@@ -177,6 +181,8 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
 !!! error TS2304: Cannot find name 'a'.
        ~
 !!! error TS1003: Identifier expected.
+          ~
+!!! error TS2304: Cannot find name 'a'.
             ~
 !!! error TS1003: Identifier expected.
     <a[foo]></a[foo]>;
