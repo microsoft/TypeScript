@@ -20,6 +20,7 @@ var Service = (function () {
     }
     return Service;
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Service;
 //// [component.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
