@@ -1,6 +1,6 @@
-///<reference path='fourslash.ts' />
-///<reference path='harness.ts'/>
-///<reference path='runnerbase.ts' />
+///<reference path="fourslash.ts" />
+///<reference path="harness.ts"/>
+///<reference path="runnerbase.ts" />
 
 const enum FourSlashTestType {
     Native,
@@ -16,16 +16,16 @@ class FourSlashRunner extends RunnerBase {
         super();
         switch (testType) {
             case FourSlashTestType.Native:
-                this.basePath = 'tests/cases/fourslash';
-                this.testSuiteName = 'fourslash';
+                this.basePath = "tests/cases/fourslash";
+                this.testSuiteName = "fourslash";
                 break;
             case FourSlashTestType.Shims:
-                this.basePath = 'tests/cases/fourslash/shims';
-                this.testSuiteName = 'fourslash-shims';
+                this.basePath = "tests/cases/fourslash/shims";
+                this.testSuiteName = "fourslash-shims";
                 break;
             case FourSlashTestType.Server:
-                this.basePath = 'tests/cases/fourslash/server';
-                this.testSuiteName = 'fourslash-server';
+                this.basePath = "tests/cases/fourslash/server";
+                this.testSuiteName = "fourslash-server";
                 break;
         }
     }
@@ -35,25 +35,25 @@ class FourSlashRunner extends RunnerBase {
             this.tests = this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
         }
 
-        describe(this.testSuiteName + ' tests', () => {
+        describe(this.testSuiteName + " tests", () => {
             this.tests.forEach((fn: string) => {
                  describe(fn, () => {
                        fn = ts.normalizeSlashes(fn);
-                        let justName = fn.replace(/^.*[\\\/]/, '');
+                        let justName = fn.replace(/^.*[\\\/]/, "");
 
                         // Convert to relative path
-                        let testIndex = fn.indexOf('tests/');
+                        let testIndex = fn.indexOf("tests/");
                         if (testIndex >= 0) fn = fn.substr(testIndex);
 
                         if (justName && !justName.match(/fourslash\.ts$/i) && !justName.match(/\.d\.ts$/i)) {
-                            it(this.testSuiteName + ' test ' + justName + ' runs correctly', () => {
+                            it(this.testSuiteName + " test " + justName + " runs correctly", () => {
                                 FourSlash.runFourSlashTest(this.basePath, this.testType, fn);
                         });
                     }
                 });
             });
 
-            describe('Generate Tao XML', () => {
+            describe("Generate Tao XML", () => {
                 let invalidReasons: any = {};
                 FourSlash.xmlData.forEach(xml => {
                     if (xml.invalidReason !== null) {
@@ -69,37 +69,37 @@ class FourSlashRunner extends RunnerBase {
                 invalidReport.sort((lhs, rhs) => lhs.count > rhs.count ? -1 : lhs.count === rhs.count ? 0 : 1);
 
                 let lines: string[] = [];
-                lines.push('<!-- Blocked Test Report');
+                lines.push("<!-- Blocked Test Report");
                 invalidReport.forEach((reasonAndCount) => {
-                    lines.push(reasonAndCount.count + ' tests blocked by ' + reasonAndCount.reason);
+                    lines.push(reasonAndCount.count + " tests blocked by " + reasonAndCount.reason);
                 });
-                lines.push('-->');
-                lines.push('<TaoTest xmlns="http://microsoft.com/schemas/VSLanguages/TAO">');
-                lines.push('    <InitTest>');
-                lines.push('        <StartTarget />');
-                lines.push('    </InitTest>');
-                lines.push('    <ScenarioList>');
+                lines.push("-->");
+                lines.push("<TaoTest xmlns=\"http://microsoft.com/schemas/VSLanguages/TAO\">");
+                lines.push("    <InitTest>");
+                lines.push("        <StartTarget />");
+                lines.push("    </InitTest>");
+                lines.push("    <ScenarioList>");
                 FourSlash.xmlData.forEach(xml => {
                     if (xml.invalidReason !== null) {
-                        lines.push('<!-- Skipped ' + xml.originalName + ', reason: ' + xml.invalidReason + ' -->');
+                        lines.push("<!-- Skipped " + xml.originalName + ", reason: " + xml.invalidReason + " -->");
                     } else {
-                        lines.push('        <Scenario Name="' + xml.originalName + '">');
+                        lines.push("        <Scenario Name=\"" + xml.originalName + "\">");
                         xml.actions.forEach(action => {
-                            lines.push('            ' + action);
+                            lines.push("            " + action);
                         });
-                        lines.push('        </Scenario>');
+                        lines.push("        </Scenario>");
                     }
                 });
-                lines.push('    </ScenarioList>');
-                lines.push('    <CleanupScenario>');
-                lines.push('        <CloseAllDocuments />');
-                lines.push('        <CleanupCreatedFiles />');
-                lines.push('    </CleanupScenario>');
-                lines.push('    <CleanupTest>');
-                lines.push('        <CloseTarget />');
-                lines.push('    </CleanupTest>');
-                lines.push('</TaoTest>');
-                Harness.IO.writeFile('built/local/fourslash.xml', lines.join('\r\n'));
+                lines.push("    </ScenarioList>");
+                lines.push("    <CleanupScenario>");
+                lines.push("        <CloseAllDocuments />");
+                lines.push("        <CleanupCreatedFiles />");
+                lines.push("    </CleanupScenario>");
+                lines.push("    <CleanupTest>");
+                lines.push("        <CloseTarget />");
+                lines.push("    </CleanupTest>");
+                lines.push("</TaoTest>");
+                Harness.IO.writeFile("built/local/fourslash.xml", lines.join("\r\n"));
             });
         });
     }
@@ -108,6 +108,6 @@ class FourSlashRunner extends RunnerBase {
 class GeneratedFourslashRunner extends FourSlashRunner {
     constructor(testType: FourSlashTestType) {
         super(testType);
-        this.basePath += '/generated/';
+        this.basePath += "/generated/";
     }
 }

@@ -211,6 +211,9 @@ namespace ts {
         let assignableRelation: Map<RelationComparisonResult> = {};
         let identityRelation: Map<RelationComparisonResult> = {};
 
+        // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
+        let _displayBuilder: SymbolDisplayBuilder;
+
         type TypeSystemEntity = Symbol | Type | Signature;
 
         const enum TypeSystemPropertyName {
@@ -965,7 +968,7 @@ namespace ts {
             if (!moduleName) return;
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                let symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
+                let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
                     return symbol;
                 }
@@ -1490,8 +1493,6 @@ namespace ts {
             return undefined;
         }
 
-        // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
-        let _displayBuilder: SymbolDisplayBuilder;
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
             function getNameOfSymbol(symbol: Symbol): string {
@@ -3448,7 +3449,7 @@ namespace ts {
         // type, a property is considered known if it is known in any constituent type.
         function isKnownProperty(type: Type, name: string): boolean {
             if (type.flags & TypeFlags.ObjectType && type !== globalObjectType) {
-                var resolved = resolveStructuredTypeMembers(type);
+                const resolved = resolveStructuredTypeMembers(type);
                 return !!(resolved.properties.length === 0 ||
                     resolved.stringIndexType ||
                     resolved.numberIndexType ||
@@ -7355,7 +7356,7 @@ namespace ts {
                     }
 
                     // Wasn't found
-                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, (<Identifier>node.tagName).text, 'JSX.' + JsxNames.IntrinsicElements);
+                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, (<Identifier>node.tagName).text, "JSX." + JsxNames.IntrinsicElements);
                     return unknownSymbol;
                 }
                 else {
@@ -7395,7 +7396,7 @@ namespace ts {
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
             // There is no such thing as an instance type for a non-class element. This
             // line shouldn't be hit.
-            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), 'Should not call getJsxElementInstanceType on non-class Element');
+            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), "Should not call getJsxElementInstanceType on non-class Element");
 
             let classSymbol = getJsxElementTagSymbol(node);
             if (classSymbol === unknownSymbol) {
@@ -7575,7 +7576,7 @@ namespace ts {
             // be marked as 'used' so we don't incorrectly elide its import. And if there
             // is no 'React' symbol in scope, we should issue an error.
             if (compilerOptions.jsx === JsxEmit.React) {
-                let reactSym = resolveName(node.tagName, 'React', SymbolFlags.Value, Diagnostics.Cannot_find_name_0, 'React');
+                let reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
                 if (reactSym) {
                     getSymbolLinks(reactSym).referenced = true;
                 }
