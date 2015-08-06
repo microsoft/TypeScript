@@ -13,6 +13,7 @@ export import defaultBinding2 from "server"; // non referenced
 //// [server.js]
 define(["require", "exports"], function (require, exports) {
     var a = 10;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = a;
 });
 //// [client.js]

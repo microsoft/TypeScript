@@ -30,21 +30,21 @@ numOrDate = unionOfDifferentReturnType[10]; // number | Date
 >10 : number
 
 var unionOfTypesWithAndWithoutStringSignature: { [a: string]: number; } | boolean;
->unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+>unionOfTypesWithAndWithoutStringSignature : { [a: string]: number; } | boolean
 >a : string
 
 anyVar = unionOfTypesWithAndWithoutStringSignature["hello"]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature["hello"] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature["hello"] : any
->unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+>unionOfTypesWithAndWithoutStringSignature : { [a: string]: number; } | boolean
 >"hello" : string
 
 anyVar = unionOfTypesWithAndWithoutStringSignature[10]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature[10] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature[10] : any
->unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+>unionOfTypesWithAndWithoutStringSignature : { [a: string]: number; } | boolean
 >10 : number
 
 // If each type in U has a numeric index signature, 
@@ -70,20 +70,20 @@ numOrDate = unionOfDifferentReturnType1[10]; // number | Date
 >10 : number
 
 var unionOfTypesWithAndWithoutStringSignature1: { [a: number]: number; } | boolean;
->unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+>unionOfTypesWithAndWithoutStringSignature1 : { [a: number]: number; } | boolean
 >a : number
 
 anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature1["hello"] : any
->unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+>unionOfTypesWithAndWithoutStringSignature1 : { [a: number]: number; } | boolean
 >"hello" : string
 
 anyVar = unionOfTypesWithAndWithoutStringSignature1[10]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature1[10] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature1[10] : any
->unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+>unionOfTypesWithAndWithoutStringSignature1 : { [a: number]: number; } | boolean
 >10 : number
 

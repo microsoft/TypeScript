@@ -70,6 +70,7 @@ var p6 = ({ a }) => { };
 
 var p7 = ({ a: { b } }) => { };
 >p7 : Symbol(p7, Decl(arrowFunctionExpressions.ts, 21, 3))
+>a : Symbol(a)
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 21, 16))
 
 var p8 = ({ a = 1 }) => { };
@@ -78,6 +79,7 @@ var p8 = ({ a = 1 }) => { };
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : Symbol(p9, Decl(arrowFunctionExpressions.ts, 23, 3))
+>a : Symbol(a)
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 16))
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 28))
 

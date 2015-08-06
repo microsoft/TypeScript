@@ -24,6 +24,7 @@ declare namespace JSX {
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 
 // didn't work
 <div>{x => <div text="wat" />}</div>;
@@ -31,16 +32,20 @@ declare namespace JSX {
 >x : Symbol(x, Decl(tsxInArrowFunction.tsx, 15, 6))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 
 // worked
 <div>{() => (<div text="wat" />)}</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 
 // worked (!)
 <div>{() => <div text="wat"></div>}</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 >text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 

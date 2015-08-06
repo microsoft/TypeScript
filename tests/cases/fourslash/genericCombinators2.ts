@@ -110,7 +110,7 @@ goTo.marker('15');
 verify.quickInfoIs('var r4a: Collection<number, any>');
 
 goTo.marker('17');
-verify.quickInfoIs('var r5a: Collection<T, V>'); // This is actually due to an error because toFixed does not return a Date
+verify.quickInfoIs('var r5a: Collection<number, Date>');
 
 goTo.marker('18');
 verify.quickInfoIs('var r5b: Collection<number, Date>');
@@ -122,10 +122,10 @@ goTo.marker('20');
 verify.quickInfoIs('var r6b: Collection<Collection<number, number>, Date>');
 
 goTo.marker('21');
-verify.quickInfoIs('var r7a: Collection<T, V>'); // This call is an error because y.foo() does not return a string
+verify.quickInfoIs('var r7a: Collection<number, string>');
 
 goTo.marker('22');
-verify.quickInfoIs('var r7b: Collection<T, V>'); // This call is an error because y.foo() does not return a string
+verify.quickInfoIs('var r7b: Collection<number, string>');
 
 goTo.marker('23');
 verify.quickInfoIs('var r8a: Collection<number, string>');

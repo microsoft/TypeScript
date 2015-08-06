@@ -79,7 +79,7 @@ var Base2 = (function () {
     function Base2() {
     }
     Base2.prototype.foo = function () {
-        _super.foo.call(this);
+        _super.prototype.foo.call(this);
     };
     return Base2;
 })();
