@@ -3090,31 +3090,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitExportMemberAssignments(name: Identifier) {
+            function emitExportMemberAssignmentsInNonSystemModule(name: Identifier) {
+                if (compilerOptions.module === ModuleKind.System) {
+                    return;
+                }
+                
                 if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
                     for (let specifier of exportSpecifiers[name.text]) {
                         writeLine();
-                        if (compilerOptions.module === ModuleKind.System) {
-                            emitStart(specifier.name);
-                            write(`${exportFunctionForFile}("`);
-                            emitNodeWithoutSourceMap(specifier.name);
-                            write(`", `);
-                            emitExpressionIdentifier(name);
-                            write(")");
-                            emitEnd(specifier.name);
-                        }
-                        else {
-                            emitStart(specifier.name);
-                            emitContainingModuleName(specifier);
-                            write(".");
-                            emitNodeWithoutSourceMap(specifier.name);
-                            emitEnd(specifier.name);
-                            write(" = ");
-                            emitExpressionIdentifier(name);
-                        }
+                        emitStart(specifier.name);
+                        emitContainingModuleName(specifier);
+                        write(".");
+                        emitNodeWithoutSourceMap(specifier.name);
+                        emitEnd(specifier.name);
+                        write(" = ");
+                        emitExpressionIdentifier(name);
                         write(";");
                     }
                 }
+            }
+            
+            function emitExportSpecifierInSystemModule(specifier: ExportSpecifier): void {
+                Debug.assert(compilerOptions.module === ModuleKind.System);
+                
+                writeLine();
+                emitStart(specifier.name);
+                write(`${exportFunctionForFile}("`);
+                emitNodeWithoutSourceMap(specifier.name);
+                write(`", `);
+                emitExpressionIdentifier(specifier.propertyName || specifier.name);
+                write(")");
+                emitEnd(specifier.name);
+                write(";");
             }
 
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
@@ -3405,7 +3412,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 let name = node.name;
                 if (name.kind === SyntaxKind.Identifier) {
-                    emitExportMemberAssignments(<Identifier>name);
+                    emitExportMemberAssignmentsInNonSystemModule(<Identifier>name);
                 }
                 else if (isBindingPattern(name)) {
                     forEach((<BindingPattern>name).elements, emitExportVariableAssignments);
@@ -3660,7 +3667,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 emitSignatureAndBody(node);
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignments((<FunctionDeclaration>node).name);
+                    emitExportMemberAssignmentsInNonSystemModule((<FunctionDeclaration>node).name);
                 }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                     emitTrailingComments(node);
@@ -4583,7 +4590,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignments(node.name);
+                    emitExportMemberAssignmentsInNonSystemModule(node.name);
                 }
             }
 
@@ -5172,7 +5179,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitDeclarationName(node);
                         write(");");
                     }
-                    emitExportMemberAssignments(node.name);
+                    emitExportMemberAssignmentsInNonSystemModule(node.name);
                 }
             }
 
@@ -5293,7 +5300,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitDeclarationName(node);
                         write(");");
                     }
-                    emitExportMemberAssignments(<Identifier>node.name);
+                    emitExportMemberAssignmentsInNonSystemModule(<Identifier>node.name);
                 }
             }
 
@@ -5326,7 +5333,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitExportImportAssignments(node: Node) {
                 if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
-                    emitExportMemberAssignments(<Identifier>(<Declaration>node).name);
+                    emitExportMemberAssignmentsInNonSystemModule(<Identifier>(<Declaration>node).name);
                 }
                 forEachChild(node, emitExportImportAssignments);
             }
@@ -6134,45 +6141,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             writeLine();
                             // save import into the local
                             write(`${importVariableName} = ${parameterName};`);
-                            writeLine();
-
-                            let defaultName =
-                                importNode.kind === SyntaxKind.ImportDeclaration
-                                    ? (<ImportDeclaration>importNode).importClause.name
-                                    : (<ImportEqualsDeclaration>importNode).name;
-
-                            if (defaultName) {
-                                // emit re-export for imported default name
-                                // import n1 from 'foo1'
-                                // import n2 = require('foo2')
-                                // export {n1}
-                                // export {n2}
-                                emitExportMemberAssignments(defaultName);
-                                writeLine();
-                            }
-
-                            if (importNode.kind === SyntaxKind.ImportDeclaration &&
-                                (<ImportDeclaration>importNode).importClause.namedBindings) {
-
-                                let namedBindings = (<ImportDeclaration>importNode).importClause.namedBindings;
-                                if (namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                    // emit re-export for namespace
-                                    // import * as n from 'foo'
-                                    // export {n}
-                                    emitExportMemberAssignments((<NamespaceImport>namedBindings).name);
-                                    writeLine();
-                                }
-                                else {
-                                    // emit re-exports for named imports
-                                    // import {a, b} from 'foo'
-                                    // export {a, b as c}
-                                    for (let element of (<NamedImports>namedBindings).elements) {
-                                        emitExportMemberAssignments(element.name || element.propertyName);
-                                        writeLine();
-                                    }
-                                }
-                            }
-
+                            writeLine();    
                             decreaseIndent();
                             break;
                         case SyntaxKind.ExportDeclaration:
@@ -6226,26 +6195,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 for (let i = startIndex; i < node.statements.length; ++i) {
                     let statement = node.statements[i];
-                    // - external module related imports/exports are not emitted for system modules
-                    // - function declarations are not emitted because they were already hoisted
                     switch (statement.kind) {
+                        // - function declarations are not emitted because they were already hoisted
+                        // - import declarations are not emitted since they are already handled in setters
+                        // - export declarations with module specifiers are not emitted since they were already written in setters
+                        // - export declarations without module specifiers are emitted preserving the order
+                        case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ExportDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.FunctionDeclaration:
+                            if (statement.kind === SyntaxKind.ExportDeclaration) {
+                                if (!(<ExportDeclaration>statement).moduleSpecifier) {
+                                    for (let element of (<ExportDeclaration>statement).exportClause.elements) {
+                                        // write call to exporter function for every export specifier in exports list
+                                        emitExportSpecifierInSystemModule(element);
+                                    }
+                                }
+                            }
                             continue;
                         case SyntaxKind.ImportEqualsDeclaration:
                             if (!isInternalModuleImportEqualsDeclaration(statement)) {
+                                // - import equals declarations that import external modules are not emitted
                                 continue;
                             }
-                    }
-                    writeLine();
-                    emit(statement);
+                            // fall-though for import declarations that import internal modules
+                        default:
+                            writeLine();
+                            emit(statement);
+                    }                    
                 }
                 decreaseIndent();
                 writeLine();
                 write("}"); // execute
             }
-
+            
             function emitSystemModule(node: SourceFile, startIndex: number): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
