@@ -6845,9 +6845,9 @@ namespace ts {
             // TODO: call a helper method instead once PR #4133 gets merged in.
             const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
 
-            let docParams = parameters.map((p, index) =>
-                indentationStr + " * @param " + (p.name.kind === SyntaxKind.Identifier ? (<Identifier>p.name).text : "param" + index) + newLine);
-
+            let docParams = parameters.reduce((prev, cur, index) =>
+                prev +
+                indentationStr + " * @param " + (cur.name.kind === SyntaxKind.Identifier ? (<Identifier>cur.name).text : "param" + index) + newLine, "");
 
             // A doc comment consists of the following
             // * The opening comment line
@@ -6860,7 +6860,7 @@ namespace ts {
                 indentationStr + " * ";
             let result =
                 preamble + newLine +
-                docParams.join("") +
+                docParams +
                 indentationStr + " */" +
                 (tokenStart === position ? newLine + indentationStr : "");
 
