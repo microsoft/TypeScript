@@ -1946,12 +1946,11 @@ module FourSlash {
             let actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (expected === undefined) {
-                if (actual === undefined) {
-                    return;
-                }
-                else {
+                if (actual) {
                     this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '}');
                 }
+
+                return;
             }
             else {
                 if (actual === undefined) {
