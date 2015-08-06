@@ -4620,7 +4620,7 @@ namespace ts {
                             case SyntaxKind.BreakKeyword:
                             case SyntaxKind.ContinueKeyword:
                                 if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
-                                    return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
+                                    return getBreakOrContinueStatementOccurrences(<BreakOrContinueStatement>node.parent);
                                 }
                                 break;
                             case SyntaxKind.ForKeyword:
@@ -4946,7 +4946,7 @@ namespace ts {
                     return map(keywords, getHighlightSpanForNode);
                 }
 
-                function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
+                function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
                     let owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
                     if (owner) {

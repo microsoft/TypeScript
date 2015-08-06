@@ -2115,17 +2115,17 @@ module FourSlash {
             }
         }
 
-        private getOccurancesAtCurrentPosition() {
+        private getOccurrencesAtCurrentPosition() {
             return this.languageService.getOccurrencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         public verifyOccurrencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
             this.taoInvalidReason = "verifyOccurrencesAtPositionListContains NYI";
 
-            let occurrences = this.getOccurancesAtCurrentPosition();
+            let occurrences = this.getOccurrencesAtCurrentPosition();
 
             if (!occurrences || occurrences.length === 0) {
-                this.raiseError('verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.');
+                this.raiseError('verifyOccurrencesAtPositionListContains failed - found 0 references, expected at least one.');
             }
 
             for (let occurrence of occurrences) {
@@ -2144,7 +2144,7 @@ module FourSlash {
         public verifyOccurrencesAtPositionListCount(expectedCount: number) {
             this.taoInvalidReason = "verifyOccurrencesAtPositionListCount NYI";
 
-            let occurrences = this.getOccurancesAtCurrentPosition();
+            let occurrences = this.getOccurrencesAtCurrentPosition();
             let actualCount = occurrences ? occurrences.length : 0;
             if (expectedCount !== actualCount) {
                 this.raiseError(`verifyOccurrencesAtPositionListCount failed - actual: ${actualCount}, expected:${expectedCount}`);
@@ -2181,7 +2181,7 @@ module FourSlash {
             }
 
             let missingItem = { fileName: fileName, start: start, end: end, kind: kind };
-            this.raiseError('verifyOccurancesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(documentHighlights) + ')');
+            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem)} in the returned list: (${JSON.stringify(documentHighlights)})`);
         }
 
         public verifyDocumentHighlightsAtPositionListCount(expectedCount: number, fileNamesToSearch: string[]) {
