@@ -2128,8 +2128,7 @@ module FourSlash {
                 this.raiseError('verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.');
             }
 
-            for (let i = 0; i < occurrences.length; i++) {
-                let occurrence = occurrences[i];
+            for (let occurrence of occurrences) {
                 if (occurrence && occurrence.fileName === fileName && occurrence.textSpan.start === start && ts.textSpanEnd(occurrence.textSpan) === end) {
                     if (typeof isWriteAccess !== "undefined" && occurrence.isWriteAccess !== isWriteAccess) {
                         this.raiseError('verifyOccurrencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ' + occurrence.isWriteAccess + ', expected: ' + isWriteAccess + '.');
@@ -2189,9 +2188,8 @@ module FourSlash {
             this.taoInvalidReason = 'verifyDocumentHighlightsAtPositionListCount NYI';
 
             let documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNamesToSearch);
-            let actualCount = documentHighlights
-                ? documentHighlights.reduce((currentCount, { fileName, highlightSpans }) => {
-                    return currentCount + highlightSpans.length}, 0)
+            let actualCount = documentHighlights 
+                ? documentHighlights.reduce((currentCount, { highlightSpans }) => currentCount + highlightSpans.length, 0) 
                 : 0;
 
             if (expectedCount !== actualCount) {

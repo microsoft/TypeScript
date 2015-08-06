@@ -534,7 +534,7 @@ namespace ts.server {
             let request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
             let response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
 
-            let _self = this;
+            let self = this;
             return response.body.map(convertToDocumentHighlights);
 
             function convertToDocumentHighlights(item: ts.server.protocol.DocumentHighlightsItem): ts.DocumentHighlights {
@@ -542,12 +542,12 @@ namespace ts.server {
 
                 return {
                     fileName: file,
-                    highlightSpans: highlightSpans.map(convertHighlightSpan2)
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
                 };
 
-                function convertHighlightSpan2(span: ts.server.protocol.HighlightSpan): ts.HighlightSpan {
-                    let start = _self.lineOffsetToPosition(file, span.start);
-                    let end = _self.lineOffsetToPosition(file, span.end);
+                function convertHighlightSpan(span: ts.server.protocol.HighlightSpan): ts.HighlightSpan {
+                    let start = self.lineOffsetToPosition(file, span.start);
+                    let end = self.lineOffsetToPosition(file, span.end);
                     return {
                         textSpan: ts.createTextSpanFromBounds(start, end),
                         kind: span.kind

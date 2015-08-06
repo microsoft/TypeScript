@@ -369,10 +369,10 @@ namespace ts.server {
 
                 return {
                     file: fileName,
-                    highlightSpans: highlightSpans.map(convertHighlightSpan1)
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
                 };
 
-                function convertHighlightSpan1(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
+                function convertHighlightSpan(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
                     let { textSpan, kind } = highlightSpan;
                     let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
                     let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
