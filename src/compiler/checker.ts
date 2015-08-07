@@ -5390,14 +5390,12 @@ namespace ts {
             if (source === target) {
                 return Ternary.True;
             }
-            if (source.minArgumentCount !== target.minArgumentCount) {
-                return Ternary.False;
-            }
             if (source.parameters.length !== target.parameters.length ||
+                source.minArgumentCount !== target.minArgumentCount ||
                 source.hasRestParameter !== target.hasRestParameter) {
                 if (!partialMatch ||
-                    source.parameters.length < target.parameters.length ||
-                    target.hasRestParameter) {
+                    source.parameters.length < target.parameters.length && !source.hasRestParameter ||
+                    source.minArgumentCount > target.minArgumentCount) {
                     return Ternary.False;
                 }
             }
