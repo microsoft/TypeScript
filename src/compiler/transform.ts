@@ -298,7 +298,7 @@ namespace ts.transform {
         private hoistedFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         
         // node stack
-        private nodeStackSize: number = 0;
+        private nodeStackSize: number = 1;
         private ancestorStack: Node[] = [];
         
         public compilerOptions: CompilerOptions;
@@ -317,6 +317,7 @@ namespace ts.transform {
             this.generatedNameSet = generatedNameSet;
             this.nodeToGeneratedName = nodeToGeneratedName;
             this.getAncestorOrSelfCallback = offset => this.peekNode(offset);
+            this.currentNode = currentSourceFile;
         }
         
         public pushNode(node: Node): void {
