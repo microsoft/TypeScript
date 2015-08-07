@@ -935,10 +935,6 @@ namespace ts {
             return false;
         }
 
-        function parseOptionalWithoutAdvancing(t: SyntaxKind): boolean {
-            return token === t;
-        }
-
         function parseOptional(t: SyntaxKind): boolean {
             if (token === t) {
                 nextToken();
@@ -3388,7 +3384,7 @@ namespace ts {
             let attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
             let node: JsxOpeningLikeElement;
 
-            if (parseOptionalWithoutAdvancing(SyntaxKind.GreaterThanToken)) {
+            if (token === SyntaxKind.GreaterThanToken) {
                 // Closing tag, so scan the immediately-following text with the JSX scanning instead
                 // of regular scanning to avoid treating illegal characters (e.g. '#') as immediate
                 // scanning errors
