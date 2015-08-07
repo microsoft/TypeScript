@@ -1,0 +1,17 @@
+=== tests/cases/compiler/resolveInterfaceNameWithSameLetDeclarationName2.ts ===
+interface foo { }
+>foo : foo
+
+interface bar { }
+>bar : bar
+
+let bar: bar | foo;
+>bar : bar | foo
+>bar : bar
+>foo : foo
+
+let foo: bar | foo;
+>foo : bar | foo
+>bar : bar
+>foo : foo
+

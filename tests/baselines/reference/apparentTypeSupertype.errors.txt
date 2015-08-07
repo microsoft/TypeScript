@@ -1,6 +1,7 @@
 tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(9,7): error TS2415: Class 'Derived<U>' incorrectly extends base class 'Base'.
   Types of property 'x' are incompatible.
     Type 'U' is not assignable to type 'string'.
+      Type 'String' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts (1 errors) ====
@@ -17,5 +18,6 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
 !!! error TS2415: Class 'Derived<U>' incorrectly extends base class 'Base'.
 !!! error TS2415:   Types of property 'x' are incompatible.
 !!! error TS2415:     Type 'U' is not assignable to type 'string'.
+!!! error TS2415:       Type 'String' is not assignable to type 'string'.
         x: U;
     }

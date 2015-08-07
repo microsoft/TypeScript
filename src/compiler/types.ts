@@ -17,6 +17,7 @@ namespace ts {
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
+    // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
         Unknown,
         EndOfFileToken,
@@ -24,6 +25,8 @@ namespace ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        // We detect and preserve #! on the first line
+        ShebangTrivia,
         // We detect and provide better error recovery when we encounter a git merge marker.  This
         // allows us to edit files with git-conflict markers in them in a much more pleasant manner.
         ConflictMarkerTrivia,
@@ -1405,6 +1408,7 @@ namespace ts {
         getPropertyOfType(type: Type, propertyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
+        getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
@@ -1431,6 +1435,7 @@ namespace ts {
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
+        isOptionalParameter(node: ParameterDeclaration): boolean;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -1574,7 +1579,8 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
+        isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1769,7 +1775,9 @@ namespace ts {
         ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
-        ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
+        /* @internal */
+        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
+        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1781,7 +1789,9 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
+        /* @internal */
+        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
     // Properties common to all types
@@ -1810,7 +1820,9 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+        /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
+        /* @internal */
         resolvedBaseTypes: ObjectType[];           // Resolved base types
     }
 

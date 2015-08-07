@@ -380,7 +380,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     function base64VLQFormatEncode(inValue: number) {
                         function base64FormatEncode(inValue: number) {
                             if (inValue < 64) {
-                                return 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.charAt(inValue);
+                                return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(inValue);
                             }
                             throw TypeError(inValue + ": not a 64 based value");
                         }
@@ -895,7 +895,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Any template literal or string literal with an extended escape
                 // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-                    return getQuotedEscapedLiteralText('"', node.text, '"');
+                    return getQuotedEscapedLiteralText("\"", node.text, "\"");
                 }
 
                 // If we don't need to downlevel and we can reach the original source text using
@@ -908,15 +908,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // or an escaped quoted form of the original text if it's string-like.
                 switch (node.kind) {
                     case SyntaxKind.StringLiteral:
-                        return getQuotedEscapedLiteralText('"', node.text, '"');
+                        return getQuotedEscapedLiteralText("\"", node.text, "\"");
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return getQuotedEscapedLiteralText('`', node.text, '`');
+                        return getQuotedEscapedLiteralText("`", node.text, "`");
                     case SyntaxKind.TemplateHead:
-                        return getQuotedEscapedLiteralText('`', node.text, '${');
+                        return getQuotedEscapedLiteralText("`", node.text, "${");
                     case SyntaxKind.TemplateMiddle:
-                        return getQuotedEscapedLiteralText('}', node.text, '${');
+                        return getQuotedEscapedLiteralText("}", node.text, "${");
                     case SyntaxKind.TemplateTail:
-                        return getQuotedEscapedLiteralText('}', node.text, '`');
+                        return getQuotedEscapedLiteralText("}", node.text, "`");
                     case SyntaxKind.NumericLiteral:
                         return node.text;
                 }
@@ -947,7 +947,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 text = text.replace(/\r\n?/g, "\n");
                 text = escapeString(text);
 
-                write('"' + text + '"');
+                write(`"${text}"`);
             }
 
             function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
@@ -1134,9 +1134,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier|QualifiedName) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
-                        write('"');
+                        write("\"");
                         emit(name);
-                        write('"');
+                        write("\"");
                     }
                     else {
                         emit(name);
@@ -1148,9 +1148,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 /// about keywords, just non-identifier characters
                 function emitAttributeName(name: Identifier) {
                     if (/[A-Za-z_]+[\w*]/.test(name.text)) {
-                        write('"');
+                        write("\"");
                         emit(name);
-                        write('"');
+                        write("\"");
                     }
                     else {
                         emit(name);
@@ -1248,10 +1248,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // Don't emit empty strings
                             if (children[i].kind === SyntaxKind.JsxText) {
                                 let text = getTextToEmit(<JsxText>children[i]);
-                                if(text !== undefined) {
-                                    write(', "');
+                                if (text !== undefined) {
+                                    write(", \"");
                                     write(text);
-                                    write('"');
+                                    write("\"");
                                 }
                             }
                             else {
@@ -1425,6 +1425,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxSpreadAttribute:
+                    case SyntaxKind.JsxExpression:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PostfixUnaryExpression:
@@ -1489,7 +1491,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (declaration.kind === SyntaxKind.ImportClause) {
                             // Identifier references default import
                             write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
-                            write(languageVersion === ScriptTarget.ES3 ? '["default"]' : ".default");
+                            write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
                             return;
                         }
                         else if (declaration.kind === SyntaxKind.ImportSpecifier) {
@@ -2004,12 +2006,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-                if (compilerOptions.isolatedModules) {
-                    // do not inline enum values in separate compilation mode
-                    return false;
-                }
-
-                let constantValue = resolver.getConstantValue(node);
+                let constantValue = tryGetConstEnumValue(node);
                 if (constantValue !== undefined) {
                     write(constantValue.toString());
                     if (!compilerOptions.removeComments) {
@@ -2019,6 +2016,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return true;
                 }
                 return false;
+            }
+            
+            function tryGetConstEnumValue(node: Node): number {
+                if (compilerOptions.isolatedModules) {
+                    return undefined;
+                }
+                
+                return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression 
+                    ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
+                    : undefined
             }
 
             // Returns 'true' if the code was actually indented, false otherwise.
@@ -2052,10 +2059,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
                 // 1 .toString is a valid property access, emit a space after the literal
+                // Also emit a space if expression is a integer const enum value - it will appear in generated code as numeric literal
                 let shouldEmitSpace: boolean;
-                if (!indentedBeforeDot && node.expression.kind === SyntaxKind.NumericLiteral) {
-                    let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
-                    shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                if (!indentedBeforeDot) {
+                    if (node.expression.kind === SyntaxKind.NumericLiteral) {
+                        // check if numeric literal was originally written with a dot
+                        let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
+                        shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+                    }
+                    else {
+                        // check if constant enum value is integer
+                        let constantValue = tryGetConstEnumValue(node.expression);
+                        // isFinite handles cases when constantValue is undefined
+                        shouldEmitSpace = isFinite(constantValue) && Math.floor(constantValue) === constantValue;
+                    }
                 }
 
                 if (shouldEmitSpace) {
@@ -4253,11 +4270,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
+                let superCall: ExpressionStatement;
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
                     if (baseTypeElement) {
-                        var superCall = findInitialSuperCall(ctor);
+                        superCall = findInitialSuperCall(ctor);
                         if (superCall) {
                             writeLine();
                             emit(superCall);
@@ -4865,6 +4883,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
             
             function emitSerializedTypeNode(node: TypeNode) {
+                if (!node) {
+                    return;
+                }
+                
                 switch (node.kind) {
                     case SyntaxKind.VoidKeyword:
                         write("void 0");
@@ -4923,14 +4945,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
-                let typeName = node.typeName;
-                let result = resolver.getTypeReferenceSerializationKind(node);
+                let location: Node = node.parent;
+                while (isDeclaration(location) || isTypeNode(location)) {
+                    location = location.parent;
+                }
+
+                // Clone the type name and parent it to a location outside of the current declaration.
+                let typeName = cloneEntityName(node.typeName);
+                typeName.parent = location;
+
+                let result = resolver.getTypeReferenceSerializationKind(typeName);
                 switch (result) {
                     case TypeReferenceSerializationKind.Unknown:
                         let temp = createAndRecordTempVariable(TempFlags.Auto);
                         write("(typeof (");
                         emitNodeWithoutSourceMap(temp);
-                        write(" = ")
+                        write(" = ");
                         emitEntityNameAsExpression(typeName, /*useFallback*/ true);
                         write(") === 'function' && ");
                         emitNodeWithoutSourceMap(temp);
@@ -4989,7 +5019,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // 
                 // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
                 if (node) {
-                    var valueDeclaration: FunctionLikeDeclaration;
+                    let valueDeclaration: FunctionLikeDeclaration;
                     if (node.kind === SyntaxKind.ClassDeclaration) {
                         valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
                     }
@@ -4998,8 +5028,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     
                     if (valueDeclaration) {
-                        var parameters = valueDeclaration.parameters;
-                        var parameterCount = parameters.length;
+                        const parameters = valueDeclaration.parameters;
+                        const parameterCount = parameters.length;
                         if (parameterCount > 0) {
                             for (var i = 0; i < parameterCount; i++) {
                                 if (i > 0) {
@@ -5007,7 +5037,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 }
                                 
                                 if (parameters[i].dotDotDotToken) {
-                                    var parameterType = parameters[i].type;
+                                    let parameterType = parameters[i].type;
                                     if (parameterType.kind === SyntaxKind.ArrayType) {
                                         parameterType = (<ArrayTypeNode>parameterType).elementType;
                                     }
@@ -5031,7 +5061,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             /** Serializes the return type of function. Used by the __metadata decorator for a method. */
             function emitSerializedReturnTypeOfNode(node: Node): string | string[] {
-                if (node && isFunctionLike(node)) {
+                if (node && isFunctionLike(node) && (<FunctionLikeDeclaration>node).type) {
                     emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
                     return;
                 }
@@ -5056,6 +5086,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         argumentsWritten++;
                     }
                     if (shouldEmitParamTypesMetadata(node)) {
+                        debugger;
                         if (writeComma || argumentsWritten) {
                             write(", ");
                         }
@@ -5429,17 +5460,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (isES6ExportedDeclaration(node)) {
-                        write("export ");
-                        write("var ");
+                    
+                    // variable declaration for import-equals declaration can be hoisted in system modules
+                    // in this case 'var' should be omitted and emit should contain only initialization
+                    let variableDeclarationIsHoisted = shouldHoistVariable(node, /*checkIfSourceFileLevelDecl*/ true);
+                    
+                    // is it top level export import v = a.b.c in system module?
+                    // if yes - it needs to be rewritten as exporter('v', v = a.b.c)
+                    let isExported = isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ true);
+                    
+                    if (!variableDeclarationIsHoisted) {
+                        Debug.assert(!isExported);
+                                                
+                        if (isES6ExportedDeclaration(node)) {
+                            write("export ");
+                            write("var ");
+                        }
+                        else if (!(node.flags & NodeFlags.Export)) {
+                            write("var ");
+                        }
                     }
-                    else if (!(node.flags & NodeFlags.Export)) {
-                        write("var ");
+                                       
+                    
+                    if (isExported) {
+                        write(`${exportFunctionForFile}("`);
+                        emitNodeWithoutSourceMap(node.name);
+                        write(`", `);
                     }
+
                     emitModuleMemberName(node);
                     write(" = ");
                     emit(node.moduleReference);
-                    write(";");
+
+                    if (isExported) {
+                        write(")");
+                    }
+                                        
+                    write(";");                    
                     emitEnd(node);
                     emitExportImportAssignments(node);
                     emitTrailingComments(node);
@@ -5793,7 +5850,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     write("}");
                     writeLine();
-                    write(`${exportFunctionForFile}(exports);`)
+                    write(`${exportFunctionForFile}(exports);`);
                     decreaseIndent();
                     writeLine();
                     write("}");
@@ -5965,6 +6022,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         return;
                     }
+                    
+                    if (isInternalModuleImportEqualsDeclaration(node)) {
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+                        
+                        hoistedVars.push(node.name);
+                        return;
+                    }
 
                     if (isBindingPattern(node)) {
                         forEach((<BindingPattern>node).elements, visit);
@@ -6132,7 +6198,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 // exports_(reexports);
                                 let reexportsVariableName = makeUniqueName("reexports");
                                 writeLine();
-                                write(`var ${reexportsVariableName} = {};`)
+                                write(`var ${reexportsVariableName} = {};`);
                                 writeLine();
                                 for (let e of (<ExportDeclaration>importNode).exportClause.elements) {
                                     write(`${reexportsVariableName}["`);
@@ -6169,14 +6235,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 for (let i = startIndex; i < node.statements.length; ++i) {
                     let statement = node.statements[i];
-                    // - imports/exports are not emitted for system modules
+                    // - external module related imports/exports are not emitted for system modules
                     // - function declarations are not emitted because they were already hoisted
                     switch (statement.kind) {
                         case SyntaxKind.ExportDeclaration:
                         case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
                         case SyntaxKind.FunctionDeclaration:
                             continue;
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            if (!isInternalModuleImportEqualsDeclaration(statement)) {
+                                continue;
+                            }
                     }
                     writeLine();
                     emit(statement);
@@ -6215,6 +6284,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
+                emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, startIndex);
                 decreaseIndent();
@@ -6286,6 +6356,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
+                emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
                 writeLine();
@@ -6307,6 +6378,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCommonJSModule(node: SourceFile, startIndex: number) {
+                emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
@@ -6316,6 +6388,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitUMDModule(node: SourceFile, startIndex: number) {
+                emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
@@ -6345,6 +6418,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
                 hasExportStars = false;
+                emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
@@ -6390,7 +6464,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (isLineBreak(c)) {
                         if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
                             let part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
-                            result = (result ? result + '" + \' \' + "' : '') + part;
+                            result = (result ? result + "\" + ' ' + \"" : "") + part;
                         }
                         firstNonWhitespace = -1;
                     }
@@ -6403,7 +6477,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 if (firstNonWhitespace !== -1) {
                     let part = text.substr(firstNonWhitespace);
-                    result = (result ? result + '" + \' \' + "' : '') + part;
+                    result = (result ? result + "\" + ' ' + \"" : "") + part;
                 }
 
                 return result;
@@ -6428,14 +6502,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
-                        write('"');
+                        write("\"");
                         write(trimReactWhitespace(node));
-                        write('"');
+                        write("\"");
                         break;
 
                     case JsxEmit.Preserve:
                     default: // Emit JSX-preserve as default when no --jsx flag is specified
-                        write(getTextOfNode(node, true));
+                        writer.writeLiteral(getTextOfNode(node, true));
                         break;
                 }
             }
@@ -6445,9 +6519,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     switch (compilerOptions.jsx) {
                         case JsxEmit.Preserve:
                         default:
-                            write('{');
+                            write("{");
                             emit(node.expression);
-                            write('}');
+                            write("}");
                             break;
                         case JsxEmit.React:
                             emit(node.expression);
@@ -6483,14 +6557,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitSourceFileNode(node: SourceFile) {
-                // Start new file on new line
-                writeLine();
-                emitDetachedComments(node);
-
-                // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-
+            function emitEmitHelpers(node: SourceFile): void {
                 // Only emit helpers if the user did not say otherwise.
                 if (!compilerOptions.noEmitHelpers) {
                     // Only Emit __extends function when target ES5.
@@ -6518,6 +6585,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         awaiterEmitted = true;
                     }
                 }
+            }
+
+            function emitSourceFileNode(node: SourceFile) {
+                // Start new file on new line
+                writeLine();
+                emitShebang();
+                emitDetachedComments(node);
+
+                // emit prologue directives prior to __extends
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (languageVersion >= ScriptTarget.ES6) {
@@ -6541,6 +6618,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     exportSpecifiers = undefined;
                     exportEquals = undefined;
                     hasExportStars = false;
+                    emitEmitHelpers(node);
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
                     emitTempDeclarations(/*newLine*/ true);
@@ -6802,6 +6880,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
+            /**
+             * Removes all but the pinned or triple slash comments.
+             * @param ranges The array to be filtered
+             * @param onlyPinnedOrTripleSlashComments whether the filtering should be performed.
+             */
             function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
                 // If we're removing comments, then we want to strip out all but the pinned or
                 // triple slash comments.
@@ -6927,6 +7010,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             }
                         }
                     }
+                }
+            }
+            
+            function emitShebang() {
+                let shebang = getShebang(currentSourceFile.text);
+                if (shebang) {
+                    write(shebang);
                 }
             }
 

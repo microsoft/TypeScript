@@ -219,10 +219,10 @@ namespace ts {
     export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
-            var count = array.length;
+            const count = array.length;
             if (count > 0) {
-                var pos = 0;
-                var result = arguments.length <= 2 ? array[pos++] : initial;
+                let pos = 0;
+                let result = arguments.length <= 2 ? array[pos++] : initial;
                 while (pos < count) {
                     result = f(<U>result, array[pos++]);
                 }
@@ -236,9 +236,9 @@ namespace ts {
     export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
-            var pos = array.length - 1;
+            let pos = array.length - 1;
             if (pos >= 0) {
-                var result = arguments.length <= 2 ? array[pos--] : initial;
+                let result = arguments.length <= 2 ? array[pos--] : initial;
                 while (pos >= 0) {
                     result = f(<U>result, array[pos--]);
                 }
@@ -523,7 +523,7 @@ namespace ts {
         if (path.lastIndexOf("file:///", 0) === 0) {
             return "file:///".length;
         }
-        let idx = path.indexOf('://');
+        let idx = path.indexOf("://");
         if (idx !== -1) {
             return idx + "://".length;
         }
