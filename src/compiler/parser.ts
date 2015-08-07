@@ -917,9 +917,9 @@ namespace ts {
             return token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, advance = true): boolean {
+        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
             if (token === kind) {
-                if (advance) {
+                if (shouldAdvance) {
                     nextToken();
                 }
                 return true;
