@@ -629,7 +629,7 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost) {
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
         return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
     }
 

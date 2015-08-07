@@ -529,7 +529,7 @@ namespace ts {
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = getNewLineOrDefault(this.host.getNewLine);
+            var newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
