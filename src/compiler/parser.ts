@@ -936,10 +936,7 @@ namespace ts {
         }
 
         function parseOptionalWithoutAdvancing(t: SyntaxKind): boolean {
-            if (token === t) {
-                return true;
-            }
-            return false;
+            return token === t;
         }
 
         function parseOptional(t: SyntaxKind): boolean {
@@ -3321,7 +3318,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement|JsxSelfClosingElement {
+        function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             let opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
@@ -3349,9 +3346,9 @@ namespace ts {
                 case SyntaxKind.JsxText:
                     return parseJsxText();
                 case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression(/*inExpression*/false);
+                    return parseJsxExpression(/*inExpression*/ false);
                 case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElement(/*inExpression*/false);
+                    return parseJsxElementOrSelfClosingElement(/*inExpression*/ false);
             }
             Debug.fail("Unknown JSX child kind " + token);
         }
@@ -3436,7 +3433,7 @@ namespace ts {
             if (token !== SyntaxKind.CloseBraceToken) {
                 node.expression = parseExpression();
             }
-            if(inExpressionContext) {
+            if (inExpressionContext) {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
