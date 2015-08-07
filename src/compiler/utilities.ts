@@ -381,24 +381,12 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        // If parameter/type parameter, the prev token trailing comments are part of this node too
-        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // e.g.   (/** blah */ a, /** blah */ b);
-
-            // e.g.:     (
-            //            /** blah */ a,
-            //            /** blah */ b);
-            return concatenate(
-                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
-        }
-        else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
-        }
+        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
