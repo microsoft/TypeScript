@@ -2092,14 +2092,6 @@ namespace ts {
         }
         return carriageReturnLineFeed;
     }
-    
-    /**
-     * The default is CRLF.
-     */   
-    export function getNewLineOrDefault(getNewLine?: () => string): string {
-        return getNewLine ? getNewLine() : carriageReturnLineFeed;
-        var x: number;
-    }
 }
 
 namespace ts {
