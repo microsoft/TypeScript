@@ -5132,8 +5132,8 @@ namespace ts {
                 function abstractSignatureRelatedTo(source: Type, sourceSig: Signature, target: Type, targetSig: Signature) {
                     if (sourceSig && targetSig) {
 
-                        let sourceDecl = getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
-                        let targetDecl = getDeclarationOfKind(target.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceDecl = source.symbol && getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
+                        let targetDecl = target.symbol && getDeclarationOfKind(target.symbol, SyntaxKind.ClassDeclaration);
 
                         if (!sourceDecl) {
                             // If the source object isn't itself a class declaration, it can be freely assigned, regardless
@@ -5152,8 +5152,8 @@ namespace ts {
                         let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
                         let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
 
-                        // abstract constructor functions are only 
                         if (sourceIsAbstract && !(targetIsAbstract && targetDecl)) {
+                            // if target isn't a class-declaration type, then it can be new'd, so we forbid the assignment.
                             if (reportErrors) {
                                 reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
                             }
