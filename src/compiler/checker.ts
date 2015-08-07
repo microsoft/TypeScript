@@ -3474,8 +3474,10 @@ namespace ts {
             return emptyArray;
         }
 
-        // Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
-        // maps primitive types and type parameters are to their apparent types.
+        /**
+         * Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
+         * maps primitive types and type parameters are to their apparent types.
+         */
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfStructuredType(getApparentType(type), kind);
         }
@@ -5098,8 +5100,11 @@ namespace ts {
                     // Because the "abstractness" of a class is the same across all construct signatures
                     // (internally we are checking the corresponding declaration), it is enough to perform 
                     // the check and report an error once over all pairs of source and target construct signatures.
-                    let sourceSig = sourceSignatures[0];
+                    //
+                    // sourceSig and targetSig are (possibly) undefined.
+                    //
                     // Note that in an extends-clause, targetSignatures is stripped, so the check never proceeds.
+                    let sourceSig = sourceSignatures[0];
                     let targetSig = targetSignatures[0];
 
                     result &= abstractSignatureRelatedTo(source, sourceSig, target, targetSig);
