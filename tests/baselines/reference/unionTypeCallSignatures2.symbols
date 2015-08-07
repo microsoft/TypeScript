@@ -58,21 +58,58 @@ interface C {
 >T : Symbol(T, Decl(unionTypeCallSignatures2.ts, 17, 5))
 }
 
-var f: A | B | C;
->f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+var f1: A | B | C;
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures2.ts, 20, 3))
 >A : Symbol(A, Decl(unionTypeCallSignatures2.ts, 0, 0))
 >B : Symbol(B, Decl(unionTypeCallSignatures2.ts, 5, 1))
 >C : Symbol(C, Decl(unionTypeCallSignatures2.ts, 12, 1))
 
-var n = f(42);             // number
->n : Symbol(n, Decl(unionTypeCallSignatures2.ts, 21, 3))
->f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+var n1 = f1(42);             // number
+>n1 : Symbol(n1, Decl(unionTypeCallSignatures2.ts, 21, 3))
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures2.ts, 20, 3))
 
-var s = f("abc");          // boolean | string | number
->s : Symbol(s, Decl(unionTypeCallSignatures2.ts, 22, 3))
->f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+var s1 = f1("abc");          // boolean | string | number
+>s1 : Symbol(s1, Decl(unionTypeCallSignatures2.ts, 22, 3))
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures2.ts, 20, 3))
 
-var a = f([true, false]);  // boolean[]
->a : Symbol(a, Decl(unionTypeCallSignatures2.ts, 23, 3))
->f : Symbol(f, Decl(unionTypeCallSignatures2.ts, 20, 3))
+var a1 = f1([true, false]);  // boolean[]
+>a1 : Symbol(a1, Decl(unionTypeCallSignatures2.ts, 23, 3))
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures2.ts, 20, 3))
+
+var f2: C | B | A;
+>f2 : Symbol(f2, Decl(unionTypeCallSignatures2.ts, 25, 3))
+>C : Symbol(C, Decl(unionTypeCallSignatures2.ts, 12, 1))
+>B : Symbol(B, Decl(unionTypeCallSignatures2.ts, 5, 1))
+>A : Symbol(A, Decl(unionTypeCallSignatures2.ts, 0, 0))
+
+var n2 = f2(42);             // number
+>n2 : Symbol(n2, Decl(unionTypeCallSignatures2.ts, 26, 3))
+>f2 : Symbol(f2, Decl(unionTypeCallSignatures2.ts, 25, 3))
+
+var s2 = f2("abc");          // number | string | boolean
+>s2 : Symbol(s2, Decl(unionTypeCallSignatures2.ts, 27, 3))
+>f2 : Symbol(f2, Decl(unionTypeCallSignatures2.ts, 25, 3))
+
+var a2 = f2([true, false]);  // boolean[]
+>a2 : Symbol(a2, Decl(unionTypeCallSignatures2.ts, 28, 3))
+>f2 : Symbol(f2, Decl(unionTypeCallSignatures2.ts, 25, 3))
+
+var f3: B | A | C;
+>f3 : Symbol(f3, Decl(unionTypeCallSignatures2.ts, 30, 3))
+>B : Symbol(B, Decl(unionTypeCallSignatures2.ts, 5, 1))
+>A : Symbol(A, Decl(unionTypeCallSignatures2.ts, 0, 0))
+>C : Symbol(C, Decl(unionTypeCallSignatures2.ts, 12, 1))
+
+var n3 = f3(42);             // number
+>n3 : Symbol(n3, Decl(unionTypeCallSignatures2.ts, 31, 3))
+>f3 : Symbol(f3, Decl(unionTypeCallSignatures2.ts, 30, 3))
+
+var s3 = f3("abc");          // string | boolean | number
+>s3 : Symbol(s3, Decl(unionTypeCallSignatures2.ts, 32, 3))
+>f3 : Symbol(f3, Decl(unionTypeCallSignatures2.ts, 30, 3))
+
+var a3 = f3([true, false]);  // boolean[]
+>a3 : Symbol(a3, Decl(unionTypeCallSignatures2.ts, 33, 3))
+>f3 : Symbol(f3, Decl(unionTypeCallSignatures2.ts, 30, 3))
+
 
