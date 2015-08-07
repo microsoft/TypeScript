@@ -3474,8 +3474,10 @@ namespace ts {
             return emptyArray;
         }
 
-        // Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
-        // maps primitive types and type parameters are to their apparent types.
+        /**
+         * Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
+         * maps primitive types and type parameters are to their apparent types.
+         */
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfStructuredType(getApparentType(type), kind);
         }
@@ -5090,30 +5092,24 @@ namespace ts {
                 let result = Ternary.True;
                 let saveErrorInfo = errorInfo;
 
-                // Because the "abstractness" of a class is the same across all construct signatures
-                // (internally we are checking the corresponding declaration), it is enough to perform 
-                // the check and report an error once over all pairs of source and target construct signatures.
-                let sourceSig = sourceSignatures[0];
-                // Note that in an extends-clause, targetSignatures is stripped, so the check never proceeds.
-                let targetSig = targetSignatures[0];
 
-                if (sourceSig && targetSig) {
-                    let sourceErasedSignature = getErasedSignature(sourceSig);
-                    let targetErasedSignature = getErasedSignature(targetSig);
 
-                    let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
-                    let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
+                if (kind === SignatureKind.Construct) {
+                    // Only want to compare the construct signatures for abstractness guarantees.
+                    
+                    // Because the "abstractness" of a class is the same across all construct signatures
+                    // (internally we are checking the corresponding declaration), it is enough to perform 
+                    // the check and report an error once over all pairs of source and target construct signatures.
+                    //
+                    // sourceSig and targetSig are (possibly) undefined.
+                    //
+                    // Note that in an extends-clause, targetSignatures is stripped, so the check never proceeds.
+                    let sourceSig = sourceSignatures[0];
+                    let targetSig = targetSignatures[0];
 
-                    let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
-                    let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
-                    let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
-                    let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
-
-                    if (sourceIsAbstract && !targetIsAbstract) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
-                        }
-                        return Ternary.False;
+                    result &= abstractSignatureRelatedTo(source, sourceSig, target, targetSig);
+                    if (result !== Ternary.True) {
+                        return result;
                     }
                 }
 
@@ -5137,6 +5133,40 @@ namespace ts {
                     }
                 }
                 return result;
+
+                function abstractSignatureRelatedTo(source: Type, sourceSig: Signature, target: Type, targetSig: Signature) {
+                    if (sourceSig && targetSig) {
+
+                        let sourceDecl = source.symbol && getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
+                        let targetDecl = target.symbol && getDeclarationOfKind(target.symbol, SyntaxKind.ClassDeclaration);
+
+                        if (!sourceDecl) {
+                            // If the source object isn't itself a class declaration, it can be freely assigned, regardless
+                            // of whether the constructed object is abstract or not.
+                            return Ternary.True;
+                        }
+
+                        let sourceErasedSignature = getErasedSignature(sourceSig);
+                        let targetErasedSignature = getErasedSignature(targetSig);
+
+                        let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
+                        let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
+
+                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
+                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
+                        let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
+
+                        if (sourceIsAbstract && !(targetIsAbstract && targetDecl)) {
+                            // if target isn't a class-declaration type, then it can be new'd, so we forbid the assignment.
+                            if (reportErrors) {
+                                reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
+                            }
+                            return Ternary.False;
+                        }
+                    }
+                    return Ternary.True;
+                }
             }
 
             function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
