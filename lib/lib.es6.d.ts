@@ -12066,7 +12066,8 @@ interface ImageData {
 
 declare var ImageData: {
     prototype: ImageData;
-    new(): ImageData;
+    new(width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
 
 interface KeyboardEvent extends UIEvent {
