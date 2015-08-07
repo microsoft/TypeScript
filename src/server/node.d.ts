@@ -123,9 +123,14 @@ declare module NodeJS {
 
     export interface ReadWriteStream extends ReadableStream, WritableStream { }
 
+    interface WindowSize {
+        columns: number;
+        rows: number;
+    }
+
     export interface Process extends EventEmitter {
-        stdout: WritableStream;
-        stderr: WritableStream;
+        stdout: WritableStream & WindowSize;
+        stderr: WritableStream & WindowSize;
         stdin: ReadableStream;
         argv: string[];
         execPath: string;
