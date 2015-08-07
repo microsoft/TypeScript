@@ -57,7 +57,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         const awaiterHelper = `
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
     return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
+        generator = generator.apply(thisArg, _arguments);
         function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
         function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
         function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
@@ -866,7 +866,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 increaseIndent();
 
-                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                let parentIsSynthesized = nodeIsSynthesized(parent);
+                if (!synthesizedNodeStartsOnNewLine(nodes[0]) && (parentIsSynthesized || nodeStartPositionsAreOnSameLine(parent, nodes[0]))) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -875,9 +876,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                 }
 
+                let lastNode: Node;
                 for (let i = 0, n = nodes.length; i < n; i++) {
                     if (i) {
-                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                        if (!synthesizedNodeStartsOnNewLine(nodes[i]) && (parentIsSynthesized || nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i]))) {
                             write(", ");
                         }
                         else {
@@ -887,6 +889,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     emit(nodes[i]);
+                    lastNode = nodes[i];
                 }
 
                 if (nodes.hasTrailingComma && allowTrailingComma) {
@@ -894,8 +897,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 decreaseIndent();
-
-                if (nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
+                
+                
+                if (!synthesizedNodeStartsOnNewLine(lastNode) && (parentIsSynthesized || nodeEndPositionsAreOnSameLine(parent, lastNode))) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -1120,7 +1124,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
-                let emitOuterParens = isExpression(parentNode, peekNode, 1) && templateNeedsParens(node);
+                let emitOuterParens = isPartOfExpression(parentNode, peekNode, 1) 
+                    && templateNeedsParens(node);
+
                 if (emitOuterParens) {
                     write("(");
                 }
@@ -1520,21 +1526,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let name = node.name;
                 Debug.assert(name.kind !== SyntaxKind.BindingElement);
 
-                if (name.kind === SyntaxKind.StringLiteral) {
+                if (isStringLiteral(name)) {
                     pushNode(name);
-                    emitLiteral(<LiteralExpression>name);
+                    emitLiteral(name);
                     popNode();
                 }
-                else if (name.kind === SyntaxKind.ComputedPropertyName) {
+                else if (isComputedPropertyName(name)) {
                     pushNode(name);
-                    emitExpressionForComputedPropertyName(<ComputedPropertyName>name);
+                    emitExpressionForComputedPropertyName(name);
                     popNode();
                 }
                 else {
                     write("\"");
 
-                    if (name.kind === SyntaxKind.NumericLiteral) {
-                        write((<LiteralExpression>name).text);
+                    if (isNumericLiteral(name)) {
+                        write(name.text);
                     }
                     else {
                         writeTextOfNode(currentSourceFile, name);
@@ -1559,7 +1565,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
                 //
-                if (parentNode && nodeIsDecorated(parentNode)) {
+                if (nodeIsDecorated(parentNode)) {
                     if (!computedPropertyNamesToGeneratedNames) {
                         computedPropertyNamesToGeneratedNames = [];
                     }
@@ -1577,7 +1583,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(" = ");
                 }
 
-                emit((<ComputedPropertyName>name).expression);
+                emit(name.expression);
             }
 
             function isExpressionIdentifier(node: Node): boolean {
@@ -1692,12 +1698,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 if (languageVersion < ScriptTarget.ES6) {
-                    switch (parentNode.kind) {
+                    let originalNode = getOriginalNode(parentNode);
+                    switch (originalNode.kind) {
                         case SyntaxKind.BindingElement:
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.VariableDeclaration:
-                            return (<Declaration>parentNode).name === node && resolver.isNestedRedeclaration(<Declaration>parentNode);
+                            return (<Declaration>originalNode).name === node && !nodeIsSynthesized(originalNode) && resolver.isNestedRedeclaration(<Declaration>originalNode);
                     }
                 }
                 return false;
@@ -1823,10 +1830,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                if (parentNode.kind === SyntaxKind.BinaryExpression && !isAssignmentOperator((<BinaryExpression>parentNode).operatorToken.kind)) {
+                if (isBinaryExpression(parentNode) && !isAssignmentOperator(parentNode.operatorToken.kind)) {
                     return true;
                 }
-                else if (parentNode.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>parentNode).condition === node) {
+                else if (isConditionalExpression(parentNode) && parentNode.condition === node) {
                     return true;
                 }
 
@@ -2500,8 +2507,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitParenExpression(node: ParenthesizedExpression) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                let parent = parentNode;
-                
                 // If the node is synthesized, it means the emitter put the parentheses there,
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
@@ -2529,8 +2534,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             operand.kind !== SyntaxKind.DeleteExpression &&
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
-                            !(operand.kind === SyntaxKind.CallExpression && parent.kind === SyntaxKind.NewExpression) &&
-                            !(operand.kind === SyntaxKind.FunctionExpression && parent.kind === SyntaxKind.CallExpression)) {
+                            !(operand.kind === SyntaxKind.CallExpression && parentNode.kind === SyntaxKind.NewExpression) &&
+                            !(operand.kind === SyntaxKind.FunctionExpression && parentNode.kind === SyntaxKind.CallExpression)) {
                             emit(operand);
                             return;
                         }
@@ -2573,15 +2578,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return false;
                 }
                 
-                debugger;
-                
-                const parentNode = currentNode;
                 const isVariableDeclarationOrBindingElement =
-                    parentNode && (parentNode.kind === SyntaxKind.VariableDeclaration || parentNode.kind === SyntaxKind.BindingElement);
+                    currentNode && (currentNode.kind === SyntaxKind.VariableDeclaration || currentNode.kind === SyntaxKind.BindingElement);
 
                 const targetDeclaration =
                     isVariableDeclarationOrBindingElement
-                        ? <Declaration>parentNode
+                        ? <Declaration>currentNode
                         : resolver.getReferencedValueDeclaration(<Identifier>node);
                         
                 return isSourceFileLevelDeclarationInSystemJsModule(targetDeclaration, /*isExported*/ true);
@@ -2777,11 +2779,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            function isBlockWithSynthesizedStatementsOnNewLine(node: Node) {
+                if (isBlock(node) && forEach(node.statements, synthesizedNodeStartsOnNewLine)) {
+                    return true;
+                }
+                return false;
+            }
+            
+            function isSingleLineSynthesizedBlock(node: Node) {
+                verifyStackBehavior(StackBehavior.Unspecified, node);
+                
+                if (isBlock(node) && nodeIsSynthesized(node) && node.statements.length === 1 && nodeIsSynthesized(node.statements[0])) {
+                    return !(<SynthesizedNode>node.statements[0]).startsOnNewLine;
+                }
+            }
+
             function emitBlock(node: Block) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    return;
+                }
+
+                if (isSingleLineSynthesizedBlock(node)) {
+                    emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    emit(node.statements[0]);
                     write(" ");
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
                     return;
@@ -3290,8 +3316,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.statement);
             }
 
+            function getContainingModule(node: Node): ModuleDeclaration {
+                do {
+                    node = getOriginalNode(node);
+                    node = node.parent;
+                } while (node && node.kind !== SyntaxKind.ModuleDeclaration);
+                return <ModuleDeclaration>node;
+            }
+            
+            function isModuleDeclarationOrGeneratedNamespace(node: Node): node is ModuleDeclaration | ExpressionStatement {
+                return isModuleDeclaration(node) || (isExpressionStatement(node) && !!(node.flags & NodeFlags.GeneratedNamespace));
+            }
+            
             function emitContainingModuleName() {
-                let container = findAncestorNode(isModuleDeclaration);
+                let container = getOriginalNode(findAncestorNode(isModuleDeclarationOrGeneratedNamespace));
                 write(container ? getGeneratedNameForNode(container) : "exports");
             }
 
@@ -3300,7 +3338,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 
                 emitStart(node.name);
                 if (getCombinedNodeFlags() & NodeFlags.Export) {
-                    let container = findAncestorNode(isModuleDeclaration);
+                    let container = getOriginalNode(findAncestorNode(isModuleDeclarationOrGeneratedNamespace));
                     if (container) {
                         write(getGeneratedNameForNode(container));
                         write(".");
@@ -4005,6 +4043,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitCaptureThisForNodeIfNecessary(node: Node): void {
                 verifyStackBehavior(StackBehavior.Unspecified);
                 
+                if (compilerOptions.experimentalTransforms) {
+                    return;
+                }
+                
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureThis) {
                     writeLine();
                     emitStart(node);
@@ -4320,7 +4362,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 pushNode(body);
                 let preambleEmitted = writer.getTextPos() !== initialTextPos;
-                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
+                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body) 
+                    && !isBlockWithSynthesizedStatementsOnNewLine(body)
+                    && (!nodeIsSynthesized(body) || isSingleLineSynthesizedBlock(body))) {
                     for (let statement of body.statements) {
                         write(" ");
                         emit(statement);
@@ -4960,6 +5004,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
+                Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -5632,6 +5677,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 // const enums are completely erased during compilation.
@@ -5753,6 +5799,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
+                Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
+                
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 // Emit only if this module is non-ambient.
@@ -7222,7 +7270,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 
                 // Process tree transformations
                 let statements = node.statements;
-                if (compilerOptions.experimentalTransforms) {
+                if (compilerOptions.experimentalTransforms || true) {
                     let context = new transform.VisitorContext(compilerOptions, currentSourceFile, resolver, generatedNameSet, nodeToGeneratedName);
                     statements = transformationChain(context, node.statements);
                 }
@@ -7290,25 +7338,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 popNode();
             }
             
-            function emitWithStackBehavior<T extends Node, U>(node: T, emit: (node: T) => U, stackBehavior: StackBehavior): U {
-                let result: U;
-                if (stackBehavior === StackBehavior.NodeIsOnTopOfStack && currentNode !== node) {
-                    pushNode(node);
-                    result = emit(node);
-                    popNode();
-                }
-                else if (stackBehavior === StackBehavior.ParentIsOnTopOfStack && currentNode === node) {
-                    popNode();
-                    result = emit(node);
-                    pushNode(node);
-                }
-                else {
-                    result = emit(node);
-                }
-                
-                return result;
-            }
-
             function emitNodeWithoutSourceMap(node: Node): void {
                 if (!node) {
                     return;
@@ -7601,11 +7630,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getLeadingCommentsToEmit(node: Node) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                if ((<SynthesizedNode>node).leadingCommentRanges) {
+                if (nodeIsSynthesized(node)) {
                     return (<SynthesizedNode>node).leadingCommentRanges;
                 }
                 
-                node = getOriginalNode(node);
+                //node = getOriginalNode(node);
                 
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (parentNode) {
@@ -7625,11 +7654,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getTrailingCommentsToEmit(node: Node) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                if ((<SynthesizedNode>node).trailingCommentRanges) {
+                if (nodeIsSynthesized(node)) {
                     return (<SynthesizedNode>node).trailingCommentRanges;
                 }
 
-                node = getOriginalNode(node);
+                //node = getOriginalNode(node);
+                
                 // Emit the trailing comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (parentNode && !nodeIsSynthesized(parentNode)) {
                     if (parentNode.kind === SyntaxKind.SourceFile || node.end !== parentNode.end) {

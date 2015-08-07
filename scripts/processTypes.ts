@@ -752,44 +752,44 @@ function generateTransform(outputFile: string) {
     sys.writeFile(outputFile, writer.getText());
     
     function writeVisitNodesFunctions() {
-        for (let typeName in memberTypeUsages) {
-            if (hasProperty(memberTypeUsages, typeName)) {
-                writeVisitNodeFunction(typeName);
-            }
-        }
-        for (let typeName in nodeArrayTypeUsages) {
-            if (getProperty(nodeArrayTypeUsages, typeName)) {
-                writeVisitNodesFunction(typeName);
-            }
-        }
+        // for (let typeName in memberTypeUsages) {
+        //     if (hasProperty(memberTypeUsages, typeName)) {
+        //         writeVisitNodeFunction(typeName);
+        //     }
+        // }
+        // for (let typeName in nodeArrayTypeUsages) {
+        //     if (getProperty(nodeArrayTypeUsages, typeName)) {
+        //         writeVisitNodesFunction(typeName);
+        //     }
+        // }
     }
     
     function writeVisitNodeFunction(typeName: string) {
-        if (typeName === "Node") {
-            return;
-        }
+        // if (typeName === "Node") {
+        //     return;
+        // }
 
-        // Skip the visit function for this node if it is defined in transform.ts
-        if (resolveQualifiedName(transformSourceFile, `ts.transform.visit${typeNameToMethodNameSuffix(typeName)}`, SymbolFlags.Function)) {
-            return;
-        }
+        // // Skip the visit function for this node if it is defined in transform.ts
+        // if (resolveQualifiedName(transformSourceFile, `ts.transform.visit${typeNameToMethodNameSuffix(typeName)}`, SymbolFlags.Function)) {
+        //     return;
+        // }
         
-        writer.write(`export function visit${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, node: ${typeName}, visitor: Visitor): ${typeName} {`);
-        writer.writeLine();
-        writer.increaseIndent();
+        // writer.write(`export function visit${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, node: ${typeName}, visitor: Visitor, mutator?: NodeWriter<${typeName}>): ${typeName} {`);
+        // writer.writeLine();
+        // writer.increaseIndent();
         
-        writer.write(`let visited = visit(context, node, visitor);`);
-        writer.writeLine();
+        // writer.write(`let visited = visit(context, node, visitor, mutator);`);
+        // writer.writeLine();
         
-        writer.write(`Debug.assert(!visited || is${typeNameToMethodNameSuffix(typeName)}(visited), "Wrong node kind after visit.");`);
-        writer.writeLine();
+        // writer.write(`Debug.assert(!visited || is${typeNameToMethodNameSuffix(typeName)}(visited), "Wrong node kind after visit.");`);
+        // writer.writeLine();
         
-        writer.write(`return <${typeName}>visited;`);
-        writer.writeLine();
+        // writer.write(`return <${typeName}>visited;`);
+        // writer.writeLine();
         
-        writer.decreaseIndent();
-        writer.write(`}`);
-        writer.writeLine();
+        // writer.decreaseIndent();
+        // writer.write(`}`);
+        // writer.writeLine();
     }
     
     function writeVisitNodesFunction(typeName: string) {
@@ -802,7 +802,7 @@ function generateTransform(outputFile: string) {
             return;
         }
         
-        writer.write(`export function visitNodeArrayOf${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, nodes: Array<${typeName}>, visitor: Visitor): NodeArray<${typeName}> {`);
+        writer.write(`export function visitNodeArrayOf${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, nodes: Array<${typeName}>, visitor: (context: VisitorContext, input: Node, write: (node: Node) => void) => void): NodeArray<${typeName}> {`);
         writer.writeLine();
         writer.increaseIndent();
         
@@ -815,15 +815,15 @@ function generateTransform(outputFile: string) {
     }
     
     function writeAcceptFunction() {
-        writer.write(`export function accept(context: VisitorContext, node: Node, visitor: Visitor): Node {`);
+        writer.write(`export function accept(context: VisitorContext, node: Node, visitor: Visitor, write: (node: Node) => void): void {`);
         writer.writeLine();
         writer.increaseIndent();
     
-        writer.write(`if (!node || !visitor) {`);
+        writer.write(`if (!node) {`);
         writer.writeLine();
         writer.increaseIndent();
         
-        writer.write(`return node;`);
+        writer.write(`return;`);
         writer.writeLine();
         
         writer.decreaseIndent();
@@ -843,7 +843,7 @@ function generateTransform(outputFile: string) {
             writer.writeLine();
             writer.increaseIndent();
             
-            writer.write(`return factory.update${syntaxNode.kindName}(`);
+            writer.write(`return write(factory.update${syntaxNode.kindName}(`);
             writer.writeLine();
             writer.increaseIndent();
             writer.write(`<${syntaxNode.typeName}>node`);
@@ -855,15 +855,26 @@ function generateTransform(outputFile: string) {
                 
                 writer.write(`, `);
                 writer.writeLine();
-                let visitorFunction =
-                    member.visitorFunction ? member.visitorFunction :
-                    member.isNodeArray || member.isModifiersArray ? `visitNodeArrayOf${typeNameToMethodNameSuffix(member.elementTypeName)}` :
-                    `visit${typeNameToMethodNameSuffix(member.typeName)}`;
                 
-                writer.write(`${visitorFunction}(context, (<${syntaxNode.typeName}>node).${member.propertyName}, visitor)`);
+                if (member.typeName === "Node") {
+                    writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}`);
+                }
+                else {
+                    // let visitorFunction =
+                    //     member.visitorFunction ? member.visitorFunction :
+                    //     member.isNodeArray || member.isModifiersArray ? `visitNodeArrayOf${typeNameToMethodNameSuffix(member.elementTypeName)}` :
+                    //     `visit${typeNameToMethodNameSuffix(member.typeName)}`;
+
+                    let visitorFunction =
+                        member.visitorFunction ? member.visitorFunction :
+                        member.isNodeArray || member.isModifiersArray ? `<NodeArray<${member.elementTypeName}>>visitNodes` :
+                        `<${member.typeName}>visitNode`;
+                        
+                    writer.write(`${visitorFunction}(context, (<${syntaxNode.typeName}>node).${member.propertyName}, visitor)`);
+                }
             }
             
-            writer.write(`);`);
+            writer.write(`));`);
             writer.writeLine();
             writer.decreaseIndent();
             writer.decreaseIndent();
@@ -872,7 +883,7 @@ function generateTransform(outputFile: string) {
         writer.write(`default:`);
         writer.writeLine();
         writer.increaseIndent();
-        writer.write(`return node;`);
+        writer.write(`return write(node);`);
         writer.writeLine();
         writer.decreaseIndent();
         writer.decreaseIndent();

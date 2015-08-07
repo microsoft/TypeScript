@@ -44,6 +44,7 @@ var compilerSources = [
     "transform.ts",
     "transform.generated.ts",
     "transforms/es6.ts",
+    "transforms/es5.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -66,6 +67,7 @@ var servicesSources = [
     "transform.ts",
     "transform.generated.ts",
     "transforms/es6.ts",
+    "transforms/es5.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -209,6 +211,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
+var useTransforms = false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 /* Compiles a file from a list of sources
@@ -236,7 +239,9 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
           , noResolve = opts && opts.noResolve
           , stripInternal = opts && opts.stripInternal
           , experimentalDecorators = opts && opts.experimentalDecorators
-          , target = opts && opts.target;
+          , experimentalTransforms = opts && opts.experimentalTransforms
+          , target = opts && opts.target
+          , diagnostics = opts && opts.diagnostics;
          
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -279,8 +284,16 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
             options += " --experimentalDecorators";
         }
         
+        if (experimentalTransforms || (useBuiltCompiler && useTransforms)) {
+            options += " --experimentalTransforms";
+        }
+        
         if (target) {
             options += " --target " + target;
+        }
+        
+        if (diagnostics) {
+            options += " --diagnostics";
         }
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
@@ -444,6 +457,10 @@ task("setDebugMode", function() {
     useDebugMode = true;
 });
 
+task("setTransforms", function() {
+    useTransforms = true;
+});
+
 task("configure-nightly", [configureNightlyJs], function() {
     var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
     console.log(cmd);
@@ -478,7 +495,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
     preserveConstEnums: true,
     keepComments: true,
     noResolve: false,
-    stripInternal: true,
+    stripInternal: true
 },  /*callback*/ function () {
     jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -490,7 +507,6 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
     definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
     fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
 });
-
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), {
@@ -590,7 +606,15 @@ directory(builtLocalDirectory);
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
 compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), {
-    useBuiltCompiler: true
+    useBuiltCompiler: true,
+    diagnostics: true
+});
+
+var run2 = path.join(builtLocalDirectory, "run-tx.js");
+compileFile(run2, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), {
+    useBuiltCompiler: true,
+    experimentalTransforms: true,
+    diagnostics: true
 });
 
 var internalTests = "internal/";
@@ -606,6 +630,9 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
+
+// Temporary task created to compare transform output on typescriptServices.js
+task("tx", ["generate-diagnostics", "generate-factory", "lib", tscFile, run, run2]);
 
 function exec(cmd, completeHandler, errorHandler) {
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});

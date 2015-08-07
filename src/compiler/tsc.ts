@@ -488,6 +488,14 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
     }
+    
+    declare var global: any, require: any;
+    if (typeof global !== "undefined" && Object.prototype.toString.call(global.process) === '[object process]') {
+        try {
+            require("source-map-support").install();
+        }
+        catch (e) { }
+    }
 }
 
 ts.executeCommandLine(ts.sys.args);

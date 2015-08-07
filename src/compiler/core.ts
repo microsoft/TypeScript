@@ -124,6 +124,19 @@ namespace ts {
         }
         return result;
     }
+    
+    export function every<T>(array: T[], f: (x: T) => boolean): boolean {
+        if (array) {
+            for (let item of array) {
+                if (!f(item)) {
+                    return false;
+                }
+                
+                return true;
+            }
+        }
+        return false;
+    }
 
     export function map<T, U>(array: T[], f: (x: T) => U): U[]{
         let result: U[];
@@ -180,6 +193,28 @@ namespace ts {
             pos++;
         }
         return true;
+    }
+    
+    /**
+     * Returns the first element of an array if non-empty, undefined otherwise.
+     */
+    export function firstOrUndefined<T>(array: T[]): T {
+        if (array.length === 0) {
+            return undefined;
+        }
+
+        return array[0];
+    }
+
+    /**
+     * Returns the only element of an array if non-empty, undefined otherwise.
+     */
+    export function singleOrUndefined<T>(array: T[]): T {
+        if (array.length === 1) {
+            return array[0];
+        }
+
+        return undefined;
     }
 
     /**

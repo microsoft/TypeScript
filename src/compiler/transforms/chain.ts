@@ -2,6 +2,7 @@
 /// <reference path="../transform.ts" />
 /// <reference path="es6.ts" />
 /// <reference path="es5.ts" />
+/*@internal*/
 namespace ts.transform {
     export type TransformationChain = (context: VisitorContext, statements: NodeArray<Statement>) => NodeArray<Statement>;
     
@@ -23,26 +24,39 @@ namespace ts.transform {
         }
     }
     
+    function runTransformation(chain: TransformationChain, context: VisitorContext, statements: NodeArray<Statement>) {
+        context.pushLexicalEnvironment();
+        
+        let transformed = chain(context, statements);
+        if (context.hasHoistedDeclarations()) {
+            transformed = factory.cloneNodeArray(transformed);
+            context.writeHoistedDeclarations(transformed);
+        }
+        
+        context.popLexicalEnvironment();
+        return transformed;
+    }
+    
     function createUnaryTransformationChain(only: TransformationChain) {
         return function (context: VisitorContext, statements: NodeArray<Statement>) {
-            if (only) statements = only(context, statements);
+            if (only) statements = runTransformation(only, context, statements);
             return statements;
         };
     }
     
     function createBinaryTransformationChain(first: TransformationChain, second: TransformationChain) {
         return function (context: VisitorContext, statements: NodeArray<Statement>) {
-            if (first) statements = first(context, statements);
-            if (second) statements = second(context, statements);
+            if (first) statements = runTransformation(first, context, statements);
+            if (second) statements = runTransformation(second, context, statements);
             return statements;
         };
     }
     
     function createTrinaryTransformationChain(first: TransformationChain, second: TransformationChain, third: TransformationChain) {
         return function (context: VisitorContext, statements: NodeArray<Statement>) {
-            if (first) statements = first(context, statements);
-            if (second) statements = second(context, statements);
-            if (third) statements = third(context, statements);
+            if (first) statements = runTransformation(first, context, statements);
+            if (second) statements = runTransformation(second, context, statements);
+            if (third) statements = runTransformation(third, context, statements);
             return statements;
         };
     }

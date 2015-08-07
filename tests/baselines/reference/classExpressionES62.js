@@ -6,5 +6,4 @@ var v = class C extends D {};
 class D {
 }
 var v = class C extends D {
-}
-;
+};

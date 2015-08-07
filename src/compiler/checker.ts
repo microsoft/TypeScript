@@ -1387,8 +1387,13 @@ namespace ts {
                 return true;
             }
         }
+        
+        function isEntityNameOrExpression(node: Node): node is EntityName | Expression {
+            return isEntityName(node) || isExpression(node);
+        }
 
         function isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult {
+            entityName = getOriginalNodeIf(entityName, isEntityNameOrExpression);
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
             if (entityName.parent.kind === SyntaxKind.TypeQuery) {
@@ -2007,6 +2012,7 @@ namespace ts {
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
+            node = getOriginalNodeIf(node, isDeclaration);
             function getContainingExternalModule(node: Node) {
                 for (; node; node = node.parent) {
                     if (node.kind === SyntaxKind.ModuleDeclaration) {
@@ -2155,6 +2161,7 @@ namespace ts {
         }
 
         function collectLinkedAliases(node: Identifier): Node[] {
+            node = getOriginalNodeIf(node, isIdentifier);
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
                 exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
@@ -13815,7 +13822,7 @@ namespace ts {
             else if ((entityName.parent.kind === SyntaxKind.JsxOpeningElement) || (entityName.parent.kind === SyntaxKind.JsxSelfClosingElement)) {
                 return getJsxElementTagSymbol(<JsxOpeningLikeElement>entityName.parent);
             }
-            else if (isExpression(entityName)) {
+            else if (isPartOfExpression(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.
                     return undefined;
@@ -13953,7 +13960,7 @@ namespace ts {
                 return getTypeFromTypeNode(<TypeNode>node);
             }
 
-            if (isExpression(node)) {
+            if (isPartOfExpression(node)) {
                 return getTypeOfExpression(<Expression>node);
             }
 
@@ -14055,6 +14062,7 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
+            node = getOriginalNodeIf(node, isIdentifier);
             let symbol = getReferencedValueSymbol(node);
             if (symbol) {
                 if (symbol.flags & SymbolFlags.ExportValue) {
@@ -14084,6 +14092,7 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
         // that import. Otherwise, return undefined.
         function getReferencedImportDeclaration(node: Identifier): Declaration {
+            node = getOriginalNodeIf(node, isIdentifier);
             let symbol = getReferencedValueSymbol(node);
             return symbol && symbol.flags & SymbolFlags.Alias ? getDeclarationOfAliasSymbol(symbol) : undefined;
         }
@@ -14116,6 +14125,7 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references a nested block scoped entity with
         // a name that hides an existing name, return the declaration of that entity. Otherwise, return undefined.
         function getReferencedNestedRedeclaration(node: Identifier): Declaration {
+            node = getOriginalNodeIf(node, isIdentifier);
             let symbol = getReferencedValueSymbol(node);
             return symbol && isNestedRedeclarationSymbol(symbol) ? symbol.valueDeclaration : undefined;
         }
@@ -14123,10 +14133,11 @@ namespace ts {
         // Return true if the given node is a declaration of a nested block scoped entity with a name that hides an
         // existing name.
         function isNestedRedeclaration(node: Declaration): boolean {
-            return isNestedRedeclarationSymbol(getSymbolOfNode(node));
+            return isNestedRedeclarationSymbol(getSymbolOfNode(getOriginalNode(node)));
         }
 
         function isValueAliasDeclaration(node: Node): boolean {
+            node = getOriginalNode(node);
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ImportClause:
@@ -14144,6 +14155,7 @@ namespace ts {
         }
 
         function isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean {
+            node = getOriginalNodeIf(node, isImportEqualsDeclaration);
             if (node.parent.kind !== SyntaxKind.SourceFile || !isInternalModuleImportEqualsDeclaration(node)) {
                 // parent is not source file or it is not reference to internal module
                 return false;
@@ -14171,6 +14183,7 @@ namespace ts {
         }
 
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
+            node = getOriginalNode(node);
             if (isAliasSymbolDeclaration(node)) {
                 let symbol = getSymbolOfNode(node);
                 if (getSymbolLinks(symbol).referenced) {
@@ -14185,6 +14198,7 @@ namespace ts {
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {
+            node = getOriginalNodeIf(node, isFunctionLike);
             if (nodeIsPresent(node.body)) {
                 let symbol = getSymbolOfNode(node);
                 let signaturesOfSymbol = getSignaturesOfSymbol(symbol);
@@ -14206,6 +14220,7 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
+            node = getOriginalNode(node);
             return getNodeLinks(node).flags;
         }
 
@@ -14213,8 +14228,13 @@ namespace ts {
             computeEnumMemberValues(<EnumDeclaration>node.parent);
             return getNodeLinks(node).enumMemberValue;
         }
+        
+        function isEnumMemberOrPropertyAccessExpressionOrElementAccessExpression(node: Node): node is EnumMember | PropertyAccessExpression | ElementAccessExpression {
+            return isEnumMember(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node);
+        }
 
         function getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number {
+            node = getOriginalNodeIf(node, isEnumMemberOrPropertyAccessExpressionOrElementAccessExpression);
             if (node.kind === SyntaxKind.EnumMember) {
                 return getEnumMemberValue(<EnumMember>node);
             }
@@ -14309,12 +14329,14 @@ namespace ts {
         }
 
         function getReferencedValueDeclaration(reference: Identifier): Declaration {
+            reference = getOriginalNodeIf(reference, isIdentifier);
             Debug.assert(!nodeIsSynthesized(reference));
             let symbol = getReferencedValueSymbol(reference);
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
+            n = getOriginalNodeIf(n, isIdentifier);
             Debug.assert(!nodeIsSynthesized(n));
 
             let isVariableDeclarationOrBindingElement =

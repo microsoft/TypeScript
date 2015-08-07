@@ -129,7 +129,6 @@ var CC = (function () {
     }
     return CC;
 })();
-var CC;
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

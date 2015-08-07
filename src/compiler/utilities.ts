@@ -11,7 +11,7 @@ namespace ts {
     export interface SynthesizedNode extends Node {
         leadingCommentRanges?: CommentRange[];
         trailingCommentRanges?: CommentRange[];
-        startsOnNewLine: boolean;
+        startsOnNewLine?: boolean;
     }
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
@@ -435,10 +435,20 @@ namespace ts {
 
     /** Gets the original node for a node that was updated via one of the factory.updateX functions */
     export function getOriginalNode(node: Node) {
-        while (node.original) {
+        while (node && node.original) {
             node = node.original;
         }
         
+        return node;
+    }
+    
+    export function getOriginalNodeIf<T extends Node>(node: T, nodeTest: (node: Node) => node is T): T {
+        while (node && node.original) {
+            let original = node.original;
+            if (nodeTest(original)) {
+                node = original;
+            }
+        }
         return node;
     }
 
@@ -651,11 +661,11 @@ namespace ts {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node): boolean {
+    export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
-    export function isFunctionLike(node: Node): boolean {
+    export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -685,27 +695,33 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
-    export function getContainingFunction(node: Node): FunctionLikeDeclaration {
+    export function getContainingFunction(node: Node): FunctionLikeDeclaration;
+    export function getContainingFunction(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): FunctionLikeDeclaration;
+    export function getContainingFunction(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): FunctionLikeDeclaration {
         while (true) {
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
             if (!node || isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
             }
         }
     }
 
-    export function getContainingClass(node: Node): ClassLikeDeclaration {
+    export function getContainingClass(node: Node): ClassLikeDeclaration;
+    export function getContainingClass(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): ClassLikeDeclaration;
+    export function getContainingClass(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): ClassLikeDeclaration {
         while (true) {
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
             if (!node || isClassLike(node)) {
                 return <ClassLikeDeclaration>node;
             }
         }
     }
 
-    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean, getAncestorOrSelf: (offset: number) => Node, offset: number): Node;
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean, getAncestorOrSelf?: (offset: number) => Node, offset?: number): Node {
         while (true) {
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
             if (!node) {
                 return undefined;
             }
@@ -715,7 +731,7 @@ namespace ts {
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
+                    if (isClassLike(getAncestorOrSelf ? getAncestorOrSelf(offset + 2) : node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -723,19 +739,20 @@ namespace ts {
                     // in an object literal, like a method or accessor. But in order for
                     // such a parent to be a this container, the reference must be in
                     // the *body* of the container.
-                    node = node.parent;
+                    node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                    if (isParameter(getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent) 
+                        && isClassElement(getAncestorOrSelf ? getAncestorOrSelf(offset + 2) : node.parent.parent)) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
-                        node = node.parent.parent;
+                        node = getAncestorOrSelf ? getAncestorOrSelf(offset += 2) : node.parent.parent;
                     }
-                    else if (isClassElement(node.parent)) {
+                    else if (isClassElement(getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent)) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
-                        node = node.parent;
+                        node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
                     }
                     break;
                 case SyntaxKind.ArrowFunction:
@@ -760,9 +777,11 @@ namespace ts {
         }
     }
 
-    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
+    export function getSuperContainer(node: Node, includeFunctions: boolean): Node;
+    export function getSuperContainer(node: Node, includeFunctions: boolean, getAncestorOrSelf: (offset: number) => Node, offset: number): Node;
+    export function getSuperContainer(node: Node, includeFunctions: boolean, getAncestorOrSelf?: (offset: number) => Node, offset?: number): Node {
         while (true) {
-            node = node.parent;
+            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
             if (!node) return node;
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
@@ -770,7 +789,7 @@ namespace ts {
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
+                    if (isClassLike(getAncestorOrSelf ? getAncestorOrSelf(offset + 2) : node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -778,19 +797,20 @@ namespace ts {
                     // in an object literal, like a method or accessor. But in order for
                     // such a parent to be a super container, the reference must be in
                     // the *body* of the container.
-                    node = node.parent;
+                    node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                    if (isParameter(getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent) 
+                        && isClassElement(getAncestorOrSelf ? getAncestorOrSelf(offset + 2) : node.parent.parent)) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
-                        node = node.parent.parent;
+                        node = getAncestorOrSelf ? getAncestorOrSelf(offset += 2) : node.parent.parent;
                     }
-                    else if (isClassElement(node.parent)) {
+                    else if (isClassElement(getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent)) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
-                        node = node.parent;
+                        node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
                     }
                     break;
                 case SyntaxKind.FunctionDeclaration:
@@ -872,7 +892,7 @@ namespace ts {
     export function nodeIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
-                if (node.decorators) {
+                if (node.decorators && node.decorators.length > 0) {
                     return true;
                 }
 
@@ -880,14 +900,14 @@ namespace ts {
 
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.Parameter:
-                if (node.decorators) {
+                if (node.decorators && node.decorators.length > 0) {
                     return true;
                 }
 
                 return false;
 
             case SyntaxKind.GetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                if ((<FunctionLikeDeclaration>node).body && node.decorators && node.decorators.length > 0) {
                     return true;
                 }
 
@@ -895,7 +915,7 @@ namespace ts {
 
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                if ((<FunctionLikeDeclaration>node).body && node.decorators && node.decorators.length > 0) {
                     return true;
                 }
 
@@ -926,7 +946,7 @@ namespace ts {
       * Returns whether the node is part of an expression.
       * @param node The node to test
       */
-    export function isExpression(node: Node): boolean;
+    export function isPartOfExpression(node: Node): boolean;
 
     /**
       * Returns whether the node is part of an expression.
@@ -936,7 +956,7 @@ namespace ts {
       * @param offset The offset in the node stack used to get the ancestor of the current node
       * from the emitter's node stack.
       */
-    export function isExpression(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): boolean;
+    export function isPartOfExpression(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): boolean;
 
     /**
       * Returns whether the node is part of an expression.
@@ -953,7 +973,7 @@ namespace ts {
       * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
       * offset of two (2) refers to the grandparent, and so on.
       */
-    export function isExpression(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
+    export function isPartOfExpression(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
         let parent: Node;
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
@@ -1049,7 +1069,7 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent, getAncestorOrSelf, offset + 1);
                     default:
-                        if (isExpression(parent, getAncestorOrSelf, offset)) {
+                        if (isPartOfExpression(parent, getAncestorOrSelf, offset)) {
                             return true;
                         }
                 }
@@ -1057,6 +1077,150 @@ namespace ts {
         return false;
     }
 
+    export function getExpressionPrecedence(expr: Expression) {
+        return getOperatorPrecedence(expr.kind, getOperator(expr), isNewExpression(expr) && !expr.arguments)
+    }
+    
+    export function getBinaryOperatorPrecedence(operator: SyntaxKind) {
+        return getOperatorPrecedence(SyntaxKind.BinaryExpression, operator);
+    }
+
+    function getOperator(expr: Expression) {
+        return isBinaryExpression(expr) 
+            ? expr.operatorToken.kind 
+            : isPrefixUnaryExpression(expr) || isPostfixUnaryExpression(expr) 
+                ? expr.operator 
+                : undefined;
+    }
+    
+    function getOperatorPrecedence(kind: SyntaxKind, operator: SyntaxKind, isNewExpressionWithoutArguments?: boolean) {
+        switch (kind) {
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.ParenthesizedExpression:
+                return 19;
+                
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                return 18;
+                
+            case SyntaxKind.NewExpression:
+                return isNewExpressionWithoutArguments ? 17 : 18;
+                
+            case SyntaxKind.CallExpression:
+                return 17;
+                
+            case SyntaxKind.PostfixUnaryExpression:
+                return 16;
+                
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.AwaitExpression:
+                return 15;
+                
+            case SyntaxKind.BinaryExpression:
+                switch (operator) {
+                    case SyntaxKind.ExclamationToken:
+                    case SyntaxKind.TildeToken:
+                        return 15;
+                        
+                    case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.PercentToken:
+                        return 14;
+                    
+                    case SyntaxKind.PlusToken:
+                    case SyntaxKind.MinusToken:
+                        return 13;
+                        
+                    case SyntaxKind.LessThanLessThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                        return 12;
+                        
+                    case SyntaxKind.LessThanToken:
+                    case SyntaxKind.LessThanEqualsToken:
+                    case SyntaxKind.GreaterThanToken:
+                    case SyntaxKind.GreaterThanEqualsToken:
+                    case SyntaxKind.InKeyword:
+                    case SyntaxKind.InstanceOfKeyword:
+                        return 11;
+                        
+                    case SyntaxKind.EqualsEqualsToken:
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsToken:
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
+                        return 10;
+                        
+                    case SyntaxKind.AmpersandToken:
+                        return 9;
+                        
+                    case SyntaxKind.CaretToken:
+                        return 8;
+                        
+                    case SyntaxKind.BarToken:
+                        return 7;
+                        
+                    case SyntaxKind.AmpersandAmpersandToken:
+                        return 6;
+                        
+                    case SyntaxKind.BarBarToken:
+                        return 5;
+                        
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.PlusEqualsToken:
+                    case SyntaxKind.MinusEqualsToken:
+                    case SyntaxKind.AsteriskEqualsToken:
+                    case SyntaxKind.SlashEqualsToken:
+                    case SyntaxKind.PercentEqualsToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return 3;
+                        
+                    case SyntaxKind.CommaToken:
+                        return 0;
+                        
+                    default:
+                        return -1;
+                }
+                
+            case SyntaxKind.ConditionalExpression:
+                return 4;
+                
+            case SyntaxKind.YieldExpression:
+                return 2;
+                
+            case SyntaxKind.SpreadElementExpression:
+                return 1;
+                
+            default:
+                return -1;
+        }
+    }
+    
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         let moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -1262,7 +1426,7 @@ namespace ts {
                 case SyntaxKind.LabeledStatement:
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.SwitchStatement:
-                case SyntaxKind.ThrowKeyword:
+                case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.WhileStatement:
@@ -1275,8 +1439,12 @@ namespace ts {
         return false;
     }
     
+    export function isStatementOrDeclarationStatement(n: Node): n is Statement {
+        return isStatement(n) || isDeclarationStatement(n);
+    }
+    
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationName(name: Node): boolean {
+    export function isDeclarationName(name: Node): name is Identifier | StringLiteral | LiteralExpression {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }
@@ -2017,7 +2185,7 @@ namespace ts {
         return 0;
     }
 
-    export function isLeftHandSideExpression(expr: Node): boolean {
+    export function isLeftHandSideExpression(expr: Node): expr is LeftHandSideExpression {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:

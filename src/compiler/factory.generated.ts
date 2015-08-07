@@ -46,8 +46,17 @@ namespace ts {
             }
             return node;
         }
-        export function createThisKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            return createNode<LeftHandSideExpression>(SyntaxKind.ThisKeyword, location, flags);
+        export function createFalseKeyword(location?: TextRange, flags?: NodeFlags): PrimaryExpression {
+            return createNode<PrimaryExpression>(SyntaxKind.FalseKeyword, location, flags);
+        }
+        export function createSuperKeyword(location?: TextRange, flags?: NodeFlags): PrimaryExpression {
+            return createNode<PrimaryExpression>(SyntaxKind.SuperKeyword, location, flags);
+        }
+        export function createThisKeyword(location?: TextRange, flags?: NodeFlags): PrimaryExpression {
+            return createNode<PrimaryExpression>(SyntaxKind.ThisKeyword, location, flags);
+        }
+        export function createTrueKeyword(location?: TextRange, flags?: NodeFlags): PrimaryExpression {
+            return createNode<PrimaryExpression>(SyntaxKind.TrueKeyword, location, flags);
         }
         export function createQualifiedName(left?: EntityName, right?: Identifier, location?: TextRange, flags?: NodeFlags): QualifiedName {
             let node = createNode<QualifiedName>(SyntaxKind.QualifiedName, location, flags);
@@ -110,10 +119,10 @@ namespace ts {
             return node;
         }
         export function updateParameter(node: ParameterDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
-            , name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): ParameterDeclaration {
-            if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
-                initializer !== node.initializer) {
-                let newNode = createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer);
+            , name: BindingPattern | Identifier, questionToken: Node, type: TypeNode, initializer: Expression): ParameterDeclaration {
+            if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || questionToken !== node.questionToken || 
+                type !== node.type || initializer !== node.initializer) {
+                let newNode = createParameter(decorators, modifiers, node.dotDotDotToken, name, questionToken, type, initializer);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -994,15 +1003,20 @@ namespace ts {
             }
             return node;
         }
-        export function createVariableStatement(declarationList?: VariableDeclarationList, 
+        export function createVariableStatement(decorators?: Array<Decorator>, modifiers?: Array<Node>, declarationList?: VariableDeclarationList, 
             location?: TextRange, flags?: NodeFlags): VariableStatement {
             let node = createNode<VariableStatement>(SyntaxKind.VariableStatement, location, flags);
-            node.declarationList = declarationList;
+            if (arguments.length) {
+                node.decorators = decorators && createNodeArray(decorators)
+                setModifiers(node, modifiers);
+                node.declarationList = declarationList;
+            }
             return node;
         }
-        export function updateVariableStatement(node: VariableStatement, declarationList: VariableDeclarationList): VariableStatement {
-            if (declarationList !== node.declarationList) {
-                let newNode = createVariableStatement(declarationList);
+        export function updateVariableStatement(node: VariableStatement, decorators: Array<Decorator>, modifiers: Array<Node>
+            , declarationList: VariableDeclarationList): VariableStatement {
+            if (decorators !== node.decorators || modifiers !== node.modifiers || declarationList !== node.declarationList) {
+                let newNode = createVariableStatement(decorators, modifiers, declarationList);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -1242,23 +1256,20 @@ namespace ts {
         export function createDebuggerStatement(location?: TextRange, flags?: NodeFlags): DebuggerStatement {
             return createNode<DebuggerStatement>(SyntaxKind.DebuggerStatement, location, flags);
         }
-        export function createVariableDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: BindingPattern | Identifier, 
-            type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): VariableDeclaration {
+        export function createVariableDeclaration(name?: BindingPattern | Identifier, type?: TypeNode, initializer?: Expression, 
+            location?: TextRange, flags?: NodeFlags): VariableDeclaration {
             let node = createNode<VariableDeclaration>(SyntaxKind.VariableDeclaration, location, flags);
             if (arguments.length) {
-                node.decorators = decorators && createNodeArray(decorators)
-                setModifiers(node, modifiers);
                 node.name = name;
                 node.type = type;
                 node.initializer = initializer;
             }
             return node;
         }
-        export function updateVariableDeclaration(node: VariableDeclaration, decorators: Array<Decorator>, modifiers: Array<Node>
-            , name: BindingPattern | Identifier, type: TypeNode, initializer: Expression): VariableDeclaration {
-            if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || 
-                initializer !== node.initializer) {
-                let newNode = createVariableDeclaration(decorators, modifiers, name, type, initializer);
+        export function updateVariableDeclaration(node: VariableDeclaration, name: BindingPattern | Identifier, type: TypeNode
+            , initializer: Expression): VariableDeclaration {
+            if (name !== node.name || type !== node.type || initializer !== node.initializer) {
+                let newNode = createVariableDeclaration(name, type, initializer);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -1759,14 +1770,18 @@ namespace ts {
             }
             return node;
         }
-        export function createHeritageClause(types?: Array<ExpressionWithTypeArguments>, location?: TextRange, flags?: NodeFlags): HeritageClause {
+        export function createHeritageClause(token?: SyntaxKind, types?: Array<ExpressionWithTypeArguments>, 
+            location?: TextRange, flags?: NodeFlags): HeritageClause {
             let node = createNode<HeritageClause>(SyntaxKind.HeritageClause, location, flags);
-            node.types = types && createNodeArray(types)
+            if (arguments.length) {
+                node.token = token;
+                node.types = types && createNodeArray(types)
+            }
             return node;
         }
         export function updateHeritageClause(node: HeritageClause, types: Array<ExpressionWithTypeArguments>): HeritageClause {
             if (types !== node.types) {
-                let newNode = createHeritageClause(types);
+                let newNode = createHeritageClause(node.token, types);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -1787,35 +1802,30 @@ namespace ts {
             }
             return node;
         }
-        export function createPropertyAssignment(name?: PropertyName, questionToken?: Node, initializer?: Expression, 
+        export function createPropertyAssignment(name?: PropertyName, initializer?: Expression, 
             location?: TextRange, flags?: NodeFlags): PropertyAssignment {
             let node = createNode<PropertyAssignment>(SyntaxKind.PropertyAssignment, location, flags);
             if (arguments.length) {
                 node.name = name;
-                node.questionToken = questionToken;
                 node.initializer = initializer;
             }
             return node;
         }
         export function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment {
             if (name !== node.name || initializer !== node.initializer) {
-                let newNode = createPropertyAssignment(name, node.questionToken, initializer);
+                let newNode = createPropertyAssignment(name, initializer);
                 return updateFrom(node, newNode);
             }
             return node;
         }
-        export function createShorthandPropertyAssignment(name?: Identifier, questionToken?: Node, 
-            location?: TextRange, flags?: NodeFlags): ShorthandPropertyAssignment {
+        export function createShorthandPropertyAssignment(name?: Identifier, location?: TextRange, flags?: NodeFlags): ShorthandPropertyAssignment {
             let node = createNode<ShorthandPropertyAssignment>(SyntaxKind.ShorthandPropertyAssignment, location, flags);
-            if (arguments.length) {
-                node.name = name;
-                node.questionToken = questionToken;
-            }
+            node.name = name;
             return node;
         }
         export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier): ShorthandPropertyAssignment {
             if (name !== node.name) {
-                let newNode = createShorthandPropertyAssignment(name, node.questionToken);
+                let newNode = createShorthandPropertyAssignment(name);
                 return updateFrom(node, newNode);
             }
             return node;
@@ -2144,8 +2154,14 @@ namespace ts {
                     return factory.createTemplateTail((<LiteralExpression>node).text, location, flags);
                 case SyntaxKind.Identifier:
                     return factory.createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind, location, flags);
+                case SyntaxKind.FalseKeyword:
+                    return factory.createFalseKeyword(location, flags);
+                case SyntaxKind.SuperKeyword:
+                    return factory.createSuperKeyword(location, flags);
                 case SyntaxKind.ThisKeyword:
                     return factory.createThisKeyword(location, flags);
+                case SyntaxKind.TrueKeyword:
+                    return factory.createTrueKeyword(location, flags);
                 case SyntaxKind.QualifiedName:
                     return factory.createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right, location, flags);
                 case SyntaxKind.ComputedPropertyName:
@@ -2307,7 +2323,8 @@ namespace ts {
                 case SyntaxKind.Block:
                     return factory.createBlock((<Block>node).statements, location, flags);
                 case SyntaxKind.VariableStatement:
-                    return factory.createVariableStatement((<VariableStatement>node).declarationList, location, flags);
+                    return factory.createVariableStatement((<VariableStatement>node).decorators, (<VariableStatement>node).modifiers, 
+                        (<VariableStatement>node).declarationList, location, flags);
                 case SyntaxKind.EmptyStatement:
                     return factory.createEmptyStatement(location, flags);
                 case SyntaxKind.ExpressionStatement:
@@ -2348,9 +2365,8 @@ namespace ts {
                 case SyntaxKind.DebuggerStatement:
                     return factory.createDebuggerStatement(location, flags);
                 case SyntaxKind.VariableDeclaration:
-                    return factory.createVariableDeclaration((<VariableDeclaration>node).decorators, (<VariableDeclaration>node).modifiers, 
-                        (<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer, 
-                        location, flags);
+                    return factory.createVariableDeclaration((<VariableDeclaration>node).name, (<VariableDeclaration>node).type, 
+                        (<VariableDeclaration>node).initializer, location, flags);
                 case SyntaxKind.VariableDeclarationList:
                     return factory.createVariableDeclarationList((<VariableDeclarationList>node).declarations, location, flags);
                 case SyntaxKind.FunctionDeclaration:
@@ -2432,15 +2448,14 @@ namespace ts {
                 case SyntaxKind.DefaultClause:
                     return factory.createDefaultClause((<DefaultClause>node).statements, location, flags);
                 case SyntaxKind.HeritageClause:
-                    return factory.createHeritageClause((<HeritageClause>node).types, location, flags);
+                    return factory.createHeritageClause((<HeritageClause>node).token, (<HeritageClause>node).types, location, flags);
                 case SyntaxKind.CatchClause:
                     return factory.createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block, location, flags);
                 case SyntaxKind.PropertyAssignment:
-                    return factory.createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).questionToken, 
-                        (<PropertyAssignment>node).initializer, location, flags);
+                    return factory.createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer, 
+                        location, flags);
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return factory.createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, 
-                        (<ShorthandPropertyAssignment>node).questionToken, location, flags);
+                    return factory.createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, location, flags);
                 case SyntaxKind.EnumMember:
                     return factory.createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, location, flags);
                 case SyntaxKind.JSDocTypeExpression:
@@ -2520,19 +2535,19 @@ namespace ts {
     export function isIdentifier(node: Node): node is Identifier {
         return node && node.kind === SyntaxKind.Identifier;
     }
-    export function isFalseKeyword(node: Node): node is LeftHandSideExpression {
+    export function isFalseKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.FalseKeyword;
     }
-    export function isNullKeyword(node: Node): node is LeftHandSideExpression {
+    export function isNullKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.NullKeyword;
     }
-    export function isSuperKeyword(node: Node): node is LeftHandSideExpression {
+    export function isSuperKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.SuperKeyword;
     }
-    export function isThisKeyword(node: Node): node is LeftHandSideExpression {
+    export function isThisKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.ThisKeyword;
     }
-    export function isTrueKeyword(node: Node): node is LeftHandSideExpression {
+    export function isTrueKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.TrueKeyword;
     }
     export function isQualifiedName(node: Node): node is QualifiedName {
@@ -2945,6 +2960,56 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isExpression(node: Node): node is Expression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.ClassExpression:
                     return true;
             }
         }

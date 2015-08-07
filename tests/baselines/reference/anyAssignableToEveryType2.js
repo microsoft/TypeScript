@@ -156,7 +156,6 @@ var c = (function () {
     }
     return c;
 })();
-var c;
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
