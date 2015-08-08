@@ -367,6 +367,10 @@ namespace ts.server {
             });
         }
 
+        getDependencies(fileName: string): DependencyInfo {
+            throw new Error("Not Implemented Yet.");            
+        }
+        
         getEmitOutput(fileName: string): EmitOutput {
             throw new Error("Not Implemented Yet.");
         }
