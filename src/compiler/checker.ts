@@ -14366,7 +14366,7 @@ namespace ts {
                 return getEnumMemberValue(<EnumMember>node);
             }
 
-            let symbol = getNodeLinks(node).resolvedSymbol;
+            let symbol = getSymbolAtLocation(node);
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 // inline property\index accesses only for const enums
                 if (isConstEnumDeclaration(symbol.valueDeclaration.parent)) {
