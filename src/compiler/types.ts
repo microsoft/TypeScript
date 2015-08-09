@@ -752,7 +752,8 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface BinaryExpression extends Expression {
+    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
+    export interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -1682,6 +1683,7 @@ namespace ts {
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isDefineModule?: boolean; // Module created from JS 'define' call
+        /* @internal */ isAmdExportAssignment?: boolean; // Property created from JS 'exports.foo = ' assignment
     }
 
     /* @internal */

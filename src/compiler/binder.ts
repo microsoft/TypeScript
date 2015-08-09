@@ -178,25 +178,39 @@ namespace ts {
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
+
+                case SyntaxKind.BinaryExpression:
+                    Debug.assert(isAmdExportAssignment(<BinaryExpression>node));
+                    return getAmdExportAssignmentName(node);
+
                 case SyntaxKind.CallExpression:
                     Debug.assert(isDefineCall(<CallExpression>node));
                     if ((<CallExpression>node).arguments[0].kind === SyntaxKind.StringLiteral) {
                         let moduleName = (<StringLiteral>(<CallExpression>node).arguments[0]).text;
-                        console.log('define module name is (local) ' + moduleName);
                         return '"' + moduleName + '"';
                     }
                     else {
-                        let parent = node.parent;
-                        while (parent && parent.kind !== SyntaxKind.SourceFile) {
-                            parent = parent.parent;
-                        }
-
-                        let sourceFileName = removeFileExtension((<SourceFile>parent).fileName);
-                        console.log('define module name (global) is ' + sourceFileName);
-
-                        return sourceFileName && ('"' + sourceFileName + '"');
+                        return getAnonymousModuleName(node);
                     }
             }
+        }
+
+        function getAmdExportAssignmentName(node: Node) {
+            Debug.assert(isAmdExportAssignment(<BinaryExpression>node));
+
+            let binaryExpr = <BinaryExpression>node;
+            let propAccess = <PropertyAccessExpression>(binaryExpr.left);
+            return propAccess.name.text;
+        }
+
+        function getAnonymousModuleName(node: Node) {
+            let parent = node.parent;
+            while (parent && parent.kind !== SyntaxKind.SourceFile) {
+                parent = parent.parent;
+            }
+
+            let sourceFileName = removeFileExtension((<SourceFile>parent).fileName);
+            return sourceFileName && ('"' + sourceFileName + '"');
         }
 
         function getDisplayName(node: Declaration): string {
@@ -296,7 +310,7 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
+                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isAmdExportAssignment(node)) {
                     let exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -876,6 +890,9 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
+                    if(isAmdExportAssignment(<BinaryExpression>node)) {
+                        return bindAmdExportAssignment(<BinaryExpression>node);
+                    }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -1013,13 +1030,19 @@ namespace ts {
             }
         }
 
+        function bindAmdExportAssignment(node: BinaryExpression) {
+            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ExportValue | SymbolFlags.Property, SymbolFlags.None);
+            symbol.isAmdExportAssignment = true;
+            if (symbol.exportSymbol) {
+                symbol.exportSymbol.isAmdExportAssignment = true;
+            }
+        }
+
         function bindDefineCall(node: CallExpression) {
-            console.log('bind a define call');
             let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule | SymbolFlags.ExportValue, SymbolFlags.None);
             symbol.isDefineModule = true;
 
             // If this was a file-level module, hook up the file symbol to this module
-            // TODO not always
             let parent = node.parent;
             while(parent && parent.kind !== SyntaxKind.SourceFile) {
                 parent = parent.parent;

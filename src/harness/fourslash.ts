@@ -2241,15 +2241,15 @@ module FourSlash {
                         let details = this.getCompletionEntryDetails(item.name);
 
                         if (documentation !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation"));
+                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation for " + name));
                         }
                         if (text !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text"));
+                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text for " + name));
                         }
                     }
 
                     if (kind !== undefined) {
-                        assert.equal(item.kind, kind, assertionMessage("completion item kind"));
+                        assert.equal(item.kind, kind, assertionMessage("completion item kind for " + name));
                     }
 
                     return;

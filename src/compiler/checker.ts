@@ -109,16 +109,6 @@ namespace ts {
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
-        // For JS files using the CommonJS wrapper for RequireJS
-        //let cjsRequireSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "require");
-        //let cjsDefineSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "define");
-        //let cjsRequireSignatureArg = createSymbol(SymbolFlags.Variable, 'args')
-        //let cjsRequireSignature = createSignature(undefined, undefined, [cjsRequireSignatureArg], anyType, undefined, 0, true, false);
-        //let cjsExportsType = createIntrinsicType(TypeFlags.Any, "CommonJS.Exports");
-        //let cjsRequireType = createAnonymousType(cjsRequireSymbol, emptySymbols, [cjsRequireSignature], emptyArray, undefined, undefined);
-        //let cjsDefineType = createIntrinsicType(TypeFlags.Any, "CommonJS.Define");
-        //let cjsModuleType = createCommonJSModuleType();
-
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
@@ -2461,12 +2451,10 @@ namespace ts {
                     func.parent &&
                     func.parent.kind === SyntaxKind.CallExpression) {
                     
-                    if (isDefineCall(<CallExpression>func.parent)) {
-                        console.log('Assign types to define call: ' + getTextOfNode(func.parent).substr(0, 20));
-                        assignDefineCallParameterTypes(<FunctionExpression>func);
+                    if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
+                        assignDefineOrRequireCallParameterTypes(<FunctionExpression>func);
                         let links = getSymbolLinks(declaration.symbol);
                         if (links.type) {
-                            console.log(' -> Computed type of module reference is ' + typeToString(links.type));
                             return links.type;
                         }
                     }
@@ -2735,6 +2723,18 @@ namespace ts {
             return links.type;
         }
 
+        function resolveAmdExportAssignment(symbol: Symbol): Type {
+            let seenTypes: Type[] = [];
+
+            for (var i = 0; i < symbol.declarations.length; i++) {
+                let decl = symbol.declarations[i];
+                Debug.assert(isAmdExportAssignment(decl));
+                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
+            }
+
+            return getUnionType(seenTypes);
+        }
+
         function resolveDefineModule(symbol: Symbol): Type {
             // Can't meaningfully define the same module more than once
             if(symbol.declarations.length !== 1) {
@@ -2775,14 +2775,16 @@ namespace ts {
             let assignedModuleType: Type = undefined;
             let exportAssignedProperties: Symbol[] = [];
             let exportAssignedPropTable: SymbolTable = {};
+            
             let cjsModuleType = getExportedTypeFromNamespace('CommonJS', 'Module');
+            Debug.assert(cjsModuleType !== undefined && !isTypeAny(cjsModuleType));
             let cjsExportsType = getExportedTypeFromNamespace('CommonJS', 'Exports');
+            Debug.assert(cjsExportsType !== undefined && !isTypeAny(cjsExportsType));
             function traverse(node: Node) {
                 if(node.kind === SyntaxKind.BinaryExpression &&
                    (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
                     let lhs = (<BinaryExpression>node).left;
                     if(lhs.kind === SyntaxKind.PropertyAccessExpression) {
-                        debugger;
                         let propertyName = (<PropertyAccessExpression>lhs).name.text;
                         let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
                         if (operandType === cjsModuleType && propertyName === 'exports') {
@@ -2822,9 +2824,20 @@ namespace ts {
             return links.type;
         }
 
+        function getTypeOfAmdExportAssignment(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                links.type = resolveAmdExportAssignment(symbol);
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
             if (symbol.isDefineModule) {
                 return getTypeOfDefineModule(symbol);
+            }
+            if (symbol.isAmdExportAssignment) {
+                return getTypeOfAmdExportAssignment(symbol);
             }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
@@ -3868,10 +3881,8 @@ namespace ts {
         }
 
         function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
-            console.log('Resolving ' + getTextOfNode(name));
             let moduleSym = resolveExternalModuleName(name, name, /*includeJs*/ true);
             if (moduleSym) {
-                console.log('Resolved to (name) ' + symbolToString(moduleSym));
                 let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
                 if (moduleSymSym) {
                     return getTypeOfSymbol(moduleSymSym);
@@ -4809,10 +4820,6 @@ namespace ts {
         }
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
-            if(symbol === getExportedSymbolFromNamespace('AMD', 'require')) {
-                console.log('no');
-                Debug.fail('what are you doing?!');
-            }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 let links = getSymbolLinks(symbol);
                 // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
@@ -9454,7 +9461,8 @@ namespace ts {
             }
 
             let exprType = getTypeOfExpression(node.expression);
-            if(exprType === getExportedTypeFromNamespace('CommonJS', 'Require')) {
+            if((exprType === getExportedTypeFromNamespace('CommonJS', 'Require')) ||
+               (exprType === getExportedTypeFromNamespace('AMD', 'Require'))) {
                 if(node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
                     return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
                 }
@@ -9494,10 +9502,8 @@ namespace ts {
             return createAnonymousType(createSymbol(SymbolFlags.None, 'CommonJS:Module'), symbolTable, emptyArray, emptyArray, undefined, undefined);
         }*/
 
-        function assignDefineCallParameterTypes(funcExpr: FunctionExpression) {
+        function assignDefineOrRequireCallParameterTypes(funcExpr: FunctionExpression) {
             let callExpr = <CallExpression>funcExpr.parent;
-            Debug.assert(callExpr.kind === SyntaxKind.CallExpression, 'Parent is a call expr');
-            Debug.assert(isDefineCall(callExpr), 'Parent is a defined call');
 
             if(isCommonJsWrapper(funcExpr)) {
                 // CommonJS wrapper
@@ -9513,7 +9519,7 @@ namespace ts {
             }
 
             let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
-            // define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
+            // Example: define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
             if (moduleNames && moduleNames.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (let i = 0; i < funcExpr.parameters.length; i++) {
                     if (moduleNames.elements.length === i) {
@@ -9525,23 +9531,18 @@ namespace ts {
 
                     if (moduleNames.elements[i].kind === SyntaxKind.StringLiteral) {
                         let moduleName = getTextOfNode(moduleNames.elements[i]);
-                        console.log('Resolve define module reference ' + moduleName + '"');
 
                         let unquotedName = moduleName.substr(1, moduleName.length - 2);
                         if (unquotedName === 'require') {
                             links.type = getExportedTypeFromNamespace('CommonJS', 'Require');
-                            console.log('Assigned special name "require", of type ' + typeToString(links.type));
                         }
                         else if (unquotedName === 'exports') {
                             links.type = getExportedTypeFromNamespace('CommonJS', 'Exports');
-                            console.log('Assigned special name "exports", of type ' + typeToString(links.type));
                         }
                         else if (unquotedName === 'module') {
                             links.type = getExportedTypeFromNamespace('CommonJS', 'Module');
-                            console.log('Assigned special name "module", of type ' + typeToString(links.type));
                         }
                         else {
-                            console.log(' -> resolve this module by name');
                             links.type = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[i]);
                         }
                     }
@@ -9868,7 +9869,7 @@ namespace ts {
 
             // Handle 'define' calls
             if (node.parent.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>node.parent)) {
-                assignDefineCallParameterTypes(<FunctionExpression>node);
+                assignDefineOrRequireCallParameterTypes(<FunctionExpression>node);
             }
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -14273,7 +14274,6 @@ namespace ts {
                     switch (location.kind) {
                         case SyntaxKind.CallExpression:
                             if(isDefineCall(<CallExpression>location)) {
-                                console.log('Adding some define-call symbols');
                                 copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember);
                             }
                             break;

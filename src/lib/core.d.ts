@@ -1205,10 +1205,13 @@ declare namespace AMD {
 declare namespace CommonJS {
     export var require: Require;
 
+    export var exports: any;
+
     interface Exports { }
     interface Module {
-        exports: Exports;
+      exports: Exports;
     }
+
     interface Require {
         (moduleName: string): any;
     }

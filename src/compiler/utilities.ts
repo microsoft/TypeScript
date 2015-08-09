@@ -969,18 +969,37 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
-    export function isDefineCall(expression: CallExpression): boolean {
-        // In .js files, calls to the identifier 'define' are treated specially
-        // Walk up to the source file parent
-        let parent = expression.parent;
+    function isInJavaScriptFile(node: Node): boolean {
+        let parent = node;
         while(parent && parent.kind !== SyntaxKind.SourceFile) {
             parent = parent.parent;
         }
         
-        return isJavaScript((<SourceFile>parent).fileName) &&
-            expression.expression.kind === SyntaxKind.Identifier &&
-            ((<Identifier>expression.expression).text === 'define' || (<Identifier>expression.expression).text === 'require') &&
-            expression.arguments.length > 0;
+        return isJavaScript((<SourceFile>parent).fileName);
+    }
+
+    function isCalledToNamedFunction(expression: CallExpression, name: string) {
+        return expression.expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>expression.expression).text === name;
+    }
+
+    export function isDefineCall(expression: CallExpression): boolean {
+        // In .js files, calls to the identifier 'define' are treated specially
+        // Walk up to the source file parent
+        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'define');
+    }
+
+    export function isAmdRequireCall(expression: CallExpression): boolean {
+        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length > 1;
+    }
+
+    export function isAmdExportAssignment(expression: Node): boolean;
+    export function isAmdExportAssignment(expression: BinaryExpression): boolean {
+        return (expression.kind === SyntaxKind.BinaryExpression) &&
+            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
+            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
     }
 
     // A function expression is a CommonJS Wrapper function if it has
