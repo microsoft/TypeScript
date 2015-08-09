@@ -13,12 +13,12 @@
 // limitations under the License.
 //
 
-/// <reference path='test262Runner.ts' />
-/// <reference path='compilerRunner.ts' />
-/// <reference path='fourslashRunner.ts' />
-/// <reference path='projectsRunner.ts' />
-/// <reference path='rwcRunner.ts' />
-/// <reference path='harness.ts' />
+/// <reference path="test262Runner.ts" />
+/// <reference path="compilerRunner.ts" />
+/// <reference path="fourslashRunner.ts" />
+/// <reference path="projectsRunner.ts" />
+/// <reference path="rwcRunner.ts" />
+/// <reference path="harness.ts" />
 
 let runners: RunnerBase[] = [];
 let iterations: number = 1;
@@ -32,13 +32,13 @@ function runTests(runners: RunnerBase[]) {
 }
 
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
-let mytestconfig = 'mytest.config';
-let testconfig = 'test.config';
+let mytestconfig = "mytest.config";
+let testconfig = "test.config";
 let testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
-    (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
+    (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : "");
 
-if (testConfigFile !== '') {
+if (testConfigFile !== "") {
     let testConfig = JSON.parse(testConfigFile);
     if (testConfig.light) {
         Harness.lightMode = true;
@@ -51,33 +51,33 @@ if (testConfigFile !== '') {
             }
 
             switch (option) {
-                case 'compiler':
+                case "compiler":
                     runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                     runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
                     runners.push(new ProjectRunner());
                     break;
-                case 'conformance':
+                case "conformance":
                     runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                     break;
-                case 'project':
+                case "project":
                     runners.push(new ProjectRunner());
                     break;
-                case 'fourslash':
+                case "fourslash":
                     runners.push(new FourSlashRunner(FourSlashTestType.Native));
                     break;
-                case 'fourslash-shims':
+                case "fourslash-shims":
                     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
                     break;
-                case 'fourslash-server':
+                case "fourslash-server":
                     runners.push(new FourSlashRunner(FourSlashTestType.Server));
                     break;
-                case 'fourslash-generated':
+                case "fourslash-generated":
                     runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
                     break;
-                case 'rwc':
+                case "rwc":
                     runners.push(new RWCRunner());
                     break;
-                case 'test262':
+                case "test262":
                     runners.push(new Test262BaselineRunner());
                     break;
             }
@@ -102,6 +102,6 @@ if (runners.length === 0) {
     // runners.push(new GeneratedFourslashRunner());
 }
 
-ts.sys.newLine = '\r\n';
+ts.sys.newLine = "\r\n";
 
 runTests(runners);

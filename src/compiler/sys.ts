@@ -30,8 +30,8 @@ namespace ts {
     declare var global: any;
     declare var __filename: string;
     declare var Buffer: {  
-        new (str: string, encoding ?: string): any;  
-    }
+        new (str: string, encoding?: string): any;  
+    };
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -188,13 +188,13 @@ namespace ts {
             };
         }
         function getNodeSystem(): System {
-            var _fs = require("fs");
-            var _path = require("path");
-            var _os = require('os');
+            const _fs = require("fs");
+            const _path = require("path");
+            const _os = require("os");
 
-            var platform: string = _os.platform();
+            const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!_fs.existsSync(fileName)) {
@@ -228,7 +228,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = '\uFEFF' + data;
+                    data = "\uFEFF" + data;
                 }
 
                 _fs.writeFileSync(fileName, data, "utf8");
@@ -271,10 +271,10 @@ namespace ts {
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {  
-                    var buffer = new Buffer(s, 'utf8');  
-                    var offset: number = 0;
-                    var toWrite: number = buffer.length;
-                    var written = 0;
+                    const buffer = new Buffer(s, "utf8");  
+                    let offset: number = 0;
+                    let toWrite: number = buffer.length;
+                    let written = 0;
                     // 1 is a standard descriptor for stdout
                     while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
                         offset += written;
@@ -297,7 +297,7 @@ namespace ts {
                         }
 
                         callback(fileName);
-                    };
+                    }
                 },
                 resolvePath: function (path: string): string {
                     return _path.resolve(path);

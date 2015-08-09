@@ -527,8 +527,33 @@ namespace ts.server {
             });
         }
 
-        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
-            throw new Error("Not Implemented Yet.");
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
+            let { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
+            let args: protocol.DocumentHighlightsRequestArgs = { file: fileName, line, offset, filesToSearch };
+
+            let request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
+            let response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
+
+            let self = this;
+            return response.body.map(convertToDocumentHighlights);
+
+            function convertToDocumentHighlights(item: ts.server.protocol.DocumentHighlightsItem): ts.DocumentHighlights {
+                let { file, highlightSpans } = item;
+
+                return {
+                    fileName: file,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                };
+
+                function convertHighlightSpan(span: ts.server.protocol.HighlightSpan): ts.HighlightSpan {
+                    let start = self.lineOffsetToPosition(file, span.start);
+                    let end = self.lineOffsetToPosition(file, span.end);
+                    return {
+                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        kind: span.kind
+                    };
+                }
+            }
         }
 
         getOutliningSpans(fileName: string): OutliningSpan[] {

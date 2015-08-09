@@ -508,14 +508,18 @@ namespace ts {
         }
 
         function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            let prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
             writeTextOfNode(currentSourceFile, node.name);
+            emitTypeParameters(node.typeParameters);
             write(" = ");
             emitType(node.type);
             write(";");
             writeLine();
+            enclosingDeclaration = prevEnclosingDeclaration;
         }
 
         function emitEnumDeclaration(node: EnumDeclaration) {

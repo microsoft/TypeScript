@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-///<reference path='harness.ts'/>
+///<reference path="harness.ts"/>
 
 module Harness.SourceMapRecoder {
 
@@ -50,11 +50,11 @@ module Harness.SourceMapRecoder {
                 return true;
             }
 
-            if (sourceMapMappings.charAt(decodingIndex) == ',') {
+            if (sourceMapMappings.charAt(decodingIndex) == ",") {
                 return true;
             }
 
-            if (sourceMapMappings.charAt(decodingIndex) == ';') {
+            if (sourceMapMappings.charAt(decodingIndex) == ";") {
                 return true;
             }
 
@@ -117,7 +117,7 @@ module Harness.SourceMapRecoder {
             }
 
             while (decodingIndex < sourceMapMappings.length) {
-                if (sourceMapMappings.charAt(decodingIndex) == ';') {
+                if (sourceMapMappings.charAt(decodingIndex) == ";") {
                     // New line
                     decodeOfEncodedMapping.emittedLine++;
                     decodeOfEncodedMapping.emittedColumn = 1;
@@ -125,7 +125,7 @@ module Harness.SourceMapRecoder {
                     continue;
                 }
 
-                if (sourceMapMappings.charAt(decodingIndex) == ',') {
+                if (sourceMapMappings.charAt(decodingIndex) == ",") {
                     // Next entry is on same line - no action needed
                     decodingIndex++;
                     continue;
@@ -459,6 +459,6 @@ module Harness.SourceMapRecoder {
             SourceMapSpanWriter.close(); // If the last spans werent emitted, emit them
         }
         sourceMapRecoder.Close();
-        return sourceMapRecoder.lines.join('\r\n');
+        return sourceMapRecoder.lines.join("\r\n");
     }
 }

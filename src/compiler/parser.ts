@@ -3148,7 +3148,7 @@ namespace ts {
         }
 
         function parseAwaitExpression() {
-            var node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
+            const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
             node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
@@ -3340,7 +3340,7 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                     return parseJsxElementOrSelfClosingElement();
             }
-            Debug.fail('Unknown JSX child kind ' + token);
+            Debug.fail("Unknown JSX child kind " + token);
         }
 
         function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
@@ -5140,7 +5140,7 @@ namespace ts {
                 // the 'from' keyword can be parsed as a named export when the export clause is unterminated (i.e. `export { from "moduleName";`)
                 // If we don't have a 'from' keyword, see if we have a string literal such that ASI won't take effect.
                 if (token === SyntaxKind.FromKeyword || (token === SyntaxKind.StringLiteral && !scanner.hasPrecedingLineBreak())) {
-                    parseExpected(SyntaxKind.FromKeyword)
+                    parseExpected(SyntaxKind.FromKeyword);
                     node.moduleSpecifier = parseModuleSpecifier();
                 }
             }
@@ -6011,7 +6011,7 @@ namespace ts {
             return;
 
             function visitNode(node: IncrementalNode) {
-                let text = '';
+                let text = "";
                 if (aggressiveChecks && shouldCheckNode(node)) {
                     text = oldText.substring(node.pos, node.end);
                 }

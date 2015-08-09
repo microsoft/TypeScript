@@ -3392,21 +3392,34 @@ namespace ts {
                         case SyntaxKind.LessThanSlashToken:
                         case SyntaxKind.SlashToken:
                         case SyntaxKind.Identifier:
-                            if(parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
+                        case SyntaxKind.JsxAttribute:
+                        case SyntaxKind.JsxSpreadAttribute:
+                            if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
                             break;
 
+                        // The context token is the closing } or " of an attribute, which means
+                        // its parent is a JsxExpression, whose parent is a JsxAttribute,
+                        // whose parent is a JsxOpeningLikeElement
+                        case SyntaxKind.StringLiteral:
+                            if (parent && ((parent.kind === SyntaxKind.JsxAttribute) || (parent.kind === SyntaxKind.JsxSpreadAttribute))) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
+
+                            break;
+
                         case SyntaxKind.CloseBraceToken:
-                            // The context token is the closing } of an attribute, which means
-                            // its parent is a JsxExpression, whose parent is a JsxAttribute,
-                            // whose parent is a JsxOpeningLikeElement
-                            if(parent &&
+                            if (parent &&
                                 parent.kind === SyntaxKind.JsxExpression && 
                                 parent.parent && 
-                                parent.parent.kind === SyntaxKind.JsxAttribute) {
+                                (parent.parent.kind === SyntaxKind.JsxAttribute)) {
 
                                 return <JsxOpeningLikeElement>parent.parent.parent;
+                            }
+
+                            if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
                             }
 
                             break;
@@ -4607,7 +4620,7 @@ namespace ts {
                             case SyntaxKind.BreakKeyword:
                             case SyntaxKind.ContinueKeyword:
                                 if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
-                                    return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
+                                    return getBreakOrContinueStatementOccurrences(<BreakOrContinueStatement>node.parent);
                                 }
                                 break;
                             case SyntaxKind.ForKeyword:
@@ -4933,7 +4946,7 @@ namespace ts {
                     return map(keywords, getHighlightSpanForNode);
                 }
 
-                function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
+                function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
                     let owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
                     if (owner) {
