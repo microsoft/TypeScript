@@ -1707,18 +1707,6 @@ namespace ts {
         return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
     }
 
-    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
-                // 1. in-browser single file compilation scenario
-                // 2. non .js file
-                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
-            }
-            return false;
-        }
-        return false;
-    }
-
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
         let firstAccessor: AccessorDeclaration;
         let secondAccessor: AccessorDeclaration;

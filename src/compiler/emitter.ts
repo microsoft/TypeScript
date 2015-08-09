@@ -220,7 +220,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             return true;
         }
 
-        function emitFile(jsFilePath: string, sourceFiles: SourceFile[]) {
+        function emitFile(jsFilePath: string, sourceFiles: SourceFile[], isSingleOutputFile: boolean) {
             let writer = createTextWriter(newLine);
             let write = writer.write;
             let writeTextOfNode = writer.writeTextOfNode;
@@ -738,7 +738,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (compilerOptions.mapRoot) {
                     sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                    if (sourceFiles.length === 1 && shouldEmitToOwnFile(sourceFiles[0], compilerOptions)) { // emitting single module file
+                    if (!isSingleOutputFile) { // emitting single module file
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
                         sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFiles[0], host, sourceMapDir));

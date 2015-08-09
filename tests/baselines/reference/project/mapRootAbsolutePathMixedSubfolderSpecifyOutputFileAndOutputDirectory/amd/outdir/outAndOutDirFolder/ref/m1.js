@@ -8,4 +8,4 @@ var m1_instance1 = new m1_c1();
 function m1_f1() {
     return m1_instance1;
 }
-//# sourceMappingURL=/tests/cases/projects/outputdir_mixed_subfolder/mapFiles/m1.js.map
+//# sourceMappingURL=/tests/cases/projects/outputdir_mixed_subfolder/mapFiles/ref/m1.js.map
