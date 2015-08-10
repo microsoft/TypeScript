@@ -1,0 +1,11 @@
+=== tests/cases/compiler/amdReexportAmbientVar.ts ===
+/// <amd-dependency path="text!extern_view.html" name="view"/>
+declare var view: string;
+>view : Symbol(view, Decl(amdReexportAmbientVar.ts, 1, 11))
+
+export {view};
+>view : Symbol(view, Decl(amdReexportAmbientVar.ts, 2, 8))
+
+export function test() { }
+>test : Symbol(test, Decl(amdReexportAmbientVar.ts, 2, 14))
+
