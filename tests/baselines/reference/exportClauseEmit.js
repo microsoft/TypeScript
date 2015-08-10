@@ -6,9 +6,9 @@ export {str};
 
 //// [exportClauseEmit.js]
 var str = "Hello";
-exports.str = str;
 // Change str
 str = "Hello World!!!";
+exports.str = str;
 
 
 //// [exportClauseEmit.d.ts]

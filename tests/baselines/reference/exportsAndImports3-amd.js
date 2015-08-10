@@ -37,29 +37,29 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
     exports.v = 1;
-    exports.v1 = exports.v;
     function f() { }
     exports.f = f;
-    exports.f1 = f;
     var C = (function () {
         function C() {
         }
         return C;
     })();
     exports.C = C;
-    exports.C1 = C;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
     })(exports.E || (exports.E = {}));
     var E = exports.E;
-    exports.E1 = E;
     var M;
     (function (M) {
     })(M = exports.M || (exports.M = {}));
-    exports.M1 = M;
     exports.a = M.x;
+    exports.v1 = exports.v;
+    exports.f1 = f;
+    exports.C1 = C;
+    exports.E1 = E;
+    exports.M1 = M;
     exports.a1 = exports.a;
 });
 //// [t2.js]

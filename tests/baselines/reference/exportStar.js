@@ -39,10 +39,10 @@ function foo() { }
 exports.foo = foo;
 //// [t3.js]
 var x = "x";
-exports.x = x;
 var y = "y";
-exports.y = y;
 var z = "z";
+exports.x = x;
+exports.y = y;
 exports.z = z;
 //// [t4.js]
 function __export(m) {

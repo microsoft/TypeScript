@@ -44,10 +44,10 @@ define(["require", "exports"], function (require, exports) {
 //// [t3.js]
 define(["require", "exports"], function (require, exports) {
     var x = "x";
-    exports.x = x;
     var y = "y";
-    exports.y = y;
     var z = "z";
+    exports.x = x;
+    exports.y = y;
     exports.z = z;
 });
 //// [t4.js]
