@@ -1,0 +1,15 @@
+tests/cases/compiler/superCallWithMissingBaseClass.ts(1,19): error TS2304: Cannot find name 'Bar'.
+
+
+==== tests/cases/compiler/superCallWithMissingBaseClass.ts (1 errors) ====
+    class Foo extends Bar {
+                      ~~~
+!!! error TS2304: Cannot find name 'Bar'.
+        m1() {
+            return super.m1();
+        }
+    
+        static m2() {
+            return super.m2();
+        }
+    }

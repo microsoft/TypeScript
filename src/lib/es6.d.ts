@@ -377,7 +377,7 @@ interface String {
       * @param searchString search string 
       * @param position If position is undefined, 0 is assumed, so as to search all of the String.
       */
-    contains(searchString: string, position?: number): boolean;
+    includes(searchString: string, position?: number): boolean;
 
     /**
       * Returns true if the sequence of elements of searchString converted to a String is the 

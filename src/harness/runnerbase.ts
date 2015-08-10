@@ -1,6 +1,6 @@
 /// <reference path="harness.ts" />
 
-class RunnerBase {
+abstract class RunnerBase {
     constructor() { }
 
     // contains the tests to run
@@ -18,9 +18,7 @@ class RunnerBase {
     /** Setup the runner's tests so that they are ready to be executed by the harness 
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */
-    public initializeTests(): void {
-        throw new Error('method not implemented');
-    }
+    public abstract initializeTests(): void;
 
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
@@ -35,7 +33,7 @@ class RunnerBase {
         
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         let localHost = /http:\/localhost:\d+/g;
-        fixedPath = fixedPath.replace(localHost, '');
+        fixedPath = fixedPath.replace(localHost, "");
         return fixedPath;
     }
 }

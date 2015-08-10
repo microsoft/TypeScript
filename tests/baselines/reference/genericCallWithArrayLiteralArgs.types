@@ -46,10 +46,10 @@ var r3 = foo<number[]>([]); // number[]
 >[] : undefined[]
 
 var r4 = foo([1, '']); // {}[]
->r4 : (string | number)[]
->foo([1, '']) : (string | number)[]
+>r4 : (number | string)[]
+>foo([1, '']) : (number | string)[]
 >foo : <T>(t: T) => T
->[1, ''] : (string | number)[]
+>[1, ''] : (number | string)[]
 >1 : number
 >'' : string
 
@@ -57,7 +57,7 @@ var r5 = foo<any[]>([1, '']); // any[]
 >r5 : any[]
 >foo<any[]>([1, '']) : any[]
 >foo : <T>(t: T) => T
->[1, ''] : (string | number)[]
+>[1, ''] : (number | string)[]
 >1 : number
 >'' : string
 
@@ -66,7 +66,7 @@ var r6 = foo<Object[]>([1, '']); // Object[]
 >foo<Object[]>([1, '']) : Object[]
 >foo : <T>(t: T) => T
 >Object : Object
->[1, ''] : (string | number)[]
+>[1, ''] : (number | string)[]
 >1 : number
 >'' : string
 

@@ -29,7 +29,34 @@
 // type 'fs.' as an alternate way of accessing the top-level objects
 // (e.g. 'fs.goTo.eof();')
 
+//---------------------------------------
+// For API editors:
+// When editting this file, and only while editing this file, enable the reference comments
+// and comment out the declarations in this section to get proper type information.
+// Undo these changes before compiling/committing/editing any other fourslash tests.
+// The test suite will likely crash if you try 'jake runtests' with reference comments enabled.
+//
+// Explanation:
+// We want type-completion while we edit this file, but at compile time/while editting fourslash tests,
+// we don't want to include the following reference because we are compiling this file in "--out" mode and don't want to rope
+// in the entire codebase into the compilation each fourslash test. Additionally, we don't want to expose the
+// src/harness/fourslash.ts API's (or the rest of the compiler) because they are unstable and complicate the
+// fourslash testing DSL. Finally, in this case, runtime reflection is (much) faster.
+//
+// TODO: figure out a better solution to the API exposure problem.
+
+// /// <reference path="../../../built/local/typescriptServices.d.ts"/>
+// /// <reference path="../../../src/harness/fourslash.ts"/>
+
 declare var FourSlash;
+module ts {
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: string;
+    }
+}
+
+//---------------------------------------------
 
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
@@ -42,7 +69,6 @@ enum EmitReturnStatus {
 }
 
 module FourSlashInterface {
-    declare var FourSlash;
 
     export interface Marker {
         fileName: string;
@@ -201,15 +227,6 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
         }
 
-        public implementorsCountIs(count: number) {
-            FourSlash.currentTestState.verifyImplementorsCountIs(count);
-        }
-
-        // Add tests for this.
-        public currentParameterIsVariable() {
-            FourSlash.currentTestState.verifyCurrentParameterIsVariable(!this.negative);
-        }
-
         public signatureHelpPresent() {
             FourSlash.currentTestState.verifySignatureHelpPresent(!this.negative);
         }
@@ -361,14 +378,11 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public setVerifyDocComments(val: boolean) {
-            FourSlash.currentTestState.setVerifyDocComments(val);
-        }
-
         public getScriptLexicalStructureListCount(count: number) {
             FourSlash.currentTestState.verifyGetScriptLexicalStructureListCount(count);
         }
 
+        // TODO: figure out what to do with the unused arguments.
         public getScriptLexicalStructureListContains(
             name: string,
             kind: string,
@@ -376,13 +390,7 @@ module FourSlashInterface {
             parentName?: string,
             isAdditionalSpan?: boolean,
             markerPosition?: number) {
-            FourSlash.currentTestState.verifGetScriptLexicalStructureListContains(
-                name,
-                kind,
-                fileName,
-                parentName,
-                isAdditionalSpan,
-                markerPosition);
+            FourSlash.currentTestState.verifyGetScriptLexicalStructureListContains(name, kind);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
@@ -411,6 +419,14 @@ module FourSlashInterface {
 
         public occurrencesAtPositionCount(expectedCount: number) {
             FourSlash.currentTestState.verifyOccurrencesAtPositionListCount(expectedCount);
+        }
+
+        public documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
+        }
+
+        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
@@ -698,12 +714,7 @@ module fs {
     export var format = new FourSlashInterface.format();
     export var cancellation = new FourSlashInterface.cancellation();
 }
-module ts {
-    export interface SymbolDisplayPart {
-        text: string;
-        kind: string;
-    }
-}
+
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);
 }
