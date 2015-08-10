@@ -116,7 +116,7 @@ declare namespace ts.server.protocol {
         /**
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
-        fileNameList?: string[];
+        fileNames?: string[];
     }
 
     /** 
@@ -893,6 +893,31 @@ declare namespace ts.server.protocol {
      */  
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    /**
+    * Arguments for GeterrForProject request.
+    */
+    export interface GeterrForProjectRequestArgs {
+        /**
+          * the file requesting project error list
+          */
+        file: string;
+
+        /**
+          * Delay in milliseconds to wait before starting to compute
+          * errors for the files in the file list
+          */
+        delay: number;
+    }
+
+    /**
+      * GeterrForProjectRequest request; value of command field is 
+      * "geterrForProject". It works similarly with 'Geterr', only 
+      * it request for every file in this project.
+      */
+    export interface GeterrForProjectRequest extends Request {
+        arguments: GeterrForProjectRequestArgs
     }
     
     /**

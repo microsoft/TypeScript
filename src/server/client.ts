@@ -183,7 +183,7 @@ namespace ts.server {
 
             return {
                 configFileName: response.body.configFileName,
-                fileNameList: response.body.fileNameList
+                fileNames: response.body.fileNames
             };
         }
         
