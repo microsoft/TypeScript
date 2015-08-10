@@ -74,7 +74,7 @@ class ProjectRunner extends RunnerBase {
         catch (e) {
             assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
         }
-        let testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, '').replace(/\.json/, "");
+        let testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, "").replace(/\.json/, "");
 
         function moduleNameToString(moduleKind: ts.ModuleKind) {
             return moduleKind === ts.ModuleKind.AMD
@@ -331,9 +331,9 @@ class ProjectRunner extends RunnerBase {
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }
 
-        let name = 'Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName;
+        let name = "Compiling project for " + testCase.scenario + ": testcase " + testCaseFileName;
 
-        describe('Projects tests', () => {
+        describe("Projects tests", () => {
             describe(name, () => {
                 function verifyCompilerResults(moduleKind: ts.ModuleKind) {
                     let compilerResult: BatchCompileProjectTestCaseResult;
@@ -367,27 +367,27 @@ class ProjectRunner extends RunnerBase {
                         compilerResult = batchCompilerProjectTestCase(moduleKind);
                     });
 
-                    it('Resolution information of (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
-                        Harness.Baseline.runBaseline('Resolution information of (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.json', () => {
+                    it("Resolution information of (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
+                        Harness.Baseline.runBaseline("Resolution information of (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () => {
                             return JSON.stringify(getCompilerResolutionInfo(), undefined, "    ");
                         });
                     });
 
 
-                    it('Errors for (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
+                    it("Errors for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.errors.length) {
-                            Harness.Baseline.runBaseline('Errors for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.errors.txt', () => {
+                            Harness.Baseline.runBaseline("Errors for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () => {
                                 return getErrorsBaseline(compilerResult);
                             });
                         }
                     });
 
 
-                    it('Baseline of emitted result (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
+                    it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
                             ts.forEach(compilerResult.outputFiles, outputFile => {
 
-                                Harness.Baseline.runBaseline('Baseline of emitted result (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
+                                Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                     try {
                                         return ts.sys.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
                                     }
@@ -400,9 +400,9 @@ class ProjectRunner extends RunnerBase {
                     });
 
 
-                    it('SourceMapRecord for (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
+                    it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.sourceMapData) {
-                            Harness.Baseline.runBaseline('SourceMapRecord for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.sourcemap.txt', () => {
+                            Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
                                 return Harness.SourceMapRecoder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
                                     ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
                             });
@@ -411,11 +411,11 @@ class ProjectRunner extends RunnerBase {
 
                     // Verify that all the generated .d.ts files compile
 
-                    it('Errors in generated Dts files for (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
+                    it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             let dTsCompileResult = compileCompileDTsFiles(compilerResult);
                             if (dTsCompileResult.errors.length) {
-                                Harness.Baseline.runBaseline('Errors in generated Dts files for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.dts.errors.txt', () => {
+                                Harness.Baseline.runBaseline("Errors in generated Dts files for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
                                     return getErrorsBaseline(dTsCompileResult);
                                 });
                             }

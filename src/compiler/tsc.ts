@@ -245,7 +245,7 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
             // Return existing SourceFile object if one is available
             if (cachedProgram) {
                 let sourceFile = cachedProgram.getSourceFile(fileName);
@@ -363,7 +363,7 @@ namespace ts {
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                diagnostics = program.getGlobalDiagnostics();
+                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
                     diagnostics = program.getSemanticDiagnostics();

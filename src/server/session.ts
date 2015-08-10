@@ -86,9 +86,11 @@ namespace ts.server {
         export const Format = "format";
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
+        export const GeterrForProject = "geterrForProject";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
+        export const DocumentHighlights = "documentHighlights";
         export const Open = "open";
         export const Quickinfo = "quickinfo";
         export const References = "references";
@@ -234,7 +236,7 @@ namespace ts.server {
         }
 
         private updateErrorCheck(checkList: PendingErrorCheck[], seq: number,
-            matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200) {
+            matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200, requireOpen = true) {
             if (followMs > ms) {
                 followMs = ms;
             }
@@ -249,7 +251,7 @@ namespace ts.server {
             var checkOne = () => {
                 if (matchSeq(seq)) {
                     var checkSpec = checkList[index++];
-                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, true)) {
+                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
@@ -313,7 +315,7 @@ namespace ts.server {
             }));
         }
 
-        private getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[]{
+        private getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[] {
             fileName = ts.normalizePath(fileName);
             let project = this.projectService.getProjectForFile(fileName);
 
@@ -343,6 +345,42 @@ namespace ts.server {
             });
         }
 
+        private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
+            fileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(fileName);
+
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            let { compilerService } = project;
+            let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
+            
+            let documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
+            
+            if (!documentHighlights) {
+                return undefined;
+            }
+
+            return documentHighlights.map(convertToDocumentHighlightsItem);
+
+            function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
+                let { fileName, highlightSpans } = documentHighlights;
+
+                return {
+                    file: fileName,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                };
+
+                function convertHighlightSpan(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
+                    let { textSpan, kind } = highlightSpan;
+                    let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                    let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                    return { start, end, kind };
+                }
+            }
+        }
+
         private getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
             fileName = ts.normalizePath(fileName)
             let project = this.projectService.getProjectForFile(fileName)
@@ -352,7 +390,7 @@ namespace ts.server {
             }
 
             if (needFileNameList) {
-                projectInfo.fileNameList = project.getFileNameList();
+                projectInfo.fileNames = project.getFileNames();
             }
 
             return projectInfo;
@@ -836,7 +874,53 @@ namespace ts.server {
             }));
         }
 
-        public exit() {
+        getDiagnosticsForProject(delay: number, fileName: string) {
+            let { configFileName, fileNames: fileNamesInProject } = this.getProjectInfo(fileName, true);
+            // No need to analyze lib.d.ts
+            fileNamesInProject = fileNamesInProject.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+
+            // Sort the file name list to make the recently touched files come first
+            let highPriorityFiles: string[] = [];
+            let mediumPriorityFiles: string[] = [];
+            let lowPriorityFiles: string[] = [];
+            let veryLowPriorityFiles: string[] = [];
+            let normalizedFileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(normalizedFileName);
+            for (let fileNameInProject of fileNamesInProject) {
+                if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
+                    highPriorityFiles.push(fileNameInProject);
+                else {
+                    let info = this.projectService.getScriptInfo(fileNameInProject);
+                    if (!info.isOpen) {
+                        if (fileNameInProject.indexOf(".d.ts") > 0)
+                            veryLowPriorityFiles.push(fileNameInProject);
+                        else
+                            lowPriorityFiles.push(fileNameInProject);
+                    }
+                    else
+                        mediumPriorityFiles.push(fileNameInProject);
+                }
+            }
+
+            fileNamesInProject = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
+
+            if (fileNamesInProject.length > 0) {
+                let checkList = fileNamesInProject.map<PendingErrorCheck>((fileName: string) => {
+                    let normalizedFileName = ts.normalizePath(fileName);
+                    return { fileName: normalizedFileName, project };
+                });
+                // Project level error analysis runs on background files too, therefore
+                // doesn't require the file to be opened
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
+            }
+        }
+
+        getCanonicalFileName(fileName: string) {
+            let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            return ts.normalizePath(name);
+        }
+
+        exit() {
         }
 
         private handlers : Map<(request: protocol.Request) => {response?: any, responseRequired?: boolean}> = {
@@ -894,6 +978,10 @@ namespace ts.server {
                 var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                 return {response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false};
             },
+            [CommandNames.GeterrForProject]: (request: protocol.Request) => {
+                let { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
+                return {response: this.getDiagnosticsForProject(delay, file), responseRequired: false};
+            },
             [CommandNames.Change]: (request: protocol.Request) => {
                 var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                 this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
@@ -936,6 +1024,10 @@ namespace ts.server {
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                 return {response: this.getOccurrences(line, offset, fileName), responseRequired: true};
+            },
+            [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
+                var { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
+                return {response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true};
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
