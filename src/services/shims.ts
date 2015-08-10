@@ -205,6 +205,11 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        /**
+         * Returns JSON-encoded value of the type TextInsertion.
+         */
+        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -809,6 +814,13 @@ namespace ts {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
+        }
+
+        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+            );
         }
 
         /// NAVIGATE TO
