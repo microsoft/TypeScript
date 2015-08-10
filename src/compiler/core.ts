@@ -193,6 +193,13 @@ namespace ts {
         return array[array.length - 1];
     }
 
+    /**
+     * Performs a binary search, finding the index at which 'value' occurs in 'array'.
+     * If no such index is found, returns the 2's-complement of first index at which
+     * number[index] exceeds number.
+     * @param array A sorted array whose first element must be no larger than number
+     * @param number The value to be searched for in the array.
+     */
     export function binarySearch(array: number[], value: number): number {
         let low = 0;
         let high = array.length - 1;
