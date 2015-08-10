@@ -679,6 +679,14 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.text);
     }
 
+    const carriageReturnLineFeed = "\r\n";
+    /**
+     * The default is CRLF.
+     */
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
+        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    }
+
     export function lineBreakPart() {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
