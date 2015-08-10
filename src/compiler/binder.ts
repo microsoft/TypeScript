@@ -97,6 +97,8 @@ namespace ts {
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
         let classifiableNames: Map<string> = {};
+        let transformFlags: TransformFlags;
+        let skipTransformFlagAggregation: boolean;
 
         if (!file.locals) {
             bind(file);
@@ -782,16 +784,45 @@ namespace ts {
             // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
             bindWorker(node);
-
+            
             // Then we recurse into the children of the node to bind them as well.  For certain
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
-            bindChildren(node);
+            aggregateTransformFlagsIfNeededAnd(bindChildren, node);
 
             inStrictMode = savedInStrictMode;
         }
-
+        
+        function aggregateTransformFlagsIfNeededAnd<T>(cbNode: (node: Node) => T, node: Node): T {
+            return node.transformFlags !== undefined 
+                ? skipTransformFlagAggregationAnd(cbNode, node)
+                : aggregateTransformFlagsAnd(cbNode, node);
+        }
+        
+        function skipTransformFlagAggregationAnd<T>(cbNode: (node: Node) => T, node: Node): T {
+            if (!skipTransformFlagAggregation) {
+                skipTransformFlagAggregation = true;
+                let result = cbNode(node);
+                skipTransformFlagAggregation = false;
+                return result;
+            }
+            
+            return cbNode(node);
+        }
+        
+        function aggregateTransformFlagsAnd<T>(cbNode: (node: Node) => T, node: Node): T {
+            if (!skipTransformFlagAggregation) {
+                let saveTransformFlags = transformFlags;
+                transformFlags = 0;
+                let result = cbNode(node);
+                transformFlags = saveTransformFlags | transform.computeTransformFlagsForNode(node, transformFlags);
+                return result;
+            }
+            
+            return cbNode(node);
+        }
+        
         function updateStrictMode(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.SourceFile:

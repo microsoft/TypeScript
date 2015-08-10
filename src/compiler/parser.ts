@@ -997,8 +997,6 @@ namespace ts {
                 node.parserContextFlags |= ParserContextFlags.ThisNodeHasError;
             }
             
-            transform.aggregateTransformFlags(node);
-            
             return node;
         }
 
@@ -1945,6 +1943,9 @@ namespace ts {
                 }
             }
 
+            // Types are always TypeScript only, so we can shortcut transform flag aggregation by 
+            // explicitly marking this node as TypeScript
+            node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
             return finishNode(node);
         }
 
@@ -1972,6 +1973,12 @@ namespace ts {
             if (modifiers) {
                 node.flags |= modifiers.flags;
                 node.modifiers = modifiers;
+                
+                if (node.flags & NodeFlags.Ambient) {
+                    // Ambient declarations are always TypeScript only, so we can shortcut transform flag aggregation by 
+                    // explicitly marking this node as TypeScript
+                    node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                }
             }
         }
 
@@ -2465,7 +2472,12 @@ namespace ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            return doOutsideOfContext(ParserContextFlags.TypeExcludesFlags, parseTypeWorker);
+            let node = doOutsideOfContext(ParserContextFlags.TypeExcludesFlags, parseTypeWorker);
+            
+            // Types are always TypeScript only, so we can shortcut transform flag aggregation by 
+            // explicitly marking this node as TypeScript
+            node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+            return node;
         }
 
         function parseTypeWorker(): TypeNode {

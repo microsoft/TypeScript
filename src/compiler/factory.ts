@@ -10,7 +10,7 @@ namespace ts {
     export function createNode<T extends Node>(kind: SyntaxKind): T {
         return factory.createNode<T>(kind);
     }
-    
+
     // @internal
     export namespace factory {
         export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {

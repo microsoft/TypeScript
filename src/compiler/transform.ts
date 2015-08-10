@@ -23,34 +23,57 @@ namespace ts.transform {
             return;
         }
 
-        transformFlags = node.transformFlags;
-        if (transformFlags === undefined) {
-            transformFlags = 0;
-            aggregateTransformFlagsForNode(node);
-            node.transformFlags = transformFlags;
-        }
+        aggregateTransformFlagsForThisNodeAndSubtree(node);
+    }
+    
+    function aggregateTransformFlagsForThisNodeAndSubtree(node: Node) {
+        if (node.transformFlags === undefined) {
+            if (node.flags & NodeFlags.Ambient) {
+                // Ambient nodes are marked as TypeScript early to prevent an unnecessary walk of the tree 
+                return node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+            }
 
-        transformFlags &= ~(TransformFlags.NodeExcludes | node.excludeTransformFlags);
+            let transformFlagsOfChildren = aggregateTransformFlagsOfChildren(node);
+            return computeTransformFlagsForNode(node, transformFlagsOfChildren);
+        }
+        
+        return node.transformFlags & ~node.excludeTransformFlags;
+    }
+    
+    function aggregateTransformFlagsOfChildren(node: Node) {
+        let saveTransformFlags = transformFlags;
+        transformFlags = 0;
+
+        forEachChild(node, aggregateTransformFlagsForChildNode);
+
+        let transformFlagsOfChildren = transformFlags;
+        transformFlags = saveTransformFlags;
+
+        return transformFlagsOfChildren & ~TransformFlags.NodeExcludes;
     }
 
     function aggregateTransformFlagsForChildNode(child: Node) {
-        let saveTransformFlags = transformFlags;
-        transformFlags = 0;
-        aggregateTransformFlags(child);
-        transformFlags = saveTransformFlags | transformFlags;
+        transformFlags |= aggregateTransformFlagsForThisNodeAndSubtree(child);
     }
     
-    function aggregateTransformFlagsForNode(node: Node) {
-        forEachChild(node, aggregateTransformFlagsForChildNode);
-
+    /**
+      * Computes the transform flags for a node, given the transform flags of its subtree
+      * @param node The node to analyze
+      * @param subtreeFlags Transform flags computed for this node's subtree
+      */
+    export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags) {
         let start = new Date().getTime();
-        
-        if (node.flags & NodeFlags.Ambient) {
-            transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-        }
+        computeTransformFlagsForNodeWorker(node, subtreeFlags);
+        aggregateTime += new Date().getTime() - start;
+        return node.transformFlags & ~node.excludeTransformFlags;
+     }
+     
+     function computeTransformFlagsForNodeWorker(node: Node, subtreeFlags: TransformFlags) {
+        let transformFlags: TransformFlags;
 
         // Mark transformations needed for each node
-        switch (node.kind) {
+        let kind = node.kind;
+        switch (kind) {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
@@ -58,233 +81,60 @@ namespace ts.transform {
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.ConstKeyword:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                break;
+                return node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScript;
 
-            case SyntaxKind.ModuleDeclaration:
-                node.excludeTransformFlags = TransformFlags.ModuleScopeExcludes;
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                break;
-
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
             case SyntaxKind.ComputedPropertyName:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                break;
-
-            // case SyntaxKind.NumericLiteral:
-            //     let sourceFile = getSourceFileOfNode(node);
-            //     let firstChar = sourceFile.text.charCodeAt(node.pos);
-            //     if (firstChar === CharacterCodes.b
-            //         || firstChar === CharacterCodes.B
-            //         || firstChar === CharacterCodes.o
-            //         || firstChar === CharacterCodes.O) {
-            //         markTransform(TransformFlags.ThisNodeIsES6);
-            //     }
-            //     break;
-            
-            case SyntaxKind.Parameter:
-                if ((<ParameterDeclaration>node).questionToken) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                if ((<ParameterDeclaration>node).flags & NodeFlags.AccessibilityModifier) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
-                }
-                if ((<ParameterDeclaration>node).initializer) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6ParameterInitializer;
-                }
-                if ((<ParameterDeclaration>node).dotDotDotToken) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6RestParameter;
-                }
-                break;
-
-            case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.CallExpression:
-                node.excludeTransformFlags = TransformFlags.CallOrArrayLiteralExcludes;
-                break;
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.ForOfStatement:
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6;
 
             case SyntaxKind.YieldExpression:
-                transformFlags |= TransformFlags.ThisNodeIsES6Yield;
-                break;
-
-            case SyntaxKind.AwaitExpression:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                break;
-
-            case SyntaxKind.BinaryExpression:
-                if (isDestructuringAssignment(node)) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
-                }
-                
-                break;
-
-            case SyntaxKind.TaggedTemplateExpression:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                break;
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6Yield;
 
             case SyntaxKind.ThisKeyword:
-                transformFlags |= TransformFlags.ThisNodeIsThisKeyword;
-                break;
+                return node.transformFlags = TransformFlags.ThisNodeIsThisKeyword;
 
             case SyntaxKind.SpreadElementExpression:
-                transformFlags |= TransformFlags.ThisNodeIsES6SpreadElement;
-                break;
-
-            case SyntaxKind.ShorthandPropertyAssignment:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                break;
-
-            case SyntaxKind.ArrowFunction:
-                node.excludeTransformFlags = TransformFlags.ArrowFunctionScopeExcludes;
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                if (transformFlags & TransformFlags.SubtreeContainsLexicalThis) {
-                    transformFlags |= TransformFlags.ThisNodeCapturesLexicalThis;
-                }
-                if (node.flags & NodeFlags.Async) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                break;
-
-            case SyntaxKind.FunctionExpression:
-                node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes;
-                if ((<FunctionLikeDeclaration>node).asteriskToken
-                    || transformFlags & TransformFlags.SubtreeContainsES6ParameterOrCapturedThis) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
-                }
-                if (node.flags & NodeFlags.Async) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                break;
-
-            case SyntaxKind.FunctionDeclaration:
-                node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes;
-                transformFlags |= TransformFlags.ThisNodeIsHoistedDeclaration;
-                if (!(<MethodDeclaration>node).body
-                    || node.flags & NodeFlags.Async) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                if ((<FunctionLikeDeclaration>node).asteriskToken
-                    || node.flags & NodeFlags.Export
-                    || transformFlags & TransformFlags.SubtreeContainsES6ParameterOrCapturedThis) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
-                }
-                break;
-
-            case SyntaxKind.ForOfStatement:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                break;
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6SpreadElement;
 
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.ReturnStatement:
-                transformFlags |= TransformFlags.ThisNodeIsCompletionStatement;
-                break;
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsCompletionStatement;
 
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                transformFlags |= TransformFlags.ThisNodeIsES6VariableBindingPattern;
-                break;
-
-            case SyntaxKind.VariableDeclarationList:
-                transformFlags |= TransformFlags.ThisNodeIsHoistedDeclaration;
-                if (node.flags & (NodeFlags.Let | NodeFlags.Const)) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6LetOrConst;
-                }
-                break;
-
-            case SyntaxKind.VariableStatement:
-                if (node.flags & NodeFlags.Export) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
-                }
-                break;
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6VariableBindingPattern;
 
             case SyntaxKind.Decorator:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScriptDecorator;
-                break;
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScriptDecorator;
 
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
-                node.excludeTransformFlags = TransformFlags.ClassScopeExcludes;
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                if (transformFlags & TransformFlags.ContainsTypeScriptClassSyntaxExtension) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                break;
+            case SyntaxKind.ModuleDeclaration:
+                return (node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScript) 
+                    & ~(node.excludeTransformFlags = TransformFlags.ModuleScopeExcludes);
 
-            case SyntaxKind.HeritageClause:
-                if ((<HeritageClause>node).token !== SyntaxKind.ExtendsKeyword) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
-                }
-                break;
-
-            case SyntaxKind.ExpressionWithTypeArguments:
-                if ((<ExpressionWithTypeArguments>node).typeArguments) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                break;
-
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.CallExpression:
+                return (node.transformFlags = subtreeFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.CallOrArrayLiteralExcludes);
+            
             case SyntaxKind.PropertyDeclaration:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
-                break;
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
 
-            case SyntaxKind.Constructor:
-                node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes;
-                if (!(<ConstructorDeclaration>node).body) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+            case SyntaxKind.BinaryExpression:
+                if (isDestructuringAssignment(node)) {
+                    return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6;
                 }
-                break;
-
-            case SyntaxKind.MethodDeclaration:
-                node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes;
-                if (!(<MethodDeclaration>node).body) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                
-                if (transformFlags & TransformFlags.ContainsTypeScriptDecorator
-                    && isComputedPropertyName((<MethodDeclaration>node).name)) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
-                }
-
-                if (node.flags & NodeFlags.Async) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes;
-                if (transformFlags & TransformFlags.ContainsTypeScriptDecorator
-                    && isComputedPropertyName((<MethodDeclaration>node).name)) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
-                }
-                break;
-
-            case SyntaxKind.EnumDeclaration:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                break;
-
-            case SyntaxKind.ImportEqualsDeclaration:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                break;
-
-            case SyntaxKind.ImportDeclaration:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
-                break;
-
-            case SyntaxKind.ExportAssignment:
-                if ((<ExportAssignment>node).isExportEquals) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-                else {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
-                }
-                break;
-
-            case SyntaxKind.ExportDeclaration:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
                 break;
 
             case SyntaxKind.AnyKeyword:
@@ -298,22 +148,163 @@ namespace ts.transform {
             case SyntaxKind.IndexSignature:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.PropertySignature:
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                node.excludeTransformFlags = TransformFlags.TypeExcludes;
-                break;
-                                
-            default:
-                if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
+                return (node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScript)
+                    & ~(node.excludeTransformFlags = TransformFlags.TypeExcludes);
+                    
+            case SyntaxKind.Parameter:
+                if ((<ParameterDeclaration>node).questionToken) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                    node.excludeTransformFlags = TransformFlags.TypeExcludes;
+                }
+                
+                if ((<ParameterDeclaration>node).flags & NodeFlags.AccessibilityModifier) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
+                }
+                
+                if ((<ParameterDeclaration>node).initializer) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6ParameterInitializer;
+                }
+                
+                if ((<ParameterDeclaration>node).dotDotDotToken) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6RestParameter;
+                }
+                
+                return node.transformFlags = subtreeFlags | transformFlags;
+
+            case SyntaxKind.ArrowFunction:
+                transformFlags = TransformFlags.ThisNodeIsES6;
+                if (subtreeFlags & TransformFlags.SubtreeContainsLexicalThis) {
+                    transformFlags |= TransformFlags.ThisNodeCapturesLexicalThis;
+                }
+                if (node.flags & NodeFlags.Async) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.ArrowFunctionScopeExcludes);
+
+            case SyntaxKind.FunctionExpression:
+                if ((<FunctionLikeDeclaration>node).asteriskToken
+                    || transformFlags & TransformFlags.SubtreeContainsES6ParameterOrCapturedThis) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
+                }
+
+                if (node.flags & NodeFlags.Async) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes);
+
+            case SyntaxKind.FunctionDeclaration:
+                if (!(<MethodDeclaration>node).body) {
+                    return node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                }
+                
+                transformFlags = TransformFlags.ThisNodeIsHoistedDeclaration;
+                if (node.flags & NodeFlags.Async) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                if ((<FunctionLikeDeclaration>node).asteriskToken
+                    || node.flags & NodeFlags.Export
+                    || subtreeFlags & TransformFlags.SubtreeContainsES6ParameterOrCapturedThis) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
+                }
+
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes);
+
+            case SyntaxKind.VariableDeclarationList:
+                transformFlags = TransformFlags.ThisNodeIsHoistedDeclaration;
+                if (node.flags & (NodeFlags.Let | NodeFlags.Const)) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6LetOrConst;
+                }
+                
+                return node.transformFlags = subtreeFlags | transformFlags;
+
+            case SyntaxKind.VariableStatement:
+                if (node.flags & NodeFlags.Export) {
+                    return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6;
                 }
                 break;
-                
-        }
 
-        node.transformFlags = transformFlags;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+                transformFlags = TransformFlags.ThisNodeIsES6;
+                if (subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntaxExtension) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.ClassScopeExcludes);
+
+            case SyntaxKind.HeritageClause:
+                if ((<HeritageClause>node).token !== SyntaxKind.ExtendsKeyword) {
+                    return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
+                }
+                
+                break;
+
+            case SyntaxKind.ExpressionWithTypeArguments:
+                if ((<ExpressionWithTypeArguments>node).typeArguments) {
+                    return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScript;
+                }
+                
+                break;
+
+            case SyntaxKind.Constructor:
+                if (!(<ConstructorDeclaration>node).body) {
+                    return node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                }
+                
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes);
+
+            case SyntaxKind.MethodDeclaration:
+                if (!(<MethodDeclaration>node).body) {
+                    return node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                transformFlags = TransformFlags.ThisNodeIsES6;
+                if (node.flags & NodeFlags.Async) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+                
+                if (subtreeFlags & TransformFlags.ContainsTypeScriptDecorator
+                    && (<MethodDeclaration>node).name.kind === SyntaxKind.ComputedPropertyName) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
+                }
+                
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes);
+
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                if (subtreeFlags & TransformFlags.ContainsTypeScriptDecorator
+                    && (<MethodDeclaration>node).name.kind === SyntaxKind.ComputedPropertyName) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScriptClassSyntaxExtension;
+                }
+                
+                return (node.transformFlags = subtreeFlags | transformFlags)
+                    & ~(node.excludeTransformFlags = TransformFlags.FunctionScopeExcludes);
+
+            case SyntaxKind.ExportAssignment:
+                if ((<ExportAssignment>node).isExportEquals) {
+                    return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScript;
+                }
+                
+                return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsES6;
+
+            default:
+                if (SyntaxKind.FirstTypeNode <= kind && kind <= SyntaxKind.LastTypeNode) {
+                    return (node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsTypeScript)
+                        & ~(node.excludeTransformFlags = TransformFlags.TypeExcludes);
+                }
+                
+                break;
+        }
         
-        aggregateTime += new Date().getTime() - start;
+        return node.transformFlags = subtreeFlags;
     }
 
     export class VisitorContext {
