@@ -3090,7 +3090,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitExportMemberAssignmentsInNonSystemModule(name: Identifier) {
+            function emitExportMemberAssignments(name: Identifier) {
                 if (compilerOptions.module === ModuleKind.System) {
                     return;
                 }
@@ -3412,7 +3412,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 let name = node.name;
                 if (name.kind === SyntaxKind.Identifier) {
-                    emitExportMemberAssignmentsInNonSystemModule(<Identifier>name);
+                    emitExportMemberAssignments(<Identifier>name);
                 }
                 else if (isBindingPattern(name)) {
                     forEach((<BindingPattern>name).elements, emitExportVariableAssignments);
@@ -3667,7 +3667,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 emitSignatureAndBody(node);
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignmentsInNonSystemModule((<FunctionDeclaration>node).name);
+                    emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                     emitTrailingComments(node);
@@ -4590,7 +4590,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignmentsInNonSystemModule(node.name);
+                    emitExportMemberAssignments(node.name);
                 }
             }
 
@@ -5179,7 +5179,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitDeclarationName(node);
                         write(");");
                     }
-                    emitExportMemberAssignmentsInNonSystemModule(node.name);
+                    emitExportMemberAssignments(node.name);
                 }
             }
 
@@ -5300,7 +5300,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitDeclarationName(node);
                         write(");");
                     }
-                    emitExportMemberAssignmentsInNonSystemModule(<Identifier>node.name);
+                    emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
 
@@ -5333,7 +5333,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitExportImportAssignments(node: Node) {
                 if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
-                    emitExportMemberAssignmentsInNonSystemModule(<Identifier>(<Declaration>node).name);
+                    emitExportMemberAssignments(<Identifier>(<Declaration>node).name);
                 }
                 forEachChild(node, emitExportImportAssignments);
             }
@@ -6155,23 +6155,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 if ((<ExportDeclaration>entry).exportClause) {
                                     // export {a, b as c} from 'foo'
                                     // emit as:
-                                    // var reexports = {}
-                                    // reexports['a'] = _foo["a"];
-                                    // reexports['c'] = _foo["b"];
-                                    // exports_(reexports);
-                                    let reexportsVariableName = makeUniqueName("reexports");
+                                    // exports_({
+                                    //    "a": _["a"],
+                                    //    "c": _["b"]
+                                    // });
                                     writeLine();
-                                    write(`var ${reexportsVariableName} = {};`);
+                                    write(`${exportFunctionForFile}({`);
                                     writeLine();
-                                    for (let e of (<ExportDeclaration>entry).exportClause.elements) {
-                                        write(`${reexportsVariableName}["`);
+                                    increaseIndent();
+                                    for (let i = 0, len = (<ExportDeclaration>entry).exportClause.elements.length; i < len; ++i) {
+                                        if (i !== 0) {
+                                            write(",");
+                                            writeLine();
+                                        }
+                                        
+                                        let e = (<ExportDeclaration>entry).exportClause.elements[i];
+                                        write(`"`);
                                         emitNodeWithoutSourceMap(e.name);
-                                        write(`"] = ${parameterName}["`);
+                                        write(`": ${parameterName}["`);
                                         emitNodeWithoutSourceMap(e.propertyName || e.name);
-                                        write(`"];`);
-                                        writeLine();
+                                        write(`"]`);
                                     }
-                                    write(`${exportFunctionForFile}(${reexportsVariableName});`);
+                                    decreaseIndent();
+                                    writeLine();
+                                    write("});")
                                 }
                                 else {
                                     writeLine();
@@ -6206,15 +6213,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // - import declarations are not emitted since they are already handled in setters
                         // - export declarations with module specifiers are not emitted since they were already written in setters
                         // - export declarations without module specifiers are emitted preserving the order
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ExportDeclaration:
+                        case SyntaxKind.FunctionDeclaration:                        
                         case SyntaxKind.ImportDeclaration:
-                            if (statement.kind === SyntaxKind.ExportDeclaration) {
-                                if (!(<ExportDeclaration>statement).moduleSpecifier) {
-                                    for (let element of (<ExportDeclaration>statement).exportClause.elements) {
-                                        // write call to exporter function for every export specifier in exports list
-                                        emitExportSpecifierInSystemModule(element);
-                                    }
+                            continue;
+                        case SyntaxKind.ExportDeclaration:
+                            if (!(<ExportDeclaration>statement).moduleSpecifier) {
+                                for (let element of (<ExportDeclaration>statement).exportClause.elements) {
+                                    // write call to exporter function for every export specifier in exports list
+                                    emitExportSpecifierInSystemModule(element);
                                 }
                             }
                             continue;

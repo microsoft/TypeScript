@@ -109,10 +109,10 @@ System.register(['a', 'bar'], function(exports_1) {
     return {
         setters:[
             function (a_1_1) {
-                var reexports_1 = {};
-                reexports_1["x"] = a_1_1["x"];
-                reexports_1["z"] = a_1_1["y"];
-                exports_1(reexports_1);
+                exports_1({
+                    "x": a_1_1["x"],
+                    "z": a_1_1["y"]
+                });
             },
             function (bar_1_1) {
                 exportStar_1(bar_1_1);
@@ -131,10 +131,10 @@ System.register(['a'], function(exports_1) {
     return {
         setters:[
             function (a_1_1) {
-                var reexports_1 = {};
-                reexports_1["s"] = a_1_1["s"];
-                reexports_1["s2"] = a_1_1["s1"];
-                exports_1(reexports_1);
+                exports_1({
+                    "s": a_1_1["s"],
+                    "s2": a_1_1["s1"]
+                });
             }],
         execute: function() {
             exports_1("z", z);

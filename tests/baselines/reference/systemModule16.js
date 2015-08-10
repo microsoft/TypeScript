@@ -39,11 +39,11 @@ System.register(["foo", "bar"], function(exports_1) {
             function (y_1) {
                 y = y_1;
                 exportStar_1(y_1);
-                var reexports_1 = {};
-                reexports_1["a2"] = y_1["a2"];
-                reexports_1["b2"] = y_1["b2"];
-                reexports_1["d2"] = y_1["c2"];
-                exports_1(reexports_1);
+                exports_1({
+                    "a2": y_1["a2"],
+                    "b2": y_1["b2"],
+                    "d2": y_1["c2"]
+                });
             }],
         execute: function() {
             exports_1("x", x);
