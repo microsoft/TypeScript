@@ -623,6 +623,9 @@ namespace ts {
             ContainsES6VariableBindingPattern |
             ContainsES6ParameterBindingPattern,
             
+        TypeExcludes =
+            ~ContainsTypeScript,
+            
         CallOrArrayLiteralExcludes =
             ContainsES6SpreadElement,
     }

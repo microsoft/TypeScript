@@ -4,6 +4,9 @@
 /// <reference path="es5.ts" />
 /*@internal*/
 namespace ts.transform {
+    
+    export let transformTime = 0;
+    
     export type TransformationChain = (context: VisitorContext, statements: NodeArray<Statement>) => NodeArray<Statement>;
     
     export function getTransformationChain(options: CompilerOptions): TransformationChain {
@@ -25,6 +28,7 @@ namespace ts.transform {
     }
     
     function runTransformation(chain: TransformationChain, context: VisitorContext, statements: NodeArray<Statement>) {
+        let start = new Date().getTime();
         context.pushLexicalEnvironment();
         
         let transformed = chain(context, statements);
@@ -34,6 +38,7 @@ namespace ts.transform {
         }
         
         context.popLexicalEnvironment();
+        transformTime += new Date().getTime() - start;
         return transformed;
     }
     

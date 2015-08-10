@@ -2,6 +2,9 @@
 /// <reference path="transform.generated.ts" />
 /* @internal */
 namespace ts.transform {
+    
+    /* @internal */ export let aggregateTime = 0;
+    
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name
@@ -40,6 +43,8 @@ namespace ts.transform {
     function aggregateTransformFlagsForNode(node: Node) {
         forEachChild(node, aggregateTransformFlagsForChildNode);
 
+        let start = new Date().getTime();
+        
         if (node.flags & NodeFlags.Ambient) {
             transformFlags |= TransformFlags.ThisNodeIsTypeScript;
         }
@@ -281,9 +286,34 @@ namespace ts.transform {
             case SyntaxKind.ExportDeclaration:
                 transformFlags |= TransformFlags.ThisNodeIsES6;
                 break;
+
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.PropertySignature:
+                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                node.excludeTransformFlags = TransformFlags.TypeExcludes;
+                break;
+                                
+            default:
+                if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                    node.excludeTransformFlags = TransformFlags.TypeExcludes;
+                }
+                break;
+                
         }
 
         node.transformFlags = transformFlags;
+        
+        aggregateTime += new Date().getTime() - start;
     }
 
     export class VisitorContext {

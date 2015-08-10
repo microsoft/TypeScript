@@ -118,7 +118,7 @@ namespace ts {
     }
 
     function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
+        sys.write(padRight(name + ":", 20) + padLeft(value.toString(), 10) + sys.newLine);
     }
 
     function reportCountStatistic(name: string, count: number) {
@@ -316,6 +316,8 @@ namespace ts {
         bindTime = 0;
         checkTime = 0;
         emitTime = 0;
+        transform.aggregateTime = 0;
+        transform.transformTime = 0;
 
         let program = createProgram(fileNames, compilerOptions, compilerHost);
         let exitStatus = compileProgram();
@@ -348,6 +350,8 @@ namespace ts {
             reportTimeStatistic("Parse time", programTime);
             reportTimeStatistic("Bind time", bindTime);
             reportTimeStatistic("Check time", checkTime);
+            reportTimeStatistic("Pre-transform time", transform.aggregateTime);
+            reportTimeStatistic("Transform time", transform.transformTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
