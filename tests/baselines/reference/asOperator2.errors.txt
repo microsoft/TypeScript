@@ -1,0 +1,8 @@
+tests/cases/conformance/expressions/asOperator/asOperator2.ts(1,9): error TS2352: Neither type 'number' nor type 'string' is assignable to the other.
+
+
+==== tests/cases/conformance/expressions/asOperator/asOperator2.ts (1 errors) ====
+    var x = 23 as string;
+            ~~~~~~~~~~~~
+!!! error TS2352: Neither type 'number' nor type 'string' is assignable to the other.
+    

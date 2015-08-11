@@ -30,9 +30,9 @@ module N {
 
     export class C3 extends M.B {
 >C3 : C3
->M.B : any
+>M.B : M.B
 >M : typeof M
->B : M.B
+>B : typeof M.B
     }
 }
 

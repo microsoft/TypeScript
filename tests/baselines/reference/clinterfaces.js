@@ -49,3 +49,4 @@ var Bar = (function () {
     }
     return Bar;
 })();
+module.exports = Foo;

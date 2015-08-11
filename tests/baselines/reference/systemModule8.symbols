@@ -78,7 +78,10 @@ export let [y] = [1];
 >y : Symbol(y, Decl(systemModule8.ts, 27, 12))
 
 export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
+>a : Symbol(a, Decl(systemModule8.ts, 28, 36))
 >z0 : Symbol(z0, Decl(systemModule8.ts, 28, 14))
+>b : Symbol(b, Decl(systemModule8.ts, 28, 44))
+>c : Symbol(c, Decl(systemModule8.ts, 28, 49))
 >z1 : Symbol(z1, Decl(systemModule8.ts, 28, 25))
 >a : Symbol(a, Decl(systemModule8.ts, 28, 36))
 >b : Symbol(b, Decl(systemModule8.ts, 28, 44))

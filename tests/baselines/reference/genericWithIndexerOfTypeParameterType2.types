@@ -12,7 +12,7 @@ export class Collection<TItem extends CollectionItem> {
 
 export class List extends Collection<ListItem>{
 >List : List
->Collection : Collection<TItem>
+>Collection : Collection<ListItem>
 >ListItem : ListItem
 
     Bar() {}

@@ -1,0 +1,51 @@
+=== tests/cases/conformance/jsx/tsxInArrowFunction.tsx ===
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxInArrowFunction.tsx, 0, 0))
+
+    interface Element { }
+>Element : Symbol(Element, Decl(tsxInArrowFunction.tsx, 1, 23))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxInArrowFunction.tsx, 2, 25))
+
+        div: {
+>div : Symbol(div, Decl(tsxInArrowFunction.tsx, 3, 33))
+
+            text?: string;
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+        }
+    }
+}
+
+
+// didn't work
+<div>{() => <div text="wat" />}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+
+// didn't work
+<div>{x => <div text="wat" />}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>x : Symbol(x, Decl(tsxInArrowFunction.tsx, 15, 6))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+
+// worked
+<div>{() => (<div text="wat" />)}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+
+// worked (!)
+<div>{() => <div text="wat"></div>}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
+

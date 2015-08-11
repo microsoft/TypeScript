@@ -5,9 +5,8 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS23
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(24,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(25,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(26,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(24,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(26,36): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(29,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(30,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(31,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
@@ -35,7 +34,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 
 
-==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (35 errors) ====
+==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (34 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -75,13 +74,11 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2
     var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
     unionOfDifferentNumberOfSignatures(); // error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     unionOfDifferentNumberOfSignatures(10); // error - no call signatures
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+                                       ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
         var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
     unionWithDifferentParameterCount();// no  call signature

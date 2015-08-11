@@ -75,28 +75,28 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 189 /* ForStatement */:
-            case 190 /* ForInStatement */:
-            case 188 /* WhileStatement */:
-            case 187 /* DoStatement */:
-                if (node.statement.kind !== 182 /* Block */) {
+            case 197 /* ForStatement */:
+            case 198 /* ForInStatement */:
+            case 196 /* WhileStatement */:
+            case 195 /* DoStatement */:
+                if (node.statement.kind !== 190 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 186 /* IfStatement */:
+            case 194 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 182 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 190 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 182 /* Block */ &&
-                    ifStatement.elseStatement.kind !== 186 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== 190 /* Block */ &&
+                    ifStatement.elseStatement.kind !== 194 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 172 /* BinaryExpression */:
+            case 179 /* BinaryExpression */:
                 var op = node.operatorToken.kind;
-                if (op === 28 /* EqualsEqualsToken */ || op == 29 /* ExclamationEqualsToken */) {
+                if (op === 30 /* EqualsEqualsToken */ || op == 31 /* ExclamationEqualsToken */) {
                     report(node, "Use '===' and '!=='.");
                 }
                 break;

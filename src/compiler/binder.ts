@@ -11,7 +11,7 @@ namespace ts {
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
-        // A module is uninstantiated if it contains only 
+        // A module is uninstantiated if it contains only
         // 1. interface declarations, type alias declarations
         if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
             return ModuleInstanceState.NonInstantiated;
@@ -53,7 +53,7 @@ namespace ts {
     }
 
     const enum ContainerFlags {
-        // The current node is not a container, and no container manipulation should happen before 
+        // The current node is not a container, and no container manipulation should happen before
         // recursing into it.
         None = 0,
 
@@ -74,7 +74,7 @@ namespace ts {
         // If the current node is a container that also container that also contains locals.  Examples:
         //
         //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals   = IsContainer | HasLocals
+        IsContainerWithLocals = IsContainer | HasLocals
     }
 
     export function bindSourceFile(file: SourceFile) {
@@ -90,13 +90,13 @@ namespace ts {
         let lastContainer: Node;
 
         // If this file is an external module, then it is automatically in strict-mode according to
-        // ES6.  If it is not an external module, then we'll determine if it is in strict mode or 
+        // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
         let inStrictMode = !!file.externalModuleIndicator;
 
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
-        let classifiableNames: Map<string> = {}; 
+        let classifiableNames: Map<string> = {};
 
         if (!file.locals) {
             bind(file);
@@ -139,7 +139,7 @@ namespace ts {
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + (<LiteralExpression>node.name).text + '"';
+                    return `"${(<LiteralExpression>node.name).text}"`;
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     let nameExpression = (<ComputedPropertyName>node.name).expression;
@@ -173,6 +173,14 @@ namespace ts {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
+        /**
+         * Declares a Symbol for the node and adds it to symbols. Reports errors for conflicting identifier names.
+         * @param symbolTable - The symbol table which node will be added to.
+         * @param parent - node's parent declaration.
+         * @param node - The declaration to be added to the symbol table
+         * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
+         * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
+         */
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
@@ -181,15 +189,16 @@ namespace ts {
 
             let symbol: Symbol;
             if (name !== undefined) {
+
                 // Check and see if the symbol table already has a symbol with this name.  If not,
                 // create a new symbol with this name and add it to the table.  Note that we don't
-                // give the new symbol any flags *yet*.  This ensures that it will not conflict 
-                // witht he 'excludes' flags we pass in.
+                // give the new symbol any flags *yet*.  This ensures that it will not conflict
+                // with the 'excludes' flags we pass in.
                 //
                 // If we do get an existing symbol, see if it conflicts with the new symbol we're
                 // creating.  For example, a 'var' symbol and a 'class' symbol will conflict within
-                // the same symbol table.  If we have a conflict, report the issue on each 
-                // declaration we have for this symbol, and then create a new symbol for this 
+                // the same symbol table.  If we have a conflict, report the issue on each
+                // declaration we have for this symbol, and then create a new symbol for this
                 // declaration.
                 //
                 // If we created a new symbol, either because we didn't have a symbol with this name
@@ -202,10 +211,10 @@ namespace ts {
                 symbol = hasProperty(symbolTable, name)
                     ? symbolTable[name]
                     : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
-                
+
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;   
-                } 
+                    classifiableNames[name] = name;
+                }
 
                 if (symbol.flags & excludes) {
                     if (node.name) {
@@ -250,7 +259,7 @@ namespace ts {
                 // ExportType, or ExportContainer flag, and an associated export symbol with all the correct flags set
                 // on it. There are 2 main reasons:
                 //
-                //   1. We treat locals and exports of the same name as mutually exclusive within a container. 
+                //   1. We treat locals and exports of the same name as mutually exclusive within a container.
                 //      That means the binder will issue a Duplicate Identifier error if you mix locals and exports
                 //      with the same name in the same container.
                 //      TODO: Make this a more specific error and decouple it from the exclusion logic.
@@ -273,11 +282,11 @@ namespace ts {
             }
         }
 
-        // All container nodes are kept on a linked list in declaration order. This list is used by 
-        // the getLocalNameOfContainer function in the type checker to validate that the local name 
+        // All container nodes are kept on a linked list in declaration order. This list is used by
+        // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
         function bindChildren(node: Node) {
-            // Before we recurse into a node's chilren, we first save the existing parent, container 
+            // Before we recurse into a node's chilren, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
             let saveParent = parent;
@@ -286,16 +295,16 @@ namespace ts {
 
             // This node will now be set as the parent of all of its children as we recurse into them.
             parent = node;
-            
+
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
             // may contain locals, we proactively initialize the .locals field. We do this because
             // it's highly likely that the .locals will be needed to place some child in (for example,
             // a parameter, or variable declaration).
-            // 
+            //
             // However, we do not proactively create the .locals for block-containers because it's
-            // totally normal and common for block-containers to never actually have a block-scoped 
+            // totally normal and common for block-containers to never actually have a block-scoped
             // variable in them.  We don't want to end up allocating an object for every 'block' we
             // run into when most of them won't be necessary.
             //
@@ -314,6 +323,7 @@ namespace ts {
 
                 addToContainerChain(container);
             }
+
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
                 blockScopeContainer.locals = undefined;
@@ -335,7 +345,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                     return ContainerFlags.IsContainer;
-                    
+
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -363,7 +373,7 @@ namespace ts {
 
                 case SyntaxKind.Block:
                     // do not treat blocks directly inside a function as a block-scoped-container.
-                    // Locals that reside in this block should go to the function locals. Othewise 'x' 
+                    // Locals that reside in this block should go to the function locals. Othewise 'x'
                     // would not appear to be a redeclaration of a block scoped local in the following
                     // example:
                     //
@@ -376,7 +386,7 @@ namespace ts {
                     // the block, then there would be no collision.
                     //
                     // By not creating a new block-scoped-container here, we ensure that both 'var x'
-                    // and 'let x' go into the Function-container's locals, and we do get a collision 
+                    // and 'let x' go into the Function-container's locals, and we do get a collision
                     // conflict.
                     return isFunctionLike(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
             }
@@ -474,7 +484,7 @@ namespace ts {
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
-            var body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
+            let body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
             if (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock) {
                 for (let stat of (<Block>body).statements) {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
@@ -508,15 +518,21 @@ namespace ts {
                 }
                 else {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-
-                    let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
-                    if (node.symbol.constEnumOnlyModule === undefined) {
-                        // non-merged case - use the current state
-                        node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
+                    if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)) {
+                        // if module was already merged with some function, class or non-const enum
+                        // treat is a non-const-enum-only
+                        node.symbol.constEnumOnlyModule = false;
                     }
                     else {
-                        // merged case: module is const enum only if all its pieces are non-instantiated or const enum
-                        node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
+                        let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
+                        if (node.symbol.constEnumOnlyModule === undefined) {
+                            // non-merged case - use the current state
+                            node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
+                        }
+                        else {
+                            // merged case: module is const enum only if all its pieces are non-instantiated or const enum
+                            node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
+                        }
                     }
                 }
             }
@@ -526,8 +542,8 @@ namespace ts {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
-            // We do that by making an anonymous type literal symbol, and then setting the function 
-            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
+            // We do that by making an anonymous type literal symbol, and then setting the function
+            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable
             // from an actual type literal symbol you would have gotten had you used the long form.
             let symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
@@ -628,9 +644,9 @@ namespace ts {
         }
 
         function getStrictModeIdentifierMessage(node: Node) {
-            // Provide specialized messages to help the user understand why we think they're in 
+            // Provide specialized messages to help the user understand why we think they're in
             // strict mode.
-            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+            if (getContainingClass(node)) {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
             }
 
@@ -686,9 +702,9 @@ namespace ts {
         }
 
         function getStrictModeEvalOrArgumentsMessage(node: Node) {
-            // Provide specialized messages to help the user understand why we think they're in 
+            // Provide specialized messages to help the user understand why we think they're in
             // strict mode.
-            if (getAncestor(node, SyntaxKind.ClassDeclaration) || getAncestor(node, SyntaxKind.ClassExpression)) {
+            if (getContainingClass(node)) {
                 return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
             }
 
@@ -750,24 +766,24 @@ namespace ts {
         function bind(node: Node) {
             node.parent = parent;
 
-            var savedInStrictMode = inStrictMode;
+            let savedInStrictMode = inStrictMode;
             if (!savedInStrictMode) {
                 updateStrictMode(node);
             }
 
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
-            // and then potentially add the symbol to an appropriate symbol table. Possible 
+            // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
-            // 
+            //
             //  1) The 'exports' table of the current container's symbol.
             //  2) The 'members' table of the current container's symbol.
             //  3) The 'locals' table of the current container.
             //
-            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols 
+            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
             bindWorker(node);
 
-            // Then we recurse into the children of the node to bind them as well.  For certain 
+            // Then we recurse into the children of the node to bind them as well.  For certain
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
@@ -807,14 +823,14 @@ namespace ts {
                 }
             }
         }
-        
+
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
         function isUseStrictPrologueDirective(node: ExpressionStatement): boolean {
             let nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
-            return nodeText === '"use strict"' || nodeText === "'use strict'";
+            return nodeText === "\"use strict\"" || nodeText === "'use strict'";
         }
 
         function bindWorker(node: Node) {
@@ -882,7 +898,8 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     checkStrictModeFunctionName(<FunctionExpression>node);
-                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function");
+                    let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
+                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
@@ -913,7 +930,7 @@ namespace ts {
         function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
-                bindAnonymousDeclaration(file, SymbolFlags.ValueModule, '"' + removeFileExtension(file.fileName) + '"');
+                bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"`);
             }
         }
 
@@ -954,15 +971,16 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                bindAnonymousDeclaration(node, SymbolFlags.Class, "__class");
+                let bindingName = node.name ? node.name.text : "__class";
+                bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
             }
 
             let symbol = node.symbol;
 
             // TypeScript 1.0 spec (April 2014): 8.4
-            // Every class automatically contains a static property member named 'prototype', the 
+            // Every class automatically contains a static property member named 'prototype', the
             // type of which is an instantiation of the class type with type Any supplied as a type
-            // argument for each type parameter. It is an error to explicitly declare a static 
+            // argument for each type parameter. It is an error to explicitly declare a static
             // property member with the name 'prototype'.
             //
             // Note: we check for this here because this class may be merging into a module.  The
@@ -988,7 +1006,7 @@ namespace ts {
 
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
             if (inStrictMode) {
-                checkStrictModeEvalOrArguments(node, node.name)
+                checkStrictModeEvalOrArguments(node, node.name);
             }
 
             if (!isBindingPattern(node.name)) {
@@ -1027,11 +1045,11 @@ namespace ts {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
             }
 
-            // If this is a property-parameter, then also declare the property symbol into the 
+            // If this is a property-parameter, then also declare the property symbol into the
             // containing class.
             if (node.flags & NodeFlags.AccessibilityModifier &&
                 node.parent.kind === SyntaxKind.Constructor &&
-                (node.parent.parent.kind === SyntaxKind.ClassDeclaration || node.parent.parent.kind === SyntaxKind.ClassExpression)) {
+                isClassLike(node.parent.parent)) {
 
                 let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);

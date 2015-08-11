@@ -123,9 +123,14 @@ declare module NodeJS {
 
     export interface ReadWriteStream extends ReadableStream, WritableStream { }
 
+    interface WindowSize {
+        columns: number;
+        rows: number;
+    }
+
     export interface Process extends EventEmitter {
-        stdout: WritableStream;
-        stderr: WritableStream;
+        stdout: WritableStream & WindowSize;
+        stderr: WritableStream & WindowSize;
         stdin: ReadableStream;
         argv: string[];
         execPath: string;
@@ -584,9 +589,9 @@ declare module NodeJS {
         export interface Response extends Message {
             request_seq: number;
             success: boolean;
-            /** Contains error message if success == false. */
+            /** Contains error message if success === false. */
             message?: string;
-            /** Contains message body if success == true. */
+            /** Contains message body if success === true. */
             body?: any;
         }
 
