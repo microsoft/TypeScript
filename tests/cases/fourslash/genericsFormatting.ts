@@ -5,6 +5,7 @@
 ////    }
 ////}
 /////*typeArguments*/var foo = new Foo   <  number, Array <   number  >   >  (  );
+/////*typeArgumentsWithTypeLiterals*/foo = new Foo  <  {   bar  :  number }, Array   < {   baz :  string   }  >  >  (  );
 ////
 ////interface IFoo {
 /////*inNewSignature*/new < T  > ( a: T);
@@ -25,6 +26,8 @@ verify.currentLineContentIs("    public method<T3, T4>(a: T1, b: Array<T4>): Map
 
 goTo.marker("typeArguments");
 verify.currentLineContentIs("var foo = new Foo<number, Array<number>>();");
+goTo.marker("typeArgumentsWithTypeLiterals");
+verify.currentLineContentIs("foo = new Foo<{ bar: number }, Array<{ baz: string }>>();");
 
 goTo.marker("inNewSignature");
 verify.currentLineContentIs("    new <T>(a: T);");

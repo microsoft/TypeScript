@@ -205,6 +205,11 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        /**
+         * Returns JSON-encoded value of the type TextInsertion.
+         */
+        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -529,7 +534,7 @@ namespace ts {
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = this.getNewLine();
+            var newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
@@ -569,10 +574,6 @@ namespace ts {
                     // on the managed side versus a full JSON array.
                     return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
                 });
-        }
-
-        private getNewLine(): string {
-            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
         }
 
         public getSyntacticDiagnostics(fileName: string): string {
@@ -809,6 +810,13 @@ namespace ts {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
+        }
+
+        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+            );
         }
 
         /// NAVIGATE TO

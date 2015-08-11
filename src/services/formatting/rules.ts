@@ -135,6 +135,7 @@ namespace ts.formatting {
         public NoSpaceAfterOpenAngularBracket: Rule;
         public NoSpaceBeforeCloseAngularBracket: Rule;
         public NoSpaceAfterCloseAngularBracket: Rule;
+        public NoSpaceAfterTypeAssertion: Rule;
 
         // Remove spaces in empty interface literals. e.g.: x: {}
         public NoSpaceBetweenEmptyInterfaceBraceBrackets: Rule;
@@ -331,12 +332,13 @@ namespace ts.formatting {
             this.NoSpaceAfterEllipsis = new Rule(RuleDescriptor.create1(SyntaxKind.DotDotDotToken, SyntaxKind.Identifier), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOptionalParameters = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
 
-            // generics
-            this.NoSpaceBeforeOpenAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.TypeNames, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceBetweenCloseParenAndAngularBracket = new Rule(RuleDescriptor.create1(SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceAfterOpenAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.LessThanToken, Shared.TokenRange.TypeNames), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceBeforeCloseAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.GreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceAfterCloseAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.GreaterThanToken, Shared.TokenRange.FromTokens([SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
+            // generics and type assertions
+            this.NoSpaceBeforeOpenAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.TypeNames, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceBetweenCloseParenAndAngularBracket = new Rule(RuleDescriptor.create1(SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceAfterOpenAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.LessThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceBeforeCloseAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.GreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceAfterCloseAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.GreaterThanToken, Shared.TokenRange.FromTokens([SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceAfterTypeAssertion = new Rule(RuleDescriptor.create3(SyntaxKind.GreaterThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeAssertionContext), RuleAction.Delete));
 
             // Remove spaces in empty interface literals. e.g.: x: {}
             this.NoSpaceBetweenEmptyInterfaceBraceBrackets = new Rule(RuleDescriptor.create1(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsObjectTypeContext), RuleAction.Delete));
@@ -391,6 +393,7 @@ namespace ts.formatting {
                 this.NoSpaceAfterOpenAngularBracket,
                 this.NoSpaceBeforeCloseAngularBracket,
                 this.NoSpaceAfterCloseAngularBracket,
+                this.NoSpaceAfterTypeAssertion,
                 this.SpaceBeforeAt,
                 this.NoSpaceAfterAt,
                 this.SpaceAfterDecorator,
@@ -704,12 +707,13 @@ namespace ts.formatting {
             return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
-        static IsTypeArgumentOrParameter(token: TextRangeWithKind, parent: Node): boolean {
+        static IsTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: Node): boolean {
             if (token.kind !== SyntaxKind.LessThanToken && token.kind !== SyntaxKind.GreaterThanToken) {
                 return false;
             }
             switch (parent.kind) {
                 case SyntaxKind.TypeReference:
+                case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.FunctionDeclaration:
@@ -728,9 +732,13 @@ namespace ts.formatting {
             }
         }
 
-        static IsTypeArgumentOrParameterContext(context: FormattingContext): boolean {
-            return Rules.IsTypeArgumentOrParameter(context.currentTokenSpan, context.currentTokenParent) ||
-                Rules.IsTypeArgumentOrParameter(context.nextTokenSpan, context.nextTokenParent);
+        static IsTypeArgumentOrParameterOrAssertionContext(context: FormattingContext): boolean {
+            return Rules.IsTypeArgumentOrParameterOrAssertion(context.currentTokenSpan, context.currentTokenParent) ||
+                Rules.IsTypeArgumentOrParameterOrAssertion(context.nextTokenSpan, context.nextTokenParent);
+        }
+
+        static IsTypeAssertionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.TypeAssertionExpression;
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {

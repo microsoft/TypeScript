@@ -1,0 +1,6 @@
+=== tests/cases/compiler/isolatedModulesSourceMap.ts ===
+
+export var x = 1;
+>x : number
+>1 : number
+

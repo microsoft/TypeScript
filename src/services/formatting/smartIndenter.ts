@@ -418,6 +418,7 @@ namespace ts.formatting {
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
