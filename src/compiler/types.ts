@@ -360,9 +360,9 @@ namespace ts {
     export const enum NodeFlags {
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
-        Public =            0x00000010,  // Property/Method
-        Private =           0x00000020,  // Property/Method
-        Protected =         0x00000040,  // Property/Method
+        Public =            0x00000010,  // Property/Method/Constructor
+        Private =           0x00000020,  // Property/Method/Constructor
+        Protected =         0x00000040,  // Property/Method/Constructor
         Static =            0x00000080,  // Property/Method
         Abstract =          0x00000100,  // Class/Method/ConstructSignature
         Async =             0x00000200,  // Property/Method/Function

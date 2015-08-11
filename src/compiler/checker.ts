@@ -8664,35 +8664,7 @@ namespace ts {
             }
             if (result) {
                 // Check to see if constructor accessibility is valid for this call
-                let constructor = result.declaration;
-                if (constructor && (<NewExpression>node).expression) {
-                    let expressionType = checkExpression((<NewExpression>node).expression);
-                    expressionType = getApparentType(expressionType);
-                    if (expressionType !== unknownType) {
-                        let declaration = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
-                        if (declaration) {
-                            // Get the declaring and enclosing class instance types
-                            let enclosingClassDeclaration = getContainingClass(node);
-                            let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
-                            
-                            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(<ClassDeclaration>declaration));
-                            if (constructor.flags & NodeFlags.Private) {
-                                // A private constructor is only accessible in the declaring class
-                                if (declaringClass !== enclosingClass) {
-                                    error(node, Diagnostics.Constructor_0_1_is_private_and_only_accessible_within_class_0, typeToString(declaringClass), signatureToString(result));
-                                    return resolveErrorCall(node);
-                                }
-                            }                    
-                            else if (constructor.flags & NodeFlags.Protected) {
-                                // A protected constructor is only accessible in the declaring class and classes derived from it
-                                if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
-                                    error(node, Diagnostics.Constructor_0_1_is_protected_and_only_accessible_within_class_0_and_its_subclasses, typeToString(declaringClass), signatureToString(result));
-                                    return resolveErrorCall(node);
-                                }
-                            }
-                        }
-                    }
-                }
+                checkConstructorVisibility(result, <NewExpression>node);
                 
                 return result;
             }
@@ -8750,6 +8722,41 @@ namespace ts {
             }
 
             return resolveErrorCall(node);
+            
+            function checkConstructorVisibility(signature: Signature, node: NewExpression) {
+                let constructor = result.declaration;
+                let expression = (<NewExpression>node).expression;
+                
+                if (!constructor || !expression) return;
+                // if constructor is public, we dont need to check visibility
+                if (constructor.flags & NodeFlags.Public) return;
+                
+                let expressionType = checkExpression(expression);
+                expressionType = getApparentType(expressionType);
+                if (expressionType === unknownType) return;
+                
+                let declaration = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
+                if (!declaration) return;
+                
+                // Get the declaring and enclosing class instance types
+                let enclosingClassDeclaration = getContainingClass(node);
+                let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
+                let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(<ClassDeclaration>declaration));
+                if (constructor.flags & NodeFlags.Private) {
+                    // A private constructor is only accessible in the declaring class
+                    if (declaringClass !== enclosingClass) {
+                        reportError(Diagnostics.Constructor_0_is_private_and_only_accessible_within_class_1, signatureToString(result), typeToString(declaringClass));
+                        //return resolveErrorCall(node);
+                    }
+                }                    
+                else if (constructor.flags & NodeFlags.Protected) {
+                    // A protected constructor is only accessible in the declaring class and classes derived from it
+                    if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
+                        reportError(Diagnostics.Constructor_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, signatureToString(result), typeToString(declaringClass));
+                        //return resolveErrorCall(node);
+                    }
+                }
+            }
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 let errorInfo: DiagnosticMessageChain;
