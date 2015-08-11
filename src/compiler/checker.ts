@@ -9493,34 +9493,53 @@ namespace ts {
                 pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
         }
 
-        /*
-        function createCommonJSModuleType() {
-            let symbolTable: SymbolTable = {};
-            let sym = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, 'exports');
-            sym.type = cjsExportsType;
-            symbolTable['exports'] = sym;
-            return createAnonymousType(createSymbol(SymbolFlags.None, 'CommonJS:Module'), symbolTable, emptyArray, emptyArray, undefined, undefined);
-        }*/
+        // A function expression is a CommonJS Wrapper function if it has
+        // 1 parameter named 'require', two parameters named 'require' and 'exports',
+        // or 3 parameters named 'require', 'exports', and 'module' in that exact order
+        function isCommonJsWrapper(expression: FunctionExpression): boolean {
+            // All fall-throughs in this switch are intentional
+            switch(expression.parameters.length) {
+                case 3:
+                    if((<Identifier>expression.parameters[2].name).text !== 'module') {
+                        return false;
+                    }
+                case 2:
+                    if((<Identifier>expression.parameters[1].name).text !== 'exports') {
+                        return false;
+                    }
+                case 1:
+                    if ((<Identifier>expression.parameters[0].name).text !== 'require') {
+                        return false;
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         function assignDefineOrRequireCallParameterTypes(funcExpr: FunctionExpression) {
             let callExpr = <CallExpression>funcExpr.parent;
 
-            if(isCommonJsWrapper(funcExpr)) {
+            let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
+            let hasDependencyArray = moduleNames && moduleNames.kind === SyntaxKind.ArrayLiteralExpression;
+
+            if (!hasDependencyArray && isCommonJsWrapper(funcExpr)) {
                 // CommonJS wrapper
-                getSymbolLinks(funcExpr.parameters[0].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Require');
-
-                if(funcExpr.parameters.length > 1) {
-                    getSymbolLinks(funcExpr.parameters[1].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Exports');
+                // Fall-throughs here are intentional
+                switch(funcExpr.parameters.length) {
+                    case 3:
+                        getSymbolLinks(funcExpr.parameters[2].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Module');
+                    case 2:
+                        getSymbolLinks(funcExpr.parameters[1].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Exports');
+                    case 1:
+                        getSymbolLinks(funcExpr.parameters[0].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Require');
                 }
 
-                if(funcExpr.parameters.length > 2) {
-                    getSymbolLinks(funcExpr.parameters[2].symbol).type = getExportedTypeFromNamespace('CommonJS', 'Module');
-                }
+                return;
             }
 
-            let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
             // Example: define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
-            if (moduleNames && moduleNames.kind === SyntaxKind.ArrayLiteralExpression) {
+            if (hasDependencyArray) {
                 for (let i = 0; i < funcExpr.parameters.length; i++) {
                     if (moduleNames.elements.length === i) {
                         // We exhausted the list of modules. TODO: Issue an error; this is bad.

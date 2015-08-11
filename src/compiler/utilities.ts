@@ -1002,30 +1002,6 @@ namespace ts {
             ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
     }
 
-    // A function expression is a CommonJS Wrapper function if it has
-    // 1 parameter named 'require', two parameters named 'require' and 'exports',
-    // or 3 parameters named 'require', 'exports', and 'module' in that exact order
-    export function isCommonJsWrapper(expression: FunctionExpression): boolean {
-        // All fall-throughs in this switch are intentional
-        switch(expression.parameters.length) {
-            case 3:
-                if((<Identifier>expression.parameters[2].name).text !== 'module') {
-                    return false;
-                }
-            case 2:
-                if((<Identifier>expression.parameters[1].name).text !== 'exports') {
-                    return false;
-                }
-            case 1:
-                if ((<Identifier>expression.parameters[0].name).text !== 'require') {
-                    return false;
-                }
-                return true;
-            default:
-                return false;
-        }
-    }
-
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
