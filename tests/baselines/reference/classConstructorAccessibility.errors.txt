@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(6,5): error TS1089: 'private' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(10,5): error TS1089: 'protected' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(23,9): error TS1089: 'private' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(27,9): error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(14,9): error TS2655: Constructor 'D(x: number): D' is private and only accessible within class 'D'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(15,9): error TS2654: Constructor 'E(x: number): E' is protected and only accessible within class 'E' and its subclasses.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(31,13): error TS2655: Constructor 'D<T>(x: number): D<number>' is private and only accessible within class 'D<T>'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(32,13): error TS2654: Constructor 'E<T>(x: number): E<number>' is protected and only accessible within class 'E<T>' and its subclasses.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts (4 errors) ====
@@ -10,20 +10,20 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     }
     
     class D {
-        private constructor(public x: number) { } // error
-        ~~~~~~~
-!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
+        private constructor(public x: number) { }
     }
     
     class E {
-        protected constructor(public x: number) { } // error
-        ~~~~~~~~~
-!!! error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+        protected constructor(public x: number) { }
     }
     
     var c = new C(1);
-    var d = new D(1);
-    var e = new E(1);
+    var d = new D(1); // error - D is private
+            ~~~~~~~~
+!!! error TS2655: Constructor 'D(x: number): D' is private and only accessible within class 'D'.
+    var e = new E(1); // error - E is protected
+            ~~~~~~~~
+!!! error TS2654: Constructor 'E(x: number): E' is protected and only accessible within class 'E' and its subclasses.
     
     module Generic {
         class C<T> {
@@ -31,19 +31,19 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
         }
     
         class D<T> {
-            private constructor(public x: T) { } // error
-            ~~~~~~~
-!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
+            private constructor(public x: T) { }
         }
     
         class E<T> {
-            protected constructor(public x: T) { } // error
-            ~~~~~~~~~
-!!! error TS1089: 'protected' modifier cannot appear on a constructor declaration.
+            protected constructor(public x: T) { }
         }
     
         var c = new C(1);
-        var d = new D(1);
-        var e = new E(1);
+        var d = new D(1); // error - D is private
+                ~~~~~~~~
+!!! error TS2655: Constructor 'D<T>(x: number): D<number>' is private and only accessible within class 'D<T>'.
+        var e = new E(1); // error - E is protected
+                ~~~~~~~~
+!!! error TS2654: Constructor 'E<T>(x: number): E<number>' is protected and only accessible within class 'E<T>' and its subclasses.
     }
     

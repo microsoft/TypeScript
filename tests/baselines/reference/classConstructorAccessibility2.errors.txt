@@ -1,0 +1,64 @@
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(16,21): error TS2653: Cannot extend private class 'A'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(18,12): error TS2655: Constructor 'A(a: string): A' is private and only accessible within class 'A'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(47,10): error TS2655: Constructor 'A(a: string): A' is private and only accessible within class 'A'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(48,10): error TS2654: Constructor 'B(): B' is protected and only accessible within class 'B' and its subclasses.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts (4 errors) ====
+    class A {
+    	private constructor(a: string) // only private access
+    	private constructor() { 
+    		
+    	}
+    	
+    	static method() {
+    		var t1 = new A("test"); // private is accessible in static method
+    	}
+    	
+    	method() {
+    		var t1 = new A("1"); // private is accessible in own class
+    	}
+    }
+    
+    class A_ext extends A { // Cannot extend private class A
+                        ~
+!!! error TS2653: Cannot extend private class 'A'.
+    	method() {
+    		var t1 = new A(""); // error - A is private and only accessible in it's own class
+    		         ~~~~~~~~~
+!!! error TS2655: Constructor 'A(a: string): A' is private and only accessible within class 'A'.
+    	}
+    }
+    
+    class B {
+    	protected constructor() {
+    	}
+    	
+    	method() {
+    		var t1 = new B(); // protected is accessible in own class
+    	}
+    }
+    
+    class B_ext extends B {
+    	method() {
+    		var t1 = new B(); // protected is accessible in sub-class
+    	}
+    }
+    
+    class C {
+    	public constructor(){
+    		
+    	}
+    	methodA() { 
+    		var t1 = new C(); // public is accessible anywhere
+    	}
+    }
+    
+    // check global scope
+    var t1 = new A(""); // error - A is private
+             ~~~~~~~~~
+!!! error TS2655: Constructor 'A(a: string): A' is private and only accessible within class 'A'.
+    var t2 = new B(); // error - B is protected 
+             ~~~~~~~
+!!! error TS2654: Constructor 'B(): B' is protected and only accessible within class 'B' and its subclasses.
+    var t3 = new C();

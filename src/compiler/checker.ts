@@ -8687,6 +8687,37 @@ namespace ts {
                 result = chooseOverload(candidates, assignableRelation);
             }
             if (result) {
+                // Check to see if constructor accessibility is valid for this call
+                let constructor = result.declaration;
+                if (constructor && (<NewExpression>node).expression) {
+                    let expressionType = checkExpression((<NewExpression>node).expression);
+                    expressionType = getApparentType(expressionType);
+                    if (expressionType !== unknownType) {
+                        let declaration = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
+                        if (declaration) {
+                            // Get the declaring and enclosing class instance types
+                            let enclosingClassDeclaration = getContainingClass(node);
+                            let enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
+                            
+                            let declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(<ClassDeclaration>declaration));
+                            if (constructor.flags & NodeFlags.Private) {
+                                // A private constructor is only accessible in the declaring class
+                                if (declaringClass !== enclosingClass) {
+                                    error(node, Diagnostics.Constructor_0_1_is_private_and_only_accessible_within_class_0, typeToString(declaringClass), signatureToString(result));
+                                    return resolveErrorCall(node);
+                                }
+                            }                    
+                            else if (constructor.flags & NodeFlags.Protected) {
+                                // A protected constructor is only accessible in the declaring class and classes derived from it
+                                if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
+                                    error(node, Diagnostics.Constructor_0_1_is_protected_and_only_accessible_within_class_0_and_its_subclasses, typeToString(declaringClass), signatureToString(result));
+                                    return resolveErrorCall(node);
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 return result;
             }
 
@@ -10788,7 +10819,7 @@ namespace ts {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
                         }
                         else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                            error(o.name || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & NodeFlags.Abstract) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract);
@@ -14832,12 +14863,6 @@ namespace ts {
                 if (flags & NodeFlags.Abstract) {
                     return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract");
                 }
-                else if (flags & NodeFlags.Protected) {
-                    return grammarErrorOnNode(lastProtected, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
-                }
-                else if (flags & NodeFlags.Private) {
-                    return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
-                }
                 else if (flags & NodeFlags.Async) {
                     return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
                 }
@@ -15057,7 +15082,25 @@ namespace ts {
                         if (heritageClause.types.length > 1) {
                             return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
                         }
-
+                        
+                        // if the base class (the class to extend) has a private constructor, 
+                        // then the derived class should not be allowed to extend it.
+                        if (heritageClause.types.length == 1) {
+                            let expression = heritageClause.types[0].expression;
+                            if (expression) {
+                                let baseType = getApparentType(checkExpression(expression));
+                                if (baseType !== unknownType) {
+                                    let signatures = getSignaturesOfType(baseType, SignatureKind.Construct);
+                                    for (let signature of signatures) {
+                                        let constuctor = signature.declaration;
+                                        if (constuctor && constuctor.flags & NodeFlags.Private) {
+                                            return grammarErrorOnFirstToken(expression, Diagnostics.Cannot_extend_private_class_0, (<Identifier>expression).text);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
                         seenExtendsClause = true;
                     }
                     else {

@@ -4,16 +4,16 @@ class C {
 }
 
 class D {
-    private constructor(public x: number) { } // error
+    private constructor(public x: number) { }
 }
 
 class E {
-    protected constructor(public x: number) { } // error
+    protected constructor(public x: number) { }
 }
 
 var c = new C(1);
-var d = new D(1);
-var e = new E(1);
+var d = new D(1); // error - D is private
+var e = new E(1); // error - E is protected
 
 module Generic {
     class C<T> {
@@ -21,16 +21,16 @@ module Generic {
     }
 
     class D<T> {
-        private constructor(public x: T) { } // error
+        private constructor(public x: T) { }
     }
 
     class E<T> {
-        protected constructor(public x: T) { } // error
+        protected constructor(public x: T) { }
     }
 
     var c = new C(1);
-    var d = new D(1);
-    var e = new E(1);
+    var d = new D(1); // error - D is private
+    var e = new E(1); // error - E is protected
 }
 
 
@@ -44,18 +44,18 @@ var C = (function () {
 var D = (function () {
     function D(x) {
         this.x = x;
-    } // error
+    }
     return D;
 })();
 var E = (function () {
     function E(x) {
         this.x = x;
-    } // error
+    }
     return E;
 })();
 var c = new C(1);
-var d = new D(1);
-var e = new E(1);
+var d = new D(1); // error - D is private
+var e = new E(1); // error - E is protected
 var Generic;
 (function (Generic) {
     var C = (function () {
@@ -67,16 +67,16 @@ var Generic;
     var D = (function () {
         function D(x) {
             this.x = x;
-        } // error
+        }
         return D;
     })();
     var E = (function () {
         function E(x) {
             this.x = x;
-        } // error
+        }
         return E;
     })();
     var c = new C(1);
-    var d = new D(1);
-    var e = new E(1);
+    var d = new D(1); // error - D is private
+    var e = new E(1); // error - E is protected
 })(Generic || (Generic = {}));

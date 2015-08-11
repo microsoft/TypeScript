@@ -1697,6 +1697,18 @@
         "category": "Error",
         "code": 2652
     },
+    "Cannot extend private class '{0}'.": {
+        "category": "Error",
+        "code": 2653
+    },
+    "Constructor '{0}{1}' is protected and only accessible within class '{0}' and its subclasses.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Constructor '{0}{1}' is private and only accessible within class '{0}'.": {
+        "category": "Error",
+        "code": 2655
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
