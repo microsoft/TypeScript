@@ -834,9 +834,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     let node = nodes[start + i];
                     // This emitting is to make sure we emit following comment properly
-                    //   ...(x, /comment1/ y)...
+                    //   ...(x, /*comment1*/ y)...
                     //         ^ => node.pos
-                    // "comment1" is not considered leading comment for node-y but rather
+                    // "comment1" is not considered leading comment for "y" but rather
                     // considered as trailing comment of the previous node.
                     emitTrailingCommentsOfPosition(node.pos);
                     emitNode(node);
@@ -1986,7 +1986,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // This is to ensure that we emit comment in the following case:
                 //      For example:
                 //          obj = {
-                //              id: /comment1/ ()=>void
+                //              id: /*comment1*/ ()=>void
                 //          }
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
