@@ -4522,7 +4522,7 @@ namespace ts {
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
 
-                    let referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
+                    let referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false, /* reduceScopeIfPossible */ false);
                     return convertReferencedSymbols(referencedSymbols);
                 }
 
@@ -5193,10 +5193,10 @@ namespace ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
+            return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments, /* reduceScopeIfPossible */ true);
         }
 
-        function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean, reduceScopeIfPossible: boolean): ReferencedSymbol[] {
             let typeChecker = program.getTypeChecker();
 
             // Labels
@@ -5247,7 +5247,7 @@ namespace ts {
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
-            let scope = getSymbolScope(symbol);
+            let scope = reduceScopeIfPossible && getSymbolScope(symbol);
 
             // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
             let symbolToIndex: number[] = [];
