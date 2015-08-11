@@ -3342,9 +3342,9 @@ namespace ts {
                 case SyntaxKind.JsxText:
                     return parseJsxText();
                 case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression(/*inExpression*/ false);
+                    return parseJsxExpression(/*inExpressionContext*/ false);
                 case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElement(/*inExpression*/ false);
+                    return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ false);
             }
             Debug.fail("Unknown JSX child kind " + token);
         }
