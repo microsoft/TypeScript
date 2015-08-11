@@ -752,7 +752,10 @@ namespace ts {
             return this.forwardJSONCall(
                 "getDocumentHighlights('" + fileName + "', " + position + ")",
                 () => {
-                    return this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    var results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    let normalizedName = normalizeSlashes(fileName).toLowerCase();
+                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
         }
 
