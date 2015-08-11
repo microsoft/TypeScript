@@ -5097,6 +5097,11 @@ namespace ts {
                 let targetSig = targetSignatures[0];
 
                 if (sourceSig && targetSig) {
+                    result &= signatureVisibilityRelatedTo(sourceSig, targetSig);
+                    if (result !== Ternary.True) {
+                        return result;
+                    }
+                    
                     let sourceErasedSignature = getErasedSignature(sourceSig);
                     let targetErasedSignature = getErasedSignature(targetSig);
 
@@ -5136,6 +5141,23 @@ namespace ts {
                     }
                 }
                 return result;
+                
+                function signatureVisibilityRelatedTo(sourceSig: Signature, targetSig: Signature) {
+                    if (!sourceSig || !targetSig) return Ternary.True;
+                    if (sourceSig.declaration.kind !== SyntaxKind.Constructor) return Ternary.True;
+                    
+                    if (sourceSig.declaration && targetSig.declaration) {
+                        let sourceVisibility = sourceSig.declaration.modifiers ? sourceSig.declaration.modifiers.flags : 0;
+                        let targetVisibility = targetSig.declaration.modifiers ? targetSig.declaration.modifiers.flags : 0;
+                        if (sourceVisibility !== targetVisibility && (!((sourceVisibility | targetVisibility) & NodeFlags.Public))) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Cannot_assign_a_non_public_constructor_type_to_a_public_constructor_type);
+                            }
+                            return Ternary.False;
+                        }
+                    }
+                    return Ternary.True;
+                }
             }
 
             function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
