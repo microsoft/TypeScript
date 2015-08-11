@@ -5143,17 +5143,16 @@ namespace ts {
                 return result;
                 
                 function signatureVisibilityRelatedTo(sourceSig: Signature, targetSig: Signature) {
-                    if (!sourceSig || !targetSig) return Ternary.True;
-                    if (sourceSig.declaration.kind !== SyntaxKind.Constructor) return Ternary.True;
-                    
-                    if (sourceSig.declaration && targetSig.declaration) {
-                        let sourceVisibility = sourceSig.declaration.modifiers ? sourceSig.declaration.modifiers.flags : 0;
-                        let targetVisibility = targetSig.declaration.modifiers ? targetSig.declaration.modifiers.flags : 0;
-                        if (sourceVisibility !== targetVisibility && (!((sourceVisibility | targetVisibility) & NodeFlags.Public))) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Cannot_assign_a_non_public_constructor_type_to_a_public_constructor_type);
+                    if (sourceSig && targetSig && sourceSig.declaration.kind === SyntaxKind.Constructor) {
+                        if (sourceSig.declaration && targetSig.declaration) {
+                            let sourceVisibility = sourceSig.declaration.modifiers ? sourceSig.declaration.modifiers.flags : 0;
+                            let targetVisibility = targetSig.declaration.modifiers ? targetSig.declaration.modifiers.flags : 0;
+                            if (sourceVisibility !== targetVisibility && (!((sourceVisibility | targetVisibility) & NodeFlags.Public))) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Cannot_assign_a_non_public_constructor_type_to_a_public_constructor_type);
+                                }
+                                return Ternary.False;
                             }
-                            return Ternary.False;
                         }
                     }
                     return Ternary.True;
@@ -8746,14 +8745,12 @@ namespace ts {
                     // A private constructor is only accessible in the declaring class
                     if (declaringClass !== enclosingClass) {
                         reportError(Diagnostics.Constructor_0_is_private_and_only_accessible_within_class_1, signatureToString(result), typeToString(declaringClass));
-                        //return resolveErrorCall(node);
                     }
                 }                    
                 else if (constructor.flags & NodeFlags.Protected) {
                     // A protected constructor is only accessible in the declaring class and classes derived from it
                     if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
                         reportError(Diagnostics.Constructor_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, signatureToString(result), typeToString(declaringClass));
-                        //return resolveErrorCall(node);
                     }
                 }
             }
