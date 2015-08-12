@@ -3653,6 +3653,10 @@ namespace ts {
 
             let completionData = getCompletionData(fileName, position);
             if (!completionData) {
+                let entries = getJsDocCompletionEntries(fileName, position);
+                if (entries) {
+                    return { isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+                }
                 return undefined;
             }
 
@@ -3702,6 +3706,56 @@ namespace ts {
                     }
                 }
 
+                return entries;
+            }
+
+            function getJsDocCompletionEntries(fileName: string, position: number): CompletionEntry[] {
+                let sourceFile = getValidSourceFile(fileName);
+                let hasJsDocComment = ts.hasDocComment(sourceFile, position);
+                if (!hasJsDocComment) {
+                    return undefined;
+                }
+
+                // If the current position is right after an At sign
+                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
+                    return getAllJsDocCompletionEntries();
+                }
+                
+                // Or if the current position is in a tag name
+                let jsDocCommentNode: JSDocComment;
+                let node = ts.getTokenAtPosition(sourceFile, position);
+                while (true) {
+                    if (node === sourceFile ||
+                        node.kind === SyntaxKind.VariableStatement ||
+                        node.kind === SyntaxKind.FunctionDeclaration ||
+                        node.kind === SyntaxKind.Parameter ||
+                        node.jsDocComment) {
+                        jsDocCommentNode = node.jsDocComment;
+                        break;
+                    }
+                    node = node.parent;
+                }
+                if (jsDocCommentNode) {
+                    for (let tag of jsDocCommentNode.tags) {
+                        if (position >= tag.atToken.pos && position <= tag.tagName.end) {
+                            return getAllJsDocCompletionEntries();
+                        }
+                    }
+                    return undefined;
+                }
+            }
+
+            function getAllJsDocCompletionEntries(): CompletionEntry[] {
+                let tagNames = ["augments", "author", "argument", "borrows", "class", "constant", "constructor", "constructs", "default", "deprecated", "description", "event", "example", "extends", "field", "fileOverview", "function", "ignore", "inner", "lends", "link", "memberOf", "name", "namespace", "param", "private", "property", "public", "requires", "returns", "see", "since", "static", "throws", "type", "version"];
+                let entries: CompletionEntry[] = [];
+                for (let tagName of tagNames) {
+                    entries.push({
+                        name: tagName,
+                        kind: ScriptElementKind.keyword,
+                        kindModifiers: "",
+                        sortText: "0",
+                    });
+                }
                 return entries;
             }
 
