@@ -2937,7 +2937,16 @@ namespace ts {
                     switch (tag.kind) {
                         case SyntaxKind.JSDocTypeTag:
                             let typeTag = <JSDocTypeTag>tag;
-                            insideJsDocTagExpression = position > typeTag.typeExpression.pos && position < typeTag.typeExpression.end;
+                            if (typeTag.typeExpression) {
+                                insideJsDocTagExpression = position > typeTag.typeExpression.pos && position < typeTag.typeExpression.end;
+                            };
+                            break;
+                        case SyntaxKind.JSDocParameterTag:
+                            let paramTag = <JSDocParameterTag>tag;
+                            if (paramTag.typeExpression) {
+                                insideJsDocTagExpression = position > paramTag.typeExpression.pos && position < paramTag.typeExpression.end;
+                            };
+                            break;
                     }
                 }
                 if (!insideJsDocTagExpression) {
@@ -3731,11 +3740,17 @@ namespace ts {
                 }
 
                 // The current position is right after an At sign
-                // Or if the current position is in a tag name
-                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at ||
-                    getJsDocTagAtPosition(sourceFile, position)) {
+                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
                     return getAllJsDocCompletionEntries();
-                }                
+                }
+
+                // Or if the current position is in a tag name
+                let tag = getJsDocTagAtPosition(sourceFile, position);
+                if (tag) {
+                    if (position >= tag.atToken.end && position <= tag.tagName.end) {
+                        return getAllJsDocCompletionEntries();
+                    }
+                }
             }
 
             function getAllJsDocCompletionEntries(): CompletionEntry[] {
