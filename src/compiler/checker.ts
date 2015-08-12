@@ -5097,9 +5097,11 @@ namespace ts {
                 let targetSig = targetSignatures[0];
 
                 if (sourceSig && targetSig) {
-                    result &= signatureVisibilityRelatedTo(sourceSig, targetSig);
-                    if (result !== Ternary.True) {
-                        return result;
+                    if (kind === SignatureKind.Construct) { 
+                        result &= signatureVisibilityRelatedTo(sourceSig, targetSig);
+                        if (result !== Ternary.True) {
+                            return result;
+                        }
                     }
                     
                     let sourceErasedSignature = getErasedSignature(sourceSig);
@@ -5143,7 +5145,7 @@ namespace ts {
                 return result;
                 
                 function signatureVisibilityRelatedTo(sourceSig: Signature, targetSig: Signature) {
-                    if (sourceSig && targetSig && sourceSig.declaration.kind === SyntaxKind.Constructor) {
+                    if (sourceSig && targetSig && sourceSig.declaration && sourceSig.declaration.kind === SyntaxKind.Constructor) {
                         if (sourceSig.declaration && targetSig.declaration) {
                             let sourceVisibility = sourceSig.declaration.modifiers ? sourceSig.declaration.modifiers.flags : 0;
                             let targetVisibility = targetSig.declaration.modifiers ? targetSig.declaration.modifiers.flags : 0;
@@ -8723,14 +8725,12 @@ namespace ts {
             return resolveErrorCall(node);
             
             function checkConstructorVisibility(signature: Signature, node: NewExpression) {
-                let constructor = result.declaration;
-                let expression = (<NewExpression>node).expression;
-                
-                if (!constructor || !expression) return;
+                let constructor = result.declaration;                
+                if (!constructor || !node.expression) return;
                 // if constructor is public, we dont need to check visibility
                 if (constructor.flags & NodeFlags.Public) return;
                 
-                let expressionType = checkExpression(expression);
+                let expressionType = checkExpression(node.expression);
                 expressionType = getApparentType(expressionType);
                 if (expressionType === unknownType) return;
                 
