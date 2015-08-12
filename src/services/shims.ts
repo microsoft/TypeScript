@@ -931,7 +931,7 @@ namespace ts {
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                return resolveModuleName(normalizeSlashes(fileName), moduleName, compilerOptions, this.host);
+                return resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
             }); 
         }
 
