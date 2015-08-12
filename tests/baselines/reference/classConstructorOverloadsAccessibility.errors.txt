@@ -1,9 +1,11 @@
 tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts(2,2): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts(3,2): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts(3,2): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts(11,2): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts(11,2): error TS2394: Overload signature is not compatible with function implementation.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts (3 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts (5 errors) ====
     class A {
     	public constructor(a: boolean) // error
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -11,6 +13,8 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorOverload
     	protected constructor(a: number) // error
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2385: Overload signatures must all be public, private or protected.
+    	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2394: Overload signature is not compatible with function implementation.
     	private constructor(a: string)
     	private constructor() { 
     		
@@ -21,6 +25,8 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorOverload
     	protected constructor(a: number) // error
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2385: Overload signatures must all be public, private or protected.
+    	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2394: Overload signature is not compatible with function implementation.
     	constructor(a: string)
     	constructor() { 
     		
