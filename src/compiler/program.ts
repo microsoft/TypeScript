@@ -373,13 +373,7 @@ namespace ts {
         }
 
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
-            let start: number;
-            let length: number;
             let diagnosticArgument: string[];
-            if (refEnd !== undefined && refPos !== undefined) {
-                start = refPos;
-                length = refEnd - refPos;
-            }
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
@@ -411,8 +405,8 @@ namespace ts {
             }
 
             if (diagnostic) {
-                if (refFile) {
-                    diagnostics.add(createFileDiagnostic(refFile, start, length, diagnostic, ...diagnosticArgument));
+                if (refFile !== undefined && refEnd !== undefined && refPos !== undefined) {
+                    diagnostics.add(createFileDiagnostic(refFile, start, refEnd - refPos, diagnostic, ...diagnosticArgument));
                 }
                 else {
                     diagnostics.add(createCompilerDiagnostic(diagnostic, ...diagnosticArgument));
@@ -421,7 +415,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
+        function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             let canonicalName = host.getCanonicalFileName(normalizeSlashes(fileName));
             if (filesByName.contains(canonicalName)) {
                 // We've already looked for this file, use cached result
@@ -436,8 +430,8 @@ namespace ts {
 
                 // We haven't looked for this file, do so now and cache result
                 let file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
-                    if (refFile) {
-                        diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
+                    if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
+                        diagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
                             Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                     else {
@@ -473,8 +467,13 @@ namespace ts {
                 if (file && host.useCaseSensitiveFileNames()) {
                     let sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
-                        diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
-                            Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
+                        if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
+                            diagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
+                                Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
+                        }
+                        else {
+                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
+                        }
                     }
                 }
                 return file;
@@ -536,7 +535,7 @@ namespace ts {
             });
 
             function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
-                return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
+                return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end);
             }
         }
 
