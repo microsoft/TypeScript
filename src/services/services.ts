@@ -2928,8 +2928,22 @@ namespace ts {
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                log("Returning an empty list because completion was inside a comment.");
-                return undefined;
+                // Completion should work inside certain JsDoc tags. For example:
+                //     /** @type {number | string} */
+                // Completion should work in the brackets
+                let insideJsDocTagExpression = false;
+                let tag = getJsDocTagAtPosition(sourceFile, position);
+                if (tag) {
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocTypeTag:
+                            let typeTag = <JSDocTypeTag>tag;
+                            insideJsDocTagExpression = position > typeTag.typeExpression.pos && position < typeTag.typeExpression.end;
+                    }
+                }
+                if (!insideJsDocTagExpression) {
+                    log("Returning an empty list because completion was inside a comment.");
+                    return undefined;
+                }
             }
 
             start = new Date().getTime();
@@ -3716,33 +3730,12 @@ namespace ts {
                     return undefined;
                 }
 
-                // If the current position is right after an At sign
-                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                    return getAllJsDocCompletionEntries();
-                }
-                
+                // The current position is right after an At sign
                 // Or if the current position is in a tag name
-                let jsDocCommentNode: JSDocComment;
-                let node = ts.getTokenAtPosition(sourceFile, position);
-                while (true) {
-                    if (node === sourceFile ||
-                        node.kind === SyntaxKind.VariableStatement ||
-                        node.kind === SyntaxKind.FunctionDeclaration ||
-                        node.kind === SyntaxKind.Parameter ||
-                        node.jsDocComment) {
-                        jsDocCommentNode = node.jsDocComment;
-                        break;
-                    }
-                    node = node.parent;
-                }
-                if (jsDocCommentNode) {
-                    for (let tag of jsDocCommentNode.tags) {
-                        if (position >= tag.atToken.pos && position <= tag.tagName.end) {
-                            return getAllJsDocCompletionEntries();
-                        }
-                    }
-                    return undefined;
-                }
+                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at ||
+                    getJsDocTagAtPosition(sourceFile, position)) {
+                    return getAllJsDocCompletionEntries();
+                }                
             }
 
             function getAllJsDocCompletionEntries(): CompletionEntry[] {
