@@ -240,12 +240,12 @@ namespace ts.formatting {
             this.NoSpaceAfterCloseBrace = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBraceToken, Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.CommaToken, SyntaxKind.SemicolonToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // No space for dot
-            this.NoSpaceBeforeDot = new Rule( RuleDescriptor.create2( Shared.TokenRange.Any, SyntaxKind.DotToken ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Delete ) );
-            this.NoSpaceAfterDot = new Rule( RuleDescriptor.create3( SyntaxKind.DotToken, Shared.TokenRange.Any ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Delete ) );
+            this.NoSpaceBeforeDot = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.DotToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterDot = new Rule(RuleDescriptor.create3(SyntaxKind.DotToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // No space before and after indexer
-            this.NoSpaceBeforeOpenBracket = new Rule( RuleDescriptor.create2( Shared.TokenRange.Any, SyntaxKind.OpenBracketToken ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Delete ) );
-            this.NoSpaceAfterCloseBracket = new Rule( RuleDescriptor.create3( SyntaxKind.CloseBracketToken, Shared.TokenRange.Any ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext ), RuleAction.Delete ) );
+            this.NoSpaceBeforeOpenBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext ), RuleAction.Delete));
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
@@ -459,11 +459,11 @@ namespace ts.formatting {
             this.NoSpaceBeforeCloseParen = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Insert space after opening and before closing nonempty brackets
-            this.SpaceAfterOpenBracket = new Rule( RuleDescriptor.create3( SyntaxKind.OpenBracketToken, Shared.TokenRange.Any ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Space ) );
-            this.SpaceBeforeCloseBracket = new Rule( RuleDescriptor.create2( Shared.TokenRange.Any, SyntaxKind.CloseBracketToken ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Space ) );
-            this.NoSpaceBetweenBrackets = new Rule( RuleDescriptor.create1( SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Delete ) );
-            this.NoSpaceAfterOpenBracket = new Rule( RuleDescriptor.create3( SyntaxKind.OpenBracketToken, Shared.TokenRange.Any ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Delete ) );
-            this.NoSpaceBeforeCloseBracket = new Rule( RuleDescriptor.create2( Shared.TokenRange.Any, SyntaxKind.CloseBracketToken ), RuleOperation.create2( new RuleOperationContext( Rules.IsSameLineTokenContext ), RuleAction.Delete ) );
+            this.SpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBetweenBrackets = new Rule(RuleDescriptor.create1(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Insert space after function keyword for anonymous functions
             this.SpaceAfterAnonymousFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
