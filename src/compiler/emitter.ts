@@ -6983,7 +6983,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /**
              * Emit trailing comments at the position. The term trailing comment is used here to describe following comment:
-             *      x, /*comment1*/ y
+             *      x, /comment1/ y
              *        ^ => pos; the function will emit "comment1" in the emitJS
              */
             function emitTrailingCommentsOfPosition(pos: number) {
