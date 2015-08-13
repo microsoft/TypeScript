@@ -381,24 +381,12 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        // If parameter/type parameter, the prev token trailing comments are part of this node too
-        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // e.g.   (/** blah */ a, /** blah */ b);
-
-            // e.g.:     (
-            //            /** blah */ a,
-            //            /** blah */ b);
-            return concatenate(
-                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
-        }
-        else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
-        }
+        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
@@ -569,7 +557,7 @@ namespace ts {
         }
     }
 
-    export function isVariableLike(node: Node): boolean {
+    export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.BindingElement:
@@ -966,7 +954,7 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportEqualsDeclaration(node: Node) {
+    export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
@@ -989,15 +977,13 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
-                    return (<ParameterDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return (<PropertyDeclaration>node).questionToken !== undefined;
+                    return (<ParameterDeclaration | MethodDeclaration | PropertyDeclaration>node).questionToken !== undefined;
             }
         }
 
@@ -1423,6 +1409,22 @@ namespace ts {
 
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+    }
+
+    export function cloneEntityName(node: EntityName): EntityName {
+        if (node.kind === SyntaxKind.Identifier) {
+            let clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            clone.text = (<Identifier>node).text;
+            return clone;
+        }
+        else {
+            let clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+            clone.left = cloneEntityName((<QualifiedName>node).left);
+            clone.left.parent = clone;
+            clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
+            clone.right.parent = clone;
+            return clone;
+        }
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
@@ -1869,7 +1871,7 @@ namespace ts {
 
         function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
             let end = Math.min(comment.end, nextLineStart - 1);
-            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, "");
             if (currentLineText) {
                 // trimmed forward and ending spaces text
                 writer.write(currentLineText);
@@ -1980,6 +1982,17 @@ namespace ts {
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
         return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
+
+    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
+        let kind = expression.kind;
+        if (kind === SyntaxKind.ObjectLiteralExpression) {
+            return (<ObjectLiteralExpression>expression).properties.length === 0;
+        }
+        if (kind === SyntaxKind.ArrayLiteralExpression) {
+            return (<ArrayLiteralExpression>expression).elements.length === 0;
+        }
+        return false;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {

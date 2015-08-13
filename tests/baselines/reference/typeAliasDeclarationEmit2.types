@@ -1,0 +1,8 @@
+=== tests/cases/compiler/typeAliasDeclarationEmit2.ts ===
+
+export type A<a> = { value: a };
+>A : { value: a; }
+>a : a
+>value : a
+>a : a
+

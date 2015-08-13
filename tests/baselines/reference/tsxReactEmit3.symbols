@@ -18,4 +18,6 @@ declare var Foo, Bar, baz;
 >Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
 >Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
 >Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
+>Foo : Symbol(Foo, Decl(tsxReactEmit3.tsx, 4, 11))
 

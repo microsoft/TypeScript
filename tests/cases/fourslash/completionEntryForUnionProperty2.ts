@@ -15,6 +15,6 @@
 ////x.commonProperty./**/
 
 goTo.marker();
-verify.memberListContains("toString", "(method) toString(): string");
-verify.memberListContains("valueOf", "(method) valueOf(): string | number");
+verify.memberListContains("toString", "(property) toString: ((radix?: number) => string) | (() => string)");
+verify.memberListContains("valueOf", "(method) valueOf(): number | string");
 verify.memberListCount(2);

@@ -82,7 +82,5 @@ var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any
 >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
 >IWithCallSignatures4 : Symbol(IWithCallSignatures4, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 18, 1))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
->a.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 

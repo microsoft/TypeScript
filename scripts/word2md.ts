@@ -100,9 +100,19 @@ module Word {
         toggleShowCodes(): void;
     }
 
+    export interface Hyperlink {
+        address: string;
+        textToDisplay: string;
+        range: Range;
+    }
+
+    export interface Hyperlinks extends Collection<Hyperlink> {
+    }
+
     export interface Document {
         fields: Fields;
         paragraphs: Paragraphs;
+        hyperlinks: Hyperlinks;
         builtInDocumentProperties: Collection<any>;
         close(saveChanges: boolean): void;
         range(): Range;
@@ -193,6 +203,18 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         replace.clearFormatting();
         setProperties(replace, replaceOptions);
         find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
+    }
+
+    function fixHyperlinks() {
+        var count = doc.hyperlinks.count;
+        for (var i = 0; i < count; i++) {
+            var hyperlink = doc.hyperlinks.item(i + 1);
+            var address = hyperlink.address;
+            if (address && address.length > 0) {
+                var textToDisplay = hyperlink.textToDisplay;
+                hyperlink.textToDisplay = "[" + textToDisplay + "](" + address + ")";
+            }
+        }
     }
 
     function write(s: string) {
@@ -346,6 +368,8 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     doc.fields.toggleShowCodes();
     findReplace("^19 REF", {}, "[^&](#^&)", {});
     doc.fields.toggleShowCodes();
+
+    fixHyperlinks();
 
     writeDocument();
 

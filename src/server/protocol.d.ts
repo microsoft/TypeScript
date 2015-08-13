@@ -116,7 +116,7 @@ declare namespace ts.server.protocol {
         /**
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
-        fileNameList?: string[];
+        fileNames?: string[];
     }
 
     /** 
@@ -154,6 +154,17 @@ declare namespace ts.server.protocol {
       */
     export interface FileLocationRequest extends FileRequest {
         arguments: FileLocationRequestArgs;
+    }
+
+    /**
+      * Arguments in document highlight request; include: filesToSearch, file,
+      * line, offset.
+      */
+    export interface DocumentHighlightsRequestArgs extends FileLocationRequestArgs {
+        /**
+         * List of files to search for document highlights.
+         */
+        filesToSearch: string[];
     }
 
     /**
@@ -236,6 +247,35 @@ declare namespace ts.server.protocol {
 
     export interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
+    }
+
+    /**
+      * Get document highlights request; value of command field is
+      * "documentHighlights". Return response giving spans that are relevant
+      * in the file at a given line and column.
+      */
+    export interface DocumentHighlightsRequest extends FileLocationRequest {
+        arguments: DocumentHighlightsRequestArgs
+    }
+
+    export interface HighlightSpan extends TextSpan {
+        kind: string
+    }
+
+    export interface DocumentHighlightsItem {
+        /**
+          * File containing highlight spans.
+          */
+        file: string,
+
+        /**
+          * Spans to highlight in file.
+          */
+        highlightSpans: HighlightSpan[];
+    }
+
+    export interface DocumentHighlightsResponse extends Response {
+        body?: DocumentHighlightsItem[];
     }
 
     /**
@@ -853,6 +893,31 @@ declare namespace ts.server.protocol {
      */  
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    /**
+    * Arguments for GeterrForProject request.
+    */
+    export interface GeterrForProjectRequestArgs {
+        /**
+          * the file requesting project error list
+          */
+        file: string;
+
+        /**
+          * Delay in milliseconds to wait before starting to compute
+          * errors for the files in the file list
+          */
+        delay: number;
+    }
+
+    /**
+      * GeterrForProjectRequest request; value of command field is 
+      * "geterrForProject". It works similarly with 'Geterr', only 
+      * it request for every file in this project.
+      */
+    export interface GeterrForProjectRequest extends Request {
+        arguments: GeterrForProjectRequestArgs
     }
     
     /**
