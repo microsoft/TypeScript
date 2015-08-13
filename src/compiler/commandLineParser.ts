@@ -335,7 +335,7 @@ namespace ts {
       * @param fileName The path to the config file
       */
     export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
-        let text = '';
+        let text = "";
         try {
             text = sys.readFile(fileName);
         }
@@ -423,7 +423,7 @@ namespace ts {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, 'files', 'Array'));                    
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));                    
                 }
             }
             else {

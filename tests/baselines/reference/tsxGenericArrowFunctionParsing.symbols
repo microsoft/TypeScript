@@ -16,6 +16,7 @@ var T, T1, T2;
 var x1 = <T>() => {}</T>;
 >x1 : Symbol(x1, Decl(tsxGenericArrowFunctionParsing.tsx, 7, 3))
 >T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
+>T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
 
 x1.isElement;
 >x1.isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
@@ -44,6 +45,7 @@ var x4 = <T extends={true}>() => {}</T>;
 >x4 : Symbol(x4, Decl(tsxGenericArrowFunctionParsing.tsx, 19, 3))
 >T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
 >extends : Symbol(unknown)
+>T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
 
 x4.isElement;
 >x4.isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
@@ -55,6 +57,7 @@ var x5 = <T extends>() => {}</T>;
 >x5 : Symbol(x5, Decl(tsxGenericArrowFunctionParsing.tsx, 23, 3))
 >T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
 >extends : Symbol(unknown)
+>T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
 
 x5.isElement;
 >x5.isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
