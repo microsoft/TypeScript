@@ -430,12 +430,10 @@ interface ImageData {
     data: number[];
     height: number;
     width: number;
+    new(width: number, height: number): ImageData;
 }
 
-declare var ImageData: {
-    prototype: ImageData;
-    new(): ImageData;
-}
+declare var ImageData: ImageData; 
 
 interface MSApp {
     clearTemporaryWebDataAsync(): MSAppAsyncOperation;
