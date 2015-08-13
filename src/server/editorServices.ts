@@ -990,6 +990,7 @@ namespace ts.server {
             InsertSpaceAfterKeywordsInControlFlowStatements: true,
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         }

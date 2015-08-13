@@ -364,6 +364,7 @@ module FourSlash {
                 InsertSpaceAfterKeywordsInControlFlowStatements: true,
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
