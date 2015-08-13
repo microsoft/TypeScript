@@ -486,9 +486,10 @@ namespace ts {
             }
             node = node.parent;
         }
+        
         if (jsDocComment) {
             for (let tag of jsDocComment.tags) {
-                if (position >= tag.pos && position <= tag.end) {
+                if (tag.pos <= position && position <= tag.end) {
                     return tag;
                 }
             }
@@ -666,7 +667,6 @@ namespace ts {
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
             else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
-
 
             return SymbolDisplayPartKind.text;
         }

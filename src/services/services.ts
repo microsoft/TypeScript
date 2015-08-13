@@ -131,6 +131,45 @@ namespace ts {
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     let emptyArray: any[] = [];
+    
+    const JsDocTagNames: string[] = [
+        "augments", 
+        "author", 
+        "argument", 
+        "borrows", 
+        "class", 
+        "constant", 
+        "constructor", 
+        "constructs", 
+        "default", 
+        "deprecated", 
+        "description", 
+        "event", 
+        "example", 
+        "extends", 
+        "field", 
+        "fileOverview", 
+        "function", 
+        "ignore", 
+        "inner", 
+        "lends", 
+        "link", 
+        "memberOf", 
+        "name", 
+        "namespace", 
+        "param", 
+        "private", 
+        "property", 
+        "public", 
+        "requires", 
+        "returns", 
+        "see", 
+        "since", 
+        "static", 
+        "throws", 
+        "type", 
+        "version"
+    ];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
         let node = <NodeObject> new (getNodeConstructor(kind))();
@@ -2936,21 +2975,16 @@ namespace ts {
                 if (tag) {
                     switch (tag.kind) {
                         case SyntaxKind.JSDocTypeTag:
-                            let typeTag = <JSDocTypeTag>tag;
-                            if (typeTag.typeExpression) {
-                                insideJsDocTagExpression = position > typeTag.typeExpression.pos && position < typeTag.typeExpression.end;
-                            };
-                            break;
                         case SyntaxKind.JSDocParameterTag:
-                            let paramTag = <JSDocParameterTag>tag;
-                            if (paramTag.typeExpression) {
-                                insideJsDocTagExpression = position > paramTag.typeExpression.pos && position < paramTag.typeExpression.end;
+                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag>tag;
+                            if (tagWithExpression.typeExpression) {
+                                insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
                             };
                             break;
                     }
                 }
                 if (!insideJsDocTagExpression) {
-                    log("Returning an empty list because completion was inside a comment.");
+                    log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
                     return undefined;
                 }
             }
@@ -3739,32 +3773,30 @@ namespace ts {
                     return undefined;
                 }
 
-                // The current position is right after an At sign
+                // Return a list of JsDoc tag names for completion if the current position is right after an '@' sign 
                 if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
                     return getAllJsDocCompletionEntries();
                 }
 
-                // Or if the current position is in a tag name
+                // Also return tag names if the current position is inside a tag name, e.g. (at the location of '^') 
+                //    /** @par^ */ 
                 let tag = getJsDocTagAtPosition(sourceFile, position);
                 if (tag) {
-                    if (position >= tag.atToken.end && position <= tag.tagName.end) {
+                    if (tag.atToken.end <= position && position <= tag.tagName.end) {
                         return getAllJsDocCompletionEntries();
                     }
                 }
             }
 
             function getAllJsDocCompletionEntries(): CompletionEntry[] {
-                let tagNames = ["augments", "author", "argument", "borrows", "class", "constant", "constructor", "constructs", "default", "deprecated", "description", "event", "example", "extends", "field", "fileOverview", "function", "ignore", "inner", "lends", "link", "memberOf", "name", "namespace", "param", "private", "property", "public", "requires", "returns", "see", "since", "static", "throws", "type", "version"];
-                let entries: CompletionEntry[] = [];
-                for (let tagName of tagNames) {
-                    entries.push({
+                return ts.map(JsDocTagNames, tagName => {
+                    return {
                         name: tagName,
                         kind: ScriptElementKind.keyword,
                         kindModifiers: "",
                         sortText: "0",
-                    });
-                }
-                return entries;
+                    }
+                });
             }
 
             function createCompletionEntry(symbol: Symbol, location: Node): CompletionEntry {
