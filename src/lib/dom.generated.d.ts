@@ -7014,10 +7014,14 @@ interface ImageData {
     data: number[];
     height: number;
     width: number;
+}
+
+interface ImageDataConstructor {
+    prototype: ImageData;
     new(width: number, height: number): ImageData;
 }
 
-declare var ImageData: ImageData; 
+declare var ImageData: ImageDataConstructor; 
 
 interface KeyboardEvent extends UIEvent {
     altKey: boolean;
