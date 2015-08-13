@@ -715,6 +715,7 @@ namespace ts.formatting {
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -725,6 +726,7 @@ namespace ts.formatting {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                case SyntaxKind.ExpressionWithTypeArguments:
                     return true;
                 default:
                     return false;
