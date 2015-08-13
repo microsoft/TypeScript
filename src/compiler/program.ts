@@ -406,7 +406,7 @@ namespace ts {
 
             if (diagnostic) {
                 if (refFile !== undefined && refEnd !== undefined && refPos !== undefined) {
-                    diagnostics.add(createFileDiagnostic(refFile, start, refEnd - refPos, diagnostic, ...diagnosticArgument));
+                    diagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...diagnosticArgument));
                 }
                 else {
                     diagnostics.add(createCompilerDiagnostic(diagnostic, ...diagnosticArgument));
