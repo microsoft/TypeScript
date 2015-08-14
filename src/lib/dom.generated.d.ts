@@ -6986,7 +6986,7 @@ interface IDBTransaction extends EventTarget {
     READ_ONLY: string;
     READ_WRITE: string;
     VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -12169,7 +12169,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     LOADING: number;
     OPENED: number;
     UNSENT: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -12439,7 +12439,7 @@ interface MSBaseReader {
     DONE: number;
     EMPTY: number;
     LOADING: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -12595,7 +12595,7 @@ interface XMLHttpRequestEventTarget {
     onloadstart: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
     ontimeout: (ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -12611,6 +12611,7 @@ interface NodeListOf<TNode extends Node> extends NodeList {
     item(index: number): TNode;
     [index: number]: TNode;
 }
+
 
 interface BlobPropertyBag {
     type?: string;

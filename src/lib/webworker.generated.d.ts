@@ -435,7 +435,7 @@ interface IDBTransaction extends EventTarget {
     READ_ONLY: string;
     READ_WRITE: string;
     VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -494,6 +494,11 @@ interface MSApp {
 declare var MSApp: MSApp;
 
 interface MSAppAsyncOperation extends EventTarget {
+    error: DOMError;
+    oncomplete: (ev: Event) => any;
+    onerror: (ev: Event) => any;
+    readyState: number;
+    result: any;
     start(): void;
     COMPLETED: number;
     ERROR: number;
@@ -710,7 +715,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     LOADING: number;
     OPENED: number;
     UNSENT: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -760,7 +765,7 @@ interface MSBaseReader {
     DONE: number;
     EMPTY: number;
     LOADING: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -801,7 +806,7 @@ interface XMLHttpRequestEventTarget {
     onloadstart: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
     ontimeout: (ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -912,6 +917,12 @@ interface MediaQueryListListener {
 }
 interface MSLaunchUriCallback {
     (): void;
+}
+interface MSUnsafeFunctionCallback {
+    (): any;
+}
+interface MSExecAtPriorityFunctionCallback {
+    (...args: any[]): any;
 }
 interface DecodeSuccessCallback {
     (decodedData: AudioBuffer): void;
