@@ -3,6 +3,11 @@
 /// IE Worker APIs
 /////////////////////////////
 
+interface EventInit {
+    bubbles?: boolean;
+    cancelable?: boolean;
+}
+
 interface EventListener {
     (evt: Event): void;
 }
