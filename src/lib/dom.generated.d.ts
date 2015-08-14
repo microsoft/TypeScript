@@ -6865,7 +6865,7 @@ interface IDBDatabase extends EventTarget {
     createObjectStore(name: string, optionalParameters?: any): IDBObjectStore;
     deleteObjectStore(name: string): void;
     transaction(storeNames: any, mode?: string): IDBTransaction;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
