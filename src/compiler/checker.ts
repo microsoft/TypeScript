@@ -13328,7 +13328,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (languageVersion >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
                     }
