@@ -21,20 +21,27 @@ module ts {
         }
         
         function test(input: string, testSettings: TranspileTestSettings): void {
-            let diagnostics: Diagnostic[] = [];
             
-            let transpileOptions: TranspileOptions = testSettings.options || {}; 
-            let transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);
+            let transpileOptions: TranspileOptions = testSettings.options || {};
+            
+            let canUseOldTranspile = !transpileOptions.renamedDependencies;  
             
             transpileOptions.reportDiagnostics = true;
             let transpileModuleResult = transpileModule(input, transpileOptions);
             
-            checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
             checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes);
             
             if (testSettings.expectedOutput !== undefined) {
-                assert.equal(transpileResult, testSettings.expectedOutput);
                 assert.equal(transpileModuleResult.outputText, testSettings.expectedOutput);
+            }
+            
+            if (canUseOldTranspile) {
+                let diagnostics: Diagnostic[] = [];                
+                let transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);                
+                checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
+                if (testSettings.expectedOutput) {
+                    assert.equal(transpileResult, testSettings.expectedOutput);
+                }
             }
             
             // check source maps
@@ -138,5 +145,74 @@ var x = 0;`,
         it("No extra errors for file without extension", () => {
             test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "file" } });
         });
+
+        it("Rename dependencies - System", () => {
+            let input = 
+                `import {foo} from "SomeName";\n` +
+                `declare function use(a: any);\n` +
+                `use(foo);`
+            let output =
+                `System.register(["SomeOtherName"], function(exports_1) {\n` +
+                `    var SomeName_1;\n` +
+                `    return {\n` +
+                `        setters:[\n` +
+                `            function (SomeName_1_1) {\n` +
+                `                SomeName_1 = SomeName_1_1;\n` +
+                `            }],\n` +
+                `        execute: function() {\n` +
+                `            use(SomeName_1.foo);\n` +
+                `        }\n` +
+                `    }\n` +
+                `});\n`
+
+            test(input, 
+                { 
+                    options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }, 
+                    expectedOutput: output
+                });
+        });
+
+        it("Rename dependencies - AMD", () => {
+            let input = 
+                `import {foo} from "SomeName";\n` +
+                `declare function use(a: any);\n` +
+                `use(foo);`
+            let output =
+                `define(["require", "exports", "SomeOtherName"], function (require, exports, SomeName_1) {\n` +
+                `    use(SomeName_1.foo);\n` +
+                `});\n`;
+
+            test(input, 
+                { 
+                    options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }, 
+                    expectedOutput: output
+                });
+        });
+
+        it("Rename dependencies - UMD", () => {
+            let input = 
+                `import {foo} from "SomeName";\n` +
+                `declare function use(a: any);\n` +
+                `use(foo);`
+            let output =
+                `(function (deps, factory) {\n` +
+                `    if (typeof module === 'object' && typeof module.exports === 'object') {\n` +
+                `        var v = factory(require, exports); if (v !== undefined) module.exports = v;\n` +
+                `    }\n` +
+                `    else if (typeof define === 'function' && define.amd) {\n` +
+                `        define(deps, factory);\n` +
+                `    }\n` +
+                `})(["require", "exports", "SomeOtherName"], function (require, exports) {\n` +
+                `    var SomeName_1 = require("SomeOtherName");\n` +
+                `    use(SomeName_1.foo);\n` +
+                `});\n`;
+
+            test(input, 
+                { 
+                    options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }, 
+                    expectedOutput: output
+                });
+        });
+
     });
 }

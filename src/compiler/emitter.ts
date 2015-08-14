@@ -5343,13 +5343,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
+            
+            function tryRenameExternalModule(moduleName: LiteralExpression): string {
+                if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
+                    return `"${currentSourceFile.renamedDependencies[moduleName.text]}"`
+                }
+                return undefined;
+            }
 
             function emitRequire(moduleName: Expression) {
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
                     write("require(");
-                    emitStart(moduleName);
-                    emitLiteral(<LiteralExpression>moduleName);
-                    emitEnd(moduleName);
+                    let text = tryRenameExternalModule(<LiteralExpression>moduleName);
+                    if (text) {
+                        write(text);
+                    }
+                    else {
+                        emitStart(moduleName);
+                        emitLiteral(<LiteralExpression>moduleName);
+                        emitEnd(moduleName);
+                    }
                     emitToken(SyntaxKind.CloseParenToken, moduleName.end);
                 }
                 else {
@@ -5752,7 +5765,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
                 let moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
-                    return getLiteralText(<LiteralExpression>moduleName);
+                    return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName); 
                 }
 
                 return undefined;
@@ -6320,7 +6333,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     
                     if (i !== 0) {
                         write(", ");
-                    }
+                    }                    
+                        
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
@@ -6333,7 +6347,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 write("});");
             }
-
+            
             function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
