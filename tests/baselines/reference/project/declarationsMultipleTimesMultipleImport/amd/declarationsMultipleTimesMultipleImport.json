@@ -14,10 +14,10 @@
     ],
     "emittedFiles": [
         "m4.js",
-        "m4.d.ts",
         "m5.js",
-        "m5.d.ts",
         "useModule.js",
+        "m4.d.ts",
+        "m5.d.ts",
         "useModule.d.ts"
     ]
 }

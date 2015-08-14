@@ -1,15 +1,15 @@
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(3,12): error TS4050: Return type of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(9,5): error TS4053: Return type of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(15,12): error TS4050: Return type of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(21,5): error TS4053: Return type of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(56,17): error TS4058: Return type of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(62,17): error TS4058: Return type of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(70,12): error TS4050: Return type of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(73,5): error TS4053: Return type of public method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(76,12): error TS4050: Return type of public static method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(79,5): error TS4053: Return type of public method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(83,17): error TS4058: Return type of exported function has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error TS4058: Return type of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(3,12): error TS4039: Name of inferred return type of method 'myPublicStaticMethod' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(9,5): error TS4039: Name of inferred return type of method 'myPublicMethod' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(15,12): error TS4039: Name of inferred return type of method 'myPublicStaticMethod1' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(21,5): error TS4039: Name of inferred return type of method 'myPublicMethod1' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(56,17): error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateParmeterTypes' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(62,17): error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateParmeterTypes1' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(70,12): error TS4039: Name of inferred return type of method 'myPublicStaticMethod' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(73,5): error TS4039: Name of inferred return type of method 'myPublicMethod' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(76,12): error TS4039: Name of inferred return type of method 'myPublicStaticMethod1' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(79,5): error TS4039: Name of inferred return type of method 'myPublicMethod1' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(83,17): error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateModuleReturnTypes' could not be written. Consider adding an explicit type annotation.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateModuleReturnTypes1' could not be written. Consider adding an explicit type annotation.
 
 
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts (12 errors) ====
@@ -17,7 +17,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod() { // Error
                ~~~~~~~~~~~~~~~~~~~~
-!!! error TS4050: Return type of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicStaticMethod' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget1();
         }
         private static myPrivateStaticMethod() {
@@ -25,7 +25,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
         myPublicMethod() { // Error
         ~~~~~~~~~~~~~~
-!!! error TS4053: Return type of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicMethod' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget1();;
         }
         private myPrivateMethod() {
@@ -33,7 +33,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4050: Return type of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicStaticMethod1' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget3();
         }
         private static myPrivateStaticMethod1() {
@@ -41,7 +41,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
-!!! error TS4053: Return type of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicMethod1' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget3();;
         }
         private myPrivateMethod1() {
@@ -78,7 +78,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     
     export function publicFunctionWithPrivateParmeterTypes() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4058: Return type of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateParmeterTypes' could not be written. Consider adding an explicit type annotation.
         return exporter.createExportedWidget1();
     }
     function privateFunctionWithPrivateParmeterTypes()   {
@@ -86,7 +86,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     }
     export function publicFunctionWithPrivateParmeterTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4058: Return type of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateParmeterTypes1' could not be written. Consider adding an explicit type annotation.
         return exporter.createExportedWidget3();
     }
     function privateFunctionWithPrivateParmeterTypes1() {
@@ -96,33 +96,33 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     export class publicClassWithPrivateModuleReturnTypes {
         static myPublicStaticMethod() { // Error
                ~~~~~~~~~~~~~~~~~~~~
-!!! error TS4050: Return type of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicStaticMethod' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget2();
         }
         myPublicMethod() { // Error
         ~~~~~~~~~~~~~~
-!!! error TS4053: Return type of public method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicMethod' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget2();
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4050: Return type of public static method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicStaticMethod1' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget4();
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
-!!! error TS4053: Return type of public method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4039: Name of inferred return type of method 'myPublicMethod1' could not be written. Consider adding an explicit type annotation.
             return exporter.createExportedWidget4();
         }
     }
     export function publicFunctionWithPrivateModuleReturnTypes() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4058: Return type of exported function has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateModuleReturnTypes' could not be written. Consider adding an explicit type annotation.
         return exporter.createExportedWidget2();
     }
     export function publicFunctionWithPrivateModuleReturnTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4058: Return type of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4061: Name of inferred return type of function 'publicFunctionWithPrivateModuleReturnTypes1' could not be written. Consider adding an explicit type annotation.
         return exporter.createExportedWidget4();
     }
     

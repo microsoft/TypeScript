@@ -1475,7 +1475,8 @@ namespace ts {
         // Called when the symbol writer encounters a symbol to write.  Currently only used by the
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        trackTypeSymbol?(symbol: Symbol): void;
+        trackInaccesibleSymbol?(symbol: Symbol): void;
     }
 
     export const enum TypeFormatFlags {
@@ -1505,35 +1506,12 @@ namespace ts {
         UseOnlyExternalAliasing = 0x00000002,
     }
 
-    /* @internal */
-    export const enum SymbolAccessibility {
-        Accessible,
-        NotAccessible,
-        CannotBeNamed
-    }
-
     export interface TypePredicate {
         parameterName: string;
         parameterIndex: number;
         type: Type;
     }
 
-    /* @internal */
-    export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
-
-    /* @internal */
-    export interface SymbolVisibilityResult {
-        accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
-        errorSymbolName?: string; // Optional symbol name that results in error
-        errorNode?: Node; // optional node that results in error
-    }
-
-    /* @internal */
-    export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
-        errorModuleName?: string; // If the symbol is not visible from module, module's name
-    }
-    
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
       * metadata */
     /* @internal */
@@ -1566,20 +1544,19 @@ namespace ts {
         isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
-        isDeclarationVisible(node: Declaration): boolean;
-        collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+        writeBaseConstructorTypeOfClass(expr: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getSymbolAtLocation(node: Node): Symbol;
+        getAliasedSymbol(s: Symbol): Symbol;
     }
 
     export const enum SymbolFlags {
@@ -1753,8 +1730,11 @@ namespace ts {
         Void                    = 0x00000010,
         Undefined               = 0x00000020,
         Null                    = 0x00000040,
+        
         Enum                    = 0x00000080,  // Enum type
+        
         StringLiteral           = 0x00000100,  // String literal type
+
         TypeParameter           = 0x00000200,  // Type parameter
         Class                   = 0x00000400,  // Class
         Interface               = 0x00000800,  // Interface

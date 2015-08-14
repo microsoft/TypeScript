@@ -64,7 +64,6 @@ namespace ts {
                 increaseIndent: () => { },
                 decreaseIndent: () => { },
                 clear: () => str = "",
-                trackSymbol: () => { }
             };
         }
 
@@ -2327,6 +2326,15 @@ namespace ts {
                     return <Declaration>current;
                 }
             }
+        }
+    }
+
+    export function getTypeAnnotationFromAccessor(getAccessor: AccessorDeclaration, setAccessor: AccessorDeclaration): TypeNode {
+        if (getAccessor && getAccessor.type) {
+            return getAccessor.type // Getter - return type
+        }
+        if (setAccessor && setAccessor.parameters.length > 0) {
+            return setAccessor.parameters[0].type;
         }
     }
 }

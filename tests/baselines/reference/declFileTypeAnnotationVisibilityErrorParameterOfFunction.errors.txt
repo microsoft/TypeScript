@@ -1,7 +1,7 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(15,34): error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(17,26): error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(40,35): error TS4078: Parameter 'param' of exported function has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(42,28): error TS4077: Parameter 'param' of exported function has or is using name 'm2.public2' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(15,34): error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(17,26): error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(40,35): error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts(42,28): error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts (4 errors) ====
@@ -21,11 +21,11 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts
     
         export function foo3(param : private1) {
                                      ~~~~~~~~
-!!! error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
         }
         export function foo4(param = new private1()) {
-                             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4078: Parameter 'param' of exported function has or is using private name 'private1'.
+                             ~~~~~
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'private1'.
         }
     
         function foo11(param: public1) {
@@ -50,11 +50,11 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts
     
         export function foo113(param: m2.public2) {
                                       ~~
-!!! error TS4078: Parameter 'param' of exported function has or is using private name 'm2'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
         }
         export function foo114(param = new m2.public2()) {
-                               ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4077: Parameter 'param' of exported function has or is using name 'm2.public2' from private module 'm2'.
+                               ~~~~~
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'm2'.
         }
     }
     

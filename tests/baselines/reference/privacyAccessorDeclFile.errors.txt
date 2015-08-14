@@ -1,39 +1,39 @@
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(253,44): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(259,31): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(265,20): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(271,13): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(361,48): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(365,35): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(405,44): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(408,31): error TS4043: Return type of public property getter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(411,20): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(414,13): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(420,48): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(422,35): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(9,40): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(15,27): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(21,16): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(27,9): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(117,44): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(121,31): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(161,40): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(164,27): error TS4043: Return type of public property getter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(167,16): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(170,9): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(176,44): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(178,31): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(211,44): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(217,31): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(223,20): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(229,13): error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(319,48): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(323,35): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(363,44): error TS4040: Return type of public static property getter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(366,31): error TS4043: Return type of public property getter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(369,20): error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(372,13): error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(378,48): error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(253,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(259,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(265,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(271,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(361,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(365,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(405,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(408,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(411,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(414,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(420,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(422,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(9,40): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(15,27): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(21,16): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(27,9): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(117,44): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(121,31): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(161,40): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(164,27): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(167,16): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(170,9): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(176,44): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(178,31): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(211,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(217,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(223,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(229,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(319,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(323,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(363,44): error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(366,31): error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(369,20): error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(372,13): error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(378,48): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts (24 errors) ====
@@ -47,7 +47,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod(): privateClass { // Error
                                            ~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
             return null;
         }
         private static get myPrivateStaticMethod(): privateClass {
@@ -55,7 +55,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         }
         get myPublicMethod(): privateClass { // Error
                               ~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
             return null;
         }
         private get myPrivateMethod(): privateClass {
@@ -63,7 +63,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         private static get myPrivateStaticMethod1() {
@@ -71,7 +71,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
             return new privateClass();
         }
         private get myPrivateMethod1() {
@@ -163,13 +163,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
     export class publicClassWithWithPrivateSetAccessorTypes {
         static set myPublicStaticMethod(param: privateClass) { // Error
                                                ~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         }
         private static set myPrivateStaticMethod(param: privateClass) {
         }
         set myPublicMethod(param: privateClass) { // Error
                                   ~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
         }
         private set myPrivateMethod(param: privateClass) {
         }
@@ -211,22 +211,22 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
     export class publicClassWithPrivateModuleGetAccessorTypes {
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
                                            ~~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
             return null;
         }
         get myPublicMethod(): privateModule.publicClass { // Error
                               ~~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
             return null;
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
             return new privateModule.publicClass();
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
             return new privateModule.publicClass();
         }
     }
@@ -234,11 +234,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
     export class publicClassWithPrivateModuleSetAccessorTypes {
         static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                                ~~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
                                   ~~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
         }
     }
     
@@ -273,7 +273,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { // Error
                                                ~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private static get myPrivateStaticMethod(): privateClass {
@@ -281,7 +281,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
             }
             get myPublicMethod(): privateClass { // Error
                                   ~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private get myPrivateMethod(): privateClass {
@@ -289,7 +289,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private static get myPrivateStaticMethod1() {
@@ -297,7 +297,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private get myPrivateMethod1() {
@@ -389,13 +389,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { // Error
                                                    ~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { // Error
                                       ~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -437,22 +437,22 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { // Error
                                                ~~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             get myPublicMethod(): privateModule.publicClass { // Error
                                   ~~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
         }
@@ -460,11 +460,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                                    ~~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { // Error
                                       ~~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
         }
     
@@ -949,7 +949,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithWithPrivateGetAccessorTypes {
             static get myPublicStaticMethod(): privateClass { // Error
                                                ~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private static get myPrivateStaticMethod(): privateClass {
@@ -957,7 +957,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
             }
             get myPublicMethod(): privateClass { // Error
                                   ~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateClass'.
                 return null;
             }
             private get myPrivateMethod(): privateClass {
@@ -965,7 +965,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private static get myPrivateStaticMethod1() {
@@ -973,7 +973,7 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateClass'.
+!!! error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateClass'.
                 return new privateClass();
             }
             private get myPrivateMethod1() {
@@ -1065,13 +1065,13 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithWithPrivateSetAccessorTypes {
             static set myPublicStaticMethod(param: privateClass) { // Error
                                                    ~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private static set myPrivateStaticMethod(param: privateClass) {
             }
             set myPublicMethod(param: privateClass) { // Error
                                       ~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateClass'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateClass'.
             }
             private set myPrivateMethod(param: privateClass) {
             }
@@ -1113,22 +1113,22 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithPrivateModuleGetAccessorTypes {
             static get myPublicStaticMethod(): privateModule.publicClass { // Error
                                                ~~~~~~~~~~~~~
-!!! error TS4040: Return type of public static property getter from exported class has or is using private name 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             get myPublicMethod(): privateModule.publicClass { // Error
                                   ~~~~~~~~~~~~~
-!!! error TS4043: Return type of public property getter from exported class has or is using private name 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicMethod' references inaccessible name 'privateModule'.
                 return null;
             }
             static get myPublicStaticMethod1() { // Error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4039: Return type of public static property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicStaticMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
             get myPublicMethod1() { // Error
                 ~~~~~~~~~~~~~~~
-!!! error TS4042: Return type of public property getter from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4043: Return type of property getter 'myPublicMethod1' references inaccessible name 'privateModule'.
                 return new privateModule.publicClass();
             }
         }
@@ -1136,11 +1136,11 @@ tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(380,35): error TS
         export class publicClassWithPrivateModuleSetAccessorTypes {
             static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                                    ~~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicStaticMethod' of public property setter from exported class has or is using private name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
             set myPublicMethod(param: privateModule.publicClass) { // Error
                                       ~~~~~~~~~~~~~
-!!! error TS4037: Parameter 'myPublicMethod' of public property setter from exported class has or is using private name 'privateModule'.
+!!! error TS4030: Type of parameter 'param' references inaccessible name 'privateModule'.
             }
         }
     

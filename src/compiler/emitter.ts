@@ -93,6 +93,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
+        // Emit declarations
+        if (compilerOptions.declaration) {
+            emitDeclarations(host, resolver, targetSourceFile, diagnostics);
+        }
+
         // Sort and make the unique list of diagnostics
         diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
 
@@ -122,7 +127,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             return true;
         }
 
-        function emitJavaScript(jsFilePath: string, root?: SourceFile) {
+        function emitFile(jsFilePath: string, root?: SourceFile) {
             let writer = createTextWriter(newLine);
             let write = writer.write;
             let writeTextOfNode = writer.writeTextOfNode;
@@ -7086,14 +7091,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
                     return true;
                 }
-            }
-        }
-
-        function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            emitJavaScript(jsFilePath, sourceFile);
-
-            if (compilerOptions.declaration) {
-                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
             }
         }
     }

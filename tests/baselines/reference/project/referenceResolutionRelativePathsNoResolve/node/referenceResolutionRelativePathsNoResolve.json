@@ -14,8 +14,8 @@
     ],
     "emittedFiles": [
         "foo.js",
-        "foo.d.ts",
         "../../../bar/bar.js",
+        "foo.d.ts",
         "../../../bar/bar.d.ts"
     ]
 }

@@ -1697,290 +1697,98 @@
         "category": "Error",
         "code": 2652
     },
-    "Import declaration '{0}' is using private name '{1}'.": {
+
+    "Import declaration '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4000
     },
-    "Type parameter '{0}' of exported class has or is using private name '{1}'.": {
+    "Constraint of type parameter '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4002
     },
-    "Type parameter '{0}' of exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4004
-    },
-    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4006
-    },
-    "Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4008
-    },
-    "Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4010
-    },
-    "Type parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4012
-    },
-    "Type parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4014
-    },
-    "Type parameter '{0}' of exported function has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4016
-    },
-    "Implements clause of exported class '{0}' has or is using private name '{1}'.": {
+    "Implements clause references inaccessible name '{0}'.": {
         "category": "Error",
         "code": 4019
     },
-    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+    "Extends clause references inaccessible name '{0}'.": {
         "category": "Error",
         "code": 4020
     },
-    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4022
-    },
-    "Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 4023
-    },
-    "Exported variable '{0}' has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4024
-    },
-    "Exported variable '{0}' has or is using private name '{1}'.": {
+    "Type of variable '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4025
     },
-    "Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+    "Name of inferred type of variable '{0}' could not be written. Consider adding an explicit type annotation.": {
         "category": "Error",
         "code": 4026
     },
-    "Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4027
-    },
-    "Public static property '{0}' of exported class has or is using private name '{1}'.": {
+    "Type of property '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4028
     },
-    "Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+    "Name of inferred type of property '{0}' could not be written. Consider adding an explicit type annotation.": {
         "category": "Error",
         "code": 4029
     },
-    "Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+    "Type of parameter '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4030
     },
-    "Public property '{0}' of exported class has or is using private name '{1}'.": {
+    "Name of inferred type of parameter '{0}' could not be written. Consider adding an explicit type annotation.": {
         "category": "Error",
         "code": 4031
     },
-    "Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4032
-    },
-    "Property '{0}' of exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4033
-    },
-    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4034
-    },
-    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4035
-    },
-    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4036
-    },
-    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4037
-    },
-    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+    "Return type of method '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4038
     },
-    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+    "Name of inferred return type of method '{0}' could not be written. Consider adding an explicit type annotation.": {
         "category": "Error",
         "code": 4039
     },
-    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 4040
-    },
-    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 4041
-    },
-    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4042
-    },
-    "Return type of public property getter from exported class has or is using private name '{0}'.": {
+    "Return type of property getter '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4043
     },
-    "Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+    "Return type of construct signature references inaccessible name '{0}'.": {
         "category": "Error",
         "code": 4044
     },
-    "Return type of constructor signature from exported interface has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 4045
-    },
-    "Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4046
-    },
-    "Return type of call signature from exported interface has or is using private name '{0}'.": {
+    "Return type of call signature references inaccessible name '{0}'.": {
         "category": "Error",
         "code": 4047
     },
-    "Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4048
-    },
-    "Return type of index signature from exported interface has or is using private name '{0}'.": {
+    "Return type of index signature references inaccessible name '{0}'.": {
         "category": "Error",
         "code": 4049
     },
-    "Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 4050
-    },
-    "Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4051
-    },
-    "Return type of public static method from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 4052
-    },
-    "Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 4053
-    },
-    "Return type of public method from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4054
-    },
-    "Return type of public method from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 4055
-    },
-    "Return type of method from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4056
-    },
-    "Return type of method from exported interface has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 4057
-    },
-    "Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 4058
-    },
-    "Return type of exported function has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 4059
-    },
-    "Return type of exported function has or is using private name '{0}'.": {
+    "Return type of function '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4060
     },
-    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+    "Name of inferred return type of function '{0}' could not be written. Consider adding an explicit type annotation.": {
         "category": "Error",
         "code": 4061
     },
-    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4062
-    },
-    "Parameter '{0}' of constructor from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4063
-    },
-    "Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4064
-    },
-    "Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4065
-    },
-    "Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4066
-    },
-    "Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4067
-    },
-    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 4068
-    },
-    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4069
-    },
-    "Parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4070
-    },
-    "Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 4071
-    },
-    "Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4072
-    },
-    "Parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4073
-    },
-    "Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4074
-    },
-    "Parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4075
-    },
-    "Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 4076
-    },
-    "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4077
-    },
-    "Parameter '{0}' of exported function has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 4078
-    },
-    "Exported type alias '{0}' has or is using private name '{1}'.": {
+    "Type alias '{0}' references inaccessible name '{1}'.": {
         "category": "Error",
         "code": 4081
     },
-    "Default export of the module has or is using private name '{0}'.": {
+    "Default export of the module references inaccessible name '{0}'.": {
         "category": "Error",
         "code": 4082
     },
+    "Name of inferred type of default export could not be written. Consider exporting a declaration instead.": {
+        "category": "Error",
+        "code": 4083
+    },
+
+
     "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
         "category": "Error",
         "code": 4091
     },
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001

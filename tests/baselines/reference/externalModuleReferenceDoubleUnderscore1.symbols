@@ -5,7 +5,7 @@ declare module 'timezonecomplete' {
 
     export import TimeUnit = basics.TimeUnit;
 >TimeUnit : Symbol(TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 1, 57))
->basics : Symbol(basics, Decl(externalModuleReferenceDoubleUnderscore1.ts, 3, 1))
+>basics : Symbol(basics, Decl(externalModuleReferenceDoubleUnderscore1.ts, 0, 35))
 >TimeUnit : Symbol(basics.TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 5, 44))
 }
 

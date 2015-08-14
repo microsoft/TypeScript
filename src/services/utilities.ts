@@ -582,7 +582,6 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { }
         };
 
         function writeIndent() {
