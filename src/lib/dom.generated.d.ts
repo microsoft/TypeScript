@@ -3030,7 +3030,7 @@ interface File extends Blob {
 
 declare var File: {
     prototype: File;
-    new(): File;
+    new (parts: (ArrayBuffer | ArrayBufferView | Blob | string)[], filename: string, properties?: FilePropertyBag): File;
 }
 
 interface FileList {
@@ -12615,6 +12615,11 @@ interface NodeListOf<TNode extends Node> extends NodeList {
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
+}
+
+interface FilePropertyBag {
+    type?: string;
+    lastModified?: number;
 }
 
 interface EventListenerObject {
