@@ -1,0 +1,27 @@
+=== tests/cases/compiler/staticGetterAndSetterInheritance.ts ===
+
+class A {
+>A : A
+
+	static get foo(): any {
+>foo : any
+
+		return this;
+>this : typeof A
+	}
+}
+
+class B extends A{}
+>B : B
+>A : A
+
+A.foo;
+>A.foo : any
+>A : typeof A
+>foo : any
+
+B.foo;
+>B.foo : any
+>B : typeof B
+>foo : any
+

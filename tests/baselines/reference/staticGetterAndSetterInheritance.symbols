@@ -1,0 +1,27 @@
+=== tests/cases/compiler/staticGetterAndSetterInheritance.ts ===
+
+class A {
+>A : Symbol(A, Decl(staticGetterAndSetterInheritance.ts, 0, 0))
+
+	static get foo(): any {
+>foo : Symbol(A.foo, Decl(staticGetterAndSetterInheritance.ts, 1, 9))
+
+		return this;
+>this : Symbol(A, Decl(staticGetterAndSetterInheritance.ts, 0, 0))
+	}
+}
+
+class B extends A{}
+>B : Symbol(B, Decl(staticGetterAndSetterInheritance.ts, 5, 1))
+>A : Symbol(A, Decl(staticGetterAndSetterInheritance.ts, 0, 0))
+
+A.foo;
+>A.foo : Symbol(A.foo, Decl(staticGetterAndSetterInheritance.ts, 1, 9))
+>A : Symbol(A, Decl(staticGetterAndSetterInheritance.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(staticGetterAndSetterInheritance.ts, 1, 9))
+
+B.foo;
+>B.foo : Symbol(B.foo, Decl(staticGetterAndSetterInheritance.ts, 1, 9))
+>B : Symbol(B, Decl(staticGetterAndSetterInheritance.ts, 5, 1))
+>foo : Symbol(B.foo, Decl(staticGetterAndSetterInheritance.ts, 1, 9))
+
