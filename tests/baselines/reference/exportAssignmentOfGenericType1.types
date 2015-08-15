@@ -5,7 +5,7 @@ import q = require("exportAssignmentOfGenericType1_0");
 
 class M extends q<string> { }
 >M : M
->q : q<X>
+>q : q<string>
 
 var m: M;
 >m : M

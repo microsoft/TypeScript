@@ -316,6 +316,11 @@ interface Array<T> {
     copyWithin(target: number, start: number, end?: number): T[];
 }
 
+interface IArguments {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface ArrayConstructor {
     /**
       * Creates an array from an array-like object.
@@ -372,7 +377,7 @@ interface String {
       * @param searchString search string 
       * @param position If position is undefined, 0 is assumed, so as to search all of the String.
       */
-    contains(searchString: string, position?: number): boolean;
+    includes(searchString: string, position?: number): boolean;
 
     /**
       * Returns true if the sequence of elements of searchString converted to a String is the 
@@ -499,14 +504,6 @@ interface GeneratorFunctionConstructor {
     prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
-
-interface Generator<T> extends IterableIterator<T> {
-    next(value?: any): IteratorResult<T>;
-    throw(exception: any): IteratorResult<T>;
-    return(value: T): IteratorResult<T>;
-    [Symbol.iterator](): Generator<T>;
-    [Symbol.toStringTag]: string;
-}
 
 interface Math {
     /**
@@ -697,6 +694,7 @@ interface Map<K, V> {
 }
 
 interface MapConstructor {
+    new (): Map<any, any>;
     new <K, V>(): Map<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
     prototype: Map<any, any>;
@@ -713,6 +711,7 @@ interface WeakMap<K, V> {
 }
 
 interface WeakMapConstructor {
+    new (): WeakMap<any, any>;
     new <K, V>(): WeakMap<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
     prototype: WeakMap<any, any>;
@@ -734,6 +733,7 @@ interface Set<T> {
 }
 
 interface SetConstructor {
+    new (): Set<any>;
     new <T>(): Set<T>;
     new <T>(iterable: Iterable<T>): Set<T>;
     prototype: Set<any>;
@@ -749,6 +749,7 @@ interface WeakSet<T> {
 }
 
 interface WeakSetConstructor {
+    new (): WeakSet<any>;
     new <T>(): WeakSet<T>;
     new <T>(iterable: Iterable<T>): WeakSet<T>;
     prototype: WeakSet<any>;
@@ -3572,17 +3573,6 @@ declare module Reflect {
     function setPrototypeOf(target: any, proto: any): boolean;
 }
 
-interface PromiseLike<T> {
-    /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
-}
-
 /**
  * Represents the completion of an asynchronous operation
  */
@@ -3602,6 +3592,7 @@ interface Promise<T> {
      * @returns A Promise for the completion of the callback.
      */
     catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
+    catch(onrejected?: (reason: any) => void): Promise<T>;
 
     [Symbol.toStringTag]: string;
 }

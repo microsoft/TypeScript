@@ -1,5 +1,6 @@
 // @target:es5
 // @module:commonjs
+// @experimentaldecorators: true
 // @filename: a.ts
 
 // from #3108
@@ -9,7 +10,7 @@ export var test = 'abc';
 import { test } from './a';
 
 function filter(handler: any) {
-    return function (target: any) {
+    return function (target: any, propertyKey: string) {
         // ...
     };
 }

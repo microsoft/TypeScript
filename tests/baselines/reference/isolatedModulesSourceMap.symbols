@@ -1,0 +1,5 @@
+=== tests/cases/compiler/isolatedModulesSourceMap.ts ===
+
+export var x = 1;
+>x : Symbol(x, Decl(isolatedModulesSourceMap.ts, 1, 10))
+

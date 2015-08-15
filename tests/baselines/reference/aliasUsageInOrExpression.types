@@ -34,7 +34,7 @@ var d2: IHasVisualizationModel = i || moduleA;
 var d2: IHasVisualizationModel = moduleA || i;
 >d2 : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
->moduleA || i : IHasVisualizationModel
+>moduleA || i : typeof moduleA
 >moduleA : typeof moduleA
 >i : IHasVisualizationModel
 
@@ -79,9 +79,9 @@ import Backbone = require("aliasUsageInOrExpression_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : any
+>Backbone.Model : Backbone.Model
 >Backbone : typeof Backbone
->Model : Backbone.Model
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }

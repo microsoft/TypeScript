@@ -64,8 +64,7 @@ class Ds extends A {
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
@@ -75,8 +74,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        this.s = 9;
         "use strict"; // No error
+        this.s = 9;
         _super.call(this);
     }
     return B;

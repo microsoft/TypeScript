@@ -29,7 +29,34 @@
 // type 'fs.' as an alternate way of accessing the top-level objects
 // (e.g. 'fs.goTo.eof();')
 
+//---------------------------------------
+// For API editors:
+// When editting this file, and only while editing this file, enable the reference comments
+// and comment out the declarations in this section to get proper type information.
+// Undo these changes before compiling/committing/editing any other fourslash tests.
+// The test suite will likely crash if you try 'jake runtests' with reference comments enabled.
+//
+// Explanation:
+// We want type-completion while we edit this file, but at compile time/while editting fourslash tests,
+// we don't want to include the following reference because we are compiling this file in "--out" mode and don't want to rope
+// in the entire codebase into the compilation each fourslash test. Additionally, we don't want to expose the
+// src/harness/fourslash.ts API's (or the rest of the compiler) because they are unstable and complicate the
+// fourslash testing DSL. Finally, in this case, runtime reflection is (much) faster.
+//
+// TODO: figure out a better solution to the API exposure problem.
+
+// /// <reference path="../../../built/local/typescriptServices.d.ts"/>
+// /// <reference path="../../../src/harness/fourslash.ts"/>
+
 declare var FourSlash;
+module ts {
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: string;
+    }
+}
+
+//---------------------------------------------
 
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
@@ -42,7 +69,6 @@ enum EmitReturnStatus {
 }
 
 module FourSlashInterface {
-    declare var FourSlash;
 
     export interface Marker {
         fileName: string;
@@ -64,6 +90,7 @@ module FourSlashInterface {
         InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number| string;
@@ -169,7 +196,7 @@ module FourSlashInterface {
         // completion list is brought up if necessary
         public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
-                FourSlash.currentTestState.verifyCompletionListDoesNotContain(symbol);
+                FourSlash.currentTestState.verifyCompletionListDoesNotContain(symbol, text, documentation, kind);
             } else {
                 FourSlash.currentTestState.verifyCompletionListContains(symbol, text, documentation, kind);
             }
@@ -199,15 +226,6 @@ module FourSlashInterface {
 
         public referencesAtPositionContains(range: Range, isWriteAccess?: boolean) {
             FourSlash.currentTestState.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
-        }
-
-        public implementorsCountIs(count: number) {
-            FourSlash.currentTestState.verifyImplementorsCountIs(count);
-        }
-
-        // Add tests for this.
-        public currentParameterIsVariable() {
-            FourSlash.currentTestState.verifyCurrentParameterIsVariable(!this.negative);
         }
 
         public signatureHelpPresent() {
@@ -269,10 +287,10 @@ module FourSlashInterface {
         }
 
         /**
-            Compiles the current file and evaluates 'expr' in a context containing
-            the emitted output, then compares (using ===) the result of that expression
-            to 'value'. Do not use this function with external modules as it is not supported.
-        */
+         * Compiles the current file and evaluates 'expr' in a context containing
+         * the emitted output, then compares (using ===) the result of that expression
+         * to 'value'. Do not use this function with external modules as it is not supported.
+         */
         public eval(expr: string, value: any) {
             FourSlash.currentTestState.verifyEval(expr, value);
         }
@@ -361,14 +379,19 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public setVerifyDocComments(val: boolean) {
-            FourSlash.currentTestState.setVerifyDocComments(val);
+        public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
+            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, caretOffset: expectedOffset });
+        }
+
+        public noDocCommentTemplate() {
+            this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, true);
         }
 
         public getScriptLexicalStructureListCount(count: number) {
             FourSlash.currentTestState.verifyGetScriptLexicalStructureListCount(count);
         }
 
+        // TODO: figure out what to do with the unused arguments.
         public getScriptLexicalStructureListContains(
             name: string,
             kind: string,
@@ -376,13 +399,7 @@ module FourSlashInterface {
             parentName?: string,
             isAdditionalSpan?: boolean,
             markerPosition?: number) {
-            FourSlash.currentTestState.verifGetScriptLexicalStructureListContains(
-                name,
-                kind,
-                fileName,
-                parentName,
-                isAdditionalSpan,
-                markerPosition);
+            FourSlash.currentTestState.verifyGetScriptLexicalStructureListContains(name, kind);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
@@ -411,6 +428,14 @@ module FourSlashInterface {
 
         public occurrencesAtPositionCount(expectedCount: number) {
             FourSlash.currentTestState.verifyOccurrencesAtPositionListCount(expectedCount);
+        }
+
+        public documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
+        }
+
+        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
@@ -448,8 +473,16 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
 
+        public getSyntacticDiagnostics(expected: string) {
+            FourSlash.currentTestState.getSyntacticDiagnostics(expected);
+        }
+
         public getSemanticDiagnostics(expected: string) {
             FourSlash.currentTestState.getSemanticDiagnostics(expected);
+        }
+
+        public ProjectInfo(expected: string []) {
+            FourSlash.currentTestState.verifyProjectInfo(expected);
         }
     }
 
@@ -639,6 +672,10 @@ module FourSlashInterface {
             return getClassification("punctuation", text, position);
         }
 
+        export function docCommentTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("docCommentTagName", text, position);
+        }
+
         export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
             return getClassification("className", text, position);
         }
@@ -686,12 +723,7 @@ module fs {
     export var format = new FourSlashInterface.format();
     export var cancellation = new FourSlashInterface.cancellation();
 }
-module ts {
-    export interface SymbolDisplayPart {
-        text: string;
-        kind: string;
-    }
-}
+
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);
 }

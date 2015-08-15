@@ -1,4 +1,5 @@
 // @target: ES5
+// @experimentaldecorators: true
 // @noLib: true
 
 // @Filename: a.ts
@@ -12,10 +13,10 @@ interface RegExp { }
 interface IArguments { }
 
 // @Filename: b.ts
-/// <reference path="a.ts" />
-declare var dec: any;
+declare function dec(t, k, d);
 
-@dec
 class C {
+    @dec
+    method() {}
 }
 

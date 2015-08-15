@@ -12,7 +12,7 @@ type arrayString = Array<String>
 >String : String
 
 type someArray = Array<String> | number[];
->someArray : number[] | String[]
+>someArray : String[] | number[]
 >Array : T[]
 >String : String
 
@@ -23,8 +23,8 @@ type stringOrNumArray = Array<String|Number>;
 >Number : Number
 
 function a1(...x: (number|string)[]) { }
->a1 : (...x: (string | number)[]) => void
->x : (string | number)[]
+>a1 : (...x: (number | string)[]) => void
+>x : (number | string)[]
 
 function a2(...a) { }
 >a2 : (...a: any[]) => void
@@ -75,8 +75,8 @@ var array = [1, 2, 3];
 >3 : number
 
 var array2 = [true, false, "hello"];
->array2 : (string | boolean)[]
->[true, false, "hello"] : (string | boolean)[]
+>array2 : (boolean | string)[]
+>[true, false, "hello"] : (boolean | string)[]
 >true : boolean
 >false : boolean
 >"hello" : string
@@ -90,7 +90,7 @@ a2([...array]);
 
 a1(...array);
 >a1(...array) : void
->a1 : (...x: (string | number)[]) => void
+>a1 : (...x: (number | string)[]) => void
 >...array : number
 >array : number[]
 
@@ -109,7 +109,7 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
 >a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
->[1, 2, [["string"]], false, true] : (number | boolean | string[][])[]
+>[1, 2, [["string"]], false, true] : (number | string[][] | boolean)[]
 >1 : number
 >2 : number
 >[["string"]] : string[][]

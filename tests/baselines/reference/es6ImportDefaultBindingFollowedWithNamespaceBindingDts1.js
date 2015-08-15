@@ -16,6 +16,7 @@ define(["require", "exports"], function (require, exports) {
         }
         return a;
     })();
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = a;
 });
 //// [client.js]

@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsx/tsxParseTests1.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxParseTests1.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(tsxParseTests1.tsx, 0, 20))
+
+	interface IntrinsicElements { div; span; }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxParseTests1.tsx, 1, 22))
+>div : Symbol(div, Decl(tsxParseTests1.tsx, 2, 30))
+>span : Symbol(span, Decl(tsxParseTests1.tsx, 2, 35))
+}
+
+var x = <div><div><span><div></div></span></div></div>;
+>x : Symbol(x, Decl(tsxParseTests1.tsx, 5, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(tsxParseTests1.tsx, 2, 35))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(tsxParseTests1.tsx, 2, 35))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+

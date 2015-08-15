@@ -40,6 +40,7 @@ export { a, b, c, d, e1, e2, f1, f2 };
 
 
 //// [t1.js]
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "hello";
 //// [t3.js]
 var a = require("./t1");

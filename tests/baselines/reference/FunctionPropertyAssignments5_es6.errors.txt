@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts(1,11): error TS9001: Generators are not currently supported.
+tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts(1,11): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
 tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts(1,13): error TS2304: Cannot find name 'foo'.
 
 
 ==== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts (2 errors) ====
     var v = { *[foo()]() { } }
               ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
                 ~~~
 !!! error TS2304: Cannot find name 'foo'.

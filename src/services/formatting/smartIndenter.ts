@@ -1,7 +1,7 @@
 ///<reference path='..\services.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export module SmartIndenter {
 
         const enum Value {
@@ -26,7 +26,7 @@ module ts.formatting {
                 precedingToken.kind === SyntaxKind.TemplateHead ||
                 precedingToken.kind === SyntaxKind.TemplateMiddle ||
                 precedingToken.kind === SyntaxKind.TemplateTail;
-            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position &&  precedingToken.end > position) {
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
                 return 0;
             }
 
@@ -65,6 +65,10 @@ module ts.formatting {
                 let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
+                }
+                actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
+                if (actualIndentation !== Value.Unknown) {
+                    return actualIndentation + options.IndentSize;
                 }
 
                 previous = current;
@@ -119,6 +123,10 @@ module ts.formatting {
                 if (useActualIndentation) {
                     // try to fetch actual indentation for current node from source text
                     let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    if (actualIndentation !== Value.Unknown) {
+                        return actualIndentation + indentationDelta;
+                    }
+                    actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -287,6 +295,55 @@ module ts.formatting {
             }
         }
 
+        function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
+            // actual indentation should not be used when:
+            // - node is close parenthesis - this is the end of the expression
+            if (node.kind === SyntaxKind.CloseParenToken) {
+                return Value.Unknown;
+            }
+
+            if (node.parent && (
+                node.parent.kind === SyntaxKind.CallExpression ||
+                node.parent.kind === SyntaxKind.NewExpression) &&
+                (<CallExpression>node.parent).expression !== node) {
+
+                let fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
+                let startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>fullCallOrNewExpression);
+
+                if (fullCallOrNewExpression === startingExpression) {
+                    return Value.Unknown;
+                }
+
+                let fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(fullCallOrNewExpression.end);
+                let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
+
+                if (fullCallOrNewExpressionEnd.line === startingExpressionEnd.line) {
+                    return Value.Unknown;
+                }
+
+                return findColumnForFirstNonWhitespaceCharacterInLine(fullCallOrNewExpressionEnd, sourceFile, options);
+            }
+
+            return Value.Unknown;
+            
+            function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
+                while (true) {
+                    switch (node.kind) {
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                        case SyntaxKind.PropertyAccessExpression:
+                        case SyntaxKind.ElementAccessExpression:
+
+                            node = <PropertyAccessExpression | CallExpression | ElementAccessExpression | PropertyAccessExpression>node.expression;
+                            break;
+                        default:
+                            return node;
+                    }
+                }
+                return node;
+            }
+        }
+
         function deriveActualIndentationFromList(list: Node[], index: number, sourceFile: SourceFile, options: EditorOptions): number {
             Debug.assert(index >= 0 && index < list.length);
             let node = list[index];
@@ -361,6 +418,7 @@ module ts.formatting {
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:

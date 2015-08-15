@@ -1,17 +1,17 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(1,9): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,11): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,20): error TS2304: Cannot find name 'yield'.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(1,9): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,11): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,20): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
 
 
 ==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts (3 errors) ====
     function*bar() {
             ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
       // 'yield' here is an identifier, and not a yield expression.
       function*foo(a = yield) {
               ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
                        ~~~~~
-!!! error TS2304: Cannot find name 'yield'.
+!!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.
       }
     }

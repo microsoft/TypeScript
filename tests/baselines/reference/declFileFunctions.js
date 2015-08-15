@@ -26,6 +26,19 @@ export function fooWithSingleOverload(a: any) {
     return a;
 }
 
+export function fooWithTypePredicate(a: any): a is number {
+    return true;
+}
+export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
+    return true;
+}
+export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
+    return true;
+}
+export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is number {
+    return true;
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
@@ -92,6 +105,26 @@ function fooWithSingleOverload(a) {
     return a;
 }
 exports.fooWithSingleOverload = fooWithSingleOverload;
+function fooWithTypePredicate(a) {
+    return true;
+}
+exports.fooWithTypePredicate = fooWithTypePredicate;
+function fooWithTypePredicateAndMulitpleParams(a, b, c) {
+    return true;
+}
+exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
+function fooWithTypeTypePredicateAndGeneric(a) {
+    return true;
+}
+exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
+function fooWithTypeTypePredicateAndRestParam(a) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+    return true;
+}
+exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
@@ -144,6 +177,10 @@ export declare function fooWithRestParameters(a: string, ...rests: string[]): st
 export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
 export declare function fooWithSingleOverload(a: string): string;
+export declare function fooWithTypePredicate(a: any): a is number;
+export declare function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number;
+export declare function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T;
+export declare function fooWithTypeTypePredicateAndRestParam(a: any, ...rest: any[]): a is number;
 //// [declFileFunctions_1.d.ts]
 /** This comment should appear for foo*/
 declare function globalfoo(): void;

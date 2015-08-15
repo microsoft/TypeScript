@@ -1,18 +1,56 @@
 /// <reference path="types.ts"/>
 
 /* @internal */
-module ts {
-    // Ternary values are defined such that
-    // x & y is False if either x or y is False.
-    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-    // x & y is True if both x and y are True.
-    // x | y is False if both x and y are False.
-    // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-    // x | y is True if either x or y is True.
+namespace ts {
+    /**
+     * Ternary values are defined such that
+     * x & y is False if either x or y is False.
+     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+     * x & y is True if both x and y are True.
+     * x | y is False if both x and y are False.
+     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+     * x | y is True if either x or y is True.
+     */
     export const enum Ternary {
         False = 0,
         Maybe = 1,
-        True  = -1
+        True = -1
+    }
+
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+        let files: Map<T> = {};
+        return {
+            get,
+            set,
+            contains,
+            remove,
+            forEachValue: forEachValueInMap
+        };
+
+        function set(fileName: string, value: T) {
+            files[normalizeKey(fileName)] = value;
+        }
+
+        function get(fileName: string) {
+            return files[normalizeKey(fileName)];
+        }
+
+        function contains(fileName: string) {
+            return hasProperty(files, normalizeKey(fileName));
+        }
+
+        function remove (fileName: string) {
+            let key = normalizeKey(fileName);
+            delete files[key];
+        }
+
+        function forEachValueInMap(f: (value: T) => void) {
+            forEachValue(files, f);
+        }
+
+        function normalizeKey(key: string) {
+            return getCanonicalFileName(normalizeSlashes(key));
+        }
     }
 
     export const enum Comparison {
@@ -23,6 +61,11 @@ module ts {
 
     export interface StringSet extends Map<any> { }
 
+    /**
+     * Iterates through 'array' by index and performs the callback on each element of array until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, the callback is applied to each element of array and undefined is returned.
+     */
     export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
@@ -127,7 +170,17 @@ module ts {
                 to.push(v);
             }
         }
-    } 
+    }
+
+    export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
+        while (pos < end) {
+            if (array1[pos] !== array2[pos]) {
+                return false;
+            }
+            pos++;
+        }
+        return true;
+    }
 
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
@@ -140,6 +193,13 @@ module ts {
         return array[array.length - 1];
     }
 
+    /**
+     * Performs a binary search, finding the index at which 'value' occurs in 'array'.
+     * If no such index is found, returns the 2's-complement of first index at which
+     * number[index] exceeds number.
+     * @param array A sorted array whose first element must be no larger than number
+     * @param number The value to be searched for in the array.
+     */
     export function binarySearch(array: number[], value: number): number {
         let low = 0;
         let high = array.length - 1;
@@ -166,10 +226,10 @@ module ts {
     export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
-            var count = array.length;
+            const count = array.length;
             if (count > 0) {
-                var pos = 0;
-                var result = arguments.length <= 2 ? array[pos++] : initial;
+                let pos = 0;
+                let result = arguments.length <= 2 ? array[pos++] : initial;
                 while (pos < count) {
                     result = f(<U>result, array[pos++]);
                 }
@@ -183,9 +243,9 @@ module ts {
     export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
-            var pos = array.length - 1;
+            let pos = array.length - 1;
             if (pos >= 0) {
-                var result = arguments.length <= 2 ? array[pos--] : initial;
+                let result = arguments.length <= 2 ? array[pos--] : initial;
                 while (pos >= 0) {
                     result = f(<U>result, array[pos--]);
                 }
@@ -312,11 +372,14 @@ module ts {
 
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
-        Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
-        Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+
+        if (file) {
+            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
+            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+        }
 
         let text = getLocaleSpecificMessage(message.key);
-        
+
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
         }
@@ -467,7 +530,7 @@ module ts {
         if (path.lastIndexOf("file:///", 0) === 0) {
             return "file:///".length;
         }
-        let idx = path.indexOf('://');
+        let idx = path.indexOf("://");
         if (idx !== -1) {
             return idx + "://".length;
         }
@@ -486,7 +549,7 @@ module ts {
                 else {
                     // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
                     // e.g. "path//file.ts".  Drop these before re-joining the parts.
-                    if(part) {
+                    if (part) {
                         normalized.push(part);
                     }
                 }
@@ -523,7 +586,7 @@ module ts {
     export function getNormalizedPathComponents(path: string, currentDirectory: string) {
         path = normalizeSlashes(path);
         let rootLength = getRootLength(path);
-        if (rootLength == 0) {
+        if (rootLength === 0) {
             // If the path is not rooted it is relative to current directory
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
@@ -544,20 +607,20 @@ module ts {
 
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/foler2/
-        // In this example the root is:  http://www.website.com/ 
+        // In this example the root is:  http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
         let urlLength = url.length;
         // Initial root length is http:// part
         let rootLength = url.indexOf("://") + "://".length;
         while (rootLength < urlLength) {
-            // Consume all immediate slashes in the protocol 
+            // Consume all immediate slashes in the protocol
             // eg.initial rootlength is just file:// but it needs to consume another "/" in file:///
             if (url.charCodeAt(rootLength) === CharacterCodes.slash) {
                 rootLength++;
             }
             else {
-                // non slash character means we continue proceeding to next component of root search 
+                // non slash character means we continue proceeding to next component of root search
                 break;
             }
         }
@@ -570,15 +633,15 @@ module ts {
         // Find the index of "/" after website.com so the root can be http://www.website.com/ (from existing http://)
         let indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
-            // Found the "/" after the website.com so the root is length of http://www.website.com/ 
+            // Found the "/" after the website.com so the root is length of http://www.website.com/
             // and get components afetr the root normally like any other folder components
             rootLength = indexOfNextSlash + 1;
             return normalizedPathComponents(url, rootLength);
         }
         else {
-            // Can't find the host assume the rest of the string as component 
+            // Can't find the host assume the rest of the string as component
             // but make sure we append "/"  to it as root is not joined using "/"
-            // eg. if url passed in was http://website.com we want to use root as [http://website.com/] 
+            // eg. if url passed in was http://website.com we want to use root as [http://website.com/]
             // so that other path manipulations will be correct and it can be merged with relative paths correctly
             return [url + directorySeparator];
         }
@@ -653,9 +716,9 @@ module ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".d.ts"];
+    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js"];
+    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
@@ -708,8 +771,8 @@ module ts {
             }
             Node.prototype = {
                 kind: kind,
-                pos: 0,
-                end: 0,
+                pos: -1,
+                end: -1,
                 flags: 0,
                 parent: undefined,
             };
@@ -718,7 +781,7 @@ module ts {
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature
-    }
+    };
 
     export const enum AssertionLevel {
         None = 0,

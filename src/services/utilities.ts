@@ -1,6 +1,6 @@
 // These utilities are common to multiple language service features.
 /* @internal */
-module ts {
+namespace ts {
     export interface ListItemInfo {
         listItemIndex: number;
         list: Node;
@@ -414,6 +414,60 @@ module ts {
             }
         }
     }
+    
+    export function isInString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+    }
+
+    export function isInComment(sourceFile: SourceFile, position: number) {
+        return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
+    }
+
+    /**
+     * Returns true if the cursor at position in sourceFile is within a comment that additionally
+     * satisfies predicate, and false otherwise.
+     */
+    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (token && position <= token.getStart()) {
+            let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+                
+            // The end marker of a single-line comment does not include the newline character.
+            // In the following case, we are inside a comment (^ denotes the cursor position):
+            //
+            //    // asdf   ^\n
+            //
+            // But for multi-line comments, we don't want to be inside the comment in the following case:
+            //
+            //    /* asdf */^
+            //
+            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+            return predicate ?
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                    predicate(c)) :
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+        }
+
+        return false;
+    }
+
+    export function hasDocComment(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        // First, we have to see if this position actually landed in a comment.
+        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+        return forEach(commentRanges, jsDocPrefix);
+        
+        function jsDocPrefix(c: CommentRange): boolean {
+            var text = sourceFile.text;
+            return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
+        }
+    }
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
@@ -429,6 +483,7 @@ module ts {
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
         if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
@@ -502,7 +557,7 @@ module ts {
 
 // Display-part writer helpers
 /* @internal */
-module ts {
+namespace ts {
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
@@ -624,6 +679,14 @@ module ts {
         return displayPart(text, SymbolDisplayPartKind.text);
     }
 
+    const carriageReturnLineFeed = "\r\n";
+    /**
+     * The default is CRLF.
+     */
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
+        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    }
+
     export function lineBreakPart() {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
@@ -653,7 +716,40 @@ module ts {
         });
     }
 
-    export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
+        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+        // If so we want to search for whatever is under the cursor.
+        if (isImportOrExportSpecifierName(location)) {
+            return location.getText();
+        }
+
+        // Try to get the local symbol if we're dealing with an 'export default'
+        // since that symbol has the "true" name.
+        let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+
+        let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
+
+        return name;
+    }
+
+    export function isImportOrExportSpecifierName(location: Node): boolean {
+        return location.parent &&
+            (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
+            (<ImportOrExportSpecifier>location.parent).propertyName === location;
+    }
+
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
+    export function stripQuotes(name: string) {
+        let length = name.length;
+        if (length >= 2 &&
+            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
+            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
+            return name.substring(1, length - 1);
+        };
+        return name;
     }
 }

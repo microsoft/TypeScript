@@ -31,8 +31,7 @@ class C1 {
 
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3?:number) { return C1M5A1 + C1M5A2; }
 
-    // Negative test
-    // "Optional parameters may only be followed by other optional parameters"
+    // Uninitialized parameter makes the initialized one required
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3:number) { return C1M5A1 + C1M5A2; }
 }
 
@@ -129,8 +128,7 @@ fnOpt2(1, [2, 3], [1], true);
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // test basic configurations
 var C1 = (function () {
@@ -153,8 +151,7 @@ var C1 = (function () {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;
     };
-    // Negative test
-    // "Optional parameters may only be followed by other optional parameters"
+    // Uninitialized parameter makes the initialized one required
     C1.prototype.C1M5 = function (C1M5A1, C1M5A2, C1M5A3) {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;

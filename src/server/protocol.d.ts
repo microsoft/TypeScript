@@ -1,7 +1,7 @@
 /** 
   * Declaration module describing the TypeScript Server protocol 
   */
-declare module ts.server.protocol {
+declare namespace ts.server.protocol {
     /** 
       * A TypeScript Server message 
       */
@@ -67,12 +67,12 @@ declare module ts.server.protocol {
         command: string;
 
         /** 
-          * Contains error message if success == false. 
+          * Contains error message if success === false. 
           */
         message?: string;
 
         /**
-          * Contains message body if success == true.
+          * Contains message body if success === true.
           */
         body?: any;
     }
@@ -85,6 +85,45 @@ declare module ts.server.protocol {
           * The file for the request (absolute pathname required).
           */
         file: string;
+    }
+
+    /** 
+      * Arguments for ProjectInfoRequest request.
+      */
+    export interface ProjectInfoRequestArgs extends FileRequestArgs {
+        /**
+          * Indicate if the file name list of the project is needed
+          */
+        needFileNameList: boolean;
+    }
+
+    /**
+      * A request to get the project information of the current file
+      */
+    export interface ProjectInfoRequest extends Request {
+        arguments: ProjectInfoRequestArgs
+    }
+
+    /** 
+      * Response message body for "projectInfo" request
+      */
+    export interface ProjectInfo {
+        /**
+          * For configured project, this is the normalized path of the 'tsconfig.json' file
+          * For inferred project, this is undefined
+          */
+        configFileName: string;
+        /**
+          * The list of normalized file name in the project, including 'lib.d.ts'
+          */
+        fileNames?: string[];
+    }
+
+    /** 
+      * Response message for "projectInfo" request
+      */
+    export interface ProjectInfoResponse extends Response {
+        body?: ProjectInfo;
     }
 
     /**
@@ -115,6 +154,17 @@ declare module ts.server.protocol {
       */
     export interface FileLocationRequest extends FileRequest {
         arguments: FileLocationRequestArgs;
+    }
+
+    /**
+      * Arguments in document highlight request; include: filesToSearch, file,
+      * line, offset.
+      */
+    export interface DocumentHighlightsRequestArgs extends FileLocationRequestArgs {
+        /**
+         * List of files to search for document highlights.
+         */
+        filesToSearch: string[];
     }
 
     /**
@@ -197,6 +247,35 @@ declare module ts.server.protocol {
 
     export interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
+    }
+
+    /**
+      * Get document highlights request; value of command field is
+      * "documentHighlights". Return response giving spans that are relevant
+      * in the file at a given line and column.
+      */
+    export interface DocumentHighlightsRequest extends FileLocationRequest {
+        arguments: DocumentHighlightsRequestArgs
+    }
+
+    export interface HighlightSpan extends TextSpan {
+        kind: string
+    }
+
+    export interface DocumentHighlightsItem {
+        /**
+          * File containing highlight spans.
+          */
+        file: string,
+
+        /**
+          * Spans to highlight in file.
+          */
+        highlightSpans: HighlightSpan[];
+    }
+
+    export interface DocumentHighlightsResponse extends Response {
+        body?: DocumentHighlightsItem[];
     }
 
     /**
@@ -373,6 +452,9 @@ declare module ts.server.protocol {
         
         /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+
+        /** Defines space handling after opening and before closing non empty brackets. Default value is false. */
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         
         /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
         placeOpenBraceOnNewLineForFunctions?: boolean;
@@ -814,6 +896,31 @@ declare module ts.server.protocol {
      */  
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    /**
+    * Arguments for GeterrForProject request.
+    */
+    export interface GeterrForProjectRequestArgs {
+        /**
+          * the file requesting project error list
+          */
+        file: string;
+
+        /**
+          * Delay in milliseconds to wait before starting to compute
+          * errors for the files in the file list
+          */
+        delay: number;
+    }
+
+    /**
+      * GeterrForProjectRequest request; value of command field is 
+      * "geterrForProject". It works similarly with 'Geterr', only 
+      * it request for every file in this project.
+      */
+    export interface GeterrForProjectRequest extends Request {
+        arguments: GeterrForProjectRequestArgs
     }
     
     /**

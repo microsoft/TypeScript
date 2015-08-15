@@ -19,7 +19,7 @@
 var debugObjectHost = (<any>this);
 
 /* @internal */
-module ts {
+namespace ts {
     export interface ScriptSnapshotShim {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -34,6 +34,9 @@ module ts {
          * Or undefined value if there was no change.
          */
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
     }
 
     export interface Logger {
@@ -51,17 +54,23 @@ module ts {
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): CancellationToken;
+        getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
+        useCaseSensitiveFileNames?(): boolean;
     }
 
     /** Public interface of the the of a config service shim instance.*/
     export interface CoreServicesShimHost extends Logger {
-        /** Returns a JSON-encoded value of the type: string[] */
-        readDirectory(rootDir: string, extension: string): string;
+        /**
+         * Returns a JSON-encoded value of the type: string[]
+         *
+         * @param exclude A JSON encoded string[] containing the paths to exclude
+         *  when enumerating the directory.
+         */
+        readDirectory(rootDir: string, extension: string, exclude?: string): string;
     }
 
     ///
@@ -196,6 +205,11 @@ module ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        /**
+         * Returns JSON-encoded value of the type TextInsertion.
+         */
+        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -233,6 +247,7 @@ module ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            // TODO: should this be '==='?
             if (encoded == null) {
                 return null;
             }
@@ -241,20 +256,34 @@ module ts {
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
+
+        public dispose(): void {
+            // if scriptSnapshotShim is a COM object then property check becomes method call with no arguments
+            // 'in' does not have this effect
+            if ("dispose" in this.scriptSnapshotShim) {
+                this.scriptSnapshotShim.dispose();
+            }
+        }
     }
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
+        private loggingEnabled = false;
+        private tracingEnabled = false;
 
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
         public log(s: string): void {
-            this.shimHost.log(s);
+            if (this.loggingEnabled) {
+                this.shimHost.log(s);
+            }
         }
 
         public trace(s: string): void {
-            this.shimHost.trace(s);
+            if (this.tracingEnabled) {
+                this.shimHost.trace(s);
+            }
         }
 
         public error(s: string): void {
@@ -270,8 +299,13 @@ module ts {
             return this.shimHost.getProjectVersion();
         }
 
+        public useCaseSensitiveFileNames(): boolean {
+            return this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+        }
+
         public getCompilationSettings(): CompilerOptions {
             var settingsJson = this.shimHost.getCompilationSettings();
+            // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;
@@ -313,8 +347,9 @@ module ts {
             }
         }
 
-        public getCancellationToken(): CancellationToken {
-            return this.shimHost.getCancellationToken();
+        public getCancellationToken(): HostCancellationToken {
+            var hostCancellationToken = this.shimHost.getCancellationToken();
+            return new ThrottledCancellationToken(hostCancellationToken);
         }
 
         public getCurrentDirectory(): string {
@@ -333,26 +368,59 @@ module ts {
         }
     }
 
+    /** A cancellation that throttles calls to the host */
+    class ThrottledCancellationToken implements HostCancellationToken {
+        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
+        // to marshall over to the host layer).  So we only bother actually checking once enough
+        // time has passed.
+        private lastCancellationCheckTime = 0;
+
+        constructor(private hostCancellationToken: HostCancellationToken) {
+        }
+
+        public isCancellationRequested(): boolean {
+            var time = Date.now();
+            var duration = Math.abs(time - this.lastCancellationCheckTime);
+            if (duration > 10) {
+                // Check no more than once every 10 ms.
+                this.lastCancellationCheckTime = time;
+                return this.hostCancellationToken.isCancellationRequested();
+            }
+
+            return false;
+        }
+    }
+
     export class CoreServicesShimHostAdapter implements ParseConfigHost {
 
         constructor(private shimHost: CoreServicesShimHost) {
         }
 
-        public readDirectory(rootDir: string, extension: string): string[] {
-            var encoded = this.shimHost.readDirectory(rootDir, extension);
+        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
+            // Wrap the API changes for 1.5 release. This try/catch
+            // should be removed once TypeScript 1.5 has shipped.
+            // Also consider removing the optional designation for
+            // the exclude param at this time.
+            var encoded: string;
+            try {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            }
+            catch (e) {
+                encoded = this.shimHost.readDirectory(rootDir, extension);
+            }
             return JSON.parse(encoded);
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
-        if (!noPerfLogging) {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+        if (logPerformance) {
             logger.log(actionDescription);
             var start = Date.now();
         }
 
         var result = action();
 
-        if (!noPerfLogging) {
+        if (logPerformance) {
             var end = Date.now();
             logger.log(actionDescription + " completed in " + (end - start) + " msec");
             if (typeof (result) === "string") {
@@ -367,9 +435,9 @@ module ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action, noPerfLogging);
+            var result = simpleForwardCall(logger, actionDescription, action, logPerformance);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -391,11 +459,11 @@ module ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; } []{
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
@@ -408,6 +476,7 @@ module ts {
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
         private logger: Logger;
+        private logPerformance = false;
 
         constructor(factory: ShimFactory,
             private host: LanguageServiceShimHost,
@@ -417,7 +486,7 @@ module ts {
         }
 
         public forwardJSONCall(actionDescription: string, action: () => any): string {
-            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
+            return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
         /// DISPOSE
@@ -465,7 +534,7 @@ module ts {
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = this.getNewLine();
+            var newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
@@ -505,10 +574,6 @@ module ts {
                     // on the managed side versus a full JSON array.
                     return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
                 });
-        }
-
-        private getNewLine(): string {
-            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
         }
 
         public getSyntacticDiagnostics(fileName: string): string {
@@ -687,7 +752,10 @@ module ts {
             return this.forwardJSONCall(
                 "getDocumentHighlights('" + fileName + "', " + position + ")",
                 () => {
-                    return this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    var results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    let normalizedName = normalizeSlashes(fileName).toLowerCase();
+                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
         }
 
@@ -745,6 +813,13 @@ module ts {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
+        }
+
+        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+            );
         }
 
         /// NAVIGATE TO
@@ -806,6 +881,7 @@ module ts {
 
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
+        private logPerformance = false;
 
         constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
@@ -815,7 +891,7 @@ module ts {
         public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
             return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
                 () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
-                /*noPerfLogging:*/ true);
+                this.logPerformance);
         }
 
         /// COLORIZATION
@@ -833,13 +909,14 @@ module ts {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
+        private logPerformance = false;
 
         constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
+            return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -909,7 +986,7 @@ module ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry = createDocumentRegistry();
+        private documentRegistry: DocumentRegistry;
 
         /*
          * Returns script API version.
@@ -920,6 +997,9 @@ module ts {
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
+                if (this.documentRegistry === undefined) {
+                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+                }
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
                 var languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
@@ -989,4 +1069,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-let toolsVersion = "1.4";
+let toolsVersion = "1.5";

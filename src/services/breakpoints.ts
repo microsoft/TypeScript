@@ -4,7 +4,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-module ts.BreakpointResolver {
+namespace ts.BreakpointResolver {
     /**
      * Get the breakpoint span in given sourceFile
      */
@@ -75,7 +75,7 @@ module ts.BreakpointResolver {
                         return textSpan(node);
                     }
 
-                    if (node.parent.kind == SyntaxKind.ArrowFunction && (<FunctionLikeDeclaration>node.parent).body == node) {
+                    if (node.parent.kind === SyntaxKind.ArrowFunction && (<FunctionLikeDeclaration>node.parent).body === node) {
                         // If this is body of arrow function, it is allowed to have the breakpoint
                         return textSpan(node);
                     }

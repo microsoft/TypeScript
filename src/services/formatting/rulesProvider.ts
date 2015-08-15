@@ -1,7 +1,7 @@
 /// <reference path="references.ts"/>
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export class RulesProvider {
         private globalRules: Rules;
         private options: ts.FormatCodeOptions;
@@ -25,6 +25,7 @@ module ts.formatting {
         }
 
         public ensureUpToDate(options: ts.FormatCodeOptions) {
+            // TODO: Should this be '==='?
             if (this.options == null || !ts.compareDataObjects(this.options, options)) {
                 let activeRules = this.createActiveRules(options);
                 let rulesMap = RulesMap.create(activeRules);
@@ -68,6 +69,17 @@ module ts.formatting {
                 rules.push(this.globalRules.NoSpaceAfterOpenParen);
                 rules.push(this.globalRules.NoSpaceBeforeCloseParen);
                 rules.push(this.globalRules.NoSpaceBetweenParens);
+            }
+
+            if ( options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets ) {
+                rules.push( this.globalRules.SpaceAfterOpenBracket );
+                rules.push( this.globalRules.SpaceBeforeCloseBracket );
+                rules.push( this.globalRules.NoSpaceBetweenBrackets );
+            }
+            else {
+                rules.push( this.globalRules.NoSpaceAfterOpenBracket );
+                rules.push( this.globalRules.NoSpaceBeforeCloseBracket );
+                rules.push( this.globalRules.NoSpaceBetweenBrackets );
             }
 
             if (options.InsertSpaceAfterSemicolonInForStatements) {
