@@ -12616,9 +12616,12 @@ namespace ts {
                         }
                     }
                     checkKindsOfPropertyMemberOverrides(type, baseType);
-
-                    if (!isDefinedBefore(baseType.symbol.declarations[0], node)) {
-                        error(getClassExtendsHeritageClauseElement(node), Diagnostics.Base_expression_references_type_before_it_is_declared);
+                        
+                    // Check if base type declaration appears before heritage clause to avoid false errors for 
+                    // base type declarations in the extend clause itself
+                    let heritageClassElement = getClassExtendsHeritageClauseElement(node);
+                    if (!isDefinedBefore(baseType.symbol.declarations[0], heritageClassElement)) {
+                        error(heritageClassElement, Diagnostics.Base_expression_references_type_before_it_is_declared);
                     }
                 }
             }

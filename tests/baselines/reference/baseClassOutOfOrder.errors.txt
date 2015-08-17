@@ -1,8 +1,10 @@
 tests/cases/compiler/baseClassOutOfOrder.ts(1,17): error TS2653: Base expression references type before it is declared.
+tests/cases/compiler/baseClassOutOfOrder.ts(15,21): error TS2653: Base expression references type before it is declared.
+tests/cases/compiler/baseClassOutOfOrder.ts(21,18): error TS2653: Base expression references type before it is declared.
 
 
-==== tests/cases/compiler/baseClassOutOfOrder.ts (1 errors) ====
-    class B extends A {
+==== tests/cases/compiler/baseClassOutOfOrder.ts (3 errors) ====
+    class B extends A { // error
                     ~
 !!! error TS2653: Base expression references type before it is declared.
         constructor(msg: string) {
@@ -10,8 +12,43 @@ tests/cases/compiler/baseClassOutOfOrder.ts(1,17): error TS2653: Base expression
         }
     }
     
+    class B2 extends class B3 extends class C { // no error
+    }{
+    }{ }
+    
+    class B3 extends class { // no error
+    }{
+    }
+    
+    class B4<T> extends A1<T> { // Error
+                        ~~~~~
+!!! error TS2653: Base expression references type before it is declared.
+        constructor(msg: T) {
+            super(msg);
+        }
+    }
+    
+    class B5 extends A1<number> { // Error
+                     ~~~~~~~~~~
+!!! error TS2653: Base expression references type before it is declared.
+        constructor(msg: number) {
+            super(msg);
+        }
+    }
+    
+    class B6 extends B4<A1<number>> { // No error
+        constructor(msg: A1<number>) {
+            super(msg);
+        }
+    }
+    
     class A {
         constructor(public msg: string) {
     
+        }
+    }
+    
+    class A1<T> {
+        constructor(msg: T) {
         }
     }

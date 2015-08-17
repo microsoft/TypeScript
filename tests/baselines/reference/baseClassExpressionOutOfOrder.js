@@ -1,9 +1,17 @@
 //// [baseClassExpressionOutOfOrder.ts]
-var c = class A extends B {
+var c = class A extends B { // error
 }
-var c2 = class extends B {
+var c2 = class extends B { // error
 }
-
+var c3 = class B extends class A { // No error
+}{
+}
+var c4 =class extends class { // no error
+}{
+}
+var c5 = class extends class B3 extends class C { // no error
+}{
+}{ }
 class B {
 }
 
@@ -27,6 +35,45 @@ var c2 = (function (_super) {
     }
     return class_1;
 })(B);
+var c3 = (function (_super) {
+    __extends(B, _super);
+    function B() {
+        _super.apply(this, arguments);
+    }
+    return B;
+})((function () {
+    function A() {
+    }
+    return A;
+})());
+var c4 = (function (_super) {
+    __extends(class_2, _super);
+    function class_2() {
+        _super.apply(this, arguments);
+    }
+    return class_2;
+})((function () {
+    function class_3() {
+    }
+    return class_3;
+})());
+var c5 = (function (_super) {
+    __extends(class_4, _super);
+    function class_4() {
+        _super.apply(this, arguments);
+    }
+    return class_4;
+})((function (_super) {
+    __extends(B3, _super);
+    function B3() {
+        _super.apply(this, arguments);
+    }
+    return B3;
+})((function () {
+    function C() {
+    }
+    return C;
+})()));
 var B = (function () {
     function B() {
     }
