@@ -1,4 +1,16 @@
 === tests/cases/compiler/derivedClasses.ts ===
+class Color {
+>Color : Color
+
+    public shade() { return "some shade"; }
+>shade : () => string
+>"some shade" : string
+
+    public hue() { return "some hue"; }
+>hue : () => string
+>"some hue" : string
+}
+
 class Red extends Color {
 >Red : Red
 >Color : Color
@@ -20,18 +32,6 @@ class Red extends Color {
 >getHue : () => string
 >" red" : string
     }
-}
-
-class Color {
->Color : Color
-
-    public shade() { return "some shade"; }
->shade : () => string
->"some shade" : string
-
-    public hue() { return "some hue"; }
->hue : () => string
->"some hue" : string
 }
 
 class Blue extends Color {

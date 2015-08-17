@@ -1,11 +1,6 @@
 // @target: ES5
 // There should be no errors in this file
-class Derived extends Base {
-    public static createEmpty(): Derived {
-        var item = new Derived();
-        return item;
-    }
-}
+
 class BaseCollection<T extends Base> {
     constructor(f: () => T) {
         (item: Thing) => { return [item.Components]; };
@@ -13,6 +8,13 @@ class BaseCollection<T extends Base> {
 }
 class Base {
     ownerCollection: BaseCollection<Base>;
+}
+
+class Derived extends Base {
+    public static createEmpty(): Derived {
+        var item = new Derived();
+        return item;
+    }
 }
 
 class Thing {

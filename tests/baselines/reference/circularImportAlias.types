@@ -1,6 +1,18 @@
 === tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts ===
 // expected no error
 
+module A {
+>A : typeof b.a
+
+    export class C { name: string }
+>C : C
+>name : string
+
+    export import b = B;
+>b : typeof b
+>B : typeof b
+}
+
 module B {
 >B : typeof a.b
 
@@ -17,18 +29,6 @@ module B {
         id: number;
 >id : number
     }
-}
-
-module A {
->A : typeof b.a
-
-    export class C { name: string }
->C : C
->name : string
-
-    export import b = B;
->b : typeof b
->B : typeof b
 }
 
 var c: { name: string };

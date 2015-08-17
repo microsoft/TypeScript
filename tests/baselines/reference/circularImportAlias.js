@@ -1,16 +1,16 @@
 //// [circularImportAlias.ts]
 // expected no error
 
+module A {
+    export class C { name: string }
+    export import b = B;
+}
+
 module B {
     export import a = A;
     export class D extends a.C {
         id: number;
     }
-}
-
-module A {
-    export class C { name: string }
-    export import b = B;
 }
 
 var c: { name: string };
@@ -26,6 +26,16 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var A;
+(function (A) {
+    var C = (function () {
+        function C() {
+        }
+        return C;
+    })();
+    A.C = C;
+    A.b = B;
+})(A || (A = {}));
 var B;
 (function (B) {
     B.a = A;
@@ -38,15 +48,5 @@ var B;
     })(B.a.C);
     B.D = D;
 })(B || (B = {}));
-var A;
-(function (A) {
-    var C = (function () {
-        function C() {
-        }
-        return C;
-    })();
-    A.C = C;
-    A.b = B;
-})(A || (A = {}));
 var c;
 var c = new B.a.C();

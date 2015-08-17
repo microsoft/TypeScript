@@ -1,0 +1,9 @@
+tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts(1,23): error TS2653: Base expression references type before it is declared.
+
+
+==== tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts (1 errors) ====
+    class derived extends base { }
+                          ~~~~
+!!! error TS2653: Base expression references type before it is declared.
+     
+    class base { constructor (public n: number) { } }

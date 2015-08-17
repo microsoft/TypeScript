@@ -1,13 +1,13 @@
+class Color {
+    public shade() { return "some shade"; }
+    public hue() { return "some hue"; }
+}
+
 class Red extends Color {
     public shade() { 
     	var getHue = () => { return this.hue(); };
     	return getHue() + " red"; 
     }
-}
-
-class Color {
-    public shade() { return "some shade"; }
-    public hue() { return "some hue"; }
 }
 
 class Blue extends Color {

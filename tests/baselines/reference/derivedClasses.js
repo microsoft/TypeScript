@@ -1,14 +1,14 @@
 //// [derivedClasses.ts]
+class Color {
+    public shade() { return "some shade"; }
+    public hue() { return "some hue"; }
+}
+
 class Red extends Color {
     public shade() { 
     	var getHue = () => { return this.hue(); };
     	return getHue() + " red"; 
     }
-}
-
-class Color {
-    public shade() { return "some shade"; }
-    public hue() { return "some hue"; }
 }
 
 class Blue extends Color {
@@ -36,6 +36,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var Color = (function () {
+    function Color() {
+    }
+    Color.prototype.shade = function () { return "some shade"; };
+    Color.prototype.hue = function () { return "some hue"; };
+    return Color;
+})();
 var Red = (function (_super) {
     __extends(Red, _super);
     function Red() {
@@ -48,13 +55,6 @@ var Red = (function (_super) {
     };
     return Red;
 })(Color);
-var Color = (function () {
-    function Color() {
-    }
-    Color.prototype.shade = function () { return "some shade"; };
-    Color.prototype.hue = function () { return "some hue"; };
-    return Color;
-})();
 var Blue = (function (_super) {
     __extends(Blue, _super);
     function Blue() {
