@@ -319,14 +319,21 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * We assume the first line starts at position 0 and 'position' is non-negative.
+     */
     export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found,
-            // the binary search returns the negative value of the next line start
+            // the binary search returns the 2's-complement of the next line start
             // e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
-            // then the search will return -2
+            // then the search will return -2.
+            //
+            // We want the index of the previous line start, so we subtract 1.
+            // Review 2's-complement if this is confusing.
             lineNumber = ~lineNumber - 1;
+            Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
         }
         return {
             line: lineNumber,
@@ -401,6 +408,9 @@ namespace ts {
               case CharacterCodes.greaterThan:
                   // Starts of conflict marker trivia
                   return true;
+              case CharacterCodes.hash:
+                  // Only if its the beginning can we have #! trivia
+                  return pos === 0;
               default:
                   return ch > CharacterCodes.maxAsciiCharacter;
           }
@@ -457,6 +467,13 @@ namespace ts {
                   case CharacterCodes.greaterThan:
                       if (isConflictMarkerTrivia(text, pos)) {
                           pos = scanConflictMarkerTrivia(text, pos);
+                          continue;
+                      }
+                      break;
+
+                  case CharacterCodes.hash:
+                      if (isShebangTrivia(text, pos)) {
+                          pos = scanShebangTrivia(text, pos);
                           continue;
                       }
                       break;
@@ -528,13 +545,31 @@ namespace ts {
         return pos;
     }
 
-    // Extract comments from the given source text starting at the given position. If trailing is
-    // false, whitespace is skipped until the first line break and comments between that location
-    // and the next token are returned.If trailing is true, comments occurring between the given
-    // position and the next line break are returned.The return value is an array containing a
-    // TextRange for each comment. Single-line comment ranges include the beginning '//' characters
-    // but not the ending line break. Multi - line comment ranges include the beginning '/* and
-    // ending '*/' characters.The return value is undefined if no comments were found.
+    const shebangTriviaRegex = /^#!.*/;
+
+    function isShebangTrivia(text: string, pos: number) {
+        // Shebangs check must only be done at the start of the file
+        Debug.assert(pos === 0);
+        return shebangTriviaRegex.test(text);
+    }
+
+    function scanShebangTrivia(text: string, pos: number) {
+        let shebang = shebangTriviaRegex.exec(text)[0];
+        pos = pos + shebang.length;
+        return pos;
+    }
+
+    /**
+     * Extract comments from text prefixing the token closest following `pos`. 
+     * The return value is an array containing a TextRange for each comment.
+     * Single-line comment ranges include the beginning '//' characters but not the ending line break.
+     * Multi - line comment ranges include the beginning '/* and ending '<asterisk>/' characters.
+     * The return value is undefined if no comments were found.
+     * @param trailing 
+     * If false, whitespace is skipped until the first line break and comments between that location
+     * and the next token are returned.
+     * If true, comments occurring between the given position and the next line break are returned.
+     */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
@@ -617,6 +652,13 @@ namespace ts {
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
+    
+    /** Optionally, get the shebang */
+    export function getShebang(text: string): string {
+        return shebangTriviaRegex.test(text)
+            ? shebangTriviaRegex.exec(text)[0]
+            : undefined;
+    }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
@@ -630,7 +672,6 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    /* @internal */
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
@@ -1087,6 +1128,18 @@ namespace ts {
                     return token = SyntaxKind.EndOfFileToken;
                 }
                 let ch = text.charCodeAt(pos);
+
+                // Special handling for shebang
+                if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text, pos);
+                    if (skipTrivia) {
+                        continue;
+                    }
+                    else {
+                        return token = SyntaxKind.ShebangTrivia;
+                    }
+                }
+
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
