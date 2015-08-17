@@ -844,6 +844,10 @@ namespace ts {
             return token = scanner.scanJsxIdentifier();
         }
 
+        function scanJsxText(): SyntaxKind {
+            return token = scanner.scanJsxToken();
+        }
+
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
@@ -913,9 +917,11 @@ namespace ts {
             return token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
+        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
             if (token === kind) {
-                nextToken();
+                if (shouldAdvance) {
+                    nextToken();
+                }
                 return true;
             }
 
@@ -3178,7 +3184,7 @@ namespace ts {
                         return parseTypeAssertion();
                     }
                     if (lookAhead(nextTokenIsIdentifierOrKeyword)) {
-                        return parseJsxElementOrSelfClosingElement();
+                        return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
                     }
                     // Fall through
                 default:
@@ -3308,14 +3314,14 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxElementOrSelfClosingElement(): JsxElement|JsxSelfClosingElement {
-            let opening = parseJsxOpeningOrSelfClosingElement();
+        function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
+            let opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
-                node.closingElement = parseJsxClosingElement();
+                node.closingElement = parseJsxClosingElement(inExpressionContext);
                 return finishNode(node);
             }
             else {
@@ -3336,9 +3342,9 @@ namespace ts {
                 case SyntaxKind.JsxText:
                     return parseJsxText();
                 case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression();
+                    return parseJsxExpression(/*inExpressionContext*/ false);
                 case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElement();
+                    return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ false);
             }
             Debug.fail("Unknown JSX child kind " + token);
         }
@@ -3368,7 +3374,7 @@ namespace ts {
             return result;
         }
 
-        function parseJsxOpeningOrSelfClosingElement(): JsxOpeningElement|JsxSelfClosingElement {
+        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement|JsxSelfClosingElement {
             let fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
@@ -3378,12 +3384,22 @@ namespace ts {
             let attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
             let node: JsxOpeningLikeElement;
 
-            if (parseOptional(SyntaxKind.GreaterThanToken)) {
+            if (token === SyntaxKind.GreaterThanToken) {
+                // Closing tag, so scan the immediately-following text with the JSX scanning instead
+                // of regular scanning to avoid treating illegal characters (e.g. '#') as immediate
+                // scanning errors
                 node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, fullStart);
+                scanJsxText();
             }
             else {
                 parseExpected(SyntaxKind.SlashToken);
-                parseExpected(SyntaxKind.GreaterThanToken);
+                if (inExpressionContext) {
+                    parseExpected(SyntaxKind.GreaterThanToken);
+                }
+                else {
+                    parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*advance*/ false);
+                    scanJsxText();
+                }
                 node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
             }
 
@@ -3406,14 +3422,20 @@ namespace ts {
             return elementName;
         }
 
-        function parseJsxExpression(): JsxExpression {
+        function parseJsxExpression(inExpressionContext: boolean): JsxExpression {
             let node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
 
             parseExpected(SyntaxKind.OpenBraceToken);
             if (token !== SyntaxKind.CloseBraceToken) {
                 node.expression = parseExpression();
             }
-            parseExpected(SyntaxKind.CloseBraceToken);
+            if (inExpressionContext) {
+                parseExpected(SyntaxKind.CloseBraceToken);
+            }
+            else {
+                parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*advance*/ false);
+                scanJsxText();
+            }
 
             return finishNode(node);
         }
@@ -3432,7 +3454,7 @@ namespace ts {
                         node.initializer = parseLiteralNode();
                         break;
                     default:
-                        node.initializer = parseJsxExpression();
+                        node.initializer = parseJsxExpression(/*inExpressionContext*/ true);
                         break;
                 }
             }
@@ -3448,11 +3470,17 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxClosingElement(): JsxClosingElement {
+        function parseJsxClosingElement(inExpressionContext: boolean): JsxClosingElement {
             let node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement);
             parseExpected(SyntaxKind.LessThanSlashToken);
             node.tagName = parseJsxElementName();
-            parseExpected(SyntaxKind.GreaterThanToken);
+            if (inExpressionContext) {
+                parseExpected(SyntaxKind.GreaterThanToken);
+            }
+            else {
+                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*advance*/ false);
+                scanJsxText();
+            }
             return finishNode(node);
         }
 

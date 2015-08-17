@@ -587,9 +587,9 @@ namespace ts {
      * Several node kinds share function-like features such as a signature,
      * a name, and a body. These nodes should extend FunctionLikeDeclaration.
      * Examples:
-     *  FunctionDeclaration
-     *  MethodDeclaration
-     *  AccessorDeclaration
+     * - FunctionDeclaration
+     * - MethodDeclaration
+     * - AccessorDeclaration
      */
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
@@ -1592,7 +1592,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
         isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 

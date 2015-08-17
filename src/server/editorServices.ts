@@ -368,7 +368,7 @@ namespace ts.server {
             return this.projectService.openFile(filename, false);
         }
 
-        getFileNameList() {
+        getFileNames() {
             let sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
@@ -1054,6 +1054,7 @@ namespace ts.server {
             InsertSpaceAfterKeywordsInControlFlowStatements: true,
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         }
