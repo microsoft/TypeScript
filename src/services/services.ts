@@ -132,7 +132,7 @@ namespace ts {
 
     let emptyArray: any[] = [];
     
-    const JsDocTagNames: string[] = [
+    const jsDocTagNames: string[] = [
         "augments", 
         "author", 
         "argument", 
@@ -170,6 +170,7 @@ namespace ts {
         "type", 
         "version"
     ];
+    let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
         let node = <NodeObject> new (getNodeConstructor(kind))();
@@ -2957,6 +2958,8 @@ namespace ts {
             let sourceFile = getValidSourceFile(fileName);
             let isJavaScriptFile = isJavaScript(fileName);
 
+            let isJsDocTagName = false;
+
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
             log("getCompletionData: Get current token: " + (new Date().getTime() - start));
@@ -2967,12 +2970,22 @@ namespace ts {
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
+                // The current position is next to the '@' sign, when no tag name being provided yet. 
+                // Provide a full list of tag names
+                if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
+                    isJsDocTagName = true;
+                }
+
                 // Completion should work inside certain JsDoc tags. For example:
                 //     /** @type {number | string} */
                 // Completion should work in the brackets
                 let insideJsDocTagExpression = false;
                 let tag = getJsDocTagAtPosition(sourceFile, position);
                 if (tag) {
+                    if (tag.tagName.pos <= position && position <= tag.tagName.end) {
+                        isJsDocTagName = true;
+                    }
+
                     switch (tag.kind) {
                         case SyntaxKind.JSDocTypeTag:
                         case SyntaxKind.JSDocParameterTag:
@@ -2983,7 +2996,14 @@ namespace ts {
                             break;
                     }
                 }
+
+                if (isJsDocTagName) {
+                    return { symbols: undefined, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+                }
+
                 if (!insideJsDocTagExpression) {
+                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal 
+                    // comment or the plain text part of a jsDoc comment, so no completion should be available
                     log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
                     return undefined;
                 }
@@ -3072,7 +3092,7 @@ namespace ts {
 
             log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
-            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag) };
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
 
             function getTypeScriptMemberSymbols(): void {
                 // Right of dot member completion list
@@ -3710,16 +3730,17 @@ namespace ts {
 
             let completionData = getCompletionData(fileName, position);
             if (!completionData) {
-                let entries = getJsDocCompletionEntries(fileName, position);
-                if (entries) {
-                    return { isMemberCompletion: false, isNewIdentifierLocation: false, entries };
-                }
                 return undefined;
             }
 
-            let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot } = completionData;
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
 
             let entries: CompletionEntry[];
+            if (isJsDocTagName) {
+                // If the current position is a jsDoc tag name, only tag names should be provided for completion
+                return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
+            }
+
             if (isRightOfDot && isJavaScript(fileName)) {
                 entries = getCompletionEntriesFromSymbols(symbols);
                 addRange(entries, getJavaScriptCompletionEntries());
@@ -3733,7 +3754,7 @@ namespace ts {
             }
 
             // Add keywords if this is not a member completion list
-            if (!isMemberCompletion) {
+            if (!isMemberCompletion && !isJsDocTagName) {
                 addRange(entries, keywordCompletions);
             }
 
@@ -3766,37 +3787,15 @@ namespace ts {
                 return entries;
             }
 
-            function getJsDocCompletionEntries(fileName: string, position: number): CompletionEntry[] {
-                let sourceFile = getValidSourceFile(fileName);
-                let hasJsDocComment = ts.hasDocComment(sourceFile, position);
-                if (!hasJsDocComment) {
-                    return undefined;
-                }
-
-                // Return a list of JsDoc tag names for completion if the current position is right after an '@' sign 
-                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                    return getAllJsDocCompletionEntries();
-                }
-
-                // Also return tag names if the current position is inside a tag name, e.g. (at the location of '^') 
-                //    /** @par^ */ 
-                let tag = getJsDocTagAtPosition(sourceFile, position);
-                if (tag) {
-                    if (tag.atToken.end <= position && position <= tag.tagName.end) {
-                        return getAllJsDocCompletionEntries();
-                    }
-                }
-            }
-
             function getAllJsDocCompletionEntries(): CompletionEntry[] {
-                return ts.map(JsDocTagNames, tagName => {
+                return jsDocCompletionEntries || (jsDocCompletionEntries = ts.map(jsDocTagNames, tagName => {
                     return {
                         name: tagName,
                         kind: ScriptElementKind.keyword,
                         kindModifiers: "",
                         sortText: "0",
                     }
-                });
+                }));
             }
 
             function createCompletionEntry(symbol: Symbol, location: Node): CompletionEntry {

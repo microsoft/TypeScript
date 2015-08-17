@@ -16,6 +16,12 @@
 ////
 /////** @type { n/*5*/ } */
 ////var v5;
+////
+////// @/*6*/
+////var v6;
+////
+////// @pa/*7*/
+////var v7;
 
 goTo.marker('1');
 verify.completionListContains("constructor");
@@ -36,4 +42,9 @@ verify.completionListContains('number');
 goTo.marker('5');
 verify.completionListContains('number');
 
+goTo.marker('6');
+verify.completionListIsEmpty();
+
+goTo.marker('7');
+verify.completionListIsEmpty();
 

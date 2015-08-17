@@ -475,18 +475,21 @@ namespace ts {
     export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
         let node = ts.getTokenAtPosition(sourceFile, position);
         let jsDocComment: JSDocComment;
-        while (true) {
-            if (node === sourceFile ||
-                node.kind === SyntaxKind.VariableStatement ||
-                node.kind === SyntaxKind.FunctionDeclaration ||
-                node.kind === SyntaxKind.Parameter ||
-                node.jsDocComment) {
-                jsDocComment = node.jsDocComment;
-                break;
-            }
-            node = node.parent;
+        if (node.jsDocComment) {
+            jsDocComment = node.jsDocComment;
         }
-        
+        else {
+            while (node) {
+                if (node.kind === SyntaxKind.VariableStatement ||
+                    node.kind === SyntaxKind.FunctionDeclaration ||
+                    node.kind === SyntaxKind.Parameter) {
+                    jsDocComment = node.jsDocComment;
+                    break;
+                }
+                node = node.parent;
+            }
+        }
+
         if (jsDocComment) {
             for (let tag of jsDocComment.tags) {
                 if (tag.pos <= position && position <= tag.end) {
@@ -494,6 +497,7 @@ namespace ts {
                 }
             }
         }
+
         return undefined;
     }
 
