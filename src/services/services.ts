@@ -3492,6 +3492,7 @@ namespace ts {
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
                             containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration ||
                             isFunction(containingNodeKind);
 
                     case SyntaxKind.StaticKeyword:
