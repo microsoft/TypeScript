@@ -13,6 +13,7 @@ export function f() {
 
 
 //// [b.js]
+exports.X = X;
 function f() {
     var x;
     return x;

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/exportClauseEmit.ts ===
+var str = "Hello";
+>str : Symbol(str, Decl(exportClauseEmit.ts, 0, 3))
+
+// Change str
+str = "Hello World!!!";
+>str : Symbol(str, Decl(exportClauseEmit.ts, 0, 3))
+
+export {str};
+>str : Symbol(str, Decl(exportClauseEmit.ts, 3, 8))
+

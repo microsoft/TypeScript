@@ -24,8 +24,8 @@ var set = {
     set foo(x) {
     }
 };
-exports.set = set;
 var get = 10;
+exports.set = set;
 exports.get = get;
 //// [t2.js]
 //// [t3.js]

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/exportClauseEmit.ts ===
+var str = "Hello";
+>str : string
+>"Hello" : string
+
+// Change str
+str = "Hello World!!!";
+>str = "Hello World!!!" : string
+>str : string
+>"Hello World!!!" : string
+
+export {str};
+>str : string
+

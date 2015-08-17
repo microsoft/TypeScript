@@ -46,21 +46,21 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [t3.js]
 define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, t1_1, c, t1_2, t1_3, t1_4) {
-    exports.a = a;
     a.default;
-    exports.b = t1_1.default;
     t1_1.default;
-    exports.c = c;
     c.default;
-    exports.d = t1_2.default;
     t1_2.default;
     var e2 = t1_3;
-    exports.e1 = t1_3.default;
-    exports.e2 = e2;
     t1_3.default;
     e2.default;
+    t1_4.default;
+    t1_4.default;
+    exports.a = a;
+    exports.b = t1_1.default;
+    exports.c = c;
+    exports.d = t1_2.default;
+    exports.e1 = t1_3.default;
+    exports.e2 = e2;
     exports.f1 = t1_4.default;
     exports.f2 = t1_4.default;
-    t1_4.default;
-    t1_4.default;
 });

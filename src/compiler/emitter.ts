@@ -3105,23 +3105,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitExportMemberAssignments(name: Identifier) {
-                if (compilerOptions.module === ModuleKind.System) {
-                    return;
-                }
-                
-                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
-                    for (let specifier of exportSpecifiers[name.text]) {
-                        writeLine();
+            function emitExportMemberAssignments(specifier: ExportSpecifier) {
+                if (resolver.isValueAliasDeclaration(specifier)) {
+                    writeLine();
+                    emitStart(specifier);
+                    if (compilerOptions.module === ModuleKind.System) {
+                        write(`${exportFunctionForFile}("`);
+                        emit(specifier.name);
+                        write(`", `);
+                        emitExpressionIdentifier(specifier.propertyName || specifier.name);
+                        write(")");
+                    }
+                    else {
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
                         write(".");
                         emitNodeWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
-                        emitExpressionIdentifier(name);
-                        write(";");
+                        emitExpressionIdentifier(specifier.propertyName || specifier.name);
                     }
+                    emitEnd(specifier);
+                    write(";");
                 }
             }
             
@@ -3421,19 +3426,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitExportVariableAssignments(node: VariableDeclaration | BindingElement) {
-                if (node.kind === SyntaxKind.OmittedExpression) {
-                    return;
-                }
-                let name = node.name;
-                if (name.kind === SyntaxKind.Identifier) {
-                    emitExportMemberAssignments(<Identifier>name);
-                }
-                else if (isBindingPattern(name)) {
-                    forEach((<BindingPattern>name).elements, emitExportVariableAssignments);
-                }
-            }
-
             function getCombinedFlagsForIdentifier(node: Identifier): NodeFlags {
                 if (!node.parent || (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
                     return 0;
@@ -3471,9 +3463,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (atLeastOneItem) {
                         write(";");
                     }
-                }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
-                    forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
             }
 
@@ -3697,9 +3686,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitSignatureAndBody(node);
-                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignments((<FunctionDeclaration>node).name);
-                }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                     emitTrailingComments(node);
                 }
@@ -4619,10 +4605,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     emitExportMemberAssignment(<ClassDeclaration>node);
                 }
-
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignments(node.name);
-                }
             }
 
             function emitClassMemberPrefix(node: ClassLikeDeclaration, member: Node) {
@@ -5219,7 +5201,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitDeclarationName(node);
                         write(");");
                     }
-                    emitExportMemberAssignments(node.name);
                 }
             }
 
@@ -5340,7 +5321,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitDeclarationName(node);
                         write(");");
                     }
-                    emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
             
@@ -5386,13 +5366,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
                 return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause && !!(<ImportDeclaration>node).importClause.name;
-            }
-
-            function emitExportImportAssignments(node: Node) {
-                if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
-                    emitExportMemberAssignments(<Identifier>(<Declaration>node).name);
-                }
-                forEachChild(node, emitExportImportAssignments);
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
@@ -5480,7 +5453,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         write(";");
                         emitEnd(node);
-                        emitExportImportAssignments(node);
                         emitTrailingComments(node);
                     }
                     else {
@@ -5498,7 +5470,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(getGeneratedNameForNode(<ImportDeclaration>node));
                             write(";");
                         }
-                        emitExportImportAssignments(node);
                     }
                 }
             }
@@ -5553,13 +5524,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                         
                     write(";");                    
                     emitEnd(node);
-                    emitExportImportAssignments(node);
                     emitTrailingComments(node);
                 }
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                Debug.assert(compilerOptions.module !== ModuleKind.System);
+                Debug.assert(compilerOptions.module !== ModuleKind.System || !!node.exportClause);
 
                 if (languageVersion < ScriptTarget.ES6) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
@@ -5603,6 +5573,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(");");
                         }
                         emitEnd(node);
+                    }
+                    else if (node.parent === currentSourceFile && !node.moduleSpecifier && node.exportClause) {
+                        // export { x, y, ... }
+                        forEach(node.exportClause.elements, emitExportMemberAssignments);
                     }
                 }
                 else {
@@ -5722,7 +5696,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     externalImports.push(<ExportDeclaration>node);
                                 }
                             }
-                            else {
+                            else if (compilerOptions.module === ModuleKind.System) {
                                 // export { x, y }
                                 for (let specifier of (<ExportDeclaration>node).exportClause.elements) {
                                     let name = (specifier.propertyName || specifier.name).text;
@@ -5872,7 +5846,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     for (let element of exportDecl.exportClause.elements) {
                         // write name of indirectly exported entry, i.e. 'export {x} from ...'
-                        writeExportedName(element.name || element.propertyName);
+                        writeExportedName(element.name);
                     }
                 }
 
@@ -6200,12 +6174,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // fall-through
                             case SyntaxKind.ImportEqualsDeclaration:
                                 Debug.assert(importVariableName !== "");
-
                                 writeLine();
                                 // save import into the local
                                 write(`${importVariableName} = ${parameterName};`);
                                 writeLine();
                                 break;
+
                             case SyntaxKind.ExportDeclaration:
                                 Debug.assert(importVariableName !== "");
 
@@ -6266,20 +6240,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 for (let i = startIndex; i < node.statements.length; ++i) {
                     let statement = node.statements[i];
                     switch (statement.kind) {
-                        // - function declarations are not emitted because they were already hoisted
-                        // - import declarations are not emitted since they are already handled in setters
                         // - export declarations with module specifiers are not emitted since they were already written in setters
                         // - export declarations without module specifiers are emitted preserving the order
-                        case SyntaxKind.FunctionDeclaration:                        
-                        case SyntaxKind.ImportDeclaration:
-                            continue;
                         case SyntaxKind.ExportDeclaration:
                             if (!(<ExportDeclaration>statement).moduleSpecifier) {
-                                for (let element of (<ExportDeclaration>statement).exportClause.elements) {
-                                    // write call to exporter function for every export specifier in exports list
-                                    emitExportSpecifierInSystemModule(element);
-                                }
+                                break;
                             }
+                        // - function declarations are not emitted because they were already hoisted
+                        // - import declarations are not emitted since they are already handled in setters
+                        case SyntaxKind.FunctionDeclaration:                        
+                        case SyntaxKind.ImportDeclaration:
                             continue;
                         case SyntaxKind.ImportEqualsDeclaration:
                             if (!isInternalModuleImportEqualsDeclaration(statement)) {
@@ -6287,10 +6257,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 continue;
                             }
                             // fall-though for import declarations that import internal modules
-                        default:
-                            writeLine();
-                            emit(statement);
-                    }                    
+                    } 
+                    writeLine();
+                    emit(statement);                   
                 }
                 decreaseIndent();
                 writeLine();
