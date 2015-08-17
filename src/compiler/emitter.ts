@@ -5344,6 +5344,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
             
+            /*
+             * Some bundlers (SystemJS builder) sometimes want to rename dependencies. 
+             * Here we check if alternative name was provided for a given moduleName and return it if possible. 
+             */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
                 if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
                     return `"${currentSourceFile.renamedDependencies[moduleName.text]}"`
@@ -6330,11 +6334,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         groupIndices[text] = dependencyGroups.length;
                         dependencyGroups.push([externalImports[i]]);
                     }
-                    
+
                     if (i !== 0) {
                         write(", ");
-                    }                    
-                        
+                    }
+                    
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
@@ -6347,7 +6351,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 write("});");
             }
-            
+
             function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
