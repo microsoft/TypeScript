@@ -5,7 +5,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'T' is not assignable to type 'Date'.
-      Property 'toDateString' is missing in type 'RegExp'.
+      Type 'RegExp' is not assignable to type 'Date'.
+        Property 'toDateString' is missing in type 'RegExp'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(37,36): error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
   Type 'F' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
@@ -13,6 +14,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(60,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'T' is not assignable to type 'Date'.
+      Type 'RegExp' is not assignable to type 'Date'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,51): error TS2304: Cannot find name 'U'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find name 'U'.
 
@@ -54,7 +56,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 !!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
 !!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
 !!! error TS2345:     Type 'T' is not assignable to type 'Date'.
-!!! error TS2345:       Property 'toDateString' is missing in type 'RegExp'.
+!!! error TS2345:       Type 'RegExp' is not assignable to type 'Date'.
+!!! error TS2345:         Property 'toDateString' is missing in type 'RegExp'.
             var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
         }
     
@@ -101,6 +104,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 !!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
 !!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
 !!! error TS2345:     Type 'T' is not assignable to type 'Date'.
+!!! error TS2345:       Type 'RegExp' is not assignable to type 'Date'.
             var r7b = foo2((a) => a, (b) => b); 
         }
     

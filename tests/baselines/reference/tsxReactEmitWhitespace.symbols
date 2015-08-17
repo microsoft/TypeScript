@@ -24,9 +24,11 @@ var p = 0;
 // Emit "   "
 <div>   </div>;
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit "  ", p, "   "
 <div>  {p}    </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit only p
@@ -35,6 +37,7 @@ var p = 0;
 
       {p}    
       </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit only p
 <div>
@@ -42,15 +45,18 @@ var p = 0;
 
   {p}
     </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit "  3"
 <div>  3  
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
   </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit "  3  "
 <div>  3  </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit "3"
@@ -59,12 +65,14 @@ var p = 0;
 
    3    
    </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit no args
 <div>   
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
    </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 // Emit "foo" + ' ' + "bar"
 <div>  
@@ -75,5 +83,6 @@ var p = 0;
  bar   
 
   </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitWhitespace.tsx, 1, 22))
 
 

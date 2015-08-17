@@ -1,7 +1,7 @@
-/// <reference path='..\services\services.ts' />
-/// <reference path='..\services\shims.ts' />
-/// <reference path='..\server\client.ts' />
-/// <reference path='harness.ts' />
+/// <reference path="..\services\services.ts" />
+/// <reference path="..\services\shims.ts" />
+/// <reference path="..\server\client.ts" />
+/// <reference path="harness.ts" />
 
 module Harness.LanguageService {
     export class ScriptInfo {
@@ -242,7 +242,7 @@ module Harness.LanguageService {
             throw new Error("NYI");
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
-            let result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split('\n');
+            let result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split("\n");
             let entries: ts.ClassificationInfo[] = [];
             let i = 0;
             let position = 0;
@@ -380,6 +380,9 @@ module Harness.LanguageService {
         }
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
+        }
+        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
+            return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));

@@ -17,6 +17,7 @@ namespace ts {
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
+    // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
         Unknown,
         EndOfFileToken,
@@ -24,6 +25,8 @@ namespace ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        // We detect and preserve #! on the first line
+        ShebangTrivia,
         // We detect and provide better error recovery when we encounter a git merge marker.  This
         // allows us to edit files with git-conflict markers in them in a much more pleasant manner.
         ConflictMarkerTrivia,
@@ -583,9 +586,9 @@ namespace ts {
      * Several node kinds share function-like features such as a signature,
      * a name, and a body. These nodes should extend FunctionLikeDeclaration.
      * Examples:
-     *  FunctionDeclaration
-     *  MethodDeclaration
-     *  AccessorDeclaration
+     * - FunctionDeclaration
+     * - MethodDeclaration
+     * - AccessorDeclaration
      */
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
@@ -1240,6 +1243,10 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+        
+        // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
+        /* @internal */
+        renamedDependencies?: Map<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1575,7 +1582,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind;
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
         isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 

@@ -1040,6 +1040,8 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
+        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
+
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -1084,6 +1086,12 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface TextInsertion {
+        newText: string;
+        /** The position in newText the caret should point to after the insertion. */
+        caretOffset: number;
     }
 
     export interface RenameLocation {
@@ -1141,6 +1149,7 @@ namespace ts {
         InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number| string;
@@ -1560,13 +1569,6 @@ namespace ts {
 
     /// Language Service
 
-    interface FormattingOptions {
-        useTabs: boolean;
-        spacesPerTab: number;
-        indentSpaces: number;
-        newLineCharacter: string;
-    }
-
     // Information about a specific host file.
     interface HostFileInformation {
         hostFileName: string;
@@ -1765,6 +1767,7 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
+        renamedDependencies?: Map<string>;
     }
     
     export interface TranspileOutput {
@@ -1782,7 +1785,7 @@ namespace ts {
      * - noLib = true
      * - noResolve = true
      */    
-    export function transpileModule(input: string, transpileOptions?: TranspileOptions): TranspileOutput {
+    export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
@@ -1804,6 +1807,8 @@ namespace ts {
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
+
+        sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
 
         let newLine = getNewLineCharacter(options);
 
@@ -2535,7 +2540,7 @@ namespace ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
-                getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
+                getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory()
@@ -3392,21 +3397,34 @@ namespace ts {
                         case SyntaxKind.LessThanSlashToken:
                         case SyntaxKind.SlashToken:
                         case SyntaxKind.Identifier:
-                            if(parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
+                        case SyntaxKind.JsxAttribute:
+                        case SyntaxKind.JsxSpreadAttribute:
+                            if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
                             break;
 
+                        // The context token is the closing } or " of an attribute, which means
+                        // its parent is a JsxExpression, whose parent is a JsxAttribute,
+                        // whose parent is a JsxOpeningLikeElement
+                        case SyntaxKind.StringLiteral:
+                            if (parent && ((parent.kind === SyntaxKind.JsxAttribute) || (parent.kind === SyntaxKind.JsxSpreadAttribute))) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
+
+                            break;
+
                         case SyntaxKind.CloseBraceToken:
-                            // The context token is the closing } of an attribute, which means
-                            // its parent is a JsxExpression, whose parent is a JsxAttribute,
-                            // whose parent is a JsxOpeningLikeElement
-                            if(parent &&
+                            if (parent &&
                                 parent.kind === SyntaxKind.JsxExpression && 
                                 parent.parent && 
-                                parent.parent.kind === SyntaxKind.JsxAttribute) {
+                                (parent.parent.kind === SyntaxKind.JsxAttribute)) {
 
                                 return <JsxOpeningLikeElement>parent.parent.parent;
+                            }
+
+                            if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
                             }
 
                             break;
@@ -4607,7 +4625,7 @@ namespace ts {
                             case SyntaxKind.BreakKeyword:
                             case SyntaxKind.ContinueKeyword:
                                 if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
-                                    return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
+                                    return getBreakOrContinueStatementOccurrences(<BreakOrContinueStatement>node.parent);
                                 }
                                 break;
                             case SyntaxKind.ForKeyword:
@@ -4933,7 +4951,7 @@ namespace ts {
                     return map(keywords, getHighlightSpanForNode);
                 }
 
-                function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
+                function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
                     let owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
                     if (owner) {
@@ -5473,7 +5491,7 @@ namespace ts {
                 symbolToIndex: number[]): void {
 
                 let sourceFile = container.getSourceFile();
-                let tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
+                let tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
 
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
 
@@ -5489,8 +5507,8 @@ namespace ts {
                             // This wasn't the start of a token.  Check to see if it might be a 
                             // match in a comment or string if that's what the caller is asking
                             // for.
-                            if ((findInStrings && isInString(position)) ||
-                                (findInComments && isInComment(position))) {
+                            if ((findInStrings && isInString(sourceFile, position)) ||
+                                (findInComments && isInNonReferenceComment(sourceFile, position))) {
 
                                 // In the case where we're looking inside comments/strings, we don't have
                                 // an actual definition.  So just use 'undefined' here.  Features like
@@ -5554,30 +5572,13 @@ namespace ts {
                     return result[index];
                 }
 
-                function isInString(position: number) {
-                    let token = getTokenAtPosition(sourceFile, position);
-                    return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
-                }
+                function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
+                    return isInCommentHelper(sourceFile, position, isNonReferenceComment);
 
-                function isInComment(position: number) {
-                    let token = getTokenAtPosition(sourceFile, position);
-                    if (token && position < token.getStart()) {
-                        // First, we have to see if this position actually landed in a comment.
-                        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-
-                        // Then we want to make sure that it wasn't in a "///<" directive comment
-                        // We don't want to unintentionally update a file name.
-                        return forEach(commentRanges, c => {
-                            if (c.pos < position && position < c.end) {
-                                let commentText = sourceFile.text.substring(c.pos, c.end);
-                                if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
-                                    return true;
-                                }
-                            }
-                        });
+                    function isNonReferenceComment(c: CommentRange): boolean {
+                        let commentText = sourceFile.text.substring(c.pos, c.end);
+                        return !tripleSlashDirectivePrefixRegex.test(commentText);
                     }
-
-                    return false;
                 }
             }
 
@@ -6804,6 +6805,78 @@ namespace ts {
             return [];
         }
 
+        /**
+         * Checks if position points to a valid position to add JSDoc comments, and if so,
+         * returns the appropriate template. Otherwise returns an empty string.
+         * Valid positions are
+         * - outside of comments, statements, and expressions, and
+         * - preceding a function declaration.
+         *
+         * Hosts should ideally check that:
+         * - The line is all whitespace up to 'position' before performing the insertion.
+         * - If the keystroke sequence "/\*\*" induced the call, we also check that the next
+         * non-whitespace character is '*', which (approximately) indicates whether we added
+         * the second '*' to complete an existing (JSDoc) comment.
+         * @param fileName The file in which to perform the check.
+         * @param position The (character-indexed) position in the file where the check should
+         * be performed.
+         */
+        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
+            let start = new Date().getTime();
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            // Check if in a context where we don't want to perform any insertion
+            if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
+                return undefined;
+            }
+
+            let tokenAtPos = getTokenAtPosition(sourceFile, position);
+            let tokenStart = tokenAtPos.getStart()
+            if (!tokenAtPos || tokenStart < position) {
+                return undefined;
+            }
+
+            // TODO: add support for:
+            // - methods
+            // - constructors
+            // - class decls
+            let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
+
+            if (!containingFunction || containingFunction.getStart() < position) {
+                return undefined;
+            }
+
+            let parameters = containingFunction.parameters;
+            let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
+            let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
+
+            let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
+
+            // TODO: call a helper method instead once PR #4133 gets merged in.
+            const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
+
+            let docParams = parameters.reduce((prev, cur, index) =>
+                prev +
+                indentationStr + " * @param " + (cur.name.kind === SyntaxKind.Identifier ? (<Identifier>cur.name).text : "param" + index) + newLine, "");
+
+            // A doc comment consists of the following
+            // * The opening comment line
+            // * the first line (without a param) for the object's untagged info (this is also where the caret ends up)
+            // * the '@param'-tagged lines
+            // * TODO: other tags.
+            // * the closing comment line
+            // * if the caret was directly in front of the object, then we add an extra line and indentation.
+            const preamble = "/**" + newLine +
+                indentationStr + " * ";
+            let result =
+                preamble + newLine +
+                docParams +
+                indentationStr + " */" +
+                (tokenStart === position ? newLine + indentationStr : "");
+
+            return { newText: result, caretOffset: preamble.length };
+        }
+
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually 
             // treat it as a semantic operation here.  This is because we expect our host to call
@@ -7045,6 +7118,7 @@ namespace ts {
             getFormattingEditsForRange,
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
+            getDocCommentTemplateAtPosition,
             getEmitOutput,
             getSourceFile,
             getProgram

@@ -2,6 +2,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsed
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(4,25): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(5,8): error TS2304: Cannot find name 'W'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(8,16): error TS2322: Type 'W' is not assignable to type 'T'.
+  Type 'V' is not assignable to type 'T'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(12,16): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(12,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(15,8): error TS2304: Cannot find name 'W'.
@@ -42,6 +43,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsed
             return x;
                    ~
 !!! error TS2322: Type 'W' is not assignable to type 'T'.
+!!! error TS2322:   Type 'V' is not assignable to type 'T'.
         }
     }
     

@@ -2,7 +2,7 @@
 
 Version 1.6
 
-July, 2015
+August, 2015
 
 <br/>
 
@@ -24,7 +24,8 @@ TypeScript is a trademark of Microsoft Corporation.
   * [1.7 Enum Types](#1.7)
   * [1.8 Overloading on String Parameters](#1.8)
   * [1.9 Generic Types and Functions](#1.9)
-  * [1.10 Modules](#1.10)
+  * [1.10 Namespaces](#1.10)
+  * [1.11 Modules](#1.11)
 * [2 Basic Concepts](#2)
   * [2.1 Grammar Conventions](#2.1)
   * [2.2 Names](#2.2)
@@ -82,9 +83,10 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.11.2 Type and Member Identity](#3.11.2)
     * [3.11.3 Subtypes and Supertypes](#3.11.3)
     * [3.11.4 Assignment Compatibility](#3.11.4)
-    * [3.11.5 Contextual Signature Instantiation](#3.11.5)
-    * [3.11.6 Type Inference](#3.11.6)
-    * [3.11.7 Recursive Types](#3.11.7)
+    * [3.11.5 Excess Properties](#3.11.5)
+    * [3.11.6 Contextual Signature Instantiation](#3.11.6)
+    * [3.11.7 Type Inference](#3.11.7)
+    * [3.11.8 Recursive Types](#3.11.8)
   * [3.12 Widened Types](#3.12)
 * [4 Expressions](#4)
   * [4.1 Values and References](#4.1)
@@ -236,9 +238,11 @@ TypeScript is a trademark of Microsoft Corporation.
 
 JavaScript applications such as web e-mail, maps, document editing, and collaboration tools are becoming an increasingly important part of the everyday computing. We designed TypeScript to meet the needs of the JavaScript programming teams that build and maintain large JavaScript programs. TypeScript helps programming teams to define interfaces between software components and to gain insight into the behavior of existing JavaScript libraries. TypeScript also enables teams to reduce naming conflicts by organizing their code into dynamically-loadable modules. TypeScript's optional type system enables JavaScript programmers to use highly-productive development tools and practices: static checking, symbol-based navigation, statement completion, and code re-factoring.
 
-TypeScript is a syntactic sugar for JavaScript. TypeScript syntax is a superset of Ecmascript 5 (ES5) syntax. Every JavaScript program is also a TypeScript program. The TypeScript compiler performs only file-local transformations on TypeScript programs and does not re-order variables declared in TypeScript. This leads to JavaScript output that closely matches the TypeScript input. TypeScript does not transform variable names, making tractable the direct debugging of emitted JavaScript. TypeScript optionally provides source maps, enabling source-level debugging. TypeScript tools typically emit JavaScript upon file save, preserving the test, edit, refresh cycle commonly used in JavaScript development.
+TypeScript is a syntactic sugar for JavaScript. TypeScript syntax is a superset of ECMAScript 6 (ES6) syntax. Every JavaScript program is also a TypeScript program. The TypeScript compiler performs only file-local transformations on TypeScript programs and does not re-order variables declared in TypeScript. This leads to JavaScript output that closely matches the TypeScript input. TypeScript does not transform variable names, making tractable the direct debugging of emitted JavaScript. TypeScript optionally provides source maps, enabling source-level debugging. TypeScript tools typically emit JavaScript upon file save, preserving the test, edit, refresh cycle commonly used in JavaScript development.
 
-TypeScript syntax includes several proposed features of Ecmascript 6 (ES6), including classes and modules. Classes enable programmers to express common object-oriented patterns in a standard way, making features like inheritance more readable and interoperable. Modules enable programmers to organize their code into components while avoiding naming conflicts. The TypeScript compiler provides module code generation options that support either static or dynamic loading of module contents.
+TypeScript syntax includes all features of ECMAScript 6 (ES6), including classes and modules, and provides the ability to translate these features into ECMAScript 3 or 5 compliant code.
+
+Classes enable programmers to express common object-oriented patterns in a standard way, making features like inheritance more readable and interoperable. Modules enable programmers to organize their code into components while avoiding naming conflicts. The TypeScript compiler provides module code generation options that support either static or dynamic loading of module contents.
 
 TypeScript also provides to JavaScript programmers a system of optional type annotations. These type annotations are like the JSDoc comments found in the Closure system, but in TypeScript they are integrated directly into the language syntax. This integration makes the code more readable and reduces the maintenance cost of synchronizing type annotations with their corresponding variables.
 
@@ -470,9 +474,9 @@ Section [4.23](#4.23) provides additional information about contextually typed e
 
 ## <a name="1.6"/>1.6 Classes
 
-JavaScript practice has at least two common design patterns: the module pattern and the class pattern. Roughly speaking, the module pattern uses closures to hide names and to encapsulate private data, while the class pattern uses prototype chains to implement many variations on object-oriented inheritance mechanisms. Libraries such as 'prototype.js' are typical of this practice.
+JavaScript practice has two very common design patterns: the module pattern and the class pattern. Roughly speaking, the module pattern uses closures to hide names and to encapsulate private data, while the class pattern uses prototype chains to implement many variations on object-oriented inheritance mechanisms. Libraries such as 'prototype.js' are typical of this practice. TypeScript's namespaces are a formalization of the module pattern. (The term "module pattern" is somewhat unfortunate now that ECMAScript 6 formally supports modules in a manner different from what the module pattern prescribes. For this reason, TypeScript uses the term "namespace" for its formalization of the module pattern.)
 
-This section and the module section below will show how TypeScript emits consistent, idiomatic JavaScript code to implement classes and modules that are closely aligned with the current ES6 proposal. The goal of TypeScript's translation is to emit exactly what a programmer would type when implementing a class or module unaided by a tool. This section will also describe how TypeScript infers a type for each class declaration. We'll start with a simple BankAccount class.
+This section and the namespace section below will show how TypeScript emits consistent, idiomatic JavaScript when emitting ECMAScript 3 or 5 compliant code for classes and namespaces. The goal of TypeScript's translation is to emit exactly what a programmer would type when implementing a class or namespace unaided by a tool. This section will also describe how TypeScript infers a type for each class declaration. We'll start with a simple BankAccount class.
 
 ```TypeScript
 class BankAccount {  
@@ -570,7 +574,7 @@ Section [8](#8) provides additional information about classes.
 TypeScript enables programmers to summarize a set of numeric constants as an *enum type*. The example below creates an enum type to represent operators in a calculator application.
 
 ```TypeScript
-enum Operator {  
+const enum Operator {  
     ADD,  
     DIV,  
     MUL,  
@@ -585,7 +589,7 @@ function compute(op: Operator, a: number, b: number) {
 
 In this example, the compute function logs the operator 'op' using a feature of enum types: reverse mapping from the enum value ('op') to the string corresponding to that value. For example, the declaration of 'Operator' automatically assigns integers, starting from zero, to the listed enum members. Section [9](#9) describes how programmers can also explicitly assign integers to enum members, and can use any string to name an enum member.
 
-If all enum members have explicitly assigned literal integers, or if an enum has all members automatically assigned, the TypeScript compiler will emit for an enum member a JavaScript constant corresponding to that member's assigned value (annotated with a comment). This improves performance on many JavaScript engines.
+When enums are declared with the `const` modifier, the TypeScript compiler will emit for an enum member a JavaScript constant corresponding to that member's assigned value (annotated with a comment). This improves performance on many JavaScript engines.
 
 For example, the 'compute' function could contain a switch statement like the following.
 
@@ -702,11 +706,11 @@ class List<T extends NamedItem> {
 
 Section [3.7](#3.7) provides further information about generic types.
 
-## <a name="1.10"/>1.10 Modules
+## <a name="1.10"/>1.10 Namespaces
 
 Classes and interfaces support large-scale JavaScript development by providing a mechanism for describing how to use a software component that can be separated from that component's implementation. TypeScript enforces *encapsulation* of implementation in classes at design time (by restricting use of private and protected members), but cannot enforce encapsulation at runtime because all object properties are accessible at runtime. Future versions of JavaScript may provide *private names* which would enable runtime enforcement of private and protected members.
 
-In the current version of JavaScript, the only way to enforce encapsulation at runtime is to use the module pattern: encapsulate private fields and methods using closure variables. The module pattern is a natural way to provide organizational structure and dynamic loading options by drawing a boundary around a software component. A module can also provide the ability to introduce namespaces, avoiding use of the global namespace for most software components. 
+In JavaScript, a very common way to enforce encapsulation at runtime is to use the module pattern: encapsulate private fields and methods using closure variables. The module pattern is a natural way to provide organizational structure and dynamic loading options by drawing a boundary around a software component. The module pattern can also provide the ability to introduce namespaces, avoiding use of the global namespace for most software components. 
 
 The following example illustrates the JavaScript module pattern.
 
@@ -724,12 +728,12 @@ This example illustrates the two essential elements of the module pattern: a *mo
 
 The example assumes that an outer lexical scope defines the functions 'generateSecretKey' and 'sendSecureMessage'; it also assumes that the outer scope has assigned the module object to the variable 'MessageModule'.
 
-TypeScript modules provide a mechanism for succinctly expressing the module pattern. In TypeScript, programmers can combine the module pattern with the class pattern by nesting modules and classes within an outer module. 
+TypeScript namespaces provide a mechanism for succinctly expressing the module pattern. In TypeScript, programmers can combine the module pattern with the class pattern by nesting namespaces and classes within an outer namespace.
 
-The following example shows the definition and use of a simple module.
+The following example shows the definition and use of a simple namespace.
 
 ```TypeScript
-module M {  
+namespace M {  
     var s = "hello";  
     export function f() {  
         return s;  
@@ -740,7 +744,7 @@ M.f();
 M.s;  // Error, s is not exported
 ```
 
-In this example, variable 's' is a private feature of the module, but function 'f' is exported from the module and accessible to code outside of the module. If we were to describe the effect of module 'M' in terms of interfaces and variables, we would write
+In this example, variable 's' is a private feature of the namespace, but function 'f' is exported from the namespace and accessible to code outside of the namespace. If we were to describe the effect of namespace 'M' in terms of interfaces and variables, we would write
 
 ```TypeScript
 interface M {  
@@ -750,9 +754,9 @@ interface M {
 var M: M;
 ```
 
-The interface 'M' summarizes the externally visible behavior of module 'M'. In this example, we can use the same name for the interface as for the initialized variable because in TypeScript type names and variable names do not conflict: each lexical scope contains a variable declaration space and type declaration space (see section [2.3](#2.3) for more details).
+The interface 'M' summarizes the externally visible behavior of namespace 'M'. In this example, we can use the same name for the interface as for the initialized variable because in TypeScript type names and variable names do not conflict: each lexical scope contains a variable declaration space and type declaration space (see section [2.3](#2.3) for more details).
 
-Module 'M' is an example of an *internal* module, because it is nested within the *global* module (see section [10](#10) for more details). The TypeScript compiler emits the following JavaScript code for this module.
+The TypeScript compiler emits the following JavaScript code for the namespace:
 
 ```TypeScript
 var M;  
@@ -765,9 +769,11 @@ var M;
 })(M || (M = {}));
 ```
 
-In this case, the compiler assumes that the module object resides in global variable 'M', which may or may not have been initialized to the desired module object.
+In this case, the compiler assumes that the namespace object resides in global variable 'M', which may or may not have been initialized to the desired namespace object.
 
-TypeScript also supports *external* modules, which are files that contain top-level *export* and *import *directives. For this type of module the TypeScript compiler will emit code whose module closure and module object implementation vary according to the specified dynamic loading system, for example, the Asynchronous Module Definition system.
+## <a name="1.11"/>1.11 Modules
+
+TypeScript also supports ECMAScript 6 modules, which are files that contain top-level *export* and *import* directives. For this type of module the TypeScript compiler can emit both ECMAScript 6 compliant code and down-level ECMAScript 3 or 5 compliant code for a variety of module loading systems, including CommonJS, Asynchronous Module Definition (AMD), and Universal Module Definition (UMD).
 
 <br/>
 
@@ -1113,7 +1119,20 @@ var c = abc.charAt(2);  // Property of String interface
 
 ### <a name="3.2.4"/>3.2.4 The Symbol Type
 
-*TODO: [Symbols](https://github.com/Microsoft/TypeScript/pull/1978)*.
+The Symbol primitive type corresponds to the similarly named JavaScript primitive type and represents unique tokens that may be used as keys for object properties.
+
+The `symbol` keyword references the Symbol primitive type. Symbol values are obtained using the global object 'Symbol' which has a number of methods and properties and can be invoked as a function. In particular, the global object 'Symbol' defines a number of well-known symbols ([2.2.3](#2.2.3)) that can be used in a manner similar to identifiers. Note that the 'Symbol' object is available only in ECMAScript 6 environments.
+
+For purposes of determining type relationships (section [3.11](#3.11)) and accessing properties (section [4.13](#4.13)), the Symbol primitive type behaves as an object type with the same properties as the global interface type 'Symbol'.
+
+Some examples:
+
+```TypeScript
+var secretKey = Symbol();  
+var obj = {};  
+obj[secretKey] = "secret message";  // Use symbol as property key  
+obj[Symbol.toStringTag] = "test";   // Use of well-known symbol
+```
 
 ### <a name="3.2.5"/>3.2.5 The Void Type
 
@@ -1418,7 +1437,7 @@ Type parameter names must be unique. A compile-time error occurs if two or more 
 
 The scope of a type parameter extends over the entire declaration with which the type parameter list is associated, with the exception of static member declarations in classes.
 
-Each type parameter has an associated type parameter ***constraint*** that establishes an upper bound for type arguments. Omitting a constraint corresponds to specifying the empty object type `{}`. Type parameters declared in a particular type parameter list may not be referenced in constraints in that type parameter list.
+Each type parameter has an associated type parameter ***constraint*** that establishes an upper bound for type arguments. Omitting a constraint or specifying type `any` as the constraint corresponds to specifying the empty object type `{}`. Type parameters declared in a particular type parameter list may not be referenced in constraints in that type parameter list.
 
 The ***base constraint*** of a type parameter *T* is defined as follows:
 
@@ -2105,7 +2124,7 @@ The ***apparent members*** of a type are the members observed in subtype, supert
 
 * The apparent members of the primitive types Number, Boolean, and String are the apparent members of the global interface types 'Number', 'Boolean', and 'String' respectively.
 * The apparent members of an enum type are the apparent members of the global interface type 'Number'.
-* The apparent members of a type parameter are the apparent members of the base constraint (section [3.6.1](#3.6.1)) of that type parameter.
+* The apparent members of a type parameter are the apparent members of the constraint (section [3.6.1](#3.6.1)) of that type parameter.
 * The apparent members of an object type *T* are the combination of the following:
   * The declared and/or inherited members of *T*.
   * The properties of the global interface type 'Object' that aren't hidden by properties with the same name in *T*.
@@ -2118,8 +2137,8 @@ The ***apparent members*** of a type are the members observed in subtype, supert
   * When all constituent types of *U* have an apparent numeric index signature, *U* has an apparent numeric index signature of a union type of the respective numeric index signature types.
 * The apparent members of an intersection type *I* are determined as follows:
   * When one of more constituent types of *I* have an apparent property named *N*, *I* has an apparent property named *N* of an intersection type of the respective property types.
-  * When one or more constituent types of I have a call signature S, I has the apparent call signature S. The signatures are ordered as a concatenation of the signatures of each constituent type in the order of the constituent types within *I*.
-  * When one or more constituent types of I have a construct signature S, I has the apparent construct signature S. The signatures are ordered as a concatenation of the signatures of each constituent type in the order of the constituent types within *I*.
+  * When one or more constituent types of *I* have a call signature *S*, *I* has the apparent call signature *S*. The signatures are ordered as a concatenation of the signatures of each constituent type in the order of the constituent types within *I*.
+  * When one or more constituent types of *I* have a construct signature *S*, *I* has the apparent construct signature *S*. The signatures are ordered as a concatenation of the signatures of each constituent type in the order of the constituent types within *I*.
   * When one or more constituent types of *I* have an apparent string index signature, *I* has an apparent string index signature of an intersection type of the respective string index signature types.
   * When one or more constituent types of *I* have an apparent numeric index signature, *I* has an apparent numeric index signature of an intersection type of the respective numeric index signature types.
 
@@ -2177,7 +2196,7 @@ the variables 'a' and 'b' are of identical types because the two type references
 
 ### <a name="3.11.3"/>3.11.3 Subtypes and Supertypes
 
-*S* is a ***subtype*** of a type *T*, and *T* is a ***supertype*** of *S*, if one of the following is true:
+*S* is a ***subtype*** of a type *T*, and *T* is a ***supertype*** of *S*, if *S* has no excess properties with respect to *T* ([3.11.5](#3.11.5)) and one of the following is true:
 
 * *S* and *T* are identical types.
 * *T* is the Any type.
@@ -2185,13 +2204,12 @@ the variables 'a' and 'b' are of identical types because the two type references
 * *S* is the Null type and *T* is not the Undefined type.
 * *S* is an enum type and *T* is the primitive type Number.
 * *S* is a string literal type and *T* is the primitive type String.
-* *S* and *T* are type parameters, and *S* is directly or indirectly constrained to *T*.
-* *S* is a type parameter whose base constraint is a union or intersection type that is a subtype of *T*.
 * *S* is a union type and each constituent type of *S* is a subtype of *T*.
 * *S* is an intersection type and at least one constituent type of *S* is a subtype of *T*.
 * *T* is a union type and *S* is a subtype of at least one constituent type of *T*.
 * *T* is an intersection type and *S* is a subtype of each constituent type of *T*.
-* *S* is an object type, a type parameter, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
+* *S* is a type parameter and the constraint of *S* is a subtype of *T*.
+* *S* is an object type, an intersection type, an enum type, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
   * *M* is a property and *S* has an apparent property *N* where
     * *M* and *N* have the same name,
     * the type of *N* is a subtype of that of *M*,
@@ -2202,8 +2220,8 @@ the variables 'a' and 'b' are of identical types because the two type references
     * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
     * for parameter positions that are present in both signatures, each parameter type in *N* is a subtype or supertype of the corresponding parameter type in *M*, and
     * the result type of *M* is Void, or the result type of *N* is a subtype of that of *M*.
-  * *M* is a string index signature of type *U* and *S* has an apparent string index signature of a type that is a subtype of *U*.
-  * *M* is a numeric index signature of type *U* and *S* has an apparent string or numeric index signature of a type that is a subtype of *U*.
+  * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is a subtype of *U*.
+  * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is a subtype of *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
@@ -2215,9 +2233,7 @@ Also note that type parameters are not considered object types. Thus, the only s
 
 Types are required to be assignment compatible in certain circumstances, such as expression and variable types in assignment statements and argument and parameter types in function calls.
 
-*TODO: Update this section with rules for [strict object literal assignment checking](https://github.com/Microsoft/TypeScript/pull/3823)*.
-
-*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if one of the following is true:
+*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if *S* has no excess properties with respect to *T* ([3.11.5](#3.11.5)) and one of the following is true:
 
 * *S* and *T* are identical types.
 * *S* or *T* is the Any type.
@@ -2225,13 +2241,12 @@ Types are required to be assignment compatible in certain circumstances, such as
 * *S* is the Null type and *T* is not the Undefined type.
 * *S* or *T* is an enum type and* *the other is the primitive type Number.
 * *S* is a string literal type and *T* is the primitive type String.
-* *S* and *T* are type parameters, and *S* is directly or indirectly constrained to *T*.
-* *S* is a type parameter whose base constraint is a union or intersection type that is assignable to *T*.
 * *S* is a union type and each constituent type of *S* is assignable to *T*.
 * *S* is an intersection type and at least one constituent type of *S* is assignable to *T*.
 * *T* is a union type and *S* is assignable to at least one constituent type of *T*.
 * *T* is an intersection type and *S* is assignable to each constituent type of *T*.
-* *S* is an object type, a type parameter, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
+* *S* is a type parameter and the constraint of *S* is assignable to *T*.
+* *S* is an object type, an intersection type, an enum type, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
   * *M* is a property and *S* has an apparent property *N* where
     * *M* and *N* have the same name,
     * the type of *N* is assignable to that of *M*,
@@ -2267,19 +2282,76 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 foo({ name: "hello" });            // Error, id required but missing
 ```
 
-### <a name="3.11.5"/>3.11.5 Contextual Signature Instantiation
+### <a name="3.11.5"/>3.11.5 Excess Properties
+
+The subtype and assignment compatibility relationships require that source types have no excess properties with respect to their target types. The purpose of this check is to detect excess or misspelled properties in object literals.
+
+A source type *S* is considered to have excess properties with respect to a target type *T* if
+
+* *S* is a fresh object literal type, as defined below, and
+* *S* has one or more properties that aren't expected in *T*.
+
+A property *P* is said to be expected in a type *T* if one of the following is true:
+
+* *T* is not an object, union, or intersection type.
+* *T* is an object type and
+  * *T* has a property with the same name as *P*,
+  * *T* has a string or numeric index signature,
+  * *T* has no properties, or
+  * *T* is the global type 'Object'.
+* *T* is a union or intersection type and *P* is expected in at least one of the constituent types of *T*.
+
+The type inferred for an object literal (as described in section [4.5](#4.5)) is considered a ***fresh object literal type***. The freshness disappears when an object literal type is widened ([3.12](#3.12)) or is the type of the expression in a type assertion ([4.16](#4.16)).
+
+Consider the following example:
+
+```TypeScript
+interface CompilerOptions {  
+    strict?: boolean;  
+    sourcePath?: string;  
+    targetPath?: string;  
+}
+
+var options: CompilerOptions = {  
+    strict: true,  
+    sourcepath: "./src",  // Error, excess or misspelled property  
+    targetpath: "./bin"   // Error, excess or misspelled property  
+};
+```
+
+The 'CompilerOptions' type contains only optional properties, so without the excess property check, *any* object literal would be assignable to the 'options' variable (because a misspelled property would just be considered an excess property of a different name).
+
+In cases where excess properties are expected, an index signature can be added to the target type as an indicator of intent:
+
+```TypeScript
+interface InputElement {  
+    name: string;  
+    visible?: boolean;  
+    [x: string]: any;            // Allow additional properties of any type  
+}
+
+var address: InputElement = {  
+    name: "Address",  
+    visible: true,  
+    help: "Enter address here",  // Allowed because of index signature  
+    shortcut: "Alt-A"            // Allowed because of index signature  
+};
+```
+
+### <a name="3.11.6"/>3.11.6 Contextual Signature Instantiation
 
 During type argument inference in a function call (section [4.15.2](#4.15.2)) it is in certain circumstances necessary to instantiate a generic call signature of an argument expression in the context of a non-generic call signature of a parameter such that further inferences can be made. A generic call signature *A* is ***instantiated in the context of*** non-generic call signature *B* as follows:
 
-* Using the process described in [3.11.6](#3.11.6), inferences for *A*'s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+* Using the process described in [3.11.7](#3.11.7), inferences for *A*'s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 * The inferred type argument for each type parameter is the union type of the set of inferences made for that type parameter. However, if the union type does not satisfy the constraint of the type parameter, the inferred type argument is instead the constraint.
 
-### <a name="3.11.6"/>3.11.6 Type Inference
+### <a name="3.11.7"/>3.11.7 Type Inference
 
 In certain contexts, inferences for a given set of type parameters are made *from* a type *S*, in which those type parameters do not occur, *to* another type *T*, in which those type parameters do occur. Inferences consist of a set of candidate type arguments collected for each of the type parameters. The inference process recursively relates *S* and *T* to gather as many inferences as possible:
 
 * If *T* is one of the type parameters for which inferences are being made, *S* is added to the set of inferences for that type parameter.
 * Otherwise, if *S* and *T* are references to the same generic type, inferences are made from each type argument in *S* to each corresponding type argument in *T*.
+* Otherwise, if *S* and *T* are tuple types with the same number of elements, inferences are made from each element type in *S* to each corresponding element type in *T*.
 * Otherwise, if *T* is a union or intersection type:
   * First, inferences are made from *S* to each constituent type in *T* that isn't simply one of the type parameters for which inferences are being made.
   * If the first step produced no inferences then if T is a union type and exactly one constituent type in *T* is simply a type parameter for which inferences are being made, inferences are made from *S* to that type parameter.
@@ -2294,7 +2366,7 @@ In certain contexts, inferences for a given set of type parameters are made *fro
 
 When comparing call or construct signatures, signatures in *S* correspond to signatures of the same kind in *T* pairwise in declaration order. If *S* and *T* have different numbers of a given kind of signature, the excess *first* signatures in declaration order of the longer list are ignored.
 
-### <a name="3.11.7"/>3.11.7 Recursive Types
+### <a name="3.11.8"/>3.11.8 Recursive Types
 
 Classes and interfaces can reference themselves in their internal structure, in effect creating recursive types with infinite nesting. For example, the type
 
@@ -2343,7 +2415,7 @@ The following example shows the results of widening types to produce inferred va
 ```TypeScript
 var a = null;                 // var a: any  
 var b = undefined;            // var b: any  
-var c = { x: 0, y: null };	    // var c: { x: number, y: any }  
+var c = { x: 0, y: null };    // var c: { x: number, y: any }  
 var d = [ null, undefined ];  // var d: any[]
 ```
 
@@ -2826,13 +2898,13 @@ Type argument inference produces a set of candidate types for each type paramete
 In order to compute candidate types, the argument list is processed as follows:
 
 * Initially all inferred type arguments are considered ***unfixed*** with an empty set of candidate types.
-* Proceeding from left to right, each argument expression *e* is ***inferentially typed*** by its corresponding parameter type *P*, possibly causing some inferred type arguments to become ***fixed***, and candidate type inferences (section [3.11.6](#3.11.6)) are made for unfixed inferred type arguments from the type computed for *e* to *P*.
+* Proceeding from left to right, each argument expression *e* is ***inferentially typed*** by its corresponding parameter type *P*, possibly causing some inferred type arguments to become ***fixed***, and candidate type inferences (section [3.11.7](#3.11.7)) are made for unfixed inferred type arguments from the type computed for *e* to *P*.
 
 The process of inferentially typing an expression *e* by a type *T* is the same as that of contextually typing *e* by *T*, with the following exceptions:
 
 * Where expressions contained within *e* would be contextually typed, they are instead inferentially typed.
 * When a function expression is inferentially typed (section [4.10](#4.10)) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, the corresponding inferred type arguments to become ***fixed*** and no further candidate inferences are made for them.
-* If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are ***fixed***, and *e*'s type is changed to a function type with *e*'s call signature instantiated in the context of *T*'s call signature (section [3.11.5](#3.11.5)).
+* If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are ***fixed***, and *e*'s type is changed to a function type with *e*'s call signature instantiated in the context of *T*'s call signature (section [3.11.6](#3.11.6)).
 
 An example:
 

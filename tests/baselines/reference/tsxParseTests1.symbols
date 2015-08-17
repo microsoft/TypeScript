@@ -17,4 +17,8 @@ var x = <div><div><span><div></div></span></div></div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
 >span : Symbol(JSX.IntrinsicElements.span, Decl(tsxParseTests1.tsx, 2, 35))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(tsxParseTests1.tsx, 2, 35))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests1.tsx, 2, 30))
 
