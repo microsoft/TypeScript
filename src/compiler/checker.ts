@@ -12616,6 +12616,10 @@ namespace ts {
                         }
                     }
                     checkKindsOfPropertyMemberOverrides(type, baseType);
+
+                    if (!isDefinedBefore(baseType.symbol.declarations[0], node)) {
+                        error(getClassExtendsHeritageClauseElement(node), Diagnostics.Base_expression_references_type_before_it_is_declared);
+                    }
                 }
             }
 
