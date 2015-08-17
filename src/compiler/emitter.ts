@@ -5343,13 +5343,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
+            
+            /*
+             * Some bundlers (SystemJS builder) sometimes want to rename dependencies. 
+             * Here we check if alternative name was provided for a given moduleName and return it if possible. 
+             */
+            function tryRenameExternalModule(moduleName: LiteralExpression): string {
+                if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
+                    return `"${currentSourceFile.renamedDependencies[moduleName.text]}"`
+                }
+                return undefined;
+            }
 
             function emitRequire(moduleName: Expression) {
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
                     write("require(");
-                    emitStart(moduleName);
-                    emitLiteral(<LiteralExpression>moduleName);
-                    emitEnd(moduleName);
+                    let text = tryRenameExternalModule(<LiteralExpression>moduleName);
+                    if (text) {
+                        write(text);
+                    }
+                    else {
+                        emitStart(moduleName);
+                        emitLiteral(<LiteralExpression>moduleName);
+                        emitEnd(moduleName);
+                    }
                     emitToken(SyntaxKind.CloseParenToken, moduleName.end);
                 }
                 else {
@@ -5752,7 +5769,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
                 let moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
-                    return getLiteralText(<LiteralExpression>moduleName);
+                    return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName); 
                 }
 
                 return undefined;
@@ -6317,10 +6334,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         groupIndices[text] = dependencyGroups.length;
                         dependencyGroups.push([externalImports[i]]);
                     }
-                    
+
                     if (i !== 0) {
                         write(", ");
                     }
+                    
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
