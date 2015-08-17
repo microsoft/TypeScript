@@ -1244,6 +1244,10 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+        
+        // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
+        /* @internal */
+        renamedDependencies?: Map<string>;
 
         /**
          * lib.d.ts should have a reference comment like

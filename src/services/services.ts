@@ -1776,6 +1776,7 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
+        renamedDependencies?: Map<string>;
     }
 
     export interface TranspileOutput {
@@ -1792,8 +1793,8 @@ namespace ts {
      * - allowNonTsExtensions = true
      * - noLib = true
      * - noResolve = true
-     */
-    export function transpileModule(input: string, transpileOptions?: TranspileOptions): TranspileOutput {
+     */    
+    export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
@@ -1815,6 +1816,8 @@ namespace ts {
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
+
+        sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
 
         let newLine = getNewLineCharacter(options);
 
