@@ -1,0 +1,12 @@
+tests/cases/compiler/file1.ts(1,17): error TS2653: Base expression references type before it is declared.
+
+
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    class B extends A {
+                    ~
+!!! error TS2653: Base expression references type before it is declared.
+    }
+    
+==== tests/cases/compiler/file2.ts (0 errors) ====
+    class A {
+    }

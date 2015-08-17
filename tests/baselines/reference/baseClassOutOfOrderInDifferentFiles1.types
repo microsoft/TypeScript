@@ -1,0 +1,11 @@
+=== tests/cases/compiler/file1.ts ===
+// Different files - no --out
+class B extends A {
+>B : B
+>A : A
+}
+
+=== tests/cases/compiler/file2.ts ===
+class A {
+>A : A
+}
