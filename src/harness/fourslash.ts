@@ -285,7 +285,9 @@ module FourSlash {
                 case FourSlashTestType.Native:
                     return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
+                case FourSlashTestType.ShimsWithPreprocess:
+                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
                 case FourSlashTestType.Server:
                     return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
                 default:
