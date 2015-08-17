@@ -1,0 +1,22 @@
+=== tests/cases/compiler/baseClassOutOfOrder.ts ===
+class B extends A {
+>B : Symbol(B, Decl(baseClassOutOfOrder.ts, 0, 0))
+>A : Symbol(A, Decl(baseClassOutOfOrder.ts, 4, 1))
+
+    constructor(msg: string) {
+>msg : Symbol(msg, Decl(baseClassOutOfOrder.ts, 1, 16))
+
+        super(msg);
+>super : Symbol(A, Decl(baseClassOutOfOrder.ts, 4, 1))
+>msg : Symbol(msg, Decl(baseClassOutOfOrder.ts, 1, 16))
+    }
+}
+
+class A {
+>A : Symbol(A, Decl(baseClassOutOfOrder.ts, 4, 1))
+
+    constructor(public msg: string) {
+>msg : Symbol(msg, Decl(baseClassOutOfOrder.ts, 7, 16))
+
+    }
+}
