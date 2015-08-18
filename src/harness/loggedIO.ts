@@ -12,6 +12,7 @@ interface FindFileResult {
 }
 
 interface IOLog {
+    timestamp: string;
     arguments: string[];
     executingPath: string;
     currentDirectory: string;
@@ -70,9 +71,9 @@ interface PlaybackControl {
 }
 
 module Playback {
-    var recordLog: IOLog = undefined;
-    var replayLog: IOLog = undefined;
-    var recordLogFileNameBase = '';
+    let recordLog: IOLog = undefined;
+    let replayLog: IOLog = undefined;
+    let recordLogFileNameBase = "";
 
     interface Memoized<T> {
         (s: string): T;
@@ -80,8 +81,8 @@ module Playback {
     }
 
     function memoize<T>(func: (s: string) => T): Memoized<T> {
-        var lookup: { [s: string]: T } = {};
-        var run: Memoized<T> = <Memoized<T>>((s: string) => {
+        let lookup: { [s: string]: T } = {};
+        let run: Memoized<T> = <Memoized<T>>((s: string) => {
             if (lookup.hasOwnProperty(s)) return lookup[s];
             return lookup[s] = func(s);
         });
@@ -98,7 +99,7 @@ module Playback {
         return {
             timestamp: (new Date()).toString(),
             arguments: [],
-            currentDirectory: '',
+            currentDirectory: "",
             filesRead: [],
             filesWritten: [],
             filesDeleted: [],
@@ -109,7 +110,7 @@ module Playback {
             dirExists: [],
             dirsCreated: [],
             pathsResolved: [],
-            executingPath: ''
+            executingPath: ""
         };
     }
 
@@ -161,32 +162,32 @@ module Playback {
     }
 
     function findResultByFields<T>(logArray: { result?: T }[], expectedFields: {}, defaultValue?: T): T {
-        var predicate = (entry: { result?: T }) => {
+        let predicate = (entry: { result?: T }) => {
             return Object.getOwnPropertyNames(expectedFields).every((name) => (<any>entry)[name] === (<any>expectedFields)[name]);
         };
-        var results = logArray.filter(entry => predicate(entry));
+        let results = logArray.filter(entry => predicate(entry));
         if (results.length === 0) {
             if (defaultValue !== undefined) {
                 return defaultValue;
             } else {
-                throw new Error('No matching result in log array for: ' + JSON.stringify(expectedFields));
+                throw new Error("No matching result in log array for: " + JSON.stringify(expectedFields));
             }
         }
         return results[0].result;
     }
 
     function findResultByPath<T>(wrapper: { resolvePath(s: string): string }, logArray: { path: string; result?: T }[], expectedPath: string, defaultValue?: T): T {
-        var normalizedName = ts.normalizeSlashes(expectedPath).toLowerCase();
+        let normalizedName = ts.normalizeSlashes(expectedPath).toLowerCase();
         // Try to find the result through normal fileName
-        for (var i = 0; i < logArray.length; i++) {
+        for (let i = 0; i < logArray.length; i++) {
             if (ts.normalizeSlashes(logArray[i].path).toLowerCase() === normalizedName) {
                 return logArray[i].result;
             }
         }
         // Fallback, try to resolve the target paths as well
         if (replayLog.pathsResolved.length > 0) {
-            var normalizedResolvedName = wrapper.resolvePath(expectedPath).toLowerCase();
-            for (var i = 0; i < logArray.length; i++) {
+            let normalizedResolvedName = wrapper.resolvePath(expectedPath).toLowerCase();
+            for (let i = 0; i < logArray.length; i++) {
                 if (wrapper.resolvePath(logArray[i].path).toLowerCase() === normalizedResolvedName) {
                     return logArray[i].result;
                 }
@@ -194,15 +195,15 @@ module Playback {
         }
         // If we got here, we didn't find a match
         if (defaultValue === undefined) {
-            throw new Error('No matching result in log array for path: ' + expectedPath);
+            throw new Error("No matching result in log array for path: " + expectedPath);
         } else {
             return defaultValue;
         }
     }
 
-    var pathEquivCache: any = {};
+    let pathEquivCache: any = {};
     function pathsAreEquivalent(left: string, right: string, wrapper: { resolvePath(s: string): string }) {
-        var key = left + '-~~-' + right;
+        let key = left + "-~~-" + right;
         function areSame(a: string, b: string) {
             return ts.normalizeSlashes(a).toLowerCase() === ts.normalizeSlashes(b).toLowerCase();
         }
@@ -219,11 +220,11 @@ module Playback {
     }
 
     function noOpReplay(name: string) {
-        //console.log("Swallowed write operation during replay: " + name);
+        // console.log("Swallowed write operation during replay: " + name);
     }
 
     export function wrapSystem(underlying: ts.System): PlaybackSystem {
-        var wrapper: PlaybackSystem = <any>{};
+        let wrapper: PlaybackSystem = <any>{};
         initWrapper(wrapper, underlying);
 
         wrapper.startReplayFromFile = logFn => {
@@ -231,15 +232,15 @@ module Playback {
         };
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
-                var i = 0;
-                var fn = () => recordLogFileNameBase + i + '.json';
+                let i = 0;
+                let fn = () => recordLogFileNameBase + i + ".json";
                 while (underlying.fileExists(fn())) i++;
                 underlying.writeFile(fn(), JSON.stringify(recordLog));
                 recordLog = undefined;
             }
         };
 
-        Object.defineProperty(wrapper, 'args', {
+        Object.defineProperty(wrapper, "args", {
             get() {
                 if (replayLog !== undefined) {
                     return replayLog.arguments;
@@ -275,7 +276,7 @@ module Playback {
 
         wrapper.getCurrentDirectory = () => {
             if (replayLog !== undefined) {
-                return replayLog.currentDirectory || '';
+                return replayLog.currentDirectory || "";
             } else if (recordLog !== undefined) {
                 return recordLog.currentDirectory = underlying.getCurrentDirectory();
             } else {
@@ -285,12 +286,12 @@ module Playback {
 
         wrapper.resolvePath = recordReplay(wrapper.resolvePath, underlying)(
             (path) => callAndRecord(underlying.resolvePath(path), recordLog.pathsResolved, { path: path }),
-            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : ts.normalizeSlashes(path))));
+            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + "/" + path : ts.normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
             (path) => {
-                var result = underlying.readFile(path);
-                var logEntry = { path: path, codepage: 0, result: { contents: result, codepage: 0 } };
+                let result = underlying.readFile(path);
+                let logEntry = { path: path, codepage: 0, result: { contents: result, codepage: 0 } };
                 recordLog.filesRead.push(logEntry);
                 return result;
             },
@@ -298,7 +299,7 @@ module Playback {
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path, contents) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path: path, contents: contents, bom: false }),
-            (path, contents) => noOpReplay('writeFile'));
+            (path, contents) => noOpReplay("writeFile"));
 
         wrapper.exit = (exitCode) => {
             if (recordLog !== undefined) {

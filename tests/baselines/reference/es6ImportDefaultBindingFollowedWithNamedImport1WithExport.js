@@ -22,6 +22,7 @@ export var x1: number = defaultBinding6;
 
 //// [server.js]
 var a = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [client.js]
 var server_1 = require("server");

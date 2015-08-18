@@ -28,13 +28,13 @@ function M() {
     }
 
     var v = new m<number>();
->v : <number>
->new m<number>() : <number>
+>v : C<number>
+>new m<number>() : C<number>
 >m : typeof C
 
     return v.f<string>();
 >v.f<string>() : { t: string; x: number; }
 >v.f : <T>() => { t: T; x: number; }
->v : <number>
+>v : C<number>
 >f : <T>() => { t: T; x: number; }
 }

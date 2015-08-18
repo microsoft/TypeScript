@@ -2,7 +2,7 @@
 
 
 function f([]) {
-	var x, y, z;
+    var x, y, z;
 }
 
 //// [emptyArrayBindingPatternParameter01.js]

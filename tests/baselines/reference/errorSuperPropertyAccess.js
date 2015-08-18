@@ -139,14 +139,14 @@ var __extends = (this && this.__extends) || function (d, b) {
 //super property access in instance member accessor(get and set) of class with no base type
 var NoBase = (function () {
     function NoBase() {
-        this.m = _super.prototype;
-        this.n = _super.hasOwnProperty.call(this, '');
-        var a = _super.prototype;
-        var b = _super.hasOwnProperty.call(this, '');
+        this.m = _super.prototype.prototype;
+        this.n = _super.prototype.hasOwnProperty.call(this, '');
+        var a = _super.prototype.prototype;
+        var b = _super.prototype.hasOwnProperty.call(this, '');
     }
     NoBase.prototype.fn = function () {
-        var a = _super.prototype;
-        var b = _super.hasOwnProperty.call(this, '');
+        var a = _super.prototype.prototype;
+        var b = _super.prototype.hasOwnProperty.call(this, '');
     };
     //super static property access in static member function of class with no base type
     //super static property access in static member accessor(get and set) of class with no base type

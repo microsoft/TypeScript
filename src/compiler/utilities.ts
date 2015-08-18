@@ -3,9 +3,9 @@
 /* @internal */
 namespace ts {
     export interface ReferencePathMatchResult {
-        fileReference?: FileReference
-        diagnosticMessage?: DiagnosticMessage
-        isNoDefaultLib?: boolean
+        fileReference?: FileReference;
+        diagnosticMessage?: DiagnosticMessage;
+        isNoDefaultLib?: boolean;
     }
 
     export interface SynthesizedNode extends Node {
@@ -16,9 +16,11 @@ namespace ts {
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         let declarations = symbol.declarations;
-        for (let declaration of declarations) {
-            if (declaration.kind === kind) {
-                return declaration;
+        if (declarations) {
+            for (let declaration of declarations) {
+                if (declaration.kind === kind) {
+                    return declaration;
+                }
             }
         }
 
@@ -70,7 +72,7 @@ namespace ts {
     }
 
     export function releaseStringWriter(writer: StringSymbolWriter) {
-        writer.clear()
+        writer.clear();
         stringWriters.push(writer);
     }
 
@@ -78,10 +80,45 @@ namespace ts {
         return node.end - node.pos;
     }
 
+    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
+        if (!arr1 || !arr2) {
+            return arr1 === arr2;
+        }
+
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < arr1.length; ++i) {
+            let equals = comparer ? comparer(arr1[i], arr2[i]) : arr1[i] === arr2[i];
+            if (!equals) {
+                return false;
+            }
+        }
+
+        return true;
+    }    
+   
+    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
+    }
+
+    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
+        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+    }
+
+    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
+        if (!sourceFile.resolvedModules) {
+            sourceFile.resolvedModules = {};
+        }
+
+        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
+    }
+
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
-        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0
+        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0;
     }
 
     function aggregateChildData(node: Node): void {
@@ -92,7 +129,7 @@ namespace ts {
             let thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
-            // If so, mark ourselves accordingly. 
+            // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
                 node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
             }
@@ -129,13 +166,13 @@ namespace ts {
 
     // Returns true if this node is missing from the actual source code.  'missing' is different
     // from 'undefined/defined'.  When a node is undefined (which can happen for optional nodes
-    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be 
+    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be
     // missing.  This happens whenever the parser knows it needs to parse something, but can't
     // get anything in the source code that it expects at that location.  For example:
     //
     //          let a: ;
     //
-    // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source 
+    // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source
     // code).  So the parser will attempt to parse out a type, and will create an actual node.
     // However, this node will be 'missing' in the sense that no actual source-code/tokens are
     // contained within it.
@@ -144,7 +181,7 @@ namespace ts {
             return true;
         }
 
-        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.pos === node.end && node.pos >= 0 && node.kind !== SyntaxKind.EndOfFileToken;
     }
 
     export function nodeIsPresent(node: Node) {
@@ -166,7 +203,7 @@ namespace ts {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
@@ -211,7 +248,7 @@ namespace ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
-    // Gets the nearest enclosing block scope container that has the provided node 
+    // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
         let current = node.parent;
@@ -307,7 +344,7 @@ namespace ts {
         }
 
         if (errorNode === undefined) {
-            // If we don't have a better node, then just set the error on the first token of 
+            // If we don't have a better node, then just set the error on the first token of
             // construct.
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
@@ -339,10 +376,10 @@ namespace ts {
         return node;
     }
 
-    // Returns the node flags for this node and all relevant parent nodes.  This is done so that 
+    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
-    // stored on the variable declaration directly, but on the containing variable statement 
+    // stored on the variable declaration directly, but on the containing variable statement
     // (if it has one).  Similarly, flags for let/const are store on the variable declaration
     // list.  By calling this function, all those flags are combined so that the client can treat
     // the node as if it actually had those flags.
@@ -379,24 +416,12 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        // If parameter/type parameter, the prev token trailing comments are part of this node too
-        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // e.g.   (/** blah */ a, /** blah */ b);
-
-            // e.g.:     (
-            //            /** blah */ a,
-            //            /** blah */ b);
-            return concatenate(
-                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
-        }
-        else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
-        }
+        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
@@ -406,7 +431,7 @@ namespace ts {
         }
     }
 
-    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
+    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
 
     export function isTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -566,7 +591,7 @@ namespace ts {
         }
     }
 
-    export function isVariableLike(node: Node): boolean {
+    export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.BindingElement:
@@ -662,7 +687,7 @@ namespace ts {
                     node = node.parent;
                     break;
                 case SyntaxKind.Decorator:
-                    // Decorators are always applied outside of the body of a class or method. 
+                    // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
@@ -717,7 +742,7 @@ namespace ts {
                     node = node.parent;
                     break;
                 case SyntaxKind.Decorator:
-                    // Decorators are always applied outside of the body of a class or method. 
+                    // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
@@ -747,11 +772,27 @@ namespace ts {
         }
     }
 
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return (<TypeReferenceNode>node).typeName;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return (<ExpressionWithTypeArguments>node).expression;
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return (<EntityName><Node>node);
+            }
+        }
+
+        return undefined;
+    }
+
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
-        
+
         // Will either be a CallExpression, NewExpression, or Decorator.
         return (<CallExpression | Decorator>node).expression;
     }
@@ -933,7 +974,7 @@ namespace ts {
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
-        let moduleState = getModuleInstanceState(node)
+        let moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
@@ -947,7 +988,7 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportEqualsDeclaration(node: Node) {
+    export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
@@ -970,15 +1011,13 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
-                    return (<ParameterDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return (<PropertyDeclaration>node).questionToken !== undefined;
+                    return (<ParameterDeclaration | MethodDeclaration | PropertyDeclaration>node).questionToken !== undefined;
             }
         }
 
@@ -1015,7 +1054,7 @@ namespace ts {
 
     export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
         if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
-            // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+            // If it's a parameter, see if the parent has a jsdoc comment with an @param
             // annotation.
             let parameterName = (<Identifier>parameter.name).text;
 
@@ -1285,7 +1324,7 @@ namespace ts {
             if (isNoDefaultLibRegEx.exec(comment)) {
                 return {
                     isNoDefaultLib: true
-                }
+                };
             }
             else {
                 let matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
@@ -1319,6 +1358,10 @@ namespace ts {
 
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    export function isAsyncFunctionLike(node: Node): boolean {
+        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
     /**
@@ -1371,14 +1414,16 @@ namespace ts {
 
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
+            case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.AsyncKeyword:
+            case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DeclareKeyword:
+            case SyntaxKind.DefaultKeyword:
+            case SyntaxKind.ExportKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.StaticKeyword:
-            case SyntaxKind.ExportKeyword:
-            case SyntaxKind.DeclareKeyword:
-            case SyntaxKind.ConstKeyword:
-            case SyntaxKind.DefaultKeyword:
                 return true;
         }
         return false;
@@ -1395,9 +1440,25 @@ namespace ts {
         }
         return node;
     }
-        
+
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+    }
+
+    export function cloneEntityName(node: EntityName): EntityName {
+        if (node.kind === SyntaxKind.Identifier) {
+            let clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            clone.text = (<Identifier>node).text;
+            return clone;
+        }
+        else {
+            let clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+            clone.left = cloneEntityName((<QualifiedName>node).left);
+            clone.left.parent = clone;
+            clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
+            clone.right.parent = clone;
+            return clone;
+        }
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
@@ -1406,14 +1467,12 @@ namespace ts {
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
         let node = <SynthesizedNode>createNode(kind);
-        node.pos = -1;
-        node.end = -1;
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
 
     export function createSynthesizedNodeArray(): NodeArray<any> {
-        var array = <NodeArray<any>>[];
+        let array = <NodeArray<any>>[];
         array.pos = -1;
         array.end = -1;
         return array;
@@ -1497,7 +1556,7 @@ namespace ts {
             }
         }
     }
-    
+
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
     // the language service. These characters should be escaped when printing, and if any characters are added,
@@ -1684,6 +1743,10 @@ namespace ts {
         });
     }
 
+    export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
+        return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
+    }
+
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
@@ -1842,7 +1905,7 @@ namespace ts {
 
         function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
             let end = Math.min(comment.end, nextLineStart - 1);
-            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, "");
             if (currentLineText) {
                 // trimmed forward and ending spaces text
                 writer.write(currentLineText);
@@ -1879,10 +1942,12 @@ namespace ts {
             case SyntaxKind.PublicKeyword: return NodeFlags.Public;
             case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
             case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.AbstractKeyword: return NodeFlags.Abstract;
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
             case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
         }
         return 0;
     }
@@ -1953,6 +2018,17 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
     }
 
+    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
+        let kind = expression.kind;
+        if (kind === SyntaxKind.ObjectLiteralExpression) {
+            return (<ObjectLiteralExpression>expression).properties.length === 0;
+        }
+        if (kind === SyntaxKind.ArrayLiteralExpression) {
+            return (<ArrayLiteralExpression>expression).elements.length === 0;
+        }
+        return false;
+    }
+
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
@@ -1966,7 +2042,7 @@ namespace ts {
     }
 
     /**
-     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
+     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
      */
     function getExpandedCharCodes(input: string): number[] {
@@ -2009,7 +2085,7 @@ namespace ts {
      * Converts a string to a base-64 encoded ASCII string.
      */
     export function convertToBase64(input: string): string {
-        var result = "";
+        let result = "";
         let charCodes = getExpandedCharCodes(input);
         let i = 0;
         let length = charCodes.length;
@@ -2051,7 +2127,7 @@ namespace ts {
             return lineFeed;
         }
         else if (sys) {
-            return sys.newLine
+            return sys.newLine;
         }
         return carriageReturnLineFeed;
     }
@@ -2063,11 +2139,11 @@ namespace ts {
     }
 
     export function textSpanEnd(span: TextSpan) {
-        return span.start + span.length
+        return span.start + span.length;
     }
 
     export function textSpanIsEmpty(span: TextSpan) {
-        return span.length === 0
+        return span.length === 0;
     }
 
     export function textSpanContainsPosition(span: TextSpan, position: number) {
@@ -2095,7 +2171,7 @@ namespace ts {
     }
 
     export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
+        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start;
     }
 
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
@@ -2156,10 +2232,10 @@ namespace ts {
     export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
 
     /**
-     * Called to merge all the changes that occurred across several versions of a script snapshot 
+     * Called to merge all the changes that occurred across several versions of a script snapshot
      * into a single change.  i.e. if a user keeps making successive edits to a script we will
-     * have a text change from V1 to V2, V2 to V3, ..., Vn.  
-     * 
+     * have a text change from V1 to V2, V2 to V3, ..., Vn.
+     *
      * This function will then merge those changes into a single change range valid between V1 and
      * Vn.
      */
@@ -2190,17 +2266,17 @@ namespace ts {
             //
             //      0         10        20        30        40        50        60        70        80        90        100
             //      -------------------------------------------------------------------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
+            //                |                                                 /
+            //                |                                            /----
+            //  T1            |                                       /----
+            //                |                                  /----
+            //                |                             /----
             //      -------------------------------------------------------------------------------------------------------
-            //                                     |                            \                                          
-            //                                     |                               \                                       
-            //   T2                                |                                 \                                     
-            //                                     |                                   \                                   
-            //                                     |                                      \                                
+            //                                     |                            \
+            //                                     |                               \
+            //   T2                                |                                 \
+            //                                     |                                   \
+            //                                     |                                      \
             //      -------------------------------------------------------------------------------------------------------
             //
             // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
@@ -2208,17 +2284,17 @@ namespace ts {
             //
             //      0         10        20        30        40        50        60        70        80        90        100
             //      ------------------------------------------------------------*------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
+            //                |                                                 /
+            //                |                                            /----
+            //  T1            |                                       /----
+            //                |                                  /----
+            //                |                             /----
             //      ----------------------------------------$-------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
+            //                .                    |                            \
+            //                .                    |                               \
+            //   T2           .                    |                                 \
+            //                .                    |                                   \
+            //                .                    |                                      \
             //      ----------------------------------------------------------------------*--------------------------------
             //
             // (Note the dots represent the newly inferrred start.
@@ -2229,22 +2305,22 @@ namespace ts {
             //
             //      0         10        20        30        40        50        60        70        80        90        100
             //      --------------------------------------------------------------------------------*----------------------
-            //                |                                                                     /                      
-            //                |                                                                /----                       
-            //  T1            |                                                           /----                            
-            //                |                                                      /----                                 
-            //                |                                                 /----                                      
+            //                |                                                                     /
+            //                |                                                                /----
+            //  T1            |                                                           /----
+            //                |                                                      /----
+            //                |                                                 /----
             //      ------------------------------------------------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
+            //                .                    |                            \
+            //                .                    |                               \
+            //   T2           .                    |                                 \
+            //                .                    |                                   \
+            //                .                    |                                      \
             //      ----------------------------------------------------------------------*--------------------------------
             //
             // In other words (in this case), we're recognizing that the second edit happened after where the first edit
             // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
-            // that's the same as if we started at char 80 instead of 60.  
+            // that's the same as if we started at char 80 instead of 60.
             //
             // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
             // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
@@ -2254,7 +2330,7 @@ namespace ts {
             // semantics: { { start: 10, length: 70 }, newLength: 60 }
             //
             // The math then works out as follows.
-            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
+            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the
             // final result like so:
             //
             // {

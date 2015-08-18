@@ -75,28 +75,28 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 191 /* ForStatement */:
-            case 192 /* ForInStatement */:
-            case 190 /* WhileStatement */:
-            case 189 /* DoStatement */:
-                if (node.statement.kind !== 184 /* Block */) {
+            case 197 /* ForStatement */:
+            case 198 /* ForInStatement */:
+            case 196 /* WhileStatement */:
+            case 195 /* DoStatement */:
+                if (node.statement.kind !== 190 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 188 /* IfStatement */:
+            case 194 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 184 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 190 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 184 /* Block */ &&
-                    ifStatement.elseStatement.kind !== 188 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== 190 /* Block */ &&
+                    ifStatement.elseStatement.kind !== 194 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 173 /* BinaryExpression */:
+            case 179 /* BinaryExpression */:
                 var op = node.operatorToken.kind;
-                if (op === 29 /* EqualsEqualsToken */ || op == 30 /* ExclamationEqualsToken */) {
+                if (op === 30 /* EqualsEqualsToken */ || op == 31 /* ExclamationEqualsToken */) {
                     report(node, "Use '===' and '!=='.");
                 }
                 break;
@@ -112,7 +112,7 @@ exports.delint = delint;
 var fileNames = process.argv.slice(2);
 fileNames.forEach(function (fileName) {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), 2 /* ES6 */, true);
+    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), 2 /* ES6 */, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

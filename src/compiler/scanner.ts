@@ -32,19 +32,20 @@ namespace ts {
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
         setTextPos(textPos: number): void;
-        // Invokes the provided callback then unconditionally restores the scanner to the state it 
+        // Invokes the provided callback then unconditionally restores the scanner to the state it
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
         lookAhead<T>(callback: () => T): T;
 
         // Invokes the provided callback.  If the callback returns something falsy, then it restores
-        // the scanner to the state it was in immediately prior to invoking the callback.  If the 
+        // the scanner to the state it was in immediately prior to invoking the callback.  If the
         // callback returns something truthy, then the scanner state is not rolled back.  The result
         // of invoking the callback is returned from this function.
         tryScan<T>(callback: () => T): T;
     }
 
     let textToToken: Map<SyntaxKind> = {
+        "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
         "boolean": SyntaxKind.BooleanKeyword,
@@ -106,6 +107,8 @@ namespace ts {
         "while": SyntaxKind.WhileKeyword,
         "with": SyntaxKind.WithKeyword,
         "yield": SyntaxKind.YieldKeyword,
+        "async": SyntaxKind.AsyncKeyword,
+        "await": SyntaxKind.AwaitKeyword,
         "of": SyntaxKind.OfKeyword,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
@@ -272,7 +275,7 @@ namespace ts {
         return textToToken[s];
     }
 
-    /* @internal */ 
+    /* @internal */
     export function computeLineStarts(text: string): number[] {
         let result: number[] = new Array();
         let pos = 0;
@@ -304,26 +307,33 @@ namespace ts {
         return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
-    /* @internal */ 
+    /* @internal */
     export function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number {
         Debug.assert(line >= 0 && line < lineStarts.length);
         return lineStarts[line] + character;
     }
 
-    /* @internal */ 
+    /* @internal */
     export function getLineStarts(sourceFile: SourceFile): number[] {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
-    /* @internal */ 
+    /* @internal */
+    /**
+     * We assume the first line starts at position 0 and 'position' is non-negative.
+     */
     export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
-            // If the actual position was not found, 
-            // the binary search returns the negative value of the next line start
+            // If the actual position was not found,
+            // the binary search returns the 2's-complement of the next line start
             // e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
-            // then the search will return -2
+            // then the search will return -2.
+            //
+            // We want the index of the previous line start, so we subtract 1.
+            // Review 2's-complement if this is confusing.
             lineNumber = ~lineNumber - 1;
+            Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
         }
         return {
             line: lineNumber,
@@ -352,125 +362,135 @@ namespace ts {
             ch === CharacterCodes.mathematicalSpace ||
             ch === CharacterCodes.ideographicSpace ||
             ch === CharacterCodes.byteOrderMark;
-    }
+      }
 
-    export function isLineBreak(ch: number): boolean {
-        // ES5 7.3:
-        // The ECMAScript line terminator characters are listed in Table 3.
-        //     Table 3: Line Terminator Characters
-        //     Code Unit Value     Name                    Formal Name
-        //     \u000A              Line Feed               <LF>
-        //     \u000D              Carriage Return         <CR>
-        //     \u2028              Line separator          <LS>
-        //     \u2029              Paragraph separator     <PS>
-        // Only the characters in Table 3 are treated as line terminators. Other new line or line 
-        // breaking characters are treated as white space but not as line terminators. 
+      export function isLineBreak(ch: number): boolean {
+          // ES5 7.3:
+          // The ECMAScript line terminator characters are listed in Table 3.
+          //     Table 3: Line Terminator Characters
+          //     Code Unit Value     Name                    Formal Name
+          //     \u000A              Line Feed               <LF>
+          //     \u000D              Carriage Return         <CR>
+          //     \u2028              Line separator          <LS>
+          //     \u2029              Paragraph separator     <PS>
+          // Only the characters in Table 3 are treated as line terminators. Other new line or line
+          // breaking characters are treated as white space but not as line terminators.
 
-        return ch === CharacterCodes.lineFeed ||
-            ch === CharacterCodes.carriageReturn ||
-            ch === CharacterCodes.lineSeparator ||
-            ch === CharacterCodes.paragraphSeparator;
-    }
+          return ch === CharacterCodes.lineFeed ||
+              ch === CharacterCodes.carriageReturn ||
+              ch === CharacterCodes.lineSeparator ||
+              ch === CharacterCodes.paragraphSeparator;
+      }
 
-    function isDigit(ch: number): boolean {
-        return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
-    }
+      function isDigit(ch: number): boolean {
+          return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
+      }
 
-    /* @internal */ 
-    export function isOctalDigit(ch: number): boolean {
-        return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
-    }
+      /* @internal */
+      export function isOctalDigit(ch: number): boolean {
+          return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
+      }
 
-    export function couldStartTrivia(text: string, pos: number): boolean {
-        // Keep in sync with skipTrivia
-        let ch = text.charCodeAt(pos);
-        switch (ch) {
-            case CharacterCodes.carriageReturn:
-            case CharacterCodes.lineFeed:
-            case CharacterCodes.tab:
-            case CharacterCodes.verticalTab:
-            case CharacterCodes.formFeed:
-            case CharacterCodes.space:
-            case CharacterCodes.slash:
-                // starts of normal trivia
-            case CharacterCodes.lessThan:
-            case CharacterCodes.equals:
-            case CharacterCodes.greaterThan:
-                // Starts of conflict marker trivia
-                return true;
-            default:
-                return ch > CharacterCodes.maxAsciiCharacter;
-        }
-    }
+      export function couldStartTrivia(text: string, pos: number): boolean {
+          // Keep in sync with skipTrivia
+          let ch = text.charCodeAt(pos);
+          switch (ch) {
+              case CharacterCodes.carriageReturn:
+              case CharacterCodes.lineFeed:
+              case CharacterCodes.tab:
+              case CharacterCodes.verticalTab:
+              case CharacterCodes.formFeed:
+              case CharacterCodes.space:
+              case CharacterCodes.slash:
+                  // starts of normal trivia
+              case CharacterCodes.lessThan:
+              case CharacterCodes.equals:
+              case CharacterCodes.greaterThan:
+                  // Starts of conflict marker trivia
+                  return true;
+              case CharacterCodes.hash:
+                  // Only if its the beginning can we have #! trivia
+                  return pos === 0;
+              default:
+                  return ch > CharacterCodes.maxAsciiCharacter;
+          }
+      }
 
-    /* @internal */ 
-    export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
-        // Keep in sync with couldStartTrivia
-        while (true) {
-            let ch = text.charCodeAt(pos);
-            switch (ch) {
-                case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
-                        pos++;
-                    }
-                case CharacterCodes.lineFeed:
-                    pos++;
-                    if (stopAfterLineBreak) {
-                        return pos;
-                    }
-                    continue;
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                    pos++;
-                    continue;
-                case CharacterCodes.slash:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                        pos += 2;
-                        while (pos < text.length) {
-                            if (isLineBreak(text.charCodeAt(pos))) {
-                                break;
-                            }
-                            pos++;
-                        }
-                        continue;
-                    }
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
-                        pos += 2;
-                        while (pos < text.length) {
-                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                                pos += 2;
-                                break;
-                            }
-                            pos++;
-                        }
-                        continue;
-                    }
-                    break;
+      /* @internal */
+      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+          // Keep in sync with couldStartTrivia
+          while (true) {
+              let ch = text.charCodeAt(pos);
+              switch (ch) {
+                  case CharacterCodes.carriageReturn:
+                      if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                          pos++;
+                      }
+                  case CharacterCodes.lineFeed:
+                      pos++;
+                      if (stopAfterLineBreak) {
+                          return pos;
+                      }
+                      continue;
+                  case CharacterCodes.tab:
+                  case CharacterCodes.verticalTab:
+                  case CharacterCodes.formFeed:
+                  case CharacterCodes.space:
+                      pos++;
+                      continue;
+                  case CharacterCodes.slash:
+                      if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                          pos += 2;
+                          while (pos < text.length) {
+                              if (isLineBreak(text.charCodeAt(pos))) {
+                                  break;
+                              }
+                              pos++;
+                          }
+                          continue;
+                      }
+                      if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
+                          pos += 2;
+                          while (pos < text.length) {
+                              if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                                  pos += 2;
+                                  break;
+                              }
+                              pos++;
+                          }
+                          continue;
+                      }
+                      break;
 
-                case CharacterCodes.lessThan:
-                case CharacterCodes.equals:
-                case CharacterCodes.greaterThan:
-                    if (isConflictMarkerTrivia(text, pos)) {
-                        pos = scanConflictMarkerTrivia(text, pos);
-                        continue;
-                    }
-                    break;
+                  case CharacterCodes.lessThan:
+                  case CharacterCodes.equals:
+                  case CharacterCodes.greaterThan:
+                      if (isConflictMarkerTrivia(text, pos)) {
+                          pos = scanConflictMarkerTrivia(text, pos);
+                          continue;
+                      }
+                      break;
 
-                default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
-                        pos++;
-                        continue;
-                    }
-                    break;
-            }
-            return pos;
-        }
-    }
+                  case CharacterCodes.hash:
+                      if (isShebangTrivia(text, pos)) {
+                          pos = scanShebangTrivia(text, pos);
+                          continue;
+                      }
+                      break;
 
-    // All conflict markers consist of the same character repeated seven times.  If it is 
-    // a <<<<<<< or >>>>>>> marker then it is also followd by a space.
+                  default:
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
+                          pos++;
+                          continue;
+                      }
+                      break;
+              }
+              return pos;
+          }
+      }
+
+      // All conflict markers consist of the same character repeated seven times.  If it is
+      // a <<<<<<< or >>>>>>> marker then it is also followd by a space.
     let mergeConflictMarkerLength = "<<<<<<<".length;
 
     function isConflictMarkerTrivia(text: string, pos: number) {
@@ -525,13 +545,31 @@ namespace ts {
         return pos;
     }
 
-    // Extract comments from the given source text starting at the given position. If trailing is 
-    // false, whitespace is skipped until the first line break and comments between that location 
-    // and the next token are returned.If trailing is true, comments occurring between the given 
-    // position and the next line break are returned.The return value is an array containing a 
-    // TextRange for each comment. Single-line comment ranges include the beginning '//' characters 
-    // but not the ending line break. Multi - line comment ranges include the beginning '/* and 
-    // ending '*/' characters.The return value is undefined if no comments were found.
+    const shebangTriviaRegex = /^#!.*/;
+
+    function isShebangTrivia(text: string, pos: number) {
+        // Shebangs check must only be done at the start of the file
+        Debug.assert(pos === 0);
+        return shebangTriviaRegex.test(text);
+    }
+
+    function scanShebangTrivia(text: string, pos: number) {
+        let shebang = shebangTriviaRegex.exec(text)[0];
+        pos = pos + shebang.length;
+        return pos;
+    }
+
+    /**
+     * Extract comments from text prefixing the token closest following `pos`. 
+     * The return value is an array containing a TextRange for each comment.
+     * Single-line comment ranges include the beginning '//' characters but not the ending line break.
+     * Multi - line comment ranges include the beginning '/* and ending '<asterisk>/' characters.
+     * The return value is undefined if no comments were found.
+     * @param trailing 
+     * If false, whitespace is skipped until the first line break and comments between that location
+     * and the next token are returned.
+     * If true, comments occurring between the given position and the next line break are returned.
+     */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
@@ -614,6 +652,13 @@ namespace ts {
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
+    
+    /** Optionally, get the shebang */
+    export function getShebang(text: string): string {
+        return shebangTriviaRegex.test(text)
+            ? shebangTriviaRegex.exec(text)[0]
+            : undefined;
+    }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
@@ -626,8 +671,7 @@ namespace ts {
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
-    
-    /* @internal */ 
+
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
@@ -637,16 +681,16 @@ namespace ts {
                                   start?: number,
                                   length?: number): Scanner {
         // Current position (end position of text of current token)
-        let pos: number;       
+        let pos: number;
 
         // end of text
-        let end: number;       
+        let end: number;
 
         // Start position of whitespace before current token
-        let startPos: number;  
+        let startPos: number;
 
         // Start position of text of current token
-        let tokenPos: number;  
+        let tokenPos: number;
 
         let token: SyntaxKind;
         let tokenValue: string;
@@ -732,7 +776,7 @@ namespace ts {
             }
             return +(text.substring(start, pos));
         }
-        
+
         /**
          * Scans the given number of hexadecimal digits in the text,
          * returning -1 if the given number is unavailable.
@@ -740,7 +784,7 @@ namespace ts {
         function scanExactNumberOfHexDigits(count: number): number {
             return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false);
         }
-        
+
         /**
          * Scans as many hexadecimal digits as are available in the text,
          * returning -1 if the given number of digits was unavailable.
@@ -818,7 +862,7 @@ namespace ts {
 
             pos++;
             let start = pos;
-            let contents = ""
+            let contents = "";
             let resultingToken: SyntaxKind;
 
             while (true) {
@@ -913,13 +957,13 @@ namespace ts {
                         pos++;
                         return scanExtendedUnicodeEscape();
                     }
-                    
+
                     // '\uDDDD'
-                    return scanHexadecimalEscape(/*numDigits*/ 4)
-                    
+                    return scanHexadecimalEscape(/*numDigits*/ 4);
+
                 case CharacterCodes.x:
                     // '\xDD'
-                    return scanHexadecimalEscape(/*numDigits*/ 2)
+                    return scanHexadecimalEscape(/*numDigits*/ 2);
 
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
@@ -931,31 +975,31 @@ namespace ts {
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
-                    return ""
+                    return "";
                 default:
                     return String.fromCharCode(ch);
             }
         }
-        
+
         function scanHexadecimalEscape(numDigits: number): string {
             let escapedValue = scanExactNumberOfHexDigits(numDigits);
-            
+
             if (escapedValue >= 0) {
                 return String.fromCharCode(escapedValue);
             }
             else {
                 error(Diagnostics.Hexadecimal_digit_expected);
-                return ""
+                return "";
             }
         }
-        
+
         function scanExtendedUnicodeEscape(): string {
             let escapedValue = scanMinimumNumberOfHexDigits(1);
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
             if (escapedValue < 0) {
-                error(Diagnostics.Hexadecimal_digit_expected)
+                error(Diagnostics.Hexadecimal_digit_expected);
                 isInvalidExtendedEscape = true;
             }
             else if (escapedValue > 0x10FFFF) {
@@ -982,18 +1026,18 @@ namespace ts {
 
             return utf16EncodeAsString(escapedValue);
         }
-        
+
         // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
         function utf16EncodeAsString(codePoint: number): string {
             Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
-            
+
             if (codePoint <= 65535) {
                 return String.fromCharCode(codePoint);
             }
-            
+
             let codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
             let codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
-            
+
             return String.fromCharCode(codeUnit1, codeUnit2);
         }
 
@@ -1055,7 +1099,7 @@ namespace ts {
             let value = 0;
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
-            let numberOfDigits = 0;  
+            let numberOfDigits = 0;
             while (true) {
                 let ch = text.charCodeAt(pos);
                 let valueOfCh = ch - CharacterCodes._0;
@@ -1084,6 +1128,18 @@ namespace ts {
                     return token = SyntaxKind.EndOfFileToken;
                 }
                 let ch = text.charCodeAt(pos);
+
+                // Special handling for shebang
+                if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text, pos);
+                    if (skipTrivia) {
+                        continue;
+                    }
+                    else {
+                        return token = SyntaxKind.ShebangTrivia;
+                    }
+                }
+
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
@@ -1129,7 +1185,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue()
+                        return token = scanTemplateAndSetTokenValue();
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -1441,14 +1497,14 @@ namespace ts {
                     // regex.  Report error and return what we have so far.
                     if (p >= end) {
                         tokenIsUnterminated = true;
-                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        error(Diagnostics.Unterminated_regular_expression_literal);
                         break;
                     }
 
                     let ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
                         tokenIsUnterminated = true;
-                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        error(Diagnostics.Unterminated_regular_expression_literal);
                         break;
                     }
 
@@ -1540,7 +1596,7 @@ namespace ts {
                     let ch = text.charCodeAt(pos);
                     if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch) : isIdentifierPart(ch))) {
                         pos++;
-                    } 
+                    }
                     else {
                         break;
                     }
@@ -1549,7 +1605,7 @@ namespace ts {
             }
             return token;
         }
-        
+
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             let savePos = pos;
             let saveStartPos = startPos;

@@ -11,7 +11,6 @@
 ////var a2 = { name: 'bob', age: 18, address: 'springfield' };
 ////var b2 = { name: 'jim', age: 20, dob: new Date() };
 ////var /*3*/c2 = [a2, b2];
-////var /*4*/c2a = [a2, b2, a1];
 
 ////interface I {
 ////    name: string;
@@ -19,13 +18,13 @@
 ////}
 
 ////var i: I;
-////var /*5*/c3 = [a2, b2, i];
+////var /*4*/c3 = [i, a];
 
 goTo.marker('1');
 verify.quickInfoIs('var c: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('2');
-verify.quickInfoIs('var c1: {\n    name: string;\n    age: number;\n}[]');
+verify.quickInfoIs('var c1: ({\n    name: string;\n    age: number;\n} | {\n    name: string;\n    age: number;\n    dob: Date;\n})[]');
 
 goTo.marker('3');
 verify.quickInfoIs('var c2: ({\n\
@@ -39,8 +38,5 @@ verify.quickInfoIs('var c2: ({\n\
 })[]');
 
 goTo.marker('4');
-verify.quickInfoIs('var c2a: {\n    name: string;\n    age: number;\n}[]');
-
-goTo.marker('5');
 verify.quickInfoIs('var c3: I[]');
 

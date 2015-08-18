@@ -78,15 +78,76 @@ namespace ts.server {
             return this.snap().getChangeRange(oldSnapshot);
         }
     }
-
+    
+    interface TimestampedResolvedModule extends ResolvedModule {
+        lastCheckTime: number; 
+    }
+    
     export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
         roots: ScriptInfo[] = [];
-
+        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;        
+        private moduleResolutionHost: ts.ModuleResolutionHost;
+        
         constructor(public host: ServerHost, public project: Project) {
+            this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
+            this.moduleResolutionHost = {
+                fileExists: fileName => this.fileExists(fileName),
+                readFile: fileName => this.host.readFile(fileName)
+            }
         }
+        
+        resolveModuleNames(moduleNames: string[], containingFile: string): string[] {
+            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
+            
+            let newResolutions: Map<TimestampedResolvedModule> = {};
+            let resolvedFileNames: string[] = [];
+            
+            let compilerOptions = this.getCompilationSettings();
+                        
+            for (let moduleName of moduleNames) {
+                // check if this is a duplicate entry in the list
+                let resolution = lookUp(newResolutions, moduleName);
+                if (!resolution) {
+                    let existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
+                    if (moduleResolutionIsValid(existingResolution)) {
+                        // ok, it is safe to use existing module resolution results  
+                        resolution = existingResolution;
+                    }
+                    else {
+                        resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution.lastCheckTime = Date.now();
+                        newResolutions[moduleName] = resolution;                                                
+                    }
+                }
+                
+                ts.Debug.assert(resolution !== undefined);
+                
+                resolvedFileNames.push(resolution.resolvedFileName);                
+            }
+            
+            // replace old results with a new one
+            this.resolvedModuleNames.set(containingFile, newResolutions);
+            return resolvedFileNames;
+            
+            function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
+                if (!resolution) {
+                    return false;
+                }
+                
+                if (resolution.resolvedFileName) {
+                    // TODO: consider checking failedLookupLocations  
+                    // TODO: use lastCheckTime to track expiration for module name resolution 
+                    return true;
+                }
+                
+                // consider situation if we have no candidate locations as valid resolution.
+                // after all there is no point to invalidate it if we have no idea where to look for the module.
+                return resolution.failedLookupLocations.length === 0;
+            }
+        }        
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
@@ -102,6 +163,8 @@ namespace ts.server {
 
         setCompilationSettings(opt: ts.CompilerOptions) {
             this.compilationSettings = opt;
+            // conservatively assume that changing compiler options might affect module resolution strategy
+            this.resolvedModuleNames.clear();
         }
 
         lineAffectsRefs(filename: string, line: number) {
@@ -137,6 +200,7 @@ namespace ts.server {
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
                 this.filenameToScript[info.fileName] = undefined;
+                this.resolvedModuleNames.remove(info.fileName);
             }
         }
 
@@ -304,7 +368,7 @@ namespace ts.server {
             return this.projectService.openFile(filename, false);
         }
 
-        getFileNameList() {
+        getFileNames() {
             let sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
@@ -803,9 +867,6 @@ namespace ts.server {
             } else {
                 this.log("no config file");
             }
-            if (configFileName) {
-                configFileName = getAbsolutePath(configFileName, searchPath);
-            }
             if (configFileName && (!this.configProjectIsActive(configFileName))) {
                 var configResult = this.openConfigFile(configFileName, fileName);
                 if (!configResult.success) {
@@ -910,7 +971,8 @@ namespace ts.server {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.readConfigFile(configFilename);
+            var contents = this.host.readFile(configFilename)
+            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
             if (rawConfig.error) {
                 return rawConfig.error;
             }
@@ -992,6 +1054,7 @@ namespace ts.server {
             InsertSpaceAfterKeywordsInControlFlowStatements: true,
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         }

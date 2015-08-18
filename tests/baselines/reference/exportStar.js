@@ -33,6 +33,7 @@ foo;
 exports.x = 1;
 exports.y = 2;
 //// [t2.js]
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "hello";
 function foo() { }
 exports.foo = foo;
