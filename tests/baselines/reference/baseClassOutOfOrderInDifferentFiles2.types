@@ -4,9 +4,43 @@ class A {
 >A : A
 }
 
+module M {
+>M : typeof M
+
+    export class C {
+>C : C
+    }
+}
+
 === tests/cases/compiler/file2.ts ===
-class B extends A {
+class B extends A { // no error
 >B : B
 >A : A
 }
 
+function foo() {
+>foo : () => void
+
+    class C extends A { // no error
+>C : C
+>A : A
+    }
+}
+
+class D extends M.C { // no error
+>D : D
+>M.C : M.C
+>M : typeof M
+>C : typeof M.C
+}
+
+function foo2() {
+>foo2 : () => void
+
+    class C extends M.C { // no error
+>C : C
+>M.C : M.C
+>M : typeof M
+>C : typeof M.C
+    }
+}

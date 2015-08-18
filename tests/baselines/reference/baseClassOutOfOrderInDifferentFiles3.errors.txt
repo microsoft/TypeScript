@@ -1,12 +1,33 @@
 tests/cases/compiler/file1.ts(1,17): error TS2653: Base expression references type before it is declared.
+tests/cases/compiler/file1.ts(9,17): error TS2653: Base expression references type before it is declared.
 
 
-==== tests/cases/compiler/file1.ts (1 errors) ====
-    class B extends A {
+==== tests/cases/compiler/file1.ts (2 errors) ====
+    class B extends A { // error
                     ~
 !!! error TS2653: Base expression references type before it is declared.
     }
     
+    function foo() {
+        class C extends A { // no error
+        }
+    }
+    
+    class D extends M.C { // error
+                    ~~~
+!!! error TS2653: Base expression references type before it is declared.
+    }
+    
+    function foo2() {
+        class C extends M.C { // no error
+        }
+    }
+    
 ==== tests/cases/compiler/file2.ts (0 errors) ====
     class A {
+    }
+    
+    module M {
+        export class C {
+        }
     }
