@@ -12638,9 +12638,15 @@ namespace ts {
                         
                     // Check if base type declaration appears before heritage clause to avoid false errors for 
                     // base type declarations in the extend clause itself
-                    let heritageClassElement = getClassExtendsHeritageClauseElement(node);
-                    if (!isDefinedBefore(baseType.symbol.declarations[0], heritageClassElement)) {
-                        error(heritageClassElement, Diagnostics.Base_expression_references_type_before_it_is_declared);
+                    let baseTypeDeclaration = baseType.symbol.declarations[0];
+                    if (baseTypeNode.expression.kind === SyntaxKind.Identifier) {
+                        let possiblyAliasDecl = getResolvedSymbol(<Identifier>baseTypeNode.expression).declarations[0];
+                        if (isInternalModuleImportEqualsDeclaration(possiblyAliasDecl)) {
+                            baseTypeDeclaration = possiblyAliasDecl;
+                        }
+                    }
+                    if (!isDefinedBefore(baseTypeDeclaration, baseTypeNode)) {
+                        error(baseTypeNode, Diagnostics.Base_expression_references_type_before_it_is_declared);
                     }
                 }
             }

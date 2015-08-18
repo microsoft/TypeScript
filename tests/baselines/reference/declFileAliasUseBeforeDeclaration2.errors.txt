@@ -1,0 +1,16 @@
+tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts(7,21): error TS2653: Base expression references type before it is declared.
+
+
+==== tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts (1 errors) ====
+    
+    declare module "test" {
+        module A {
+            class C {
+            }
+        }
+        class B extends E {
+                        ~
+!!! error TS2653: Base expression references type before it is declared.
+        }
+        import E = A.C;
+    }
