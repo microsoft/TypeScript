@@ -2004,7 +2004,13 @@ namespace ts {
         Error,
         Message,
     }
-
+    
+    export const enum ModuleResolutionKind {
+        Legacy  = 1,
+        NodeJs  = 2,
+        BaseUrl = 3
+    }
+    
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2043,6 +2049,8 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        moduleResolution?: ModuleResolutionKind
+        baseUrl?: string;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

@@ -36,11 +36,165 @@ namespace ts {
     }
     
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
-        // TODO: use different resolution strategy based on compiler options
-        return legacyNameResolver(moduleName, containingFile, compilerOptions, host);
+        switch(compilerOptions.moduleResolution) {
+            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+            case ModuleResolutionKind.BaseUrl: return baseUrlModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+            default: return legacyNameResolver(moduleName, containingFile, compilerOptions, host);
+        }
+    }
+    
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+        let containingDirectory = getDirectoryPath(containingFile);        
+
+        if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
+            let failedLookupLocations: string[] = [];
+            let candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+            let result = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
+            
+            if (result) {
+                return { resolvedFileName: result, failedLookupLocations };
+            }
+            
+            result = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
+            return { resolvedFileName: result, failedLookupLocations };
+        }
+        else {
+            return loadModuleModuleFromNodeModules(moduleName, containingDirectory, host);
+        }
+    }
+    
+    function loadNodeModuleFromFile(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+        // load only .d.ts files
+        let fileName = fileExtensionIs(candidate, ".d.ts") ? candidate : candidate + ".d.ts";
+        if (!host.fileExists(fileName)) {
+            failedLookupLocation.push(fileName);
+            return undefined;
+        }
+        
+        return fileName;
+    }
+    
+    function loadNodeModuleFromDirectory(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+        let packageJsonPath = combinePaths(candidate, "package.json");
+        if (host.fileExists(packageJsonPath)) {
+            let jsonText = host.readFile(packageJsonPath);
+            let jsonContent = jsonText ? <{ typings?: string, main?: string }>JSON.parse(jsonText) : { typings: undefined, main:undefined };
+            if (jsonContent.typings) {
+                let result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
+                if (result) {
+                    return result;
+                }
+            }
+            
+            if (jsonContent.main) {
+                let mainFile = removeFileExtension(jsonContent.main);
+                let result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, mainFile)), failedLookupLocation, host);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        else {
+            // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
+            failedLookupLocation.push(packageJsonPath);
+        }
+        
+        return loadNodeModuleFromFile(combinePaths(candidate, "index"), failedLookupLocation, host);
+    }
+    
+    function loadModuleModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModule {
+        let failedLookupLocations: string[] = []; 
+        directory = normalizeSlashes(directory);
+        while (true) {
+            let baseName = getBaseFileName(directory);
+            if (baseName !== "node_modules") {
+                let nodeModulesFolder = combinePaths(directory, "node_modules");
+                let candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
+                let result = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
+                if (result) {
+                    return { resolvedFileName: result, failedLookupLocations };
+                }
+                
+                result = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
+                if (result) {
+                    return { resolvedFileName: result, failedLookupLocations };
+                }
+            }
+            
+            let parentPath = getDirectoryPath(directory);
+            if (parentPath === directory) {
+                break;
+            }
+            
+            directory = parentPath;
+        }
+        
+        return { resolvedFileName: undefined, failedLookupLocations };
+    }
+    
+    export function baseUrlModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+        Debug.assert(compilerOptions.baseUrl !== undefined, "baseUrl is mandatory when using this module resolution strategy");
+        
+        let normalizedModuleName = normalizeSlashes(moduleName); 
+        
+        // treat module name as url that is relative to containing file if 
+        let basePart = useBaseUrl(moduleName) ? compilerOptions.baseUrl : getDirectoryPath(containingFile);
+        let candidate = normalizePath(combinePaths(basePart, moduleName));
+        
+                
+        let failedLookupLocations: string[] = [];
+        // first - try to load file as is
+        let result = tryLoadFile(candidate);
+        if (result) {
+            return result;
+        }
+        // then try all supported extension
+        for(let ext of supportedExtensions) {
+            let result = tryLoadFile(candidate + ext);
+            if (result) {
+                return result;
+            }
+        }
+        
+        return { resolvedFileName: undefined, failedLookupLocations };
+        
+        function tryLoadFile(location: string): ResolvedModule {
+            if (host.fileExists(location)) {
+                return { resolvedFileName: location, failedLookupLocations }; 
+            }
+            else {
+                failedLookupLocations.push(location);
+                return undefined;
+            }
+        }
+    }
+    
+    function nameStartsWithDotSlashOrDotDotSlash(name: string) {
+        let i = name.lastIndexOf("./", 1);
+        return i === 0 || (i === 1 && name.charCodeAt(0) === CharacterCodes.dot);
+    }
+    
+    function useBaseUrl(moduleName: string): boolean {
+        // path is rooted
+        if (getRootLength(moduleName) !== 0) {
+            return false;
+        }
+
+        // module name starts with './' or '../'
+        if (nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
+            return false;
+        }
+        
+        // module name has one of supported extesions
+        for(let ext of supportedExtensions ) {
+            if (fileExtensionIs(moduleName, ext)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    function legacyNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+    export function legacyNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
         
         // module names that contain '!' are used to reference resources and are not resolved to actual files on disk
         if (moduleName.indexOf('!') != -1) {
