@@ -666,38 +666,7 @@ interface RegExp {
       * that search.
       * @param string A string to search within.
       */
-    match(string: string): string[];
-
-    /**
-      * Replaces text in a string, using a regular expression.
-      * @param searchValue A String object or string literal that represents the regular expression
-      * @param replaceValue A String object or string literal containing the text to replace for every 
-      * successful match of rgExp in stringObj.
-      */
-    replace(string: string, replaceValue: string): string;
-
-    search(string: string): number;
-
-    /**
-      * Returns an Array object into which substrings of the result of converting string to a String 
-      * have been stored. The substrings are determined by searching from left to right for matches 
-      * of the this value regular expression; these occurrences are not part of any substring in the 
-      * returned array, but serve to divide up the String value.
-      *
-      * If the regular expression that contains capturing parentheses, then each time separator is 
-      * matched the results (including any undefined results) of the capturing parentheses are spliced.
-      * @param string string value to split
-      * @param limit if not undefined, the output array is truncated so that it contains no more 
-      * than limit elements.
-      */
-    split(string: string, limit?: number): string[];
-
-    /**
-      * Matches a string with this regular expression, and returns an array containing the results of
-      * that search.
-      * @param string A string to search within.
-      */
-    [Symbol.match](str: string): RegExpMatchArray;
+    [Symbol.match](string: string): RegExpMatchArray;
 
     /**
       * Replaces text in a string, using this regular expression.
