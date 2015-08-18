@@ -3460,9 +3460,11 @@ namespace ts {
                             containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                             isFunction(containingNodeKind) ||
                             containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D<T, |
                             containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                            containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
+                            containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
                                                                                                           
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
@@ -3490,9 +3492,10 @@ namespace ts {
 
                     case SyntaxKind.LessThanToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                             containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
-                            containingNodeKind === SyntaxKind.TypeAliasDeclaration ||
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
                             isFunction(containingNodeKind);
 
                     case SyntaxKind.StaticKeyword:
