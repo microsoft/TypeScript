@@ -686,7 +686,7 @@ interface RegExp {
     [Symbol.match](str: string): RegExpMatchArray;
 
     /**
-      * Replaces text in a string, using a regular expression.
+      * Replaces text in a string, using this regular expression.
       * @param string A String object or string literal whose contents matching against
       *               this regular expression will be replaced
       * @param replaceValue A String object or string literal containing the text to replace for every 
@@ -695,7 +695,7 @@ interface RegExp {
     [Symbol.replace](string: string, replaceValue: string): string;
 
     /**
-      * Replaces text in a string, using a regular expression.
+      * Replaces text in a string, using this regular expression.
       * @param string A String object or string literal whose contents matching against
       *               this regular expression will be replaced
       * @param replacer A function that returns the replacement text.
@@ -709,6 +709,20 @@ interface RegExp {
       * @param string The string to search within.
       */
     [Symbol.search](string: string): number;
+
+    /**
+      * Returns an array of substrings that were delimited by strings in the original input that
+      * match against this regular expression.
+      *
+      * If the regular expression contains capturing parentheses, then each time this
+      * regular expression matches, the results (including any undefined results) of the
+      * capturing parentheses are spliced.
+      *
+      * @param string string value to split
+      * @param limit if not undefined, the output array is truncated so that it contains no more
+      * than 'limit' elements.
+      */
+    [Symbol.split](string: string, limit?: number): string[];
 
     /**
       * Returns a string indicating the flags of the regular expression in question. This field is read-only.
