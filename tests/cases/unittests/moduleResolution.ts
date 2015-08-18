@@ -253,7 +253,6 @@ module ts {
                 assert.deepEqual(resolution.failedLookupLocations, expectedFailedLookupLocations)
             }
             
-            test("/a/b/c/d.ts", "/foo.ts", "/foo.ts");
             test("/a/b/c/d.ts", "/foo.ts", "/foo");
             test("/a/b/c/d.ts", "/foo.d.ts", "/foo");
             test("/a/b/c/d.ts", "/foo.tsx", "/foo");
@@ -265,10 +264,6 @@ module ts {
             test("/a/b/c/d.ts", "/a/b/foo.ts", "../foo");
             test("/a/b/c/d.ts", "/a/b/foo.d.ts", "../foo");
             test("/a/b/c/d.ts", "/a/b/foo.tsx", "../foo");
-
-            test("/a/b/c/d.ts", "/a/b/c/foo.ts", "foo.ts");
-            test("/a/b/c/d.ts", "/a/b/c/foo.tsx", "foo.tsx");
-            test("/a/b/c/d.ts", "/a/b/c/foo.d.ts", "foo.d.ts");
         });
         
         it ("load module using base url", () => {

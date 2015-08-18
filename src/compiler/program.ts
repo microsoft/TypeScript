@@ -36,7 +36,7 @@ namespace ts {
     }
     
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
-        switch(compilerOptions.moduleResolution) {
+        switch (compilerOptions.moduleResolution) {
             case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, host);
             case ModuleResolutionKind.BaseUrl: return baseUrlModuleNameResolver(moduleName, containingFile, compilerOptions.baseUrl, host);
             default: return legacyNameResolver(moduleName, containingFile, compilerOptions, host);
@@ -141,26 +141,7 @@ namespace ts {
         
         let failedLookupLocations: string[] = [];
         
-        let hasSupportedExtension = forEach(supportedExtensions, ext => fileExtensionIs(candidate, ext));
-
-        if (hasSupportedExtension) {
-            // module name already has extension - use it as is
-            let result = tryLoadFile(candidate);
-            if (result) {
-                return result;
-            }            
-        }
-        else {
-            // module name does not have extension - try every supported extension
-            for(let ext of supportedExtensions) {
-                let result = tryLoadFile(candidate + ext);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-
-        return { resolvedFileName: undefined, failedLookupLocations };
+        return forEach(supportedExtensions, ext => tryLoadFile(candidate + ext)) || { resolvedFileName: undefined, failedLookupLocations }; 
         
         function tryLoadFile(location: string): ResolvedModule {
             if (host.fileExists(location)) {
@@ -179,23 +160,9 @@ namespace ts {
     }
     
     function useBaseUrl(moduleName: string): boolean {
-        // path is rooted
-        if (getRootLength(moduleName) !== 0) {
-            return false;
-        }
-
-        // module name starts with './' or '../'
-        if (nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
-            return false;
-        }
-        
-        // module name has one of supported extesions
-        for(let ext of supportedExtensions ) {
-            if (fileExtensionIs(moduleName, ext)) {
-                return false;
-            }
-        }
-        return true;
+        // path is not rooted
+        // module name does not start with './' or '../'
+        return getRootLength(moduleName) === 0 && !nameStartsWithDotSlashOrDotDotSlash(moduleName);
     }
 
     export function legacyNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
