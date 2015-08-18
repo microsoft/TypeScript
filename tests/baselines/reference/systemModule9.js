@@ -38,24 +38,24 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
     }
     return {
         setters:[
-            function (_ns) {
-                ns = _ns;
+            function (ns_1) {
+                ns = ns_1;
             },
-            function (_file2_1) {
-                file2_1 = _file2_1;
+            function (file2_1_1) {
+                file2_1 = file2_1_1;
             },
-            function (_file3_1) {
-                file3_1 = _file3_1;
+            function (file3_1_1) {
+                file3_1 = file3_1_1;
             },
-            function (_) {},
-            function (_file5_1) {
-                file5_1 = _file5_1;
+            function (_1) {},
+            function (file5_1_1) {
+                file5_1 = file5_1_1;
             },
-            function (_ns3) {
-                ns3 = _ns3;
+            function (ns3_1) {
+                ns3 = ns3_1;
             },
-            function (_file7_1) {
-                exportStar_1(_file7_1);
+            function (file7_1_1) {
+                exportStar_1(file7_1_1);
             }],
         execute: function() {
             ns.f();

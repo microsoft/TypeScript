@@ -416,24 +416,12 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        // If parameter/type parameter, the prev token trailing comments are part of this node too
-        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // e.g.   (/** blah */ a, /** blah */ b);
-
-            // e.g.:     (
-            //            /** blah */ a,
-            //            /** blah */ b);
-            return concatenate(
-                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
-        }
-        else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
-        }
+        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
@@ -1455,6 +1443,22 @@ namespace ts {
 
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+    }
+
+    export function cloneEntityName(node: EntityName): EntityName {
+        if (node.kind === SyntaxKind.Identifier) {
+            let clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            clone.text = (<Identifier>node).text;
+            return clone;
+        }
+        else {
+            let clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+            clone.left = cloneEntityName((<QualifiedName>node).left);
+            clone.left.parent = clone;
+            clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
+            clone.right.parent = clone;
+            return clone;
+        }
     }
 
     export function nodeIsSynthesized(node: Node): boolean {

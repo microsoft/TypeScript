@@ -112,7 +112,7 @@ exports.delint = delint;
 var fileNames = process.argv.slice(2);
 fileNames.forEach(function (fileName) {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), 2 /* ES6 */, true);
+    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), 2 /* ES6 */, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

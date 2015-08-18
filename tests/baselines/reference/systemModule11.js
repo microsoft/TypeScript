@@ -59,8 +59,8 @@ System.register(['bar'], function(exports_1) {
     }
     return {
         setters:[
-            function (_bar_1) {
-                exportStar_1(_bar_1);
+            function (bar_1_1) {
+                exportStar_1(bar_1_1);
             }],
         execute: function() {
         }
@@ -82,8 +82,8 @@ System.register(['bar'], function(exports_1) {
     }
     return {
         setters:[
-            function (_bar_1) {
-                exportStar_1(_bar_1);
+            function (bar_1_1) {
+                exportStar_1(bar_1_1);
             }],
         execute: function() {
             exports_1("x", x);
@@ -108,14 +108,14 @@ System.register(['a', 'bar'], function(exports_1) {
     }
     return {
         setters:[
-            function (_a_1) {
-                var reexports_1 = {};
-                reexports_1["x"] = _a_1["x"];
-                reexports_1["z"] = _a_1["y"];
-                exports_1(reexports_1);
+            function (a_1_1) {
+                exports_1({
+                    "x": a_1_1["x"],
+                    "z": a_1_1["y"]
+                });
             },
-            function (_bar_1) {
-                exportStar_1(_bar_1);
+            function (bar_1_1) {
+                exportStar_1(bar_1_1);
             }],
         execute: function() {
         }
@@ -130,11 +130,11 @@ System.register(['a'], function(exports_1) {
     exports_1("default", default_1);
     return {
         setters:[
-            function (_a_1) {
-                var reexports_1 = {};
-                reexports_1["s"] = _a_1["s"];
-                reexports_1["s2"] = _a_1["s1"];
-                exports_1(reexports_1);
+            function (a_1_1) {
+                exports_1({
+                    "s": a_1_1["s"],
+                    "s2": a_1_1["s1"]
+                });
             }],
         execute: function() {
             exports_1("z", z);
@@ -154,8 +154,8 @@ System.register(['a'], function(exports_1) {
     }
     return {
         setters:[
-            function (_a_1) {
-                exportStar_1(_a_1);
+            function (a_1_1) {
+                exportStar_1(a_1_1);
             }],
         execute: function() {
         }

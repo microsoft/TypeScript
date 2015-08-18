@@ -74,7 +74,7 @@ namespace ts {
         // If the current node is a container that also container that also contains locals.  Examples:
         //
         //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals   = IsContainer | HasLocals
+        IsContainerWithLocals = IsContainer | HasLocals
     }
 
     export function bindSourceFile(file: SourceFile) {

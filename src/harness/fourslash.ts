@@ -366,6 +366,7 @@ module FourSlash {
                 InsertSpaceAfterKeywordsInControlFlowStatements: true,
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -1885,7 +1886,7 @@ module FourSlash {
                     );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNameList.map( file => {
+                    actual.fileNames.map( file => {
                         return file.replace(this.basePath + "/", "");
                         }).join(",")
                     );
@@ -1939,6 +1940,32 @@ module FourSlash {
 
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
+                }
+            }
+        }
+
+        public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
+            const name = "verifyDocCommentTemplate";
+            let actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+
+            if (expected === undefined) {
+                if (actual) {
+                    this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '}');
+                }
+
+                return;
+            }
+            else {
+                if (actual === undefined) {
+                    this.raiseError(name + ' failed - expected the template {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '} but got nothing instead');
+                }
+
+                if (actual.newText !== expected.newText) {
+                    this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
+                }
+
+                if (actual.caretOffset !== expected.caretOffset) {
+                    this.raiseError(name + ' failed - expected caretOffset: ' + expected.caretOffset + ',\nactual caretOffset:' + actual.caretOffset);
                 }
             }
         }
@@ -2117,17 +2144,17 @@ module FourSlash {
             }
         }
 
-        private getOccurancesAtCurrentPosition() {
+        private getOccurrencesAtCurrentPosition() {
             return this.languageService.getOccurrencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         public verifyOccurrencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
             this.taoInvalidReason = "verifyOccurrencesAtPositionListContains NYI";
 
-            let occurrences = this.getOccurancesAtCurrentPosition();
+            let occurrences = this.getOccurrencesAtCurrentPosition();
 
             if (!occurrences || occurrences.length === 0) {
-                this.raiseError('verifyOccurancesAtPositionListContains failed - found 0 references, expected at least one.');
+                this.raiseError('verifyOccurrencesAtPositionListContains failed - found 0 references, expected at least one.');
             }
 
             for (let occurrence of occurrences) {
@@ -2146,7 +2173,7 @@ module FourSlash {
         public verifyOccurrencesAtPositionListCount(expectedCount: number) {
             this.taoInvalidReason = "verifyOccurrencesAtPositionListCount NYI";
 
-            let occurrences = this.getOccurancesAtCurrentPosition();
+            let occurrences = this.getOccurrencesAtCurrentPosition();
             let actualCount = occurrences ? occurrences.length : 0;
             if (expectedCount !== actualCount) {
                 this.raiseError(`verifyOccurrencesAtPositionListCount failed - actual: ${actualCount}, expected:${expectedCount}`);
@@ -2174,7 +2201,7 @@ module FourSlash {
                     for (let highlight of highlightSpans) {
                         if (highlight && highlight.textSpan.start === start && ts.textSpanEnd(highlight.textSpan) === end) {
                             if (typeof kind !== "undefined" && highlight.kind !== kind) {
-                                this.raiseError('verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ' + highlight.kind + ', expected: ' + kind + '.');
+                                this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ${highlight.kind}, expected: ${kind}.`);
                             }
                             return;
                         }
@@ -2183,7 +2210,7 @@ module FourSlash {
             }
 
             let missingItem = { fileName: fileName, start: start, end: end, kind: kind };
-            this.raiseError('verifyOccurancesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(documentHighlights) + ')');
+            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem)} in the returned list: (${JSON.stringify(documentHighlights)})`);
         }
 
         public verifyDocumentHighlightsAtPositionListCount(expectedCount: number, fileNamesToSearch: string[]) {
