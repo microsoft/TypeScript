@@ -1,0 +1,116 @@
+=== tests/cases/compiler/baseClassOutOfOrderInFunction.ts ===
+function foo() {
+>foo : () => void
+
+    class B extends A { // no error
+>B : B
+>A : A
+
+        constructor(msg: string) {
+>msg : string
+
+            super(msg);
+>super(msg) : void
+>super : typeof A
+>msg : string
+        }
+    }
+
+    class B2 extends class B3 extends class C { // no error
+>B2 : B2
+>class B3 extends class C { // no error    }{    } : B3
+>B3 : typeof B3
+>class C { // no error    } : C
+>C : typeof C
+
+    }{
+    }{ }
+
+    class B3 extends class { // no error
+>B3 : B3
+>class { // no error    } : (Anonymous class)
+
+    }{
+    }
+
+    class B4<T> extends A1<T> { // no error
+>B4 : B4<T>
+>T : T
+>A1 : A1<T>
+>T : T
+
+        constructor(msg: T) {
+>msg : T
+>T : T
+
+            super(msg);
+>super(msg) : void
+>super : typeof A1
+>msg : T
+        }
+    }
+    
+    class B5 extends A1<number> { // no error
+>B5 : B5
+>A1 : A1<number>
+
+        constructor(msg: number) {
+>msg : number
+
+            super(msg);
+>super(msg) : void
+>super : typeof A1
+>msg : number
+        }
+    }
+
+    class B6 extends B4<A1<number>> { // No error
+>B6 : B6
+>B4 : B4<A1<number>>
+>A1 : A1<T>
+
+        constructor(msg: A1<number>) {
+>msg : A1<number>
+>A1 : A1<T>
+
+            super(msg);
+>super(msg) : void
+>super : typeof B4
+>msg : A1<number>
+        }
+    }
+
+    class B7 extends M.c { // no error
+>B7 : B7
+>M.c : M.c
+>M : typeof M
+>c : typeof M.c
+    }
+}
+
+class A {
+>A : A
+
+    constructor(public msg: string) {
+>msg : string
+
+    }
+}
+
+class A1<T> {
+>A1 : A1<T>
+>T : T
+
+    constructor(msg: T) {
+>msg : T
+>T : T
+    }
+}
+
+module M {
+>M : typeof M
+
+    export class c {
+>c : c
+    }
+}
