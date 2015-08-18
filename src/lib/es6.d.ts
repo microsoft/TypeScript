@@ -170,12 +170,6 @@ interface ObjectConstructor {
 }
 
 interface Function {
-    /** 
-      * Returns a new function object that is identical to the argument object in all ways except 
-      * for its identity and the value of its HomeObject internal slot. 
-      */
-    toMethod(newHome: Object): Function;
-
     /**
       * Returns the name of the function. Function names are read-only and can not be changed.
       */
