@@ -686,6 +686,23 @@ interface RegExp {
     [Symbol.match](str: string): RegExpMatchArray;
 
     /**
+      * Replaces text in a string, using a regular expression.
+      * @param string A String object or string literal whose contents matching against
+      *               this regular expression will be replaced
+      * @param replaceValue A String object or string literal containing the text to replace for every 
+      *                     successful match of this regular expression.
+      */
+    [Symbol.replace](string: string, replaceValue: string): string;
+
+    /**
+      * Replaces text in a string, using a regular expression.
+      * @param string A String object or string literal whose contents matching against
+      *               this regular expression will be replaced
+      * @param replacer A function that returns the replacement text.
+      */
+    [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
+
+    /**
       * Returns a string indicating the flags of the regular expression in question. This field is read-only.
       * The characters in this string are sequenced and concatenated in the following order:
       *
