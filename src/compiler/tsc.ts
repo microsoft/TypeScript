@@ -105,7 +105,7 @@ namespace ts {
         sys.write(output);
     }
 
-    const redColorControlChar = "\u001b[31m";
+    const redColorControlChar = "\u001b[91m";
     const resetColorControlChar = "\u001b[0m";
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic): void {
@@ -115,19 +115,38 @@ namespace ts {
             let { start, length, file } = diagnostic;
             let { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
             let { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
-            
+            const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
+
+            let hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
+            let gutterWidth = (lastLine + 1 + "").length;
+            if (hasMoreThanFiveLines) {
+                gutterWidth = Math.max("...".length, gutterWidth);
+            }
+
             output += sys.newLine;
             for (let i = firstLine; i <= lastLine; i++) {
+                // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
+                // so we'll skip ahead to the second-to-last line.
+                if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
+                    output += padLeft("...", gutterWidth) + " ||" + sys.newLine;
+                    i = lastLine - 1;
+                }
+
                 let lineStart = getPositionOfLineAndCharacter(file, i, 0);
-                let lineEnd = i < lastLine ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
+                let lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
                 let lineContent = file.text.slice(lineStart, lineEnd);
                 lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
                 lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
-                output += lineContent + sys.newLine;
+                // Output the actual contents of the line.
+                output += padLeft(i + 1 + "", gutterWidth) + " ||" + lineContent + sys.newLine;
                 
+                // Output the error span for the line using tildes.
+                output += padLeft("", gutterWidth) + " ||";
                 output += redColorControlChar;
                 if (i === firstLine) {
+                    // If we're on the last line, then limit it to the last character of the last line.
+                    // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
                     let lastCharForLine = i === lastLine ? lastLineChar : undefined;
 
                     output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
@@ -135,9 +154,9 @@ namespace ts {
                 }
                 else if (i === lastLine) {
                     output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
-                    // Don't bother "filling" at the end.
                 }
                 else {
+                    // Squiggle the entire line.
                     output += lineContent.replace(/./g, "~");
                 }
                 output += resetColorControlChar;
@@ -145,6 +164,7 @@ namespace ts {
                 output += sys.newLine;
             }
 
+            output += sys.newLine;
             output += `${ file.fileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
