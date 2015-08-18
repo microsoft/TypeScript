@@ -37,13 +37,13 @@ namespace ts {
     
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
         switch(compilerOptions.moduleResolution) {
-            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
-            case ModuleResolutionKind.BaseUrl: return baseUrlModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, host);
+            case ModuleResolutionKind.BaseUrl: return baseUrlModuleNameResolver(moduleName, containingFile, compilerOptions.baseUrl, host);
             default: return legacyNameResolver(moduleName, containingFile, compilerOptions, host);
         }
     }
     
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModule {
         let containingDirectory = getDirectoryPath(containingFile);        
 
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
@@ -132,30 +132,34 @@ namespace ts {
         return { resolvedFileName: undefined, failedLookupLocations };
     }
     
-    export function baseUrlModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
-        Debug.assert(compilerOptions.baseUrl !== undefined, "baseUrl is mandatory when using this module resolution strategy");
+    export function baseUrlModuleNameResolver(moduleName: string, containingFile: string, baseUrl: string, host: ModuleResolutionHost): ResolvedModule {
+        Debug.assert(baseUrl !== undefined);
         
-        let normalizedModuleName = normalizeSlashes(moduleName); 
-        
-        // treat module name as url that is relative to containing file if 
-        let basePart = useBaseUrl(moduleName) ? compilerOptions.baseUrl : getDirectoryPath(containingFile);
+        let normalizedModuleName = normalizeSlashes(moduleName);         
+        let basePart = useBaseUrl(moduleName) ? baseUrl : getDirectoryPath(containingFile);        
         let candidate = normalizePath(combinePaths(basePart, moduleName));
         
-                
         let failedLookupLocations: string[] = [];
-        // first - try to load file as is
-        let result = tryLoadFile(candidate);
-        if (result) {
-            return result;
-        }
-        // then try all supported extension
-        for(let ext of supportedExtensions) {
-            let result = tryLoadFile(candidate + ext);
+        
+        let hasSupportedExtension = forEach(supportedExtensions, ext => fileExtensionIs(candidate, ext));
+
+        if (hasSupportedExtension) {
+            // module name already has extension - use it as is
+            let result = tryLoadFile(candidate);
             if (result) {
                 return result;
+            }            
+        }
+        else {
+            // module name does not have extension - try every supported extension
+            for(let ext of supportedExtensions) {
+                let result = tryLoadFile(candidate + ext);
+                if (result) {
+                    return result;
+                }
             }
         }
-        
+
         return { resolvedFileName: undefined, failedLookupLocations };
         
         function tryLoadFile(location: string): ResolvedModule {
