@@ -98,8 +98,8 @@ interface SymbolConstructor {
       */
     toStringTag: symbol;
 
-    /** 
-      * An Object whose own property names are property names that are excluded from the with 
+    /**
+      * An Object whose own property names are property names that are excluded from the 'with'
       * environment bindings of the associated objects.
       */
     unscopables: symbol;
@@ -259,6 +259,20 @@ interface ArrayLike<T> {
 interface Array<T> {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<T>;
+
+    /**
+     * Returns an object whose properties have the value 'true'
+     * when they will be absent when used in a 'with' statement.
+     */
+    [Symbol.unscopables](): {
+        copyWithin: boolean;
+        entries: boolean;
+        fill: boolean;
+        find: boolean;
+        findIndex: boolean;
+        keys: boolean;
+        values: boolean;
+    };
 
     /** 
       * Returns an array of key, value pairs for every entry in the array
