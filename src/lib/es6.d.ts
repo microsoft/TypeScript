@@ -751,6 +751,10 @@ interface RegExp {
     unicode: boolean;
 }
 
+interface RegExpConstructor {
+    [Symbol.species](): RegExpConstructor;
+}
+
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
