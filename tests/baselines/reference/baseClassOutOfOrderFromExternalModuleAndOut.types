@@ -1,0 +1,26 @@
+=== tests/cases/compiler/mod2.ts ===
+export default class D {
+>D : D
+}
+
+=== tests/cases/compiler/file1.ts ===
+import C from "mod";
+>C : typeof C
+
+import D from "mod2";
+>D : typeof D
+
+class B extends C { // no error here
+>B : B
+>C : C
+}
+class A extends D { // no error here
+>A : A
+>D : D
+}
+
+=== tests/cases/compiler/mod.ts ===
+export default class C {
+>C : C
+}
+
