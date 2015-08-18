@@ -12638,14 +12638,14 @@ namespace ts {
                         
                     // Check if base type declaration appears before heritage clause to avoid false errors for 
                     // base type declarations in the extend clause itself
-                    let baseTypeDeclaration = baseType.symbol.declarations[0];
+                    let baseTypeDeclaration: Declaration
                     if (baseTypeNode.expression.kind === SyntaxKind.Identifier) {
-                        let possiblyAliasDecl = getResolvedSymbol(<Identifier>baseTypeNode.expression).declarations[0];
-                        if (isInternalModuleImportEqualsDeclaration(possiblyAliasDecl)) {
-                            baseTypeDeclaration = possiblyAliasDecl;
-                        }
+                        baseTypeDeclaration = getInternalAliasDeclarationOfName(<Identifier>baseTypeNode.expression)
                     }
-                    if (!isDefinedBefore(baseTypeDeclaration, baseTypeNode)) {
+                    else if (baseTypeNode.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                        baseTypeDeclaration = getLeftMostInternalAliasDeclarationInPropertyAccessExpression(<PropertyAccessExpression>baseTypeNode.expression)
+                    }
+                    if (!isDefinedBefore(baseTypeDeclaration || baseType.symbol.declarations[0], baseTypeNode)) {
                         error(baseTypeNode, Diagnostics.Base_expression_references_type_before_it_is_declared);
                     }
                 }
@@ -12676,6 +12676,29 @@ namespace ts {
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
+            }
+        }
+
+        function getLeftMostInternalAliasDeclarationInPropertyAccessExpression(propertyAccessExpression: PropertyAccessExpression) : Declaration {
+            if (propertyAccessExpression.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                let result = getLeftMostInternalAliasDeclarationInPropertyAccessExpression(<PropertyAccessExpression>propertyAccessExpression.expression);
+                if (result) {
+                    return result;
+                }
+            }
+            else if (propertyAccessExpression.expression.kind === SyntaxKind.Identifier) {
+                let result = getInternalAliasDeclarationOfName(<Identifier>propertyAccessExpression.expression);
+                if (result) {
+                    return result;
+                }
+            }
+            return getInternalAliasDeclarationOfName(propertyAccessExpression);
+        }
+
+        function getInternalAliasDeclarationOfName(node: PropertyAccessExpression | Identifier): Declaration {
+            let resolvedSymbol = getNodeLinks(node).resolvedSymbol;
+            if (resolvedSymbol && isInternalModuleImportEqualsDeclaration(resolvedSymbol.declarations[0])) {
+                return resolvedSymbol.declarations[0];
             }
         }
 
