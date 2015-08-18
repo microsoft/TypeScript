@@ -703,6 +703,14 @@ interface RegExp {
     [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
+      * Finds the position beginning first substring match in a regular expression search
+      * using this regular expression.
+      *
+      * @param string The string to search within.
+      */
+    [Symbol.search](string: string): number;
+
+    /**
       * Returns a string indicating the flags of the regular expression in question. This field is read-only.
       * The characters in this string are sequenced and concatenated in the following order:
       *
