@@ -1,0 +1,10 @@
+=== tests/cases/compiler/letDeclarations-useBeforeDefinitionInFunctionScope.ts ===
+function foo() {
+>foo : () => void
+
+    a; // No Error
+>a : any
+}
+let a;
+>a : any
+

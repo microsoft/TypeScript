@@ -385,7 +385,7 @@ namespace ts {
             let file1 = getSourceFileOfNode(node1);
             let file2 = getSourceFileOfNode(node2);
             if (file1 === file2) {
-                return node1.pos <= node2.pos;
+                return node1.pos <= node2.pos || !isInSameLexicalScope();
             }
 
             if (!compilerOptions.out) {
@@ -393,9 +393,28 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
-        }
+            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2) || !isInSameLexicalScope(); 
 
+            function isInSameLexicalScope() {
+                let node1Scope = getEnclosingBlockScopeContainer(node1);
+                let node2Scope = getEnclosingBlockScopeContainer(node2);
+                
+                while (node2Scope && node1Scope !== node2Scope) {
+                    switch (node2Scope.kind) {
+                        // In function like scope
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                            return false;
+                    }
+
+                    node2Scope = getEnclosingBlockScopeContainer(node2Scope);
+                }
+
+                return true;
+            }
+        }
+        
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
