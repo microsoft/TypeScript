@@ -647,8 +647,8 @@ interface Date {
 }
 
 interface RegExp {
-    /** 
-      * Matches a string with a regular expression, and returns an array containing the results of 
+    /**
+      * Matches a string with this regular expression, and returns an array containing the results of
       * that search.
       * @param string A string to search within.
       */
@@ -677,6 +677,13 @@ interface RegExp {
       * than limit elements.
       */
     split(string: string, limit?: number): string[];
+
+    /**
+      * Matches a string with this regular expression, and returns an array containing the results of
+      * that search.
+      * @param string A string to search within.
+      */
+    [Symbol.match](str: string): RegExpMatchArray;
 
     /**
       * Returns a string indicating the flags of the regular expression in question. This field is read-only.
