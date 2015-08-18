@@ -13809,7 +13809,7 @@ namespace ts {
                     if (location.locals && !isGlobalSourceFile(location)) {
                         copySymbols(location.locals, meaning);
                     }
-
+                    
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
                             if (!isExternalModule(<SourceFile>location)) {
@@ -13845,7 +13845,9 @@ namespace ts {
                             }
                             break;
                     }
-
+                    if (isFunctionLike(location)) {
+                        copySymbol(argumentsSymbol, meaning);
+                    }
                     memberFlags = location.flags;
                     location = location.parent;
                 }
