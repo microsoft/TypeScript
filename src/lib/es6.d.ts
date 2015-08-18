@@ -87,8 +87,8 @@ interface SymbolConstructor {
     split: symbol;
 
     /** 
-      * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
-      * abstract operation.
+      * A method that converts an object to a corresponding primitive value.
+      * Called by the ToPrimitive abstract operation.
       */
     toPrimitive: symbol;
 
@@ -620,6 +620,30 @@ interface Math {
     cbrt(x: number): number;
 
     [Symbol.toStringTag]: string;
+}
+
+interface Date {
+    /**
+     * Converts a Date object to a string.
+     */
+    [Symbol.toPrimitive](hint: "default"): string;
+    /**
+     * Converts a Date object to a string.
+     */
+    [Symbol.toPrimitive](hint: "string"): string;
+    /**
+     * Converts a Date object to a number.
+     */
+    [Symbol.toPrimitive](hint: "number"): number;
+    /**
+     * Converts a Date object to a string or number.
+     *
+     * @param hint The strings "number", "string", or "default" to specify what primitive to return.
+     *
+     * @throws {TypeError} If 'hint' was given something other than "number", "string", or "default".
+     * @returns A number if 'hint' was "number", a string if 'hint' was "string" or "default".
+     */
+    [Symbol.toPrimitive](hint: string): string | number;
 }
 
 interface RegExp {
