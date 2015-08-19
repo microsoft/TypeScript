@@ -330,7 +330,7 @@ namespace ts {
                     }
                     
                     // check imports
-                    collectExternalModuleReferences(newSourceFile);                    
+                    collectExternalModuleReferences(newSourceFile);
                     if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
                         return false;
@@ -706,10 +706,10 @@ namespace ts {
             });
         }
        
-        function processImportedModules(file: SourceFile, basePath: string) {            
-            collectExternalModuleReferences(file);                        
-            if (file.imports.length) {               
-                file.resolvedModules = {};                
+        function processImportedModules(file: SourceFile, basePath: string) {
+            collectExternalModuleReferences(file);
+            if (file.imports.length) {
+                file.resolvedModules = {};
                 let moduleNames = map(file.imports, name => name.text);
                 let resolutions = resolveModuleNamesWorker(moduleNames, file.fileName);
                 for (let i = 0; i < file.imports.length; ++i) {
