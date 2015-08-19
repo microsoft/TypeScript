@@ -382,6 +382,11 @@ namespace ts {
 
         /** Returns true if node1 is defined before node 2**/
         function isDefinedBefore(node1: Node, node2: Node): boolean {
+            if (isAliasSymbolDeclaration(node1) && !isInternalModuleImportEqualsDeclaration(node1)) {
+                // external aliases always declared before use
+                return true;
+            }
+
             let file1 = getSourceFileOfNode(node1);
             let file2 = getSourceFileOfNode(node2);
             if (file1 === file2) {
@@ -12638,14 +12643,8 @@ namespace ts {
                         
                     // Check if base type declaration appears before heritage clause to avoid false errors for 
                     // base type declarations in the extend clause itself
-                    let baseTypeDeclaration: Declaration
-                    if (baseTypeNode.expression.kind === SyntaxKind.Identifier) {
-                        baseTypeDeclaration = getInternalAliasDeclarationOfName(<Identifier>baseTypeNode.expression)
-                    }
-                    else if (baseTypeNode.expression.kind === SyntaxKind.PropertyAccessExpression) {
-                        baseTypeDeclaration = getLeftMostInternalAliasDeclarationInPropertyAccessExpression(<PropertyAccessExpression>baseTypeNode.expression)
-                    }
-                    if (!isDefinedBefore(baseTypeDeclaration || baseType.symbol.declarations[0], baseTypeNode)) {
+                    let baseTypeDeclaration = getLeftMostAliasDeclarationOfExpression(baseTypeNode.expression) || baseType.symbol.declarations[0];
+                    if (!isDefinedBefore(baseTypeDeclaration, baseTypeNode)) {
                         error(baseTypeNode, Diagnostics.Base_expression_references_type_before_it_is_declared);
                     }
                 }
@@ -12679,26 +12678,20 @@ namespace ts {
             }
         }
 
-        function getLeftMostInternalAliasDeclarationInPropertyAccessExpression(propertyAccessExpression: PropertyAccessExpression) : Declaration {
-            if (propertyAccessExpression.expression.kind === SyntaxKind.PropertyAccessExpression) {
-                let result = getLeftMostInternalAliasDeclarationInPropertyAccessExpression(<PropertyAccessExpression>propertyAccessExpression.expression);
+        function getLeftMostAliasDeclarationOfExpression(node: Expression): Declaration {
+            if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                let result = getLeftMostAliasDeclarationOfExpression((<PropertyAccessExpression>node).expression);
                 if (result) {
                     return result;
                 }
             }
-            else if (propertyAccessExpression.expression.kind === SyntaxKind.Identifier) {
-                let result = getInternalAliasDeclarationOfName(<Identifier>propertyAccessExpression.expression);
-                if (result) {
-                    return result;
-                }
+            else if (node.kind !== SyntaxKind.Identifier) {
+                return;
             }
-            return getInternalAliasDeclarationOfName(propertyAccessExpression);
-        }
 
-        function getInternalAliasDeclarationOfName(node: PropertyAccessExpression | Identifier): Declaration {
             let resolvedSymbol = getNodeLinks(node).resolvedSymbol;
-            if (resolvedSymbol && isInternalModuleImportEqualsDeclaration(resolvedSymbol.declarations[0])) {
-                return resolvedSymbol.declarations[0];
+            if (resolvedSymbol && !!(resolvedSymbol.flags & SymbolFlags.Alias)) {
+                return getDeclarationOfAliasSymbol(resolvedSymbol);
             }
         }
 
@@ -13367,6 +13360,11 @@ namespace ts {
                             if (!(resolveEntityName(moduleName, SymbolFlags.Value | SymbolFlags.Namespace).flags & SymbolFlags.Namespace)) {
                                 error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
                             }
+
+                            let internalReferenceDecl = getLeftMostAliasDeclarationOfInternalModuleReference(<EntityName>node.moduleReference) || target.declarations[0];
+                            if (!isDefinedBefore(internalReferenceDecl, node.moduleReference)) {
+                                error(node.moduleReference, Diagnostics.Import_declaration_references_entity_before_it_is_declared);
+                            }
                         }
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
@@ -13379,6 +13377,24 @@ namespace ts {
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
                     }
                 }
+            }
+        }
+
+        function getLeftMostAliasDeclarationOfInternalModuleReference(node: EntityName): Declaration {
+            if (node.kind === SyntaxKind.QualifiedName) {
+                let result = getLeftMostAliasDeclarationOfInternalModuleReference((<QualifiedName>node).left);
+                if (result) {
+                    return result;
+                }
+            }
+
+            let meaning = node.parent.kind === SyntaxKind.QualifiedName ?
+                SymbolFlags.Namespace :
+                SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
+
+            let resolvedSymbol = resolveEntityName(node, meaning | SymbolFlags.Alias, /*ignoreErrors*/ true);
+            if (resolvedSymbol && !!(resolvedSymbol.flags & SymbolFlags.Alias)) {
+                return getDeclarationOfAliasSymbol(resolvedSymbol);
             }
         }
 

@@ -1701,6 +1701,10 @@
         "category": "Error",
         "code": 2653
     },
+    "Import declaration references entity before it is declared.": {
+        "category": "Error",
+        "code": 2654
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

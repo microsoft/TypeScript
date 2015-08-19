@@ -1,0 +1,52 @@
+tests/cases/compiler/aliasOutOfOrder.ts(1,12): error TS2654: Import declaration references entity before it is declared.
+tests/cases/compiler/aliasOutOfOrder.ts(3,12): error TS2654: Import declaration references entity before it is declared.
+tests/cases/compiler/aliasOutOfOrder.ts(5,12): error TS2654: Import declaration references entity before it is declared.
+tests/cases/compiler/aliasOutOfOrder.ts(6,12): error TS2654: Import declaration references entity before it is declared.
+tests/cases/compiler/aliasOutOfOrder.ts(12,17): error TS2653: Base expression references type before it is declared.
+tests/cases/compiler/aliasOutOfOrder.ts(22,13): error TS2654: Import declaration references entity before it is declared.
+tests/cases/compiler/aliasOutOfOrder.ts(24,13): error TS2654: Import declaration references entity before it is declared.
+
+
+==== tests/cases/compiler/aliasOutOfOrder.ts (7 errors) ====
+    import a = M.B; // error
+               ~~~
+!!! error TS2654: Import declaration references entity before it is declared.
+    import b = M.I; // no error
+    import d = c.B; // error
+               ~~~
+!!! error TS2654: Import declaration references entity before it is declared.
+    import e = c.I; // no error
+    import f = c; // error
+               ~
+!!! error TS2654: Import declaration references entity before it is declared.
+    import c = M; // error
+               ~
+!!! error TS2654: Import declaration references entity before it is declared.
+    import g = c.B; // no error
+    import h = c.I; // no error
+    import i = c; // no error
+    class C extends a { // no error 
+    }
+    class D extends M.B { // error
+                    ~~~
+!!! error TS2653: Base expression references type before it is declared.
+    }
+    module M {
+        export class B {
+        }
+        export interface I {
+        }
+    }
+    import a1 = M.B; // no error
+    import b1 = M.I; // no error
+    import d1 = c1.B; // error
+                ~~~~
+!!! error TS2654: Import declaration references entity before it is declared.
+    import e1 = c1.I; // no error
+    import f1 = c1; // error
+                ~~
+!!! error TS2654: Import declaration references entity before it is declared.
+    import c1 = M; // no error
+    import g1 = c1.B; // no error
+    import h1 = c1.I; // no error
+    import i1 = c1; // no error
