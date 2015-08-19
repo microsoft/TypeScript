@@ -420,7 +420,10 @@ namespace ts {
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
+            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
+                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :
+            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
         return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
@@ -634,6 +637,20 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                     return true;
             }
+        }
+        return false;
+    }
+
+    export function introducesArgumentsExoticObject(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                return true;
         }
         return false;
     }
