@@ -160,6 +160,14 @@ namespace ts.server {
                 this.roots.push(info);
             }
         }
+        
+        removeRoot(info: ScriptInfo) {
+            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
+            if (scriptInfo) {
+                this.filenameToScript[info.fileName] = undefined;
+                this.roots = copyListRemovingItem(info, this.roots);
+            }
+        }
 
         saveTo(filename: string, tmpfilename: string) {
             var script = this.getScriptInfo(filename);
@@ -289,7 +297,7 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
-            this.compilerService = new CompilerService(this,projectOptions && projectOptions.compilerOptions);
+            this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
         addOpenRef() {
@@ -359,6 +367,12 @@ namespace ts.server {
         addRoot(info: ScriptInfo) {
             info.defaultProject = this;
             this.compilerService.host.addRoot(info);
+        }
+        
+        // remove a root file from project
+        removeRoot(info: ScriptInfo) {
+            info.defaultProject = undefined;
+            this.compilerService.host.removeRoot(info);
         }
 
         filesToString() {
@@ -692,13 +706,13 @@ namespace ts.server {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
             
-            let openFileRootsConfigured: ScriptInfo[];
+            let openFileRootsConfigured: ScriptInfo[] = [];
             for (let info of this.openFileRootsConfigured) {
-                let configFileName = info.defaultProject.projectFilename;
-                let project = this.findConfiguredProjectByConfigFile(configFileName);
+                let project = info.defaultProject;
                 if (!project || !(project.getSourceFile(info))) {
                     info.defaultProject = undefined;
                     this.createInferredProject(info);
+                    this.openFileRoots.push(info);
                 }
                 else {
                     openFileRootsConfigured.push(info);
@@ -1009,6 +1023,35 @@ namespace ts.server {
                     return error;
                 }
                 else {
+                    let oldFileNames = project.compilerService.host.roots.map(info => info.fileName); 
+                    let newFileNames = projectOptions.files;
+                    let fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
+                    let fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
+                    
+                    for (let fileName of fileNamesToRemove) {
+                        let info = this.getScriptInfo(fileName);
+                        project.removeRoot(info);
+                    }
+                    
+                    for (let fileName of fileNamesToAdd) {
+                        let info = this.getScriptInfo(fileName);
+                        if (!info) {
+                            info = this.openFile(fileName, false);
+                        }
+                        else {
+                            // if the root file was opened by client, it would belong to either 
+                            // openFileRoots or openFileReferenced.
+                            if (this.openFileRoots.indexOf(info) >= 0) {
+                                this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                            }
+                            if (this.openFilesReferenced.indexOf(info) >= 0) {
+                                this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                            }
+                            this.openFileRootsConfigured.push(info);
+                        }
+                        project.addRoot(info);
+                    }
+
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
                 }
