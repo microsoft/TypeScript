@@ -434,6 +434,20 @@ interface String {
     match(regexpLike: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
 
     /**
+      * Replaces text in a string, using an object that supports replacement within a string.
+      * @param searchValue A object can search for and replace matches within a string.
+      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+      */
+    replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
+
+    /**
+      * Replaces text in a string, using an object that supports replacement within a string.
+      * @param searchValue A object can search for and replace matches within a string.
+      * @param replacer A function that returns the replacement text.
+      */
+    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+
+    /**
       * Returns an <a> HTML anchor element and sets the name attribute to the text value
       * @param name
       */
