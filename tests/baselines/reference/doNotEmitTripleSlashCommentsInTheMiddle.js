@@ -11,6 +11,5 @@ var y = 1000;
 
 //// [0.js]
 //// [1.js]
-/// <reference path="0.ts" />
 var x = 10;
 var y = 1000;
