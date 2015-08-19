@@ -4,9 +4,9 @@ class Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess2.ts, 0, 0))
 
     [Symbol.isConcatSpreadable]() {
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1277, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1233, 52), Decl(lib.d.ts, 1339, 11))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1277, 24))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1276, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1232, 52), Decl(lib.d.ts, 1338, 11))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1276, 24))
 
         return 0;
     }
@@ -17,14 +17,14 @@ class Bar extends Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess2.ts, 0, 0))
 
     [Symbol.isConcatSpreadable]() {
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1277, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1233, 52), Decl(lib.d.ts, 1339, 11))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1277, 24))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1276, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1232, 52), Decl(lib.d.ts, 1338, 11))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1276, 24))
 
         return super[Symbol.isConcatSpreadable]();
 >super : Symbol(Foo, Decl(superSymbolIndexedAccess2.ts, 0, 0))
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1277, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1233, 52), Decl(lib.d.ts, 1339, 11))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1277, 24))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1276, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1232, 52), Decl(lib.d.ts, 1338, 11))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1276, 24))
     }
 }

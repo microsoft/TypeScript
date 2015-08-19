@@ -970,26 +970,36 @@ namespace ts {
     }
 
     function isInJavaScriptFile(node: Node): boolean {
-        let parent = node;
-        while(parent && parent.kind !== SyntaxKind.SourceFile) {
-            parent = parent.parent;
-        }
-        
-        return isJavaScript((<SourceFile>parent).fileName);
+        return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
     }
 
+    function isCalledToNamedFunction(expression: Node, name: string): boolean;
     function isCalledToNamedFunction(expression: CallExpression, name: string) {
-        return expression.expression.kind === SyntaxKind.Identifier &&
+        return expression.kind === SyntaxKind.CallExpression &&
+                expression.expression.kind === SyntaxKind.Identifier &&
                 (<Identifier>expression.expression).text === name;
     }
 
+    export function isDefineCall(expression: Node): boolean;
     export function isDefineCall(expression: CallExpression): boolean {
         // In .js files, calls to the identifier 'define' are treated specially
-        // Walk up to the source file parent
-        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'define');
+        return expression &&
+            expression.kind === SyntaxKind.CallExpression &&
+            expression.arguments.length > 0 &&
+            isInJavaScriptFile(expression) &&
+            isCalledToNamedFunction(expression, 'define');
     }
 
+    export function isAnonymousDefineCall(expression: Node): boolean;
+    export function isAnonymousDefineCall(expression: CallExpression): boolean {
+        return isDefineCall(expression) &&
+            expression.arguments.length > 0 &&
+            expression.arguments[0].kind !== SyntaxKind.StringLiteral;
+    }
+
+    export function isAmdRequireCall(expression: Node): boolean;
     export function isAmdRequireCall(expression: CallExpression): boolean {
+        // of the form 'require("name")' or 'require(arg1, arg2, ...)'
         return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length > 1;
     }
 

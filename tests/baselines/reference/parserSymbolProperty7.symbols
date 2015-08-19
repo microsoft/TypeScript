@@ -3,7 +3,7 @@ class C {
 >C : Symbol(C, Decl(parserSymbolProperty7.ts, 0, 0))
 
     [Symbol.toStringTag](): void { }
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1325, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1233, 52), Decl(lib.d.ts, 1339, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1325, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1324, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1232, 52), Decl(lib.d.ts, 1338, 11))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1324, 24))
 }

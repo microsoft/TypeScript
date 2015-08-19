@@ -1195,8 +1195,7 @@ declare namespace AMD {
         (dependencies: string[], callback: (...resolvedModules: any[]) => any): void;
         (moduleName: string, dependencies: string[], callback: (...resolvedModules: any[]) => any): void;
         (func: (require: Require, module: { exports: any }, exports: any) => any): void;
-        (func: (require: Require, module: { exports: any }, exports: any) => any): void;
-        (object: {}): void;
+        (moduleName: string, object: {}): void;
     }
 
     export var define: Define;

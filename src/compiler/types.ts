@@ -1682,8 +1682,6 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
-        /* @internal */ isDefineModule?: boolean; // Module created from JS 'define' call
-        /* @internal */ isAmdExportAssignment?: boolean; // Property created from JS 'exports.foo = ' assignment
     }
 
     /* @internal */

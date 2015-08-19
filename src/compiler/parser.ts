@@ -5236,6 +5236,7 @@ namespace ts {
                     || node.kind === SyntaxKind.ExportAssignment
                     || node.kind === SyntaxKind.ExportDeclaration
                     || node.kind === SyntaxKind.ExpressionStatement && isAmdExportAssignment((<ExpressionStatement>node).expression)
+                    || node.kind === SyntaxKind.CallExpression && isDefineCall(node)
                     ? node
                     : undefined);
         }

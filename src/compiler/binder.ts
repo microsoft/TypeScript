@@ -204,13 +204,8 @@ namespace ts {
         }
 
         function getAnonymousModuleName(node: Node) {
-            let parent = node.parent;
-            while (parent && parent.kind !== SyntaxKind.SourceFile) {
-                parent = parent.parent;
-            }
-
-            let sourceFileName = removeFileExtension((<SourceFile>parent).fileName);
-            return sourceFileName && ('"' + sourceFileName + '"');
+            let sourceFileName = removeFileExtension(file.fileName);
+            return '"' + sourceFileName + '"';
         }
 
         function getDisplayName(node: Declaration): string {
@@ -891,7 +886,7 @@ namespace ts {
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     if(isAmdExportAssignment(<BinaryExpression>node)) {
-                        return bindAmdExportAssignment(<BinaryExpression>node);
+                        bindAmdExportAssignment(<BinaryExpression>node);
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
@@ -911,7 +906,7 @@ namespace ts {
                     if (isDefineCall(<CallExpression>node)) {
                         return bindDefineCall(<CallExpression>node);
                     }
-                    break;
+                    return;
 
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
@@ -1031,23 +1026,20 @@ namespace ts {
         }
 
         function bindAmdExportAssignment(node: BinaryExpression) {
-            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ExportValue | SymbolFlags.Property, SymbolFlags.None);
-            symbol.isAmdExportAssignment = true;
-            if (symbol.exportSymbol) {
-                symbol.exportSymbol.isAmdExportAssignment = true;
-            }
+            declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.Property, SymbolFlags.None);
         }
 
         function bindDefineCall(node: CallExpression) {
-            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule | SymbolFlags.ExportValue, SymbolFlags.None);
-            symbol.isDefineModule = true;
+            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
 
             // If this was a file-level module, hook up the file symbol to this module
-            let parent = node.parent;
-            while(parent && parent.kind !== SyntaxKind.SourceFile) {
-                parent = parent.parent;
+            if (isAnonymousDefineCall(node)) {
+                let parent = node.parent;
+                while (parent && parent.kind !== SyntaxKind.SourceFile) {
+                    parent = parent.parent;
+                }
+                parent.symbol = symbol;
             }
-            parent.symbol = symbol;
         }
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
