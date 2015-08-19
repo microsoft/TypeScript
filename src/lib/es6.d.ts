@@ -454,6 +454,13 @@ interface String {
     search(searcher: { [Symbol.search](string: string): number; }): number;
 
     /**
+      * Split a string into substrings using the specified separator and return them as an array.
+      * @param splitter An object that can split a string.
+      * @param limit A value used to limit the number of elements returned in the array.
+      */
+    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+
+    /**
       * Returns an <a> HTML anchor element and sets the name attribute to the text value
       * @param name
       */
