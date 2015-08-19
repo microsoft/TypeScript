@@ -132,7 +132,7 @@ namespace ts {
 
     let emptyArray: any[] = [];
     
-    const jsDocTagNames: string[] = [
+    const jsDocTagNames = [
         "augments", 
         "author", 
         "argument", 
@@ -2992,7 +2992,7 @@ namespace ts {
                             let tagWithExpression = <JSDocTypeTag | JSDocParameterTag>tag;
                             if (tagWithExpression.typeExpression) {
                                 insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
-                            };
+                            }
                             break;
                     }
                 }

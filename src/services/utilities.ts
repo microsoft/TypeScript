@@ -470,26 +470,27 @@ namespace ts {
     }
 
     /**
-     * Get the corresponding JSDocTag node if the position is in a jsDoc commet
+     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
      */
     export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
         let node = ts.getTokenAtPosition(sourceFile, position);
-        let jsDocComment: JSDocComment;
-        if (node.jsDocComment) {
-            jsDocComment = node.jsDocComment;
-        }
-        else {
-            while (node) {
-                if (node.kind === SyntaxKind.VariableStatement ||
-                    node.kind === SyntaxKind.FunctionDeclaration ||
-                    node.kind === SyntaxKind.Parameter) {
-                    jsDocComment = node.jsDocComment;
+        if (isToken(node)) {
+            switch (node.kind) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
+                    // if the current token is var, let or const, skip the VariableDeclarationList
+                    node = node.parent.parent;
                     break;
-                }
+                default:
+                    node = node.parent;
+                    break;
+            }
+            if (!node.jsDocComment) {
                 node = node.parent;
             }
         }
-
+        let jsDocComment = node.jsDocComment;
         if (jsDocComment) {
             for (let tag of jsDocComment.tags) {
                 if (tag.pos <= position && position <= tag.end) {
