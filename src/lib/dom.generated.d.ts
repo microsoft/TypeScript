@@ -7019,6 +7019,7 @@ interface ImageData {
 interface ImageDataConstructor {
     prototype: ImageData;
     new(width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
 
 declare var ImageData: ImageDataConstructor; 
