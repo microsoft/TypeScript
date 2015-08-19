@@ -1,4 +1,4 @@
-{
+ {
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -1165,7 +1165,7 @@
         "category": "Error",
         "code": 2394
     },
-    "Individual declarations in merged declaration {0} must be all exported or all local.": {
+    "Individual declarations in merged declaration '{0}' must be all exported or all local.": {
         "category": "Error",
         "code": 2395
     },
@@ -1688,6 +1688,14 @@
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
+    },
+    "A member initializer in a 'const' enum declaration cannot reference members declared after it, including members defined in other 'const' enums.": {
+        "category": "Error",
+        "code": 2651
+    },    
+    "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead.": {
+        "category": "Error",
+        "code": 2652
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2445,5 +2453,9 @@
     "Cannot use JSX unless the '--jsx' flag is provided.": {
         "category": "Error",
         "code": 17004
+    },
+    "A constructor cannot contain a 'super' call when its class extends 'null'": {
+      "category": "Error",
+      "code": 17005
     }
 }

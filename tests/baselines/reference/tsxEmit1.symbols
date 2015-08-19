@@ -57,16 +57,19 @@ var selfClosed7 = <div x={p} y='p' />;
 var openClosed1 = <div></div>;
 >openClosed1 : Symbol(openClosed1, Decl(tsxEmit1.tsx, 16, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 var openClosed2 = <div n='m'>foo</div>;
 >openClosed2 : Symbol(openClosed2, Decl(tsxEmit1.tsx, 17, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >n : Symbol(unknown)
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 var openClosed3 = <div n='m'>{p}</div>;
 >openClosed3 : Symbol(openClosed3, Decl(tsxEmit1.tsx, 18, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >n : Symbol(unknown)
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 var openClosed4 = <div n='m'>{p < p}</div>;
 >openClosed4 : Symbol(openClosed4, Decl(tsxEmit1.tsx, 19, 3))
@@ -74,6 +77,7 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >n : Symbol(unknown)
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 var openClosed5 = <div n='m'>{p > p}</div>;
 >openClosed5 : Symbol(openClosed5, Decl(tsxEmit1.tsx, 20, 3))
@@ -81,6 +85,7 @@ var openClosed5 = <div n='m'>{p > p}</div>;
 >n : Symbol(unknown)
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(tsxEmit1.tsx, 20, 43))
@@ -92,6 +97,7 @@ class SomeClass {
 >rewrites1 : Symbol(rewrites1, Decl(tsxEmit1.tsx, 24, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >this : Symbol(SomeClass, Decl(tsxEmit1.tsx, 20, 43))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 		var rewrites2 = <div>{[p, ...p, p]}</div>;
 >rewrites2 : Symbol(rewrites2, Decl(tsxEmit1.tsx, 25, 5))
@@ -99,17 +105,20 @@ class SomeClass {
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 		var rewrites3 = <div>{{p}}</div>;
 >rewrites3 : Symbol(rewrites3, Decl(tsxEmit1.tsx, 26, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 26, 25))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 		var rewrites4 = <div a={() => this}></div>;
 >rewrites4 : Symbol(rewrites4, Decl(tsxEmit1.tsx, 28, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >a : Symbol(unknown)
 >this : Symbol(SomeClass, Decl(tsxEmit1.tsx, 20, 43))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 		var rewrites5 = <div a={[p, ...p, p]}></div>;
 >rewrites5 : Symbol(rewrites5, Decl(tsxEmit1.tsx, 29, 5))
@@ -118,21 +127,25 @@ class SomeClass {
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
 >p : Symbol(p, Decl(tsxEmit1.tsx, 7, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 		var rewrites6 = <div a={{p}}></div>;
 >rewrites6 : Symbol(rewrites6, Decl(tsxEmit1.tsx, 30, 5))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >a : Symbol(unknown)
 >p : Symbol(p, Decl(tsxEmit1.tsx, 30, 27))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 	}
 }
 
 var whitespace1 = <div>      </div>;
 >whitespace1 : Symbol(whitespace1, Decl(tsxEmit1.tsx, 34, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 var whitespace2 = <div>  {p}    </div>;
 >whitespace2 : Symbol(whitespace2, Decl(tsxEmit1.tsx, 35, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 
 var whitespace3 = <div>  
@@ -141,4 +154,5 @@ var whitespace3 = <div>
 
       {p}    
       </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxEmit1.tsx, 1, 22))
 

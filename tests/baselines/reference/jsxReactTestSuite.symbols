@@ -46,6 +46,7 @@ declare var hasOwnProperty:any;
   <div><br /></div>
   <Component>{foo}<br />{bar}</Component>
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
   <br />
 </div>;
@@ -56,6 +57,7 @@ declare var hasOwnProperty:any;
 
     {this.props.children}
 </Composite>;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
 
 <Composite>
 >Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
@@ -64,6 +66,7 @@ declare var hasOwnProperty:any;
 >Composite2 : Symbol(Composite2, Decl(jsxReactTestSuite.tsx, 4, 11))
 
 </Composite>;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
 
 var x =
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
@@ -181,6 +184,7 @@ var x =
 >x : Symbol(unknown)
 >y : Symbol(unknown)
 >Child : Symbol(Child, Decl(jsxReactTestSuite.tsx, 5, 11))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
@@ -189,6 +193,7 @@ var x =
 >y : Symbol(y, Decl(jsxReactTestSuite.tsx, 113, 27))
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
 >z : Symbol(unknown)
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
 
 
