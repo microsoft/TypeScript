@@ -240,7 +240,7 @@ namespace ts {
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
-        return getBaseFileName(moduleName).replace(/\W/g, "_");
+        return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
     export function isBlockOrCatchScoped(declaration: Declaration) {
