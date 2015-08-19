@@ -324,9 +324,9 @@ interface String {
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A String object or string literal that represents the regular expression
-      * @param replaceValue A function that returns the replacement text.
+      * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -338,9 +338,9 @@ interface String {
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replaceValue A function that returns the replacement text.
+      * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.

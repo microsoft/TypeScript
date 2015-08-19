@@ -332,17 +332,13 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>    // Emit M.Foo
 1->^^^^
-2 >    
-3 >    ^^^^^^^^^^^^^
-4 >                 ^^^^^->
+2 >    ^^^^^^^^^^^^^
+3 >                 ^^^^^->
 1->
-  >	// Emit M.Foo
   >	
-2 >    
-3 >    // Emit M.Foo
-1->Emitted(21, 5) Source(19, 2) + SourceIndex(0) name (M)
-2 >Emitted(21, 5) Source(18, 2) + SourceIndex(0) name (M)
-3 >Emitted(21, 18) Source(18, 15) + SourceIndex(0) name (M)
+2 >    // Emit M.Foo
+1->Emitted(21, 5) Source(18, 2) + SourceIndex(0) name (M)
+2 >Emitted(21, 18) Source(18, 15) + SourceIndex(0) name (M)
 ---
 >>>    M.Foo, <M.Foo />;
 1->^^^^
@@ -411,17 +407,13 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>        // Emit M.Foo
 1->^^^^^^^^
-2 >        
-3 >        ^^^^^^^^^^^^^
-4 >                     ^^^^^->
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^^^->
 1->
-  >		// Emit M.Foo
   >		
-2 >        
-3 >        // Emit M.Foo
-1->Emitted(25, 9) Source(23, 3) + SourceIndex(0) name (M.S)
-2 >Emitted(25, 9) Source(22, 3) + SourceIndex(0) name (M.S)
-3 >Emitted(25, 22) Source(22, 16) + SourceIndex(0) name (M.S)
+2 >        // Emit M.Foo
+1->Emitted(25, 9) Source(22, 3) + SourceIndex(0) name (M.S)
+2 >Emitted(25, 22) Source(22, 16) + SourceIndex(0) name (M.S)
 ---
 >>>        M.Foo, <M.Foo />;
 1->^^^^^^^^
@@ -449,18 +441,14 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>        // Emit S.Bar
 1 >^^^^^^^^
-2 >        
-3 >        ^^^^^^^^^^^^^
-4 >                     ^^^^^->
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^^^->
 1 >
   >
-  >		// Emit S.Bar
   >		
-2 >        
-3 >        // Emit S.Bar
-1 >Emitted(27, 9) Source(26, 3) + SourceIndex(0) name (M.S)
-2 >Emitted(27, 9) Source(25, 3) + SourceIndex(0) name (M.S)
-3 >Emitted(27, 22) Source(25, 16) + SourceIndex(0) name (M.S)
+2 >        // Emit S.Bar
+1 >Emitted(27, 9) Source(25, 3) + SourceIndex(0) name (M.S)
+2 >Emitted(27, 22) Source(25, 16) + SourceIndex(0) name (M.S)
 ---
 >>>        S.Bar, <S.Bar />;
 1->^^^^^^^^
@@ -600,17 +588,13 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>    // Emit M.S.Bar
 1->^^^^
-2 >    
-3 >    ^^^^^^^^^^^^^^^
-4 >                   ^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^^^^^^->
 1->
-  >	// Emit M.S.Bar
   >	
-2 >    
-3 >    // Emit M.S.Bar
-1->Emitted(33, 5) Source(33, 2) + SourceIndex(0) name (M)
-2 >Emitted(33, 5) Source(32, 2) + SourceIndex(0) name (M)
-3 >Emitted(33, 20) Source(32, 17) + SourceIndex(0) name (M)
+2 >    // Emit M.S.Bar
+1->Emitted(33, 5) Source(32, 2) + SourceIndex(0) name (M)
+2 >Emitted(33, 20) Source(32, 17) + SourceIndex(0) name (M)
 ---
 >>>    M.S.Bar, <M.S.Bar />;
 1->^^^^
@@ -737,17 +721,13 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>    // Emit M_1.Foo
 1->^^^^
-2 >    
-3 >    ^^^^^^^^^^^^^^^
-4 >                   ^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^^^^^^->
 1->
-  >	// Emit M_1.Foo
   >	
-2 >    
-3 >    // Emit M_1.Foo
-1->Emitted(39, 5) Source(39, 2) + SourceIndex(0) name (M)
-2 >Emitted(39, 5) Source(38, 2) + SourceIndex(0) name (M)
-3 >Emitted(39, 20) Source(38, 17) + SourceIndex(0) name (M)
+2 >    // Emit M_1.Foo
+1->Emitted(39, 5) Source(38, 2) + SourceIndex(0) name (M)
+2 >Emitted(39, 20) Source(38, 17) + SourceIndex(0) name (M)
 ---
 >>>    M_1.Foo, <M_1.Foo />;
 1->^^^^
