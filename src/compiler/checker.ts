@@ -965,7 +965,9 @@ namespace ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) return;
+            if (!moduleName) {
+                return;
+            }
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
@@ -973,20 +975,9 @@ namespace ts {
                     return symbol;
                 }
             }
-            let fileName: string;
-            let sourceFile: SourceFile;
-            while (true) {
-                fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
-                if (sourceFile || isRelative) {
-                    break;
-                }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
+
+            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral.text);
+            let sourceFile = fileName && host.getSourceFile(fileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
@@ -2175,10 +2166,13 @@ namespace ts {
         function collectLinkedAliases(node: Identifier): Node[] {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
+                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
+                let exportSpecifier = <ExportSpecifier>node.parent;
+                exportSymbol = (<ExportDeclaration>exportSpecifier.parent.parent).moduleSpecifier ?
+                    getExternalModuleMember(<ExportDeclaration>exportSpecifier.parent.parent, exportSpecifier) :
+                    resolveEntityName(exportSpecifier.propertyName || exportSpecifier.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             let result: Node[] = [];
             if (exportSymbol) {
@@ -3131,52 +3125,66 @@ namespace ts {
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
         }
 
-        function findMatchingSignature(signature: Signature, signatureList: Signature[]): Signature {
-            for (let s of signatureList) {
-                // Only signatures with no type parameters may differ in return types
-                if (compareSignatures(signature, s, /*compareReturnTypes*/ !!signature.typeParameters, compareTypes)) {
+        function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreReturnTypes: boolean): Signature {
+            for (let s of signatureList)  {
+                if (compareSignatures(s, signature, partialMatch, ignoreReturnTypes, compareTypes)) {
                     return s;
                 }
             }
         }
 
-        function findMatchingSignatures(signature: Signature, signatureLists: Signature[][]): Signature[] {
+        function findMatchingSignatures(signatureLists: Signature[][], signature: Signature, listIndex: number): Signature[] {
+            if (signature.typeParameters) {
+                // We require an exact match for generic signatures, so we only return signatures from the first
+                // signature list and only if they have exact matches in the other signature lists.
+                if (listIndex > 0) {
+                    return undefined;
+                }
+                for (let i = 1; i < signatureLists.length; i++) {
+                    if (!findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ false)) {
+                        return undefined;
+                    }
+                }
+                return [signature];
+            }
             let result: Signature[] = undefined;
-            for (let i = 1; i < signatureLists.length; i++) {
-                let match = findMatchingSignature(signature, signatureLists[i]);
+            for (let i = 0; i < signatureLists.length; i++) {
+                // Allow matching non-generic signatures to have excess parameters and different return types
+                let match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreReturnTypes*/ true);
                 if (!match) {
                     return undefined;
                 }
-                if (!result) {
-                    result = [signature];
-                }
-                if (match !== signature) {
-                    result.push(match);
+                if (!contains(result, match)) {
+                    (result || (result = [])).push(match);
                 }
             }
             return result;
         }
 
-        // The signatures of a union type are those signatures that are present and identical in each of the
-        // constituent types, except that non-generic signatures may differ in return types. When signatures
-        // differ in return types, the resulting return type is the union of the constituent return types.
+        // The signatures of a union type are those signatures that are present in each of the constituent types.
+        // Generic signatures must match exactly, but non-generic signatures are allowed to have extra optional
+        // parameters and may differ in return types. When signatures differ in return types, the resulting return
+        // type is the union of the constituent return types.
         function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
             let signatureLists = map(types, t => getSignaturesOfType(t, kind));
             let result: Signature[] = undefined;
-            for (let source of signatureLists[0]) {
-                let unionSignatures = findMatchingSignatures(source, signatureLists);
-                if (unionSignatures) {
-                    let signature: Signature = undefined;
-                    if (unionSignatures.length === 1 || source.typeParameters) {
-                        signature = source;
+            for (let i = 0; i < signatureLists.length; i++) {
+                for (let signature of signatureLists[i]) {
+                    // Only process signatures with parameter lists that aren't already in the result list
+                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ true)) {
+                        let unionSignatures = findMatchingSignatures(signatureLists, signature, i);
+                        if (unionSignatures) {
+                            let s = signature;
+                            // Union the result types when more than one signature matches
+                            if (unionSignatures.length > 1) {
+                                s = cloneSignature(signature);
+                                // Clear resolved return type we possibly got from cloneSignature
+                                s.resolvedReturnType = undefined;
+                                s.unionSignatures = unionSignatures;
+                            }
+                            (result || (result = [])).push(s);
+                        }
                     }
-                    else {
-                        signature = cloneSignature(source);
-                        // Clear resolved return type we possibly got from cloneSignature
-                        signature.resolvedReturnType = undefined;
-                        signature.unionSignatures = unionSignatures;
-                    }
-                    (result || (result = [])).push(signature);
                 }
             }
             return result || emptyArray;
@@ -5272,7 +5280,7 @@ namespace ts {
                 }
                 let result = Ternary.True;
                 for (let i = 0, len = sourceSignatures.length; i < len; ++i) {
-                    let related = compareSignatures(sourceSignatures[i], targetSignatures[i], /*compareReturnTypes*/ true, isRelatedTo);
+                    let related = compareSignatures(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -5402,14 +5410,18 @@ namespace ts {
             return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
 
-        function compareSignatures(source: Signature, target: Signature, compareReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
+        function compareSignatures(source: Signature, target: Signature, partialMatch: boolean, ignoreReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             if (source === target) {
                 return Ternary.True;
             }
             if (source.parameters.length !== target.parameters.length ||
                 source.minArgumentCount !== target.minArgumentCount ||
                 source.hasRestParameter !== target.hasRestParameter) {
-                return Ternary.False;
+                if (!partialMatch ||
+                    source.parameters.length < target.parameters.length && !source.hasRestParameter ||
+                    source.minArgumentCount > target.minArgumentCount) {
+                    return Ternary.False;
+                }
             }
             let result = Ternary.True;
             if (source.typeParameters && target.typeParameters) {
@@ -5431,16 +5443,18 @@ namespace ts {
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
             source = getErasedSignature(source);
             target = getErasedSignature(target);
-            for (let i = 0, len = source.parameters.length; i < len; i++) {
-                let s = source.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
-                let t = target.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
+            let sourceLen = source.parameters.length;
+            let targetLen = target.parameters.length;
+            for (let i = 0; i < targetLen; i++) {
+                let s = source.hasRestParameter && i === sourceLen - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
+                let t = target.hasRestParameter && i === targetLen - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
                 let related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
                 }
                 result &= related;
             }
-            if (compareReturnTypes) {
+            if (!ignoreReturnTypes) {
                 result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
             return result;
@@ -6954,20 +6968,13 @@ namespace ts {
             let signatureList: Signature[];
             let types = (<UnionType>type).types;
             for (let current of types) {
-                // The signature set of all constituent type with call signatures should match
-                // So number of signatures allowed is either 0 or 1
-                if (signatureList &&
-                    getSignaturesOfStructuredType(current, SignatureKind.Call).length > 1) {
-                    return undefined;
-                }
-
                 let signature = getNonGenericSignature(current);
                 if (signature) {
                     if (!signatureList) {
                         // This signature will contribute to contextual union signature
                         signatureList = [signature];
                     }
-                    else if (!compareSignatures(signatureList[0], signature, /*compareReturnTypes*/ false, compareTypes)) {
+                    else if (!compareSignatures(signatureList[0], signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ true, compareTypes)) {
                         // Signatures aren't identical, do not use
                         return undefined;
                     }
@@ -13315,7 +13322,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (languageVersion >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
                     }
@@ -13838,7 +13845,11 @@ namespace ts {
                             }
                             break;
                     }
-
+                    
+                    if (introducesArgumentsExoticObject(location)) {
+                        copySymbol(argumentsSymbol, meaning);
+                    }
+                    
                     memberFlags = location.flags;
                     location = location.parent;
                 }
