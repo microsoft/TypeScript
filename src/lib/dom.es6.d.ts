@@ -9,7 +9,3 @@ interface NodeList {
 interface NodeListOf<TNode extends Node> {
     [Symbol.iterator](): IterableIterator<TNode>
 }
-
-interface ImageDataConstructor {
-    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
-}
