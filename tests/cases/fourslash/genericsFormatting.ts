@@ -14,6 +14,13 @@
 ////
 ////foo()<number, string, T >();
 ////(a + b)<number, string, T >();
+////
+////function bar<T>() {
+/////*inClassExpression*/    return class  <  T2 > {
+////    }
+////}
+/////*expressionWithTypeArguments*/class A < T > extends bar <  T >( )  <  T > {
+////}
 
 
 format.document();
@@ -34,3 +41,9 @@ verify.currentLineContentIs("    new <T>(a: T);");
 
 goTo.marker("inOptionalMethodSignature");
 verify.currentLineContentIs("    op?<T, M>(a: T, b: M);");
+
+goTo.marker("inClassExpression");
+verify.currentLineContentIs("    return class <T2> {");
+
+goTo.marker("expressionWithTypeArguments");
+verify.currentLineContentIs("class A<T> extends bar<T>()<T> {");

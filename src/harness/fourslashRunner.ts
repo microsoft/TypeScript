@@ -5,6 +5,7 @@
 const enum FourSlashTestType {
     Native,
     Shims,
+    ShimsWithPreprocess,
     Server
 }
 
@@ -22,6 +23,10 @@ class FourSlashRunner extends RunnerBase {
             case FourSlashTestType.Shims:
                 this.basePath = "tests/cases/fourslash/shims";
                 this.testSuiteName = "fourslash-shims";
+                break;
+            case FourSlashTestType.ShimsWithPreprocess:
+                this.basePath = 'tests/cases/fourslash/shims-pp';
+                this.testSuiteName = 'fourslash-shims-pp';
                 break;
             case FourSlashTestType.Server:
                 this.basePath = "tests/cases/fourslash/server";

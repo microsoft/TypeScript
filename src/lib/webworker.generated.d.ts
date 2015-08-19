@@ -3,8 +3,26 @@
 /// IE Worker APIs
 /////////////////////////////
 
+interface EventInit {
+    bubbles?: boolean;
+    cancelable?: boolean;
+}
+
 interface EventListener {
     (evt: Event): void;
+}
+
+interface AudioBuffer {
+    duration: number;
+    length: number;
+    numberOfChannels: number;
+    sampleRate: number;
+    getChannelData(channel: number): any;
+}
+
+declare var AudioBuffer: {
+    prototype: AudioBuffer;
+    new(): AudioBuffer;
 }
 
 interface Blob {
@@ -58,6 +76,21 @@ interface Console {
 declare var Console: {
     prototype: Console;
     new(): Console;
+}
+
+interface Coordinates {
+    accuracy: number;
+    altitude: number;
+    altitudeAccuracy: number;
+    heading: number;
+    latitude: number;
+    longitude: number;
+    speed: number;
+}
+
+declare var Coordinates: {
+    prototype: Coordinates;
+    new(): Coordinates;
 }
 
 interface DOMError {
@@ -210,7 +243,7 @@ interface File extends Blob {
 
 declare var File: {
     prototype: File;
-    new(): File;
+    new (parts: (ArrayBuffer | ArrayBufferView | Blob | string)[], filename: string, properties?: FilePropertyBag): File;
 }
 
 interface FileList {
@@ -281,7 +314,7 @@ interface IDBDatabase extends EventTarget {
     createObjectStore(name: string, optionalParameters?: any): IDBObjectStore;
     deleteObjectStore(name: string): void;
     transaction(storeNames: any, mode?: string): IDBTransaction;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -402,7 +435,7 @@ interface IDBTransaction extends EventTarget {
     READ_ONLY: string;
     READ_WRITE: string;
     VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -462,6 +495,29 @@ interface MSApp {
 }
 declare var MSApp: MSApp;
 
+interface MSAppAsyncOperation extends EventTarget {
+    error: DOMError;
+    oncomplete: (ev: Event) => any;
+    onerror: (ev: Event) => any;
+    readyState: number;
+    result: any;
+    start(): void;
+    COMPLETED: number;
+    ERROR: number;
+    STARTED: number;
+    addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var MSAppAsyncOperation: {
+    prototype: MSAppAsyncOperation;
+    new(): MSAppAsyncOperation;
+    COMPLETED: number;
+    ERROR: number;
+    STARTED: number;
+}
+
 interface MSBlobBuilder {
     append(data: any, endings?: string): void;
     getBlob(contentType?: string): Blob;
@@ -496,6 +552,18 @@ interface MSStreamReader extends EventTarget, MSBaseReader {
 declare var MSStreamReader: {
     prototype: MSStreamReader;
     new(): MSStreamReader;
+}
+
+interface MediaQueryList {
+    matches: boolean;
+    media: string;
+    addListener(listener: MediaQueryListListener): void;
+    removeListener(listener: MediaQueryListListener): void;
+}
+
+declare var MediaQueryList: {
+    prototype: MediaQueryList;
+    new(): MediaQueryList;
 }
 
 interface MessageChannel {
@@ -533,6 +601,33 @@ interface MessagePort extends EventTarget {
 declare var MessagePort: {
     prototype: MessagePort;
     new(): MessagePort;
+}
+
+interface Position {
+    coords: Coordinates;
+    timestamp: number;
+}
+
+declare var Position: {
+    prototype: Position;
+    new(): Position;
+}
+
+interface PositionError {
+    code: number;
+    message: string;
+    toString(): string;
+    PERMISSION_DENIED: number;
+    POSITION_UNAVAILABLE: number;
+    TIMEOUT: number;
+}
+
+declare var PositionError: {
+    prototype: PositionError;
+    new(): PositionError;
+    PERMISSION_DENIED: number;
+    POSITION_UNAVAILABLE: number;
+    TIMEOUT: number;
 }
 
 interface ProgressEvent extends Event {
@@ -622,7 +717,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     LOADING: number;
     OPENED: number;
     UNSENT: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -644,6 +739,15 @@ declare var XMLHttpRequest: {
     create(): XMLHttpRequest;
 }
 
+interface XMLHttpRequestUpload extends EventTarget, XMLHttpRequestEventTarget {
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var XMLHttpRequestUpload: {
+    prototype: XMLHttpRequestUpload;
+    new(): XMLHttpRequestUpload;
+}
+
 interface AbstractWorker {
     onerror: (ev: Event) => any;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
@@ -663,7 +767,7 @@ interface MSBaseReader {
     DONE: number;
     EMPTY: number;
     LOADING: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -704,7 +808,7 @@ interface XMLHttpRequestEventTarget {
     onloadstart: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
     ontimeout: (ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -790,15 +894,14 @@ interface WorkerUtils extends Object, WindowBase64 {
 }
 
 
-interface NodeListOf<TNode extends Node> extends NodeList {
-    length: number;
-    item(index: number): TNode;
-    [index: number]: TNode;
-}
-
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
+}
+
+interface FilePropertyBag {
+    type?: string;
+    lastModified?: number;
 }
 
 interface EventListenerObject {
@@ -822,11 +925,11 @@ interface MediaQueryListListener {
 interface MSLaunchUriCallback {
     (): void;
 }
-interface FrameRequestCallback {
-    (time: number): void;
+interface MSUnsafeFunctionCallback {
+    (): any;
 }
-interface MutationCallback {
-    (mutations: MutationRecord[], observer: MutationObserver): void;
+interface MSExecAtPriorityFunctionCallback {
+    (...args: any[]): any;
 }
 interface DecodeSuccessCallback {
     (decodedData: AudioBuffer): void;
