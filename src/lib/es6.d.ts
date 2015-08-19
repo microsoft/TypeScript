@@ -3652,7 +3652,7 @@ declare var Proxy: ProxyConstructor;
 
 declare module Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
-    function construct(target: Function, argumentsList: ArrayLike<any>): any;
+    function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: any): any;
     function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
     function deleteProperty(target: any, propertyKey: PropertyKey): boolean;
     function enumerate(target: any): IterableIterator<any>;
