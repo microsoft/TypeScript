@@ -87,8 +87,8 @@ interface SymbolConstructor {
     split: symbol;
 
     /** 
-      * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
-      * abstract operation.
+      * A method that converts an object to a corresponding primitive value.
+      * Called by the ToPrimitive abstract operation.
       */
     toPrimitive: symbol;
 
@@ -98,8 +98,8 @@ interface SymbolConstructor {
       */
     toStringTag: symbol;
 
-    /** 
-      * An Object whose own property names are property names that are excluded from the with 
+    /**
+      * An Object whose own property names are property names that are excluded from the 'with'
       * environment bindings of the associated objects.
       */
     unscopables: symbol;
@@ -170,16 +170,19 @@ interface ObjectConstructor {
 }
 
 interface Function {
-    /** 
-      * Returns a new function object that is identical to the argument object in all ways except 
-      * for its identity and the value of its HomeObject internal slot. 
-      */
-    toMethod(newHome: Object): Function;
-
     /**
       * Returns the name of the function. Function names are read-only and can not be changed.
       */
     name: string;
+
+    /**
+     * Determines whether the given value inherits from this function if this function was used
+     * as a constructor function.
+     *
+     * A constructor function can control which objects are recognized as its instances by
+     * 'instanceof' by overriding this method.
+     */
+    [Symbol.hasInstance](value: any): boolean;
 }
 
 interface NumberConstructor {
@@ -256,6 +259,20 @@ interface ArrayLike<T> {
 interface Array<T> {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<T>;
+
+    /**
+     * Returns an object whose properties have the value 'true'
+     * when they will be absent when used in a 'with' statement.
+     */
+    [Symbol.unscopables](): {
+        copyWithin: boolean;
+        entries: boolean;
+        fill: boolean;
+        find: boolean;
+        findIndex: boolean;
+        keys: boolean;
+        values: boolean;
+    };
 
     /** 
       * Returns an array of key, value pairs for every entry in the array
@@ -619,37 +636,76 @@ interface Math {
     [Symbol.toStringTag]: string;
 }
 
+interface Date {
+    /**
+     * Converts a Date object to a string.
+     */
+    [Symbol.toPrimitive](hint: "default"): string;
+    /**
+     * Converts a Date object to a string.
+     */
+    [Symbol.toPrimitive](hint: "string"): string;
+    /**
+     * Converts a Date object to a number.
+     */
+    [Symbol.toPrimitive](hint: "number"): number;
+    /**
+     * Converts a Date object to a string or number.
+     *
+     * @param hint The strings "number", "string", or "default" to specify what primitive to return.
+     *
+     * @throws {TypeError} If 'hint' was given something other than "number", "string", or "default".
+     * @returns A number if 'hint' was "number", a string if 'hint' was "string" or "default".
+     */
+    [Symbol.toPrimitive](hint: string): string | number;
+}
+
 interface RegExp {
-    /** 
-      * Matches a string with a regular expression, and returns an array containing the results of 
+    /**
+      * Matches a string with this regular expression, and returns an array containing the results of
       * that search.
       * @param string A string to search within.
       */
-    match(string: string): string[];
+    [Symbol.match](string: string): RegExpMatchArray;
 
     /**
-      * Replaces text in a string, using a regular expression.
-      * @param searchValue A String object or string literal that represents the regular expression
+      * Replaces text in a string, using this regular expression.
+      * @param string A String object or string literal whose contents matching against
+      *               this regular expression will be replaced
       * @param replaceValue A String object or string literal containing the text to replace for every 
-      * successful match of rgExp in stringObj.
+      *                     successful match of this regular expression.
       */
-    replace(string: string, replaceValue: string): string;
-
-    search(string: string): number;
+    [Symbol.replace](string: string, replaceValue: string): string;
 
     /**
-      * Returns an Array object into which substrings of the result of converting string to a String 
-      * have been stored. The substrings are determined by searching from left to right for matches 
-      * of the this value regular expression; these occurrences are not part of any substring in the 
-      * returned array, but serve to divide up the String value.
-      *
-      * If the regular expression that contains capturing parentheses, then each time separator is 
-      * matched the results (including any undefined results) of the capturing parentheses are spliced.
-      * @param string string value to split
-      * @param limit if not undefined, the output array is truncated so that it contains no more 
-      * than limit elements.
+      * Replaces text in a string, using this regular expression.
+      * @param string A String object or string literal whose contents matching against
+      *               this regular expression will be replaced
+      * @param replacer A function that returns the replacement text.
       */
-    split(string: string, limit?: number): string[];
+    [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
+
+    /**
+      * Finds the position beginning first substring match in a regular expression search
+      * using this regular expression.
+      *
+      * @param string The string to search within.
+      */
+    [Symbol.search](string: string): number;
+
+    /**
+      * Returns an array of substrings that were delimited by strings in the original input that
+      * match against this regular expression.
+      *
+      * If the regular expression contains capturing parentheses, then each time this
+      * regular expression matches, the results (including any undefined results) of the
+      * capturing parentheses are spliced.
+      *
+      * @param string string value to split
+      * @param limit if not undefined, the output array is truncated so that it contains no more
+      * than 'limit' elements.
+      */
+    [Symbol.split](string: string, limit?: number): string[];
 
     /**
       * Returns a string indicating the flags of the regular expression in question. This field is read-only.
@@ -676,6 +732,10 @@ interface RegExp {
       * expression. Default is false. Read-only. 
       */
     unicode: boolean;
+}
+
+interface RegExpConstructor {
+    [Symbol.species](): RegExpConstructor;
 }
 
 interface Map<K, V> {

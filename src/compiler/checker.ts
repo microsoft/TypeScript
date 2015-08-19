@@ -965,7 +965,9 @@ namespace ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) return;
+            if (!moduleName) {
+                return;
+            }
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
@@ -973,20 +975,9 @@ namespace ts {
                     return symbol;
                 }
             }
-            let fileName: string;
-            let sourceFile: SourceFile;
-            while (true) {
-                fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
-                if (sourceFile || isRelative) {
-                    break;
-                }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
+
+            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral.text);
+            let sourceFile = fileName && host.getSourceFile(fileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
@@ -2175,10 +2166,13 @@ namespace ts {
         function collectLinkedAliases(node: Identifier): Node[] {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
+                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
+                let exportSpecifier = <ExportSpecifier>node.parent;
+                exportSymbol = (<ExportDeclaration>exportSpecifier.parent.parent).moduleSpecifier ?
+                    getExternalModuleMember(<ExportDeclaration>exportSpecifier.parent.parent, exportSpecifier) :
+                    resolveEntityName(exportSpecifier.propertyName || exportSpecifier.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             let result: Node[] = [];
             if (exportSymbol) {
@@ -13851,7 +13845,11 @@ namespace ts {
                             }
                             break;
                     }
-
+                    
+                    if (introducesArgumentsExoticObject(location)) {
+                        copySymbol(argumentsSymbol, meaning);
+                    }
+                    
                     memberFlags = location.flags;
                     location = location.parent;
                 }

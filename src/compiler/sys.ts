@@ -334,7 +334,7 @@ namespace ts {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
-        else if (typeof process !== "undefined" && process.nextTick && !process.browser) {
+        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
             return getNodeSystem();
