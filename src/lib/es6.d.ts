@@ -429,9 +429,9 @@ interface String {
 
     /**
       * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
-      * @param regexpLike An object that supports being matched against.
+      * @param matcher An object that supports being matched against.
       */
-    match(regexpLike: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
+    match(matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
 
     /**
       * Replaces text in a string, using an object that supports replacement within a string.
@@ -446,6 +446,12 @@ interface String {
       * @param replacer A function that returns the replacement text.
       */
     replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+
+    /**
+      * Finds the first substring match in a regular expression search.
+      * @param searcher An object which supports searching within a string.
+      */
+    search(searcher: { [Symbol.search](string: string): number; }): number;
 
     /**
       * Returns an <a> HTML anchor element and sets the name attribute to the text value
