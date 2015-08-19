@@ -3,7 +3,7 @@ interface I {
 >I : Symbol(I, Decl(symbolDeclarationEmit6.ts, 0, 0))
 
     [Symbol.isConcatSpreadable]: string;
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 3553, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3509, 102), Decl(lib.d.ts, 3615, 11))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 3553, 24))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 3883, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3839, 102), Decl(lib.d.ts, 3945, 11))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 3883, 24))
 }
