@@ -425,6 +425,14 @@ interface String {
       */
     startsWith(searchString: string, position?: number): boolean;
 
+    // Overloads for objects with methods of well-known symbols.
+
+    /**
+      * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
+      * @param regexpLike An object that supports being matched against.
+      */
+    match(regexpLike: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
+
     /**
       * Returns an <a> HTML anchor element and sets the name attribute to the text value
       * @param name
