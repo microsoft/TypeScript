@@ -8,4 +8,4 @@ declare module JSX {
 }
 declare var React: any;
 
-<div>Dot goes here: &middot; </div>;
+<div>Dot goes here: &middot; &notAnEntity; </div>;

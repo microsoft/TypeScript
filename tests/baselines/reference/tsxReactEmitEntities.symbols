@@ -15,7 +15,7 @@ declare module JSX {
 declare var React: any;
 >React : Symbol(React, Decl(tsxReactEmitEntities.tsx, 6, 11))
 
-<div>Dot goes here: &middot; </div>;
+<div>Dot goes here: &middot; &notAnEntity; </div>;
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitEntities.tsx, 1, 22))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmitEntities.tsx, 1, 22))
 

@@ -6547,7 +6547,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (result) {
                     // Replace entities like &nbsp;
                     result = result.replace(/&(\w+);/g, function(s: any, m: string) {
-                        return String.fromCharCode(entities[m]);
+                        if (entities[m] !== undefined) {
+                            return String.fromCharCode(entities[m]);
+                        }
+                        else {
+                            return s;
+                        }
                     });
                 }
 
