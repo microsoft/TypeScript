@@ -7045,7 +7045,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitDetachedComments(node: TextRange) {
-                let leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                let leadingComments = filterComments(getLeadingCommentRanges(currentSourceFile.text, node.pos), node.pos === 0);
                 if (leadingComments) {
                     let detachedComments: CommentRange[] = [];
                     let lastComment: CommentRange;

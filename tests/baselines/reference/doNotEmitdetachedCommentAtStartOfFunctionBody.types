@@ -1,0 +1,13 @@
+=== tests/cases/compiler/doNotEmitdetachedCommentAtStartOfFunctionBody.ts ===
+function foo() {
+>foo : () => number
+
+    /*
+
+        multi line
+        comment
+    */
+
+    return 42;
+>42 : number
+}
