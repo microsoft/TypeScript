@@ -100,6 +100,7 @@ namespace ts.server {
         export const SignatureHelp = "signatureHelp";
         export const TypeDefinition = "typeDefinition";
         export const ProjectInfo = "projectInfo";
+        export const RebuildProjects = "rebuildProjects";
         export const Unknown = "unknown";
     }
 
@@ -225,6 +226,10 @@ namespace ts.server {
         private errorCheck(file: string, project: Project) {
             this.syntacticCheck(file, project);
             this.semanticCheck(file, project);
+        }
+        
+        private rebuildProjectStructure() {
+            this.projectService.rebuildProjectStructure();
         }
 
         private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
@@ -1033,6 +1038,10 @@ namespace ts.server {
                 var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
                 return {response: this.getProjectInfo(file, needFileNameList), responseRequired: true};
             },
+            [CommandNames.RebuildProjects]: (request: protocol.Request) => {
+                this.rebuildProjectStructure();
+                return {responseRequired: false};
+            }
         };
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => {response?: any, responseRequired: boolean}) {
             if (this.handlers[command]) {

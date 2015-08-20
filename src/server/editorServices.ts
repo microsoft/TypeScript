@@ -621,7 +621,10 @@ namespace ts.server {
 
                 let fileNames = project.getFileNames();
                 for (let fileName of fileNames) {
-                    this.getScriptInfo(fileName).defaultProject = undefined;
+                    let info = this.getScriptInfo(fileName);
+                    if (info.defaultProject == project){
+                        info.defaultProject = undefined;
+                    }
                 }
         }
 
@@ -766,6 +769,19 @@ namespace ts.server {
             return referencingProjects;
         }
 
+        rebuildProjectStructure() {
+            // First check if there is new tsconfig file added for inferred project roots
+            for (let info of this.openFileRoots) {
+                this.openOrUpdateConfiguredProjectForFile(info.fileName);
+            }
+            this.updateProjectStructure();
+        }
+
+        /**
+         * This function is to update the project structure for every projects. 
+         * It is called on the premise that all the configured projects are 
+         * up to date.
+         */
         updateProjectStructure() {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
@@ -912,10 +928,6 @@ namespace ts.server {
             let configFileName = this.findConfigFile(searchPath);
             if (configFileName) {
                 this.log("Config file name: " + configFileName, "Info");
-            } else {
-                this.log("no config file");
-            }
-            if (configFileName) {
                 let project = this.findConfiguredProjectByConfigFile(configFileName);
                 if (!project) {
                     var configResult = this.openConfigFile(configFileName, fileName);
@@ -930,6 +942,9 @@ namespace ts.server {
                 else {
                     this.updateConfiguredProject(project);
                 }
+            }
+            else {
+                this.log("No config files found.");
             }
         }
 
