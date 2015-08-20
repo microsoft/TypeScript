@@ -9645,19 +9645,29 @@ namespace ts {
             return false;
         }
 
-        // Return true if type has the given flags, or is a union or intersection type composed of types that all have those flags.
+        // Return true if type has the given flags,
+        // is a union type composed of types that all have those flags,
+        // or an intersection type that contains (at least) one type that has those flags.
         function allConstituentTypesHaveKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                let types = (<UnionOrIntersectionType>type).types;
+            if (type.flags & TypeFlags.Union) {
+                let types = (<UnionType>type).types;
                 for (let current of types) {
                     if (!(current.flags & kind)) {
                         return false;
                     }
                 }
                 return true;
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                let types = (<IntersectionType>type).types;
+                for (let current of types) {
+                    if (current.flags & kind) {
+                        return true;
+                    }
+                }
             }
             return false;
         }
