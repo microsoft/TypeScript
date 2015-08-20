@@ -248,35 +248,6 @@ namespace ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
-    // Gets the nearest enclosing block scope container that has the provided node
-    // as a descendant, that is not the provided node.
-    export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node.parent;
-        while (current) {
-            if (isFunctionLike(current)) {
-                return current;
-            }
-            switch (current.kind) {
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.CatchClause:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                    return current;
-                case SyntaxKind.Block:
-                    // function block is not considered block-scope container
-                    // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                    if (!isFunctionLike(current.parent)) {
-                        return current;
-                    }
-            }
-
-            current = current.parent;
-        }
-    }
-
     export function isCatchClauseVariableDeclaration(declaration: Declaration) {
         return declaration &&
             declaration.kind === SyntaxKind.VariableDeclaration &&
@@ -594,53 +565,6 @@ namespace ts {
         }
     }
 
-    export function isVariableLike(node: Node): node is VariableLikeDeclaration {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.BindingElement:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.VariableDeclaration:
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    export function isAccessor(node: Node): boolean {
-        return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
-    }
-
-    export function isClassLike(node: Node): boolean {
-        return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
-    }
-
-    export function isFunctionLike(node: Node): boolean {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.Constructor:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                    return true;
-            }
-        }
-        return false;
-    }
-
     export function introducesArgumentsExoticObject(node: Node) {
         switch (node.kind) {
             case SyntaxKind.MethodDeclaration:
@@ -661,132 +585,6 @@ namespace ts {
 
     export function isObjectLiteralMethod(node: Node) {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
-    }
-
-    export function getContainingFunction(node: Node): FunctionLikeDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isFunctionLike(node)) {
-                return <FunctionLikeDeclaration>node;
-            }
-        }
-    }
-
-    export function getContainingClass(node: Node): ClassLikeDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isClassLike(node)) {
-                return <ClassLikeDeclaration>node;
-            }
-        }
-    }
-
-    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
-        while (true) {
-            node = node.parent;
-            if (!node) {
-                return undefined;
-            }
-            switch (node.kind) {
-                case SyntaxKind.ComputedPropertyName:
-                    // If the grandparent node is an object literal (as opposed to a class),
-                    // then the computed property is not a 'this' container.
-                    // A computed property name in a class needs to be a this container
-                    // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
-                        return node;
-                    }
-                    // If this is a computed property, then the parent should not
-                    // make it a this container. The parent might be a property
-                    // in an object literal, like a method or accessor. But in order for
-                    // such a parent to be a this container, the reference must be in
-                    // the *body* of the container.
-                    node = node.parent;
-                    break;
-                case SyntaxKind.Decorator:
-                    // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
-                        // If the decorator's parent is a Parameter, we resolve the this container from
-                        // the grandparent class declaration.
-                        node = node.parent.parent;
-                    }
-                    else if (isClassElement(node.parent)) {
-                        // If the decorator's parent is a class element, we resolve the 'this' container
-                        // from the parent class declaration.
-                        node = node.parent;
-                    }
-                    break;
-                case SyntaxKind.ArrowFunction:
-                    if (!includeArrowFunctions) {
-                        continue;
-                    }
-                // Fall through
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.SourceFile:
-                    return node;
-            }
-        }
-    }
-
-    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
-        while (true) {
-            node = node.parent;
-            if (!node) return node;
-            switch (node.kind) {
-                case SyntaxKind.ComputedPropertyName:
-                    // If the grandparent node is an object literal (as opposed to a class),
-                    // then the computed property is not a 'super' container.
-                    // A computed property name in a class needs to be a super container
-                    // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
-                        return node;
-                    }
-                    // If this is a computed property, then the parent should not
-                    // make it a super container. The parent might be a property
-                    // in an object literal, like a method or accessor. But in order for
-                    // such a parent to be a super container, the reference must be in
-                    // the *body* of the container.
-                    node = node.parent;
-                    break;
-                case SyntaxKind.Decorator:
-                    // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
-                        // If the decorator's parent is a Parameter, we resolve the this container from
-                        // the grandparent class declaration.
-                        node = node.parent.parent;
-                    }
-                    else if (isClassElement(node.parent)) {
-                        // If the decorator's parent is a class element, we resolve the 'this' container
-                        // from the parent class declaration.
-                        node = node.parent;
-                    }
-                    break;
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    if (!includeFunctions) {
-                        continue;
-                    }
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return node;
-            }
-        }
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
@@ -889,105 +687,6 @@ namespace ts {
 
     export function nodeOrChildIsDecorated(node: Node): boolean {
         return nodeIsDecorated(node) || childIsDecorated(node);
-    }
-
-    export function isExpression(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
-            case SyntaxKind.SuperKeyword:
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.TrueKeyword:
-            case SyntaxKind.FalseKeyword:
-            case SyntaxKind.RegularExpressionLiteral:
-            case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.ObjectLiteralExpression:
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-            case SyntaxKind.TaggedTemplateExpression:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.ParenthesizedExpression:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.VoidExpression:
-            case SyntaxKind.DeleteExpression:
-            case SyntaxKind.TypeOfExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.BinaryExpression:
-            case SyntaxKind.ConditionalExpression:
-            case SyntaxKind.SpreadElementExpression:
-            case SyntaxKind.TemplateExpression:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.OmittedExpression:
-            case SyntaxKind.JsxElement:
-            case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.YieldExpression:
-                return true;
-            case SyntaxKind.QualifiedName:
-                while (node.parent.kind === SyntaxKind.QualifiedName) {
-                    node = node.parent;
-                }
-                return node.parent.kind === SyntaxKind.TypeQuery;
-            case SyntaxKind.Identifier:
-                if (node.parent.kind === SyntaxKind.TypeQuery) {
-                    return true;
-                }
-            // fall through
-            case SyntaxKind.NumericLiteral:
-            case SyntaxKind.StringLiteral:
-                let parent = node.parent;
-                switch (parent.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.BindingElement:
-                        return (<VariableLikeDeclaration>parent).initializer === node;
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.SwitchStatement:
-                        return (<ExpressionStatement>parent).expression === node;
-                    case SyntaxKind.ForStatement:
-                        let forStatement = <ForStatement>parent;
-                        return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forStatement.condition === node ||
-                            forStatement.incrementor === node;
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                        let forInStatement = <ForInStatement | ForOfStatement>parent;
-                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forInStatement.expression === node;
-                    case SyntaxKind.TypeAssertionExpression:
-                    case SyntaxKind.AsExpression:
-                        return node === (<AssertionExpression>parent).expression;
-                    case SyntaxKind.TemplateSpan:
-                        return node === (<TemplateSpan>parent).expression;
-                    case SyntaxKind.ComputedPropertyName:
-                        return node === (<ComputedPropertyName>parent).expression;
-                    case SyntaxKind.Decorator:
-                        return true;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
-                    default:
-                        if (isExpression(parent)) {
-                            return true;
-                        }
-                }
-        }
-        return false;
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
@@ -1140,83 +839,6 @@ namespace ts {
         return false;
     }
 
-    export function isDeclaration(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.BindingElement:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.Constructor:
-            case SyntaxKind.EnumDeclaration:
-            case SyntaxKind.EnumMember:
-            case SyntaxKind.ExportSpecifier:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.ImportClause:
-            case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.Parameter:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.VariableDeclaration:
-                return true;
-        }
-        return false;
-    }
-
-    export function isStatement(n: Node): boolean {
-        switch (n.kind) {
-            case SyntaxKind.BreakStatement:
-            case SyntaxKind.ContinueStatement:
-            case SyntaxKind.DebuggerStatement:
-            case SyntaxKind.DoStatement:
-            case SyntaxKind.ExpressionStatement:
-            case SyntaxKind.EmptyStatement:
-            case SyntaxKind.ForInStatement:
-            case SyntaxKind.ForOfStatement:
-            case SyntaxKind.ForStatement:
-            case SyntaxKind.IfStatement:
-            case SyntaxKind.LabeledStatement:
-            case SyntaxKind.ReturnStatement:
-            case SyntaxKind.SwitchStatement:
-            case SyntaxKind.ThrowKeyword:
-            case SyntaxKind.TryStatement:
-            case SyntaxKind.VariableStatement:
-            case SyntaxKind.WhileStatement:
-            case SyntaxKind.WithStatement:
-            case SyntaxKind.ExportAssignment:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    export function isClassElement(n: Node): boolean {
-        switch (n.kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.IndexSignature:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
@@ -1270,23 +892,6 @@ namespace ts {
                 return true;
         }
         return false;
-    }
-
-    // An alias symbol is created by one of the following declarations:
-    // import <symbol> = ...
-    // import <symbol> from ...
-    // import * as <symbol> from ...
-    // import { x as <symbol> } from ...
-    // export { x as <symbol> } from ...
-    // export = ...
-    // export default ...
-    export function isAliasSymbolDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
-            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
-            node.kind === SyntaxKind.NamespaceImport ||
-            node.kind === SyntaxKind.ImportSpecifier ||
-            node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
@@ -1367,18 +972,6 @@ namespace ts {
         }
 
         return undefined;
-    }
-
-    export function isKeyword(token: SyntaxKind): boolean {
-        return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
-    }
-
-    export function isTrivia(token: SyntaxKind) {
-        return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
-    }
-
-    export function isAsyncFunctionLike(node: Node): boolean {
-        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
     /**
@@ -1723,19 +1316,6 @@ namespace ts {
         };
     }
 
-    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
-        let compilerOptions = host.getCompilerOptions();
-        let emitOutputFilePathWithoutExtension: string;
-        if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
-        }
-        else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
-        }
-
-        return emitOutputFilePathWithoutExtension + extension;
-    }
-
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
@@ -1762,18 +1342,6 @@ namespace ts {
 
     export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
         return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
-    }
-
-    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
-                // 1. in-browser single file compilation scenario
-                // 2. non .js file
-                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
-            }
-            return false;
-        }
-        return false;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
@@ -1969,43 +1537,6 @@ namespace ts {
         return 0;
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
-        if (expr) {
-            switch (expr.kind) {
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                case SyntaxKind.TaggedTemplateExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.ParenthesizedExpression:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Identifier:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateExpression:
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.SuperKeyword:
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    export function isAssignmentOperator(token: SyntaxKind): boolean {
-        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
-    }
-
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
@@ -2153,6 +1684,475 @@ namespace ts {
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+    }
+
+    // Gets the nearest enclosing block scope container that has the provided node
+    // as a descendant, that is not the provided node.
+    export function getEnclosingBlockScopeContainer(node: Node): Node {
+        let current = node.parent;
+        while (current) {
+            if (isFunctionLike(current)) {
+                return current;
+            }
+            switch (current.kind) {
+                case SyntaxKind.SourceFile:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.CatchClause:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return current;
+                case SyntaxKind.Block:
+                    // function block is not considered block-scope container
+                    // see comment in binder.ts: bind(...), case for SyntaxKind.Block
+                    if (!isFunctionLike(current.parent)) {
+                        return current;
+                    }
+            }
+
+            current = current.parent;
+        }
+    }
+
+    export function isVariableLike(node: Node): node is VariableLikeDeclaration {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    export function isAccessor(node: Node): boolean {
+        return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
+    }
+
+    export function isClassLike(node: Node): boolean {
+        return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
+    }
+
+    export function isFunctionLike(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    export function getContainingFunction(node: Node): FunctionLikeDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isFunctionLike(node)) {
+                return <FunctionLikeDeclaration>node;
+            }
+        }
+    }
+
+    export function getContainingClass(node: Node): ClassLikeDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isClassLike(node)) {
+                return <ClassLikeDeclaration>node;
+            }
+        }
+    }
+
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return undefined;
+            }
+            switch (node.kind) {
+                case SyntaxKind.ComputedPropertyName:
+                    // If the grandparent node is an object literal (as opposed to a class),
+                    // then the computed property is not a 'this' container.
+                    // A computed property name in a class needs to be a this container
+                    // so that we can error on it.
+                    if (isClassLike(node.parent.parent)) {
+                        return node;
+                    }
+                    // If this is a computed property, then the parent should not
+                    // make it a this container. The parent might be a property
+                    // in an object literal, like a method or accessor. But in order for
+                    // such a parent to be a this container, the reference must be in
+                    // the *body* of the container.
+                    node = node.parent;
+                    break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method.
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
+                    break;
+                case SyntaxKind.ArrowFunction:
+                    if (!includeArrowFunctions) {
+                        continue;
+                    }
+                // Fall through
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.SourceFile:
+                    return node;
+            }
+        }
+    }
+
+    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) return node;
+            switch (node.kind) {
+                case SyntaxKind.ComputedPropertyName:
+                    // If the grandparent node is an object literal (as opposed to a class),
+                    // then the computed property is not a 'super' container.
+                    // A computed property name in a class needs to be a super container
+                    // so that we can error on it.
+                    if (isClassLike(node.parent.parent)) {
+                        return node;
+                    }
+                    // If this is a computed property, then the parent should not
+                    // make it a super container. The parent might be a property
+                    // in an object literal, like a method or accessor. But in order for
+                    // such a parent to be a super container, the reference must be in
+                    // the *body* of the container.
+                    node = node.parent;
+                    break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method.
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!includeFunctions) {
+                        continue;
+                    }
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
+            }
+        }
+    }
+
+    export function isExpression(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.OmittedExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.YieldExpression:
+                return true;
+            case SyntaxKind.QualifiedName:
+                while (node.parent.kind === SyntaxKind.QualifiedName) {
+                    node = node.parent;
+                }
+                return node.parent.kind === SyntaxKind.TypeQuery;
+            case SyntaxKind.Identifier:
+                if (node.parent.kind === SyntaxKind.TypeQuery) {
+                    return true;
+                }
+            // fall through
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+                let parent = node.parent;
+                switch (parent.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.BindingElement:
+                        return (<VariableLikeDeclaration>parent).initializer === node;
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.SwitchStatement:
+                        return (<ExpressionStatement>parent).expression === node;
+                    case SyntaxKind.ForStatement:
+                        let forStatement = <ForStatement>parent;
+                        return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                            forStatement.condition === node ||
+                            forStatement.incrementor === node;
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                        let forInStatement = <ForInStatement | ForOfStatement>parent;
+                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                            forInStatement.expression === node;
+                    case SyntaxKind.TypeAssertionExpression:
+                    case SyntaxKind.AsExpression:
+                        return node === (<AssertionExpression>parent).expression;
+                    case SyntaxKind.TemplateSpan:
+                        return node === (<TemplateSpan>parent).expression;
+                    case SyntaxKind.ComputedPropertyName:
+                        return node === (<ComputedPropertyName>parent).expression;
+                    case SyntaxKind.Decorator:
+                        return true;
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                    default:
+                        if (isExpression(parent)) {
+                            return true;
+                        }
+                }
+        }
+        return false;
+    }
+
+    export function isDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.VariableDeclaration:
+                return true;
+        }
+        return false;
+    }
+
+    export function isStatement(n: Node): boolean {
+        switch (n.kind) {
+            case SyntaxKind.BreakStatement:
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.DebuggerStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.ExpressionStatement:
+            case SyntaxKind.EmptyStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isClassElement(n: Node): boolean {
+        switch (n.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.IndexSignature:
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+    // An alias symbol is created by one of the following declarations:
+    // import <symbol> = ...
+    // import <symbol> from ...
+    // import * as <symbol> from ...
+    // import { x as <symbol> } from ...
+    // export { x as <symbol> } from ...
+    // export = ...
+    // export default ...
+    export function isAliasSymbolDeclaration(node: Node): boolean {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
+            node.kind === SyntaxKind.NamespaceImport ||
+            node.kind === SyntaxKind.ImportSpecifier ||
+            node.kind === SyntaxKind.ExportSpecifier ||
+            node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
+    }
+    
+    export function isKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+    }
+
+    export function isTrivia(token: SyntaxKind) {
+        return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    export function isAsyncFunctionLike(node: Node): boolean {
+        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
+    }
+    
+    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
+        let compilerOptions = host.getCompilerOptions();
+        let emitOutputFilePathWithoutExtension: string;
+        if (compilerOptions.outDir) {
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+        }
+        else {
+            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+        }
+
+        return emitOutputFilePathWithoutExtension + extension;
+    }
+    
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        if (!isDeclarationFile(sourceFile)) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
+            }
+            return false;
+        }
+        return false;
+    }
+    
+    export function isLeftHandSideExpression(expr: Expression): boolean {
+        if (expr) {
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
     export function textSpanEnd(span: TextSpan) {
