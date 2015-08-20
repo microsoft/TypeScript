@@ -1017,7 +1017,6 @@ module Harness {
                     switch (setting.flag.toLowerCase()) {
                         // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
                         case "module":
-                        case "modulegentarget":
                             if (typeof setting.value === "string") {
                                 if (setting.value.toLowerCase() === "amd") {
                                     options.module = ts.ModuleKind.AMD;
@@ -1038,7 +1037,6 @@ module Harness {
                             break;
 
                         case "target":
-                        case "codegentarget":
                             if (typeof setting.value === "string") {
                                 if (setting.value.toLowerCase() === "es3") {
                                     options.target = ts.ScriptTarget.ES3;
@@ -1087,11 +1085,9 @@ module Harness {
                             break;
 
                         case "out":
-                        case "outfileoption":
                             options.out = setting.value;
                             break;
 
-                        case "outdiroption":
                         case "outdir":
                             options.outDir = setting.value;
                             break;
