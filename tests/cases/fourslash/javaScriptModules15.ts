@@ -1,7 +1,6 @@
 ///<reference path="fourslash.ts" />
 
 // @allowNonTsExtensions: true
-// @module: AMD
 // @Filename: myMod.js
 //// define(function() {
 //// 	let x = { n: 3, s: 'foo', b: true };
@@ -10,7 +9,7 @@
 //// 
 
 // @Filename: consumer.js
-//// var x = require('myMod');
+//// var x = require('./myMod');
 //// x/**/;
 
 goTo.file('consumer.js');

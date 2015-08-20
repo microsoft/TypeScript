@@ -1501,11 +1501,8 @@ namespace ts {
                         //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
                         writeTextOfNode(currentSourceFile, bindingElement.propertyName);
                         write(": ");
-
-                        // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
-                        emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
-                    else if (bindingElement.name) {
+                    if (bindingElement.name) {
                         if (isBindingPattern(bindingElement.name)) {
                             // If it is a nested binding pattern, we will recursively descend into each element and emit each one separately.
                             // In the case of rest element, we will omit rest element.

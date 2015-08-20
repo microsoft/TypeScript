@@ -21,8 +21,8 @@ System.register(["foo"], function(exports_1) {
     var cls, cls2, x, y, z, M;
     return {
         setters:[
-            function (_foo_1) {
-                foo_1 = _foo_1;
+            function (foo_1_1) {
+                foo_1 = foo_1_1;
             }],
         execute: function() {
             cls = foo_1.alias.Class;

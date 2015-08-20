@@ -203,9 +203,35 @@ module Harness.LanguageService {
     /// Shim adapter
     class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
-        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
+
+        public getModuleResolutionsForFile: (fileName: string)=> string;
+
+        constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
+
+            if (preprocessToResolve) {
+                let compilerOptions = this.nativeHost.getCompilationSettings()
+                let moduleResolutionHost: ts.ModuleResolutionHost = {
+                    fileExists: fileName => this.getScriptInfo(fileName) !== undefined,
+                    readFile: fileName => {
+                        let scriptInfo = this.getScriptInfo(fileName);
+                        return scriptInfo && scriptInfo.content;
+                    }
+                };
+                this.getModuleResolutionsForFile = (fileName) => {
+                    let scriptInfo = this.getScriptInfo(fileName);
+                    let preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
+                    let imports: ts.Map<string> = {};
+                    for (let module of preprocessInfo.importedFiles) {
+                        let resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost);
+                        if (resolutionInfo.resolvedFileName) {
+                            imports[module.fileName] = resolutionInfo.resolvedFileName;
+                        }
+                    }
+                    return JSON.stringify(imports);
+                }
+            }
         }
 
         getFilenames(): string[] { return this.nativeHost.getFilenames(); }
@@ -229,7 +255,11 @@ module Harness.LanguageService {
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
         }
-
+        fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }        
+        readFile(fileName: string) { 
+            let snapshot = this.nativeHost.getScriptSnapshot(fileName);
+            return snapshot && snapshot.getText(0, snapshot.getLength());
+        }        
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
@@ -381,6 +411,9 @@ module Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
+        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
+            return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -396,8 +429,8 @@ module Harness.LanguageService {
     export class ShimLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: ShimLanguageServiceHost;
         private factory: ts.TypeScriptServicesFactory;
-        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
-            this.host = new ShimLanguageServiceHost(cancellationToken, options);
+        constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
+            this.host = new ShimLanguageServiceHost(preprocessToResolve, cancellationToken, options);
             this.factory = new TypeScript.Services.TypeScriptServicesFactory();
         }
         getHost() { return this.host; }
@@ -416,6 +449,7 @@ module Harness.LanguageService {
             let convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
                 importedFiles: [],
+                ambientExternalModules: [],
                 isLibFile: shimResult.isLibFile
             };
 
