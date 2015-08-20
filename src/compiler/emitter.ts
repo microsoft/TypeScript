@@ -7003,8 +7003,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            /**
+             * Emit comments associated with node that will not be emitted into JS file
+             */
             function emitCommentsOnNotEmittedNode(node: Node) {
-                /// TODO (yuisu): comments
                 emitLeadingCommentsWorker(node, /*isEmittedNode:*/ false);
             }
 
