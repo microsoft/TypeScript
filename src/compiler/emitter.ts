@@ -6463,7 +6463,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function trimReactWhitespace(node: JsxText): string {
                 let result: string = undefined;
-                let text = getTextOfNode(node, true);
+                let text = getTextOfNode(node, /*includeTrivia*/ true);
                 let firstNonWhitespace = 0;
                 let lastNonWhitespace = -1;
 
@@ -6506,7 +6506,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     case JsxEmit.Preserve:
                     default:
-                        return getTextOfNode(node, true);
+                        return getTextOfNode(node, /*includeTrivia*/ true);
                 }
             }
 
@@ -6520,7 +6520,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     case JsxEmit.Preserve:
                     default: // Emit JSX-preserve as default when no --jsx flag is specified
-                        writer.writeLiteral(getTextOfNode(node, true));
+                        writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
                         break;
                 }
             }
