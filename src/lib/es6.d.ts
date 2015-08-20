@@ -420,6 +420,41 @@ interface String {
       */
     startsWith(searchString: string, position?: number): boolean;
 
+    // Overloads for objects with methods of well-known symbols.
+
+    /**
+      * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
+      * @param matcher An object that supports being matched against.
+      */
+    match(matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
+
+    /**
+      * Replaces text in a string, using an object that supports replacement within a string.
+      * @param searchValue A object can search for and replace matches within a string.
+      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+      */
+    replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
+
+    /**
+      * Replaces text in a string, using an object that supports replacement within a string.
+      * @param searchValue A object can search for and replace matches within a string.
+      * @param replacer A function that returns the replacement text.
+      */
+    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+
+    /**
+      * Finds the first substring match in a regular expression search.
+      * @param searcher An object which supports searching within a string.
+      */
+    search(searcher: { [Symbol.search](string: string): number; }): number;
+
+    /**
+      * Split a string into substrings using the specified separator and return them as an array.
+      * @param splitter An object that can split a string.
+      * @param limit A value used to limit the number of elements returned in the array.
+      */
+    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+
     /**
       * Returns an <a> HTML anchor element and sets the name attribute to the text value
       * @param name
@@ -850,6 +885,8 @@ interface Int8Array {
 }
 
 interface Int8ArrayConstructor {
+    new (elements: Iterable<number>): Int8Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -880,6 +917,8 @@ interface Uint8Array {
 }
 
 interface Uint8ArrayConstructor {
+    new (elements: Iterable<number>): Uint8Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -913,6 +952,8 @@ interface Uint8ClampedArray {
 }
 
 interface Uint8ClampedArrayConstructor {
+    new (elements: Iterable<number>): Uint8ClampedArray;
+
 
     /**
       * Creates an array from an array-like or iterable object.
@@ -948,6 +989,8 @@ interface Int16Array {
 }
 
 interface Int16ArrayConstructor {
+    new (elements: Iterable<number>): Int16Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -978,6 +1021,8 @@ interface Uint16Array {
 }
 
 interface Uint16ArrayConstructor {
+    new (elements: Iterable<number>): Uint16Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1008,6 +1053,8 @@ interface Int32Array {
 }
 
 interface Int32ArrayConstructor {
+    new (elements: Iterable<number>): Int32Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1038,6 +1085,8 @@ interface Uint32Array {
 }
 
 interface Uint32ArrayConstructor {
+    new (elements: Iterable<number>): Uint32Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1068,6 +1117,8 @@ interface Float32Array {
 }
 
 interface Float32ArrayConstructor {
+    new (elements: Iterable<number>): Float32Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1098,6 +1149,8 @@ interface Float64Array {
 }
 
 interface Float64ArrayConstructor {
+    new (elements: Iterable<number>): Float64Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1130,9 +1183,9 @@ interface ProxyConstructor {
 }
 declare var Proxy: ProxyConstructor;
 
-declare module Reflect {
+declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
-    function construct(target: Function, argumentsList: ArrayLike<any>): any;
+    function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: any): any;
     function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
     function deleteProperty(target: any, propertyKey: PropertyKey): boolean;
     function enumerate(target: any): IterableIterator<any>;
