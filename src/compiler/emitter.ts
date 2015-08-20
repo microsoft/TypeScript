@@ -5131,7 +5131,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         argumentsWritten++;
                     }
                     if (shouldEmitParamTypesMetadata(node)) {
-                        debugger;
                         if (writeComma || argumentsWritten) {
                             write(", ");
                         }

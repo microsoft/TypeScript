@@ -221,19 +221,9 @@ namespace ts {
 
         host = host || createCompilerHost(options);
         
-        // initialize resolveModuleNameWorker only if noResolve is false
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => string[];
-        if (!options.noResolve) {
-            resolveModuleNamesWorker = host.resolveModuleNames;
-            if (!resolveModuleNamesWorker) {
-                resolveModuleNamesWorker = (moduleNames, containingFile) => {
-                    return map(moduleNames, moduleName => {
-                        let moduleResolution = resolveModuleName(moduleName, containingFile, options, host);
-                        return moduleResolution.resolvedFileName;
-                    });
-                }
-            }
-        }
+        const resolveModuleNamesWorker =
+            host.resolveModuleNames || 
+            ((moduleNames, containingFile) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedFileName));
 
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
         
@@ -340,7 +330,7 @@ namespace ts {
                     }
                     
                     // check imports
-                    collectExternalModuleReferences(newSourceFile);                    
+                    collectExternalModuleReferences(newSourceFile);
                     if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
                         return false;
@@ -670,12 +660,15 @@ namespace ts {
 
                     // Set the source file for normalized absolute path
                     filesByName.set(canonicalAbsolutePath, file);
-
+                    
+                    let basePath = getDirectoryPath(fileName);
                     if (!options.noResolve) {
-                        let basePath = getDirectoryPath(fileName);
                         processReferencedFiles(file, basePath);
-                        processImportedModules(file, basePath);
                     }
+
+                    // always process imported modules to record module name resolutions
+                    processImportedModules(file, basePath);
+
                     if (isDefaultLib) {
                         file.isDefaultLib = true;
                         files.unshift(file);
@@ -713,21 +706,19 @@ namespace ts {
             });
         }
        
-        function processImportedModules(file: SourceFile, basePath: string) {            
-            collectExternalModuleReferences(file);            
-            if (file.imports.length) {               
+        function processImportedModules(file: SourceFile, basePath: string) {
+            collectExternalModuleReferences(file);
+            if (file.imports.length) {
                 file.resolvedModules = {};
-                let oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
-                
                 let moduleNames = map(file.imports, name => name.text);
                 let resolutions = resolveModuleNamesWorker(moduleNames, file.fileName);
                 for (let i = 0; i < file.imports.length; ++i) {
                     let resolution = resolutions[i];
                     setResolvedModuleName(file, moduleNames[i], resolution);
-                    if (resolution) {
+                    if (resolution && !options.noResolve) {
                         findModuleSourceFile(resolution, file.imports[i]);
                     }
-                }                
+                }
             }
             else {
                 // no imports - drop cached module resolutions
