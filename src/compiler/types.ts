@@ -1293,6 +1293,16 @@ namespace ts {
         getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
+    
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        writeFile: WriteFileCallback;
+    }
 
     export interface ParseConfigHost extends ModuleResolutionHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
@@ -1322,6 +1332,8 @@ namespace ts {
          * Get a list of files in the program
          */
         getSourceFiles(): SourceFile[];
+        
+        getEmitHost(): EmitHost;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
