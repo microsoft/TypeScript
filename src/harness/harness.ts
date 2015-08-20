@@ -1519,16 +1519,6 @@ module Harness {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         let optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
-        // List of allowed metadata names
-        let fileMetadataNames = ["filename", "comments", "declaration", "module",
-            "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
-            "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
-            "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
-            "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata", "experimentaldecorators",
-            "skipdefaultlibcheck", "jsx"];
-
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
             let opts: CompilerSetting[] = [];
