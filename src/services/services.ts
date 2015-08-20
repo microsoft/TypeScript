@@ -3493,7 +3493,6 @@ namespace ts {
                     case SyntaxKind.LessThanToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
                             containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
                             containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
                             isFunction(containingNodeKind);
