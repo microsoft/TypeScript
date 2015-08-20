@@ -769,7 +769,7 @@ namespace ts.server {
             return referencingProjects;
         }
 
-        rebuildProjectStructure() {
+        reloadProjects() {
             // First check if there is new tsconfig file added for inferred project roots
             for (let info of this.openFileRoots) {
                 this.openOrUpdateConfiguredProjectForFile(info.fileName);
