@@ -915,190 +915,194 @@ module Harness {
             includeBuiltFileNames?: string[];
         }
 
-        export function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting, options: ts.CompilerOptions & HarnesOptions): void {
-            let name = setting.flag.toLowerCase();
-            let value = setting.value ? setting.value.toLowerCase() : setting.value;
-            switch (name) {
-                case "module":
-                    if (value === "amd") {
-                        options.module = ts.ModuleKind.AMD;
-                    } else if (value === "umd") {
-                        options.module = ts.ModuleKind.UMD;
-                    } else if (value === "commonjs") {
-                        options.module = ts.ModuleKind.CommonJS;
-                    } else if (value === "system") {
-                        options.module = ts.ModuleKind.System;
-                    } else if (value === "unspecified") {
-                        options.module = ts.ModuleKind.None;
-                    } else {
-                        throw new Error("Unknown module type " + value);
+        export function setCompilerOptionForSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnesOptions): void {
+            for (let name in settings) {
+                if (settings.hasOwnProperty(name)) {
+                    let value = settings[name] ? settings[name].toLowerCase() : settings[name];
+                    switch (name.toLowerCase()) {
+                        case "module":
+                            if (value === "amd") {
+                                options.module = ts.ModuleKind.AMD;
+                            } else if (value === "umd") {
+                                options.module = ts.ModuleKind.UMD;
+                            } else if (value === "commonjs") {
+                                options.module = ts.ModuleKind.CommonJS;
+                            } else if (value === "system") {
+                                options.module = ts.ModuleKind.System;
+                            } else if (value === "unspecified") {
+                                options.module = ts.ModuleKind.None;
+                            } else {
+                                throw new Error("Unknown module type " + value);
+                            }
+                            break;
+
+                        case "target":
+                            if (value === "es3") {
+                                options.target = ts.ScriptTarget.ES3;
+                            } else if (value === "es5") {
+                                options.target = ts.ScriptTarget.ES5;
+                            } else if (value === "es6") {
+                                options.target = ts.ScriptTarget.ES6;
+                            } else {
+                                throw new Error("Unknown compile target " + value);
+                            }
+                            break;
+
+                        case "experimentaldecorators":
+                            options.experimentalDecorators = value === "true";
+                            break;
+
+                        case "emitdecoratormetadata":
+                            options.emitDecoratorMetadata = value === "true";
+                            break;
+
+                        case "experimentalasyncfunctions":
+                            options.experimentalAsyncFunctions = value === "true";
+                            break;
+
+                        case "noemithelpers":
+                            options.noEmitHelpers = value === "true";
+                            break;
+
+                        case "noemitonerror":
+                            options.noEmitOnError = value === "true";
+                            break;
+
+                        case "noresolve":
+                            options.noResolve = value === "true";
+                            break;
+
+                        case "noimplicitany":
+                            options.noImplicitAny = value === "true";
+                            break;
+
+                        case "nolib":
+                            options.noLib = value === "true";
+                            break;
+
+                        case "out":
+                            options.out = settings[name];
+                            break;
+
+                        case "outdir":
+                            options.outDir = settings[name];
+                            break;
+
+                        case "skipdefaultlibcheck":
+                            options.skipDefaultLibCheck = value === "true";
+                            break;
+
+                        case "sourceroot":
+                            options.sourceRoot = settings[name];
+                            break;
+
+                        case "maproot":
+                            options.mapRoot = settings[name];
+                            break;
+
+                        case "sourcemap":
+                            options.sourceMap = value === "true";
+                            break;
+
+                        case "declaration":
+                            options.declaration = value === "true";
+                            break;
+
+                        case "newline":
+                            if (value === "crlf") {
+                                options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                            }
+                            else if (value === "lf") {
+                                options.newLine = ts.NewLineKind.LineFeed;
+                            }
+                            else {
+                                throw new Error("Unknown option for newLine: " + value);
+                            }
+                            break;
+
+                        case "comments":
+                            options.removeComments = value === "false";
+                            break;
+
+                        case "stripinternal":
+                            options.stripInternal = value === "true";
+                            break;
+
+                        case "usecasesensitivefilenames":
+                            options.useCaseSensitiveFileNames = value === "true";
+                            break;
+
+                        case "filename":
+                            // Not supported yet
+                            break;
+
+                        case "emitbom":
+                            options.emitBOM = value === "true";
+                            break;
+
+                        case "errortruncation":
+                            options.noErrorTruncation = value === "false";
+                            break;
+
+                        case "preserveconstenums":
+                            options.preserveConstEnums = value === "true";
+                            break;
+
+                        case "isolatedmodules":
+                            options.isolatedModules = value === "true";
+                            break;
+
+                        case "suppressimplicitanyindexerrors":
+                            options.suppressImplicitAnyIndexErrors = value === "true";
+                            break;
+
+                        case "includebuiltfile":
+                            if (!options.includeBuiltFileNames) {
+                                options.includeBuiltFileNames = [];
+                            }
+                            options.includeBuiltFileNames.push(settings[name]);
+                            break;
+
+                        case "inlinesourcemap":
+                            options.inlineSourceMap = value === "true";
+                            break;
+
+                        case "inlinesources":
+                            options.inlineSources = value === "true";
+                            break;
+
+                        case "jsx":
+                            if (value === "react") {
+                                options.jsx = ts.JsxEmit.React;
+                            }
+                            else if (value === "preserve") {
+                                options.jsx = ts.JsxEmit.Preserve;
+                            }
+                            else if (value === "none") {
+                                options.jsx = ts.JsxEmit.None;
+                            }
+                            else {
+                                throw new Error("Unknown option for jsx: " + value);
+                            }
+                            break;
+
+                        default:
+                            throw new Error("Unsupported compiler setting " + value);
                     }
-                    break;
-
-                case "target":
-                    if (value === "es3") {
-                        options.target = ts.ScriptTarget.ES3;
-                    } else if (value === "es5") {
-                        options.target = ts.ScriptTarget.ES5;
-                    } else if (value === "es6") {
-                        options.target = ts.ScriptTarget.ES6;
-                    } else {
-                        throw new Error("Unknown compile target " + value);
-                    }
-                    break;
-
-                case "experimentaldecorators":
-                    options.experimentalDecorators = value === "true";
-                    break;
-
-                case "emitdecoratormetadata":
-                    options.emitDecoratorMetadata = value === "true";
-                    break;
-
-                case "experimentalasyncfunctions":
-                    options.experimentalAsyncFunctions = value === "true";
-                    break;
-
-                case "noemithelpers":
-                    options.noEmitHelpers = value === "true";
-                    break;
-
-                case "noemitonerror":
-                    options.noEmitOnError = value === "true";
-                    break;
-
-                case "noresolve":
-                    options.noResolve = value === "true";
-                    break;
-
-                case "noimplicitany":
-                    options.noImplicitAny = value === "true";
-                    break;
-
-                case "nolib":
-                    options.noLib = value === "true";
-                    break;
-
-                case "out":
-                    options.out = value;
-                    break;
-
-                case "outdir":
-                    options.outDir = value;
-                    break;
-
-                case "skipdefaultlibcheck":
-                    options.skipDefaultLibCheck = value === "true";
-                    break;
-
-                case "sourceroot":
-                    options.sourceRoot = value;
-                    break;
-
-                case "maproot":
-                    options.mapRoot = value;
-                    break;
-
-                case "sourcemap":
-                    options.sourceMap = value === "true";
-                    break;
-
-                case "declaration":
-                    options.declaration = value === "true";
-                    break;
-
-                case "newline":
-                    if (value === "crlf") {
-                        options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-                    }
-                    else if (value === "lf") {
-                        options.newLine = ts.NewLineKind.LineFeed;
-                    }
-                    else {
-                        throw new Error("Unknown option for newLine: " + value);
-                    }
-                    break;
-
-                case "comments":
-                    options.removeComments = value === "false";
-                    break;
-
-                case "stripinternal":
-                    options.stripInternal = value === "true";
-
-                case "usecasesensitivefilenames":
-                    options.useCaseSensitiveFileNames = value === "true";
-                    break;
-
-                case "filename":
-                    // Not supported yet
-                    break;
-
-                case "emitbom":
-                    options.emitBOM = value === "true";
-                    break;
-
-                case "errortruncation":
-                    options.noErrorTruncation = value === "false";
-                    break;
-
-                case "preserveconstenums":
-                    options.preserveConstEnums = value === "true";
-                    break;
-
-                case "isolatedmodules":
-                    options.isolatedModules = value === "true";
-                    break;
-
-                case "suppressimplicitanyindexerrors":
-                    options.suppressImplicitAnyIndexErrors = value === "true";
-                    break;
-
-                case "includebuiltfile":
-                    if (!options.includeBuiltFileNames) {
-                        options.includeBuiltFileNames = [];
-                    }
-                    options.includeBuiltFileNames.push(value);
-                    break;
-
-                case "inlinesourcemap":
-                    options.inlineSourceMap = value === "true";
-                    break;
-
-                case "inlinesources":
-                    options.inlineSources = value === "true";
-                    break;
-
-                case "jsx":
-                    if (value === "react") {
-                        options.jsx = ts.JsxEmit.React;
-                    }
-                    else if (value === "preserve") {
-                        options.jsx = ts.JsxEmit.Preserve;
-                    }
-                    else if (value === "none") {
-                        options.jsx = ts.JsxEmit.None;
-                    }
-                    else {
-                        throw new Error("Unknown option for jsx: " + value);
-                    }
-                    break;
-
-                default:
-                    throw new Error("Unsupported compiler setting " + setting.flag);
+                }
             }
         }
   
         export class HarnessCompiler {
             private inputFiles: { unitName: string; content: string }[] = [];
             private compileOptions: ts.CompilerOptions;
-            private settings: Harness.TestCaseParser.CompilerSetting[] = [];
+            private settings: Harness.TestCaseParser.CompilerSettings = {};
 
             private lastErrors: ts.Diagnostic[];
 
             public reset() {
                 this.inputFiles = [];
-                this.settings = [];
+                this.settings = {};
                 this.lastErrors = [];
             }
 
@@ -1106,11 +1110,7 @@ module Harness {
                 return this.lastErrors;
             }
 
-            public setCompilerSettingsFromOptions(tcSettings: ts.CompilerOptions) {
-                this.settings = Object.keys(tcSettings).map(k => ({ flag: k, value: (<any>tcSettings)[k] }));
-            }
-
-            public setCompilerSettings(tcSettings: Harness.TestCaseParser.CompilerSetting[]) {
+            public setCompilerSettings(tcSettings: Harness.TestCaseParser.CompilerSettings) {
                 this.settings = tcSettings;
             }
 
@@ -1164,7 +1164,7 @@ module Harness {
                 options.skipDefaultLibCheck = true;
 
                 // Parse settings
-                this.settings.forEach(setting => setCompilerOptionForSetting(setting, options));
+                setCompilerOptionForSetting(this.settings, options);
 
                 // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
                 // Treat them as library files, so include them in build, but not in baselines.
@@ -1514,9 +1514,8 @@ module Harness {
 
     export module TestCaseParser {
         /** all the necessary information to set the right compiler settings */
-        export interface CompilerSetting {
-            flag: string;
-            value: string;
+        export interface CompilerSettings {
+            [name: string]: string;
         }
 
         /** All the necessary information to turn a multi file test into useful units for later compilation */
@@ -1531,20 +1530,20 @@ module Harness {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         let optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
-        function extractCompilerSettings(content: string): CompilerSetting[] {
+        function extractCompilerSettings(content: string): CompilerSettings {
 
-            let opts: CompilerSetting[] = [];
+            let opts: CompilerSettings = {};
 
             let match: RegExpExecArray;
             while ((match = optionRegex.exec(content)) != null) {
-                opts.push({ flag: match[1], value: match[2] });
+                opts[match[1]] = match[2];
             }
 
             return opts;
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string): { settings: CompilerSetting[]; testUnitData: TestUnitData[]; } {
+        export function makeUnitsFromTest(code: string, fileName: string): { settings: CompilerSettings; testUnitData: TestUnitData[]; } {
             let settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
