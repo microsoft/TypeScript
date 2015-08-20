@@ -480,21 +480,21 @@ namespace ts {
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                     // if the current token is var, let or const, skip the VariableDeclarationList
-                    node = node.parent.parent;
+                    node = node.parent === undefined ? undefined : node.parent.parent;
                     break;
                 default:
                     node = node.parent;
                     break;
             }
-            if (!node.jsDocComment) {
-                node = node.parent;
-            }
         }
-        let jsDocComment = node.jsDocComment;
-        if (jsDocComment) {
-            for (let tag of jsDocComment.tags) {
-                if (tag.pos <= position && position <= tag.end) {
-                    return tag;
+
+        if (node) {
+            let jsDocComment = node.jsDocComment;
+            if (jsDocComment) {
+                for (let tag of jsDocComment.tags) {
+                    if (tag.pos <= position && position <= tag.end) {
+                        return tag;
+                    }
                 }
             }
         }
