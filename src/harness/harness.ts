@@ -910,7 +910,12 @@ module Harness {
             };
         }
 
-        export function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting, options: ts.CompilerOptions): void {
+        interface HarnesOptions {
+            useCaseSensitiveFileNames?: boolean;
+            includeBuiltFileNames?: string[];
+        }
+
+        export function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting, options: ts.CompilerOptions & HarnesOptions): void {
             switch (setting.flag.toLowerCase()) {
                 case "module":
                     if (typeof setting.value === "string") {
@@ -1028,7 +1033,7 @@ module Harness {
                     options.stripInternal = setting.value === "true";
 
                 case "usecasesensitivefilenames":
-                    useCaseSensitiveFileNames = setting.value === "true";
+                    options.useCaseSensitiveFileNames = setting.value === "true";
                     break;
 
                 case "filename":
@@ -1056,8 +1061,10 @@ module Harness {
                     break;
 
                 case "includebuiltfile":
-                    let builtFileName = libFolder + setting.value;
-                    includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
+                    if (!options.includeBuiltFileNames) {
+                        options.includeBuiltFileNames = [];
+                    }
+                    options.includeBuiltFileNames.push(setting.value);
                     break;
 
                 case "inlinesourcemap":
@@ -1136,7 +1143,7 @@ module Harness {
                 otherFiles: { unitName: string; content: string }[],
                 onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
-                options?: ts.CompilerOptions,
+                options?: ts.CompilerOptions & HarnesOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
                 currentDirectory?: string) {
 
@@ -1153,12 +1160,18 @@ module Harness {
                 let newLine = "\r\n";
                 options.skipDefaultLibCheck = true;
 
+                // Parse settings
+                this.settings.forEach(setting => setCompilerOptionForSetting(setting, options));
+
                 // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
                 // Treat them as library files, so include them in build, but not in baselines.
                 let includeBuiltFiles: { unitName: string; content: string }[] = [];
+                ts.forEach(options.includeBuiltFileNames, fileName => {
+                    let builtFileName = libFolder + fileName;
+                    includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
+                });
 
-                let useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
-                this.settings.forEach(setting => setCompilerOptionForSetting(setting, options));
+                let useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : ts.sys.useCaseSensitiveFileNames;
 
                 let fileOutputs: GeneratedFile[] = [];
 
