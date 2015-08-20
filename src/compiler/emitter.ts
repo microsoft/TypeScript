@@ -6463,7 +6463,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function trimReactWhitespace(node: JsxText): string {
                 let result: string = undefined;
-                let text = getTextOfNode(node);
+                let text = getTextOfNode(node, true);
                 let firstNonWhitespace = 0;
                 let lastNonWhitespace = -1;
 
@@ -6498,7 +6498,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
                         let text = trimReactWhitespace(node);
-                        if (text.length === 0) {
+                        if (text === undefined || text.length === 0) {
                             return undefined;
                         }
                         else {
