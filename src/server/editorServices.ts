@@ -770,13 +770,13 @@ namespace ts.server {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
             
+            let unattachedOpenFiles: ScriptInfo[] = [];
             let openFileRootsConfigured: ScriptInfo[] = [];
             for (let info of this.openFileRootsConfigured) {
                 let project = info.defaultProject;
                 if (!project || !(project.getSourceFile(info))) {
                     info.defaultProject = undefined;
-                    this.createInferredProject(info);
-                    this.openFileRoots.push(info);
+                    unattachedOpenFiles.push(info);
                 }
                 else {
                     openFileRootsConfigured.push(info);
@@ -789,8 +789,6 @@ namespace ts.server {
             // references that file.  If so, then just keep the file in the referenced list.
             // If not, add the file to an unattached list, to be rechecked later.
             var openFilesReferenced: ScriptInfo[] = [];
-            var unattachedOpenFiles: ScriptInfo[] = [];
-
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                 var referencedFile = this.openFilesReferenced[i];
                 referencedFile.defaultProject.updateGraph();
