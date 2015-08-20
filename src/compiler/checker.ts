@@ -11384,9 +11384,16 @@ namespace ts {
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
-                let rootSymbol = resolveName(root, root.text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
-                    markAliasSymbolAsReferenced(rootSymbol);
+                var meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
+                // Resolve type so we know which symbol is referenced
+                let rootSymbol = resolveName(root, root.text, meaning | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                // Resolved symbol is alias
+                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
+                    let aliasTarget = resolveAlias(rootSymbol);
+                    // If alias has value symbol - mark alias as referenced
+                    if (aliasTarget.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
+                        markAliasSymbolAsReferenced(rootSymbol);
+                    }
                 }
             }
         }
