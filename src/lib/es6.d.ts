@@ -885,7 +885,8 @@ interface Int8Array {
 }
 
 interface Int8ArrayConstructor {
-    new (elements: Iterable<number>): Int8Array;
+    new (elements: Iterable<number>): Int8Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -916,7 +917,8 @@ interface Uint8Array {
 }
 
 interface Uint8ArrayConstructor {
-    new (elements: Iterable<number>): Uint8Array;
+    new (elements: Iterable<number>): Uint8Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -950,7 +952,8 @@ interface Uint8ClampedArray {
 }
 
 interface Uint8ClampedArrayConstructor {
-    new (elements: Iterable<number>): Uint8ClampedArray;
+    new (elements: Iterable<number>): Uint8ClampedArray;
+
 
     /**
       * Creates an array from an array-like or iterable object.
@@ -986,7 +989,8 @@ interface Int16Array {
 }
 
 interface Int16ArrayConstructor {
-    new (elements: Iterable<number>): Int16Array;
+    new (elements: Iterable<number>): Int16Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1017,7 +1021,8 @@ interface Uint16Array {
 }
 
 interface Uint16ArrayConstructor {
-    new (elements: Iterable<number>): Uint16Array;
+    new (elements: Iterable<number>): Uint16Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1048,7 +1053,8 @@ interface Int32Array {
 }
 
 interface Int32ArrayConstructor {
-    new (elements: Iterable<number>): Int32Array;
+    new (elements: Iterable<number>): Int32Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1079,7 +1085,8 @@ interface Uint32Array {
 }
 
 interface Uint32ArrayConstructor {
-    new (elements: Iterable<number>): Uint32Array;
+    new (elements: Iterable<number>): Uint32Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1110,7 +1117,8 @@ interface Float32Array {
 }
 
 interface Float32ArrayConstructor {
-    new (elements: Iterable<number>): Float32Array;
+    new (elements: Iterable<number>): Float32Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1141,7 +1149,8 @@ interface Float64Array {
 }
 
 interface Float64ArrayConstructor {
-    new (elements: Iterable<number>): Float64Array;
+    new (elements: Iterable<number>): Float64Array;
+
     /**
       * Creates an array from an array-like or iterable object.
       * @param arrayLike An array-like or iterable object to convert to an array.
@@ -1174,7 +1183,7 @@ interface ProxyConstructor {
 }
 declare var Proxy: ProxyConstructor;
 
-declare module Reflect {
+declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
     function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: any): any;
     function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
