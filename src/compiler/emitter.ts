@@ -6922,13 +6922,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
+            /**
+             * Filter comment when removeComments is true according to following rules:
+             *      - Pinned Comments - remove all but the top of the file one
+             *      - Normal Comments - remove all
+             *      - // Comments     - remove all
+             * @param isTopOfFileComments boolean indicating whether comments are at the top of file
+             * @param isEmittedNode boolean indicating whether node associated with the comments will be
+             *                      emitted in javascript file
+             */
             function filterComments(ranges: CommentRange[], isTopOfFileComments: boolean, isEmittedNode=true): CommentRange[] {
-                // TODO (yuisu): comment
                 if (compilerOptions.removeComments) {
+                    // Only preserve pinned comments at the top of the file
                     ranges = isTopOfFileComments ? filter(ranges, isPinnedComments) : [];
                 }
                 else {
                     if (!isEmittedNode) {
+                        // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
+                        // unless it is a triple slash comment at the top of the file.
+                        // For Example:
+                        //      /// <reference-path ...>
+                        //      declare var x;
+                        //      /// <reference-path ...>
+                        //      interface F {}
+                        //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
                         ranges = isTopOfFileComments ? filter(ranges, isTripleSlashOrPinnedComments) : filter(ranges, isPinnedComments);
                     }
                 }
