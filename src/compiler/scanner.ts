@@ -472,7 +472,7 @@ namespace ts {
                       break;
 
                   case CharacterCodes.hash:
-                      if (isShebangTrivia(text, pos)) {
+                      if (pos === 0 && isShebangTrivia(text, pos)) {
                           pos = scanShebangTrivia(text, pos);
                           continue;
                       }
