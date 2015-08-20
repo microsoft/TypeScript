@@ -910,6 +910,175 @@ module Harness {
             };
         }
 
+        export function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting, options: ts.CompilerOptions): void {
+            switch (setting.flag.toLowerCase()) {
+                case "module":
+                    if (typeof setting.value === "string") {
+                        if (setting.value.toLowerCase() === "amd") {
+                            options.module = ts.ModuleKind.AMD;
+                        } else if (setting.value.toLowerCase() === "umd") {
+                            options.module = ts.ModuleKind.UMD;
+                        } else if (setting.value.toLowerCase() === "commonjs") {
+                            options.module = ts.ModuleKind.CommonJS;
+                        } else if (setting.value.toLowerCase() === "system") {
+                            options.module = ts.ModuleKind.System;
+                        } else if (setting.value.toLowerCase() === "unspecified") {
+                            options.module = ts.ModuleKind.None;
+                        } else {
+                            throw new Error("Unknown module type " + setting.value);
+                        }
+                    } else {
+                        options.module = <any>setting.value;
+                    }
+                    break;
+
+                case "target":
+                    if (typeof setting.value === "string") {
+                        if (setting.value.toLowerCase() === "es3") {
+                            options.target = ts.ScriptTarget.ES3;
+                        } else if (setting.value.toLowerCase() === "es5") {
+                            options.target = ts.ScriptTarget.ES5;
+                        } else if (setting.value.toLowerCase() === "es6") {
+                            options.target = ts.ScriptTarget.ES6;
+                        } else {
+                            throw new Error("Unknown compile target " + setting.value);
+                        }
+                    } else {
+                        options.target = <any>setting.value;
+                    }
+                    break;
+
+                case "experimentaldecorators":
+                    options.experimentalDecorators = setting.value === "true";
+                    break;
+
+                case "emitdecoratormetadata":
+                    options.emitDecoratorMetadata = setting.value === "true";
+                    break;
+
+                case "experimentalasyncfunctions":
+                    options.experimentalAsyncFunctions = setting.value === "true";
+                    break;
+
+                case "noemithelpers":
+                    options.noEmitHelpers = setting.value === "true";
+                    break;
+
+                case "noemitonerror":
+                    options.noEmitOnError = setting.value === "true";
+                    break;
+
+                case "noresolve":
+                    options.noResolve = setting.value === "true";
+                    break;
+
+                case "noimplicitany":
+                    options.noImplicitAny = setting.value === "true";
+                    break;
+
+                case "nolib":
+                    options.noLib = setting.value === "true";
+                    break;
+
+                case "out":
+                    options.out = setting.value;
+                    break;
+
+                case "outdir":
+                    options.outDir = setting.value;
+                    break;
+
+                case "skipdefaultlibcheck":
+                    options.skipDefaultLibCheck = setting.value === "true";
+                    break;
+
+                case "sourceroot":
+                    options.sourceRoot = setting.value;
+                    break;
+
+                case "maproot":
+                    options.mapRoot = setting.value;
+                    break;
+
+                case "sourcemap":
+                    options.sourceMap = setting.value === "true";
+                    break;
+
+                case "declaration":
+                    options.declaration = setting.value === "true";
+                    break;
+
+                case "newline":
+                    if (setting.value.toLowerCase() === "crlf") {
+                        options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                    }
+                    else if (setting.value.toLowerCase() === "lf") {
+                        options.newLine = ts.NewLineKind.LineFeed;
+                    }
+                    else {
+                        throw new Error("Unknown option for newLine: " + setting.value);
+                    }
+                    break;
+
+                case "comments":
+                    options.removeComments = setting.value === "false";
+                    break;
+
+                case "stripinternal":
+                    options.stripInternal = setting.value === "true";
+
+                case "usecasesensitivefilenames":
+                    useCaseSensitiveFileNames = setting.value === "true";
+                    break;
+
+                case "filename":
+                    // Not supported yet
+                    break;
+
+                case "emitbom":
+                    options.emitBOM = setting.value === "true";
+                    break;
+
+                case "errortruncation":
+                    options.noErrorTruncation = setting.value === "false";
+                    break;
+
+                case "preserveconstenums":
+                    options.preserveConstEnums = setting.value === "true";
+                    break;
+
+                case "isolatedmodules":
+                    options.isolatedModules = setting.value === "true";
+                    break;
+
+                case "suppressimplicitanyindexerrors":
+                    options.suppressImplicitAnyIndexErrors = setting.value === "true";
+                    break;
+
+                case "includebuiltfile":
+                    let builtFileName = libFolder + setting.value;
+                    includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
+                    break;
+
+                case "inlinesourcemap":
+                    options.inlineSourceMap = setting.value === "true";
+                    break;
+
+                case "inlinesources":
+                    options.inlineSources = setting.value === "true";
+                    break;
+
+                case "jsx":
+                    options.jsx = setting.value.toLowerCase() === "react" ? ts.JsxEmit.React :
+                        setting.value.toLowerCase() === "preserve" ? ts.JsxEmit.Preserve :
+                            ts.JsxEmit.None;
+                    break;
+
+                default:
+                    throw new Error("Unsupported compiler setting " + setting.flag);
+            }
+        }
+  
         export class HarnessCompiler {
             private inputFiles: { unitName: string; content: string }[] = [];
             private compileOptions: ts.CompilerOptions;
@@ -989,7 +1158,7 @@ module Harness {
                 let includeBuiltFiles: { unitName: string; content: string }[] = [];
 
                 let useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
-                this.settings.forEach(setCompilerOptionForSetting);
+                this.settings.forEach(setting => setCompilerOptionForSetting(setting, options));
 
                 let fileOutputs: GeneratedFile[] = [];
 
@@ -1013,175 +1182,6 @@ module Harness {
                 ts.sys.newLine = newLine;
                 return options;
                 
-                function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting) {
-                    switch (setting.flag.toLowerCase()) {
-                        // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
-                        case "module":
-                            if (typeof setting.value === "string") {
-                                if (setting.value.toLowerCase() === "amd") {
-                                    options.module = ts.ModuleKind.AMD;
-                                } else if (setting.value.toLowerCase() === "umd") {
-                                    options.module = ts.ModuleKind.UMD;
-                                } else if (setting.value.toLowerCase() === "commonjs") {
-                                    options.module = ts.ModuleKind.CommonJS;
-                                } else if (setting.value.toLowerCase() === "system") {
-                                    options.module = ts.ModuleKind.System;
-                                } else if (setting.value.toLowerCase() === "unspecified") {
-                                    options.module = ts.ModuleKind.None;
-                                } else {
-                                    throw new Error("Unknown module type " + setting.value);
-                                }
-                            } else {
-                                options.module = <any>setting.value;
-                            }
-                            break;
-
-                        case "target":
-                            if (typeof setting.value === "string") {
-                                if (setting.value.toLowerCase() === "es3") {
-                                    options.target = ts.ScriptTarget.ES3;
-                                } else if (setting.value.toLowerCase() === "es5") {
-                                    options.target = ts.ScriptTarget.ES5;
-                                } else if (setting.value.toLowerCase() === "es6") {
-                                    options.target = ts.ScriptTarget.ES6;
-                                } else {
-                                    throw new Error("Unknown compile target " + setting.value);
-                                }
-                            } else {
-                                options.target = <any>setting.value;
-                            }
-                            break;
-                            
-                        case "experimentaldecorators":
-                            options.experimentalDecorators = setting.value === "true";
-                            break;
-
-                        case "emitdecoratormetadata":
-                            options.emitDecoratorMetadata = setting.value === "true";
-                            break;
-                            
-                        case "experimentalasyncfunctions":
-                            options.experimentalAsyncFunctions = setting.value === "true";
-                            break;
-
-                        case "noemithelpers":
-                            options.noEmitHelpers = setting.value === "true";
-                            break;
-
-                        case "noemitonerror":
-                            options.noEmitOnError = setting.value === "true";
-                            break;
-
-                        case "noresolve":
-                            options.noResolve = setting.value === "true";
-                            break;
-
-                        case "noimplicitany":
-                            options.noImplicitAny = setting.value === "true";
-                            break;
-
-                        case "nolib":
-                            options.noLib = setting.value === "true";
-                            break;
-
-                        case "out":
-                            options.out = setting.value;
-                            break;
-
-                        case "outdir":
-                            options.outDir = setting.value;
-                            break;
-
-                        case "skipdefaultlibcheck":
-                            options.skipDefaultLibCheck = setting.value === "true";
-                            break;
-
-                        case "sourceroot":
-                            options.sourceRoot = setting.value;
-                            break;
-
-                        case "maproot":
-                            options.mapRoot = setting.value;
-                            break;
-
-                        case "sourcemap":
-                            options.sourceMap = setting.value === "true";
-                            break;
-
-                        case "declaration":
-                            options.declaration = setting.value === "true";
-                            break;
-
-                        case "newline":
-                            if (setting.value.toLowerCase() === "crlf") {
-                                options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-                            }
-                            else if (setting.value.toLowerCase() === "lf") {
-                                options.newLine = ts.NewLineKind.LineFeed;
-                            }
-                            else {
-                                throw new Error("Unknown option for newLine: " + setting.value);
-                            }
-                            break;
-
-                        case "comments":
-                            options.removeComments = setting.value === "false";
-                            break;
-
-                        case "stripinternal":
-                            options.stripInternal = setting.value === "true";
-
-                        case "usecasesensitivefilenames":
-                            useCaseSensitiveFileNames = setting.value === "true";
-                            break;
-
-                        case "filename":
-                            // Not supported yet
-                            break;
-
-                        case "emitbom":
-                            options.emitBOM = setting.value === "true";
-                            break;
-
-                        case "errortruncation":
-                            options.noErrorTruncation = setting.value === "false";
-                            break;
-
-                        case "preserveconstenums":
-                            options.preserveConstEnums = setting.value === "true";
-                            break;
-
-                        case "isolatedmodules":
-                            options.isolatedModules = setting.value === "true";
-                            break;
-
-                        case "suppressimplicitanyindexerrors":
-                            options.suppressImplicitAnyIndexErrors = setting.value === "true";
-                            break;
-
-                        case "includebuiltfile":
-                            let builtFileName = libFolder + setting.value;
-                            includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
-                            break;
-
-                        case "inlinesourcemap":
-                            options.inlineSourceMap = setting.value === "true";
-                            break;
-
-                        case "inlinesources":
-                            options.inlineSources = setting.value === "true";
-                            break;
-
-                        case "jsx":
-                            options.jsx = setting.value.toLowerCase() === "react" ? ts.JsxEmit.React :
-                                          setting.value.toLowerCase() === "preserve" ? ts.JsxEmit.Preserve :
-                                          ts.JsxEmit.None;
-                            break;
-
-                        default:
-                            throw new Error("Unsupported compiler setting " + setting.flag);
-                    }
-                }
             }
 
             public compileDeclarationFiles(inputFiles: { unitName: string; content: string; }[],
