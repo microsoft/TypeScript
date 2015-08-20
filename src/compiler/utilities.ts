@@ -1732,15 +1732,15 @@ namespace ts {
         return false;
     }
 
-    export function isAccessor(node: Node): boolean {
+    export function isAccessor(node: Node): node is AccessorDeclaration {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node): boolean {
+    export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
-    export function isFunctionLike(node: Node): boolean {
+    export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -1987,7 +1987,7 @@ namespace ts {
         return false;
     }
 
-    export function isDeclaration(node: Node): boolean {
+    export function isDeclaration(node: Node): node is Declaration {
         switch (node.kind) {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
@@ -2022,7 +2022,7 @@ namespace ts {
         return false;
     }
 
-    export function isStatement(n: Node): boolean {
+    export function isStatement(n: Node): n is Statement {
         switch (n.kind) {
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
@@ -2049,7 +2049,7 @@ namespace ts {
         }
     }
 
-    export function isClassElement(n: Node): boolean {
+    export function isClassElement(n: Node): n is ClassElement {
         switch (n.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.PropertyDeclaration:
@@ -2118,7 +2118,7 @@ namespace ts {
         return false;
     }
     
-    export function isLeftHandSideExpression(expr: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Expression): expr is LeftHandSideExpression {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:
