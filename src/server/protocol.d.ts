@@ -31,6 +31,12 @@ declare namespace ts.server.protocol {
           */
         arguments?: any;
     }
+    
+    /**
+      * Request to reload the project structure for all the opened files 
+      */
+    export interface ReloadProjectsRequest extends Message {
+    }
 
     /** 
       * Server-initiated event message 
