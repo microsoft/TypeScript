@@ -913,6 +913,7 @@ module Harness {
         interface HarnesOptions {
             useCaseSensitiveFileNames?: boolean;
             includeBuiltFileNames?: string[];
+            baselineFile?: string;
         }
 
         export function setCompilerOptionForSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnesOptions): void {
@@ -1084,6 +1085,14 @@ module Harness {
                             else {
                                 throw new Error("Unknown option for jsx: " + value);
                             }
+                            break;
+
+                        case "allownontsextensions":
+                            options.allowNonTsExtensions = value === "true";
+                            break;
+                        
+                        case "baselinefile":
+                            options.baselineFile = settings[name];
                             break;
 
                         default:
