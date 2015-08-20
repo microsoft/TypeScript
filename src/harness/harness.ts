@@ -1025,6 +1025,9 @@ module Harness {
                                     options.module = ts.ModuleKind.UMD;
                                 } else if (setting.value.toLowerCase() === "commonjs") {
                                     options.module = ts.ModuleKind.CommonJS;
+                                    if (options.moduleResolution === undefined) {
+                                        options.moduleResolution = ts.ModuleResolutionKind.Classic;
+                                    }
                                 } else if (setting.value.toLowerCase() === "system") {
                                     options.module = ts.ModuleKind.System;
                                 } else if (setting.value.toLowerCase() === "unspecified") {
@@ -1036,7 +1039,16 @@ module Harness {
                                 options.module = <any>setting.value;
                             }
                             break;
-
+                        case "moduleresolution":
+                            switch((setting.value || "").toLowerCase()) {
+                                case "classic": 
+                                    options.moduleResolution = ts.ModuleResolutionKind.Classic;
+                                    break;
+                                case "node": 
+                                    options.moduleResolution = ts.ModuleResolutionKind.NodeJs;
+                                    break;
+                            }
+                            break;
                         case "target":
                         case "codegentarget":
                             if (typeof setting.value === "string") {

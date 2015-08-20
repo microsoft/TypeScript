@@ -2010,9 +2010,8 @@ namespace ts {
     }
     
     export const enum ModuleResolutionKind {
-        Legacy  = 1,
-        NodeJs  = 2,
-        BaseUrl = 3
+        Classic  = 1,
+        NodeJs  = 2
     }
     
     export interface CompilerOptions {
@@ -2054,7 +2053,6 @@ namespace ts {
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind
-        baseUrl?: string;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

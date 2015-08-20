@@ -574,6 +574,7 @@ namespace ts {
         Enables_experimental_support_for_emitting_type_metadata_for_decorators: { code: 6066, category: DiagnosticCategory.Message, key: "Enables experimental support for emitting type metadata for decorators." },
         Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower: { code: 6067, category: DiagnosticCategory.Message, key: "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower." },
         Enables_experimental_support_for_ES7_async_functions: { code: 6068, category: DiagnosticCategory.Message, key: "Enables experimental support for ES7 async functions." },
+        Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6: { code: 6069, category: DiagnosticCategory.Message, key: "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) ." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },

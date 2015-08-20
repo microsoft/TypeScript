@@ -86,30 +86,24 @@ module ts {
     describe("Node module resolution - relative paths", () => {
         
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            {
-                // loading only .d.ts files
-                
-                let containingFile = { name: containingFileName, content: ""}
-                let moduleFile = { name: moduleFileNameNoExt + ".d.ts", content: "var x;"}
-                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
-                
+            for (let ext of supportedExtensions) {
+                let containingFile = { name: containingFileName }
+                let moduleFile = { name: moduleFileNameNoExt + ext }
+                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, moduleFile));                
                 assert.equal(resolution.resolvedFileName, moduleFile.name);
-                assert.isTrue(resolution.failedLookupLocations.length === 0);
-            }
-            {
-                // does not try to load .ts files
                 
-                let containingFile = { name: containingFileName, content: ""}
-                let moduleFile = { name: moduleFileNameNoExt + ".ts", content: "var x;"}
-                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+                let failedLookupLocations: string[] = [];
+                let dir = getDirectoryPath(containingFileName);
+                for (let e of supportedExtensions) {
+                    if (e === ext) {
+                        break;
+                    }
+                    else {
+                        failedLookupLocations.push(normalizePath(getRootLength(moduleName) === 0 ? combinePaths(dir, moduleName) : moduleName) + e);
+                    }
+                }
                 
-                assert.equal(resolution.resolvedFileName, undefined);
-                assert.equal(resolution.failedLookupLocations.length, 3);
-                assert.deepEqual(resolution.failedLookupLocations, [
-                    moduleFileNameNoExt + ".d.ts",
-                    moduleFileNameNoExt + "/package.json",
-                    moduleFileNameNoExt + "/index.d.ts"
-                ])
+                assert.deepEqual(resolution.failedLookupLocations, failedLookupLocations);
             }
         }
         
@@ -129,28 +123,21 @@ module ts {
             testLoadAsFile("c:/foo/bar/baz.ts", "c:/foo", "c:/foo");
         });
         
-        function testLoadingFromPackageJson(containingFileName: string, packageJsonFileName: string, fieldName: string, fieldRef: string, moduleFileName: string, moduleName: string): void {
+        function testLoadingFromPackageJson(containingFileName: string, packageJsonFileName: string, fieldRef: string, moduleFileName: string, moduleName: string): void {
             let containingFile = { name: containingFileName };
-            let packageJson = { name: packageJsonFileName, content: JSON.stringify({ [fieldName]: fieldRef }) };
+            let packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
             let moduleFile = { name: moduleFileName };
             let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, packageJson, moduleFile));
             assert.equal(resolution.resolvedFileName, moduleFile.name);
-            // expect one failed lookup location - attempt to load module as file
-            assert.equal(resolution.failedLookupLocations.length, 1);
+            // expect three failed lookup location - attempt to load module as file with all supported extensions
+            assert.equal(resolution.failedLookupLocations.length, 3);
         }
         
         it("module name as directory - load from typings", () => {
-            testLoadingFromPackageJson("/a/b/c/d.ts", "/a/b/c/bar/package.json", "typings", "c/d/e.d.ts", "/a/b/c/bar/c/d/e.d.ts", "./bar");
-            testLoadingFromPackageJson("/a/b/c/d.ts", "/a/bar/package.json", "typings", "e.d.ts", "/a/bar/e.d.ts", "../../bar");
-            testLoadingFromPackageJson("/a/b/c/d.ts", "/bar/package.json", "typings", "e.d.ts", "/bar/e.d.ts", "/bar");
-            testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "typings", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
-        });
-        
-        it("module name as directory - load from main", () => {
-            testLoadingFromPackageJson("/a/b/c/d.ts", "/a/b/c/bar/package.json", "main", "c/d/e.d.ts", "/a/b/c/bar/c/d/e.d.ts", "./bar");
-            testLoadingFromPackageJson("/a/b/c/d.ts", "/a/bar/package.json", "main", "e.d.ts", "/a/bar/e.d.ts", "../../bar");
-            testLoadingFromPackageJson("/a/b/c/d.ts", "/bar/package.json", "main", "e.d.ts", "/bar/e.d.ts", "/bar");
-            testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "main", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
+            testLoadingFromPackageJson("/a/b/c/d.ts", "/a/b/c/bar/package.json", "c/d/e.d.ts", "/a/b/c/bar/c/d/e.d.ts", "./bar");
+            testLoadingFromPackageJson("/a/b/c/d.ts", "/a/bar/package.json", "e.d.ts", "/a/bar/e.d.ts", "../../bar");
+            testLoadingFromPackageJson("/a/b/c/d.ts", "/bar/package.json", "e.d.ts", "/bar/e.d.ts", "/bar");
+            testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
         });
         
         it ("module name as directory - load index.d.ts", () => {
@@ -159,10 +146,12 @@ module ts {
             let indexFile = { name: "/a/b/foo/index.d.ts" };
             let resolution = nodeModuleNameResolver("./foo", containingFile.name, createModuleResolutionHost(containingFile, packageJson, indexFile));
             assert.equal(resolution.resolvedFileName, indexFile.name);
-            // expect 2 failed lookup locations:
             assert.deepEqual(resolution.failedLookupLocations, [
-                "/a/b/foo.d.ts", 
-                "/c/d.d.ts"
+                "/a/b/foo.ts",
+                "/a/b/foo.tsx",
+                "/a/b/foo.d.ts",
+                "/a/b/foo/index.ts",
+                "/a/b/foo/index.tsx",
             ]);
         });
     });

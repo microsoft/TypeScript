@@ -2286,7 +2286,10 @@
         "category": "Message",
         "code": 6068
     },
-
+    "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
+        "category": "Message",
+        "code": 6069
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

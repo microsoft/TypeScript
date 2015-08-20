@@ -163,6 +163,7 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
                     noResolve: testCase.noResolve,
                     rootDir: testCase.rootDir
                 };
