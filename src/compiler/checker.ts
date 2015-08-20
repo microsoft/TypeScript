@@ -13845,7 +13845,11 @@ namespace ts {
                             }
                             break;
                     }
-
+                    
+                    if (introducesArgumentsExoticObject(location)) {
+                        copySymbol(argumentsSymbol, meaning);
+                    }
+                    
                     memberFlags = location.flags;
                     location = location.parent;
                 }
