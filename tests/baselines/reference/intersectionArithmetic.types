@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/intersection/intersectionArithmetic.ts ===
+let numberObject: number & { foo: any };
+>numberObject : number & { foo: any; }
+>foo : any
+
+let stringObject: string & { foo: any };
+>stringObject : string & { foo: any; }
+>foo : any
+
+let numberString: number & string;
+>numberString : number & string
+
+let a = numberObject + 1;
+>a : number
+>numberObject + 1 : number
+>numberObject : number & { foo: any; }
+>1 : number
+
+let b = stringObject + 1;
+>b : string
+>stringObject + 1 : string
+>stringObject : string & { foo: any; }
+>1 : number
+
+let c = numberObject + '';
+>c : string
+>numberObject + '' : string
+>numberObject : number & { foo: any; }
+>'' : string
+
+let d = stringObject + '';
+>d : string
+>stringObject + '' : string
+>stringObject : string & { foo: any; }
+>'' : string
+
+let e = numberObject + stringObject;
+>e : string
+>numberObject + stringObject : string
+>numberObject : number & { foo: any; }
+>stringObject : string & { foo: any; }
+
+let f = numberString + 1;
+>f : number
+>numberString + 1 : number
+>numberString : number & string
+>1 : number
+
+let g = numberString + '';
+>g : string
+>numberString + '' : string
+>numberString : number & string
+>'' : string
+
+let h = numberString + numberString;
+>h : number
+>numberString + numberString : number
+>numberString : number & string
+>numberString : number & string
+
+let i = numberObject * 2;
+>i : number
+>numberObject * 2 : number
+>numberObject : number & { foo: any; }
+>2 : number
+
+let j = numberString * 2;
+>j : number
+>numberString * 2 : number
+>numberString : number & string
+>2 : number
+

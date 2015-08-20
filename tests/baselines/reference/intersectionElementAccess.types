@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/intersection/intersectionElementAccess.ts ===
+let numberObject: number & { foo: any };
+>numberObject : number & { foo: any; }
+>foo : any
+
+let stringObject: string & { foo: any };
+>stringObject : string & { foo: any; }
+>foo : any
+
+let numberString: number & string;
+>numberString : number & string
+
+let object: {
+>object : { [key: string]: { stringIndexer: any; }; [index: number]: { stringIndexer: any; numberIndexer: any; }; }
+
+	[ index: number ]: { stringIndexer: any, numberIndexer: any },
+>index : number
+>stringIndexer : any
+>numberIndexer : any
+
+	[ key: string]: { stringIndexer: any }
+>key : string
+>stringIndexer : any
+}
+
+let a = object[numberObject];
+>a : { stringIndexer: any; numberIndexer: any; }
+>object[numberObject] : { stringIndexer: any; numberIndexer: any; }
+>object : { [key: string]: { stringIndexer: any; }; [index: number]: { stringIndexer: any; numberIndexer: any; }; }
+>numberObject : number & { foo: any; }
+
+let b = object[stringObject];
+>b : { stringIndexer: any; }
+>object[stringObject] : { stringIndexer: any; }
+>object : { [key: string]: { stringIndexer: any; }; [index: number]: { stringIndexer: any; numberIndexer: any; }; }
+>stringObject : string & { foo: any; }
+
+let c = object[numberString];
+>c : { stringIndexer: any; numberIndexer: any; }
+>object[numberString] : { stringIndexer: any; numberIndexer: any; }
+>object : { [key: string]: { stringIndexer: any; }; [index: number]: { stringIndexer: any; numberIndexer: any; }; }
+>numberString : number & string
+
