@@ -6923,11 +6923,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function filterComments(ranges: CommentRange[], isTopOfFileComments: boolean, isEmittedNode=true): CommentRange[] {
+                // TODO (yuisu): comment
                 if (compilerOptions.removeComments) {
-                    ranges = filter(ranges, isPinnedComments);
+                    ranges = isTopOfFileComments ? filter(ranges, isPinnedComments) : [];
                 }
                 else {
-                    // TODO (yuisu): comment
                     if (!isEmittedNode) {
                         ranges = isTopOfFileComments ? filter(ranges, isTripleSlashOrPinnedComments) : filter(ranges, isPinnedComments);
                     }
