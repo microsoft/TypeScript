@@ -5,6 +5,7 @@
 // we register it using the filename
 
 // @allowNonTsExtensions: true
+// @module: amd
 
 // @Filename: foo.js
 //// define(function(ff) {

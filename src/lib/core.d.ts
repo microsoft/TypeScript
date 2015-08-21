@@ -316,22 +316,22 @@ interface String {
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A String object or string literal that represents the regular expression
-      * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
+      * @param searchValue A string that represents the regular expression.
+      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: string, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A String object or string literal that represents the regular expression
+      * @param searchValue A string that represents the regular expression.
       * @param replacer A function that returns the replacement text.
       */
     replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
+      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
+      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: RegExp, replaceValue: string): string;
 

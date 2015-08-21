@@ -465,10 +465,13 @@ interface ImageData {
     width: number;
 }
 
-declare var ImageData: {
+interface ImageDataConstructor {
     prototype: ImageData;
-    new(): ImageData;
+    new(width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
+
+declare var ImageData: ImageDataConstructor; 
 
 interface MSApp {
     clearTemporaryWebDataAsync(): MSAppAsyncOperation;

@@ -1040,7 +1040,7 @@ namespace ts {
     export function isAmdRequireCall(expression: Node): boolean;
     export function isAmdRequireCall(expression: CallExpression): boolean {
         // of the form 'require("name")' or 'require(arg1, arg2, ...)'
-        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length > 1;
+        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length >= 1;
     }
 
     export function isAmdExportAssignment(expression: Node): boolean;
@@ -1050,6 +1050,25 @@ namespace ts {
             (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
             ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
             ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
+    }
+
+    export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
+        // e.g. define(['a', 'b', 'c'], ...) or define('myMod', ['a', 'b', 'c'], ...)
+        if (callExpr.arguments.length < 1) {
+            return undefined;
+        }
+
+        for (var i = 0; i < callExpr.arguments.length; i++) {
+            if (callExpr.arguments[i].kind === SyntaxKind.ArrayLiteralExpression) {
+                return (<ArrayLiteralExpression>callExpr.arguments[i]).elements;
+            }
+        }
+
+        if(isAmdRequireCall(callExpr)) {
+            return callExpr.arguments;
+        }
+
+        return undefined;
     }
 
     export function getExternalModuleName(node: Node): Expression {

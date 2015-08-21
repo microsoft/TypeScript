@@ -978,6 +978,7 @@ namespace ts {
                 return;
             }
 
+            debugger;
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);

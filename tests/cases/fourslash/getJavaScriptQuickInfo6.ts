@@ -5,6 +5,5 @@
 /////** @type {function(this:number)} */
 ////function f() { /**/this }
 
-debugger;
 goTo.marker();
 verify.quickInfoIs('number');

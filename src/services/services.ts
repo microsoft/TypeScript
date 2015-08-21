@@ -1842,9 +1842,8 @@ namespace ts {
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
             getNewLine: () => newLine,
-            // these two methods should never be called in transpile scenarios since 'noResolve' is set to 'true'
-            fileExists: (fileName): boolean => { throw new Error("Should never be called."); },
-            readFile: (fileName): string => { throw new Error("Should never be called."); }
+            fileExists: (fileName): boolean => fileName === inputFileName,
+            readFile: (fileName): string => ""
         };
 
         let program = createProgram([inputFileName], options, compilerHost);

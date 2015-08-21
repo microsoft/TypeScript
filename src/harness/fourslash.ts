@@ -128,13 +128,14 @@ module FourSlash {
         sourceRoot: "sourceRoot",
         allowNonTsExtensions: "allowNonTsExtensions",
         resolveReference: "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        jsx: "jsx",
     };
 
     // List of allowed metadata names
     let fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
     let globalMetadataNames = [metadataOptionNames.allowNonTsExtensions, metadataOptionNames.baselineFile, metadataOptionNames.declaration,
         metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out,
-        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot];
+        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot, metadataOptionNames.jsx];
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
         let settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
@@ -153,11 +154,11 @@ module FourSlash {
                         break;
                     case metadataOptionNames.module:
                         // create appropriate external module target for CompilationSettings
-                        switch (globalOptions[prop]) {
-                            case "AMD":
+                        switch ((globalOptions[prop] || '').toLowerCase()) {
+                            case "amd":
                                 settings.module = ts.ModuleKind.AMD;
                                 break;
-                            case "CommonJS":
+                            case "commonjs":
                                 settings.module = ts.ModuleKind.CommonJS;
                                 break;
                             default:
@@ -177,6 +178,20 @@ module FourSlash {
                         break;
                     case metadataOptionNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
+                        break;
+                    case metadataOptionNames.jsx:
+                        switch (globalOptions[prop].toLowerCase()) {
+                            case "react":
+                                settings.jsx = ts.JsxEmit.React;
+                                break;
+                            case "preserve":
+                                settings.jsx = ts.JsxEmit.Preserve;
+                                break;
+                            default:
+                                ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
+                                settings.jsx = ts.JsxEmit.None;
+                                break;
+                        }
                         break;
                 }
             }

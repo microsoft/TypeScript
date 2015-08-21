@@ -12,7 +12,4 @@
 //// });
 
 goTo.marker();
-// debug.printCurrentFileState();
-debugger;
 format.document();
-debug.printCurrentFileState();

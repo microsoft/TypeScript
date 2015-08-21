@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "1.6.0",
+    "version": "1.5.3",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -19,7 +19,8 @@
         "type": "git",
         "url": "https://github.com/Microsoft/TypeScript.git"
     },
-    "main": "./lib/typescript.js",
+    "preferGlobal": true,
+    "main": "./bin/typescript.js",
     "bin": {
         "tsc": "./bin/tsc",
         "tsserver": "./bin/tsserver"
@@ -33,21 +34,9 @@
         "chai": "latest",
         "browserify": "latest",
         "istanbul": "latest",
-        "mocha-fivemat-progress-reporter": "latest",
         "tslint": "latest"
     },
     "scripts": {
-        "pretest": "jake tests",
-        "test": "jake runtests",
-        "build": "npm run build:compiler && npm run build:tests",
-        "build:compiler": "jake local",
-        "build:tests": "jake tests",
-        "clean": "jake clean"
-    },
-    "browser": {
-        "buffer": false,
-        "fs": false,
-        "os": false,
-        "path": false
-    }    
+        "test": "jake runtests"
+    }
 }
