@@ -26,7 +26,6 @@
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
-var Buffer: BufferConstructor = require("buffer").Buffer;
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
@@ -55,9 +54,17 @@ module Utils {
             return ExecutionEnvironment.Node;
         }
     }
-
+    
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
+    const Buffer: BufferConstructor = currentExecutionEnvironment !== ExecutionEnvironment.Browser 
+        ? require("buffer").Buffer 
+        : undefined;
+
+    export function encodeString(s: string): string {
+        return Buffer ? (new Buffer(s)).toString("utf8") : s;
+    }
+    
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         let environment = getExecutionEnvironment();
         switch (environment) {
@@ -1736,7 +1743,7 @@ module Harness {
         }
 
         function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
-            let encoded_actual = (new Buffer(actual)).toString("utf8");
+            let encoded_actual =  Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
                 let errMsg = "The baseline file " + relativeFileName + " has changed";
