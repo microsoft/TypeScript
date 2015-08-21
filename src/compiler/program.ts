@@ -604,6 +604,7 @@ namespace ts {
                         }
                         break;
                 }
+                
                 if (isJavaScript) {
                     forEachChild(node, visit);
                 }

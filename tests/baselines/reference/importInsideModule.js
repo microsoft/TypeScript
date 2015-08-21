@@ -9,6 +9,8 @@ export module myModule {
     var a = foo.x;
 }
 
+//// [importInsideModule_file1.js]
+exports.x = 1;
 //// [importInsideModule_file2.js]
 var myModule;
 (function (myModule) {

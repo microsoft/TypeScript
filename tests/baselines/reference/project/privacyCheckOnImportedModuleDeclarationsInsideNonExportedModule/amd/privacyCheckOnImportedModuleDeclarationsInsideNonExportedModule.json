@@ -6,9 +6,13 @@
     ],
     "resolvedInputFiles": [
         "lib.d.ts",
+        "mExported.ts",
+        "mNonExported.ts",
         "test.ts"
     ],
     "emittedFiles": [
+        "mExported.js",
+        "mNonExported.js",
         "test.js"
     ]
 }
