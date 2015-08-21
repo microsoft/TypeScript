@@ -420,7 +420,10 @@ module Harness {
         getMemoryUsage?(): number;
     }
     export var IO: IO;
-
+    
+    // harness always uses one kind of new line
+    const harnessNewLine = "\r\n";
+    
     module IOImpl {
         declare class Enumerator {
             public atEnd(): boolean;
@@ -439,7 +442,7 @@ module Harness {
 
             export const resolvePath = (path: string) => ts.sys.resolvePath(path);
             export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
-            export const newLine = () => ts.sys.newLine;
+            export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => ts.sys.useCaseSensitiveFileNames;
 
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
@@ -505,7 +508,7 @@ module Harness {
             
             export const resolvePath = (path: string) => ts.sys.resolvePath(path);
             export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
-            export const newLine = () => ts.sys.newLine;
+            export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => ts.sys.useCaseSensitiveFileNames;
 
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
@@ -576,7 +579,7 @@ module Harness {
         export module Network {
             let serverRoot = "http://localhost:8888/";
 
-            export const newLine = () => "\r\n";
+            export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => false;
             export const getCurrentDirectory = () => "";
             let supportsCodePage = () => false;
