@@ -1,6 +1,8 @@
 /// <reference path="core.ts"/>
 
 namespace ts {
+    declare var __webpack_require__: any;
+
     export interface System {
         args: string[];
         newLine: string;
@@ -331,12 +333,16 @@ namespace ts {
                 }
             };
         }
+        
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
-        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
+        else if (typeof process !== "undefined" && 
+                 process.nextTick && 
+                 typeof require !== "undefined" && 
+                 typeof __webpack_require__ === "undefined") {
             // process and process.nextTick checks if current environment is node-like
-            // process.browser check excludes webpack and browserify
+            // __webpack_require__ checks that current environment is not webpack (since it does not shim 'fs')
             return getNodeSystem();
         }
         else {
