@@ -472,7 +472,7 @@ namespace ts {
                       break;
 
                   case CharacterCodes.hash:
-                      if (isShebangTrivia(text, pos)) {
+                      if (pos === 0 && isShebangTrivia(text, pos)) {
                           pos = scanShebangTrivia(text, pos);
                           continue;
                       }
@@ -672,7 +672,6 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    /* @internal */
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,

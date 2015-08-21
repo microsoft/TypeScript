@@ -1,0 +1,12 @@
+error TS5053: Option 'out' cannot be specified with option 'outFile'.
+
+
+!!! error TS5053: Option 'out' cannot be specified with option 'outFile'.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    
+    // --out and --outFile error
+    
+    class A { }
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    class B { }

@@ -1019,11 +1019,6 @@ declare namespace ts {
         emitSkipped: boolean;
         diagnostics: Diagnostic[];
     }
-    interface TypeCheckerHost {
-        getCompilerOptions(): CompilerOptions;
-        getSourceFiles(): SourceFile[];
-        getSourceFile(fileName: string): SourceFile;
-    }
     interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
@@ -1450,6 +1445,7 @@ declare namespace ts {
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
+    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant: ts.LanguageVariant, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
