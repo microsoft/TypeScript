@@ -158,7 +158,7 @@ class ProjectRunner extends RunnerBase {
                 return {
                     declaration: !!testCase.declaration,
                     sourceMap: !!testCase.sourceMap,
-                    out: testCase.out,
+                    outFile: testCase.out,
                     outDir: testCase.outDir,
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
@@ -299,7 +299,7 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
                 }
                 else {
-                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.out) + ".d.ts";
+                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile|| compilerOptions.out) + ".d.ts";
                     let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);

@@ -2032,6 +2032,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
+        outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;

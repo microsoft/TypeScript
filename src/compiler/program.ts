@@ -413,7 +413,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            let emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(options.out ? undefined : sourceFile);
+            let emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out)? undefined : sourceFile);
 
             let start = new Date().getTime();
 
@@ -804,6 +804,10 @@ namespace ts {
                 if (options.out) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules"));
                 }
+
+                if (options.outFile) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules"));
+                }
             }
 
             if (options.inlineSourceMap) {
@@ -825,6 +829,10 @@ namespace ts {
                 }
             }
 
+            if (options.out && options.outFile) {
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
+            }
+
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
@@ -837,6 +845,7 @@ namespace ts {
             }
 
             let languageVersion = options.target || ScriptTarget.ES3;
+            let outFile = options.outFile || options.out;
 
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (options.isolatedModules) {
@@ -866,7 +875,7 @@ namespace ts {
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
                 (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
-                    (!options.out || firstExternalModuleSourceFile !== undefined))) {
+                    (!outFile || firstExternalModuleSourceFile !== undefined))) {
 
                 if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
@@ -888,6 +897,10 @@ namespace ts {
             if (options.noEmit) {
                 if (options.out) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "out"));
+                }
+
+                if (options.outFile) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outFile"));
                 }
 
                 if (options.outDir) {

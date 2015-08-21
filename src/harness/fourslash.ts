@@ -123,6 +123,7 @@ module FourSlash {
         mapRoot: "mapRoot",
         module: "module",
         out: "out",
+        outFile: "outFile",
         outDir: "outDir",
         sourceMap: "sourceMap",
         sourceRoot: "sourceRoot",
@@ -133,7 +134,7 @@ module FourSlash {
     // List of allowed metadata names
     let fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
     let globalMetadataNames = [metadataOptionNames.allowNonTsExtensions, metadataOptionNames.baselineFile, metadataOptionNames.declaration,
-        metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out,
+        metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out, metadataOptionNames.outFile,
         metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot];
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
@@ -168,6 +169,9 @@ module FourSlash {
                         break;
                     case metadataOptionNames.out:
                         settings.out = globalOptions[prop];
+                        break;
+                    case metadataOptionNames.outFile:
+                        settings.outFile = globalOptions[prop];
                         break;
                     case metadataOptionNames.outDir:
                         settings.outDir = globalOptions[prop];
@@ -2407,7 +2411,7 @@ module FourSlash {
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
 
-        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { outFile: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
         let sourceFile = host.getSourceFile(fileName, ts.ScriptTarget.ES3);
 
