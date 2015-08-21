@@ -429,6 +429,8 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxExpression:
                     return true;
             }
             return false;
