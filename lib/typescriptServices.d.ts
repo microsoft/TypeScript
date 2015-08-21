@@ -1445,7 +1445,7 @@ declare namespace ts {
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
-    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant: ts.LanguageVariant, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
+    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant: LanguageVariant, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
