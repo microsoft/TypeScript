@@ -942,7 +942,7 @@ module Harness {
             baselineFile?: string;
         }
 
-        export function setCompilerOptionForSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnesOptions): void {
+        export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnesOptions): void {
             for (let name in settings) {
                 if (settings.hasOwnProperty(name)) {
                     let value = settings[name] ? settings[name].toLowerCase() : settings[name];
@@ -1203,7 +1203,7 @@ module Harness {
                 options.skipDefaultLibCheck = true;
 
                 // Parse settings
-                setCompilerOptionForSetting(this.settings, options);
+                setCompilerOptionsFromHarnessSetting(this.settings, options);
 
                 // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
                 // Treat them as library files, so include them in build, but not in baselines.

@@ -127,7 +127,7 @@ module FourSlash {
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
         let settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
-        Harness.Compiler.setCompilerOptionForSetting(globalOptions, settings);
+        Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
         return settings;
     }
 
