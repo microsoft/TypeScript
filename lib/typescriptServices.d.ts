@@ -1019,11 +1019,6 @@ declare namespace ts {
         emitSkipped: boolean;
         diagnostics: Diagnostic[];
     }
-    interface TypeCheckerHost {
-        getCompilerOptions(): CompilerOptions;
-        getSourceFiles(): SourceFile[];
-        getSourceFile(fileName: string): SourceFile;
-    }
     interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;

@@ -1411,6 +1411,7 @@ namespace ts {
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
