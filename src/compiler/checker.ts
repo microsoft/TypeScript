@@ -3770,11 +3770,11 @@ namespace ts {
             return result;
         }
 
-        function isRestOrOptionalParameter(node: ParameterDeclaration) {
-            return isRestParameter(node) || isOptionalParameter(node);
+        function isRestOrOptionalParameter(node: ParameterDeclaration, skipSignatureCheck?: boolean) {
+            return isRestParameter(node) || isOptionalParameter(node, skipSignatureCheck);
         }
 
-        function isOptionalParameter(node: ParameterDeclaration) {
+        function isOptionalParameter(node: ParameterDeclaration, skipSignatureCheck?: boolean) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
@@ -3797,6 +3797,10 @@ namespace ts {
             }
 
             if (node.initializer) {
+                if (skipSignatureCheck) {
+                    return true;
+                }
+
                 let signatureDeclaration = <SignatureDeclaration>node.parent;
                 let signature = getSignatureFromDeclaration(signatureDeclaration);
                 let parameterIndex = signatureDeclaration.parameters.indexOf(node);
@@ -3830,7 +3834,7 @@ namespace ts {
                         hasStringLiterals = true;
                     }
 
-                    if (param.initializer || param.questionToken || param.dotDotDotToken) {
+                    if (isRestOrOptionalParameter(param, /*skipSignatureCheck*/ true)) {
                         if (minArgumentCount < 0) {
                             minArgumentCount = i;
                         }
