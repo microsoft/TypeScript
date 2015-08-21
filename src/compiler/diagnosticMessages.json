@@ -2457,5 +2457,9 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "Invalid regular expression literal.": {
+      "category": "Error",
+      "code": 17006
     }
 }

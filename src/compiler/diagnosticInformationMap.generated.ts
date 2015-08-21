@@ -616,5 +616,6 @@ namespace ts {
         JSX_attribute_expected: { code: 17003, category: DiagnosticCategory.Error, key: "JSX attribute expected." },
         Cannot_use_JSX_unless_the_jsx_flag_is_provided: { code: 17004, category: DiagnosticCategory.Error, key: "Cannot use JSX unless the '--jsx' flag is provided." },
         A_constructor_cannot_contain_a_super_call_when_its_class_extends_null: { code: 17005, category: DiagnosticCategory.Error, key: "A constructor cannot contain a 'super' call when its class extends 'null'" },
+        Invalid_regular_expression_literal: { code: 17006, category: DiagnosticCategory.Error, key: "Invalid regular expression literal." },
     };
 }
