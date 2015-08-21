@@ -360,7 +360,9 @@ namespace ts.formatting {
             range: TextRange, 
             inheritedIndentation: number): number {
             
-            if (rangeOverlapsWithStartEnd(range, startPos, endPos)) {
+            if (rangeOverlapsWithStartEnd(range, startPos, endPos) ||
+                rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */) {
+
                 if (inheritedIndentation !== Constants.Unknown) {
                     return inheritedIndentation;
                 }
@@ -387,7 +389,10 @@ namespace ts.formatting {
 
             let indentation = inheritedIndentation;
             if (indentation === Constants.Unknown) {
-                if (isSomeBlock(node.kind)) {
+                if (isIndentPreventedChildNode(parent.kind, node.kind)) {
+                    indentation = parentDynamicIndentation.getIndentation();
+                }
+                else if (isSomeBlock(node.kind)) {
                     // blocks should be indented in 
                     // - other blocks
                     // - source file 
@@ -1014,6 +1019,14 @@ namespace ts.formatting {
                 return true;
         }
         return false;
+    }
+
+    function isIndentPreventedChildNode(parent: SyntaxKind, child: SyntaxKind) {
+        switch (parent) {
+            case SyntaxKind.JsxElement: {
+                return child === SyntaxKind.JsxClosingElement;
+            }
+        }
     }
 
     function getOpenTokenForList(node: Node, list: Node[]) {
