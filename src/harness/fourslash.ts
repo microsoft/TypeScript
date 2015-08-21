@@ -127,7 +127,6 @@ module FourSlash {
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
         let settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
-
         Harness.Compiler.setCompilerOptionForSetting(globalOptions, settings);
         return settings;
     }
@@ -306,7 +305,7 @@ module FourSlash {
             this.formatCodeOptions = {
                 IndentSize: 4,
                 TabSize: 4,
-                NewLineCharacter: ts.sys.newLine,
+                NewLineCharacter: Harness.IO.newLine(),
                 ConvertTabsToSpaces: true,
                 InsertSpaceAfterCommaDelimiter: true,
                 InsertSpaceAfterSemicolonInForStatements: true,
@@ -484,7 +483,7 @@ module FourSlash {
             errors.forEach(function (error: ts.Diagnostic) {
                 Harness.IO.log("  minChar: " + error.start +
                     ", limChar: " + (error.start + error.length) +
-                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, ts.sys.newLine) + "\n");
+                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine()) + "\n");
             });
         }
 
@@ -1195,21 +1194,21 @@ module FourSlash {
                     emitFiles.forEach(emitFile => {
                         let emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
                         // Print emitOutputStatus in readable format
-                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + ts.sys.newLine;
+                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
 
                         if (emitOutput.emitSkipped) {
-                            resultString += "Diagnostics:" + ts.sys.newLine;
+                            resultString += "Diagnostics:" + Harness.IO.newLine();
                             let diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (let i = 0, n = diagnostics.length; i < n; i++) {
-                                resultString += "  " + diagnostics[0].messageText + ts.sys.newLine;
+                                resultString += "  " + diagnostics[0].messageText + Harness.IO.newLine();
                             }
                         }
 
                         emitOutput.outputFiles.forEach((outputFile, idx, array) => {
-                            let fileName = "FileName : " + outputFile.name + ts.sys.newLine;
+                            let fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + fileName + outputFile.text;
                         });
-                        resultString += ts.sys.newLine;
+                        resultString += Harness.IO.newLine();
                     });
 
                     return resultString;
@@ -1246,7 +1245,7 @@ module FourSlash {
                     Harness.IO.log(
                         "start: " + err.start +
                         ", length: " + err.length +
-                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine));
+                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, Harness.IO.newLine()));
                 });
             }
         }
@@ -1820,9 +1819,9 @@ module FourSlash {
             }
 
             function jsonMismatchString() {
-                return ts.sys.newLine +
-                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k, v) => v, 2) + "'" + ts.sys.newLine +
-                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                return Harness.IO.newLine() +
+                    "expected: '" + Harness.IO.newLine() + JSON.stringify(expected, (k, v) => v, 2) + "'" + Harness.IO.newLine() +
+                    "actual:   '" + Harness.IO.newLine() + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -2331,7 +2330,7 @@ module FourSlash {
         let host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined }],
             (fn, contents) => fourslashJsOutput = contents,
             ts.ScriptTarget.Latest,
-            ts.sys.useCaseSensitiveFileNames);
+            Harness.IO.useCaseSensitiveFileNames());
 
         let program = ts.createProgram([Harness.Compiler.fourslashFileName], { noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
@@ -2353,16 +2352,16 @@ module FourSlash {
             ],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
-            ts.sys.useCaseSensitiveFileNames);
+            Harness.IO.useCaseSensitiveFileNames());
 
-        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { outFile: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
         let sourceFile = host.getSourceFile(fileName, ts.ScriptTarget.ES3);
 
         let diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
         if (diagnostics.length > 0) {
             throw new Error(`Error compiling ${fileName}: ` +
-                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join("\r\n"));
+                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, Harness.IO.newLine())).join("\r\n"));
         }
 
         program.emit(sourceFile);
