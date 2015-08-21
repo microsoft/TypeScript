@@ -78,8 +78,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             });
 
-            if (compilerOptions.out) {
-                emitFile(compilerOptions.out);
+            if (compilerOptions.outFile || compilerOptions.out) {
+                emitFile(compilerOptions.outFile || compilerOptions.out);
             }
         }
         else {
@@ -88,8 +88,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
-            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                emitFile(compilerOptions.out);
+            else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
+                emitFile(compilerOptions.outFile || compilerOptions.out);
             }
         }
 
