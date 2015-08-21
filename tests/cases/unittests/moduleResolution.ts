@@ -6,73 +6,23 @@ declare namespace chai.assert {
 }
 
 module ts {
-   
-    interface Directory {
-        name: string;
-        children: Map<File | Directory>;
-    }
-    
+
     interface File {
         name: string
         content?: string 
     }
 
     function createModuleResolutionHost(...files: File[]): ModuleResolutionHost {
-        let root = makeFS(files);
+        let map = arrayToMap(files, f => f.name);
         
         return { fileExists, readFile };
         
         function fileExists(path: string): boolean {
-            return findFile(path, root) !== undefined;
+            return hasProperty(map, path);
         }
         
         function readFile(path: string): string {
-            let f = findFile(path, root);
-            return f && f.content;
-        }
-        
-        function findFile(path: string, fse: File | Directory): File {
-            if (!fse) {
-                return undefined;
-            }
-            
-            if (isDirectory(fse)) {
-                let {dir, rel} = splitPath(path);
-                return findFile(rel, (<Directory>fse).children[dir]);
-            }
-            else {
-                return !path && <File>fse;
-            }
-        }
-        
-        function isDirectory(fse: Directory | File): boolean {
-            return (<Directory>fse).children !== undefined;
-        }
-        
-        function makeFS(files: File[]): Directory {
-            // create root
-            let {dir} = splitPath(files[0].name);
-            let root: Directory = { name: dir, children: {} };
-            
-            for(let f of files) {
-                addFile(f.name, f.content, root);
-            }
-            
-            function addFile(path: string, content: string, parent: Directory) {
-                Debug.assert(parent !== undefined);
-                
-                let {dir, rel} = splitPath(path);
-                if (rel) {
-                    let d = parent.children[dir] || (parent.children[dir] = { name: dir, children: {} });
-                    Debug.assert(isDirectory(d))
-                    addFile(rel, content, <Directory>d);
-                }
-                else {
-                    parent.children[dir] = <File>{ name: dir, content };
-                }
-            }
-            
-            return root;
+            return hasProperty(map, path) ? map[path].content : undefined;
         }
     }
 
