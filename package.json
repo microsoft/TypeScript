@@ -45,9 +45,6 @@
         "clean": "jake clean"
     },
     "browser": {
-        "buffer": false,
-        "fs": false,
-        "os": false,
-        "path": false
-    }    
+        "fs": false
+    }
 }
