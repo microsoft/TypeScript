@@ -1116,13 +1116,15 @@ namespace ts.server {
                         else {
                             // if the root file was opened by client, it would belong to either 
                             // openFileRoots or openFileReferenced.
-                            if (this.openFileRoots.indexOf(info) >= 0) {
-                                this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                            if (info.isOpen) {
+                                if (this.openFileRoots.indexOf(info) >= 0) {
+                                    this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                }
+                                if (this.openFilesReferenced.indexOf(info) >= 0) {
+                                    this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                                }
+                                this.openFileRootsConfigured.push(info);
                             }
-                            if (this.openFilesReferenced.indexOf(info) >= 0) {
-                                this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
-                            }
-                            this.openFileRootsConfigured.push(info);
                         }
                         project.addRoot(info);
                     }
