@@ -2989,7 +2989,8 @@ namespace ts {
                     switch (tag.kind) {
                         case SyntaxKind.JSDocTypeTag:
                         case SyntaxKind.JSDocParameterTag:
-                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag>tag;
+                        case SyntaxKind.JSDocReturnTag:
+                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
                             if (tagWithExpression.typeExpression) {
                                 insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
                             }

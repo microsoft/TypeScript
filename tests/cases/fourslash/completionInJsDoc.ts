@@ -22,6 +22,12 @@
 ////
 ////// @pa/*7*/
 ////var v7;
+////
+/////** @param { n/*8*/ } */
+////var v8;
+////
+/////** @return { n/*9*/ } */
+////var v9;
 
 goTo.marker('1');
 verify.completionListContains("constructor");
@@ -47,4 +53,10 @@ verify.completionListIsEmpty();
 
 goTo.marker('7');
 verify.completionListIsEmpty();
+
+goTo.marker('8');
+verify.completionListContains('number');
+
+goTo.marker('9');
+verify.completionListContains('number');
 
