@@ -17,5 +17,4 @@
 //// var x = <MyClass name={[|n/**/n|]}></MyClass>;
 
 goTo.marker();
-debugger;
 verify.renameLocations(false, false);
