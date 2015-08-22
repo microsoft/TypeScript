@@ -3,7 +3,7 @@
 // @declaration: true
 // @module: commonjs
 //// @out: bin\
-// @comments: true
+// @removeComments: false
 
 // my class comments
 class MyClass

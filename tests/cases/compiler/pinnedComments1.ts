@@ -1,4 +1,4 @@
-// @comments: false
+// @removeComments: true
 
 /* unpinned comment */
 /*! pinned comment */

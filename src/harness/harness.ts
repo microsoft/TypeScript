@@ -838,9 +838,9 @@ module Harness {
         }
 
         export function createSourceFileAndAssertInvariants(
-                fileName: string,
-                sourceText: string,
-                languageVersion: ts.ScriptTarget) {
+            fileName: string,
+            sourceText: string,
+            languageVersion: ts.ScriptTarget) {
             // We'll only assert inletiants outside of light mode. 
             const shouldAssertInvariants = !Harness.lightMode;
             
@@ -870,13 +870,13 @@ module Harness {
         }
 
         export function createCompilerHost(
-                inputFiles: { unitName: string; content: string; }[],
-                writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
-                scriptTarget: ts.ScriptTarget,
-                useCaseSensitiveFileNames: boolean,
-                // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
-                currentDirectory?: string,
-                newLineKind?: ts.NewLineKind): ts.CompilerHost {
+            inputFiles: { unitName: string; content: string; }[],
+            writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
+            scriptTarget: ts.ScriptTarget,
+            useCaseSensitiveFileNames: boolean,
+            // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
+            currentDirectory?: string,
+            newLineKind?: ts.NewLineKind): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -894,7 +894,7 @@ module Harness {
                 }
             };
             inputFiles.forEach(register);
-            
+
             function getSourceFile(fn: string, languageVersion: ts.ScriptTarget) {
                 fn = ts.normalizePath(fn);
                 if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
@@ -938,200 +938,64 @@ module Harness {
 
         interface HarnesOptions {
             useCaseSensitiveFileNames?: boolean;
-            includeBuiltFileNames?: string[];
+            includeBuiltFile?: string;
             baselineFile?: string;
+        }
+
+        // Additional options not already in ts.optionDeclarations 
+        const harnessOptionDeclarations: ts.CommandLineOption[] = [
+            { name: "allowNonTsExtensions", type: "boolean" },
+            { name: "useCaseSensitiveFileNames", type: "boolean" },
+            { name: "baselineFile", type: "string" },
+            { name: "includeBuiltFile", type: "string" },
+            { name: "fileName", type: "string" },
+            { name: "noErrorTruncation", type: "boolean" }
+        ];
+
+        let optionsIndex: ts.Map<ts.CommandLineOption>;
+        function getCommandLineOption(name: string): ts.CommandLineOption {
+            if (!optionsIndex) {
+                optionsIndex = {};
+                let optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
+                for (let option of optionDeclarations) {
+                    optionsIndex[option.name.toLowerCase()] = option;
+                }
+            }
+            return ts.lookUp(optionsIndex, name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnesOptions): void {
             for (let name in settings) {
                 if (settings.hasOwnProperty(name)) {
-                    let value = settings[name] ? settings[name].toLowerCase() : settings[name];
-                    switch (name.toLowerCase()) {
-                        case "module":
-                            if (value === "amd") {
-                                options.module = ts.ModuleKind.AMD;
-                            } else if (value === "umd") {
-                                options.module = ts.ModuleKind.UMD;
-                            } else if (value === "commonjs") {
-                                options.module = ts.ModuleKind.CommonJS;
-                            } else if (value === "system") {
-                                options.module = ts.ModuleKind.System;
-                            } else if (value === "unspecified") {
-                                options.module = ts.ModuleKind.None;
-                            } else {
-                                throw new Error("Unknown module type " + value);
-                            }
-                            break;
-
-                        case "target":
-                            if (value === "es3") {
-                                options.target = ts.ScriptTarget.ES3;
-                            } else if (value === "es5") {
-                                options.target = ts.ScriptTarget.ES5;
-                            } else if (value === "es6") {
-                                options.target = ts.ScriptTarget.ES6;
-                            } else {
-                                throw new Error("Unknown compile target " + value);
-                            }
-                            break;
-
-                        case "experimentaldecorators":
-                            options.experimentalDecorators = value === "true";
-                            break;
-
-                        case "emitdecoratormetadata":
-                            options.emitDecoratorMetadata = value === "true";
-                            break;
-
-                        case "experimentalasyncfunctions":
-                            options.experimentalAsyncFunctions = value === "true";
-                            break;
-
-                        case "noemithelpers":
-                            options.noEmitHelpers = value === "true";
-                            break;
-
-                        case "noemitonerror":
-                            options.noEmitOnError = value === "true";
-                            break;
-
-                        case "noresolve":
-                            options.noResolve = value === "true";
-                            break;
-
-                        case "noimplicitany":
-                            options.noImplicitAny = value === "true";
-                            break;
-
-                        case "nolib":
-                            options.noLib = value === "true";
-                            break;
-
-                        case "out":
-                            options.out = settings[name];
-                            break;
-
-                        case "outfile":
-                            options.outFile = settings[name];
-                            break;
-
-                        case "outdir":
-                            options.outDir = settings[name];
-                            break;
-
-                        case "skipdefaultlibcheck":
-                            options.skipDefaultLibCheck = value === "true";
-                            break;
-
-                        case "sourceroot":
-                            options.sourceRoot = settings[name];
-                            break;
-
-                        case "maproot":
-                            options.mapRoot = settings[name];
-                            break;
-
-                        case "sourcemap":
-                            options.sourceMap = value === "true";
-                            break;
-
-                        case "declaration":
-                            options.declaration = value === "true";
-                            break;
-
-                        case "newline":
-                            if (value === "crlf") {
-                                options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-                            }
-                            else if (value === "lf") {
-                                options.newLine = ts.NewLineKind.LineFeed;
-                            }
-                            else {
-                                throw new Error("Unknown option for newLine: " + value);
-                            }
-                            break;
-
-                        case "comments":
-                            options.removeComments = value === "false";
-                            break;
-
-                        case "stripinternal":
-                            options.stripInternal = value === "true";
-                            break;
-
-                        case "usecasesensitivefilenames":
-                            options.useCaseSensitiveFileNames = value === "true";
-                            break;
-
-                        case "filename":
-                            // Not supported yet
-                            break;
-
-                        case "emitbom":
-                            options.emitBOM = value === "true";
-                            break;
-
-                        case "errortruncation":
-                            options.noErrorTruncation = value === "false";
-                            break;
-
-                        case "preserveconstenums":
-                            options.preserveConstEnums = value === "true";
-                            break;
-
-                        case "isolatedmodules":
-                            options.isolatedModules = value === "true";
-                            break;
-
-                        case "suppressimplicitanyindexerrors":
-                            options.suppressImplicitAnyIndexErrors = value === "true";
-                            break;
-
-                        case "includebuiltfile":
-                            if (!options.includeBuiltFileNames) {
-                                options.includeBuiltFileNames = [];
-                            }
-                            options.includeBuiltFileNames.push(settings[name]);
-                            break;
-
-                        case "inlinesourcemap":
-                            options.inlineSourceMap = value === "true";
-                            break;
-
-                        case "inlinesources":
-                            options.inlineSources = value === "true";
-                            break;
-
-                        case "jsx":
-                            if (value === "react") {
-                                options.jsx = ts.JsxEmit.React;
-                            }
-                            else if (value === "preserve") {
-                                options.jsx = ts.JsxEmit.Preserve;
-                            }
-                            else if (value === "none") {
-                                options.jsx = ts.JsxEmit.None;
-                            }
-                            else {
-                                throw new Error("Unknown option for jsx: " + value);
-                            }
-                            break;
-
-                        case "allownontsextensions":
-                            options.allowNonTsExtensions = value === "true";
-                            break;
-                        
-                        case "baselinefile":
-                            options.baselineFile = settings[name];
-                            break;
-
-                        default:
-                            throw new Error("Unsupported compiler setting " + value);
+                    let value = settings[name];
+                    let option = getCommandLineOption(name);
+                    if (option) {
+                        switch (option.type) {
+                            case "boolean":
+                                options[option.name] = value.toLowerCase() === "true";
+                                break;
+                            case "string":
+                                options[option.name] = value;
+                                break;
+                            // If not a primitive, the possible types are specified in what is effectively a map of options.
+                            default:
+                                let map = <ts.Map<number>>option.type;
+                                let key = (value).toLowerCase();
+                                if (ts.hasProperty(map, key)) {
+                                    options[option.name] = map[key];
+                                }
+                                else {
+                                    throw new Error(`Unkown value '${value}' for compiler option '${name}'.`);
+                                }
+                        }
+                    }
+                    else {
+                        throw new Error(`Unkown compiler option '${name}'.`);
                     }
                 }
             }
         }
-  
+
         export class HarnessCompiler {
             private inputFiles: { unitName: string; content: string }[] = [];
             private compileOptions: ts.CompilerOptions;
@@ -1194,13 +1058,13 @@ module Harness {
                 options.module = options.module || ts.ModuleKind.None;
                 options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
                 options.noErrorTruncation = true;
+                options.skipDefaultLibCheck = true;
 
                 if (settingsCallback) {
                     settingsCallback(null);
                 }
 
                 let newLine = "\r\n";
-                options.skipDefaultLibCheck = true;
 
                 // Parse settings
                 setCompilerOptionsFromHarnessSetting(this.settings, options);
@@ -1208,10 +1072,10 @@ module Harness {
                 // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
                 // Treat them as library files, so include them in build, but not in baselines.
                 let includeBuiltFiles: { unitName: string; content: string }[] = [];
-                ts.forEach(options.includeBuiltFileNames, fileName => {
-                    let builtFileName = libFolder + fileName;
+                if (options.includeBuiltFile) {
+                    let builtFileName = libFolder + options.includeBuiltFile;
                     includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
-                });
+                }
 
                 let useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
                

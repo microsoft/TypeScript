@@ -1,7 +1,7 @@
-//@module: commonjs
+// @module: commonjs
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 // @Filename: commentsExternalModules2_0.ts
 /** Module comment*/
