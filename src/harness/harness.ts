@@ -1213,8 +1213,8 @@ module Harness {
                     includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
                 });
 
-                let useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : ts.sys.useCaseSensitiveFileNames;
-
+                let useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
+               
                 let fileOutputs: GeneratedFile[] = [];
 
                 let programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
@@ -1230,13 +1230,10 @@ module Harness {
                 let errors = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
                 this.lastErrors = errors;
 
-                let result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
+                let result = new CompilerResult(fileOutputs, errors, program, Harness.IO.getCurrentDirectory(), emitResult.sourceMaps);
                 onComplete(result, program);
 
-                // reset what newline means in case the last test changed it
-                ts.sys.newLine = newLine;
                 return options;
-                
             }
 
             public compileDeclarationFiles(inputFiles: { unitName: string; content: string; }[],
