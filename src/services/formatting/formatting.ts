@@ -389,7 +389,7 @@ namespace ts.formatting {
 
             let indentation = inheritedIndentation;
             if (indentation === Constants.Unknown) {
-                if (isIndentPreventedCoreComponent(node.kind)) {
+                if (isIndentPreventedChildNode(parent.kind, node.kind)) {
                     indentation = parentDynamicIndentation.getIndentation();
                 }
                 else if (isSomeBlock(node.kind)) {
@@ -479,12 +479,21 @@ namespace ts.formatting {
                             return indentation;
                         }
                     }
-                    if (isIndentPreventedCoreComponent(kind)) {
-                        return indentation;
-                    }
-                    else {
-                        // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
-                        return nodeStartLine !== line ? indentation + delta : indentation;
+                    switch (kind) {
+                        // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
+                        case SyntaxKind.OpenBraceToken:
+                        case SyntaxKind.CloseBraceToken:
+                        case SyntaxKind.OpenBracketToken:
+                        case SyntaxKind.CloseBracketToken:
+                        case SyntaxKind.OpenParenToken:
+                        case SyntaxKind.CloseParenToken:
+                        case SyntaxKind.ElseKeyword:
+                        case SyntaxKind.WhileKeyword:
+                        case SyntaxKind.AtToken:
+                            return indentation;
+                        default:
+                            // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
+                            return nodeStartLine !== line ? indentation + delta : indentation;
                     }
                 },
                 getIndentation: () => indentation,
@@ -1012,6 +1021,14 @@ namespace ts.formatting {
         return false;
     }
 
+    function isIndentPreventedChildNode(parent: SyntaxKind, child: SyntaxKind) {
+        switch (parent) {
+            case SyntaxKind.JsxElement: {
+                return child === SyntaxKind.JsxClosingElement;
+            }
+        }
+    }
+
     function isIndentPreventedCoreComponent(child: SyntaxKind) {
         switch (child) {
             // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
@@ -1027,6 +1044,7 @@ namespace ts.formatting {
             case SyntaxKind.JsxClosingElement:
                 return true;
         }
+        return false;
     }
 
     function getOpenTokenForList(node: Node, list: Node[]) {
