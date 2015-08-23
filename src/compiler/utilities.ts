@@ -2052,11 +2052,11 @@ namespace ts {
     }
 
     export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+        return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 
     export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+        return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
     }
 
     /**
