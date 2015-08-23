@@ -121,9 +121,10 @@ namespace ts.server {
         private changeSeq = 0;
 
         constructor(
-            private host: ServerHost, 
-            private byteLength: (buf: string, encoding?: string) => number, 
-            private hrtime: (start?: number[]) => number[], 
+            private host: ServerHost,
+            private writeHost: (data: string) => void,
+            private byteLength: (buf: string, encoding?: string) => number,
+            private hrtime: (start?: number[]) => number[],
             private logger: Logger
         ) {
             this.projectService =
@@ -153,7 +154,7 @@ namespace ts.server {
         }
 
         private sendLineToClient(line: string) {
-            this.host.write(line + this.host.newLine);
+            this.writeHost(line + this.host.newLine);
         }
 
         public send(msg: protocol.Message) {

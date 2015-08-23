@@ -11,7 +11,10 @@ namespace ts.server {
         input: process.stdin,
         output: process.stdout,
         terminal: false,
-    });  
+    });
+
+    // Using rl.write causes the written data to fire a 'line' event
+    var writeHost = (data: string) => process.stdout.write(data);
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -170,11 +173,11 @@ namespace ts.server {
         removeFile(file: WatchedFile) {
             this.watchedFiles = WatchedFileSet.copyListRemovingItem(file, this.watchedFiles);
         }
-    } 
+    }
 
     class IOSession extends Session {
         constructor(host: ServerHost, logger: ts.server.Logger) {
-            super(host, Buffer.byteLength, process.hrtime, logger);
+            super(host, writeHost, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
