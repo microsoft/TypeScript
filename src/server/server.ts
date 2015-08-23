@@ -7,14 +7,47 @@ namespace ts.server {
     var path: NodeJS.Path = require('path');
     var fs: typeof NodeJS.fs = require('fs');
 
+    // TODO: 'net' module not defined in local node.d.ts
+    var net: any = require('net');
+
     var rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         terminal: false,
     });
 
-    // Using rl.write causes the written data to fire a 'line' event
-    var writeHost = (data: string) => process.stdout.write(data);
+    // Stubs for I/O
+    var writeHost = (data: string) => { return true; };
+    var onInput = (input: string) => { return; };
+    var onClose = () => { return; };
+
+    // Use a socket for comms if defined
+    var tss_debug: string = process.env['TSS_DEBUG']
+    var tcp_port = 0;
+    if(tss_debug){
+        tss_debug.split(' ').forEach( param => {
+            if (param.indexOf("port=") === 0) {
+                tcp_port = parseInt(param.substring(5));
+            }
+        });
+        if(tcp_port){
+            net.createServer( (socket: any) => {
+                // Called once a connection is made
+                socket.setEncoding('utf8');
+                // Wire up the I/O handers to the socket
+                writeHost = (data: string) => socket.write(data);
+                socket.on('data', onInput);
+                socket.on('end', onClose);
+
+            }).listen(tcp_port);
+        }
+    }
+    if(!tcp_port){
+        // If not using tcp, wire up the I/O handler to stdin/stdout
+        writeHost = (data: string) => process.stdout.write(data);
+        rl.on('line', (input: string) => onInput(input));
+        rl.on('close', () => onClose());
+    }
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -187,14 +220,11 @@ namespace ts.server {
         }
 
         listen() {
-            rl.on('line',(input: string) => {
+            onInput = (input: string) => {
                 var message = input.trim();
                 this.onMessage(message);
-            });
-
-            rl.on('close',() => {
-                this.exit();
-            });
+            };
+            onClose = () => this.exit();
         }
     }
 
