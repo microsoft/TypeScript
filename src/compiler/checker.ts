@@ -390,7 +390,7 @@ namespace ts {
             let referenceDeclarationFile = getSourceFileOfNode(referenceDeclaration);
             let locationNodeFile = getSourceFileOfNode(locationNode);
             if (referenceDeclarationFile === locationNodeFile) {
-                return referenceDeclaration.pos <= locationNode.pos || !isInSameLexicalScope();
+                return referenceDeclaration.pos <= locationNode.pos || !isInSameContainingFunction();
             }
 
             if (!compilerOptions.outFile && !compilerOptions.out) {
@@ -398,21 +398,10 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return indexOf(sourceFiles, referenceDeclarationFile) <= indexOf(sourceFiles, locationNodeFile) || !isInSameLexicalScope(); 
+            return indexOf(sourceFiles, referenceDeclarationFile) <= indexOf(sourceFiles, locationNodeFile) || !isInSameContainingFunction(); 
 
-            function isInSameLexicalScope() {
-                let referenceDeclarationScope = getEnclosingBlockScopeContainer(referenceDeclaration);
-                let locationNodeScope = getEnclosingBlockScopeContainer(locationNode);
-                
-                while (locationNodeScope && referenceDeclarationScope !== locationNodeScope) {
-                    if (isFunctionLike(locationNodeScope)) {
-                            return false;
-                    }
-
-                    locationNodeScope = getEnclosingBlockScopeContainer(locationNodeScope);
-                }
-
-                return true;
+            function isInSameContainingFunction() {
+                return getContainingFunction(referenceDeclaration) === getContainingFunction(locationNode);
             }
         }
         
