@@ -1,0 +1,16 @@
+=== tests/cases/compiler/letUsedInClassMethodOutOfOrder.ts ===
+class c {
+>c : c
+
+    method1() {
+>method1 : () => void
+
+        a; // shouldnt error
+>a : number
+    }
+}
+
+let a = 10;
+>a : number
+>10 : number
+

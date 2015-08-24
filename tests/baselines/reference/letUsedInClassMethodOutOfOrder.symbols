@@ -1,0 +1,15 @@
+=== tests/cases/compiler/letUsedInClassMethodOutOfOrder.ts ===
+class c {
+>c : Symbol(c, Decl(letUsedInClassMethodOutOfOrder.ts, 0, 0))
+
+    method1() {
+>method1 : Symbol(method1, Decl(letUsedInClassMethodOutOfOrder.ts, 0, 9))
+
+        a; // shouldnt error
+>a : Symbol(a, Decl(letUsedInClassMethodOutOfOrder.ts, 6, 3))
+    }
+}
+
+let a = 10;
+>a : Symbol(a, Decl(letUsedInClassMethodOutOfOrder.ts, 6, 3))
+

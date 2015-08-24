@@ -398,18 +398,14 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(referenceDeclarationFile) <= sourceFiles.indexOf(locationNodeFile) || !isInSameLexicalScope(); 
+            return indexOf(sourceFiles, referenceDeclarationFile) <= indexOf(sourceFiles, locationNodeFile) || !isInSameLexicalScope(); 
 
             function isInSameLexicalScope() {
                 let referenceDeclarationScope = getEnclosingBlockScopeContainer(referenceDeclaration);
                 let locationNodeScope = getEnclosingBlockScopeContainer(locationNode);
                 
                 while (locationNodeScope && referenceDeclarationScope !== locationNodeScope) {
-                    switch (locationNodeScope.kind) {
-                        // In function like scope
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ArrowFunction:
+                    if (isFunctionLike(locationNodeScope)) {
                             return false;
                     }
 
