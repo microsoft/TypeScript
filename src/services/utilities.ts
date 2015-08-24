@@ -469,6 +469,39 @@ namespace ts {
         }
     }
 
+    /**
+     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
+     */
+    export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
+        let node = ts.getTokenAtPosition(sourceFile, position);
+        if (isToken(node)) {
+            switch (node.kind) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
+                    // if the current token is var, let or const, skip the VariableDeclarationList
+                    node = node.parent === undefined ? undefined : node.parent.parent;
+                    break;
+                default:
+                    node = node.parent;
+                    break;
+            }
+        }
+
+        if (node) {
+            let jsDocComment = node.jsDocComment;
+            if (jsDocComment) {
+                for (let tag of jsDocComment.tags) {
+                    if (tag.pos <= position && position <= tag.end) {
+                        return tag;
+                    }
+                }
+            }
+        }
+
+        return undefined;
+    }
+
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note, that getWidth() does not take trivia into account.
@@ -639,7 +672,6 @@ namespace ts {
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
             else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
-
 
             return SymbolDisplayPartKind.text;
         }
