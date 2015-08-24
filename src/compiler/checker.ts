@@ -11384,7 +11384,7 @@ namespace ts {
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
-                var meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
+                let meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 // Resolve type so we know which symbol is referenced
                 let rootSymbol = resolveName(root, root.text, meaning | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 // Resolved symbol is alias
