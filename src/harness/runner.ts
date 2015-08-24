@@ -106,6 +106,4 @@ if (runners.length === 0) {
     // runners.push(new GeneratedFourslashRunner());
 }
 
-ts.sys.newLine = "\r\n";
-
 runTests(runners);

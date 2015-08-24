@@ -120,6 +120,13 @@ namespace ts {
         {
             name: "out",
             type: "string",
+            isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+                               // for correct behaviour, please use outFile
+            paramType: Diagnostics.FILE,
+        },
+        {
+            name: "outFile",
+            type: "string",
             isFilePath: true,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
