@@ -16,8 +16,12 @@ namespace ts.server {
         terminal: false,
     });
 
+    // Need to write directly to stdout, else rl.write also causes an input 'line' event
+    // See https://github.com/joyent/node/issues/4243
+    var writeHost = (data: string) => process.stdout.write(data);
+
     // Stubs for I/O
-    var writeHost = (data: string) => { return true; };
+    var onWrite = (output: string) => writeHost(output);
     var onInput = (input: string) => { return; };
     var onClose = () => { return; };
 
@@ -35,8 +39,16 @@ namespace ts.server {
                 // Called once a connection is made
                 socket.setEncoding('utf8');
                 // Wire up the I/O handers to the socket
-                writeHost = (data: string) => socket.write(data);
-                socket.on('data', onInput);
+                writeHost = (data: string) => {
+                    socket.write(data);
+                    return true;
+                };
+                socket.on('data', (data: string) => {
+                    // May get multiple requests in one network read
+                    if (data) {
+                        data.trim().split(/(\r\n)|\n/).forEach(line => onInput(line));
+                    }
+                });
                 socket.on('end', onClose);
 
             }).listen(tcp_port);
@@ -44,7 +56,6 @@ namespace ts.server {
     }
     if(!tcp_port){
         // If not using tcp, wire up the I/O handler to stdin/stdout
-        writeHost = (data: string) => process.stdout.write(data);
         rl.on('line', (input: string) => onInput(input));
         rl.on('close', () => onClose());
     }
@@ -210,7 +221,7 @@ namespace ts.server {
 
     class IOSession extends Session {
         constructor(host: ServerHost, logger: ts.server.Logger) {
-            super(host, writeHost, Buffer.byteLength, process.hrtime, logger);
+            super(host, onWrite, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
@@ -221,6 +232,9 @@ namespace ts.server {
 
         listen() {
             onInput = (input: string) => {
+                if(!input || !input.trim()){
+                    return;
+                }
                 var message = input.trim();
                 this.onMessage(message);
             };
