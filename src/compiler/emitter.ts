@@ -1552,6 +1552,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else if (isNameOfNestedRedeclaration(node)) {
                     write(getGeneratedNameForNode(node));
                 }
+                else if (nodeIsSynthesized(node)) {
+                    write(node.text);
+                }
                 else {
                     writeTextOfNode(currentSourceFile, node);
                 }
