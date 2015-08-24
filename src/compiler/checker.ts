@@ -14409,6 +14409,10 @@ namespace ts {
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             let typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true);
+            // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
+            if (!typeSymbol) {
+                return TypeReferenceSerializationKind.ObjectType; 
+            }
             let type = getDeclaredTypeOfSymbol(typeSymbol);
             if (type === unknownType) {
                 return TypeReferenceSerializationKind.Unknown;
