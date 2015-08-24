@@ -361,6 +361,10 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+            if(projectOptions && projectOptions.files){
+                // If files are listed explicitly, allow all extensions
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
+            }
             this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
