@@ -381,16 +381,16 @@ namespace ts {
         }
 
         /** Returns true if node1 is defined before node 2**/
-        function isDefinedBefore(node1: Node, node2: Node): boolean {
-            if (isAliasSymbolDeclaration(node1) && !isInternalModuleImportEqualsDeclaration(node1)) {
+        function isDefinedBefore(referenceDeclaration: Node, locationNode: Node): boolean {
+            if (isAliasSymbolDeclaration(referenceDeclaration) && !isInternalModuleImportEqualsDeclaration(referenceDeclaration)) {
                 // external aliases always declared before use
                 return true;
             }
 
-            let file1 = getSourceFileOfNode(node1);
-            let file2 = getSourceFileOfNode(node2);
-            if (file1 === file2) {
-                return node1.pos <= node2.pos || !isInSameLexicalScope();
+            let referenceDeclarationFile = getSourceFileOfNode(referenceDeclaration);
+            let locationNodeFile = getSourceFileOfNode(locationNode);
+            if (referenceDeclarationFile === locationNodeFile) {
+                return referenceDeclaration.pos <= locationNode.pos || !isInSameLexicalScope();
             }
 
             if (!compilerOptions.outFile && !compilerOptions.out) {
@@ -398,14 +398,14 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2) || !isInSameLexicalScope(); 
+            return sourceFiles.indexOf(referenceDeclarationFile) <= sourceFiles.indexOf(locationNodeFile) || !isInSameLexicalScope(); 
 
             function isInSameLexicalScope() {
-                let node1Scope = getEnclosingBlockScopeContainer(node1);
-                let node2Scope = getEnclosingBlockScopeContainer(node2);
+                let referenceDeclarationScope = getEnclosingBlockScopeContainer(referenceDeclaration);
+                let locationNodeScope = getEnclosingBlockScopeContainer(locationNode);
                 
-                while (node2Scope && node1Scope !== node2Scope) {
-                    switch (node2Scope.kind) {
+                while (locationNodeScope && referenceDeclarationScope !== locationNodeScope) {
+                    switch (locationNodeScope.kind) {
                         // In function like scope
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.FunctionDeclaration:
@@ -413,7 +413,7 @@ namespace ts {
                             return false;
                     }
 
-                    node2Scope = getEnclosingBlockScopeContainer(node2Scope);
+                    locationNodeScope = getEnclosingBlockScopeContainer(locationNodeScope);
                 }
 
                 return true;
@@ -12646,7 +12646,7 @@ namespace ts {
                         
                     // Check if base type declaration appears before heritage clause to avoid false errors for 
                     // base type declarations in the extend clause itself
-                    let baseTypeDeclaration = getLeftMostAliasDeclarationOfExpression(baseTypeNode.expression) || baseType.symbol.declarations[0];
+                    let baseTypeDeclaration = getLeftmostAliasDeclarationFromExpressionOrEnityName(baseTypeNode.expression) || baseType.symbol.declarations[0];
                     if (!isDefinedBefore(baseTypeDeclaration, baseTypeNode)) {
                         error(baseTypeNode, Diagnostics.Base_expression_references_type_before_it_is_declared);
                     }
@@ -12681,18 +12681,32 @@ namespace ts {
             }
         }
 
-        function getLeftMostAliasDeclarationOfExpression(node: Expression): Declaration {
-            if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                let result = getLeftMostAliasDeclarationOfExpression((<PropertyAccessExpression>node).expression);
-                if (result) {
-                    return result;
-                }
-            }
-            else if (node.kind !== SyntaxKind.Identifier) {
-                return;
+        function getLeftmostAliasDeclarationFromExpressionOrEnityName(node: Expression | EntityName): Declaration {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    let result = getLeftmostAliasDeclarationFromExpressionOrEnityName((<PropertyAccessExpression>node).expression);
+                    if (result) {
+                        return result;
+                    }
+                    break;
+
+                case SyntaxKind.QualifiedName:
+                    let result2 = getLeftmostAliasDeclarationFromExpressionOrEnityName((<QualifiedName>node).left);
+                    if (result2) {
+                        return result2;
+                    }
+
+                case SyntaxKind.Identifier:
+                    break;
+
+                default:
+                    return;
             }
 
-            let resolvedSymbol = getNodeLinks(node).resolvedSymbol;
+            let meaning = node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccessExpression?
+                SymbolFlags.Namespace :
+                SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
+            let resolvedSymbol = resolveEntityName(node, meaning | SymbolFlags.Alias, /*ignoreErrors*/ true);
             if (resolvedSymbol && !!(resolvedSymbol.flags & SymbolFlags.Alias)) {
                 return getDeclarationOfAliasSymbol(resolvedSymbol);
             }
@@ -13364,7 +13378,7 @@ namespace ts {
                                 error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
                             }
 
-                            let internalReferenceDecl = getLeftMostAliasDeclarationOfInternalModuleReference(<EntityName>node.moduleReference) || target.declarations[0];
+                            let internalReferenceDecl = getLeftmostAliasDeclarationFromExpressionOrEnityName(<EntityName>node.moduleReference) || target.declarations[0];
                             if (!isDefinedBefore(internalReferenceDecl, node.moduleReference)) {
                                 error(node.moduleReference, Diagnostics.Import_declaration_references_entity_before_it_is_declared);
                             }
@@ -13380,24 +13394,6 @@ namespace ts {
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
                     }
                 }
-            }
-        }
-
-        function getLeftMostAliasDeclarationOfInternalModuleReference(node: EntityName): Declaration {
-            if (node.kind === SyntaxKind.QualifiedName) {
-                let result = getLeftMostAliasDeclarationOfInternalModuleReference((<QualifiedName>node).left);
-                if (result) {
-                    return result;
-                }
-            }
-
-            let meaning = node.parent.kind === SyntaxKind.QualifiedName ?
-                SymbolFlags.Namespace :
-                SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
-
-            let resolvedSymbol = resolveEntityName(node, meaning | SymbolFlags.Alias, /*ignoreErrors*/ true);
-            if (resolvedSymbol && !!(resolvedSymbol.flags & SymbolFlags.Alias)) {
-                return getDeclarationOfAliasSymbol(resolvedSymbol);
             }
         }
 
