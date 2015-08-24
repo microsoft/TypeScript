@@ -220,6 +220,55 @@ var x = 0;`,
                     expectedOutput: output
                 });
         });
+        
+        it("Transpile with emit decorators and emit metadata", () => {
+            let input = 
+                `import {db} from './db';\n` +
+                `function someDecorator(target) {\n` +
+                `    return target;\n` +
+                `} \n` +
+                `@someDecorator\n` +
+                `class MyClass {\n` +
+                `    db: db;\n` +
+                `    constructor(db: db) {\n` +
+                `        this.db = db;\n` +
+                `        this.db.doSomething(); \n` +
+                `    }\n` +
+                `}\n` +
+                `export {MyClass}; \n`
+            let output =
+                `var db_1 = require(\'./db\');\n` + 
+                `function someDecorator(target) {\n` +
+                `    return target;\n` +
+                `}\n` + 
+                `var MyClass = (function () {\n` + 
+                `    function MyClass(db) {\n` + 
+                `        this.db = db;\n` + 
+                `        this.db.doSomething();\n` + 
+                `    }\n` + 
+                `    MyClass = __decorate([\n` + 
+                `        someDecorator, \n` + 
+                `        __metadata(\'design:paramtypes\', [(typeof (_a = typeof db_1.db !== \'undefined\' && db_1.db) === \'function\' && _a) || Object])\n` + 
+                `    ], MyClass);\n` + 
+                `    return MyClass;\n` + 
+                `    var _a;\n` + 
+                `})();\n` + 
+                `exports.MyClass = MyClass;\n`;
 
+            test(input, 
+                { 
+                    options: {
+                        compilerOptions: {
+                            module: ModuleKind.CommonJS,
+                            newLine: NewLineKind.LineFeed,
+                            noEmitHelpers: true,
+                            emitDecoratorMetadata: true,
+                            experimentalDecorators: true,
+                            target: ScriptTarget.ES5,
+                        }
+                    }, 
+                    expectedOutput: output
+                });
+        });
     });
 }
