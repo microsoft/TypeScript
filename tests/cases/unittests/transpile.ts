@@ -23,6 +23,13 @@ module ts {
         function test(input: string, testSettings: TranspileTestSettings): void {
             
             let transpileOptions: TranspileOptions = testSettings.options || {};
+            if (!transpileOptions.compilerOptions) {
+                transpileOptions.compilerOptions = {};
+            }
+            if(transpileOptions.compilerOptions.newLine === undefined) {
+                // use \r\n as default new line
+                transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+            }
             
             let canUseOldTranspile = !transpileOptions.renamedDependencies;  
             

@@ -5831,7 +5831,6 @@ namespace ts {
 
                     if (!name) {
                         parseErrorAtPosition(pos, 0, Diagnostics.Identifier_expected);
-                        return undefined;
                     }
 
                     let preName: Identifier, postName: Identifier;

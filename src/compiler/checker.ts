@@ -393,7 +393,7 @@ namespace ts {
                 return node1.pos <= node2.pos || !isInSameLexicalScope();
             }
 
-            if (!compilerOptions.out) {
+            if (!compilerOptions.outFile && !compilerOptions.out) {
                 return true;
             }
 
