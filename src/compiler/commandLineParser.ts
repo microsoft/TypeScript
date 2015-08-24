@@ -225,7 +225,16 @@ namespace ts {
             type: "boolean",
             experimental: true,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
-        }
+        },
+        {
+            name: "moduleResolution",
+            type: {
+                "node": ModuleResolutionKind.NodeJs,
+                "classic": ModuleResolutionKind.Classic
+            },
+            experimental: true,
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
+        }        
     ];
 
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {

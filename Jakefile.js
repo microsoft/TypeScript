@@ -143,7 +143,8 @@ var harnessSources = harnessCoreSources.concat([
     "convertToBase64.ts",
     "transpile.ts",
     "reuseProgramStructure.ts",
-    "cachingInServerLSHost.ts"
+    "cachingInServerLSHost.ts",
+    "moduleResolution.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([

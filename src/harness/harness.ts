@@ -1049,6 +1049,13 @@ module Harness {
                                     options.module = ts.ModuleKind.UMD;
                                 } else if (setting.value.toLowerCase() === "commonjs") {
                                     options.module = ts.ModuleKind.CommonJS;
+                                    if (options.moduleResolution === undefined) {
+                                        // TODO: currently we have relative module names pretty much in all tests that use CommonJS module target.
+                                        // Such names could never be resolved in Node however classic resolution strategy still can handle them.
+                                        // Changing all module names to relative will be a major overhaul in code (but we'll do this anyway) so  as a temporary measure 
+                                        // we'll use ts.ModuleResolutionKind.Classic for CommonJS modules.
+                                        options.moduleResolution = ts.ModuleResolutionKind.Classic;
+                                    }
                                 } else if (setting.value.toLowerCase() === "system") {
                                     options.module = ts.ModuleKind.System;
                                 } else if (setting.value.toLowerCase() === "unspecified") {
@@ -1060,7 +1067,16 @@ module Harness {
                                 options.module = <any>setting.value;
                             }
                             break;
-
+                        case "moduleresolution":
+                            switch((setting.value || "").toLowerCase()) {
+                                case "classic": 
+                                    options.moduleResolution = ts.ModuleResolutionKind.Classic;
+                                    break;
+                                case "node": 
+                                    options.moduleResolution = ts.ModuleResolutionKind.NodeJs;
+                                    break;
+                            }
+                            break;
                         case "target":
                         case "codegentarget":
                             if (typeof setting.value === "string") {
