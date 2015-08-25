@@ -1424,9 +1424,6 @@ module Harness {
                 return diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
             });
 
-            // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
-
             return minimalDiagnosticsToString(diagnostics) +
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
         }
