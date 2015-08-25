@@ -6922,37 +6922,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            /**
-             * Filter comment when removeComments is true according to following rules:
-             *      - Pinned Comments - remove all but the top of the file one
-             *      - Normal Comments - remove all
-             *      - // Comments     - remove all
-             * @param isTopOfFileComments boolean indicating whether comments are at the top of file
-             * @param isEmittedNode boolean indicating whether node associated with the comments will be
-             *                      emitted in javascript file
-             */
-            function filterComments(ranges: CommentRange[], isTopOfFileComments: boolean, isEmittedNode=true): CommentRange[] {
-                if (compilerOptions.removeComments) {
-                    // Only preserve pinned comments at the top of the file
-                    ranges = isTopOfFileComments ? filter(ranges, isPinnedComments) : [];
-                }
-                else {
-                    if (!isEmittedNode) {
-                        // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
-                        // unless it is a triple slash comment at the top of the file.
-                        // For Example:
-                        //      /// <reference-path ...>
-                        //      declare var x;
-                        //      /// <reference-path ...>
-                        //      interface F {}
-                        //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
-                        ranges = isTopOfFileComments ? filter(ranges, isTripleSlashOrPinnedComments) : filter(ranges, isPinnedComments);
-                    }
-                }
-
-                return ranges;
-            }
-
             function isPinnedComments(comment: CommentRange) {
                 if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                     return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
@@ -6960,11 +6929,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             /**
-             * Determine if the given comment is a triple-slash or pinned comment
+             * Determine if the given comment is a triple-slash
              *
-             * @return true if the comment is a triple-slash comment or a pinned comment else false
+             * @return true if the comment is a triple-slash comment else false
              **/
-            function isTripleSlashOrPinnedComments(comment: CommentRange) {
+            function isTripleSlashComments(comment: CommentRange) {
                 // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
                 // so that we don't end up computing comment string and doing match for all // comments
                 if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
@@ -6975,7 +6944,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
                         true : false;
                 }
-                return isPinnedComments(comment);
+                return false;
             }
 
             function getLeadingCommentsToEmit(node: Node) {
@@ -7015,9 +6984,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitLeadingCommentsWorker(node: Node, isEmittedNode: boolean) {
-                // If the caller only wants pinned or triple slash comments, then always filter
-                // down to that set.  Otherwise, filter based on the current compiler options.
-                let leadingComments = filterComments(getLeadingCommentsToEmit(node), /*isTopOfFileComments:*/ node.pos === 0, isEmittedNode);
+                if (compilerOptions.removeComments) return;
+                let leadingComments: CommentRange[];
+
+                if (isEmittedNode) {
+                    leadingComments = getLeadingCommentsToEmit(node);
+                }
+                else {
+                    // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
+                    // unless it is a triple slash comment at the top of the file.
+                    // For Example:
+                    //      /// <reference-path ...>
+                    //      declare var x;
+                    //      /// <reference-path ...>
+                    //      interface F {}
+                    //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
+                    leadingComments = node.pos === 0 ? filter(getLeadingCommentsToEmit(node), isTripleSlashComments) : [];
+                }
 
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
 
@@ -7026,8 +7009,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitTrailingComments(node: Node) {
+                if (compilerOptions.removeComments) return;
                 // Emit the trailing comments only if the parent's end doesn't match
-                let trailingComments = filterComments(getTrailingCommentsToEmit(node), /*isTopOfFileComments:*/ node.pos === 0);
+                let trailingComments = getTrailingCommentsToEmit(node);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
@@ -7039,13 +7023,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              *        ^ => pos; the function will emit "comment1" in the emitJS
              */
             function emitTrailingCommentsOfPosition(pos: number) {
-                let trailingComments = filterComments(getTrailingCommentRanges(currentSourceFile.text, pos), /*isTopOfFileComments*/ pos === 0); 
+                if (compilerOptions.removeComments) return;
+                let trailingComments = getTrailingCommentRanges(currentSourceFile.text, pos);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitLeadingCommentsOfPosition(pos: number) {
+                if (compilerOptions.removeComments) return;
                 let leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
@@ -7056,7 +7042,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
 
-                leadingComments = filterComments(leadingComments, /*isTopOfFileComments*/ pos === 0);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -7064,7 +7049,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitDetachedComments(node: TextRange) {
-                let leadingComments = filterComments(getLeadingCommentRanges(currentSourceFile.text, node.pos), node.pos === 0);
+                let leadingComments: CommentRange[];
+                if (compilerOptions.removeComments) {
+                    // removeComments is true, only reserve pinned comment at the top of file
+                    // For example:
+                    //      /*! Pinned Comment */
+                    //
+                    //      var x = 10;
+                    leadingComments = node.pos === 0 ?
+                        filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments) : [];
+                }
+                else {
+                    // removeComments is false, just get detached as normal and bypass the process to filter comment
+                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                }
+
                 if (leadingComments) {
                     let detachedComments: CommentRange[] = [];
                     let lastComment: CommentRange;
