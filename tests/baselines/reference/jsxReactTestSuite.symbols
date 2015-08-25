@@ -46,6 +46,8 @@ declare var hasOwnProperty:any;
   <div><br /></div>
   <Component>{foo}<br />{bar}</Component>
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+>foo : Symbol(foo, Decl(jsxReactTestSuite.tsx, 7, 11))
+>bar : Symbol(bar, Decl(jsxReactTestSuite.tsx, 8, 11))
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
   <br />
@@ -159,6 +161,7 @@ var x =
 <Component x={y} />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 9, 11))
 
 <x-component />;
 

@@ -69,6 +69,6 @@ var SomeClass = (function () {
     };
     return SomeClass;
 })();
-var whitespace1 = React.createElement("div", null);
-var whitespace2 = React.createElement("div", null, p);
+var whitespace1 = React.createElement("div", null, "      ");
+var whitespace2 = React.createElement("div", null, "  ", p, "    ");
 var whitespace3 = React.createElement("div", null, p);
