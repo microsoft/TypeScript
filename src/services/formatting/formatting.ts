@@ -389,7 +389,8 @@ namespace ts.formatting {
 
             let indentation = inheritedIndentation;
             if (indentation === Constants.Unknown) {
-                if (isIndentPreventedChildNode(parent.kind, node.kind)) {
+                if (parent.kind === SyntaxKind.JsxElement && node.kind === SyntaxKind.JsxClosingElement) {
+                    // JsxClosingElement should not be indented
                     indentation = parentDynamicIndentation.getIndentation();
                 }
                 else if (isSomeBlock(node.kind)) {
@@ -1016,32 +1017,6 @@ namespace ts.formatting {
         switch (kind) {
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return true;
-        }
-        return false;
-    }
-
-    function isIndentPreventedChildNode(parent: SyntaxKind, child: SyntaxKind) {
-        switch (parent) {
-            case SyntaxKind.JsxElement: {
-                return child === SyntaxKind.JsxClosingElement;
-            }
-        }
-    }
-
-    function isIndentPreventedCoreComponent(child: SyntaxKind) {
-        switch (child) {
-            // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
-            case SyntaxKind.OpenBraceToken:
-            case SyntaxKind.CloseBraceToken:
-            case SyntaxKind.OpenBracketToken:
-            case SyntaxKind.CloseBracketToken:
-            case SyntaxKind.OpenParenToken:
-            case SyntaxKind.CloseParenToken:
-            case SyntaxKind.ElseKeyword:
-            case SyntaxKind.WhileKeyword:
-            case SyntaxKind.AtToken:
-            case SyntaxKind.JsxClosingElement:
                 return true;
         }
         return false;
