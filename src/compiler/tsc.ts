@@ -144,20 +144,6 @@ namespace ts {
         let hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
         let timerHandle: number;                    // Handle for 0.25s wait timer
 
-        if (commandLine.options.init) {
-            let file = `${sys.getCurrentDirectory()}/tsconfig.json`;
-            if (sys.fileExists(file)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.You_already_have_a_tsconfig_json_file_defined));
-            }
-            else {
-                let writer = createTextWriter("\n");
-                buildConfigFile(writer, compilerOptions, commandLine.fileNames, ["node_modules"]);
-                sys.writeFile(file, writer.getText());
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
-            }
-            return sys.exit(ExitStatus.Success);
-        }
-
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
@@ -171,6 +157,51 @@ namespace ts {
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+
+        if (commandLine.options.init) {
+            let file = combinePaths(sys.getCurrentDirectory(), 'tsconfig.json');
+            if (sys.fileExists(file)) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.You_already_have_a_tsconfig_json_file_defined));
+            }
+            else {
+                let compilerOptions = extend(commandLine.options, defaultInitCompilerOptions);
+                let configs = {
+                    compilerOptions,
+                    files: commandLine.fileNames,
+                    exclude: ["node_modules"]
+                };
+                sys.writeFile(file, JSON.stringify(configs, (k, v) => {
+                    if (k === "compilerOptions") {
+                        let options: CompilerOptions = v;
+                        for (let o in options) {
+                            switch (o) {
+                                case "target":
+                                    options[o] = scriptTargetToString(options[o] as ScriptTarget);
+                                    continue;
+                                case "module":
+                                    options[o] = moduleKindToString(options[o] as ModuleKind);
+                                    continue;
+                                case "newLine":
+                                    options[o] = newLineKindToString(options[o] as NewLineKind);
+                                    continue;
+                                case "init":
+                                case "watch":
+                                case "version":
+                                case "help":
+                                    delete options[o];
+                                    continue;
+                            }
+                        }
+
+                        return options;
+                    }
+
+                    return v;
+                }, 4));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+            }
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.version) {

@@ -368,100 +368,12 @@ namespace ts {
     }
 
     /**
-      * Remove whitespace, comments and trailing commas from JSON text.
-      * @param text JSON text string.
-      */
-    function stripJsonTrivia(text: string): string {
-        let ch: number;
-        let pos = 0;
-        let end = text.length - 1;
-        let result = '';
-        let pendingCommaInsertion = false;
-
-        while (pos <= end) {
-            ch = text.charCodeAt(pos);
-
-            if(isWhiteSpace(ch) || isLineBreak(ch)) {
-                pos++;
-                continue;
-            }
-
-            switch (ch) {
-                case CharacterCodes.slash:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                        pos += 2;
-
-                        while (pos <= end) {
-                            if (isLineBreak(text.charCodeAt(pos))) {
-                                break;
-                            }
-                            pos++;
-                        }
-                        break;
-                    }
-                    else if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
-                        pos += 2;
-
-                        while (pos <= end) {
-                            ch = text.charCodeAt(pos);
-
-                            if (ch === CharacterCodes.asterisk &&
-                                text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-
-                                pos += 2;
-                                break;
-                            }
-                            pos++;
-                        }
-                        break;
-                    }
-
-                case CharacterCodes.doubleQuote:
-                    result += text[pos];
-                    pos++;
-
-                    while (pos <= end) {
-                        ch = text.charCodeAt(pos);
-                        if (ch === CharacterCodes.backslash) {
-                            switch (text.charCodeAt(pos + 1)) {
-                                case CharacterCodes.doubleQuote:
-                                    result += "\\\"";
-                                    pos += 2;
-                                    continue;
-                                case CharacterCodes.backslash:
-                                    result += "\\\\";
-                                    pos += 2;
-                                    continue;
-                            }
-                            pos++;
-                        }
-                        result += text[pos];
-
-                        if (ch === CharacterCodes.doubleQuote) {
-                            break;
-                        }
-
-                        pos++;
-                    }
-                    break;
-
-                default:
-                    result += text[pos];
-            }
-
-            pos++;
-        }
-        return result;
-    }
-
-    /**
       * Parse the text of the tsconfig.json file
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
     export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
-            jsonText = stripJsonTrivia(jsonText);
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
         catch (e) {
