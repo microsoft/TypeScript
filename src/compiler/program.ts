@@ -225,6 +225,7 @@ namespace ts {
         return { resolvedFileName: referencedSourceFile, failedLookupLocations };
     }
 
+    /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES3,
@@ -234,6 +235,7 @@ namespace ts {
         sourceMap: false,
     }
 
+    /* @internal */
     export function scriptTargetToString(target: ScriptTarget): string {
         switch (target) {
             case ScriptTarget.ES5:
@@ -245,6 +247,7 @@ namespace ts {
         }
     }
 
+    /* @internal */
     export function moduleKindToString(kind: ModuleKind): string {
         switch (kind) {
             case ModuleKind.None:
@@ -260,6 +263,7 @@ namespace ts {
         }
     }
 
+    /* @internal */
     export function newLineKindToString(kind: NewLineKind): string {
         switch (kind) {
             case NewLineKind.CarriageReturnLineFeed:

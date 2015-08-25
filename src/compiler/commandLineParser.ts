@@ -242,12 +242,14 @@ namespace ts {
         }        
     ];
 
+    /* @internal */
     export interface OptionNameMap {
         optionNameMap: Map<CommandLineOption>;
         shortOptionNames: Map<string>;
     }
 
     let optionNameMapCache: OptionNameMap;
+    /* @internal */
     export function getOptionNameMap(): OptionNameMap {
         if (optionNameMapCache) {
             return optionNameMapCache;

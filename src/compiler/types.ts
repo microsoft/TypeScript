@@ -2109,6 +2109,7 @@ namespace ts {
         errors: Diagnostic[];
     }
 
+    /* @internal */
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
