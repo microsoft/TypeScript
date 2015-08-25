@@ -2033,15 +2033,11 @@
         "category": "Error",
         "code": 5053
     },
-<<<<<<< HEAD
-    
-=======
-    "You already have a tsconfig.json file defined.": {
+    "A 'tsconfig.json' file is already defined at: '{0}'.": {
         "category": "Error",
-        "code": 5052
+        "code": 5053
     },
 
->>>>>>> 1670ce9664ed914ba2cd7c172caf8fe905261a81
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2258,21 +2254,18 @@
         "category": "Message",
         "code": 6068
     },
-<<<<<<< HEAD
     "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
         "category": "Message",
         "code": 6069
     },
-=======
     "Initializes a TypeScript project and creates a tsconfig.json file.": {
-        "category": "Message",
-        "code": 6069
-    },
-    "Successfully created a tsconfig.json file.": {
         "category": "Message",
         "code": 6070
     },
->>>>>>> 1670ce9664ed914ba2cd7c172caf8fe905261a81
+    "Successfully created a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6071
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

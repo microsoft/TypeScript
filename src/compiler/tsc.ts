@@ -162,7 +162,7 @@ namespace ts {
         if (commandLine.options.init) {
             let file = combinePaths(sys.getCurrentDirectory(), 'tsconfig.json');
             if (sys.fileExists(file)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.You_already_have_a_tsconfig_json_file_defined));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
             }
             else {
                 let compilerOptions = extend(commandLine.options, defaultInitCompilerOptions);
