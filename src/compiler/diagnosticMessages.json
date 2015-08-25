@@ -161,7 +161,7 @@
     },
     "Type '{0}' is not a valid async function return type.": {
         "category": "Error",
-        "code": 1055  
+        "code": 1055
     },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
@@ -2033,7 +2033,15 @@
         "category": "Error",
         "code": 5053
     },
+<<<<<<< HEAD
     
+=======
+    "You already have a tsconfig.json file defined.": {
+        "category": "Error",
+        "code": 5052
+    },
+
+>>>>>>> 1670ce9664ed914ba2cd7c172caf8fe905261a81
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2250,10 +2258,21 @@
         "category": "Message",
         "code": 6068
     },
+<<<<<<< HEAD
     "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
         "category": "Message",
         "code": 6069
     },
+=======
+    "Initializes a TypeScript project and creates a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6069
+    },
+    "Successfully created a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6070
+    },
+>>>>>>> 1670ce9664ed914ba2cd7c172caf8fe905261a81
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -1,5 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
+/// <reference path="core.ts" />
 
 namespace ts {
     /* @internal */ export let programTime = 0;
@@ -222,6 +223,50 @@ namespace ts {
         }
 
         return { resolvedFileName: referencedSourceFile, failedLookupLocations };
+    }
+
+    export const defaultInitCompilerOptions: CompilerOptions = {
+        module: ModuleKind.CommonJS,
+        target: ScriptTarget.ES3,
+        noImplicitAny: false,
+        outDir: "built",
+        rootDir: ".",
+        sourceMap: false,
+    }
+
+    export function scriptTargetToString(target: ScriptTarget): string {
+        switch (target) {
+            case ScriptTarget.ES5:
+                return "es5";
+            case ScriptTarget.ES6:
+                return "es6";
+            default:
+                return "es3";
+        }
+    }
+
+    export function moduleKindToString(kind: ModuleKind): string {
+        switch (kind) {
+            case ModuleKind.None:
+                return undefined;
+            case ModuleKind.CommonJS:
+                return "commonjs";
+            case ModuleKind.System:
+                return "system";
+            case ModuleKind.UMD:
+                return "umd";
+            default:
+                return "amd";
+        }
+    }
+
+    export function newLineKindToString(kind: NewLineKind): string {
+        switch (kind) {
+            case NewLineKind.CarriageReturnLineFeed:
+                return "CRLF";
+            default:
+                return "LF";
+        }
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {

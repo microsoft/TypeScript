@@ -31,6 +31,11 @@ namespace ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "init",
+            type: "boolean",
+            description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
+        },
+        {
             name: "inlineSourceMap",
             type: "boolean",
         },
@@ -237,19 +242,36 @@ namespace ts {
         }        
     ];
 
-    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
-        let options: CompilerOptions = {};
-        let fileNames: string[] = [];
-        let errors: Diagnostic[] = [];
-        let shortOptionNames: Map<string> = {};
-        let optionNameMap: Map<CommandLineOption> = {};
+    export interface OptionNameMap {
+        optionNameMap: Map<CommandLineOption>;
+        shortOptionNames: Map<string>;
+    }
 
+    let optionNameMapCache: OptionNameMap;
+    export function getOptionNameMap(): OptionNameMap {
+        if (optionNameMapCache) {
+            return optionNameMapCache;
+        }
+
+        let optionNameMap: Map<CommandLineOption> = {};
+        let shortOptionNames: Map<string> = {};
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
                 shortOptionNames[option.shortName] = option.name;
             }
         });
+
+        optionNameMapCache = { optionNameMap, shortOptionNames };
+        return optionNameMapCache;
+    }
+
+    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
+        let options: CompilerOptions = {};
+        let fileNames: string[] = [];
+        let errors: Diagnostic[] = [];
+        let { optionNameMap, shortOptionNames } = getOptionNameMap();
+
         parseStrings(commandLine);
         return {
             options,

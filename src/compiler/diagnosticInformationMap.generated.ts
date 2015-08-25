@@ -511,6 +511,7 @@ namespace ts {
         Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided: { code: 5051, category: DiagnosticCategory.Error, key: "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided." },
         Option_0_cannot_be_specified_without_specifying_option_1: { code: 5052, category: DiagnosticCategory.Error, key: "Option '{0}' cannot be specified without specifying option '{1}'." },
         Option_0_cannot_be_specified_with_option_1: { code: 5053, category: DiagnosticCategory.Error, key: "Option '{0}' cannot be specified with option '{1}'." },
+        You_already_have_a_tsconfig_json_file_defined: { code: 5054, category: DiagnosticCategory.Error, key: "You already have a tsconfig.json file defined." },
         Concatenate_and_emit_output_to_single_file: { code: 6001, category: DiagnosticCategory.Message, key: "Concatenate and emit output to single file." },
         Generates_corresponding_d_ts_file: { code: 6002, category: DiagnosticCategory.Message, key: "Generates corresponding '.d.ts' file." },
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: { code: 6003, category: DiagnosticCategory.Message, key: "Specifies the location where debugger should locate map files instead of generated locations." },
@@ -566,6 +567,9 @@ namespace ts {
         Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower: { code: 6067, category: DiagnosticCategory.Message, key: "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower." },
         Enables_experimental_support_for_ES7_async_functions: { code: 6068, category: DiagnosticCategory.Message, key: "Enables experimental support for ES7 async functions." },
         Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6: { code: 6069, category: DiagnosticCategory.Message, key: "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) ." },
+        Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file: { code: 6070, category: DiagnosticCategory.Message, key: "Initializes a TypeScript project and creates a tsconfig.json file." },
+        Successfully_created_a_tsconfig_json_file: { code: 6071, category: DiagnosticCategory.Message, key: "Successfully created a tsconfig.json file." },
+
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
