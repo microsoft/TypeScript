@@ -161,7 +161,7 @@
     },
     "Type '{0}' is not a valid async function return type.": {
         "category": "Error",
-        "code": 1055  
+        "code": 1055
     },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
@@ -1689,7 +1689,7 @@
         "category": "Error",
         "code": 2650
     },
-    "A member initializer in a 'const' enum declaration cannot reference members declared after it, including members defined in other 'const' enums.": {
+    "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
     },    
@@ -2033,7 +2033,11 @@
         "category": "Error",
         "code": 5053
     },
-    
+    "A 'tsconfig.json' file is already defined at: '{0}'.": {
+        "category": "Error",
+        "code": 5053
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2253,6 +2257,14 @@
     "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
         "category": "Message",
         "code": 6069
+    },
+    "Initializes a TypeScript project and creates a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6070
+    },
+    "Successfully created a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6071
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

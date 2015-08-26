@@ -4487,6 +4487,15 @@ namespace ts {
         }
 
         function instantiateAnonymousType(type: ObjectType, mapper: TypeMapper): ObjectType {
+            if (mapper.instantiations) {
+                let cachedType = mapper.instantiations[type.id];
+                if (cachedType) {
+                    return cachedType;
+                }
+            }
+            else {
+                mapper.instantiations = [];
+            }
             // Mark the anonymous type as instantiated such that our infinite instantiation detection logic can recognize it
             let result = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.Instantiated, type.symbol);
             result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
@@ -4497,6 +4506,7 @@ namespace ts {
             let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
             if (stringIndexType) result.stringIndexType = instantiateType(stringIndexType, mapper);
             if (numberIndexType) result.numberIndexType = instantiateType(numberIndexType, mapper);
+            mapper.instantiations[type.id] = result;
             return result;
         }
 
@@ -13053,7 +13063,7 @@ namespace ts {
                             // illegal case: forward reference
                             if (!isDefinedBefore(propertyDecl, member)) {
                                 reportError = false;
-                                error(e, Diagnostics.A_member_initializer_in_a_const_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_const_enums);
+                                error(e, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                                 return undefined;
                             }
 
