@@ -15,4 +15,6 @@ export var React;
 //@filename: react-consumer.tsx
 import {React} from "./test";
 // Should emit test_1.React.createElement
-var spread1 = <div />;
+//  and React.__spread
+var foo;
+var spread1 = <div x='' {...foo} y='' />;

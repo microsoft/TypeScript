@@ -875,7 +875,6 @@ namespace ts {
     /// A JSX expression of the form <TagName attrs />
     export interface JsxSelfClosingElement extends PrimaryExpression, JsxOpeningElement {
         _selfClosingElementBrand?: any;
-        reactNode?: Identifier;
     }
 
     /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
