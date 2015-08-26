@@ -5731,8 +5731,11 @@ namespace ts {
             inferFromTypes(source, target);
 
             function isInProcess(source: Type, target: Type) {
+                let sourceSymbol = source.symbol;
+                let targetSymbol = target.symbol;
+
                 for (let i = 0; i < depth; i++) {
-                    if (source === sourceStack[i] && target === targetStack[i]) {
+                    if (sourceSymbol === sourceStack[i].symbol && targetSymbol === targetStack[i].symbol) {
                         return true;
                     }
                 }
