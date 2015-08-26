@@ -1415,15 +1415,7 @@ module Harness {
                 assert.equal(markedErrorCount, fileErrors.length, "count of errors in " + inputFile.unitName);
             });
 
-            let numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.file && (isLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
-            });
-
-            let numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                // Count an error generated from tests262-harness folder.This should only apply for test262
-                return diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
-            });
-
+            assert.equal(totalErrorsReported, diagnostics.length, "total number of errors");
             return minimalDiagnosticsToString(diagnostics) +
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
         }
