@@ -1177,9 +1177,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
+                    let syntheticReactRef = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    syntheticReactRef.text = 'React';
+                    syntheticReactRef.parent = openingNode;
+
                     // Call React.createElement(tag, ...
                     emitLeadingComments(openingNode);
-                    write("React.createElement(");
+                    emitExpressionIdentifier(syntheticReactRef);
+                    write(".createElement(");
                     emitTagName(openingNode.tagName);
                     write(", ");
 
@@ -1193,7 +1198,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // a call to React.__spread
                         let attrs = openingNode.attributes;
                         if (forEach(attrs, attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
-                            write("React.__spread(");
+                            emitExpressionIdentifier(syntheticReactRef);
+                            write(".__spread(");
 
                             let haveOpenedObjectLiteral = false;
                             for (let i = 0; i < attrs.length; i++) {
