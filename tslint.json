@@ -38,6 +38,7 @@
         ],
         "no-internal-module": true,
         "no-trailing-whitespace": true,
-        "no-inferrable-types": true
+        "no-inferrable-types": true,
+        "no-null": true
   }
 }

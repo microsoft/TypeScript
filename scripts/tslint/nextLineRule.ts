@@ -1,4 +1,4 @@
-/// <reference path="../../lib/typescriptServices.d.ts" />
+/// <reference path="../../node_modules/tslint/typings/typescriptServices.d.ts" />
 /// <reference path="../../node_modules/tslint/lib/tslint.d.ts" />
 
 const OPTION_CATCH = "check-catch";
