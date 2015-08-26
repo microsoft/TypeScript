@@ -429,7 +429,14 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxElement:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
                 case SyntaxKind.FunctionType:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AwaitExpression:
                     return true;
             }
             return false;
@@ -449,8 +456,6 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.CallSignature:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:

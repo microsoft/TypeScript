@@ -213,6 +213,16 @@ namespace ts.formatting {
         public NoSpaceBetweenYieldKeywordAndStar: Rule;
         public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
 
+        // Await-async
+        public SpaceAfterAwaitKeyword: Rule;
+        public NoSpaceAfterAwaitKeyword: Rule;
+        public SpaceBetweenAsyncAndFunctionKeyword: Rule;
+        public NoSpaceBetweenAsyncAndFunctionKeyword: Rule;
+
+        // Tagged template string
+        public SpaceBetweenTagAndTemplateString: Rule;
+        public NoSpaceBetweenTagAndTemplateString: Rule;
+
         constructor() {
             ///
             /// Common Rules
@@ -360,6 +370,17 @@ namespace ts.formatting {
             this.NoSpaceBetweenYieldKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Delete));
             this.SpaceBetweenYieldOrYieldStarAndOperand = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Space));
 
+            // Await-async
+            this.SpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.SpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            
+            // template string
+            this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
             [
@@ -386,6 +407,12 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
+                this.SpaceAfterAwaitKeyword,
+                this.NoSpaceAfterAwaitKeyword,
+                this.SpaceBetweenAsyncAndFunctionKeyword,
+                this.NoSpaceBetweenAsyncAndFunctionKeyword,
+                this.SpaceBetweenTagAndTemplateString,
+                this.NoSpaceBetweenTagAndTemplateString,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
