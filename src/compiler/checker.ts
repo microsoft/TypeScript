@@ -7629,8 +7629,12 @@ namespace ts {
             // is no 'React' symbol in scope, we should issue an error.
             if (compilerOptions.jsx === JsxEmit.React) {
                 let reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
-                if (reactSym) {
+                if (reactSym && reactSym !== unknownSymbol) {
                     getSymbolLinks(reactSym).referenced = true;
+                    let reactNode = <Identifier>createSynthesizedNode(SyntaxKind.Identifier, false);
+                    reactNode.text = 'React';
+                    getNodeLinks(reactNode).resolvedSymbol = reactSym;
+                    node.reactNode = reactNode;
                 }
             }
 

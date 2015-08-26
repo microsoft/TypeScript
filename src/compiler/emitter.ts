@@ -1179,7 +1179,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     // Call React.createElement(tag, ...
                     emitLeadingComments(openingNode);
-                    write("React.createElement(");
+                    if (openingNode.reactNode) {
+                        emitExpressionIdentifier(openingNode.reactNode);
+                    }
+                    else {
+                        write('React');
+                    }
+                    write(".createElement(");
                     emitTagName(openingNode.tagName);
                     write(", ");
 
@@ -1193,7 +1199,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // a call to React.__spread
                         let attrs = openingNode.attributes;
                         if (forEach(attrs, attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
-                            write("React.__spread(");
+                            if (openingNode.reactNode) {
+                                emitExpressionIdentifier(openingNode.reactNode);
+                            }
+                            else {
+                                write('React');
+                            }
+                            write(".__spread(");
 
                             let haveOpenedObjectLiteral = false;
                             for (let i = 0; i < attrs.length; i++) {
