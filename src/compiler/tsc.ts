@@ -504,17 +504,18 @@ namespace ts {
         else {
             let compilerOptions = extend(options, defaultInitCompilerOptions);
             let configs = {
-                compilerOptions: serializeCompilerOptions(compilerOptions, currentDirectory),
+                compilerOptions: serializeCompilerOptions(compilerOptions),
                 files: fileNames,
-                exclude: ["node_modules"]
+                exclude: ["node_modules"],
             };
+
             sys.writeFile(file, JSON.stringify(configs, undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
         }
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions, currentDirectory: string): Map<string|number|boolean> {
+        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
             let result: Map<string|number|boolean> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
@@ -529,7 +530,7 @@ namespace ts {
                         case "project":
                             break;
                         default:
-                            let optionDefinition = optionsNameMap[name];
+                            let optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
                                 if (typeof optionDefinition.type === "string") {
                                     // string, number or boolean
