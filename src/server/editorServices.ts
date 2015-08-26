@@ -545,8 +545,9 @@ namespace ts.server {
 
         /**
          * This is the callback function when the directory that an inferred project belongs
-         * to changed. The function looks for newly added tsconfig.json file; if it found one,
-         * it will update project structure on all opened file roots.
+         * to changed. The function looks for newly added tsconfig.json files; if it found one,
+         * and the tsconfig.json file contains the root file of the current inferred project,
+         * it will update the project structure.
          */
         watchedDirectoryChanged(project:Project, path: string) {
             if (project.isConfiguredProject()) {
