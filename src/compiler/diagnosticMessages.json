@@ -1689,7 +1689,7 @@
         "category": "Error",
         "code": 2650
     },
-    "A member initializer in a 'const' enum declaration cannot reference members declared after it, including members defined in other 'const' enums.": {
+    "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
     },    
