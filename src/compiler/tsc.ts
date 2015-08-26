@@ -503,11 +503,15 @@ namespace ts {
         }
         else {
             let compilerOptions = extend(options, defaultInitCompilerOptions);
-            let configs = {
+            let configs: any = {
                 compilerOptions: serializeCompilerOptions(compilerOptions),
-                files: fileNames,
-                exclude: ["node_modules"],
+                exclude: ["node_modules"]
             };
+
+            if (fileNames && fileNames.length) {
+                // only set the files property if we have at least one file
+                configs.files = fileNames;
+            }
 
             sys.writeFile(file, JSON.stringify(configs, undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
