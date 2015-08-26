@@ -6,6 +6,5 @@
 //// /** @type {f} */
 //// var v/**/
 
-debugger;
 goTo.marker();
 verify.quickInfoIs('var v: (a: any, b: any) => void');

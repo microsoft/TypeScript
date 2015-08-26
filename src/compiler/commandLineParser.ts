@@ -120,6 +120,13 @@ namespace ts {
         {
             name: "out",
             type: "string",
+            isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+                               // for correct behaviour, please use outFile
+            paramType: Diagnostics.FILE,
+        },
+        {
+            name: "outFile",
+            type: "string",
             isFilePath: true,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
@@ -218,7 +225,16 @@ namespace ts {
             type: "boolean",
             experimental: true,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
-        }
+        },
+        {
+            name: "moduleResolution",
+            type: {
+                "node": ModuleResolutionKind.NodeJs,
+                "classic": ModuleResolutionKind.Classic
+            },
+            experimental: true,
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
+        }        
     ];
 
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {

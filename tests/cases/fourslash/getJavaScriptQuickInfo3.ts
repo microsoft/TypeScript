@@ -5,6 +5,5 @@
 /////** @param {number[]} [a] */
 ////function /**/f(a) { }
 
-debugger;
 goTo.marker();
 verify.quickInfoIs('function f(a?: number[]): void');

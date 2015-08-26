@@ -158,6 +158,11 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
+        let cjsModuleType: Type;
+        let cjsExportsType: Type;
+        let cjsRequireType: Type;
+        let amdRequireType: Type;
+
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let intersectionTypes: Map<IntersectionType> = {};
@@ -388,7 +393,7 @@ namespace ts {
                 return node1.pos <= node2.pos;
             }
 
-            if (!compilerOptions.out) {
+            if (!compilerOptions.outFile && !compilerOptions.out) {
                 return true;
             }
 
@@ -953,7 +958,7 @@ namespace ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, searchForJs = false): Symbol {
             if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
@@ -965,7 +970,14 @@ namespace ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) return;
+            if(moduleName.indexOf('!') >= 0) {
+                moduleName = moduleName.substr(0, moduleName.indexOf('!'));
+            }
+
+            if (!moduleName) {
+                return;
+            }
+
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
@@ -973,20 +985,10 @@ namespace ts {
                     return symbol;
                 }
             }
-            let fileName: string;
-            let sourceFile: SourceFile;
-            while (true) {
-                fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
-                if (sourceFile || isRelative) {
-                    break;
-                }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
+
+            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral.text);
+            let sourceFile = fileName && host.getSourceFile(fileName);
+
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
@@ -1369,7 +1371,8 @@ namespace ts {
 
         function hasExternalModuleSymbol(declaration: Node) {
             return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
-                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
+                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration)) ||
+                (declaration.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
@@ -2175,10 +2178,13 @@ namespace ts {
         function collectLinkedAliases(node: Identifier): Node[] {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
+                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
+                let exportSpecifier = <ExportSpecifier>node.parent;
+                exportSymbol = (<ExportDeclaration>exportSpecifier.parent.parent).moduleSpecifier ?
+                    getExternalModuleMember(<ExportDeclaration>exportSpecifier.parent.parent, exportSpecifier) :
+                    resolveEntityName(exportSpecifier.propertyName || exportSpecifier.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             let result: Node[] = [];
             if (exportSymbol) {
@@ -2439,6 +2445,22 @@ namespace ts {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
                     }
                 }
+
+                // In a JS file, we might need to add types to parameters of a function expression that is
+                // an argument to 'define'
+                if (func.kind === SyntaxKind.FunctionExpression &&
+                    func.parent &&
+                    func.parent.kind === SyntaxKind.CallExpression) {
+                    
+                    if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
+                        assignDefineOrRequireCallParameterTypes(<FunctionExpression>func);
+                        let links = getSymbolLinks(declaration.symbol);
+                        if (links.type) {
+                            return links.type;
+                        }
+                    }
+                }
+
                 // Use contextual parameter type if one is available
                 let type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
@@ -2702,7 +2724,170 @@ namespace ts {
             return links.type;
         }
 
+        function resolveAmdExportAssignment(symbol: Symbol): Type {
+            let seenTypes: Type[] = [];
+
+            for (var i = 0; i < symbol.declarations.length; i++) {
+                let decl = symbol.declarations[i];
+                Debug.assert(isAmdExportAssignment(decl));
+                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
+            }
+
+            return getUnionType(seenTypes);
+        }
+
+        function resolveCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+            let seenTypes: Type[] = [];
+
+            for (var i = 0; i < symbol.declarations.length; i++) {
+                let decl = symbol.declarations[i];
+                Debug.assert(isCommonJsExportsAssignment(decl));
+                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
+            }
+
+            return getUnionType(seenTypes);
+        }
+
+        /*
+         * Given a Symbol for a declaration of an AMD module ('define(..., ..., ...')'),
+         * produces the type of that module
+        */
+        function resolveDefineModule(symbol: Symbol): Type {
+            // Can't meaningfully define the same module more than once
+            if(symbol.declarations.length !== 1) {
+                return unknownType;
+            }
+
+            // If the invocation of 'define' has zero args ('define()')... we
+            // shouldn't really be here, but it's meaninguless
+            let callExpr = <CallExpression>symbol.declarations[0];
+            if(callExpr.arguments.length === 0) {
+                Debug.fail('Should not have a zero-arg define call');
+                return unknownType;
+            }
+
+            // If the last arg isn't a function expr, just resolve
+            // its type and define that as the shape of the module
+            let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
+            if(!isFunctionLike(lastArg)) {
+                let resultType = getTypeOfExpression(lastArg);
+                // If this type is a function type, we want to use its return type since
+                // it's going to get invoked anyway
+                let signatures = getSignaturesOfType(resultType, SignatureKind.Call);
+                if (signatures.length > 0) {
+                    return getReturnTypeOfSignature(signatures[0]);
+                }
+                else {
+                    return resultType;
+                }
+            }
+
+            // If there are any expressionful return statements in this function,
+            // we'll use those as the shape of the module
+            let bodyReturnType = getReturnTypeFromBody(lastArg);
+            if (bodyReturnType !== voidType) {
+                return bodyReturnType;
+            }
+
+            // Collect assignments in the body to 'module.exports' or 'exports.propName' or 'module.exports.propName'
+            let assignedModuleType: Type = undefined;
+            let exportAssignedProperties: Symbol[] = [];
+            let exportAssignedPropTable: SymbolTable = {};
+            
+            if (cjsModuleType === undefined || cjsExportsType === undefined) {
+                return unknownType;
+            }
+
+            traverse(lastArg.body);
+
+            // Someone assigned to 'module.exports', so ignore other assignments
+            if (assignedModuleType) {
+                return assignedModuleType;
+            }
+
+            // Otherwise return the collected property assignments
+            if (exportAssignedProperties.length > 0) {
+                return createAnonymousType(lastArg.symbol,
+                        exportAssignedPropTable,
+                        /*callSignatures*/ [],
+                        /*constructSignatures*/ [],
+                        /*stringIndexType*/ undefined,
+                        /*numberIndexType*/ undefined);
+            }
+
+            // Empty module?
+            return emptyObjectType;
+
+            function traverse(node: Node) {
+                if(node.kind === SyntaxKind.BinaryExpression &&
+                   (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    let lhs = (<BinaryExpression>node).left;
+                    if(lhs.kind === SyntaxKind.PropertyAccessExpression) {
+                        // e.g. module.exports = foo;
+                        let propertyName = (<PropertyAccessExpression>lhs).name.text;
+                        let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
+                        if (operandType === cjsModuleType && propertyName === 'exports') {
+                            assignedModuleType = getTypeOfNode((<BinaryExpression>node).right);
+                        }
+                        else if (operandType === cjsExportsType) {
+                            // e.g. exports = bar;
+                            let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propertyName);
+                            prop.type = getTypeOfNode((<BinaryExpression>node).right);
+                            exportAssignedProperties.push(prop);
+                            exportAssignedPropTable[propertyName] = prop;
+                        }
+                    }
+                }
+                forEachChild(node, traverse);
+            }
+        }
+
+        function getTypeOfDefineModule(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveDefineModule(symbol);
+            }
+            return links.type;
+        }
+
+        function getTypeOfAmdExportAssignment(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveAmdExportAssignment(symbol);
+            }
+            return links.type;
+        }
+
+        function getTypeOfCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveCommonJsModuleExportsAssignment(symbol);
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
+            if (symbol.declarations && forEach(symbol.declarations, isDefineCall)) {
+                return getTypeOfDefineModule(symbol);
+            }
+            if (symbol.declarations && forEach(symbol.declarations, isAmdExportAssignment)) {
+                return getTypeOfAmdExportAssignment(symbol);
+            }
+            if (symbol.declarations && forEach(symbol.declarations, isCommonJsExportsAssignment)) {
+                return getTypeOfCommonJsModuleExportsAssignment(symbol);
+            }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
@@ -3177,52 +3362,66 @@ namespace ts {
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
         }
 
-        function findMatchingSignature(signature: Signature, signatureList: Signature[]): Signature {
-            for (let s of signatureList) {
-                // Only signatures with no type parameters may differ in return types
-                if (compareSignatures(signature, s, /*compareReturnTypes*/ !!signature.typeParameters, compareTypes)) {
+        function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreReturnTypes: boolean): Signature {
+            for (let s of signatureList)  {
+                if (compareSignatures(s, signature, partialMatch, ignoreReturnTypes, compareTypes)) {
                     return s;
                 }
             }
         }
 
-        function findMatchingSignatures(signature: Signature, signatureLists: Signature[][]): Signature[] {
+        function findMatchingSignatures(signatureLists: Signature[][], signature: Signature, listIndex: number): Signature[] {
+            if (signature.typeParameters) {
+                // We require an exact match for generic signatures, so we only return signatures from the first
+                // signature list and only if they have exact matches in the other signature lists.
+                if (listIndex > 0) {
+                    return undefined;
+                }
+                for (let i = 1; i < signatureLists.length; i++) {
+                    if (!findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ false)) {
+                        return undefined;
+                    }
+                }
+                return [signature];
+            }
             let result: Signature[] = undefined;
-            for (let i = 1; i < signatureLists.length; i++) {
-                let match = findMatchingSignature(signature, signatureLists[i]);
+            for (let i = 0; i < signatureLists.length; i++) {
+                // Allow matching non-generic signatures to have excess parameters and different return types
+                let match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreReturnTypes*/ true);
                 if (!match) {
                     return undefined;
                 }
-                if (!result) {
-                    result = [signature];
-                }
-                if (match !== signature) {
-                    result.push(match);
+                if (!contains(result, match)) {
+                    (result || (result = [])).push(match);
                 }
             }
             return result;
         }
 
-        // The signatures of a union type are those signatures that are present and identical in each of the
-        // constituent types, except that non-generic signatures may differ in return types. When signatures
-        // differ in return types, the resulting return type is the union of the constituent return types.
+        // The signatures of a union type are those signatures that are present in each of the constituent types.
+        // Generic signatures must match exactly, but non-generic signatures are allowed to have extra optional
+        // parameters and may differ in return types. When signatures differ in return types, the resulting return
+        // type is the union of the constituent return types.
         function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
             let signatureLists = map(types, t => getSignaturesOfType(t, kind));
             let result: Signature[] = undefined;
-            for (let source of signatureLists[0]) {
-                let unionSignatures = findMatchingSignatures(source, signatureLists);
-                if (unionSignatures) {
-                    let signature: Signature = undefined;
-                    if (unionSignatures.length === 1 || source.typeParameters) {
-                        signature = source;
+            for (let i = 0; i < signatureLists.length; i++) {
+                for (let signature of signatureLists[i]) {
+                    // Only process signatures with parameter lists that aren't already in the result list
+                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ true)) {
+                        let unionSignatures = findMatchingSignatures(signatureLists, signature, i);
+                        if (unionSignatures) {
+                            let s = signature;
+                            // Union the result types when more than one signature matches
+                            if (unionSignatures.length > 1) {
+                                s = cloneSignature(signature);
+                                // Clear resolved return type we possibly got from cloneSignature
+                                s.resolvedReturnType = undefined;
+                                s.unionSignatures = unionSignatures;
+                            }
+                            (result || (result = [])).push(s);
+                        }
                     }
-                    else {
-                        signature = cloneSignature(source);
-                        // Clear resolved return type we possibly got from cloneSignature
-                        signature.resolvedReturnType = undefined;
-                        signature.unionSignatures = unionSignatures;
-                    }
-                    (result || (result = [])).push(signature);
                 }
             }
             return result || emptyArray;
@@ -3612,7 +3811,7 @@ namespace ts {
                     if (paramTag.isBracketed) {
                         return true;
                     }
-                    
+
                     if (paramTag.typeExpression) {
                         return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
                     }
@@ -3746,6 +3945,18 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
+            let moduleSym = resolveExternalModuleName(name, name, /*includeJs*/ true);
+            if (moduleSym) {
+                let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
+                if (moduleSymSym) {
+                    return getTypeOfSymbol(moduleSymSym);
+                }
+            }
+
+            return anyType;
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -4040,7 +4251,7 @@ namespace ts {
                         return (<ExpressionWithTypeArguments>node).expression;
                     }
 
-                    // fall through;
+                // fall through;
             }
 
             return undefined;
@@ -4169,9 +4380,13 @@ namespace ts {
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
-            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            let typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            let typeSymbol = getExportedSymbolFromNamespace(namespace, name);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
+        }
+
+        function getExportedSymbolFromNamespace(namespace: string, name: string): Symbol {
+            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            return namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type | SymbolFlags.Value);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -5489,7 +5704,7 @@ namespace ts {
                 }
                 let result = Ternary.True;
                 for (let i = 0, len = sourceSignatures.length; i < len; ++i) {
-                    let related = compareSignatures(sourceSignatures[i], targetSignatures[i], /*compareReturnTypes*/ true, isRelatedTo);
+                    let related = compareSignatures(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -5619,14 +5834,18 @@ namespace ts {
             return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
 
-        function compareSignatures(source: Signature, target: Signature, compareReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
+        function compareSignatures(source: Signature, target: Signature, partialMatch: boolean, ignoreReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             if (source === target) {
                 return Ternary.True;
             }
             if (source.parameters.length !== target.parameters.length ||
                 source.minArgumentCount !== target.minArgumentCount ||
                 source.hasRestParameter !== target.hasRestParameter) {
-                return Ternary.False;
+                if (!partialMatch ||
+                    source.parameters.length < target.parameters.length && !source.hasRestParameter ||
+                    source.minArgumentCount > target.minArgumentCount) {
+                    return Ternary.False;
+                }
             }
             let result = Ternary.True;
             if (source.typeParameters && target.typeParameters) {
@@ -5648,16 +5867,18 @@ namespace ts {
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
             source = getErasedSignature(source);
             target = getErasedSignature(target);
-            for (let i = 0, len = source.parameters.length; i < len; i++) {
-                let s = source.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
-                let t = target.hasRestParameter && i === len - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
+            let sourceLen = source.parameters.length;
+            let targetLen = target.parameters.length;
+            for (let i = 0; i < targetLen; i++) {
+                let s = source.hasRestParameter && i === sourceLen - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
+                let t = target.hasRestParameter && i === targetLen - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
                 let related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
                 }
                 result &= related;
             }
-            if (compareReturnTypes) {
+            if (!ignoreReturnTypes) {
                 result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
             return result;
@@ -7189,20 +7410,13 @@ namespace ts {
             let signatureList: Signature[];
             let types = (<UnionType>type).types;
             for (let current of types) {
-                // The signature set of all constituent type with call signatures should match
-                // So number of signatures allowed is either 0 or 1
-                if (signatureList &&
-                    getSignaturesOfStructuredType(current, SignatureKind.Call).length > 1) {
-                    return undefined;
-                }
-
                 let signature = getNonGenericSignature(current);
                 if (signature) {
                     if (!signatureList) {
                         // This signature will contribute to contextual union signature
                         signatureList = [signature];
                     }
-                    else if (!compareSignatures(signatureList[0], signature, /*compareReturnTypes*/ false, compareTypes)) {
+                    else if (!compareSignatures(signatureList[0], signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ true, compareTypes)) {
                         // Signatures aren't identical, do not use
                         return undefined;
                     }
@@ -8631,7 +8845,6 @@ namespace ts {
                     }
 
                 // fall-through
-
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
@@ -8681,7 +8894,6 @@ namespace ts {
                 // a string or a symbol, based on the name of the parameter's containing method.
 
                 // fall-through
-
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
@@ -9071,8 +9283,8 @@ namespace ts {
             }
 
             let funcType = checkExpression(node.expression);
-            let apparentType = getApparentType(funcType);
 
+            let apparentType = getApparentType(funcType);
             if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
@@ -9313,6 +9525,15 @@ namespace ts {
                     return anyType;
                 }
             }
+
+            let exprType = getTypeOfExpression(node.expression);
+            if((exprType === cjsRequireType) ||
+               (exprType === amdRequireType)) {
+                if(node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                    return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
+                }
+            }
+
             return getReturnTypeOfSignature(signature);
         }
 
@@ -9336,6 +9557,86 @@ namespace ts {
             return signature.hasRestParameter ?
                 pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
                 pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+        }
+
+        // A function expression is a CommonJS Wrapper function if it has
+        // 1 parameter named 'require', two parameters named 'require' and 'exports',
+        // or 3 parameters named 'require', 'exports', and 'module' in that exact order
+        function isCommonJsWrapper(expression: FunctionExpression|ArrowFunction): boolean {
+           switch(expression.parameters.length) {
+                case 3:
+                    if((<Identifier>expression.parameters[2].name).text !== 'module') {
+                        return false;
+                    }
+                    // fall-through
+                case 2:
+                    if((<Identifier>expression.parameters[1].name).text !== 'exports') {
+                        return false;
+                    }
+                    // fall-through
+                case 1:
+                    if ((<Identifier>expression.parameters[0].name).text !== 'require') {
+                        return false;
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        function assignDefineOrRequireCallParameterTypes(funcExpr: FunctionExpression|ArrowFunction) {
+            let callExpr = <CallExpression>funcExpr.parent;
+
+            let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
+            let hasDependencyArray = moduleNames && moduleNames.kind === SyntaxKind.ArrayLiteralExpression;
+
+            if (!hasDependencyArray && isCommonJsWrapper(funcExpr)) {
+                // CommonJS wrapper
+                // Fall-throughs here are intentional
+                switch(funcExpr.parameters.length) {
+                    case 3:
+                        getSymbolLinks(funcExpr.parameters[2].symbol).type = cjsModuleType;
+                    case 2:
+                        getSymbolLinks(funcExpr.parameters[1].symbol).type = cjsExportsType;
+                    case 1:
+                        getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsRequireType;
+                }
+
+                return;
+            }
+
+            // Example: define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
+            if (hasDependencyArray) {
+                // Note that you might require more modules than you accept as parameters; this is fine
+                for (let i = 0; i < funcExpr.parameters.length; i++) {
+                    if (moduleNames.elements.length === i) {
+                        // We exhausted the list of modules. TODO: Issue an error; this is bad.
+                        break;
+                    }
+
+                    let links = getSymbolLinks(funcExpr.parameters[i].symbol);
+                    if (moduleNames.elements[i].kind === SyntaxKind.StringLiteral) {
+                        let moduleName = getTextOfNode(moduleNames.elements[i]);
+
+                        let unquotedName = moduleName.substr(1, moduleName.length - 2);
+                        if (unquotedName === 'require') {
+                            links.type = cjsRequireType;
+                        }
+                        else if (unquotedName === 'exports') {
+                            links.type = cjsExportsType;
+                        }
+                        else if (unquotedName === 'module') {
+                            links.type = cjsModuleType;
+                        }
+                        else {
+                            links.type = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[i]);
+                        }
+                    }
+                    else {
+                        links.type = anyType;
+                    }
+                }
+            }
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -9653,6 +9954,11 @@ namespace ts {
                         checkSignatureDeclaration(node);
                     }
                 }
+            }
+
+            // Handle 'define' calls
+            if (node.parent.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>node.parent)) {
+                assignDefineOrRequireCallParameterTypes(<FunctionExpression>node);
             }
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -11628,9 +11934,16 @@ namespace ts {
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
-                let rootSymbol = resolveName(root, root.text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
-                    markAliasSymbolAsReferenced(rootSymbol);
+                let meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
+                // Resolve type so we know which symbol is referenced
+                let rootSymbol = resolveName(root, root.text, meaning | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                // Resolved symbol is alias
+                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
+                    let aliasTarget = resolveAlias(rootSymbol);
+                    // If alias has value symbol - mark alias as referenced
+                    if (aliasTarget.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
+                        markAliasSymbolAsReferenced(rootSymbol);
+                    }
                 }
             }
         }
@@ -13566,7 +13879,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (languageVersion >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
                     }
@@ -14070,8 +14383,9 @@ namespace ts {
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                            // fall through; this fall-through is necessary because we would like to handle
-                            // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
+
+                        // fall through; this fall-through is necessary because we would like to handle
+                        // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             // If we didn't come from static member of class or interface,
@@ -14089,7 +14403,11 @@ namespace ts {
                             }
                             break;
                     }
-
+                    
+                    if (introducesArgumentsExoticObject(location)) {
+                        copySymbol(argumentsSymbol, meaning);
+                    }
+                    
                     memberFlags = location.flags;
                     location = location.parent;
                 }
@@ -14642,6 +14960,10 @@ namespace ts {
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             let typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true);
+            // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
+            if (!typeSymbol) {
+                return TypeReferenceSerializationKind.ObjectType; 
+            }
             let type = getDeclaredTypeOfSymbol(typeSymbol);
             if (type === unknownType) {
                 return TypeReferenceSerializationKind.Unknown;
@@ -14794,10 +15116,23 @@ namespace ts {
             });
 
             // Initialize special symbols
+            if (compilerOptions.allowNonTsExtensions) {
+                let req = getExportedSymbolFromNamespace('AMD', 'require');
+                if (req) {
+                    globals['require'] = req;
+                }
+                
+                let def = getExportedSymbolFromNamespace('AMD', 'define');
+                if (def) {
+                    globals['define'] = def;
+                }
+            }
+
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
+
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
@@ -14819,6 +15154,12 @@ namespace ts {
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
+
+            cjsModuleType = getExportedTypeFromNamespace('CommonJS', 'Module');
+            cjsExportsType = getExportedTypeFromNamespace('CommonJS', 'Exports');
+            cjsRequireType = getExportedTypeFromNamespace('CommonJS', 'Require');
+            amdRequireType = getExportedTypeFromNamespace('AMD', 'Require');
+
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.

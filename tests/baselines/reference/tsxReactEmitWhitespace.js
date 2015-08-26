@@ -57,17 +57,17 @@ var p = 0;
 // WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
 var p = 0;
 // Emit "   "
-React.createElement("div", null);
+React.createElement("div", null, "   ");
 // Emit "  ", p, "   "
-React.createElement("div", null, p);
+React.createElement("div", null, "  ", p, "    ");
 // Emit only p
 React.createElement("div", null, p);
 // Emit only p
 React.createElement("div", null, p);
 // Emit "  3"
-React.createElement("div", null, "3");
+React.createElement("div", null, "  3");
 // Emit "  3  "
-React.createElement("div", null, "3  ");
+React.createElement("div", null, "  3  ");
 // Emit "3"
 React.createElement("div", null, "3");
 // Emit no args

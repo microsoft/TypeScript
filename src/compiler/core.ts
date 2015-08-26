@@ -24,6 +24,7 @@ namespace ts {
             set,
             contains,
             remove,
+            clear,
             forEachValue: forEachValueInMap
         };
 
@@ -50,6 +51,10 @@ namespace ts {
 
         function normalizeKey(key: string) {
             return getCanonicalFileName(normalizeSlashes(key));
+        }
+        
+        function clear() {
+            files = {};
         }
     }
 
@@ -716,7 +721,9 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
+    export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
+
+    export const supportedJsExtensions = supportedExtensions.concat(".js");
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {

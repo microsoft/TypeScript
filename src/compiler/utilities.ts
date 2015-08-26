@@ -80,6 +80,41 @@ namespace ts {
         return node.end - node.pos;
     }
 
+    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
+        if (!arr1 || !arr2) {
+            return arr1 === arr2;
+        }
+
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < arr1.length; ++i) {
+            let equals = comparer ? comparer(arr1[i], arr2[i]) : arr1[i] === arr2[i];
+            if (!equals) {
+                return false;
+            }
+        }
+
+        return true;
+    }    
+   
+    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
+    }
+
+    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
+        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+    }
+
+    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
+        if (!sourceFile.resolvedModules) {
+            sourceFile.resolvedModules = {};
+        }
+
+        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
+    }
+
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
@@ -205,7 +240,7 @@ namespace ts {
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
-        return getBaseFileName(moduleName).replace(/\W/g, "_");
+        return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
     export function isBlockOrCatchScoped(declaration: Declaration) {
@@ -381,24 +416,15 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        // If parameter/type parameter, the prev token trailing comments are part of this node too
-        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // e.g.   (/** blah */ a, /** blah */ b);
-
-            // e.g.:     (
-            //            /** blah */ a,
-            //            /** blah */ b);
-            return concatenate(
-                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
-        }
-        else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
-        }
+        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
+            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
+                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :
+            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
@@ -611,6 +637,20 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                     return true;
             }
+        }
+        return false;
+    }
+
+    export function introducesArgumentsExoticObject(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                return true;
         }
         return false;
     }
@@ -938,6 +978,7 @@ namespace ts {
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
+                    case SyntaxKind.JsxExpression:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -967,6 +1008,78 @@ namespace ts {
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
+    }
+
+    function isInJavaScriptFile(node: Node): boolean {
+        return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+    }
+
+    function isCalledToNamedFunction(expression: Node, name: string): boolean;
+    function isCalledToNamedFunction(expression: CallExpression, name: string) {
+        return expression.kind === SyntaxKind.CallExpression &&
+                expression.expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>expression.expression).text === name;
+    }
+
+    export function isDefineCall(expression: Node): boolean;
+    export function isDefineCall(expression: CallExpression): boolean {
+        // In .js files, calls to the identifier 'define' are treated specially
+        return expression &&
+            expression.kind === SyntaxKind.CallExpression &&
+            expression.arguments.length > 0 &&
+            isInJavaScriptFile(expression) &&
+            isCalledToNamedFunction(expression, 'define');
+    }
+
+    export function isAnonymousDefineCall(expression: Node): boolean;
+    export function isAnonymousDefineCall(expression: CallExpression): boolean {
+        return isDefineCall(expression) &&
+            expression.arguments.length > 0 &&
+            expression.arguments[0].kind !== SyntaxKind.StringLiteral;
+    }
+
+    export function isAmdRequireCall(expression: Node): boolean;
+    export function isAmdRequireCall(expression: CallExpression): boolean {
+        // of the form 'require("name")' or 'require(arg1, arg2, ...)'
+        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length >= 1;
+    }
+
+    export function isAmdExportAssignment(expression: Node): boolean;
+    export function isAmdExportAssignment(expression: BinaryExpression): boolean {
+        return (expression.kind === SyntaxKind.BinaryExpression) &&
+            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
+            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
+    }
+
+    export function isCommonJsExportsAssignment(expression: Node): boolean;
+    export function isCommonJsExportsAssignment(expression: BinaryExpression): boolean {
+        return (expression.kind === SyntaxKind.BinaryExpression) &&
+            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
+            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'module') &&
+            ((<PropertyAccessExpression>expression.left).name.text === 'exports');
+    }
+
+    export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
+        // e.g. define(['a', 'b', 'c'], ...) or define('myMod', ['a', 'b', 'c'], ...)
+        if (callExpr.arguments.length < 1) {
+            return undefined;
+        }
+
+        for (var i = 0; i < callExpr.arguments.length; i++) {
+            if (callExpr.arguments[i].kind === SyntaxKind.ArrayLiteralExpression) {
+                return (<ArrayLiteralExpression>callExpr.arguments[i]).elements;
+            }
+        }
+
+        if(isAmdRequireCall(callExpr)) {
+            return callExpr.arguments;
+        }
+
+        return undefined;
     }
 
     export function getExternalModuleName(node: Node): Expression {
@@ -1726,7 +1839,7 @@ namespace ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
                 return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
