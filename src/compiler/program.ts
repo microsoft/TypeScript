@@ -233,45 +233,7 @@ namespace ts {
         outDir: "built",
         rootDir: ".",
         sourceMap: false,
-    }
-
-    /* @internal */
-    export function scriptTargetToString(target: ScriptTarget): string {
-        switch (target) {
-            case ScriptTarget.ES5:
-                return "es5";
-            case ScriptTarget.ES6:
-                return "es6";
-            default:
-                return "es3";
-        }
-    }
-
-    /* @internal */
-    export function moduleKindToString(kind: ModuleKind): string {
-        switch (kind) {
-            case ModuleKind.None:
-                return undefined;
-            case ModuleKind.CommonJS:
-                return "commonjs";
-            case ModuleKind.System:
-                return "system";
-            case ModuleKind.UMD:
-                return "umd";
-            default:
-                return "amd";
-        }
-    }
-
-    /* @internal */
-    export function newLineKindToString(kind: NewLineKind): string {
-        switch (kind) {
-            case NewLineKind.CarriageReturnLineFeed:
-                return "CRLF";
-            default:
-                return "LF";
-        }
-    }
+    };
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;

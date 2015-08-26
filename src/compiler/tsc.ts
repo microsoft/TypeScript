@@ -160,47 +160,7 @@ namespace ts {
         }
 
         if (commandLine.options.init) {
-            let file = combinePaths(sys.getCurrentDirectory(), 'tsconfig.json');
-            if (sys.fileExists(file)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
-            }
-            else {
-                let compilerOptions = extend(commandLine.options, defaultInitCompilerOptions);
-                let configs = {
-                    compilerOptions,
-                    files: commandLine.fileNames,
-                    exclude: ["node_modules"]
-                };
-                sys.writeFile(file, JSON.stringify(configs, (k, v) => {
-                    if (k === "compilerOptions") {
-                        let options: CompilerOptions = v;
-                        for (let o in options) {
-                            switch (o) {
-                                case "target":
-                                    options[o] = scriptTargetToString(options[o] as ScriptTarget);
-                                    continue;
-                                case "module":
-                                    options[o] = moduleKindToString(options[o] as ModuleKind);
-                                    continue;
-                                case "newLine":
-                                    options[o] = newLineKindToString(options[o] as NewLineKind);
-                                    continue;
-                                case "init":
-                                case "watch":
-                                case "version":
-                                case "help":
-                                    delete options[o];
-                                    continue;
-                            }
-                        }
-
-                        return options;
-                    }
-
-                    return v;
-                }, 4));
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
-            }
+            writeConfigFile(commandLine.options, commandLine.fileNames);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -532,6 +492,65 @@ namespace ts {
 
         function makePadding(paddingLength: number): string {
             return Array(paddingLength + 1).join(" ");
+        }
+    }
+
+    function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
+        let currentDirectory = sys.getCurrentDirectory();
+        let file = combinePaths(currentDirectory, 'tsconfig.json');
+        if (sys.fileExists(file)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+        }
+        else {
+            let compilerOptions = extend(options, defaultInitCompilerOptions);
+            let configs = {
+                compilerOptions: serializeCompilerOptions(compilerOptions, currentDirectory),
+                files: fileNames,
+                exclude: ["node_modules"]
+            };
+            sys.writeFile(file, JSON.stringify(configs, undefined, 4));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+        }
+
+        return;
+
+        function serializeCompilerOptions(options: CompilerOptions, currentDirectory: string): Map<string|number|boolean> {
+            let result: Map<string|number|boolean> = {};
+            let optionsNameMap = getOptionNameMap().optionNameMap;
+
+            for (let name in options) {
+                if (hasProperty(options, name)) {
+                    let value = options[name];
+                    switch (name) {
+                        case "init":
+                        case "watch":
+                        case "version":
+                        case "help":
+                        case "project":
+                            break;
+                        default:
+                            let optionDefinition = optionsNameMap[name];
+                            if (optionDefinition) {
+                                if (typeof optionDefinition.type === "string") {
+                                    // string, number or boolean
+                                    result[name] = value;
+                                }
+                                else {
+                                    // Enum
+                                    let typeMap = <Map<number>>optionDefinition.type;
+                                    for (let key in typeMap) {
+                                        if (hasProperty(typeMap, key)) {
+                                            if (typeMap[key] === value)
+                                                result[name] = key;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return result;
         }
     }
 }
