@@ -917,7 +917,7 @@ interface MessageEventInit extends EventInit {
     lastEventId?: string;
     channel?: string;
     source?: any;
-    ports?: Array<MessagePort>;
+    ports?: MessagePort[];
 }
 
 interface ProgressEventInit extends EventInit {
