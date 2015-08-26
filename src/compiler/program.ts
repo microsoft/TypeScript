@@ -1,5 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
+/// <reference path="core.ts" />
 
 namespace ts {
     /* @internal */ export let programTime = 0;
@@ -223,6 +224,16 @@ namespace ts {
 
         return { resolvedFileName: referencedSourceFile, failedLookupLocations };
     }
+
+    /* @internal */
+    export const defaultInitCompilerOptions: CompilerOptions = {
+        module: ModuleKind.CommonJS,
+        target: ScriptTarget.ES3,
+        noImplicitAny: false,
+        outDir: "built",
+        rootDir: ".",
+        sourceMap: false,
+    };
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
