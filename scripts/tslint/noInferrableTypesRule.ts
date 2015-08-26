@@ -11,17 +11,6 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class InferrableTypeWalker extends Lint.RuleWalker {
-    private originalService: ts.LanguageService;
-    private fileName: string;
-    private originalContent: string;
-    
-    constructor(file: ts.SourceFile, opts: Lint.IOptions) {
-        this.fileName = file.fileName;
-        this.originalContent = file.getFullText();
-        this.originalService = ts.createLanguageService(Lint.createLanguageServiceHost(this.fileName, this.originalContent));
-        super(this.originalService.getSourceFile(this.fileName), opts);
-    }
-
     visitVariableStatement(node: ts.VariableStatement) {
         node.declarationList.declarations.forEach(e => {
             if ((!!e.type) && (!!e.initializer)) {
