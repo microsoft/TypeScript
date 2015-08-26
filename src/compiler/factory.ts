@@ -64,9 +64,11 @@ namespace ts {
             
             newNode.flags = flags;
             newNode.original = oldNode;
+            newNode.pos = oldNode.pos;
+            newNode.end = oldNode.end;
             
-            mergeCommentRanges(oldNode, newNode);
-            return setTextRange(newNode, oldNode);
+            //mergeCommentRanges(oldNode, newNode);
+            return newNode;
         }
         
         function mergeCommentRanges(oldNode: Node, newNode: Node) {
@@ -83,21 +85,33 @@ namespace ts {
         }
         
         export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): T {
-            return setNodeFlags(setTextRange(<T>new (getNodeConstructor(kind))(), location), flags);
+            let node = <T>new (getNodeConstructor(kind))();
+            if (location) {
+                node.pos = location.pos;
+                node.end = location.end;
+            }
+            if (flags) {
+                node.flags = flags;
+            }
+            return node;
         }
         
         export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange) {
             let nodes = <NodeArray<T>>(elements || []);
-            if (nodes.pos === undefined) {
+            if (location) {
+                nodes.pos = location.pos;
+                nodes.end = location.end;
+            }
+            else if (nodes.pos === undefined) {
                 nodes.pos = -1;
                 nodes.end = -1;
             }
             
-            return setTextRange(nodes, location);
+            return nodes;
         }
         
         export function createModifiersArray(elements?: Node[], location?: TextRange) {
-            let modifiers = <ModifiersArray>(elements || []);
+            let modifiers = <ModifiersArray>createNodeArray(elements || [], location);
             if (modifiers.flags === undefined) {
                 let flags = 0;
                 for (let modifier of modifiers) {
@@ -107,7 +121,7 @@ namespace ts {
                 modifiers.flags = flags;
             }
             
-            return setTextRange(modifiers, location);
+            return modifiers;
         }
         
         export function createSourceFile(): SourceFile {

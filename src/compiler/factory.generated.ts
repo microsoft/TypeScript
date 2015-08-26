@@ -40,7 +40,7 @@ namespace ts {
         }
         export function createIdentifier(text?: string, originalKeywordKind?: SyntaxKind, location?: TextRange, flags?: NodeFlags): Identifier {
             let node = createNode<Identifier>(SyntaxKind.Identifier, location, flags);
-            if (arguments.length) {
+            if (text || originalKeywordKind) {
                 node.text = text;
                 node.originalKeywordKind = originalKeywordKind;
             }
@@ -60,7 +60,7 @@ namespace ts {
         }
         export function createQualifiedName(left?: EntityName, right?: Identifier, location?: TextRange, flags?: NodeFlags): QualifiedName {
             let node = createNode<QualifiedName>(SyntaxKind.QualifiedName, location, flags);
-            if (arguments.length) {
+            if (left || right) {
                 node.left = left;
                 node.right = right;
             }
@@ -88,7 +88,7 @@ namespace ts {
         export function createTypeParameter(name?: Identifier, constraint?: TypeNode, expression?: Expression, 
             location?: TextRange, flags?: NodeFlags): TypeParameterDeclaration {
             let node = createNode<TypeParameterDeclaration>(SyntaxKind.TypeParameter, location, flags);
-            if (arguments.length) {
+            if (name || constraint || expression) {
                 node.name = name;
                 node.constraint = constraint;
                 node.expression = expression;
@@ -107,7 +107,7 @@ namespace ts {
             name?: BindingPattern | Identifier, questionToken?: Node, type?: TypeNode, initializer?: Expression, 
             location?: TextRange, flags?: NodeFlags): ParameterDeclaration {
             let node = createNode<ParameterDeclaration>(SyntaxKind.Parameter, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || dotDotDotToken || name || questionToken || type || initializer) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.dotDotDotToken = dotDotDotToken;
@@ -142,7 +142,7 @@ namespace ts {
         export function createPropertySignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, questionToken?: Node, 
             type?: TypeNode, location?: TextRange, flags?: NodeFlags): PropertySignature {
             let node = createNode<PropertySignature>(SyntaxKind.PropertySignature, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || questionToken || type) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -162,7 +162,7 @@ namespace ts {
         export function createPropertyDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: PropertyName, type?: TypeNode, 
             initializer?: Expression, location?: TextRange, flags?: NodeFlags): PropertyDeclaration {
             let node = createNode<PropertyDeclaration>(SyntaxKind.PropertyDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || type || initializer) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -184,7 +184,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, 
             location?: TextRange, flags?: NodeFlags): MethodSignature {
             let node = createNode<MethodSignature>(SyntaxKind.MethodSignature, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || questionToken || typeParameters || parameters || type) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -208,7 +208,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): MethodDeclaration {
             let node = createNode<MethodDeclaration>(SyntaxKind.MethodDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || asteriskToken || name || typeParameters || parameters || type || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.asteriskToken = asteriskToken;
@@ -233,7 +233,7 @@ namespace ts {
         export function createConstructor(decorators?: Array<Decorator>, modifiers?: Array<Node>, parameters?: Array<ParameterDeclaration>, 
             type?: TypeNode, body?: Block, location?: TextRange, flags?: NodeFlags): ConstructorDeclaration {
             let node = createNode<ConstructorDeclaration>(SyntaxKind.Constructor, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || parameters || type || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.parameters = parameters && createNodeArray(parameters)
@@ -255,7 +255,7 @@ namespace ts {
             parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): GetAccessorDeclaration {
             let node = createNode<GetAccessorDeclaration>(SyntaxKind.GetAccessor, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || parameters || type || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -278,7 +278,7 @@ namespace ts {
             parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): SetAccessorDeclaration {
             let node = createNode<SetAccessorDeclaration>(SyntaxKind.SetAccessor, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || parameters || type || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -300,7 +300,7 @@ namespace ts {
         export function createCallSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
             type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): CallSignatureDeclaration {
             let node = createNode<CallSignatureDeclaration>(SyntaxKind.CallSignature, location, flags);
-            if (arguments.length) {
+            if (typeParameters || parameters || type || questionToken) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
@@ -319,7 +319,7 @@ namespace ts {
         export function createConstructSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
             type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): ConstructSignatureDeclaration {
             let node = createNode<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature, location, flags);
-            if (arguments.length) {
+            if (typeParameters || parameters || type || questionToken) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
@@ -338,7 +338,7 @@ namespace ts {
         export function createIndexSignature(decorators?: Array<Decorator>, modifiers?: Array<Node>, parameters?: Array<ParameterDeclaration>, 
             type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): IndexSignatureDeclaration {
             let node = createNode<IndexSignatureDeclaration>(SyntaxKind.IndexSignature, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || parameters || type || questionToken) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.parameters = parameters && createNodeArray(parameters)
@@ -358,7 +358,7 @@ namespace ts {
         export function createTypePredicate(parameterName?: Identifier, type?: TypeNode, 
             location?: TextRange, flags?: NodeFlags): TypePredicateNode {
             let node = createNode<TypePredicateNode>(SyntaxKind.TypePredicate, location, flags);
-            if (arguments.length) {
+            if (parameterName || type) {
                 node.parameterName = parameterName;
                 node.type = type;
             }
@@ -374,7 +374,7 @@ namespace ts {
         export function createTypeReference(typeName?: EntityName, typeArguments?: Array<TypeNode>, 
             location?: TextRange, flags?: NodeFlags): TypeReferenceNode {
             let node = createNode<TypeReferenceNode>(SyntaxKind.TypeReference, location, flags);
-            if (arguments.length) {
+            if (typeName || typeArguments) {
                 node.typeName = typeName;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
             }
@@ -390,7 +390,7 @@ namespace ts {
         export function createFunctionType(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
             type?: TypeNode, location?: TextRange, flags?: NodeFlags): FunctionTypeNode {
             let node = createNode<FunctionTypeNode>(SyntaxKind.FunctionType, location, flags);
-            if (arguments.length) {
+            if (typeParameters || parameters || type) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
@@ -408,7 +408,7 @@ namespace ts {
         export function createConstructorType(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, 
             type?: TypeNode, location?: TextRange, flags?: NodeFlags): ConstructorTypeNode {
             let node = createNode<ConstructorTypeNode>(SyntaxKind.ConstructorType, location, flags);
-            if (arguments.length) {
+            if (typeParameters || parameters || type) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
@@ -535,7 +535,7 @@ namespace ts {
             dotDotDotToken?: Node, name?: BindingPattern | Identifier, initializer?: Expression, 
             location?: TextRange, flags?: NodeFlags): BindingElement {
             let node = createNode<BindingElement>(SyntaxKind.BindingElement, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || propertyName || dotDotDotToken || name || initializer) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.propertyName = propertyName;
@@ -569,7 +569,7 @@ namespace ts {
         export function createObjectLiteralExpression(decorators?: Array<Decorator>, modifiers?: Array<Node>, 
             properties?: Array<ObjectLiteralElement>, location?: TextRange, flags?: NodeFlags): ObjectLiteralExpression {
             let node = createNode<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || properties) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.properties = properties && createNodeArray(properties)
@@ -587,7 +587,7 @@ namespace ts {
         export function createPropertyAccessExpression(expression?: LeftHandSideExpression, dotToken?: Node, name?: Identifier, 
             location?: TextRange, flags?: NodeFlags): PropertyAccessExpression {
             let node = createNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression, location, flags);
-            if (arguments.length) {
+            if (expression || dotToken || name) {
                 node.expression = expression;
                 node.dotToken = dotToken;
                 node.name = name;
@@ -605,7 +605,7 @@ namespace ts {
         export function createElementAccessExpression(expression?: LeftHandSideExpression, argumentExpression?: Expression, 
             location?: TextRange, flags?: NodeFlags): ElementAccessExpression {
             let node = createNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression, location, flags);
-            if (arguments.length) {
+            if (expression || argumentExpression) {
                 node.expression = expression;
                 node.argumentExpression = argumentExpression;
             }
@@ -622,7 +622,7 @@ namespace ts {
         export function createCallExpression(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, _arguments?: Array<Expression>, 
             location?: TextRange, flags?: NodeFlags): CallExpression {
             let node = createNode<CallExpression>(SyntaxKind.CallExpression, location, flags);
-            if (arguments.length) {
+            if (expression || typeArguments || _arguments) {
                 node.expression = expression;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
                 node.arguments = _arguments && createNodeArray(_arguments)
@@ -640,7 +640,7 @@ namespace ts {
         export function createNewExpression(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, _arguments?: Array<Expression>, 
             location?: TextRange, flags?: NodeFlags): NewExpression {
             let node = createNode<NewExpression>(SyntaxKind.NewExpression, location, flags);
-            if (arguments.length) {
+            if (expression || typeArguments || _arguments) {
                 node.expression = expression;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
                 node.arguments = _arguments && createNodeArray(_arguments)
@@ -658,7 +658,7 @@ namespace ts {
         export function createTaggedTemplateExpression(tag?: LeftHandSideExpression, template?: LiteralExpression | TemplateExpression, 
             location?: TextRange, flags?: NodeFlags): TaggedTemplateExpression {
             let node = createNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression, location, flags);
-            if (arguments.length) {
+            if (tag || template) {
                 node.tag = tag;
                 node.template = template;
             }
@@ -675,7 +675,7 @@ namespace ts {
         export function createTypeAssertionExpression(type?: TypeNode, expression?: UnaryExpression, 
             location?: TextRange, flags?: NodeFlags): TypeAssertion {
             let node = createNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression, location, flags);
-            if (arguments.length) {
+            if (type || expression) {
                 node.type = type;
                 node.expression = expression;
             }
@@ -704,7 +704,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block | Expression, 
             location?: TextRange, flags?: NodeFlags): FunctionExpression {
             let node = createNode<FunctionExpression>(SyntaxKind.FunctionExpression, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || asteriskToken || name || typeParameters || parameters || type || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.asteriskToken = asteriskToken;
@@ -730,7 +730,7 @@ namespace ts {
             parameters?: Array<ParameterDeclaration>, type?: TypeNode, equalsGreaterThanToken?: Node, body?: Block | Expression, 
             location?: TextRange, flags?: NodeFlags): ArrowFunction {
             let node = createNode<ArrowFunction>(SyntaxKind.ArrowFunction, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || typeParameters || parameters || type || equalsGreaterThanToken || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
@@ -802,7 +802,7 @@ namespace ts {
         export function createPrefixUnaryExpression(operator?: SyntaxKind, operand?: UnaryExpression, 
             location?: TextRange, flags?: NodeFlags): PrefixUnaryExpression {
             let node = createNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression, location, flags);
-            if (arguments.length) {
+            if (operator || operand) {
                 node.operator = operator;
                 node.operand = operand;
             }
@@ -818,7 +818,7 @@ namespace ts {
         export function createPostfixUnaryExpression(operand?: LeftHandSideExpression, operator?: SyntaxKind, 
             location?: TextRange, flags?: NodeFlags): PostfixUnaryExpression {
             let node = createNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression, location, flags);
-            if (arguments.length) {
+            if (operand || operator) {
                 node.operand = operand;
                 node.operator = operator;
             }
@@ -834,7 +834,7 @@ namespace ts {
         export function createBinaryExpression(left?: Expression, operatorToken?: Node, right?: Expression, 
             location?: TextRange, flags?: NodeFlags): BinaryExpression {
             let node = createNode<BinaryExpression>(SyntaxKind.BinaryExpression, location, flags);
-            if (arguments.length) {
+            if (left || operatorToken || right) {
                 node.left = left;
                 node.operatorToken = operatorToken;
                 node.right = right;
@@ -851,7 +851,7 @@ namespace ts {
         export function createConditionalExpression(condition?: Expression, questionToken?: Node, whenTrue?: Expression, colonToken?: Node, 
             whenFalse?: Expression, location?: TextRange, flags?: NodeFlags): ConditionalExpression {
             let node = createNode<ConditionalExpression>(SyntaxKind.ConditionalExpression, location, flags);
-            if (arguments.length) {
+            if (condition || questionToken || whenTrue || colonToken || whenFalse) {
                 node.condition = condition;
                 node.questionToken = questionToken;
                 node.whenTrue = whenTrue;
@@ -871,7 +871,7 @@ namespace ts {
         export function createTemplateExpression(head?: LiteralExpression, templateSpans?: Array<TemplateSpan>, 
             location?: TextRange, flags?: NodeFlags): TemplateExpression {
             let node = createNode<TemplateExpression>(SyntaxKind.TemplateExpression, location, flags);
-            if (arguments.length) {
+            if (head || templateSpans) {
                 node.head = head;
                 node.templateSpans = templateSpans && createNodeArray(templateSpans)
             }
@@ -888,7 +888,7 @@ namespace ts {
         export function createYieldExpression(asteriskToken?: Node, expression?: Expression, 
             location?: TextRange, flags?: NodeFlags): YieldExpression {
             let node = createNode<YieldExpression>(SyntaxKind.YieldExpression, location, flags);
-            if (arguments.length) {
+            if (asteriskToken || expression) {
                 node.asteriskToken = asteriskToken;
                 node.expression = expression;
             }
@@ -917,7 +917,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<ClassElement>, 
             location?: TextRange, flags?: NodeFlags): ClassExpression {
             let node = createNode<ClassExpression>(SyntaxKind.ClassExpression, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || typeParameters || heritageClauses || members) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -943,7 +943,7 @@ namespace ts {
         export function createExpressionWithTypeArguments(expression?: LeftHandSideExpression, typeArguments?: Array<TypeNode>, 
             location?: TextRange, flags?: NodeFlags): ExpressionWithTypeArguments {
             let node = createNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments, location, flags);
-            if (arguments.length) {
+            if (expression || typeArguments) {
                 node.expression = expression;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
             }
@@ -959,7 +959,7 @@ namespace ts {
         }
         export function createAsExpression(expression?: Expression, type?: TypeNode, location?: TextRange, flags?: NodeFlags): AsExpression {
             let node = createNode<AsExpression>(SyntaxKind.AsExpression, location, flags);
-            if (arguments.length) {
+            if (expression || type) {
                 node.expression = expression;
                 node.type = type;
             }
@@ -975,7 +975,7 @@ namespace ts {
         export function createTemplateSpan(expression?: Expression, literal?: LiteralExpression, 
             location?: TextRange, flags?: NodeFlags): TemplateSpan {
             let node = createNode<TemplateSpan>(SyntaxKind.TemplateSpan, location, flags);
-            if (arguments.length) {
+            if (expression || literal) {
                 node.expression = expression;
                 node.literal = literal;
             }
@@ -1006,7 +1006,7 @@ namespace ts {
         export function createVariableStatement(decorators?: Array<Decorator>, modifiers?: Array<Node>, declarationList?: VariableDeclarationList, 
             location?: TextRange, flags?: NodeFlags): VariableStatement {
             let node = createNode<VariableStatement>(SyntaxKind.VariableStatement, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || declarationList) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.declarationList = declarationList;
@@ -1039,7 +1039,7 @@ namespace ts {
         export function createIfStatement(expression?: Expression, thenStatement?: Statement, elseStatement?: Statement, 
             location?: TextRange, flags?: NodeFlags): IfStatement {
             let node = createNode<IfStatement>(SyntaxKind.IfStatement, location, flags);
-            if (arguments.length) {
+            if (expression || thenStatement || elseStatement) {
                 node.expression = expression;
                 node.thenStatement = thenStatement;
                 node.elseStatement = elseStatement;
@@ -1056,7 +1056,7 @@ namespace ts {
         }
         export function createDoStatement(statement?: Statement, expression?: Expression, location?: TextRange, flags?: NodeFlags): DoStatement {
             let node = createNode<DoStatement>(SyntaxKind.DoStatement, location, flags);
-            if (arguments.length) {
+            if (statement || expression) {
                 node.statement = statement;
                 node.expression = expression;
             }
@@ -1072,7 +1072,7 @@ namespace ts {
         export function createWhileStatement(expression?: Expression, statement?: Statement, 
             location?: TextRange, flags?: NodeFlags): WhileStatement {
             let node = createNode<WhileStatement>(SyntaxKind.WhileStatement, location, flags);
-            if (arguments.length) {
+            if (expression || statement) {
                 node.expression = expression;
                 node.statement = statement;
             }
@@ -1088,7 +1088,7 @@ namespace ts {
         export function createForStatement(initializer?: Expression | VariableDeclarationList, condition?: Expression, incrementor?: Expression, 
             statement?: Statement, location?: TextRange, flags?: NodeFlags): ForStatement {
             let node = createNode<ForStatement>(SyntaxKind.ForStatement, location, flags);
-            if (arguments.length) {
+            if (initializer || condition || incrementor || statement) {
                 node.initializer = initializer;
                 node.condition = condition;
                 node.incrementor = incrementor;
@@ -1108,7 +1108,7 @@ namespace ts {
         export function createForInStatement(initializer?: Expression | VariableDeclarationList, expression?: Expression, statement?: Statement, 
             location?: TextRange, flags?: NodeFlags): ForInStatement {
             let node = createNode<ForInStatement>(SyntaxKind.ForInStatement, location, flags);
-            if (arguments.length) {
+            if (initializer || expression || statement) {
                 node.initializer = initializer;
                 node.expression = expression;
                 node.statement = statement;
@@ -1126,7 +1126,7 @@ namespace ts {
         export function createForOfStatement(initializer?: Expression | VariableDeclarationList, expression?: Expression, statement?: Statement, 
             location?: TextRange, flags?: NodeFlags): ForOfStatement {
             let node = createNode<ForOfStatement>(SyntaxKind.ForOfStatement, location, flags);
-            if (arguments.length) {
+            if (initializer || expression || statement) {
                 node.initializer = initializer;
                 node.expression = expression;
                 node.statement = statement;
@@ -1179,7 +1179,7 @@ namespace ts {
         }
         export function createWithStatement(expression?: Expression, statement?: Statement, location?: TextRange, flags?: NodeFlags): WithStatement {
             let node = createNode<WithStatement>(SyntaxKind.WithStatement, location, flags);
-            if (arguments.length) {
+            if (expression || statement) {
                 node.expression = expression;
                 node.statement = statement;
             }
@@ -1195,7 +1195,7 @@ namespace ts {
         export function createSwitchStatement(expression?: Expression, caseBlock?: CaseBlock, 
             location?: TextRange, flags?: NodeFlags): SwitchStatement {
             let node = createNode<SwitchStatement>(SyntaxKind.SwitchStatement, location, flags);
-            if (arguments.length) {
+            if (expression || caseBlock) {
                 node.expression = expression;
                 node.caseBlock = caseBlock;
             }
@@ -1211,7 +1211,7 @@ namespace ts {
         export function createLabeledStatement(label?: Identifier, statement?: Statement, 
             location?: TextRange, flags?: NodeFlags): LabeledStatement {
             let node = createNode<LabeledStatement>(SyntaxKind.LabeledStatement, location, flags);
-            if (arguments.length) {
+            if (label || statement) {
                 node.label = label;
                 node.statement = statement;
             }
@@ -1239,7 +1239,7 @@ namespace ts {
         export function createTryStatement(tryBlock?: Block, catchClause?: CatchClause, finallyBlock?: Block, 
             location?: TextRange, flags?: NodeFlags): TryStatement {
             let node = createNode<TryStatement>(SyntaxKind.TryStatement, location, flags);
-            if (arguments.length) {
+            if (tryBlock || catchClause || finallyBlock) {
                 node.tryBlock = tryBlock;
                 node.catchClause = catchClause;
                 node.finallyBlock = finallyBlock;
@@ -1259,7 +1259,7 @@ namespace ts {
         export function createVariableDeclaration(name?: BindingPattern | Identifier, type?: TypeNode, initializer?: Expression, 
             location?: TextRange, flags?: NodeFlags): VariableDeclaration {
             let node = createNode<VariableDeclaration>(SyntaxKind.VariableDeclaration, location, flags);
-            if (arguments.length) {
+            if (name || type || initializer) {
                 node.name = name;
                 node.type = type;
                 node.initializer = initializer;
@@ -1292,7 +1292,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: Block, 
             location?: TextRange, flags?: NodeFlags): FunctionDeclaration {
             let node = createNode<FunctionDeclaration>(SyntaxKind.FunctionDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || asteriskToken || name || typeParameters || parameters || type || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.asteriskToken = asteriskToken;
@@ -1318,7 +1318,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<ClassElement>, 
             location?: TextRange, flags?: NodeFlags): ClassDeclaration {
             let node = createNode<ClassDeclaration>(SyntaxKind.ClassDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || typeParameters || heritageClauses || members) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -1342,7 +1342,7 @@ namespace ts {
             typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<TypeElement>, 
             location?: TextRange, flags?: NodeFlags): InterfaceDeclaration {
             let node = createNode<InterfaceDeclaration>(SyntaxKind.InterfaceDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || typeParameters || heritageClauses || members) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -1365,7 +1365,7 @@ namespace ts {
         export function createTypeAliasDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
             typeParameters?: Array<TypeParameterDeclaration>, type?: TypeNode, location?: TextRange, flags?: NodeFlags): TypeAliasDeclaration {
             let node = createNode<TypeAliasDeclaration>(SyntaxKind.TypeAliasDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || typeParameters || type) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -1386,7 +1386,7 @@ namespace ts {
         export function createEnumDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, members?: Array<EnumMember>, 
             location?: TextRange, flags?: NodeFlags): EnumDeclaration {
             let node = createNode<EnumDeclaration>(SyntaxKind.EnumDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || members) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -1405,7 +1405,7 @@ namespace ts {
         export function createModuleDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier | LiteralExpression, 
             body?: ModuleBlock | ModuleDeclaration, location?: TextRange, flags?: NodeFlags): ModuleDeclaration {
             let node = createNode<ModuleDeclaration>(SyntaxKind.ModuleDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || body) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -1448,7 +1448,7 @@ namespace ts {
         export function createImportEqualsDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, name?: Identifier, 
             moduleReference?: EntityName | ExternalModuleReference, location?: TextRange, flags?: NodeFlags): ImportEqualsDeclaration {
             let node = createNode<ImportEqualsDeclaration>(SyntaxKind.ImportEqualsDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || name || moduleReference) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.name = name;
@@ -1467,7 +1467,7 @@ namespace ts {
         export function createImportDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, importClause?: ImportClause, 
             moduleSpecifier?: Expression, location?: TextRange, flags?: NodeFlags): ImportDeclaration {
             let node = createNode<ImportDeclaration>(SyntaxKind.ImportDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || importClause || moduleSpecifier) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.importClause = importClause;
@@ -1487,7 +1487,7 @@ namespace ts {
         export function createImportClause(name?: Identifier, namedBindings?: NamedImports | NamespaceImport, 
             location?: TextRange, flags?: NodeFlags): ImportClause {
             let node = createNode<ImportClause>(SyntaxKind.ImportClause, location, flags);
-            if (arguments.length) {
+            if (name || namedBindings) {
                 node.name = name;
                 node.namedBindings = namedBindings;
             }
@@ -1527,7 +1527,7 @@ namespace ts {
         export function createImportSpecifier(propertyName?: Identifier, name?: Identifier, 
             location?: TextRange, flags?: NodeFlags): ImportSpecifier {
             let node = createNode<ImportSpecifier>(SyntaxKind.ImportSpecifier, location, flags);
-            if (arguments.length) {
+            if (propertyName || name) {
                 node.propertyName = propertyName;
                 node.name = name;
             }
@@ -1543,7 +1543,7 @@ namespace ts {
         export function createExportAssignment(decorators?: Array<Decorator>, modifiers?: Array<Node>, expression?: Expression, 
             location?: TextRange, flags?: NodeFlags): ExportAssignment {
             let node = createNode<ExportAssignment>(SyntaxKind.ExportAssignment, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || expression) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.expression = expression;
@@ -1561,7 +1561,7 @@ namespace ts {
         export function createExportDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, exportClause?: NamedExports, 
             moduleSpecifier?: Expression, location?: TextRange, flags?: NodeFlags): ExportDeclaration {
             let node = createNode<ExportDeclaration>(SyntaxKind.ExportDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || exportClause || moduleSpecifier) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.exportClause = exportClause;
@@ -1593,7 +1593,7 @@ namespace ts {
         export function createExportSpecifier(propertyName?: Identifier, name?: Identifier, 
             location?: TextRange, flags?: NodeFlags): ExportSpecifier {
             let node = createNode<ExportSpecifier>(SyntaxKind.ExportSpecifier, location, flags);
-            if (arguments.length) {
+            if (propertyName || name) {
                 node.propertyName = propertyName;
                 node.name = name;
             }
@@ -1609,7 +1609,7 @@ namespace ts {
         export function createMissingDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Node>, questionToken?: Node, 
             location?: TextRange, flags?: NodeFlags): MissingDeclaration {
             let node = createNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, location, flags);
-            if (arguments.length) {
+            if (decorators || modifiers || questionToken) {
                 node.decorators = decorators && createNodeArray(decorators)
                 setModifiers(node, modifiers);
                 node.questionToken = questionToken;
@@ -1639,7 +1639,7 @@ namespace ts {
         export function createJsxElement(openingElement?: JsxOpeningElement, children?: Array<JsxChild>, closingElement?: JsxClosingElement, 
             location?: TextRange, flags?: NodeFlags): JsxElement {
             let node = createNode<JsxElement>(SyntaxKind.JsxElement, location, flags);
-            if (arguments.length) {
+            if (openingElement || children || closingElement) {
                 node.openingElement = openingElement;
                 node.children = children && createNodeArray(children)
                 node.closingElement = closingElement;
@@ -1657,7 +1657,7 @@ namespace ts {
         export function createJsxSelfClosingElement(tagName?: EntityName, attributes?: Array<JsxAttribute | JsxSpreadAttribute>, 
             location?: TextRange, flags?: NodeFlags): JsxSelfClosingElement {
             let node = createNode<JsxSelfClosingElement>(SyntaxKind.JsxSelfClosingElement, location, flags);
-            if (arguments.length) {
+            if (tagName || attributes) {
                 node.tagName = tagName;
                 node.attributes = attributes && createNodeArray(attributes)
             }
@@ -1674,7 +1674,7 @@ namespace ts {
         export function createJsxOpeningElement(tagName?: EntityName, attributes?: Array<JsxAttribute | JsxSpreadAttribute>, 
             location?: TextRange, flags?: NodeFlags): JsxOpeningElement {
             let node = createNode<JsxOpeningElement>(SyntaxKind.JsxOpeningElement, location, flags);
-            if (arguments.length) {
+            if (tagName || attributes) {
                 node.tagName = tagName;
                 node.attributes = attributes && createNodeArray(attributes)
             }
@@ -1705,7 +1705,7 @@ namespace ts {
         }
         export function createJsxAttribute(name?: Identifier, initializer?: Expression, location?: TextRange, flags?: NodeFlags): JsxAttribute {
             let node = createNode<JsxAttribute>(SyntaxKind.JsxAttribute, location, flags);
-            if (arguments.length) {
+            if (name || initializer) {
                 node.name = name;
                 node.initializer = initializer;
             }
@@ -1745,7 +1745,7 @@ namespace ts {
         export function createCaseClause(expression?: Expression, statements?: Array<Statement>, 
             location?: TextRange, flags?: NodeFlags): CaseClause {
             let node = createNode<CaseClause>(SyntaxKind.CaseClause, location, flags);
-            if (arguments.length) {
+            if (expression || statements) {
                 node.expression = expression;
                 node.statements = statements && createNodeArray(statements)
             }
@@ -1773,7 +1773,7 @@ namespace ts {
         export function createHeritageClause(token?: SyntaxKind, types?: Array<ExpressionWithTypeArguments>, 
             location?: TextRange, flags?: NodeFlags): HeritageClause {
             let node = createNode<HeritageClause>(SyntaxKind.HeritageClause, location, flags);
-            if (arguments.length) {
+            if (token || types) {
                 node.token = token;
                 node.types = types && createNodeArray(types)
             }
@@ -1789,7 +1789,7 @@ namespace ts {
         export function createCatchClause(variableDeclaration?: VariableDeclaration, block?: Block, 
             location?: TextRange, flags?: NodeFlags): CatchClause {
             let node = createNode<CatchClause>(SyntaxKind.CatchClause, location, flags);
-            if (arguments.length) {
+            if (variableDeclaration || block) {
                 node.variableDeclaration = variableDeclaration;
                 node.block = block;
             }
@@ -1805,7 +1805,7 @@ namespace ts {
         export function createPropertyAssignment(name?: PropertyName, initializer?: Expression, 
             location?: TextRange, flags?: NodeFlags): PropertyAssignment {
             let node = createNode<PropertyAssignment>(SyntaxKind.PropertyAssignment, location, flags);
-            if (arguments.length) {
+            if (name || initializer) {
                 node.name = name;
                 node.initializer = initializer;
             }
@@ -1832,7 +1832,7 @@ namespace ts {
         }
         export function createEnumMember(name?: DeclarationName, initializer?: Expression, location?: TextRange, flags?: NodeFlags): EnumMember {
             let node = createNode<EnumMember>(SyntaxKind.EnumMember, location, flags);
-            if (arguments.length) {
+            if (name || initializer) {
                 node.name = name;
                 node.initializer = initializer;
             }
@@ -1938,7 +1938,7 @@ namespace ts {
         export function createJSDocRecordMember(name?: Identifier | LiteralExpression, type?: JSDocType, 
             location?: TextRange, flags?: NodeFlags): JSDocRecordMember {
             let node = createNode<JSDocRecordMember>(SyntaxKind.JSDocRecordMember, location, flags);
-            if (arguments.length) {
+            if (name || type) {
                 node.name = name;
                 node.type = type;
             }
@@ -1954,7 +1954,7 @@ namespace ts {
         export function createJSDocTypeReference(name?: EntityName, typeArguments?: Array<JSDocType>, 
             location?: TextRange, flags?: NodeFlags): JSDocTypeReference {
             let node = createNode<JSDocTypeReference>(SyntaxKind.JSDocTypeReference, location, flags);
-            if (arguments.length) {
+            if (name || typeArguments) {
                 node.name = name;
                 node.typeArguments = typeArguments && createNodeArray(typeArguments)
             }
@@ -1982,7 +1982,7 @@ namespace ts {
         export function createJSDocFunctionType(parameters?: Array<ParameterDeclaration>, type?: JSDocType, 
             location?: TextRange, flags?: NodeFlags): JSDocFunctionType {
             let node = createNode<JSDocFunctionType>(SyntaxKind.JSDocFunctionType, location, flags);
-            if (arguments.length) {
+            if (parameters || type) {
                 node.parameters = parameters && createNodeArray(parameters)
                 node.type = type;
             }
@@ -2046,7 +2046,7 @@ namespace ts {
         }
         export function createJSDocTag(atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocTag {
             let node = createNode<JSDocTag>(SyntaxKind.JSDocTag, location, flags);
-            if (arguments.length) {
+            if (atToken || tagName) {
                 node.atToken = atToken;
                 node.tagName = tagName;
             }
@@ -2062,7 +2062,7 @@ namespace ts {
         export function createJSDocParameterTag(preParameterName?: Identifier, typeExpression?: JSDocTypeExpression, postParameterName?: Identifier, 
             atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocParameterTag {
             let node = createNode<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, location, flags);
-            if (arguments.length) {
+            if (preParameterName || typeExpression || postParameterName || atToken || tagName) {
                 node.preParameterName = preParameterName;
                 node.typeExpression = typeExpression;
                 node.postParameterName = postParameterName;
@@ -2083,7 +2083,7 @@ namespace ts {
         export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier, 
             location?: TextRange, flags?: NodeFlags): JSDocReturnTag {
             let node = createNode<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, location, flags);
-            if (arguments.length) {
+            if (typeExpression || atToken || tagName) {
                 node.typeExpression = typeExpression;
                 node.atToken = atToken;
                 node.tagName = tagName;
@@ -2100,7 +2100,7 @@ namespace ts {
         export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier, 
             location?: TextRange, flags?: NodeFlags): JSDocTypeTag {
             let node = createNode<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, location, flags);
-            if (arguments.length) {
+            if (typeExpression || atToken || tagName) {
                 node.typeExpression = typeExpression;
                 node.atToken = atToken;
                 node.tagName = tagName;
@@ -2117,7 +2117,7 @@ namespace ts {
         export function createJSDocTemplateTag(typeParameters?: Array<TypeParameterDeclaration>, atToken?: Node, tagName?: Identifier, 
             location?: TextRange, flags?: NodeFlags): JSDocTemplateTag {
             let node = createNode<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, location, flags);
-            if (arguments.length) {
+            if (typeParameters || atToken || tagName) {
                 node.typeParameters = typeParameters && createNodeArray(typeParameters)
                 node.atToken = atToken;
                 node.tagName = tagName;

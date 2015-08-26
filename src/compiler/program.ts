@@ -713,6 +713,10 @@ namespace ts {
                 options.target !== ScriptTarget.ES6) {
                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
             }
+            
+            if (FORCE_TRANSFORMS) {
+                options.experimentalTransforms = true;
+            }
         }
     }
 }

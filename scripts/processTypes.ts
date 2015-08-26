@@ -72,6 +72,7 @@ interface SyntaxMember {
     isNode?: boolean;
     isNodeArray?: boolean;
     isModifiersArray?: boolean;
+    startsNewLexicalEnvironment?: boolean;
 }
 
 interface EnumValue<T extends number> {
@@ -267,7 +268,9 @@ function discover() {
                         propertyIsNodeArray ? normalizeTypeName((<TypeReferenceNode>typeNode).typeArguments[0].getText()) : 
                         propertyIsModifiersArray ? "Modifier" :
                         undefined; 
-
+                    
+                    let propertyStartsNewLexicalEnvironment = propertyIsNode && startsNewLexicalEnvironment(property);
+                
                     members.push({
                         propertyName: property.name,
                         paramName: property.name === "arguments" ? "_arguments" : property.name,
@@ -277,7 +280,8 @@ function discover() {
                         isFactoryParam: propertyIsFactoryParam,
                         isNodeArray: propertyIsNodeArray,
                         isModifiersArray: propertyIsModifiersArray,
-                        isNode: propertyIsNode
+                        isNode: propertyIsNode,
+                        startsNewLexicalEnvironment: propertyStartsNewLexicalEnvironment
                     });
 
                     if (!propertyIsFactoryParam) {
@@ -470,7 +474,20 @@ function generateFactory(outputFile: string) {
             writer.write(`let node = createNode<${syntaxNode.typeName}>(SyntaxKind.${syntaxNode.kindName}, location, flags);`);
             writer.writeLine();
             if (syntaxNode.members.length > 1) {
-                writer.write(`if (arguments.length) {`);
+                writer.write(`if (`);
+                
+                let first = true;
+                for (let member of syntaxNode.members) {
+                    if (first) {
+                        first = false;
+                    }
+                    else {
+                        writer.write(` || `);
+                    }
+                    
+                    writer.write(member.paramName);
+                }
+                writer.write(`) {`);
                 writer.writeLine();
                 writer.increaseIndent();
             }
@@ -744,78 +761,14 @@ function generateTransform(outputFile: string) {
     writer.writeLine();
     writer.increaseIndent();
     writeAcceptFunction();
-    writeVisitNodesFunctions();
     writer.decreaseIndent();
     writer.write(`}`);
     writer.writeLine();
    
     sys.writeFile(outputFile, writer.getText());
     
-    function writeVisitNodesFunctions() {
-        // for (let typeName in memberTypeUsages) {
-        //     if (hasProperty(memberTypeUsages, typeName)) {
-        //         writeVisitNodeFunction(typeName);
-        //     }
-        // }
-        // for (let typeName in nodeArrayTypeUsages) {
-        //     if (getProperty(nodeArrayTypeUsages, typeName)) {
-        //         writeVisitNodesFunction(typeName);
-        //     }
-        // }
-    }
-    
-    function writeVisitNodeFunction(typeName: string) {
-        // if (typeName === "Node") {
-        //     return;
-        // }
-
-        // // Skip the visit function for this node if it is defined in transform.ts
-        // if (resolveQualifiedName(transformSourceFile, `ts.transform.visit${typeNameToMethodNameSuffix(typeName)}`, SymbolFlags.Function)) {
-        //     return;
-        // }
-        
-        // writer.write(`export function visit${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, node: ${typeName}, visitor: Visitor, mutator?: NodeWriter<${typeName}>): ${typeName} {`);
-        // writer.writeLine();
-        // writer.increaseIndent();
-        
-        // writer.write(`let visited = visit(context, node, visitor, mutator);`);
-        // writer.writeLine();
-        
-        // writer.write(`Debug.assert(!visited || is${typeNameToMethodNameSuffix(typeName)}(visited), "Wrong node kind after visit.");`);
-        // writer.writeLine();
-        
-        // writer.write(`return <${typeName}>visited;`);
-        // writer.writeLine();
-        
-        // writer.decreaseIndent();
-        // writer.write(`}`);
-        // writer.writeLine();
-    }
-    
-    function writeVisitNodesFunction(typeName: string) {
-        if (typeName === "Node") {
-            return;
-        }
-        
-        // Skip the visitNodes function for this node if it is defined in transform.ts
-        if (resolveQualifiedName(transformSourceFile, `ts.transform.visitNodeArrayOf${typeNameToMethodNameSuffix(typeName)}`, SymbolFlags.Function)) {
-            return;
-        }
-        
-        writer.write(`export function visitNodeArrayOf${typeNameToMethodNameSuffix(typeName)}(context: VisitorContext, nodes: Array<${typeName}>, visitor: (context: VisitorContext, input: Node, write: (node: Node) => void) => void): NodeArray<${typeName}> {`);
-        writer.writeLine();
-        writer.increaseIndent();
-        
-        writer.write(`return <NodeArray<${typeName}>>visitNodes(context, nodes, visitor, visit${typeNameToMethodNameSuffix(typeName)});`);
-        writer.writeLine();
-        
-        writer.decreaseIndent();
-        writer.write(`}`);
-        writer.writeLine();
-    }
-    
     function writeAcceptFunction() {
-        writer.write(`export function accept(context: VisitorContext, node: Node, visitor: Visitor, write: (node: Node) => void): void {`);
+        writer.write(`export function accept(node: Node, visitor: (input: Node, write: (node: Node) => void) => void, write: (node: Node) => void): void {`);
         writer.writeLine();
         writer.increaseIndent();
     
@@ -860,17 +813,13 @@ function generateTransform(outputFile: string) {
                     writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}`);
                 }
                 else {
-                    // let visitorFunction =
-                    //     member.visitorFunction ? member.visitorFunction :
-                    //     member.isNodeArray || member.isModifiersArray ? `visitNodeArrayOf${typeNameToMethodNameSuffix(member.elementTypeName)}` :
-                    //     `visit${typeNameToMethodNameSuffix(member.typeName)}`;
-
                     let visitorFunction =
                         member.visitorFunction ? member.visitorFunction :
                         member.isNodeArray || member.isModifiersArray ? `<NodeArray<${member.elementTypeName}>>visitNodes` :
+                        member.startsNewLexicalEnvironment ? `<${member.typeName}>visitNewLexicalEnvironment` :
                         `<${member.typeName}>visitNode`;
                         
-                    writer.write(`${visitorFunction}(context, (<${syntaxNode.typeName}>node).${member.propertyName}, visitor)`);
+                    writer.write(`${visitorFunction}((<${syntaxNode.typeName}>node).${member.propertyName}, visitor)`);
                 }
             }
             
@@ -1614,6 +1563,15 @@ class MemberVisitorAnnotation extends Annotation {
     }
 }
 
+@annotation("newlexicalenvironment")
+class NewLexicalEnvironmentAnnotation extends Annotation {
+    public name = "newlexicalenvironment";
+    
+    public static match(annotation: Annotation): annotation is NewLexicalEnvironmentAnnotation {
+        return annotation instanceof NewLexicalEnvironmentAnnotation;
+    }
+}
+
 function createAnnotation(name: string, _arguments: any[]): Annotation {
     let ctor = getProperty(annotationConstructors, name);
     if (ctor) {
@@ -1761,6 +1719,10 @@ function getFactoryOrder(symbol: Symbol, inherited?: boolean): string[] {
     }
     
     return propertyNames;
+}
+
+function startsNewLexicalEnvironment(symbol: Symbol): boolean {
+    return !!findFirstAnnotation(symbol, NewLexicalEnvironmentAnnotation.match);
 }
 
 // Main entry point

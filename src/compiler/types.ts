@@ -430,76 +430,45 @@ namespace ts {
         
         // A fact that states that a node is TypeScript syntax
         TypeScript = 1 << 1,
-        
-        // A fact that states that this node or its subtree contains TypeScript 
-        // syntax
         ContainsTypeScript = 1 << 2,
-        ContainsTypeScriptPropertyDeclarationWithInitializer = 1 << 3,
-        ContainsTypeScriptClassSyntaxExtension = 1 << 4,
-        ContainsTypeScriptDecorator = 1 << 6,
+        ContainsTypeScriptClassSyntaxExtension = 1 << 3,
+        ContainsTypeScriptDecorator = 1 << 4,
+        ContainsTypeScriptModifier = 1 << 20,
         
         // A fact that states that a node is ES6 syntax
-        ES6 = 1 << 7,
+        ES6 = 1 << 5,
+        ContainsES6 = 1 << 6,
+        ContainsES6Yield = 1 << 7,
+        ContainsES6ParameterBindingPattern = 1 << 8,
+        ContainsES6VariableBindingPattern = 1 << 9,
+        ContainsES6RestParameter = 1 << 10,
+        ContainsES6ParameterInitializer = 1 << 11,
+        ContainsES6SpreadElement = 1 << 12,
+        ContainsES6LetOrConst = 1 << 13,
+        ContainsES6ComputedPropertyName = 1 << 14,
         
-        // A fact that states that this node or its subtree contains ES6 syntax
-        ContainsES6 = 1 << 8,
+        ContainsCapturedThis = 1 << 15,
+        ContainsLexicalThis = 1 << 16,
+        ContainsHoistedDeclaration = 1 << 17,
+        ContainsCompletionStatement = 1 << 18,
         
-        ContainsES6Yield = 1 << 9,
-        
-        // A fact that states that this node or its subtree contains an ES6 Binding Pattern
-        ContainsES6ParameterBindingPattern = 1 << 10,
-        ContainsES6VariableBindingPattern = 1 << 11,
-        
-        // A fact that states that this node or its subtree contains an ES6 Rest Parameter
-        ContainsES6RestParameter = 1 << 12,
-        
-        // A fact that states that this node or its subtree contains an ES6 Parameter Initializer
-        ContainsES6ParameterInitializer = 1 << 13,
-        
-        ContainsES6SpreadElement = 1 << 14,
-        
-        ContainsES6LetOrConst = 1 << 15,
-        
-        ContainsES6ComputedPropertyName = 1 << 16,
-        
-        // A fact that states that this node or its subtree contains a captured lexical `this` binding
-        ContainsCapturedThis = 1 << 17,
-        
-        // A fact that states that this node or its subtree contains a lexical `this` binding
-        ContainsLexicalThis = 1 << 18,
-        
-        ContainsHoistedDeclaration = 1 << 19,
-        ContainsCompletionStatement = 1 << 20,
-
-        // Template Transform Facts
-        ContainsTemplatePlaceholder = 1 << 21,
+        LexicalEnvironment = 1 << 19,
 
         //
         // Assertions
         //
         
         ThisNodeIsTypeScript = TypeScript | ContainsTypeScript,
+        ThisNodeIsTypeScriptModifier = ThisNodeIsTypeScript | ContainsTypeScriptModifier,
         ThisNodeIsTypeScriptClassSyntaxExtension = ThisNodeIsTypeScript | ContainsTypeScriptClassSyntaxExtension,
         ThisNodeIsTypeScriptDecorator = ThisNodeIsTypeScriptClassSyntaxExtension | ContainsTypeScriptDecorator,
         
-        // Asserts that this node is ES6, and any subtree that contains it contains ES6.
         ThisNodeIsES6 = ES6 | ContainsES6,
-        
         ThisNodeIsES6Yield = ThisNodeIsES6 | ContainsES6Yield,
-        
-        // Asserts that this node is ES6, and any subtree that contains it contains an 
-        // ES6 binding pattern.
         ThisNodeIsES6ParameterBindingPattern = ThisNodeIsES6 | ContainsES6ParameterBindingPattern,
         ThisNodeIsES6VariableBindingPattern = ThisNodeIsES6 | ContainsES6VariableBindingPattern,
-
-        // Asserts that this node is ES6, and any subtree that contains it contains an 
-        // ES6 rest parameter.
         ThisNodeIsES6RestParameter = ThisNodeIsES6 | ContainsES6RestParameter,
-
-        // Asserts that this node is ES6, and any subtree that contains it contains an 
-        // ES6 parameter initializer.
         ThisNodeIsES6ParameterInitializer = ThisNodeIsES6 | ContainsES6ParameterInitializer,
-        
         ThisNodeIsES6SpreadElement = ThisNodeIsES6 | ContainsES6SpreadElement,
         ThisNodeIsES6LetOrConst = ThisNodeIsES6 | ContainsES6LetOrConst,
         
@@ -508,6 +477,7 @@ namespace ts {
         ThisNodeIsThisKeyword = ContainsLexicalThis,
         ThisNodeIsHoistedDeclaration = ContainsHoistedDeclaration,
         ThisNodeIsCompletionStatement = ContainsCompletionStatement,
+        ThisNodeStartsNewLexicalEnvironment = LexicalEnvironment,
         
         //
         // Masks
@@ -581,9 +551,6 @@ namespace ts {
             ContainsES6RestParameter |
             ContainsCapturedThis,
           
-        SubtreeContainsTemplatePlaceholder =
-            ContainsTemplatePlaceholder,
-            
         //
         // Scope Exclusions
         //
@@ -591,6 +558,9 @@ namespace ts {
         NodeExcludes = 
             ThisNodeIsTypeScriptMask |
             ThisNodeIsES6Mask,
+            
+        ParameterScopeExcludes =
+            ContainsTypeScriptModifier,
         
         ArrowFunctionScopeExcludes =
             ContainsES6Yield |
@@ -655,7 +625,7 @@ namespace ts {
         Failed = 2,
         FailedAndReported = 3
     }
-
+    
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
     // @factoryhidden("parent", true)
@@ -891,6 +861,7 @@ namespace ts {
      *  MethodDeclaration
      *  AccessorDeclaration
      */
+    // @
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
 
@@ -899,7 +870,7 @@ namespace ts {
         // @factoryparam
         questionToken?: Node;
 
-        // @visitor("visitBlockOrExpressionInNewLexicalEnvironment")
+        // @newlexicalenvironment()
         body?: Block | Expression;
     }
 
@@ -909,7 +880,7 @@ namespace ts {
     export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
         name?: Identifier;
         
-        // @visitor("visitBlockInNewLexicalEnvironment")
+        // @newlexicalenvironment()
         body?: Block;
     }
 
@@ -936,6 +907,8 @@ namespace ts {
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
     export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         name: PropertyName;
+        
+        // @newlexicalenvironment()
         body?: Block;
     }
     
@@ -946,6 +919,7 @@ namespace ts {
     // @factoryhidden("name")
     // @factoryorder("decorators", "modifiers", "name", "parameters", "type", "body")
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+        // @newlexicalenvironment()
         body?: Block;
     }
 
@@ -965,7 +939,8 @@ namespace ts {
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
         name: PropertyName;
-        // @visitor("visitBlockInNewLexicalEnvironment")
+
+        // @newlexicalenvironment()
         body: Block;
     }
     
@@ -1171,7 +1146,7 @@ namespace ts {
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
         
-        // @visitor("visitBlockOrExpressionInNewLexicalEnvironment")
+        // @newlexicalenvironment()
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
@@ -1568,7 +1543,7 @@ namespace ts {
     export interface ModuleDeclaration extends DeclarationStatement {
         name: Identifier | LiteralExpression;
         
-        // @visitor("visitModuleBlockOrModuleDeclarationInNewLexicalEnvironment")
+        // @newlexicalenvironment()
         body: ModuleBlock | ModuleDeclaration;
     }
 

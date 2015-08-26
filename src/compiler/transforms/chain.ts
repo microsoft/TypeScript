@@ -7,7 +7,7 @@ namespace ts.transform {
     
     export let transformTime = 0;
     
-    export type TransformationChain = (context: VisitorContext, statements: NodeArray<Statement>) => NodeArray<Statement>;
+    export type TransformationChain = (statements: NodeArray<Statement>) => NodeArray<Statement>;
     
     export function getTransformationChain(options: CompilerOptions): TransformationChain {
         if ((options.target || ScriptTarget.ES3) < ScriptTarget.ES6) {
@@ -27,55 +27,47 @@ namespace ts.transform {
         }
     }
     
-    function runTransformation(chain: TransformationChain, context: VisitorContext, statements: NodeArray<Statement>) {
+    function runTransformation(chain: TransformationChain, statements: NodeArray<Statement>) {
         let start = new Date().getTime();
-        context.pushLexicalEnvironment();
-        
-        let transformed = chain(context, statements);
-        if (context.hasHoistedDeclarations()) {
-            transformed = factory.cloneNodeArray(transformed);
-            context.writeHoistedDeclarations(transformed);
-        }
-        
-        context.popLexicalEnvironment();
+        let transformed = chain(statements);
         transformTime += new Date().getTime() - start;
         return transformed;
     }
     
     function createUnaryTransformationChain(only: TransformationChain) {
-        return function (context: VisitorContext, statements: NodeArray<Statement>) {
-            if (only) statements = runTransformation(only, context, statements);
+        return function (statements: NodeArray<Statement>) {
+            if (only) statements = runTransformation(only, statements);
             return statements;
         };
     }
     
     function createBinaryTransformationChain(first: TransformationChain, second: TransformationChain) {
-        return function (context: VisitorContext, statements: NodeArray<Statement>) {
-            if (first) statements = runTransformation(first, context, statements);
-            if (second) statements = runTransformation(second, context, statements);
+        return function (statements: NodeArray<Statement>) {
+            if (first) statements = runTransformation(first, statements);
+            if (second) statements = runTransformation(second, statements);
             return statements;
         };
     }
     
     function createTrinaryTransformationChain(first: TransformationChain, second: TransformationChain, third: TransformationChain) {
-        return function (context: VisitorContext, statements: NodeArray<Statement>) {
-            if (first) statements = runTransformation(first, context, statements);
-            if (second) statements = runTransformation(second, context, statements);
-            if (third) statements = runTransformation(third, context, statements);
+        return function (statements: NodeArray<Statement>) {
+            if (first) statements = runTransformation(first, statements);
+            if (second) statements = runTransformation(second, statements);
+            if (third) statements = runTransformation(third, statements);
             return statements;
         };
     }
     
     function createNaryTransformationChain(transformations: TransformationChain[]) {
-        return function (context: VisitorContext, statements: NodeArray<Statement>) {
+        return function (statements: NodeArray<Statement>) {
             for (let transformation of transformations) {
-                if (transformation) statements = transformation(context, statements);
+                if (transformation) statements = transformation(statements);
             }
             return statements;
         };
     }
     
-    function identityTransformation(context: VisitorContext, statements: NodeArray<Statement>): NodeArray<Statement> {
+    function identityTransformation(statements: NodeArray<Statement>): NodeArray<Statement> {
         return statements;
     }
 }

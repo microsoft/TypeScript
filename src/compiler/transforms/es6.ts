@@ -1,8 +1,15 @@
 /// <reference path="../transform.generated.ts" />
 /*@internal*/
 namespace ts.transform {
-    export function toES6(context: VisitorContext, statements: NodeArray<Statement>) {
-        return transform.visitNodes(context, statements, transformNode);
+    let resolver: EmitResolver;
+    let compilerOptions: CompilerOptions;
+    let languageVersion: ScriptTarget;
+    
+    export function toES6(statements: NodeArray<Statement>) {
+        resolver = getEmitResolver();
+        compilerOptions = getCompilerOptions();
+        languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        return visitNodes(statements, transformNode, /*newLexicalEnvironment*/ true);
     }
     
     /**
@@ -22,24 +29,36 @@ namespace ts.transform {
       * If no part of this node or its subtree requires transformation, the node 
       * is returned, unchanged.
       */
-    function transformNode<T extends Node>(context: VisitorContext, node: T, write: (node: T) => void): void {
-        if (needsTransform(node, TransformFlags.ThisNodeNeedsTransformToES6)) {
-            transformNodeWorker(context, node, write);
+    function transformNode<T extends Node>(node: T, write: (node: T) => void): void {
+        if (!node) {
+            return;
         }
-        else if (needsTransform(node, TransformFlags.SubtreeNeedsTransformToES6)) {
-            accept(context, node, transformNode, write);
+
+        // Debug.assert(
+        //     !needsTransform(node, TransformFlags.ThisNodeNeedsTransformToES7), 
+        //     "Cannot transform node with post-ES7 syntax.");
+        
+        if (node.transformFlags & TransformFlags.ThisNodeNeedsTransformToES6) {
+            transformNodeWorker(node, write);
+        }
+        else if (node.transformFlags & TransformFlags.SubtreeNeedsTransformToES6) {
+            accept(node, transformNode, write);
         }
         else {
             write(node);
         }
     }
     
-    function transformModuleElement(context: VisitorContext, node: Node, write: (node: Node) => void): void {
+    function transformModuleElement(node: Node, write: (node: Node) => void): void {
+        if (!node) {
+            return;
+        }
+        
         if (node.flags & NodeFlags.Export) {
-            transformNodeWorker(context, node, write);
+            transformNodeWorker(node, write);
         }
         else {
-            transformNode(context, node, write);
+            transformNode(node, write);
         }
     }
     
@@ -48,10 +67,10 @@ namespace ts.transform {
       * @param context Context information for the transform.
       * @param node The node to transform.
       */
-    function transformNodeWorker(context: VisitorContext, node: Node, write?: (node: Node) => void): void {
+    function transformNodeWorker(node: Node, write?: (node: Node) => void): void {
         // TypeScript ambient declarations are elided.
         if (node.flags & NodeFlags.Ambient) {
-            return undefined;
+            return;
         }
         
         switch (node.kind) {
@@ -137,7 +156,7 @@ namespace ts.transform {
                 // - index signatures
                 // - method overload signatures
                 // - async methods
-                return transformClassDeclaration(context, <ClassDeclaration>node, write);
+                return transformClassDeclaration(<ClassDeclaration>node, write);
 
             case SyntaxKind.ClassExpression:
                 // This is a class expression with TypeScript syntax extensions.
@@ -150,43 +169,43 @@ namespace ts.transform {
                 // - index signatures
                 // - method overload signatures
                 // - async methods
-                return transformClassExpression(context, <ClassExpression>node, write);
+                return transformClassExpression(<ClassExpression>node, write);
             
             case SyntaxKind.HeritageClause:
                 // This is a heritage clause with TypeScript syntax extensions.
                 //
                 // TypeScript heritage clause extensions include:
                 // - `implements` clause
-                return transformHeritageClause(context, <HeritageClause>node, write);
+                return transformHeritageClause(<HeritageClause>node, write);
                 
             case SyntaxKind.ExpressionWithTypeArguments:
                 // TypeScript supports type arguments on an expression in an `extends` heritage clause.
-                return transformExpressionWithTypeArguments(context, <ExpressionWithTypeArguments>node, write);
+                return transformExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, write);
             
             case SyntaxKind.MethodDeclaration:
                 // TypeScript method declarations may be 'async', and may have decorators, modifiers
                 // or type annotations.
-                return transformMethodDeclaration(context, <MethodDeclaration>node, write);
+                return transformMethodDeclaration(<MethodDeclaration>node, write);
                 
             case SyntaxKind.GetAccessor:
                 // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
-                return transformGetAccessor(context, <GetAccessorDeclaration>node, write);
+                return transformGetAccessor(<GetAccessorDeclaration>node, write);
                 
             case SyntaxKind.SetAccessor:
                 // Set Accessors can have TypeScript modifiers, decorators, and type annotations.
-                return transformSetAccessor(context, <SetAccessorDeclaration>node, write);
+                return transformSetAccessor(<SetAccessorDeclaration>node, write);
                 
             case SyntaxKind.FunctionDeclaration:
                 // TypeScript function declarations may be 'async'
-                return transformFunctionDeclaration(context, <FunctionDeclaration>node, write);
+                return transformFunctionDeclaration(<FunctionDeclaration>node, write);
                 
             case SyntaxKind.FunctionExpression:
                 // TypeScript function expressions may be 'async'
-                return transformFunctionExpression(context, <FunctionExpression>node, write);
+                return transformFunctionExpression(<FunctionExpression>node, write);
                 
             case SyntaxKind.ArrowFunction:
                 // TypeScript arrow functions may be 'async'
-                return transformArrowFunction(context, <ArrowFunction>node, write);
+                return transformArrowFunction(<ArrowFunction>node, write);
                 
             case SyntaxKind.Parameter:
                 // This is a parameter declaration with TypeScript syntax extensions.
@@ -196,7 +215,7 @@ namespace ts.transform {
                 // - accessibility modifiers
                 // - the question mark (?) token for optional parameters
                 // - type annotations
-                return transformParameter(context, <ParameterDeclaration>node, write);
+                return transformParameter(<ParameterDeclaration>node, write);
                 
             case SyntaxKind.TypeAssertionExpression:
                 // TypeScript type assertions are removed, but their subtrees are preserved.
@@ -208,19 +227,19 @@ namespace ts.transform {
                 
             case SyntaxKind.EnumDeclaration:
                 // TypeScript enum declarations do not exist in ES6 and must be rewritten.
-                return transformEnumDeclaration(context, <EnumDeclaration>node, write);
+                return transformEnumDeclaration(<EnumDeclaration>node, write);
                 
             case SyntaxKind.AwaitExpression:
                 // TypeScript 'await' expressions must be transformed.
-                return transformAwaitExpression(context, <AwaitExpression>node, write);
+                return transformAwaitExpression(<AwaitExpression>node, write);
                 
             // case SyntaxKind.VariableStatement:
             //     // TypeScript namespace exports for variable statements must be transformed.
-            //     return transformVariableStatement(context, <VariableStatement>node, write);
+            //     return transformVariableStatement(<VariableStatement>node, write);
                 
             case SyntaxKind.ModuleDeclaration:
                 // TypeScript namespace declarations must be transformed.
-                return transformModuleDeclaration(context, <ModuleDeclaration>node, write);
+                return transformModuleDeclaration(<ModuleDeclaration>node, write);
                 
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ExportAssignment:
@@ -229,7 +248,7 @@ namespace ts.transform {
             default:
                 // Fall back to the default visit behavior as some part of this node's 
                 // subtree requires a transformation.
-                return accept(context, node, transformNode, write);
+                return accept(node, transformNode, write);
         }
     }
         
@@ -238,21 +257,21 @@ namespace ts.transform {
       * @param context Context information for the transform.
       * @param node The node to transform.
       */
-    function transformClassDeclaration(context: VisitorContext, node: ClassDeclaration, write: (node: Statement) => void) {
-        let thisNodeIsNamespaceExport = isNamespaceLevelExport(context, node);
-        let name = <Identifier>context.getDeclarationName(node);
-        let heritageClauses = visitNodes(context, node.heritageClauses, transformNode);
+    function transformClassDeclaration(node: ClassDeclaration, write: (node: Statement) => void) {
+        let thisNodeIsNamespaceExport = isNamespaceLevelExport(node);
+        let name = getDeclarationName(node);
+        let heritageClauses = visitNodes(node.heritageClauses, transformNode);
         let extendsClause = heritageClauses && firstOrUndefined(heritageClauses);
         let baseTypeNode = extendsClause && firstOrUndefined(extendsClause.types);
-        let constructor = transformConstructor(context, node, baseTypeNode);
-        let members = visitNodes(context, node.members, transformNode);
+        let constructor = transformConstructor(node, baseTypeNode);
+        let members = visitNodes(node.members, transformNode);
         let classMembers: ClassElement[] = constructor ? [constructor, ...members] : members;
 
         if (nodeIsDecorated(node)) {
             let classExpr = factory.createClassExpression2(/*name*/ undefined, extendsClause, classMembers);
             let varDecl = factory.createVariableDeclaration2(name, classExpr);
             let varDeclList = factory.createVariableDeclarationList([varDecl], /*location*/ undefined, NodeFlags.Let);
-            let exportFlags = isTopLevelNonDefaultExport(context, node) ? NodeFlags.Export : undefined; 
+            let exportFlags = isTopLevelNonDefaultExport(node) ? NodeFlags.Export : undefined; 
             let varStmt = factory.createVariableStatement2(varDeclList, /*location*/ node, exportFlags);
             varStmt.original = node;
             write(varStmt);
@@ -266,51 +285,29 @@ namespace ts.transform {
             write(classDecl);
         }
         
-        transformPropertyDeclarationsToStatements(context, node, getInitializedProperties(node, /*isStatic*/ true), write);
-        transformDecoratorsOfMembers(context, node, /*isStatic*/ false, write);
-        transformDecoratorsOfMembers(context, node, /*isStatic*/ true, write);
-        transformDecoratorsOfConstructor(context, node, write);
+        transformPropertyDeclarationsToStatements(node, getInitializedProperties(node, /*isStatic*/ true), write);
+        transformDecoratorsOfMembers(node, /*isStatic*/ false, write);
+        transformDecoratorsOfMembers(node, /*isStatic*/ true, write);
+        transformDecoratorsOfConstructor(node, write);
         
         if (thisNodeIsNamespaceExport) {
-            let namespaceExportExpr = factory.createAssignmentExpression(getModuleMemberName(context, node), name);
+            let namespaceExportExpr = factory.createAssignmentExpression(getModuleMemberName(node), name);
             let exprStmt = factory.createExpressionStatement(namespaceExportExpr);
             write(exprStmt);
         }
-        else if (isTopLevelDefaultExport(context, node) && nodeIsDecorated(node)) {
+        else if (isTopLevelDefaultExport(node) && nodeIsDecorated(node)) {
             let exportDefaultStmt = factory.createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, name);
             write(exportDefaultStmt);
         }
-        
-        // let exportPart = thisNodeIsTopLevelExport && (!thisNodeIsDecorated || !thisNodeIsDefaultExport) && tag_part`export`;
-        // let defaultPart = thisNodeIsTopLevelExport && thisNodeIsDefaultExport && tag_part`default`; 
-        // let extendsPart = baseTypeNode && tag_part`extends ${baseTypeNode}`;
-        // let namespaceExportPart = !thisNodeIsTopLevelExport && (node.flags & NodeFlags.Export) && tag_part`${getModuleMemberName(context, node)} = ${name}`;
-        // let exportDefaultPart = thisNodeIsTopLevelExport && (node.flags & NodeFlags.Default) && thisNodeIsDecorated && tag_part`export default ${name}`;
-        // let statements = tag_statements`
-        //     ${thisNodeIsDecorated 
-        //         ? tag_part`${exportPart} let ${name} = class` 
-        //         : tag_part`${exportPart} ${defaultPart} class ${name}`
-        //     } ${extendsPart} {
-        //         ${constructor}
-        //         ${members}
-        //     }
-        //     ${transformPropertyDeclarationsToStatements(context, node, getInitializedProperties(node, /*isStatic*/ true)}
-        //     ${transformDecoratorsOfMembers(context, node, /*isStatic*/ false)}
-        //     ${transformDecoratorsOfMembers(context, node, /*isStatic*/ true)}
-        //     ${transformDecoratorsOfConstructor(context, node)}
-        //     ${namespaceExportPart}
-        //     ${exportDefaultPart}
-        // `;
-        // statements[0].original = node;
     }
     
-    function transformClassExpression(context: VisitorContext, node: ClassExpression, write: (node: LeftHandSideExpression) => void) {
-        let name = context.getDeclarationName(node);
-        let heritageClauses = visitNodes(context, node.heritageClauses, transformNode);
+    function transformClassExpression(node: ClassExpression, write: (node: LeftHandSideExpression) => void) {
+        let name = getDeclarationName(node);
+        let heritageClauses = visitNodes(node.heritageClauses, transformNode);
         let extendsClause = heritageClauses ? firstOrUndefined(heritageClauses) : undefined;
         let baseTypeNode = extendsClause ? firstOrUndefined(extendsClause.types) : undefined;
-        let constructor = transformConstructor(context, node, baseTypeNode);
-        let members = visitNodes(context, node.members, transformNodeWorker);
+        let constructor = transformConstructor(node, baseTypeNode);
+        let members = visitNodes(node.members, transformNodeWorker);
         let classMembers = constructor ? [constructor, ...members] : members;
 
         let newNode = factory.createClassExpression2(
@@ -322,67 +319,58 @@ namespace ts.transform {
         let staticPropertyAssignments = getInitializedProperties(node, /*isStatic*/ true);
         if (staticPropertyAssignments) {
             let expressions: Expression[] = [];
-            let tempVar = context.declareLocal();
+            let tempVar = declareLocal();
             let cacheExpr = factory.createAssignmentExpression(tempVar, newNode);
             expressions.push(cacheExpr);
-            transformPropertyDeclarationsToExpressions(context, node, staticPropertyAssignments, expressions);
+            transformPropertyDeclarationsToExpressions(node, staticPropertyAssignments, expressions);
             expressions.push(tempVar);
             write(factory.createParenthesizedExpression(factory.inlineExpressions(expressions)));
-            // return tag_lhs_expression`
-            //     ${tempVariable} = ${newNode},
-            //     ${factory.inlineExpressions(expressions)},
-            //     ${tempVariable}
-            // `;
         }
         else {
             write(newNode);
         }
     }
 
-    function isTopLevelExport(context: VisitorContext, node: Node) {
+    function isTopLevelExport(node: Node) {
         return !!(node.flags & NodeFlags.Export) &&
-            context.parentNode.kind === SyntaxKind.SourceFile;
+            getParentNode().kind === SyntaxKind.SourceFile;
     }
     
-    function isTopLevelDefaultExport(context: VisitorContext, node: Node) {
-        return isTopLevelExport(context, node) && !!(node.flags & NodeFlags.Default);
+    function isTopLevelDefaultExport(node: Node) {
+        return isTopLevelExport(node) && !!(node.flags & NodeFlags.Default);
     }
 
-    function isTopLevelNonDefaultExport(context: VisitorContext, node: Node) {
-        return isTopLevelExport(context, node) && !(node.flags & NodeFlags.Default);
+    function isTopLevelNonDefaultExport(node: Node) {
+        return isTopLevelExport(node) && !(node.flags & NodeFlags.Default);
     }
     
-    function isNamespaceLevelExport(context: VisitorContext, node: Node) {
+    function isNamespaceLevelExport(node: Node) {
         return !!(node.flags & NodeFlags.Export) &&
-            context.parentNode.kind !== SyntaxKind.SourceFile;
+            getParentNode().kind !== SyntaxKind.SourceFile;
     }
     
-    function getContainingModule(context: VisitorContext): ModuleDeclaration {
-        return context.findAncestorNode(isModuleDeclaration);
+    function getContainingModule(): ModuleDeclaration {
+        return findAncestorNode(isModuleDeclaration);
     }
     
-    function getContainingModuleName(context: VisitorContext): Identifier {
-        let container = context.findAncestorNode(isModuleDeclaration);
-        return container ? context.getGeneratedNameForNode(container) : factory.createIdentifier("exports");
-        // return container ? context.getGeneratedNameForNode(container) : tag_id`exports`;
+    function getContainingModuleName(): Identifier {
+        let container = findAncestorNode(isModuleDeclaration);
+        return container ? getGeneratedNameForNode(container) : factory.createIdentifier("exports");
     }
     
-    function getModuleMemberName(context: VisitorContext, node: Declaration): Expression {
-        let name = <Identifier>context.getDeclarationName(node);
+    function getModuleMemberName(node: Declaration): Expression {
+        let name = <Identifier>getDeclarationName(node);
         Debug.assert(isIdentifier(name));
 
-        if (context.getCombinedNodeFlags() & NodeFlags.Export) {
-            let container = getContainingModuleName(context);
+        if (getCombinedNodeFlags(node, peekNode, 0) & NodeFlags.Export) {
+            let container = getContainingModuleName();
             let propExpr = factory.createPropertyAccessExpression2(container, name);
             return propExpr;
-            // return tag_expression`
-            //     ${container}.${name}
-            // `;
         }
         return name;
     }
     
-    function transformConstructor(context: VisitorContext, node: ClassLikeDeclaration, baseTypeNode: ExpressionWithTypeArguments) {
+    function transformConstructor(node: ClassLikeDeclaration, baseTypeNode: ExpressionWithTypeArguments) {
         // Check if we have a property assignment inside class declaration.
         // If there is a property assignment, we need to emit constructor whether users define it or not
         // If there is no property assignment, we can omit constructor if users do not define it
@@ -412,12 +400,12 @@ namespace ts.transform {
         
         
         let parameters =
-            constructor ? visitNodes(context, constructor.parameters, transformNode) :
+            constructor ? visitNodes(constructor.parameters, transformNode) :
             baseTypeNode ? [factory.createRestParameter(factory.createIdentifier("args"), /*location*/ undefined, NodeFlags.GeneratedRest)] :
             [];
             
         // let parameters =
-        //     constructor ? transformSignatureParameters(context, constructor.parameters) :
+        //     constructor ? transformSignatureParameters(constructor.parameters) :
         //     hasBaseType ? [factory.createRestParameter(tag_id`args`, /*location*/ undefined, NodeFlags.GeneratedRest)] :
         //     [];
 
@@ -445,9 +433,6 @@ namespace ts.transform {
                     let assignStmt = factory.createExpressionStatement(assignExpr);
                     factory.startOnNewLine(assignStmt);
                     statements.push(assignStmt);
-                    // statements.push(tag_statement`
-                    //     this.${name} = ${name};
-                    // `);
                 }
             }
         }
@@ -458,20 +443,16 @@ namespace ts.transform {
             let callExpr = factory.createCallExpression2(superExpr, [spreadExpr]);
             let callStmt = factory.createExpressionStatement(callExpr, /*location*/ undefined, NodeFlags.GeneratedSuper);
             factory.startOnNewLine(callStmt);
-            // let statement = tag_statement`
-            //     super(...args);
-            // `;
-            // statement.flags |= NodeFlags.GeneratedSuper;
             statements.push(callStmt);
         }
         
-        transformPropertyDeclarationsToStatements(context, node, instancePropertyAssignments, n => { statements.push(n); });
+        transformPropertyDeclarationsToStatements(node, instancePropertyAssignments, n => { statements.push(n); });
         
         if (constructor) {
             let bodyStatements = superCall
                 ? constructor.body.statements.slice(1)
                 : constructor.body.statements;
-            statements.push(...visitNodes(context, bodyStatements, transformNode));
+            statements.push(...visitNodes(bodyStatements, transformNode));
         }
         
         let body = constructor 
@@ -483,61 +464,58 @@ namespace ts.transform {
         return newConstructor;
     }
     
-    function transformHeritageClause(context: VisitorContext, node: HeritageClause, write: (node: HeritageClause) => void) {
+    function transformHeritageClause(node: HeritageClause, write: (node: HeritageClause) => void) {
         if (node.token === SyntaxKind.ExtendsKeyword) {
             write(factory.updateHeritageClause(
                 node,
-                visitNodes(context, node.types, transformNode)
+                visitNodes(node.types, transformNode)
             ));
         }
     }
 
-    function transformExpressionWithTypeArguments(context: VisitorContext, node: ExpressionWithTypeArguments, write: (node: ExpressionWithTypeArguments) => void) {
+    function transformExpressionWithTypeArguments(node: ExpressionWithTypeArguments, write: (node: ExpressionWithTypeArguments) => void) {
         write(factory.updateExpressionWithTypeArguments(
             node,
-            visitNode(context, node.expression, transformNode),
+            visitNode(node.expression, transformNode),
             /*typeArguments*/ undefined
         ));
     }
     
-    function transformPropertyDeclarationsToStatements(context: VisitorContext, node: ClassLikeDeclaration, properties: PropertyDeclaration[], write: (node: Statement) => void) {
+    function transformPropertyDeclarationsToStatements(node: ClassLikeDeclaration, properties: PropertyDeclaration[], write: (node: Statement) => void) {
         if (!properties) {
             return;
         }
         
         for (let property of properties) {
-            let propertyAssignment = transformPropertyDeclaration(context, node, property);
+            let propertyAssignment = transformPropertyDeclaration(node, property);
             let propertyStatement = factory.createExpressionStatement(propertyAssignment, /*location*/ property);
             write(propertyStatement);
         }
     }
     
-    function transformPropertyDeclarationsToExpressions(context: VisitorContext, node: ClassLikeDeclaration, properties: PropertyDeclaration[], expressions: Expression[]) {
+    function transformPropertyDeclarationsToExpressions(node: ClassLikeDeclaration, properties: PropertyDeclaration[], expressions: Expression[]) {
         if (!properties) {
             return;
         }
 
         for (let property of properties) {
-            let propertyAssignment = transformPropertyDeclaration(context, node, property, /*location*/ property);
+            let propertyAssignment = transformPropertyDeclaration(node, property, /*location*/ property);
             expressions.push(propertyAssignment);
         }
     }
     
-    function transformPropertyDeclaration(context: VisitorContext, node: ClassLikeDeclaration, property: PropertyDeclaration, location?: TextRange): Expression {
+    function transformPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, location?: TextRange): Expression {
         let isStatic = (property.flags & NodeFlags.Static) !== 0;
         let target = isStatic
-            ? <Identifier>context.getDeclarationName(node)
+            ? getDeclarationName(node)
             : factory.createThisKeyword();
         
-        let name = transformPropertyName(context, property);
+        let name = transformPropertyName(property);
         let left = factory.createMemberAccessForPropertyName(target, name, /*location*/ property.name);
-        let initializer = visitNode(context, property.initializer, transformNode);
+        let initializer = visitNode(property.initializer, transformNode);
         let assignExpr = factory.createAssignmentExpression(left, initializer);
         factory.setTextRange(assignExpr, location);
         return assignExpr;
-        // return tag_expression`
-        //     ${left} = ${initializer}
-        // `;
     }
 
     // emitter.ts:4074
@@ -586,23 +564,20 @@ namespace ts.transform {
         }
     }
     
-    function transformMethodDeclaration(context: VisitorContext, node: MethodDeclaration, write: (node: ClassElement) => void) {
+    function transformMethodDeclaration(node: MethodDeclaration, write: (node: ClassElement) => void) {
         if (!node.body) {
-            // let missing = factory.createNode<MethodDeclaration>(SyntaxKind.MissingDeclaration, /*location*/ node);
-            // missing.original = node;
-            // return missing;
             return;
         }
         
-        let name = transformPropertyName(context, node);
-        let parameters = visitNodes(context, node.parameters, transformNode);
+        let name = transformPropertyName(node);
+        let parameters = visitNodes(node.parameters, transformNode);
 
         let body: Block;
         if (isAsyncFunctionLike(node)) {
-            body = <Block>transformAsyncFunctionBody(context, node);
+            body = <Block>transformAsyncFunctionBody(node);
         }
         else {
-            body = visitNode(context, node.body, transformNode);
+            body = visitNode(node.body, transformNode);
         }
         
         write(factory.createMethodDeclaration2(
@@ -614,10 +589,10 @@ namespace ts.transform {
         ));
     }
     
-    function transformGetAccessor(context: VisitorContext, node: GetAccessorDeclaration, write: (node: ClassElement) => void) {
-        let name = transformPropertyName(context, node);
-        let parameters = visitNodes(context, node.parameters, transformNode);
-        let body = visitNode(context, node.body, transformNode);
+    function transformGetAccessor(node: GetAccessorDeclaration, write: (node: ClassElement) => void) {
+        let name = transformPropertyName(node);
+        let parameters = visitNodes(node.parameters, transformNode);
+        let body = visitNode(node.body, transformNode);
         write(factory.createGetAccessor2(
             name,
             parameters,
@@ -627,10 +602,10 @@ namespace ts.transform {
         ));
     }
     
-    function transformSetAccessor(context: VisitorContext, node: SetAccessorDeclaration, write: (node: ClassElement) => void) {
-        let name = transformPropertyName(context, node);
-        let parameters = visitNodes(context, node.parameters, transformNode);
-        let body = visitNode(context, node.body, transformNode);
+    function transformSetAccessor(node: SetAccessorDeclaration, write: (node: ClassElement) => void) {
+        let name = transformPropertyName(node);
+        let parameters = visitNodes(node.parameters, transformNode);
+        let body = visitNode(node.body, transformNode);
         write(factory.createSetAccessor2(
             name,
             parameters,
@@ -640,13 +615,13 @@ namespace ts.transform {
         ));
     }
         
-    function transformFunctionDeclaration(context: VisitorContext, node: FunctionDeclaration, write: (node: Statement) => void) {
+    function transformFunctionDeclaration(node: FunctionDeclaration, write: (node: Statement) => void) {
         if (!node.body) {
             // Function overloads are elided
             return;
         }
         
-        let thisNodeIsNamespaceExport = isNamespaceLevelExport(context, node);
+        let thisNodeIsNamespaceExport = isNamespaceLevelExport(node);
         let flags = thisNodeIsNamespaceExport
             ? undefined  
             : node.flags & (NodeFlags.Default | NodeFlags.Export);
@@ -654,53 +629,53 @@ namespace ts.transform {
         let funcDecl = factory.createFunctionDeclaration3(
             node.asteriskToken,
             node.name, 
-            visitNodes(context, node.parameters, transformNode), 
-            <Block>transformFunctionBody(context, node),
+            visitNodes(node.parameters, transformNode), 
+            <Block>transformFunctionBody(node),
             /*location*/ node,
             flags);
             
         write(funcDecl);
         
         if (thisNodeIsNamespaceExport) {
-            let namespaceExportExpr = factory.createAssignmentExpression(getModuleMemberName(context, node), factory.cloneNode(node.name));
+            let namespaceExportExpr = factory.createAssignmentExpression(getModuleMemberName(node), factory.cloneNode(node.name));
             let exprStmt = factory.createExpressionStatement(namespaceExportExpr);
             write(exprStmt);
         }
     }
 
-    function transformFunctionExpression(context: VisitorContext, node: FunctionExpression, write: (node: FunctionExpression) => void) {
+    function transformFunctionExpression(node: FunctionExpression, write: (node: FunctionExpression) => void) {
        write(factory.createFunctionExpression3(
             node.asteriskToken,
             node.name, 
-            visitNodes(context, node.parameters, transformNode), 
-            <Block>transformFunctionBody(context, node),
+            visitNodes(node.parameters, transformNode), 
+            <Block>transformFunctionBody(node),
             /*location*/ node));
     }
 
-    function transformArrowFunction(context: VisitorContext, node: ArrowFunction, write: (node: ArrowFunction) => void) {
+    function transformArrowFunction(node: ArrowFunction, write: (node: ArrowFunction) => void) {
         write(factory.createArrowFunction(
             /*decorators*/ undefined, 
             /*modifiers*/ undefined, 
             /*typeParameters*/ undefined, 
-            visitNodes(context, node.parameters, transformNode), 
+            visitNodes(node.parameters, transformNode), 
             /*type*/ undefined, 
             node.equalsGreaterThanToken,
-            transformFunctionBody(context, node),
+            transformFunctionBody(node),
             /*location*/ node));
     }
     
-    function transformFunctionBody(context: VisitorContext, node: FunctionLikeDeclaration): Block | Expression {
+    function transformFunctionBody(node: FunctionLikeDeclaration): Block | Expression {
         if (isAsyncFunctionLike(node)) {
-            return transformAsyncFunctionBody(context, node);
+            return transformAsyncFunctionBody(node);
         }
         else {
-            return visitNode(context, node.body, transformNode);
+            return visitNode(node.body, transformNode);
         }
     }
     
-    function transformAsyncFunctionBody(context: VisitorContext, node: FunctionLikeDeclaration): Block | Expression {
+    function transformAsyncFunctionBody(node: FunctionLikeDeclaration): Block | Expression {
         let promiseConstructor = getEntityNameFromTypeNode(node.type);
-        let hasLexicalArguments = (context.resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
+        let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
         let args: string;
 
         // An async function is emit as an outer function that calls an inner
@@ -775,24 +750,15 @@ namespace ts.transform {
         //  }
         //
 
-        // If this is not an async arrow, emit the opening brace of the function body
-        // and the start of the return statement.
-        // if (!isArrowFunction) {
-        //     write(" {");
-        //     increaseIndent();
-        //     writeLine();
-        //     write("return");
-        // }
-        
         let body = node.body;
         let generatorBody: Block;
         if (!isBlock(body)) {
-            let bodyExpr = visitNode(context, body, transformNode);
+            let bodyExpr = visitNode(body, transformNode);
             let returnStmt = factory.createReturnStatement(bodyExpr);
             generatorBody = factory.createBlock([returnStmt]);
         }
         else {
-            generatorBody = visitNode(context, body, transformNode);
+            generatorBody = visitNode(body, transformNode);
         }
         
         let callExpr = factory.createAwaiterHelperCall(hasLexicalArguments, promiseConstructor, generatorBody);
@@ -806,63 +772,49 @@ namespace ts.transform {
         }
     }
     
-    function transformParameter(context: VisitorContext, node: ParameterDeclaration, write: (node: ParameterDeclaration) => void) {
+    function transformParameter(node: ParameterDeclaration, write: (node: ParameterDeclaration) => void) {
         write(factory.createParameter2(
-            visitNode(context, node.name, transformNode),
-            visitNode(context, node.initializer, transformNode),
+            visitNode(node.name, transformNode),
+            visitNode(node.initializer, transformNode),
             /*location*/ node,
             /*flags*/ node.flags & ~NodeFlags.AccessibilityModifier
         ));
     }
     
-    function transformVariableStatement(context: VisitorContext, node: VariableStatement, write: (node: Statement) => void) {
+    function transformVariableStatement(node: VariableStatement, write: (node: Statement) => void) {
         // TODO(rbuckton): transform namespace exports for a variable declaration list
-        Debug.assert(isNamespaceLevelExport(context, node), "Should only reach here for exported variables.");
-        
-        let declList = node.declarationList;
-        context.pushNode(declList);
-        
-        let expressions: Expression[];
-        for (let varDecl of declList.declarations) {
-            if (!varDecl.initializer) {
-                continue;
-            }
-            
-            context.pushNode(varDecl);
-            
-            if (isBindingPattern(varDecl.name)) {
-                Debug.fail("Transform not yet supported.");
-            }
-            else {
-                if (!expressions) {
-                    expressions = [];
-                }
-
-                let name = getModuleMemberName(context, varDecl);
-                let initializer = visitNode(context, varDecl.initializer, transformNode);
-                let assignExpr = factory.createAssignmentExpression(name, initializer);
-                expressions.push(assignExpr);
-            }
-            
-            context.popNode();
-        }
-        
-        context.popNode();
+        Debug.assert(isNamespaceLevelExport(node), "Should only reach here for exported variables.");
+        pipeNode(node.declarationList, write, transformVariableDeclarationList);
+    }
+    
+    function transformVariableDeclarationList(node: VariableDeclarationList, write: (node: Statement) => void) {
+        let expressions = visitNodes<VariableDeclaration, Expression>(node.declarations, transformVariableDeclaration, /*newLexicalEnvironment*/ false, /*returnUndefinedIfEmpty*/ true);
         if (expressions) {
             let exprStmt = factory.createExpressionStatement(factory.inlineExpressions(expressions));
             write(exprStmt);
         }
-        
+    }
+    
+    function transformVariableDeclaration(node: VariableDeclaration, write: (node: Expression) => void) {
+        if (isBindingPattern(node.name)) {
+            Debug.fail("Transform not yet supported.");
+        }
+        else {
+            let name = getModuleMemberName(node);
+            let initializer = visitNode(node.initializer, transformNode);
+            let assignExpr = factory.createAssignmentExpression(name, initializer);
+            write(assignExpr);
+        }
     }
 
-    function transformModuleDeclaration(context: VisitorContext, node: ModuleDeclaration, write: (node: Statement) => void) {
-        if (!shouldEmitModuleDeclaration(context, node)) {
+    function transformModuleDeclaration(node: ModuleDeclaration, write: (node: Statement) => void) {
+        if (!shouldEmitModuleDeclaration(node)) {
             return;
         }
         
         let location = node;
-        if (!isModuleMergedWithClass(context, node)) {
-            let exportFlags = isTopLevelExport(context, node) ? NodeFlags.Export : undefined;
+        if (!isModuleMergedWithClass(node)) {
+            let exportFlags = isTopLevelExport(node) ? NodeFlags.Export : undefined;
             let varDecl = factory.createVariableDeclaration2(<Identifier>node.name);
             let varDecls = factory.createVariableDeclarationList([varDecl]);
             let varStmt = factory.createVariableStatement2(varDecls, location, exportFlags);
@@ -870,27 +822,27 @@ namespace ts.transform {
             location = undefined;
         }
         
-        let localName = context.getGeneratedNameForNode(node);
+        let localName = getGeneratedNameForNode(node);
         let localParam = factory.createParameter2(localName);
         
         let body = node.body;
         let moduleBody: Block;
         if (isModuleBlock(body)) {
-            moduleBody = factory.createBlock(visitNodes(context, body.statements, transformModuleElement));
+            moduleBody = factory.createBlock(visitNodes(body.statements, transformModuleElement));
         }
         else {
-            let inner = visitStatement(context, body, transformNode);
+            let inner = visitStatement(body, transformNode);
             moduleBody = isBlock(inner) ? inner : factory.createBlock([inner]);
         }
         
         let funcExpr = factory.createFunctionExpression2(/*name*/ undefined, [localParam], moduleBody);
         let parenExpr = factory.createParenthesizedExpression(funcExpr);
-        let moduleMemberName = getModuleMemberName(context, node);
+        let moduleMemberName = getModuleMemberName(node);
         let moduleStorageObjExpr = factory.createObjectLiteralExpression2();
         let moduleStorageInitExpr = factory.createAssignmentExpression(moduleMemberName, moduleStorageObjExpr);
         let moduleStorageExpr = factory.createLogicalOrExpression(moduleMemberName, moduleStorageInitExpr);
         let moduleParam: Expression = moduleStorageExpr;
-        if (isNamespaceLevelExport(context, node)) {
+        if (isNamespaceLevelExport(node)) {
             moduleParam = factory.createAssignmentExpression(factory.cloneNode(node.name), moduleStorageExpr);
         }
         
@@ -900,36 +852,35 @@ namespace ts.transform {
         write(callStmt);
     }
 
-    function shouldEmitModuleDeclaration(context: VisitorContext, node: ModuleDeclaration) {
-        return isInstantiatedModule(node, context.compilerOptions.preserveConstEnums || context.compilerOptions.isolatedModules);
+    function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
+        return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
     }
 
-    function isModuleMergedWithClass(context: VisitorContext, node: ModuleDeclaration) {
-        return !!(context.resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
+    function isModuleMergedWithClass(node: ModuleDeclaration) {
+        return !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
     }
     
-    function getExpressionForPropertyName(context: VisitorContext, container: Declaration): Expression {
+    function getExpressionForPropertyName(container: Declaration): Expression {
         let name = <PropertyName>container.name;
         if (isIdentifier(name)) {
             return factory.createStringLiteral(name.text);
         }
         else if (isComputedPropertyName(name)) {
-            return context.getGeneratedNameForNode(name);
+            return getGeneratedNameForNode(name);
         }
         else {
             return factory.cloneNode(name);
         }
     }
     
-    function transformPropertyName(context: VisitorContext, container: Declaration): PropertyName {
+    function transformPropertyName(container: Declaration): PropertyName {
         let name = <PropertyName>container.name;
         if (isComputedPropertyName(name)) {
-            let expression = visitNode(context, name.expression, transformNode);
+            let expression = visitNode(name.expression, transformNode);
             if (nodeCanBeDecorated(container) && nodeIsDecorated(container)) {
-                let generatedName = context.getGeneratedNameForNode(name);
-                context.hoistVariableDeclaration(generatedName);
+                let generatedName = getGeneratedNameForNode(name);
+                hoistVariableDeclaration(generatedName);
                 expression = factory.createAssignmentExpression(generatedName, expression);
-                // expression = tag_expression`${generatedName} = ${expression}`;
             }
             
             return factory.updateComputedPropertyName(name, expression);
@@ -941,15 +892,15 @@ namespace ts.transform {
         Debug.fail("Binding patterns cannot be used as property names.");
     }
     
-    function transformEnumDeclaration(context: VisitorContext, node: EnumDeclaration, write: (node: Statement) => void) {
+    function transformEnumDeclaration(node: EnumDeclaration, write: (node: Statement) => void) {
         // Const enum declarations may be elided
-        if (!shouldEmitEnumDeclaration(context, node)) {
+        if (!shouldEmitEnumDeclaration(node)) {
             return;
         }
         
         let location: TextRange = node;
-        if (!isNamespaceLevelExport(context, node)) {
-            let exportFlags = isTopLevelExport(context, node) ? NodeFlags.Export : undefined;
+        if (!isNamespaceLevelExport(node)) {
+            let exportFlags = isTopLevelExport(node) ? NodeFlags.Export : undefined;
             let varDecl = factory.createVariableDeclaration2(node.name, /*initializer*/ undefined, /*location*/ undefined, exportFlags);
             let varDecls = factory.createVariableDeclarationList([varDecl]);
             let varStmt = factory.createVariableStatement2(varDecls, location);
@@ -957,14 +908,14 @@ namespace ts.transform {
             location = undefined;
         }
         
-        let localName = context.getGeneratedNameForNode(node);
+        let localName = getGeneratedNameForNode(node);
         let enumBody = factory.createBlock([]);
-        transformEnumMembers(context, node, localName, enumBody.statements);
+        transformEnumMembers(node, localName, enumBody.statements);
         
         let localNameParam = factory.createParameter2(localName);
         let enumDecl = factory.createFunctionExpression2(/*name*/ undefined, [localNameParam], enumBody);
         let parenExpr = factory.createParenthesizedExpression(enumDecl);
-        let moduleMemberName = getModuleMemberName(context, node);
+        let moduleMemberName = getModuleMemberName(node);
         let enumStorageObjectExpr = factory.createObjectLiteralExpression2();
         let enumStorageInitExpr = factory.createAssignmentExpression(moduleMemberName, enumStorageObjectExpr);
         let enumStorageExpr = factory.createLogicalOrExpression(moduleMemberName, enumStorageInitExpr);
@@ -972,7 +923,7 @@ namespace ts.transform {
         let callStmt = factory.createExpressionStatement(callExpr, location);
         write(callStmt);
         
-        if (isNamespaceLevelExport(context, node)) {
+        if (isNamespaceLevelExport(node)) {
             let varDecl = factory.createVariableDeclaration2(node.name, moduleMemberName);
             let varDecls = factory.createVariableDeclarationList([varDecl]);
             let varStmt = factory.createVariableStatement2(varDecls);
@@ -980,15 +931,15 @@ namespace ts.transform {
         }
     }
     
-    function transformEnumMembers(context: VisitorContext, node: EnumDeclaration, localName: Identifier, statements: Statement[]) {
+    function transformEnumMembers(node: EnumDeclaration, localName: Identifier, statements: Statement[]) {
         for (let member of node.members) {
-            transformEnumMember(context, member, localName, statements);
+            transformEnumMember(member, localName, statements);
         }
     }
     
-    function transformEnumMember(context: VisitorContext, node: EnumMember, localName: Identifier, statements: Statement[]) {
-        let enumNameExpr = getExpressionForPropertyName(context, node);
-        let enumValueExpr = getEnumMemberDeclarationValue(context, node);
+    function transformEnumMember(node: EnumMember, localName: Identifier, statements: Statement[]) {
+        let enumNameExpr = getExpressionForPropertyName(node);
+        let enumValueExpr = getEnumMemberDeclarationValue(node);
         let enumNameElemExpr = factory.createElementAccessExpression2(localName, enumNameExpr);
         let enumValueAssignExpr = factory.createAssignmentExpression(enumNameElemExpr, enumValueExpr);
         let enumValueElemExpr = factory.createElementAccessExpression2(localName, enumValueAssignExpr);
@@ -997,13 +948,13 @@ namespace ts.transform {
         statements.push(enumMemberStmt);
     }
     
-    function getEnumMemberDeclarationValue(context: VisitorContext, member: EnumMember): Expression {
-        let value = context.resolver.getConstantValue(member);
+    function getEnumMemberDeclarationValue(member: EnumMember): Expression {
+        let value = resolver.getConstantValue(member);
         if (value !== undefined) {
             return factory.createNumericLiteral2(value);
         }
         else if (member.initializer) {
-            return visitNode(context, member.initializer, transformNode);
+            return visitNode(member.initializer, transformNode);
         }
         else {
             // NOTE(rbuckton): Should this be `void 0`?
@@ -1011,15 +962,15 @@ namespace ts.transform {
         }
     }
     
-    function shouldEmitEnumDeclaration(context: VisitorContext, node: EnumDeclaration) {
+    function shouldEmitEnumDeclaration(node: EnumDeclaration) {
         let isConstEnum = isConst(node);
-        return !isConstEnum || context.compilerOptions.preserveConstEnums || context.compilerOptions.isolatedModules;
+        return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.isolatedModules;
     }
     
-    function transformAwaitExpression(context: VisitorContext, node: AwaitExpression, write: (node: Expression) => void) {
-        let expression = visitNode(context, node.expression, transformNode);
+    function transformAwaitExpression(node: AwaitExpression, write: (node: Expression) => void) {
+        let expression = visitNode(node.expression, transformNode);
         let yieldExpr = factory.createYieldExpression(/*asteriskToken*/ undefined, expression, /*location*/ node);
-        if (needsParenthesisForAwaitExpressionAsYield(context, node)) {
+        if (needsParenthesisForAwaitExpressionAsYield(node)) {
             let parenExpr = factory.createParenthesizedExpression(yieldExpr);
             write(parenExpr);
         }
@@ -1028,8 +979,8 @@ namespace ts.transform {
         }
     }
 
-    function needsParenthesisForAwaitExpressionAsYield(context: VisitorContext, node: AwaitExpression) {
-        let parentNode = context.parentNode;
+    function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
+        let parentNode = getParentNode();
         if (isBinaryExpression(parentNode) && !isAssignmentOperator(parentNode.operatorToken.kind)) {
             return true;
         }
@@ -1040,7 +991,7 @@ namespace ts.transform {
         return false;
     }
     
-    function transformDecoratorsOfMembers(context: VisitorContext, node: ClassLikeDeclaration, isStatic: boolean, statements: (node: Statement) => void) {
+    function transformDecoratorsOfMembers(node: ClassLikeDeclaration, isStatic: boolean, statements: (node: Statement) => void) {
         for (let member of node.members) {
             // only emit members in the correct group
             if (isStatic !== ((member.flags & NodeFlags.Static) !== 0)) {
@@ -1053,11 +1004,11 @@ namespace ts.transform {
                 continue;
             }
             
-            transformDecoratorsOfMember(context, node, member, statements);
+            transformDecoratorsOfMember(node, member, statements);
         }
     }
     
-    function transformDecoratorsOfConstructor(context: VisitorContext, node: ClassLikeDeclaration, write: (node: Statement) => void) {
+    function transformDecoratorsOfConstructor(node: ClassLikeDeclaration, write: (node: Statement) => void) {
         let decorators = node.decorators;
         let constructor = getFirstConstructorWithBody(node);
         let hasDecoratedParameters = constructor && forEach(constructor.parameters, nodeIsDecorated);
@@ -1081,29 +1032,25 @@ namespace ts.transform {
         let decoratorExpressions: Expression[] = [];
         if (decorators) {
             for (let decorator of decorators) {
-                decoratorExpressions.push(visitNode(context, decorator.expression, transformNode))
+                decoratorExpressions.push(visitNode(decorator.expression, transformNode))
             }
         }
         
         if (constructor) {
-            appendDecoratorsOfParameters(context, constructor.parameters, decoratorExpressions);
+            appendDecoratorsOfParameters(constructor.parameters, decoratorExpressions);
         }
         
-        if (context.compilerOptions.emitDecoratorMetadata) {
-            appendSerializedTypeMetadata(context, node, decoratorExpressions);
+        if (compilerOptions.emitDecoratorMetadata) {
+            appendSerializedTypeMetadata(node, decoratorExpressions);
         }
         
-        let name = context.getDeclarationName(node);
+        let name = getDeclarationName(node);
         let callExpr = factory.createDecorateHelperCall(decoratorExpressions, name);
         let statement = factory.createExpressionStatement(callExpr);
         write(statement);
-        
-        // statements.push(tag_statement`
-        //     ${name} = __decorate([${decoratorExpressions}], ${name});
-        // `);
     }
     
-    function transformDecoratorsOfMember(context: VisitorContext, node: ClassLikeDeclaration, member: ClassElement, write: (node: Statement) => void) {
+    function transformDecoratorsOfMember(node: ClassLikeDeclaration, member: ClassElement, write: (node: Statement) => void) {
         let decorators: Decorator[];
         let parameters: ParameterDeclaration[];
 
@@ -1170,27 +1117,24 @@ namespace ts.transform {
         let decoratorExpressions: Expression[] = [];
         if (decorators) {
             for (let decorator of decorators) {
-                decoratorExpressions.push(visitNode(context, decorator.expression, transformNode))
+                decoratorExpressions.push(visitNode(decorator.expression, transformNode))
             }
         }
         
         if (parameters) {
-            appendDecoratorsOfParameters(context, parameters, decoratorExpressions);
+            appendDecoratorsOfParameters(parameters, decoratorExpressions);
         }
         
-        if (context.compilerOptions.emitDecoratorMetadata) {
-            appendSerializedTypeMetadata(context, node, decoratorExpressions);
+        if (compilerOptions.emitDecoratorMetadata) {
+            appendSerializedTypeMetadata(node, decoratorExpressions);
         }
         
-        let prefix = context.getClassMemberPrefix(node, member);
-        let memberName = getExpressionForPropertyName(context, member);
+        let prefix = getClassMemberPrefix(node, member);
+        let memberName = getExpressionForPropertyName(member);
         if (isPropertyDeclaration(member)) {
             let decorateExpr = factory.createDecorateHelperCall(decoratorExpressions, prefix, memberName);
             let statement = factory.createExpressionStatement(decorateExpr);
             write(statement);
-            // statements.push(tag_statement`
-            //     __decorate([${decoratorExpressions}], ${prefix}, ${memberName});
-            // `);
         }
         else {
             let descriptorExpr = factory.createGetOwnPropertyDescriptorCall(prefix, memberName);
@@ -1198,54 +1142,37 @@ namespace ts.transform {
             let definePropertyExpr = factory.createDefinePropertyCall(prefix, memberName, decorateExpr);
             let statement = factory.createExpressionStatement(definePropertyExpr);
             write(statement);
-            // statements.push(tag_statement`
-            //     Object.defineProperty(${prefix}, ${memberName}, 
-            //         __decorate([${decoratorExpressions}], ${prefix}, ${memberName},
-            //             Object.getOwnPropertyDescriptor(${prefix}, ${memberName})));
-            // `);
         }
     }
     
-    function appendDecoratorsOfParameters(context: VisitorContext, parameters: ParameterDeclaration[], expressions: Expression[]) {
+    function appendDecoratorsOfParameters(parameters: ParameterDeclaration[], expressions: Expression[]) {
         for (let parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
             let parameter = parameters[parameterIndex];
             if (nodeIsDecorated(parameter)) {
                 for (let decorator of parameter.decorators) {
-                    let decoratorExpr = visitNode(context, decorator.expression, transformNode);
+                    let decoratorExpr = visitNode(decorator.expression, transformNode);
                     let paramExpr = factory.createParamHelperCall(parameterIndex, decoratorExpr);
                     expressions.push(paramExpr);
-                    // expressions.push(tag_expression`
-                    //     __param(${parameterIndex}, ${decoratorExpr})
-                    // `);
                 }
             }
         }
     }
     
-    function appendSerializedTypeMetadata(context: VisitorContext, node: Declaration, expressions: Expression[]) {
+    function appendSerializedTypeMetadata(node: Declaration, expressions: Expression[]) {
         if (shouldAppendTypeMetadata(node)) {
-            let typeExpr = serializeTypeOfNode(context, node);
+            let typeExpr = serializeTypeOfNode(node);
             let metadataExpr = factory.createMetadataHelperCall("design:type", typeExpr);
             expressions.push(metadataExpr);
-            // expressions.push(tag_expression`
-            //     __metadata("design:type", ${serializeTypeOfNode(context, node)})
-            // `);
         }
         if (shouldAppendParamTypesMetadata(node)) {
-            let paramTypesExpr = serializeParameterTypesOfNode(context, node);
+            let paramTypesExpr = serializeParameterTypesOfNode(node);
             let metadataExpr = factory.createMetadataHelperCall("design:paramtypes", paramTypesExpr);
             expressions.push(metadataExpr);
-            // expressions.push(tag_expression`
-            //     __metadata("design:paramtypes", ${serializeParameterTypesOfNode(context, node)})
-            // `);
         }
         if (shouldAppendReturnTypeMetadata(node)) {
-            let returnTypeExpr = serializeReturnTypeOfNode(context, node);
+            let returnTypeExpr = serializeReturnTypeOfNode(node);
             let metadataExpr = factory.createMetadataHelperCall("design:returntype", returnTypeExpr);
             expressions.push(metadataExpr);
-            // expressions.push(tag_expression`
-            //     __metadata("design:returntype", ${serializeReturnTypeOfNode(context, node)})
-            // `);
         }
     }
 
@@ -1288,24 +1215,22 @@ namespace ts.transform {
         return false;
     }
     
-    function serializeTypeOfNode(context: VisitorContext, node: Node): Expression {
+    function serializeTypeOfNode(node: Node): Expression {
         if (isPropertyDeclaration(node) || isParameter(node) || isGetAccessor(node)) {
-            return serializeTypeNode(context, node.type);
+            return serializeTypeNode(node.type);
         }
         else if (isSetAccessor(node)) {
-            return serializeTypeNode(context, getSetAccessorTypeAnnotationNode(node));
+            return serializeTypeNode(getSetAccessorTypeAnnotationNode(node));
         }
         else if (isClassLike(node) || isFunctionLike(node)) {
             return factory.createIdentifier("Function");
-            // return tag_id`Function`;
         }
         else {
             return factory.createVoidZeroExpression();
-            // return tag_expression`void 0`;
         }
     }
     
-    function serializeParameterTypesOfNode(context: VisitorContext, node: Node): Expression {
+    function serializeParameterTypesOfNode(node: Node): Expression {
         let valueDeclaration =
             isClassLike(node) ? getFirstConstructorWithBody(node) :
             isFunctionLike(node) && nodeIsPresent(node.body) ? node :
@@ -1319,10 +1244,10 @@ namespace ts.transform {
                     let elementType =
                         isArrayType(parameterType) ? parameterType.elementType :
                         isTypeReference(parameterType) && parameterType.typeArguments && singleOrUndefined(parameterType.typeArguments);
-                    parameterTypeExpressions.push(serializeTypeNode(context, elementType));
+                    parameterTypeExpressions.push(serializeTypeNode(elementType));
                 }
                 else {
-                    parameterTypeExpressions.push(serializeTypeOfNode(context, parameter));
+                    parameterTypeExpressions.push(serializeTypeOfNode(parameter));
                 }
             }
         }
@@ -1330,60 +1255,52 @@ namespace ts.transform {
         return factory.createArrayLiteralExpression(parameterTypeExpressions);
     }
     
-    function serializeReturnTypeOfNode(context: VisitorContext, node: Node): Expression {
+    function serializeReturnTypeOfNode(node: Node): Expression {
         if (isFunctionLike(node)) {
-            return serializeTypeNode(context, node.type);
+            return serializeTypeNode(node.type);
         }
         
         return undefined;
     }
     
-    function serializeTypeNode(context: VisitorContext, node: TypeNode): Expression {
+    function serializeTypeNode(node: TypeNode): Expression {
         if (node === undefined) {
             return factory.createIdentifier("Object");
-            // return tag_id`Object`;
         }
         
         switch (node.kind) {
             case SyntaxKind.VoidKeyword:
                 return factory.createVoidZeroExpression(); 
-                // return tag_expression`void 0`;
 
             case SyntaxKind.ParenthesizedType:
-                return serializeTypeNode(context, (<ParenthesizedTypeNode>node).type);
+                return serializeTypeNode((<ParenthesizedTypeNode>node).type);
                 
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
                 return factory.createIdentifier("Function");
-                // return tag_id`Function`;
                 
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
                 return factory.createIdentifier("Array");
-                // return tag_id`Array`;
                 
             case SyntaxKind.TypePredicate:
             case SyntaxKind.BooleanKeyword:
                 return factory.createIdentifier("Boolean")
-                // return tag_id`Boolean`;
 
             case SyntaxKind.StringKeyword:
             case SyntaxKind.StringLiteral:
                 return factory.createIdentifier("String"); 
-                // return tag_id`String`;
                 
             case SyntaxKind.NumberKeyword:
                 return factory.createIdentifier("Number");
-                // return tag_id`Number`;
                 
             case SyntaxKind.SymbolKeyword:
-                return context.languageVersion < ScriptTarget.ES6
+                return languageVersion < ScriptTarget.ES6
                     ? getGlobalSymbolNameWithFallback()
                     : factory.createIdentifier("Symbol");
-                // return tag_id`Symbol`;
 
             case SyntaxKind.TypeReference:
-                return serializeTypeReferenceNode(context, <TypeReferenceNode>node);
+                return serializeTypeReferenceNode(<TypeReferenceNode>node);
                 
             case SyntaxKind.TypeQuery:
             case SyntaxKind.TypeLiteral:
@@ -1398,18 +1315,17 @@ namespace ts.transform {
         }
         
         return factory.createIdentifier("Object");
-        // return tag_id`Object`;
     }
 
     /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-    function serializeTypeReferenceNode(context: VisitorContext, node: TypeReferenceNode) {
+    function serializeTypeReferenceNode(node: TypeReferenceNode) {
         let typeName = node.typeName;
-        let result = context.resolver.getTypeReferenceSerializationKind(node);
+        let result = resolver.getTypeReferenceSerializationKind(node);
         switch (result) {
             case TypeReferenceSerializationKind.Unknown:
-                let tempVar = context.declareLocal();
+                let tempVar = declareLocal();
                 let globalObjectName = factory.createIdentifier("Object");
-                let typeExpr = serializeEntityNameAsExpression(context, typeName, /*useFallback*/ true);
+                let typeExpr = serializeEntityNameAsExpression(typeName, /*useFallback*/ true);
                 let cacheExpr = factory.createAssignmentExpression(tempVar, typeExpr);
                 let typeOfExpr = factory.createTypeOfExpression(factory.createParenthesizedExpression(cacheExpr));
                 let functionLiteral = factory.createStringLiteral("function");
@@ -1417,35 +1333,27 @@ namespace ts.transform {
                 let logicalAndExpr = factory.createLogicalAndExpression(equalityExpr, tempVar);
                 let logicalOrExpr = factory.createLogicalOrExpression(logicalAndExpr, globalObjectName);
                 return logicalOrExpr;
-                // return tag_expression`
-                //     typeof (${tempVar} = ${typeExpr}) === "function" && ${tempVar} || Object
-                // `;
 
             case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                return serializeEntityNameAsExpression(context, typeName, /*useFallback*/ false);
+                return serializeEntityNameAsExpression(typeName, /*useFallback*/ false);
                 
             case TypeReferenceSerializationKind.VoidType:
                 return factory.createVoidZeroExpression();
-                // return tag_expression`void 0`;
                 
             case TypeReferenceSerializationKind.BooleanType:
                 return factory.createIdentifier("Boolean");
-                // return tag_id`Boolean`;
                 
             case TypeReferenceSerializationKind.NumberLikeType:
                 return factory.createIdentifier("Number");
-                // return tag_id`Number`;
                 
             case TypeReferenceSerializationKind.StringLikeType:
                 return factory.createIdentifier("String");
-                // return tag_id`String`;
                 
             case TypeReferenceSerializationKind.ArrayLikeType:
                 return factory.createIdentifier("Array");
-                // return tag_id`Array`;
                 
             case TypeReferenceSerializationKind.ESSymbolType:
-                return context.languageVersion < ScriptTarget.ES6
+                return languageVersion < ScriptTarget.ES6
                     ? getGlobalSymbolNameWithFallback()
                     : factory.createIdentifier("Symbol");
                 
@@ -1458,10 +1366,9 @@ namespace ts.transform {
         }
         
         return factory.createIdentifier("Object");
-        // return tag_id`Object`;
     }
 
-    function serializeEntityNameAsExpression(context: VisitorContext, node: EntityName, useFallback: boolean): Expression {
+    function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): Expression {
         switch (node.kind) {
             case SyntaxKind.Identifier:
                 let name = factory.cloneNode(<Identifier>node);
@@ -1471,43 +1378,34 @@ namespace ts.transform {
                     let equalityExpr = factory.createStrictInequalityExpression(typeOfExpr, undefinedLiteral);
                     let logicalAndExpr = factory.createLogicalAndExpression(equalityExpr, name);
                     return logicalAndExpr;
-                    // return tag_expression`
-                    //     typeof ${name} !== "undefined" && ${name}
-                    // `;
                 }
                 
                 return name;
                 
             case SyntaxKind.QualifiedName:
-                return serializeQualifiedNameAsExpression(context, <QualifiedName>node, useFallback);
+                return serializeQualifiedNameAsExpression(<QualifiedName>node, useFallback);
         }
     }
 
-    function serializeQualifiedNameAsExpression(context: VisitorContext, node: QualifiedName, useFallback: boolean): Expression {
+    function serializeQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean): Expression {
         let left: Expression
         if (node.left.kind === SyntaxKind.Identifier) {
-            left = serializeEntityNameAsExpression(context, node.left, useFallback);
+            left = serializeEntityNameAsExpression(node.left, useFallback);
         }
         else if (useFallback) {
-            let tempVar = context.declareLocal();
-            let pathExpr = serializeEntityNameAsExpression(context, node.left, /*useFallback*/ true);
+            let tempVar = declareLocal();
+            let pathExpr = serializeEntityNameAsExpression(node.left, /*useFallback*/ true);
             let cacheExpr = factory.createAssignmentExpression(tempVar, pathExpr);
             left = factory.createLogicalAndExpression(cacheExpr, tempVar);
-            // left = tag_expression`
-            //     (${tempVar} = ${pathExpr}) && ${tempVar}
-            // `;
         }
         else {
-            left = serializeEntityNameAsExpression(context, node.left, /*useFallback*/ false);
+            left = serializeEntityNameAsExpression(node.left, /*useFallback*/ false);
         }
         
         // we clone the node here to create a copy of the node with no position information 
         let right = factory.cloneNode(node.right);
         let propExpr = factory.createPropertyAccessExpression2(left, right);
         return propExpr;
-        // return tag_expression`
-        //     ${factory.parenthesizeForAccess(left)}.${factory.cloneNode(node.right)}
-        // `;
     }
     
     function getGlobalSymbolNameWithFallback(): Expression {

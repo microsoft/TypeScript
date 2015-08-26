@@ -82,6 +82,10 @@ namespace ts {
         bindSourceFileWorker(file);
         bindTime += new Date().getTime() - start;
     }
+    
+    // function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags) {
+    //     return 0;
+    // }
 
     function bindSourceFileWorker(file: SourceFile) {
         let parent: Node;
@@ -816,7 +820,7 @@ namespace ts {
                 let saveTransformFlags = transformFlags;
                 transformFlags = 0;
                 let result = cbNode(node);
-                transformFlags = saveTransformFlags | transform.computeTransformFlagsForNode(node, transformFlags);
+                transformFlags = saveTransformFlags | computeTransformFlagsForNode(node, transformFlags);
                 return result;
             }
             

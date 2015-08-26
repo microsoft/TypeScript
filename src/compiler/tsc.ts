@@ -316,7 +316,6 @@ namespace ts {
         bindTime = 0;
         checkTime = 0;
         emitTime = 0;
-        transform.aggregateTime = 0;
         transform.transformTime = 0;
 
         let program = createProgram(fileNames, compilerOptions, compilerHost);
@@ -350,7 +349,6 @@ namespace ts {
             reportTimeStatistic("Parse time", programTime);
             reportTimeStatistic("Bind time", bindTime);
             reportTimeStatistic("Check time", checkTime);
-            reportTimeStatistic("Pre-transform time", transform.aggregateTime);
             reportTimeStatistic("Transform time", transform.transformTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);

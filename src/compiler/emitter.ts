@@ -7271,8 +7271,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Process tree transformations
                 let statements = node.statements;
                 if (compilerOptions.experimentalTransforms) {
-                    let context = new transform.VisitorContext(compilerOptions, currentSourceFile, resolver, generatedNameSet, nodeToGeneratedName);
-                    statements = transformationChain(context, node.statements);
+                    statements = runTransformationChain(statements, transformationChain, compilerOptions, currentSourceFile, resolver, generatedNameSet, nodeToGeneratedName);
                 }
 
                 // emit prologue directives prior to __extends

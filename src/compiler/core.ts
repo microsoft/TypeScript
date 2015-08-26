@@ -803,6 +803,10 @@ namespace ts {
                 end: -1,
                 flags: 0,
                 parent: undefined,
+                original: undefined,
+                transformFlags: undefined,
+                excludeTransformFlags: undefined,
+                modifiers: undefined
             };
             return <any>Node;
         },
