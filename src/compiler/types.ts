@@ -1413,6 +1413,7 @@ namespace ts {
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
@@ -2010,7 +2011,12 @@ namespace ts {
         Error,
         Message,
     }
-
+    
+    export const enum ModuleResolutionKind {
+        Classic  = 1,
+        NodeJs  = 2
+    }
+    
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2034,6 +2040,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
+        outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;
@@ -2049,6 +2056,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        moduleResolution?: ModuleResolutionKind
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
