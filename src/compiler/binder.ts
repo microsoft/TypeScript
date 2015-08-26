@@ -180,8 +180,15 @@ namespace ts {
                     return "p" + index;
 
                 case SyntaxKind.BinaryExpression:
-                    Debug.assert(isAmdExportAssignment(<BinaryExpression>node));
-                    return getAmdExportAssignmentName(node);
+                    if (isAmdExportAssignment(node)) {
+                        return getAmdExportAssignmentName(node);
+                    }
+                    else if(isCommonJsExportsAssignment(node)) {
+                        return getAnonymousModuleName(node);
+                    }
+                    else {
+                        Debug.fail('Unknown binder BinaryExpression kind');
+                    }
 
                 case SyntaxKind.CallExpression:
                     Debug.assert(isDefineCall(<CallExpression>node));
@@ -305,7 +312,7 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isAmdExportAssignment(node)) {
+                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isAmdExportAssignment(node) || isCommonJsExportsAssignment(node)) {
                     let exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -885,8 +892,11 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
-                    if(isAmdExportAssignment(<BinaryExpression>node)) {
+                    if (isAmdExportAssignment(node)) {
                         bindAmdExportAssignment(<BinaryExpression>node);
+                    }
+                    else if (isCommonJsExportsAssignment(node)) {
+                        bindAmdModuleExportsAssignment(<BinaryExpression>node);
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
@@ -1027,6 +1037,12 @@ namespace ts {
 
         function bindAmdExportAssignment(node: BinaryExpression) {
             declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.Property, SymbolFlags.None);
+        }
+
+        function bindAmdModuleExportsAssignment(node: BinaryExpression) {
+            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
+            // This file is an external module
+            getSourceFileOfNode(node).symbol = symbol;
         }
 
         function bindDefineCall(node: CallExpression) {

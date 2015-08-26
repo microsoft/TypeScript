@@ -1053,6 +1053,16 @@ namespace ts {
             ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
     }
 
+    export function isCommonJsExportsAssignment(expression: Node): boolean;
+    export function isCommonJsExportsAssignment(expression: BinaryExpression): boolean {
+        return (expression.kind === SyntaxKind.BinaryExpression) &&
+            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
+            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'module') &&
+            ((<PropertyAccessExpression>expression.left).name.text === 'exports');
+    }
+
     export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
         // e.g. define(['a', 'b', 'c'], ...) or define('myMod', ['a', 'b', 'c'], ...)
         if (callExpr.arguments.length < 1) {

@@ -2736,6 +2736,18 @@ namespace ts {
             return getUnionType(seenTypes);
         }
 
+        function resolveCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+            let seenTypes: Type[] = [];
+
+            for (var i = 0; i < symbol.declarations.length; i++) {
+                let decl = symbol.declarations[i];
+                Debug.assert(isCommonJsExportsAssignment(decl));
+                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
+            }
+
+            return getUnionType(seenTypes);
+        }
+
         /*
          * Given a Symbol for a declaration of an AMD module ('define(..., ..., ...')'),
          * produces the type of that module
@@ -2854,12 +2866,27 @@ namespace ts {
             return links.type;
         }
 
+        function getTypeOfCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveCommonJsModuleExportsAssignment(symbol);
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
             if (symbol.declarations && forEach(symbol.declarations, isDefineCall)) {
                 return getTypeOfDefineModule(symbol);
             }
             if (symbol.declarations && forEach(symbol.declarations, isAmdExportAssignment)) {
                 return getTypeOfAmdExportAssignment(symbol);
+            }
+            if (symbol.declarations && forEach(symbol.declarations, isCommonJsExportsAssignment)) {
+                return getTypeOfCommonJsModuleExportsAssignment(symbol);
             }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
