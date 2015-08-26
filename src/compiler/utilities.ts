@@ -80,6 +80,41 @@ namespace ts {
         return node.end - node.pos;
     }
 
+    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
+        if (!arr1 || !arr2) {
+            return arr1 === arr2;
+        }
+
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < arr1.length; ++i) {
+            let equals = comparer ? comparer(arr1[i], arr2[i]) : arr1[i] === arr2[i];
+            if (!equals) {
+                return false;
+            }
+        }
+
+        return true;
+    }    
+   
+    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
+    }
+
+    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
+        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+    }
+
+    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
+        if (!sourceFile.resolvedModules) {
+            sourceFile.resolvedModules = {};
+        }
+
+        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
+    }
+
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
@@ -205,7 +240,7 @@ namespace ts {
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
-        return getBaseFileName(moduleName).replace(/\W/g, "_");
+        return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
     export function isBlockOrCatchScoped(declaration: Declaration) {
@@ -606,6 +641,20 @@ namespace ts {
         return false;
     }
 
+    export function introducesArgumentsExoticObject(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                return true;
+        }
+        return false;
+    }
+
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
@@ -929,6 +978,7 @@ namespace ts {
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
+                    case SyntaxKind.JsxExpression:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -1717,7 +1767,7 @@ namespace ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
                 return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");

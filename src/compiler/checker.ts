@@ -388,7 +388,7 @@ namespace ts {
                 return node1.pos <= node2.pos;
             }
 
-            if (!compilerOptions.out) {
+            if (!compilerOptions.outFile && !compilerOptions.out) {
                 return true;
             }
 
@@ -965,7 +965,9 @@ namespace ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) return;
+            if (!moduleName) {
+                return;
+            }
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
@@ -973,20 +975,9 @@ namespace ts {
                     return symbol;
                 }
             }
-            let fileName: string;
-            let sourceFile: SourceFile;
-            while (true) {
-                fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
-                if (sourceFile || isRelative) {
-                    break;
-                }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
+
+            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral.text);
+            let sourceFile = fileName && host.getSourceFile(fileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
@@ -2175,10 +2166,13 @@ namespace ts {
         function collectLinkedAliases(node: Identifier): Node[] {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
+                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
+                let exportSpecifier = <ExportSpecifier>node.parent;
+                exportSymbol = (<ExportDeclaration>exportSpecifier.parent.parent).moduleSpecifier ?
+                    getExternalModuleMember(<ExportDeclaration>exportSpecifier.parent.parent, exportSpecifier) :
+                    resolveEntityName(exportSpecifier.propertyName || exportSpecifier.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             let result: Node[] = [];
             if (exportSymbol) {
@@ -11390,9 +11384,16 @@ namespace ts {
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
-                let rootSymbol = resolveName(root, root.text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
-                    markAliasSymbolAsReferenced(rootSymbol);
+                let meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
+                // Resolve type so we know which symbol is referenced
+                let rootSymbol = resolveName(root, root.text, meaning | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                // Resolved symbol is alias
+                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
+                    let aliasTarget = resolveAlias(rootSymbol);
+                    // If alias has value symbol - mark alias as referenced
+                    if (aliasTarget.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
+                        markAliasSymbolAsReferenced(rootSymbol);
+                    }
                 }
             }
         }
@@ -13851,7 +13852,11 @@ namespace ts {
                             }
                             break;
                     }
-
+                    
+                    if (introducesArgumentsExoticObject(location)) {
+                        copySymbol(argumentsSymbol, meaning);
+                    }
+                    
                     memberFlags = location.flags;
                     location = location.parent;
                 }
@@ -14404,6 +14409,10 @@ namespace ts {
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             let typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true);
+            // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
+            if (!typeSymbol) {
+                return TypeReferenceSerializationKind.ObjectType; 
+            }
             let type = getDeclaredTypeOfSymbol(typeSymbol);
             if (type === unknownType) {
                 return TypeReferenceSerializationKind.Unknown;

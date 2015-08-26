@@ -78,15 +78,76 @@ namespace ts.server {
             return this.snap().getChangeRange(oldSnapshot);
         }
     }
-
+    
+    interface TimestampedResolvedModule extends ResolvedModule {
+        lastCheckTime: number; 
+    }
+    
     export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
         roots: ScriptInfo[] = [];
-
+        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;        
+        private moduleResolutionHost: ts.ModuleResolutionHost;
+        
         constructor(public host: ServerHost, public project: Project) {
+            this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
+            this.moduleResolutionHost = {
+                fileExists: fileName => this.fileExists(fileName),
+                readFile: fileName => this.host.readFile(fileName)
+            }
         }
+        
+        resolveModuleNames(moduleNames: string[], containingFile: string): string[] {
+            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
+            
+            let newResolutions: Map<TimestampedResolvedModule> = {};
+            let resolvedFileNames: string[] = [];
+            
+            let compilerOptions = this.getCompilationSettings();
+                        
+            for (let moduleName of moduleNames) {
+                // check if this is a duplicate entry in the list
+                let resolution = lookUp(newResolutions, moduleName);
+                if (!resolution) {
+                    let existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
+                    if (moduleResolutionIsValid(existingResolution)) {
+                        // ok, it is safe to use existing module resolution results  
+                        resolution = existingResolution;
+                    }
+                    else {
+                        resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution.lastCheckTime = Date.now();
+                        newResolutions[moduleName] = resolution;                                                
+                    }
+                }
+                
+                ts.Debug.assert(resolution !== undefined);
+                
+                resolvedFileNames.push(resolution.resolvedFileName);                
+            }
+            
+            // replace old results with a new one
+            this.resolvedModuleNames.set(containingFile, newResolutions);
+            return resolvedFileNames;
+            
+            function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
+                if (!resolution) {
+                    return false;
+                }
+                
+                if (resolution.resolvedFileName) {
+                    // TODO: consider checking failedLookupLocations  
+                    // TODO: use lastCheckTime to track expiration for module name resolution 
+                    return true;
+                }
+                
+                // consider situation if we have no candidate locations as valid resolution.
+                // after all there is no point to invalidate it if we have no idea where to look for the module.
+                return resolution.failedLookupLocations.length === 0;
+            }
+        }        
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
@@ -102,6 +163,8 @@ namespace ts.server {
 
         setCompilationSettings(opt: ts.CompilerOptions) {
             this.compilationSettings = opt;
+            // conservatively assume that changing compiler options might affect module resolution strategy
+            this.resolvedModuleNames.clear();
         }
 
         lineAffectsRefs(filename: string, line: number) {
@@ -137,6 +200,7 @@ namespace ts.server {
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
                 this.filenameToScript[info.fileName] = undefined;
+                this.resolvedModuleNames.remove(info.fileName);
             }
         }
 
@@ -158,6 +222,14 @@ namespace ts.server {
             if (!scriptInfo) {
                 this.filenameToScript[info.fileName] = info;
                 this.roots.push(info);
+            }
+        }
+        
+        removeRoot(info: ScriptInfo) {
+            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
+            if (scriptInfo) {
+                this.filenameToScript[info.fileName] = undefined;
+                this.roots = copyListRemovingItem(info, this.roots);
             }
         }
 
@@ -281,6 +353,7 @@ namespace ts.server {
     export class Project {
         compilerService: CompilerService;
         projectFilename: string;
+        projectFileWatcher: FileWatcher;
         program: ts.Program;
         filenameToSourceFile: ts.Map<ts.SourceFile> = {};
         updateGraphSeq = 0;
@@ -288,7 +361,7 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
-            this.compilerService = new CompilerService(this,projectOptions && projectOptions.compilerOptions);
+            this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
         addOpenRef() {
@@ -358,6 +431,12 @@ namespace ts.server {
         addRoot(info: ScriptInfo) {
             info.defaultProject = this;
             this.compilerService.host.addRoot(info);
+        }
+        
+        // remove a root file from project
+        removeRoot(info: ScriptInfo) {
+            info.defaultProject = undefined;
+            this.compilerService.host.removeRoot(info);
         }
 
         filesToString() {
@@ -453,6 +532,12 @@ namespace ts.server {
             }
         }
 
+        watchedProjectConfigFileChanged(project: Project) {
+            this.log("Config File Changed: " + project.projectFilename);
+            this.updateConfiguredProject(project);
+            this.updateProjectStructure();
+        }
+
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
         }
@@ -529,6 +614,19 @@ namespace ts.server {
             }
             this.configuredProjects = configuredProjects;
         }
+        
+        removeConfiguredProject(project: Project) {
+                project.projectFileWatcher.close();
+                this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+
+                let fileNames = project.getFileNames();
+                for (let fileName of fileNames) {
+                    let info = this.getScriptInfo(fileName);
+                    if (info.defaultProject == project){
+                        info.defaultProject = undefined;
+                    }
+                }
+        }
 
         setConfiguredProjectRoot(info: ScriptInfo) {
              for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
@@ -583,7 +681,6 @@ namespace ts.server {
         /**
           * Remove this file from the set of open, non-configured files.
           * @param info The file that has been closed or newly configured
-          * @param openedByConfig True if info has become a root of a configured project
           */
         closeOpenFile(info: ScriptInfo) {
             var openFileRoots: ScriptInfo[] = [];
@@ -672,18 +769,42 @@ namespace ts.server {
             return referencingProjects;
         }
 
+        reloadProjects() {
+            // First check if there is new tsconfig file added for inferred project roots
+            for (let info of this.openFileRoots) {
+                this.openOrUpdateConfiguredProjectForFile(info.fileName);
+            }
+            this.updateProjectStructure();
+        }
+
+        /**
+         * This function is to update the project structure for every projects. 
+         * It is called on the premise that all the configured projects are 
+         * up to date.
+         */
         updateProjectStructure() {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
+            
+            let unattachedOpenFiles: ScriptInfo[] = [];
+            let openFileRootsConfigured: ScriptInfo[] = [];
+            for (let info of this.openFileRootsConfigured) {
+                let project = info.defaultProject;
+                if (!project || !(project.getSourceFile(info))) {
+                    info.defaultProject = undefined;
+                    unattachedOpenFiles.push(info);
+                }
+                else {
+                    openFileRootsConfigured.push(info);
+                }
+            }
+            this.openFileRootsConfigured = openFileRootsConfigured;
 
             // First loop through all open files that are referenced by projects but are not
             // project roots.  For each referenced file, see if the default project still
             // references that file.  If so, then just keep the file in the referenced list.
             // If not, add the file to an unattached list, to be rechecked later.
-
             var openFilesReferenced: ScriptInfo[] = [];
-            var unattachedOpenFiles: ScriptInfo[] = [];
-
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                 var referencedFile = this.openFilesReferenced[i];
                 referencedFile.defaultProject.updateGraph();
@@ -793,30 +914,38 @@ namespace ts.server {
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
          */
-
         openClientFile(fileName: string) {
-            var searchPath = ts.normalizePath(getDirectoryPath(fileName));
-            this.log("Search path: " + searchPath,"Info");
-            var configFileName = this.findConfigFile(searchPath);
-            if (configFileName) {
-                this.log("Config file name: " + configFileName, "Info");
-            } else {
-                this.log("no config file");
-            }
-            if (configFileName && (!this.configProjectIsActive(configFileName))) {
-                var configResult = this.openConfigFile(configFileName, fileName);
-                if (!configResult.success) {
-                    this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
-                }
-                else {
-                    this.log("Opened configuration file " + configFileName,"Info");
-                    this.configuredProjects.push(configResult.project);
-                }
-            }
+            this.openOrUpdateConfiguredProjectForFile(fileName);
             var info = this.openFile(fileName, true);
             this.addOpenFile(info);
             this.printProjects();
             return info;
+        }
+        
+        openOrUpdateConfiguredProjectForFile(fileName: string) {
+            let searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            this.log("Search path: " + searchPath,"Info");
+            let configFileName = this.findConfigFile(searchPath);
+            if (configFileName) {
+                this.log("Config file name: " + configFileName, "Info");
+                let project = this.findConfiguredProjectByConfigFile(configFileName);
+                if (!project) {
+                    var configResult = this.openConfigFile(configFileName, fileName);
+                    if (!configResult.success) {
+                        this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
+                    }
+                    else {
+                        this.log("Opened configuration file " + configFileName,"Info");
+                        this.configuredProjects.push(configResult.project);
+                    }
+                }
+                else {
+                    this.updateConfiguredProject(project);
+                }
+            }
+            else {
+                this.log("No config files found.");
+            }
         }
 
         /**
@@ -895,49 +1024,113 @@ namespace ts.server {
         }
 
         configProjectIsActive(fileName: string) {
-            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
-                if (this.configuredProjects[i].projectFilename == fileName) {
-                    return true;
-                }
-            }
-            return false;
+            return this.findConfiguredProjectByConfigFile(fileName) === undefined;
         }
 
-        openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
+        findConfiguredProjectByConfigFile(configFileName: string) {
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                if (this.configuredProjects[i].projectFilename == configFileName) {
+                    return this.configuredProjects[i];
+                }
+            }
+            return undefined;
+        }
+
+        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, error?: ProjectOpenResult } {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
             var contents = this.host.readFile(configFilename)
             var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
             if (rawConfig.error) {
-                return rawConfig.error;
+                return { succeeded: false, error: rawConfig.error };
             }
             else {
                 var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                    return { errorMsg: "tsconfig option errors" };
+                    return { succeeded: false, error: { errorMsg: "tsconfig option errors" }};
                 }
-                else if (parsedCommandLine.fileNames) {
+                else if (parsedCommandLine.fileNames == null) {
+                    return { succeeded: false, error: { errorMsg: "no files found" }}
+                }
+                else {
                     var projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
                         compilerOptions: parsedCommandLine.options
                     };
-                    var proj = this.createProject(configFilename, projectOptions);
-                    for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
-                        var rootFilename = parsedCommandLine.fileNames[i];
-                        if (this.host.fileExists(rootFilename)) {
-                            var info = this.openFile(rootFilename, clientFileName == rootFilename);
-                            proj.addRoot(info);
-                        }
-                        else {
-                            return { errorMsg: "specified file " + rootFilename + " not found" };
-                        }
+                    return { succeeded: true, projectOptions };
+                }
+            }
+
+        }
+
+        openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
+            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
+            if (!succeeded) {
+                return error;
+            } 
+            else {
+                let proj = this.createProject(configFilename, projectOptions);
+                for (let i = 0, len = projectOptions.files.length; i < len; i++) {
+                    let rootFilename = projectOptions.files[i];
+                    if (this.host.fileExists(rootFilename)) {
+                        let info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
+                        proj.addRoot(info);
                     }
-                    proj.finishGraph();
-                    return { success: true, project: proj };
+                    else {
+                        return { errorMsg: "specified file " + rootFilename + " not found" };
+                    }
+                }
+                proj.finishGraph();
+                proj.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(proj));
+                return { success: true, project: proj };
+            }
+        }
+        
+        updateConfiguredProject(project: Project) {
+            if (!this.host.fileExists(project.projectFilename)) {
+                this.log("Config file deleted");
+                this.removeConfiguredProject(project);
+            }
+            else {
+                let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+                if (!succeeded) {
+                    return error;
                 }
                 else {
-                    return { errorMsg: "no files found" };
+                    let oldFileNames = project.compilerService.host.roots.map(info => info.fileName); 
+                    let newFileNames = projectOptions.files;
+                    let fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
+                    let fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
+                    
+                    for (let fileName of fileNamesToRemove) {
+                        let info = this.getScriptInfo(fileName);
+                        project.removeRoot(info);
+                    }
+                    
+                    for (let fileName of fileNamesToAdd) {
+                        let info = this.getScriptInfo(fileName);
+                        if (!info) {
+                            info = this.openFile(fileName, false);
+                        }
+                        else {
+                            // if the root file was opened by client, it would belong to either 
+                            // openFileRoots or openFileReferenced.
+                            if (info.isOpen) {
+                                if (this.openFileRoots.indexOf(info) >= 0) {
+                                    this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                }
+                                if (this.openFilesReferenced.indexOf(info) >= 0) {
+                                    this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                                }
+                                this.openFileRootsConfigured.push(info);
+                            }
+                        }
+                        project.addRoot(info);
+                    }
+
+                    project.setProjectOptions(projectOptions);
+                    project.finishGraph();
                 }
             }
         }

@@ -54,6 +54,7 @@ var selfClosed7 = <div x={p} y='p' b />;
 >selfClosed7 : Symbol(selfClosed7, Decl(tsxReactEmit1.tsx, 15, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 >x : Symbol(unknown)
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 8, 3))
 >y : Symbol(unknown)
 >b : Symbol(unknown)
 
@@ -72,6 +73,7 @@ var openClosed3 = <div n='m'>{p}</div>;
 >openClosed3 : Symbol(openClosed3, Decl(tsxReactEmit1.tsx, 19, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 >n : Symbol(unknown)
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 8, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 
 var openClosed4 = <div n='m'>{p < p}</div>;
@@ -150,6 +152,7 @@ var whitespace1 = <div>      </div>;
 var whitespace2 = <div>  {p}    </div>;
 >whitespace2 : Symbol(whitespace2, Decl(tsxReactEmit1.tsx, 36, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 8, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 
 var whitespace3 = <div>  
@@ -157,6 +160,8 @@ var whitespace3 = <div>
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 
       {p}    
+>p : Symbol(p, Decl(tsxReactEmit1.tsx, 8, 3))
+
       </div>;
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxReactEmit1.tsx, 1, 22))
 

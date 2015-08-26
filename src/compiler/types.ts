@@ -9,6 +9,7 @@ namespace ts {
         contains(fileName: string): boolean;
         remove(fileName: string): void;
         forEachValue(f: (v: T) => void): void;
+        clear(): void;
     }
 
     export interface TextRange {
@@ -1243,6 +1244,10 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+        
+        // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
+        /* @internal */
+        renamedDependencies?: Map<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1275,8 +1280,12 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-
         /* @internal */ classifiableNames?: Map<string>;
+        // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
+        // It is used to resolve module names in the checker.
+        // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
+        /* @internal */ resolvedModules: Map<string>;
+        /* @internal */ imports: LiteralExpression[];
     }
 
     export interface ScriptReferenceHost {
@@ -1285,7 +1294,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost {
+    export interface ParseConfigHost extends ModuleResolutionHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -1303,6 +1312,12 @@ namespace ts {
     }
 
     export interface Program extends ScriptReferenceHost {
+        
+        /**
+         * Get a list of root file names that were passed to a 'createProgram'
+         */
+        getRootFileNames(): string[]
+        
         /**
          * Get a list of files in the program
          */
@@ -1343,6 +1358,9 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+
+        // For testing purposes only.
+        /* @internal */ structureIsReused?: boolean;
     }
 
     export interface SourceMapSpan {
@@ -1393,6 +1411,7 @@ namespace ts {
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
@@ -1990,7 +2009,12 @@ namespace ts {
         Error,
         Message,
     }
-
+    
+    export const enum ModuleResolutionKind {
+        Classic  = 1,
+        NodeJs  = 2
+    }
+    
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2014,6 +2038,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
+        outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;
@@ -2029,6 +2054,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        moduleResolution?: ModuleResolutionKind
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2229,9 +2255,23 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }   
+    
+    export interface ModuleResolutionHost {
+        fileExists(fileName: string): boolean;
+        // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
+        // to determine location of bundled typings for node module 
+        readFile(fileName: string): string;
     }
+    
+    export interface ResolvedModule {
+        resolvedFileName: string;
+        failedLookupLocations: string[];
+    }
+    
+    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
 
-    export interface CompilerHost {
+    export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
@@ -2240,6 +2280,15 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        
+        /*
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
+         * 'throw new Error("NotImplemented")'  
+         */
+        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
     }
 
     export interface TextSpan {
