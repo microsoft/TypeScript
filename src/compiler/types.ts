@@ -869,7 +869,6 @@ namespace ts {
         _openingElementBrand?: any;
         tagName: EntityName;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
-        reactNode?: Identifier;
     }
 
     /// A JSX expression of the form <TagName attrs />
