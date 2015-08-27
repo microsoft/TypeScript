@@ -213,11 +213,15 @@ namespace ts.formatting {
         public NoSpaceBetweenYieldKeywordAndStar: Rule;
         public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
 
-        // Await-async
-        public SpaceAfterAwaitKeyword: Rule;
-        public NoSpaceAfterAwaitKeyword: Rule;
+        // Async-await
         public SpaceBetweenAsyncAndFunctionKeyword: Rule;
         public NoSpaceBetweenAsyncAndFunctionKeyword: Rule;
+        public SpaceAfterAwaitKeyword: Rule;
+        public NoSpaceAfterAwaitKeyword: Rule;
+
+        // Type alias declaration
+        public SpaceAfterTypeKeyword: Rule;
+        public NoSpaceAfterTypeKeyword: Rule;
 
         // Tagged template string
         public SpaceBetweenTagAndTemplateString: Rule;
@@ -376,12 +380,16 @@ namespace ts.formatting {
             this.NoSpaceBetweenYieldKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Delete));
             this.SpaceBetweenYieldOrYieldStarAndOperand = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Space));
 
-            // Await-async
-            this.SpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            // Async-await
             this.SpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            
+            this.SpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+            // Type alias declaration
+            this.SpaceAfterTypeKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.TypeKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterTypeKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.TypeKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
             // template string
             this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
@@ -419,8 +427,9 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
-                this.SpaceAfterAwaitKeyword, this.NoSpaceAfterAwaitKeyword,
                 this.SpaceBetweenAsyncAndFunctionKeyword, this.NoSpaceBetweenAsyncAndFunctionKeyword,
+                this.SpaceAfterAwaitKeyword, this.NoSpaceAfterAwaitKeyword,
+                this.SpaceAfterTypeKeyword, this.NoSpaceAfterTypeKeyword,
                 this.SpaceBetweenTagAndTemplateString, this.NoSpaceBetweenTagAndTemplateString,
                 this.SpaceBeforeBar, this.NoSpaceBeforeBar, this.SpaceAfterBar, this.NoSpaceAfterBar,
 

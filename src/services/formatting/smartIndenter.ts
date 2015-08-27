@@ -408,6 +408,7 @@ namespace ts.formatting {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
