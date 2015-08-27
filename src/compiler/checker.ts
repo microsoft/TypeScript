@@ -12613,6 +12613,7 @@ namespace ts {
                 if (baseTypes.length && produceDiagnostics) {
                     let baseType = baseTypes[0];
                     let staticBaseType = getBaseConstructorTypeOfClass(type);
+                    checkSourceElement(baseTypeNode.expression);
                     if (baseTypeNode.typeArguments) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (let constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments)) {
@@ -13682,6 +13683,8 @@ namespace ts {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.VariableDeclarationList:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.HeritageClause:
+                case SyntaxKind.ExpressionWithTypeArguments:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
