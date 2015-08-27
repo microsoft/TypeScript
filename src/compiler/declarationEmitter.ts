@@ -896,6 +896,9 @@ namespace ts {
                 if (isSupportedExpressionWithTypeArguments(node)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
                 }
+                else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
+                    write("null");
+                }
 
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     let diagnosticMessage: DiagnosticMessage;
