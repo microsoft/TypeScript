@@ -4941,6 +4941,8 @@ namespace ts {
 
         function parseModuleOrNamespaceDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
             let node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
+            // If we are parsing a dotted namespace name, we want to
+            // propagate the 'Namespace' flag across the names if set.
             let namespaceFlag = flags & NodeFlags.Namespace;
             node.decorators = decorators;
             setModifiers(node, modifiers);
