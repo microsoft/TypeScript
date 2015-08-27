@@ -1340,8 +1340,8 @@ module Harness {
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: ts.Diagnostic[]) {
             diagnostics.sort(ts.compareDiagnostics);
             let outputLines: string[] = [];
-            // Count up all the errors we find so we don't miss any
-            let totalErrorsReported = 0;
+            // Count up all errors that were found in files other than lib.d.ts so we don't miss any
+            let totalErrorsReportedInNonLibraryFiles = 0;
 
             function outputErrorText(error: ts.Diagnostic) {
                 let message = ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine());
@@ -1352,8 +1352,15 @@ module Harness {
                     .filter(s => s.length > 0)
                     .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
                 errLines.forEach(e => outputLines.push(e));
-
-                totalErrorsReported++;
+                
+                // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
+                // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers) 
+                // then they will be added twice thus triggering 'total errors' assertion with condition
+                // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
+                 
+                if (!error.file || !isLibraryFile(error.file.fileName)) {
+                    totalErrorsReportedInNonLibraryFiles++;
+                }
             }
 
             // Report global errors
@@ -1438,7 +1445,7 @@ module Harness {
             });
 
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
+            assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
 
             return minimalDiagnosticsToString(diagnostics) +
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
@@ -1816,11 +1823,11 @@ module Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(): { unitName: string, content: string } {
+    export function getDefaultLibraryFile(io: Harness.IO): { unitName: string, content: string } {
         let libFile = Harness.userSpecifiedRoot + Harness.libFolder + "lib.d.ts";
         return {
             unitName: libFile,
-            content: IO.readFile(libFile)
+            content: io.readFile(libFile)
         };
     }
 

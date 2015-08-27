@@ -4,7 +4,7 @@
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 module RWC {
-    function runWithIOLog(ioLog: IOLog, fn: () => void) {
+    function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
         let oldIO = Harness.IO;
 
         let wrappedIO = Playback.wrapIO(oldIO);
@@ -12,7 +12,7 @@ module RWC {
         Harness.IO = wrappedIO;
 
         try {
-            fn();
+            fn(oldIO);
         } finally {
             wrappedIO.endReplay();
             Harness.IO = oldIO;
@@ -32,9 +32,6 @@ module RWC {
             let baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
-            
-            const defaultLibraryFile = Harness.getDefaultLibraryFile();
-            
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
@@ -67,7 +64,7 @@ module RWC {
                     opts.options.noEmitOnError = false;
                 });
 
-                runWithIOLog(ioLog, () => {
+                runWithIOLog(ioLog, oldIO => {
                     harnessCompiler.reset();
 
                     // Load the files
@@ -77,7 +74,6 @@ module RWC {
 
                     // Add files to compilation
                     let isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
-                    let prependDefaultLib = false;
                     for (let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
                         const resolvedPath = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
@@ -101,14 +97,10 @@ module RWC {
                                 }
                                 else {
                                     // set the flag to put default library to the beginning of the list
-                                    prependDefaultLib = true;
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
                                 }
                             }
                         }
-                    }
-                    
-                    if (prependDefaultLib) {
-                        inputFiles.unshift(defaultLibraryFile);
                     }
 
                     // do not use lib since we already read it in above
