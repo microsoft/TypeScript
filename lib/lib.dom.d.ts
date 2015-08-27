@@ -3105,6 +3105,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitMatchesSelector(selectors: string): boolean;
     webkitRequestFullScreen(): void;
     webkitRequestFullscreen(): void;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -4092,7 +4093,6 @@ interface HTMLElement extends Element {
     contains(child: HTMLElement): boolean;
     dragDrop(): boolean;
     focus(): void;
-    getElementsByClassName(classNames: string): NodeListOf<Element>;
     insertAdjacentElement(position: string, insertedElement: Element): Element;
     insertAdjacentHTML(where: string, html: string): void;
     insertAdjacentText(where: string, text: string): void;
@@ -7895,7 +7895,7 @@ interface MessageEvent extends Event {
 
 declare var MessageEvent: {
     prototype: MessageEvent;
-    new(): MessageEvent;
+    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
 }
 
 interface MessagePort extends EventTarget {
@@ -8637,7 +8637,7 @@ interface ProgressEvent extends Event {
 
 declare var ProgressEvent: {
     prototype: ProgressEvent;
-    new(): ProgressEvent;
+    new(type: string, eventInitDict?: ProgressEventInit): ProgressEvent;
 }
 
 interface Range {
@@ -12804,7 +12804,6 @@ interface NodeListOf<TNode extends Node> extends NodeList {
     [index: number]: TNode;
 }
 
-
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
@@ -12820,6 +12819,21 @@ interface EventListenerObject {
 }
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+
+interface MessageEventInit extends EventInit {
+    data?: any;
+    origin?: string;
+    lastEventId?: string;
+    channel?: string;
+    source?: any;
+    ports?: MessagePort[];
+}
+
+interface ProgressEventInit extends EventInit {
+    lengthComputable?: boolean;
+    loaded?: number;
+    total?: number;
+}
 
 interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?:Error): void;
