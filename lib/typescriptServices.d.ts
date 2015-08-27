@@ -1304,6 +1304,7 @@ declare namespace ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
