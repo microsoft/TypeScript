@@ -1329,6 +1329,7 @@ declare module "typescript" {
         rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
