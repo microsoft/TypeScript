@@ -134,6 +134,7 @@ var harnessCoreSources = [
 var harnessSources = harnessCoreSources.concat([
     "incrementalParser.ts",
     "jsDocParsing.ts",
+    "services/api.ts",
     "services/colorization.ts",
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
