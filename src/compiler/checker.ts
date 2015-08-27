@@ -7161,7 +7161,7 @@ namespace ts {
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
-            let typeFlags: TypeFlags;
+            let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
                 let member = memberDecl.symbol;
@@ -7210,7 +7210,8 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.PropagatingFlags);
+            let freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
             return result;
 
             function getIndexType(kind: IndexKind) {
