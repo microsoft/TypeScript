@@ -12588,7 +12588,6 @@ namespace ts {
             if (getSymbolOfNode(node).flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
                 error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
             }
-
             forEach(node.members, checkSourceElement);
         }
 
@@ -13627,6 +13626,13 @@ namespace ts {
                     break;
                 case SyntaxKind.WithStatement:
                     checkFunctionAndClassExpressionBodies((<WithStatement>node).expression);
+                    break;
+                case SyntaxKind.HeritageClause:
+                    if (node.parent.kind !== SyntaxKind.ClassDeclaration && node.parent.kind !== SyntaxKind.ClassExpression) {
+                        // Only extends heirtage clause of class like declaration is important to recurse
+                        break;
+                    }
+                    forEach((<HeritageClause>node).types, type => checkFunctionAndClassExpressionBodies(type.expression));
                     break;
                 case SyntaxKind.Decorator:
                 case SyntaxKind.Parameter:
