@@ -374,7 +374,7 @@ namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string, system: System = sys): { config?: any; error?: Diagnostic }  {
+    export function readConfigFile(fileName: string, system: System): { config?: any; error?: Diagnostic }  {
         let text = "";
         try {
             text = system.readFile(fileName);
