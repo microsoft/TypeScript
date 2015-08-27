@@ -3119,7 +3119,7 @@ namespace ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes)));
+            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes, /*noDeduplication*/ true)));
             let members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
@@ -7161,7 +7161,7 @@ namespace ts {
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
-            let typeFlags: TypeFlags;
+            let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
                 let member = memberDecl.symbol;
@@ -7210,7 +7210,8 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.PropagatingFlags);
+            let freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
             return result;
 
             function getIndexType(kind: IndexKind) {
@@ -12613,6 +12614,7 @@ namespace ts {
                 if (baseTypes.length && produceDiagnostics) {
                     let baseType = baseTypes[0];
                     let staticBaseType = getBaseConstructorTypeOfClass(type);
+                    checkSourceElement(baseTypeNode.expression);
                     if (baseTypeNode.typeArguments) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (let constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments)) {
@@ -13682,6 +13684,8 @@ namespace ts {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.VariableDeclarationList:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.HeritageClause:
+                case SyntaxKind.ExpressionWithTypeArguments:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
