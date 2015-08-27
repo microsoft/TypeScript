@@ -19,12 +19,6 @@ module RWC {
         }
     }
 
-    let defaultLibPath = ts.sys.resolvePath("built/local/lib.d.ts");
-    let defaultLib = {
-        unitName: ts.normalizePath(defaultLibPath),
-        content: Harness.IO.readFile(defaultLibPath)
-    };
-
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
             let inputFiles: { unitName: string; content: string; }[] = [];
@@ -72,6 +66,11 @@ module RWC {
                 });
 
                 if (!useCustomLibraryFile) {
+                    let defaultLibPath = ts.sys.resolvePath("built/local/lib.d.ts");
+                    let defaultLib = {
+                        unitName: ts.normalizePath(defaultLibPath),
+                        content: Harness.IO.readFile(defaultLibPath)
+                    };
                     inputFiles.push(defaultLib);
                 }
 
