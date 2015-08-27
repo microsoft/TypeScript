@@ -12578,8 +12578,6 @@ namespace ts {
             if (getSymbolOfNode(node).flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
                 error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
             }
-
-            forEach(node.members, checkSourceElement);
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -12655,6 +12653,7 @@ namespace ts {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
             }
+            forEach(node.members, checkSourceElement);
         }
 
         function getTargetSymbol(s: Symbol) {

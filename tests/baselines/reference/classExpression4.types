@@ -1,22 +1,22 @@
 === tests/cases/conformance/classes/classExpressions/classExpression4.ts ===
 let C = class {
->C : typeof (Anonymous class)
+>C : any
 >class {    foo() {        return new C();    }} : typeof (Anonymous class)
 
     foo() {
->foo : () => (Anonymous class)
+>foo : () => any
 
         return new C();
->new C() : (Anonymous class)
->C : typeof (Anonymous class)
+>new C() : any
+>C : any
     }
 };
 let x = (new C).foo();
->x : (Anonymous class)
->(new C).foo() : (Anonymous class)
->(new C).foo : () => (Anonymous class)
->(new C) : (Anonymous class)
->new C : (Anonymous class)
->C : typeof (Anonymous class)
->foo : () => (Anonymous class)
+>x : any
+>(new C).foo() : any
+>(new C).foo : any
+>(new C) : any
+>new C : any
+>C : any
+>foo : any
 
