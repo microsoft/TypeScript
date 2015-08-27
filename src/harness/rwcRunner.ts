@@ -5,17 +5,17 @@
 
 module RWC {
     function runWithIOLog(ioLog: IOLog, fn: () => void) {
-        let oldSys = ts.sys;
+        let oldIO = Harness.IO;
 
-        let wrappedSys = Playback.wrapSystem(ts.sys);
-        wrappedSys.startReplayFromData(ioLog);
-        ts.sys = wrappedSys;
+        let wrappedIO = Playback.wrapIO(oldIO);
+        wrappedIO.startReplayFromData(ioLog);
+        Harness.IO = wrappedIO;
 
         try {
             fn();
         } finally {
-            wrappedSys.endReplay();
-            ts.sys = oldSys;
+            wrappedIO.endReplay();
+            Harness.IO = oldIO;
         }
     }
 
@@ -32,7 +32,9 @@ module RWC {
             let baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
-
+            
+            const defaultLibraryFile = Harness.getDefaultLibraryFile();
+            
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
@@ -57,7 +59,7 @@ module RWC {
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
-                    opts = ts.parseCommandLine(ioLog.arguments);
+                    opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
 
                     // To provide test coverage of output javascript file,
@@ -75,9 +77,10 @@ module RWC {
 
                     // Add files to compilation
                     let isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
+                    let prependDefaultLib = false;
                     for (let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
-                        const resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
+                        const resolvedPath = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
                         let inInputList = ts.forEach(inputFiles, isInInputList(resolvedPath));
 
                         if (!Harness.isLibraryFile(fileRead.path)) {
@@ -97,10 +100,15 @@ module RWC {
                                     inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                                 }
                                 else {
-                                    inputFiles.push(Harness.getDefaultLibraryFile());
+                                    // set the flag to put default library to the beginning of the list
+                                    prependDefaultLib = true;
                                 }
                             }
                         }
+                    }
+                    
+                    if (prependDefaultLib) {
+                        inputFiles.unshift(defaultLibraryFile);
                     }
 
                     // do not use lib since we already read it in above
@@ -118,13 +126,13 @@ module RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
-                    let unitName = ts.normalizeSlashes(ts.sys.resolvePath(fileName));
+                    let unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
                     let content: string = null;
                     try {
-                        content = ts.sys.readFile(unitName);
+                        content = Harness.IO.readFile(unitName);
                     }
                     catch (e) {
-                        content = ts.sys.readFile(fileName);
+                        content = Harness.IO.readFile(fileName);
                     }
                     return { unitName, content };
                 }
@@ -187,7 +195,7 @@ module RWC {
                         }
 
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
-                            ts.sys.newLine + ts.sys.newLine +
+                            Harness.IO.newLine() + Harness.IO.newLine() +
                             Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, false, baselineOpts);
                 }

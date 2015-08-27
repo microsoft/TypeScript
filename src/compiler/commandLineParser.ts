@@ -237,13 +237,13 @@ namespace ts {
         }        
     ];
 
-    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
+    export function parseCommandLine(commandLine: string[], readFile?: (fileName: string) => string): ParsedCommandLine {
         let options: CompilerOptions = {};
         let fileNames: string[] = [];
         let errors: Diagnostic[] = [];
         let shortOptionNames: Map<string> = {};
         let optionNameMap: Map<CommandLineOption> = {};
-
+        
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
@@ -313,7 +313,7 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            let text = sys.readFile(fileName);
+            let text = readFile ? readFile(fileName): sys.readFile(fileName);
 
             if (!text) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));

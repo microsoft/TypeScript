@@ -425,6 +425,9 @@ module Harness {
         listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
         getMemoryUsage?(): number;
+        args(): string[];
+        getExecutingFilePath(): string;
+        exit(exitCode?: number): void;
     }
     export var IO: IO;
     
@@ -446,7 +449,10 @@ module Harness {
             } else {
                 fso = {};
             }
-
+            
+            export const args = () => ts.sys.args;
+            export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
+            export const exit = (exitCode: number) => ts.sys.exit(exitCode);
             export const resolvePath = (path: string) => ts.sys.resolvePath(path);
             export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
             export const newLine = () => harnessNewLine;
@@ -517,6 +523,9 @@ module Harness {
             export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
             export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => ts.sys.useCaseSensitiveFileNames;
+            export const args = () => ts.sys.args;
+            export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
+            export const exit = (exitCode: number) => ts.sys.exit(exitCode);
 
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
@@ -589,6 +598,10 @@ module Harness {
             export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => false;
             export const getCurrentDirectory = () => "";
+            export const args = () => <string[]>[];
+            export const getExecutingFilePath = () => "";
+            export const exit = (exitCode: number) => {};
+            
             let supportsCodePage = () => false;
 
             module Http {
@@ -1804,7 +1817,7 @@ module Harness {
     }
 
     export function getDefaultLibraryFile(): { unitName: string, content: string } {
-        let libFile = Harness.userSpecifiedRoot + Harness.libFolder + "/" + "lib.d.ts";
+        let libFile = Harness.userSpecifiedRoot + Harness.libFolder + "lib.d.ts";
         return {
             unitName: libFile,
             content: IO.readFile(libFile)
