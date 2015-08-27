@@ -12631,6 +12631,8 @@ namespace ts {
                         
                     // Check if base type declaration appears before heritage clause to avoid false errors for 
                     // base type declarations in the extend clause itself
+                    // eg. class A extends class B { } { } 
+                    // Should not error on class B even though it is declared in its heritage clause
                     let baseTypeDeclaration = getLeftmostAliasDeclarationFromExpressionOrEnityName(baseTypeNode.expression) || baseType.symbol.declarations[0];
                     if (!isDefinedBefore(baseTypeDeclaration, baseTypeNode)) {
                         error(baseTypeNode, Diagnostics.Base_expression_references_type_before_it_is_declared);
@@ -12688,9 +12690,11 @@ namespace ts {
                     return;
             }
 
-            let meaning = node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccessExpression?
+            let meaning = node.parent.kind === SyntaxKind.QualifiedName ?
                 SymbolFlags.Namespace :
-                SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
+                node.parent.kind === SyntaxKind.PropertyAccessExpression ?
+                    SymbolFlags.Namespace | SymbolFlags.Value :
+                    SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
             let resolvedSymbol = resolveEntityName(node, meaning | SymbolFlags.Alias, /*ignoreErrors*/ true);
             if (resolvedSymbol && !!(resolvedSymbol.flags & SymbolFlags.Alias)) {
                 return getDeclarationOfAliasSymbol(resolvedSymbol);
