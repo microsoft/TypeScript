@@ -432,9 +432,11 @@ namespace ts.formatting {
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.UnionType:
                 case SyntaxKind.Parameter:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
                     return true;
