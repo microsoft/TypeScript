@@ -19,6 +19,12 @@ module RWC {
         }
     }
 
+    let defaultLibPath = ts.sys.resolvePath("built/local/lib.d.ts");
+    let defaultLib = {
+        unitName: ts.normalizePath(defaultLibPath),
+        content: Harness.IO.readFile(defaultLibPath)
+    };
+
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
             let inputFiles: { unitName: string; content: string; }[] = [];
@@ -65,6 +71,10 @@ module RWC {
                     opts.options.noEmitOnError = false;
                 });
 
+                if (!useCustomLibraryFile) {
+                    inputFiles.push(defaultLib);
+                }
+
                 runWithIOLog(ioLog, () => {
                     harnessCompiler.reset();
 
@@ -95,9 +105,6 @@ module RWC {
                                 // their own version of lib.d.ts because they have customized lib.d.ts
                                 if (useCustomLibraryFile) {
                                     inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
-                                }
-                                else {
-                                    inputFiles.push(Harness.getDefaultLibraryFile());
                                 }
                             }
                         }
