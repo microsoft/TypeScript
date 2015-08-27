@@ -1447,6 +1447,7 @@ namespace ts {
         isArgumentsSymbol(symbol: Symbol): boolean;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+        getConstant(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): Constant;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
@@ -1595,10 +1596,22 @@ namespace ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+        getConstant(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): Constant;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
         isOptionalParameter(node: ParameterDeclaration): boolean;
+    }
+
+    export type ConstantValue = number;
+
+    export type Constant = {
+        value: ConstantValue
+        flags: ConstantFlags
+    }
+
+    export const enum ConstantFlags {
+        Inline = 1
     }
 
     export const enum SymbolFlags {
