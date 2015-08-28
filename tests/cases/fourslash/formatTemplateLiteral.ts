@@ -20,10 +20,10 @@ verify.currentLineContentIs("3`;")
 
 goTo.marker("3");
 edit.insert(";");
-verify.currentLineContentIs("let z = `foo`;"); 
+verify.currentLineContentIs("let z = `foo`;");
 goTo.marker("4");
 edit.insert(";");
-verify.currentLineContentIs("let w = `bar${3}`;"); 
+verify.currentLineContentIs("let w = `bar${3}`;");
 
 goTo.marker("5");
 edit.insert(";");
