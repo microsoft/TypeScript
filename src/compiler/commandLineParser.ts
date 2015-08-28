@@ -274,7 +274,7 @@ namespace ts {
         return optionNameMapCache;
     }
 
-    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
+    export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         let options: CompilerOptions = {};
         let fileNames: string[] = [];
         let errors: Diagnostic[] = [];
@@ -343,7 +343,7 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            let text = sys.readFile(fileName);
+            let text = readFile ? readFile(fileName) : sys.readFile(fileName);
 
             if (!text) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
