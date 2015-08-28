@@ -440,6 +440,12 @@ namespace ts.formatting {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
+                case SyntaxKind.NamedExports:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportSpecifier:
+                //case SyntaxKind.ImportSpecifier:
                     return true;
             }
             return false;
