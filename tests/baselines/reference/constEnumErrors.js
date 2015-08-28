@@ -24,13 +24,21 @@ var y0 = E2[1]
 var name = "A";
 var y1 = E2[name];
 
-var x = E2;
-var y = [E2];
+var x = E2; // error
+var y = [E2]; // error
+var enumType: typeof E2;
+var enumMember: typeof E2.A;
 
 function foo(t: any): void {
 }
 
-foo(E2);
+foo(E2); // error
+
+namespace N {
+    export const enum E { }
+}
+N.E; // error
+N["E"] // error
 
 const enum NaNOrInfinity {
     A = 9007199254740992,
@@ -51,8 +59,12 @@ var E;
 var y0 = E2[1];
 var name = "A";
 var y1 = E2[name];
-var x = E2;
-var y = [E2];
+var x = E2; // error
+var y = [E2]; // error
+var enumType;
+var enumMember;
 function foo(t) {
 }
-foo(E2);
+foo(E2); // error
+N.E; // error
+N["E"]; // error
