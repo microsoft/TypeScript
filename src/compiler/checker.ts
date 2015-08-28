@@ -1893,7 +1893,7 @@ namespace ts {
 
             function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
                 let targetSymbol = getTargetSymbol(symbol);
-                if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
+                if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface || targetSymbol.flags & SymbolFlags.TypeAlias) {
                     buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaraiton, flags);
                 }
             }
@@ -3119,7 +3119,7 @@ namespace ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes)));
+            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes, /*noDeduplication*/ true)));
             let members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
@@ -4487,6 +4487,15 @@ namespace ts {
         }
 
         function instantiateAnonymousType(type: ObjectType, mapper: TypeMapper): ObjectType {
+            if (mapper.instantiations) {
+                let cachedType = mapper.instantiations[type.id];
+                if (cachedType) {
+                    return cachedType;
+                }
+            }
+            else {
+                mapper.instantiations = [];
+            }
             // Mark the anonymous type as instantiated such that our infinite instantiation detection logic can recognize it
             let result = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.Instantiated, type.symbol);
             result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
@@ -4497,6 +4506,7 @@ namespace ts {
             let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
             if (stringIndexType) result.stringIndexType = instantiateType(stringIndexType, mapper);
             if (numberIndexType) result.numberIndexType = instantiateType(numberIndexType, mapper);
+            mapper.instantiations[type.id] = result;
             return result;
         }
 
@@ -7151,7 +7161,7 @@ namespace ts {
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
-            let typeFlags: TypeFlags;
+            let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
                 let member = memberDecl.symbol;
@@ -7200,7 +7210,8 @@ namespace ts {
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.FreshObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.PropagatingFlags);
+            let freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
             return result;
 
             function getIndexType(kind: IndexKind) {
@@ -12603,6 +12614,7 @@ namespace ts {
                 if (baseTypes.length && produceDiagnostics) {
                     let baseType = baseTypes[0];
                     let staticBaseType = getBaseConstructorTypeOfClass(type);
+                    checkSourceElement(baseTypeNode.expression);
                     if (baseTypeNode.typeArguments) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (let constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments)) {
@@ -13053,7 +13065,7 @@ namespace ts {
                             // illegal case: forward reference
                             if (!isDefinedBefore(propertyDecl, member)) {
                                 reportError = false;
-                                error(e, Diagnostics.A_member_initializer_in_a_const_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_const_enums);
+                                error(e, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                                 return undefined;
                             }
 
@@ -13672,6 +13684,8 @@ namespace ts {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.VariableDeclarationList:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.HeritageClause:
+                case SyntaxKind.ExpressionWithTypeArguments:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
