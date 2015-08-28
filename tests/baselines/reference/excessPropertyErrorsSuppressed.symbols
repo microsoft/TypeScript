@@ -1,0 +1,8 @@
+=== tests/cases/compiler/excessPropertyErrorsSuppressed.ts ===
+
+var x: { a: string } = { a: "hello", b: 42 };  // No error
+>x : Symbol(x, Decl(excessPropertyErrorsSuppressed.ts, 1, 3))
+>a : Symbol(a, Decl(excessPropertyErrorsSuppressed.ts, 1, 8))
+>a : Symbol(a, Decl(excessPropertyErrorsSuppressed.ts, 1, 24))
+>b : Symbol(b, Decl(excessPropertyErrorsSuppressed.ts, 1, 36))
+

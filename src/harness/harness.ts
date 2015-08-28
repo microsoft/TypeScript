@@ -1216,6 +1216,10 @@ module Harness {
                             options.isolatedModules = setting.value === "true";
                             break;
 
+                        case "suppressexcesspropertyerrors":
+                            options.suppressExcessPropertyErrors = setting.value === "true";
+                            break;
+
                         case "suppressimplicitanyindexerrors":
                             options.suppressImplicitAnyIndexErrors = setting.value === "true";
                             break;
@@ -1589,7 +1593,7 @@ module Harness {
             "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
             "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
-            "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
+            "includebuiltfile", "suppressexcesspropertyerrors", "suppressimplicitanyindexerrors", "stripinternal",
             "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
             "inlinesources", "emitdecoratormetadata", "experimentaldecorators",
             "skipdefaultlibcheck", "jsx"];
