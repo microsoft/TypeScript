@@ -24,7 +24,7 @@ goTo.marker('1');
 verify.quickInfoIs('var c: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('2');
-verify.quickInfoIs('var c1: ({\n    name: string;\n    age: number;\n} | {\n    name: string;\n    age: number;\n    dob: Date;\n})[]');
+verify.quickInfoIs('var c1: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('3');
 verify.quickInfoIs('var c2: ({\n\
