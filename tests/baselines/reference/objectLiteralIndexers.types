@@ -31,7 +31,7 @@ var o1: { [s: string]: A;[n: number]: B; } = { x: a, 0: b }; // string indexer i
 >A : A
 >n : number
 >B : B
->{ x: a, 0: b } : { [x: string]: A; [x: number]: B; 0: B; x: A; }
+>{ x: a, 0: b } : { [x: string]: A | B; [x: number]: B; 0: B; x: A; }
 >x : A
 >a : A
 >b : B

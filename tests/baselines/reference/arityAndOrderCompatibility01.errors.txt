@@ -1,6 +1,7 @@
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(13,12): error TS2493: Tuple type '[string, number]' with length '2' cannot be assigned to tuple with length '3'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(14,12): error TS2460: Type 'StrNum' has no property '2'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(15,5): error TS2461: Type '{ 0: string; 1: number; }' is not an array type.
+tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(15,12): error TS2460: Type '{ 0: string; 1: number; }' has no property '2'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(16,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -46,7 +47,7 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(30,5): error
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts (18 errors) ====
+==== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts (19 errors) ====
     interface StrNum extends Array<string|number> {
         0: string;
         1: number;
@@ -68,6 +69,8 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(30,5): error
     var [g, h, i] = z;
         ~~~~~~~~~
 !!! error TS2461: Type '{ 0: string; 1: number; }' is not an array type.
+               ~
+!!! error TS2460: Type '{ 0: string; 1: number; }' has no property '2'.
     var j1: [number, number, number] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.

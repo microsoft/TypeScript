@@ -22,21 +22,21 @@
 ////}
 ////else/*13*/ { }
 
-function verifyOccurencesAtMarker(marker: string, count: number) {
+function verifyOccurrencesAtMarker(marker: string, count: number) {
     goTo.marker(marker);
     verify.occurrencesAtPositionCount(count);
 }
 
-verifyOccurencesAtMarker("1", 7);
-verifyOccurencesAtMarker("2", 2);
-verifyOccurencesAtMarker("3", 2);
-verifyOccurencesAtMarker("4", 2);
-verifyOccurencesAtMarker("5", 2);
-verifyOccurencesAtMarker("6", 1);
-verifyOccurencesAtMarker("7", 1);
-verifyOccurencesAtMarker("8", 7);
-verifyOccurencesAtMarker("9", 7);
-verifyOccurencesAtMarker("10", 7);
-verifyOccurencesAtMarker("11", 7);
-verifyOccurencesAtMarker("12", 7);
-verifyOccurencesAtMarker("13", 7);
+verifyOccurrencesAtMarker("1", 7);
+verifyOccurrencesAtMarker("2", 2);
+verifyOccurrencesAtMarker("3", 2);
+verifyOccurrencesAtMarker("4", 2);
+verifyOccurrencesAtMarker("5", 2);
+verifyOccurrencesAtMarker("6", 1);
+verifyOccurrencesAtMarker("7", 1);
+verifyOccurrencesAtMarker("8", 7);
+verifyOccurrencesAtMarker("9", 7);
+verifyOccurrencesAtMarker("10", 7);
+verifyOccurrencesAtMarker("11", 7);
+verifyOccurrencesAtMarker("12", 7);
+verifyOccurrencesAtMarker("13", 7);

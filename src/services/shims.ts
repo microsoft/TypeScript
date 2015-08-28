@@ -60,12 +60,19 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
+        
+        getModuleResolutionsForFile?(fileName: string): string;
     }
 
     /** Public interface of the the of a config service shim instance.*/
-    export interface CoreServicesShimHost extends Logger {
-        /** Returns a JSON-encoded value of the type: string[] */
-        readDirectory(rootDir: string, extension: string): string;
+    export interface CoreServicesShimHost extends Logger, ModuleResolutionHost {
+        /**
+         * Returns a JSON-encoded value of the type: string[]
+         *
+         * @param exclude A JSON encoded string[] containing the paths to exclude
+         *  when enumerating the directory.
+         */
+        readDirectory(rootDir: string, extension: string, exclude?: string): string;
     }
 
     ///
@@ -200,6 +207,11 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
+        /**
+         * Returns JSON-encoded value of the type TextInsertion.
+         */
+        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -260,8 +272,18 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
-
+        
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => string[];
+        
         constructor(private shimHost: LanguageServiceShimHost) {
+            // if shimHost is a COM object then property check will become method call with no arguments.
+            // 'in' does not have this effect. 
+            if ("getModuleResolutionsForFile" in this.shimHost) {
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                    let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                    return map(moduleNames, name => lookUp(resolutionsInFile, name));
+                };
+            }
         }
 
         public log(s: string): void {
@@ -386,9 +408,27 @@ namespace ts {
         constructor(private shimHost: CoreServicesShimHost) {
         }
 
-        public readDirectory(rootDir: string, extension: string): string[] {
-            var encoded = this.shimHost.readDirectory(rootDir, extension);
+        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
+            // Wrap the API changes for 1.5 release. This try/catch
+            // should be removed once TypeScript 1.5 has shipped.
+            // Also consider removing the optional designation for
+            // the exclude param at this time.
+            var encoded: string;
+            try {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            }
+            catch (e) {
+                encoded = this.shimHost.readDirectory(rootDir, extension);
+            }
             return JSON.parse(encoded);
+        }
+        
+        public fileExists(fileName: string): boolean {
+            return this.shimHost.fileExists(fileName);
+        }
+        
+        public readFile(fileName: string): string {
+            return this.shimHost.readFile(fileName);
         }
     }
 
@@ -439,11 +479,11 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; } []{
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
@@ -514,7 +554,7 @@ namespace ts {
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = this.getNewLine();
+            var newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
@@ -554,10 +594,6 @@ namespace ts {
                     // on the managed side versus a full JSON array.
                     return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
                 });
-        }
-
-        private getNewLine(): string {
-            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
         }
 
         public getSyntacticDiagnostics(fileName: string): string {
@@ -736,7 +772,10 @@ namespace ts {
             return this.forwardJSONCall(
                 "getDocumentHighlights('" + fileName + "', " + position + ")",
                 () => {
-                    return this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    var results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    let normalizedName = normalizeSlashes(fileName).toLowerCase();
+                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
         }
 
@@ -794,6 +833,13 @@ namespace ts {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
+        }
+
+        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+            );
         }
 
         /// NAVIGATE TO
@@ -892,6 +938,13 @@ namespace ts {
         private forwardJSONCall(actionDescription: string, action: () => any): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
+        
+        public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
+            return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
+                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                return resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+            }); 
+        }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
@@ -901,6 +954,7 @@ namespace ts {
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
+                        ambientExternalModules: result.ambientExternalModules,
                         isLibFile: result.isLibFile
                     };
 
@@ -1043,4 +1097,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-let toolsVersion = "1.5";
+const toolsVersion = "1.6";

@@ -24,6 +24,7 @@ namespace ts {
             set,
             contains,
             remove,
+            clear,
             forEachValue: forEachValueInMap
         };
 
@@ -50,6 +51,10 @@ namespace ts {
 
         function normalizeKey(key: string) {
             return getCanonicalFileName(normalizeSlashes(key));
+        }
+        
+        function clear() {
+            files = {};
         }
     }
 
@@ -193,6 +198,13 @@ namespace ts {
         return array[array.length - 1];
     }
 
+    /**
+     * Performs a binary search, finding the index at which 'value' occurs in 'array'.
+     * If no such index is found, returns the 2's-complement of first index at which
+     * number[index] exceeds number.
+     * @param array A sorted array whose first element must be no larger than number
+     * @param number The value to be searched for in the array.
+     */
     export function binarySearch(array: number[], value: number): number {
         let low = 0;
         let high = array.length - 1;
@@ -219,10 +231,10 @@ namespace ts {
     export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
-            var count = array.length;
+            const count = array.length;
             if (count > 0) {
-                var pos = 0;
-                var result = arguments.length <= 2 ? array[pos++] : initial;
+                let pos = 0;
+                let result = arguments.length <= 2 ? array[pos++] : initial;
                 while (pos < count) {
                     result = f(<U>result, array[pos++]);
                 }
@@ -236,9 +248,9 @@ namespace ts {
     export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
-            var pos = array.length - 1;
+            let pos = array.length - 1;
             if (pos >= 0) {
-                var result = arguments.length <= 2 ? array[pos--] : initial;
+                let result = arguments.length <= 2 ? array[pos--] : initial;
                 while (pos >= 0) {
                     result = f(<U>result, array[pos--]);
                 }
@@ -275,14 +287,14 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T>(first: Map<T>, second: Map<T>): Map<T> {
-        let result: Map<T> = {};
+    export function extend<T1, T2>(first: Map<T1>, second: Map<T2>): Map<T1 & T2> {
+        let result: Map<T1 & T2> = {};
         for (let id in first) {
-            result[id] = first[id];
+            (result as any)[id] = first[id];
         }
         for (let id in second) {
             if (!hasProperty(result, id)) {
-                result[id] = second[id];
+                (result as any)[id] = second[id];
             }
         }
         return result;
@@ -523,7 +535,7 @@ namespace ts {
         if (path.lastIndexOf("file:///", 0) === 0) {
             return "file:///".length;
         }
-        let idx = path.indexOf('://');
+        let idx = path.indexOf("://");
         if (idx !== -1) {
             return idx + "://".length;
         }
@@ -709,7 +721,7 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
+    export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {

@@ -39,12 +39,12 @@ namespace ts.formatting {
         public SpaceBetweenCloseBraceAndWhile: Rule;
         public NoSpaceAfterCloseBrace: Rule;
 
-        // No space for indexer and dot
+        // No space for dot
         public NoSpaceBeforeDot: Rule;
         public NoSpaceAfterDot: Rule;
+
+        // No space before and after indexer
         public NoSpaceBeforeOpenBracket: Rule;
-        public NoSpaceAfterOpenBracket: Rule;
-        public NoSpaceBeforeCloseBracket: Rule;
         public NoSpaceAfterCloseBracket: Rule;
 
         // Insert a space after { and before } in single-line contexts, but remove space from empty object literals {}.
@@ -135,6 +135,7 @@ namespace ts.formatting {
         public NoSpaceAfterOpenAngularBracket: Rule;
         public NoSpaceBeforeCloseAngularBracket: Rule;
         public NoSpaceAfterCloseAngularBracket: Rule;
+        public NoSpaceAfterTypeAssertion: Rule;
 
         // Remove spaces in empty interface literals. e.g.: x: {}
         public NoSpaceBetweenEmptyInterfaceBraceBrackets: Rule;
@@ -190,6 +191,13 @@ namespace ts.formatting {
         public NoSpaceAfterOpenParen: Rule;
         public NoSpaceBeforeCloseParen: Rule;
 
+        // Insert space after opening and before closing nonempty brackets
+        public SpaceAfterOpenBracket: Rule;
+        public SpaceBeforeCloseBracket: Rule;
+        public NoSpaceBetweenBrackets: Rule;
+        public NoSpaceAfterOpenBracket: Rule;
+        public NoSpaceBeforeCloseBracket: Rule;
+
         // Insert space after function keyword for anonymous functions
         public SpaceAfterAnonymousFunctionKeyword: Rule;
         public NoSpaceAfterAnonymousFunctionKeyword: Rule;
@@ -204,6 +212,26 @@ namespace ts.formatting {
         public SpaceAfterStarInGeneratorDeclaration: Rule;
         public NoSpaceBetweenYieldKeywordAndStar: Rule;
         public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
+
+        // Async-await
+        public SpaceBetweenAsyncAndFunctionKeyword: Rule;
+        public NoSpaceBetweenAsyncAndFunctionKeyword: Rule;
+        public SpaceAfterAwaitKeyword: Rule;
+        public NoSpaceAfterAwaitKeyword: Rule;
+
+        // Type alias declaration
+        public SpaceAfterTypeKeyword: Rule;
+        public NoSpaceAfterTypeKeyword: Rule;
+
+        // Tagged template string
+        public SpaceBetweenTagAndTemplateString: Rule;
+        public NoSpaceBetweenTagAndTemplateString: Rule;
+
+        // Union type
+        public SpaceBeforeBar: Rule;
+        public NoSpaceBeforeBar: Rule;
+        public SpaceAfterBar: Rule;
+        public NoSpaceAfterBar: Rule;
 
         constructor() {
             ///
@@ -231,13 +259,13 @@ namespace ts.formatting {
             this.SpaceBetweenCloseBraceAndWhile = new Rule(RuleDescriptor.create1(SyntaxKind.CloseBraceToken, SyntaxKind.WhileKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterCloseBrace = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBraceToken, Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.CommaToken, SyntaxKind.SemicolonToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
-            // No space for indexer and dot
+            // No space for dot
             this.NoSpaceBeforeDot = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.DotToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterDot = new Rule(RuleDescriptor.create3(SyntaxKind.DotToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+            // No space before and after indexer
             this.NoSpaceBeforeOpenBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.NoSpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.NoSpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext), RuleAction.Delete));
+            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext ), RuleAction.Delete));
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
@@ -331,12 +359,13 @@ namespace ts.formatting {
             this.NoSpaceAfterEllipsis = new Rule(RuleDescriptor.create1(SyntaxKind.DotDotDotToken, SyntaxKind.Identifier), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOptionalParameters = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
 
-            // generics
-            this.NoSpaceBeforeOpenAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.TypeNames, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceBetweenCloseParenAndAngularBracket = new Rule(RuleDescriptor.create1(SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceAfterOpenAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.LessThanToken, Shared.TokenRange.TypeNames), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceBeforeCloseAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.GreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
-            this.NoSpaceAfterCloseAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.GreaterThanToken, Shared.TokenRange.FromTokens([SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterContext), RuleAction.Delete));
+            // generics and type assertions
+            this.NoSpaceBeforeOpenAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.TypeNames, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceBetweenCloseParenAndAngularBracket = new Rule(RuleDescriptor.create1(SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceAfterOpenAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.LessThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceBeforeCloseAngularBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.GreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceAfterCloseAngularBracket = new Rule(RuleDescriptor.create3(SyntaxKind.GreaterThanToken, Shared.TokenRange.FromTokens([SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeArgumentOrParameterOrAssertionContext), RuleAction.Delete));
+            this.NoSpaceAfterTypeAssertion = new Rule(RuleDescriptor.create3(SyntaxKind.GreaterThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsTypeAssertionContext), RuleAction.Delete));
 
             // Remove spaces in empty interface literals. e.g.: x: {}
             this.NoSpaceBetweenEmptyInterfaceBraceBrackets = new Rule(RuleDescriptor.create1(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsObjectTypeContext), RuleAction.Delete));
@@ -350,6 +379,27 @@ namespace ts.formatting {
             this.SpaceAfterStarInGeneratorDeclaration = new Rule(RuleDescriptor.create3(SyntaxKind.AsteriskToken, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Space));
             this.NoSpaceBetweenYieldKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Delete));
             this.SpaceBetweenYieldOrYieldStarAndOperand = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Space));
+
+            // Async-await
+            this.SpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.SpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+            // Type alias declaration
+            this.SpaceAfterTypeKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.TypeKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterTypeKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.TypeKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+            // template string
+            this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+            // union type
+            this.SpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.SpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
 
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
@@ -377,6 +427,11 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
+                this.SpaceBetweenAsyncAndFunctionKeyword, this.NoSpaceBetweenAsyncAndFunctionKeyword,
+                this.SpaceAfterAwaitKeyword, this.NoSpaceAfterAwaitKeyword,
+                this.SpaceAfterTypeKeyword, this.NoSpaceAfterTypeKeyword,
+                this.SpaceBetweenTagAndTemplateString, this.NoSpaceBetweenTagAndTemplateString,
+                this.SpaceBeforeBar, this.NoSpaceBeforeBar, this.SpaceAfterBar, this.NoSpaceAfterBar,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
@@ -391,6 +446,7 @@ namespace ts.formatting {
                 this.NoSpaceAfterOpenAngularBracket,
                 this.NoSpaceBeforeCloseAngularBracket,
                 this.NoSpaceAfterCloseAngularBracket,
+                this.NoSpaceAfterTypeAssertion,
                 this.SpaceBeforeAt,
                 this.NoSpaceAfterAt,
                 this.SpaceAfterDecorator,
@@ -402,8 +458,8 @@ namespace ts.formatting {
                 this.NoSpaceBeforeSemicolon,
                 this.SpaceBeforeOpenBraceInControl, this.SpaceBeforeOpenBraceInFunction, this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock,
                 this.NoSpaceBeforeComma,
-                this.NoSpaceBeforeOpenBracket, this.NoSpaceAfterOpenBracket,
-                this.NoSpaceBeforeCloseBracket, this.NoSpaceAfterCloseBracket,
+                this.NoSpaceBeforeOpenBracket,
+                this.NoSpaceAfterCloseBracket,
                 this.SpaceAfterSemicolon,
                 this.NoSpaceBeforeOpenParenInFuncDecl,
                 this.SpaceBetweenStatements, this.SpaceAfterTryFinally
@@ -447,6 +503,13 @@ namespace ts.formatting {
             this.NoSpaceBetweenParens = new Rule(RuleDescriptor.create1(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOpenParen = new Rule(RuleDescriptor.create3(SyntaxKind.OpenParenToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceBeforeCloseParen = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+
+            // Insert space after opening and before closing nonempty brackets
+            this.SpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBetweenBrackets = new Rule(RuleDescriptor.create1(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Insert space after function keyword for anonymous functions
             this.SpaceAfterAnonymousFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
@@ -704,13 +767,15 @@ namespace ts.formatting {
             return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
-        static IsTypeArgumentOrParameter(token: TextRangeWithKind, parent: Node): boolean {
+        static IsTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: Node): boolean {
             if (token.kind !== SyntaxKind.LessThanToken && token.kind !== SyntaxKind.GreaterThanToken) {
                 return false;
             }
             switch (parent.kind) {
                 case SyntaxKind.TypeReference:
+                case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -721,6 +786,7 @@ namespace ts.formatting {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                case SyntaxKind.ExpressionWithTypeArguments:
                     return true;
                 default:
                     return false;
@@ -728,9 +794,13 @@ namespace ts.formatting {
             }
         }
 
-        static IsTypeArgumentOrParameterContext(context: FormattingContext): boolean {
-            return Rules.IsTypeArgumentOrParameter(context.currentTokenSpan, context.currentTokenParent) ||
-                Rules.IsTypeArgumentOrParameter(context.nextTokenSpan, context.nextTokenParent);
+        static IsTypeArgumentOrParameterOrAssertionContext(context: FormattingContext): boolean {
+            return Rules.IsTypeArgumentOrParameterOrAssertion(context.currentTokenSpan, context.currentTokenParent) ||
+                Rules.IsTypeArgumentOrParameterOrAssertion(context.nextTokenSpan, context.nextTokenParent);
+        }
+
+        static IsTypeAssertionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.TypeAssertionExpression;
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {

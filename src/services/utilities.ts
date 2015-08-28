@@ -414,6 +414,93 @@ namespace ts {
             }
         }
     }
+    
+    export function isInString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+    }
+
+    export function isInComment(sourceFile: SourceFile, position: number) {
+        return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
+    }
+
+    /**
+     * Returns true if the cursor at position in sourceFile is within a comment that additionally
+     * satisfies predicate, and false otherwise.
+     */
+    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (token && position <= token.getStart()) {
+            let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+                
+            // The end marker of a single-line comment does not include the newline character.
+            // In the following case, we are inside a comment (^ denotes the cursor position):
+            //
+            //    // asdf   ^\n
+            //
+            // But for multi-line comments, we don't want to be inside the comment in the following case:
+            //
+            //    /* asdf */^
+            //
+            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+            return predicate ?
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                    predicate(c)) :
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+        }
+
+        return false;
+    }
+
+    export function hasDocComment(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        // First, we have to see if this position actually landed in a comment.
+        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+        return forEach(commentRanges, jsDocPrefix);
+        
+        function jsDocPrefix(c: CommentRange): boolean {
+            var text = sourceFile.text;
+            return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
+        }
+    }
+
+    /**
+     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
+     */
+    export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
+        let node = ts.getTokenAtPosition(sourceFile, position);
+        if (isToken(node)) {
+            switch (node.kind) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
+                    // if the current token is var, let or const, skip the VariableDeclarationList
+                    node = node.parent === undefined ? undefined : node.parent.parent;
+                    break;
+                default:
+                    node = node.parent;
+                    break;
+            }
+        }
+
+        if (node) {
+            let jsDocComment = node.jsDocComment;
+            if (jsDocComment) {
+                for (let tag of jsDocComment.tags) {
+                    if (tag.pos <= position && position <= tag.end) {
+                        return tag;
+                    }
+                }
+            }
+        }
+
+        return undefined;
+    }
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
@@ -586,7 +673,6 @@ namespace ts {
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
             else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
 
-
             return SymbolDisplayPartKind.text;
         }
     }
@@ -623,6 +709,14 @@ namespace ts {
 
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
+    }
+
+    const carriageReturnLineFeed = "\r\n";
+    /**
+     * The default is CRLF.
+     */
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
+        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {

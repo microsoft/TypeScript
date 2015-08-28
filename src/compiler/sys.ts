@@ -36,8 +36,8 @@ namespace ts {
     declare var url: any;
     declare var __filename: string;
     declare var Buffer: {  
-        new (str: string, encoding ?: string): any;  
-    }
+        new (str: string, encoding?: string): any;  
+    };
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -199,15 +199,15 @@ namespace ts {
             };
         }
         function getNodeSystem(): System {
-            var _fs = require("fs");
-            var _path = require("path");
-            var _os = require('os');
-            var _https = require('https');
-            var _url = require('url');
+            const _fs = require("fs");
+            const _path = require("path");
+            const _os = require('os');
+            const _https = require('https');
+            const _url = require('url');
 
-            var platform: string = _os.platform();
+            const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!_fs.existsSync(fileName)) {
@@ -241,7 +241,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = '\uFEFF' + data;
+                    data = "\uFEFF" + data;
                 }
 
                 _fs.writeFileSync(fileName, data, "utf8");
@@ -324,10 +324,10 @@ namespace ts {
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {  
-                    var buffer = new Buffer(s, 'utf8');  
-                    var offset: number = 0;
-                    var toWrite: number = buffer.length;
-                    var written = 0;
+                    const buffer = new Buffer(s, "utf8");  
+                    let offset: number = 0;
+                    let toWrite: number = buffer.length;
+                    let written = 0;
                     // 1 is a standard descriptor for stdout
                     while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
                         offset += written;
@@ -351,7 +351,7 @@ namespace ts {
                         }
 
                         callback(fileName);
-                    };
+                    }
                 },
                 https,
                 getFileWriteTime,
@@ -391,7 +391,9 @@ namespace ts {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
-        else if (typeof module !== "undefined" && module.exports) {
+        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
+            // process and process.nextTick checks if current environment is node-like
+            // process.browser check excludes webpack and browserify
             return getNodeSystem();
         }
         else {

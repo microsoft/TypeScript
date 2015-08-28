@@ -31,6 +31,11 @@ namespace ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "init",
+            type: "boolean",
+            description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
+        },
+        {
             name: "inlineSourceMap",
             type: "boolean",
         },
@@ -120,6 +125,13 @@ namespace ts {
         {
             name: "out",
             type: "string",
+            isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+                               // for correct behaviour, please use outFile
+            paramType: Diagnostics.FILE,
+        },
+        {
+            name: "outFile",
+            type: "string",
             isFilePath: true,
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
@@ -173,6 +185,12 @@ namespace ts {
             paramType: Diagnostics.LOCATION,
         },
         {
+            name: "suppressExcessPropertyErrors",
+            type: "boolean",
+            description: Diagnostics.Suppress_excess_property_checks_for_object_literals,
+            experimental: true
+        },
+        {
             name: "suppressImplicitAnyIndexErrors",
             type: "boolean",
             description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
@@ -218,22 +236,50 @@ namespace ts {
             type: "boolean",
             experimental: true,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
-        }
+        },
+        {
+            name: "moduleResolution",
+            type: {
+                "node": ModuleResolutionKind.NodeJs,
+                "classic": ModuleResolutionKind.Classic
+            },
+            experimental: true,
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
+        }        
     ];
 
-    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
-        let options: CompilerOptions = {};
-        let fileNames: string[] = [];
-        let errors: Diagnostic[] = [];
-        let shortOptionNames: Map<string> = {};
-        let optionNameMap: Map<CommandLineOption> = {};
+    /* @internal */
+    export interface OptionNameMap {
+        optionNameMap: Map<CommandLineOption>;
+        shortOptionNames: Map<string>;
+    }
 
+    let optionNameMapCache: OptionNameMap;
+    /* @internal */
+    export function getOptionNameMap(): OptionNameMap {
+        if (optionNameMapCache) {
+            return optionNameMapCache;
+        }
+
+        let optionNameMap: Map<CommandLineOption> = {};
+        let shortOptionNames: Map<string> = {};
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
                 shortOptionNames[option.shortName] = option.name;
             }
         });
+
+        optionNameMapCache = { optionNameMap, shortOptionNames };
+        return optionNameMapCache;
+    }
+
+    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
+        let options: CompilerOptions = {};
+        let fileNames: string[] = [];
+        let errors: Diagnostic[] = [];
+        let { optionNameMap, shortOptionNames } = getOptionNameMap();
+
         parseStrings(commandLine);
         return {
             options,
@@ -335,7 +381,7 @@ namespace ts {
       * @param fileName The path to the config file
       */
     export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
-        let text = '';
+        let text = "";
         try {
             text = sys.readFile(fileName);
         }
@@ -421,6 +467,9 @@ namespace ts {
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                }
+                else {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));                    
                 }
             }
             else {
