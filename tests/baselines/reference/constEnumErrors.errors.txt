@@ -51,7 +51,7 @@ tests/cases/compiler/constEnumErrors.ts(50,9): error TS2478: 'const' enum member
                 ~
 !!! error TS2476: A const enum member can only be accessed using a string literal.
     var name = "A";
-    var y1 = E2[name];
+    var y1 = E2[name]; // error
                 ~~~~
 !!! error TS2476: A const enum member can only be accessed using a string literal.
     

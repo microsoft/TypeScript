@@ -22,7 +22,7 @@ const enum E2 {
 
 var y0 = E2[1]
 var name = "A";
-var y1 = E2[name];
+var y1 = E2[name]; // error
 
 var x = E2; // error
 var y = [E2]; // error
@@ -58,7 +58,7 @@ var E;
 })(E || (E = {}));
 var y0 = E2[1];
 var name = "A";
-var y1 = E2[name];
+var y1 = E2[name]; // error
 var x = E2; // error
 var y = [E2]; // error
 var enumType;
