@@ -4081,7 +4081,7 @@ namespace ts {
         }
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
-            for (var i = 0, len = types.length; i < len; i++) {
+            for (let i = 0, len = types.length; i < len; i++) {
                 if (candidate !== types[i] && isTypeSubtypeOf(candidate, types[i])) {
                     return true;
                 }
@@ -4090,7 +4090,7 @@ namespace ts {
         }
 
         function removeSubtypes(types: Type[]) {
-            var i = types.length;
+            let i = types.length;
             while (i > 0) {
                 i--;
                 if (isSubtypeOfAny(types[i], types)) {
