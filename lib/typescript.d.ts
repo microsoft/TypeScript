@@ -1525,7 +1525,7 @@ declare module "typescript" {
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
 }
 declare module "typescript" {
-    function parseCommandLine(commandLine: string[]): ParsedCommandLine;
+    function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine;
     /**
       * Read tsconfig.json file
       * @param fileName The path to the config file
