@@ -4640,7 +4640,9 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    source = getRegularTypeOfObjectLiteral(source);
+                    if (target.flags & TypeFlags.UnionOrIntersection) {
+                        source = getRegularTypeOfObjectLiteral(source);
+                    }
                 }
 
                 let saveErrorInfo = errorInfo;
