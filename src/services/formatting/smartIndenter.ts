@@ -440,12 +440,11 @@ namespace ts.formatting {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
-                case SyntaxKind.NamedExports:
-                case SyntaxKind.ExportDeclaration:
-                case SyntaxKind.NamedImports:
                 case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.NamedExports:
+                case SyntaxKind.NamedImports:
                 case SyntaxKind.ExportSpecifier:
-                //case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ImportSpecifier:
                     return true;
             }
             return false;
@@ -470,6 +469,8 @@ namespace ts.formatting {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return child !== SyntaxKind.Block;
+                case SyntaxKind.ExportDeclaration:
+                    return child !== SyntaxKind.NamedExports;
                 default:
                     return false;
             }

@@ -403,6 +403,20 @@ namespace ts.formatting {
                         indentation = parentDynamicIndentation.getIndentation();
                     }
                 }
+                else if (node.kind === SyntaxKind.NamedExports || node.kind === SyntaxKind.ImportClause) {
+                    let blockParent = node.kind === SyntaxKind.ImportClause ?
+                        (<ImportClause>node).namedBindings : node;
+
+                    let children = (<NamedExports | ImportClause>blockParent).getChildren(sourceFile);
+                    // Detect named export/import pseudo-block
+                    if (children[0] && children[0].kind === SyntaxKind.OpenBraceToken &&
+                        children[2] && children[2].kind === SyntaxKind.CloseBraceToken) {
+                        indentation = parentDynamicIndentation.getIndentation();
+                    }
+                    else {
+                        indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
+                    }
+                }
                 else {
                     if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
                         indentation = parentDynamicIndentation.getIndentation();
