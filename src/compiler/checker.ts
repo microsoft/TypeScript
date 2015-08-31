@@ -4593,6 +4593,16 @@ namespace ts {
             }
             return result !== Ternary.False;
 
+            function reportErrorAndTryImproveErrorNode(
+                    newErrorNode: Node,
+                    message: DiagnosticMessage,
+                    arg0?: string,
+                    arg1?: string,
+                    arg2?: string) {
+                errorNode = newErrorNode || errorNode;
+                reportError(message, arg0, arg1, arg2);
+            }
+
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
@@ -4767,7 +4777,8 @@ namespace ts {
                 for (let prop of getPropertiesOfObjectType(source)) {
                     if (!isKnownProperty(target, prop.name)) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(prop), typeToString(target));
+                            reportErrorAndTryImproveErrorNode(prop.valueDeclaration,
+                                Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(prop), typeToString(target));
                         }
                         return true;
                     }
