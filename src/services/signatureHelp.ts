@@ -611,13 +611,11 @@ namespace ts.SignatureHelp {
                 let displayParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                let isOptional = hasQuestionToken(parameter.valueDeclaration);
-
                 return {
                     name: parameter.name,
                     documentation: parameter.getDocumentationComment(),
                     displayParts,
-                    isOptional
+                    isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
                 };
             }
 

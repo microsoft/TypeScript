@@ -73,7 +73,7 @@ interface PlaybackControl {
 module Playback {
     let recordLog: IOLog = undefined;
     let replayLog: IOLog = undefined;
-    let recordLogFileNameBase = '';
+    let recordLogFileNameBase = "";
 
     interface Memoized<T> {
         (s: string): T;
@@ -93,13 +93,13 @@ module Playback {
         return run;
     }
 
-    export interface PlaybackSystem extends ts.System, PlaybackControl { }
+    export interface PlaybackIO extends Harness.IO, PlaybackControl { }
 
     function createEmptyLog(): IOLog {
         return {
             timestamp: (new Date()).toString(),
             arguments: [],
-            currentDirectory: '',
+            currentDirectory: "",
             filesRead: [],
             filesWritten: [],
             filesDeleted: [],
@@ -110,7 +110,7 @@ module Playback {
             dirExists: [],
             dirsCreated: [],
             pathsResolved: [],
-            executingPath: ''
+            executingPath: ""
         };
     }
 
@@ -170,7 +170,7 @@ module Playback {
             if (defaultValue !== undefined) {
                 return defaultValue;
             } else {
-                throw new Error('No matching result in log array for: ' + JSON.stringify(expectedFields));
+                throw new Error("No matching result in log array for: " + JSON.stringify(expectedFields));
             }
         }
         return results[0].result;
@@ -195,7 +195,7 @@ module Playback {
         }
         // If we got here, we didn't find a match
         if (defaultValue === undefined) {
-            throw new Error('No matching result in log array for path: ' + expectedPath);
+            throw new Error("No matching result in log array for path: " + expectedPath);
         } else {
             return defaultValue;
         }
@@ -203,7 +203,7 @@ module Playback {
 
     let pathEquivCache: any = {};
     function pathsAreEquivalent(left: string, right: string, wrapper: { resolvePath(s: string): string }) {
-        let key = left + '-~~-' + right;
+        let key = left + "-~~-" + right;
         function areSame(a: string, b: string) {
             return ts.normalizeSlashes(a).toLowerCase() === ts.normalizeSlashes(b).toLowerCase();
         }
@@ -223,8 +223,8 @@ module Playback {
         // console.log("Swallowed write operation during replay: " + name);
     }
 
-    export function wrapSystem(underlying: ts.System): PlaybackSystem {
-        let wrapper: PlaybackSystem = <any>{};
+    export function wrapIO(underlying: Harness.IO): PlaybackIO {
+        let wrapper: PlaybackIO = <any>{};
         initWrapper(wrapper, underlying);
 
         wrapper.startReplayFromFile = logFn => {
@@ -233,24 +233,30 @@ module Playback {
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 let i = 0;
-                let fn = () => recordLogFileNameBase + i + '.json';
+                let fn = () => recordLogFileNameBase + i + ".json";
                 while (underlying.fileExists(fn())) i++;
                 underlying.writeFile(fn(), JSON.stringify(recordLog));
                 recordLog = undefined;
             }
         };
-
-        Object.defineProperty(wrapper, 'args', {
-            get() {
-                if (replayLog !== undefined) {
-                    return replayLog.arguments;
-                } else if (recordLog !== undefined) {
-                    recordLog.arguments = underlying.args;
-                }
-                return underlying.args;
+        
+        wrapper.args = () => {
+            if (replayLog !== undefined) {
+                return replayLog.arguments;
+            } else if (recordLog !== undefined) {
+                recordLog.arguments = underlying.args();
             }
-        });
-
+            return underlying.args();
+        }
+        
+        wrapper.newLine = () => underlying.newLine();
+        wrapper.useCaseSensitiveFileNames = () => underlying.useCaseSensitiveFileNames();
+        wrapper.directoryName = (path): string => { throw new Error("NotSupported"); };
+        wrapper.createDirectory = path => { throw new Error("NotSupported"); };
+        wrapper.directoryExists = (path): boolean => { throw new Error("NotSupported"); };
+        wrapper.deleteFile = path => { throw new Error("NotSupported"); };
+        wrapper.listFiles = (path, filter, options): string[] => { throw new Error("NotSupported"); };
+        wrapper.log = text => underlying.log(text);
 
         wrapper.fileExists = recordReplay(wrapper.fileExists, underlying)(
             (path) => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path: path }),
@@ -276,7 +282,7 @@ module Playback {
 
         wrapper.getCurrentDirectory = () => {
             if (replayLog !== undefined) {
-                return replayLog.currentDirectory || '';
+                return replayLog.currentDirectory || "";
             } else if (recordLog !== undefined) {
                 return recordLog.currentDirectory = underlying.getCurrentDirectory();
             } else {
@@ -286,7 +292,7 @@ module Playback {
 
         wrapper.resolvePath = recordReplay(wrapper.resolvePath, underlying)(
             (path) => callAndRecord(underlying.resolvePath(path), recordLog.pathsResolved, { path: path }),
-            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : ts.normalizeSlashes(path))));
+            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + "/" + path : ts.normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
             (path) => {
@@ -299,7 +305,7 @@ module Playback {
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path, contents) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path: path, contents: contents, bom: false }),
-            (path, contents) => noOpReplay('writeFile'));
+            (path, contents) => noOpReplay("writeFile"));
 
         wrapper.exit = (exitCode) => {
             if (recordLog !== undefined) {

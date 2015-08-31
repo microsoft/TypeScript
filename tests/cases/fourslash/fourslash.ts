@@ -90,6 +90,7 @@ module FourSlashInterface {
         InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number| string;
@@ -286,10 +287,10 @@ module FourSlashInterface {
         }
 
         /**
-            Compiles the current file and evaluates 'expr' in a context containing
-            the emitted output, then compares (using ===) the result of that expression
-            to 'value'. Do not use this function with external modules as it is not supported.
-        */
+         * Compiles the current file and evaluates 'expr' in a context containing
+         * the emitted output, then compares (using ===) the result of that expression
+         * to 'value'. Do not use this function with external modules as it is not supported.
+         */
         public eval(expr: string, value: any) {
             FourSlash.currentTestState.verifyEval(expr, value);
         }
@@ -378,6 +379,14 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyNoMatchingBracePosition(bracePosition);
         }
 
+        public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
+            FourSlash.currentTestState.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, caretOffset: expectedOffset });
+        }
+
+        public noDocCommentTemplate() {
+            this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, true);
+        }
+
         public getScriptLexicalStructureListCount(count: number) {
             FourSlash.currentTestState.verifyGetScriptLexicalStructureListCount(count);
         }
@@ -419,6 +428,14 @@ module FourSlashInterface {
 
         public occurrencesAtPositionCount(expectedCount: number) {
             FourSlash.currentTestState.verifyOccurrencesAtPositionListCount(expectedCount);
+        }
+
+        public documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
+        }
+
+        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
+            FourSlash.currentTestState.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {

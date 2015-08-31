@@ -17,7 +17,7 @@ var docDirectory = "doc/";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
-var LKGDirectory = "bin/";
+var LKGDirectory = "lib/";
 
 var copyright = "CopyrightNotice.txt";
 var thirdParty = "ThirdPartyNoticeText.txt";
@@ -141,7 +141,10 @@ var harnessSources = harnessCoreSources.concat([
     "session.ts",
     "versionCache.ts",
     "convertToBase64.ts",
-    "transpile.ts"
+    "transpile.ts",
+    "reuseProgramStructure.ts",
+    "cachingInServerLSHost.ts",
+    "moduleResolution.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -155,10 +158,10 @@ var harnessSources = harnessCoreSources.concat([
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["core.d.ts"] },
-        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
+        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
+        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
         { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
 ];
@@ -218,7 +221,7 @@ var compilerFilename = "tsc.js";
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var options = "--module commonjs -noImplicitAny";
+        var options = "--module commonjs --noImplicitAny --noEmitOnError";
 
         // Keep comments when specifically requested
         // or when in debug mode.

@@ -3,15 +3,15 @@ var i = {
 >i : Symbol(i, Decl(symbolProperty19.ts, 0, 3))
 
     [Symbol.iterator]: { p: null },
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
 >p : Symbol(p, Decl(symbolProperty19.ts, 1, 24))
 
     [Symbol.toStringTag]() { return { p: undefined }; }
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1291, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1291, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
 >p : Symbol(p, Decl(symbolProperty19.ts, 2, 37))
 >undefined : Symbol(undefined)
 }
@@ -19,14 +19,14 @@ var i = {
 var it = i[Symbol.iterator];
 >it : Symbol(it, Decl(symbolProperty19.ts, 5, 3))
 >i : Symbol(i, Decl(symbolProperty19.ts, 0, 3))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
 
 var str = i[Symbol.toStringTag]();
 >str : Symbol(str, Decl(symbolProperty19.ts, 6, 3))
 >i : Symbol(i, Decl(symbolProperty19.ts, 0, 3))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1291, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1291, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
 

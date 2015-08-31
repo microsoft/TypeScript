@@ -65,17 +65,17 @@ a['foo'] > ;
 <a b=>;
 var x = <div>one</div><div>two</div>;;
 var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>two</div>;;
-<a>{"str"};}</a>;
-<span className="a"/>, id="b" />;
-<div className=/>"app">;
+<a>{"str"}}</a>;
+<span className="a"/> id="b" />;
+<div className=/>>;
 <div {...props}/>;
 
-<div>stuff</div> {}...props}>;
-<div {...props}>stuff</div> {}...props}>;
+<div>stuff</div>...props}>;
+<div {...props}>stuff</div>...props}>;
 
 <a>></a>;
 <a> ></a>;
 <a b=>;
 <a b={ < }>;
 <a>}</a>;
-<a /> .../*hai*/asdf/>;</></></></>;
+<a /> /*hai*//*hai*/asdf/>;</></></></>;

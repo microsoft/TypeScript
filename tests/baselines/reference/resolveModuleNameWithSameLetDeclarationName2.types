@@ -1,0 +1,18 @@
+=== tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts ===
+declare module "punycode" {
+    interface ucs2 {
+>ucs2 : ucs2
+
+        decode(string: string): string;
+>decode : (string: string) => string
+>string : string
+
+        encode(codePoints: number[]): string;
+>encode : (codePoints: number[]) => string
+>codePoints : number[]
+    }
+
+    export let ucs2: ucs2;
+>ucs2 : ucs2
+>ucs2 : ucs2
+}
