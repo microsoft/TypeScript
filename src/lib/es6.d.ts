@@ -125,6 +125,33 @@ interface ObjectConstructor {
       * Copy the values of all of the enumerable own properties from one or more source objects to a 
       * target object. Returns the target object.
       * @param target The target object to copy to.
+      * @param source source objects to copy properties from.
+      */
+    assign<T, U>(target: T, source: U): T & U;
+
+    /**
+      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * target object. Returns the target object.
+      * @param target The target object to copy to.
+      * @param source1 first source objects to copy properties from.
+      * @param source2 second source objects to copy properties from.
+      */
+    assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
+
+    /**
+      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * target object. Returns the target object.
+      * @param target The target object to copy to.
+      * @param source1 first source objects to copy properties from.
+      * @param source2 second source objects to copy properties from.
+      * @param source3 second source objects to copy properties from.
+      */
+    assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+
+    /**
+      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * target object. Returns the target object.
+      * @param target The target object to copy to.
       * @param sources One or more source objects to copy properties from.
       */
     assign(target: any, ...sources: any[]): any;
