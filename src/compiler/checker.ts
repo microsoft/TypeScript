@@ -7041,12 +7041,16 @@ namespace ts {
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
             }
             if (!hasSpreadElement) {
+                // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
+                // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 if (inDestructuringPattern && elementTypes.length) {
                     return createImpliedType(createTupleType(elementTypes));
                 }
                 let contextualType = getContextualType(node);
                 let contextualTupleLikeType = contextualType && contextualTypeIsTupleLikeType(contextualType) ? contextualType : undefined;
                 if (contextualTupleLikeType) {
+                    // If array literal is contextually typed by the implied type of a binding pattern, pad the resulting
+                    // tuple type with elements from the binding tuple type to make the lengths equal.
                     if (contextualTupleLikeType.flags & TypeFlags.Tuple && contextualTupleLikeType.flags & TypeFlags.ImpliedType) {
                         let contextualElementTypes = (<TupleType>contextualTupleLikeType).elementTypes;
                         for (let i = elementTypes.length; i < contextualElementTypes.length; i++) {
