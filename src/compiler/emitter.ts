@@ -7047,9 +7047,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitLeadingCommentsWorker(node: Node, isEmittedNode: boolean) {
-                if (compilerOptions.removeComments) return;
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+            
                 let leadingComments: CommentRange[];
-
                 if (isEmittedNode) {
                     leadingComments = getLeadingCommentsToEmit(node);
                 }
@@ -7062,7 +7064,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //      /// <reference-path ...>
                     //      interface F {}
                     //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
-                    leadingComments = node.pos === 0 ? filter(getLeadingCommentsToEmit(node), isTripleSlashComments) : [];
+                    if (node.pos === 0) {
+                        leadingComments = filter(getLeadingCommentsToEmit(node), isTripleSlashComments); 
+                    }
                 }
 
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
@@ -7072,7 +7076,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitTrailingComments(node: Node) {
-                if (compilerOptions.removeComments) return;
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 // Emit the trailing comments only if the parent's end doesn't match
                 let trailingComments = getTrailingCommentsToEmit(node);
 
@@ -7086,7 +7093,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              *        ^ => pos; the function will emit "comment1" in the emitJS
              */
             function emitTrailingCommentsOfPosition(pos: number) {
-                if (compilerOptions.removeComments) return;
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 let trailingComments = getTrailingCommentRanges(currentSourceFile.text, pos);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
@@ -7094,7 +7104,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitLeadingCommentsOfPosition(pos: number) {
-                if (compilerOptions.removeComments) return;
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 let leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
@@ -7119,8 +7132,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //      /*! Pinned Comment */
                     //
                     //      var x = 10;
-                    leadingComments = node.pos === 0 ?
-                        filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments) : [];
+                    if (node.pos === 0) {
+                        leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments);
+                    }
                 }
                 else {
                     // removeComments is false, just get detached as normal and bypass the process to filter comment
