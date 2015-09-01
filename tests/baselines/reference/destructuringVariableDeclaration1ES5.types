@@ -31,7 +31,7 @@ var { b1: { b11 } = { b11: "string" }  } = { b1: { b11: "world" } };
 >{ b11: "string" } : { b11: string; }
 >b11 : string
 >"string" : string
->{ b1: { b11: "world" } } : { b1: { b11: string; }; }
+>{ b1: { b11: "world" } } : { b1?: { b11: string; }; }
 >b1 : { b11: string; }
 >{ b11: "world" } : { b11: string; }
 >b11 : string

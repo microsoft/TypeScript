@@ -94,7 +94,7 @@ var [c0, c1] = [...temp];
 
 var [c2] = [];
 >c2 : any
->[] : undefined[]
+>[] : [any]
 
 var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
 >c3 : any

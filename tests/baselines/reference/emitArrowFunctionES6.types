@@ -87,12 +87,12 @@ var p8 = ({ a = 1 }) => { };
 >1 : number
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
->p9 : ({ a: { b = 1 } = { b: 1 } }: { a?: { b: number; }; }) => void
->({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b = 1 } = { b: 1 } }: { a?: { b: number; }; }) => void
+>p9 : ({ a: { b = 1 } = { b: 1 } }: { a?: { b?: number; }; }) => void
+>({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b = 1 } = { b: 1 } }: { a?: { b?: number; }; }) => void
 >a : any
 >b : number
 >1 : number
->{ b: 1 } : { b: number; }
+>{ b: 1 } : { b?: number; }
 >b : number
 >1 : number
 
