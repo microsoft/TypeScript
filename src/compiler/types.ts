@@ -1795,6 +1795,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ImpliedType             = 0x02000000,  // Type implied by object binding pattern
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1864,8 +1865,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];          // Element types
-        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
+        elementTypes: Type[];           // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {

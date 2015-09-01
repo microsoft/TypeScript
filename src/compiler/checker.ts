@@ -2318,8 +2318,8 @@ namespace ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 type = getTypeOfPropertyOfType(parentType, name.text) ||
-                isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                getIndexTypeOfType(parentType, IndexKind.String);
+                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                    getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
@@ -2456,7 +2456,6 @@ namespace ts {
                 let unionOfElements = getUnionType(elementTypes);
                 return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
             }
-
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
             return createTupleType(elementTypes);
         }
@@ -6607,10 +6606,16 @@ namespace ts {
                     }
                 }
                 if (isBindingPattern(declaration.name)) {
-                    return getTypeFromBindingPattern(<BindingPattern>declaration.name);
+                    return createImpliedType(getTypeFromBindingPattern(<BindingPattern>declaration.name));
                 }
             }
             return undefined;
+        }
+
+        function createImpliedType(type: Type): Type {
+            var result = clone(type);
+            result.flags |= TypeFlags.ImpliedType;
+            return result;
         }
 
         function getContextualTypeForReturnExpression(node: Expression): Type {
@@ -7005,9 +7010,6 @@ namespace ts {
 
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             let elements = node.elements;
-            if (!elements.length) {
-                return createArrayType(undefinedType);
-            }
             let hasSpreadElement = false;
             let elementTypes: Type[] = [];
             let inDestructuringPattern = isAssignmentTarget(node);
@@ -7039,12 +7041,24 @@ namespace ts {
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
             }
             if (!hasSpreadElement) {
+                if (inDestructuringPattern && elementTypes.length) {
+                    return createImpliedType(createTupleType(elementTypes));
+                }
                 let contextualType = getContextualType(node);
-                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || inDestructuringPattern) {
-                    return createTupleType(elementTypes);
+                let contextualTupleLikeType = contextualType && contextualTypeIsTupleLikeType(contextualType) ? contextualType : undefined;
+                if (contextualTupleLikeType) {
+                    if (contextualTupleLikeType.flags & TypeFlags.Tuple && contextualTupleLikeType.flags & TypeFlags.ImpliedType) {
+                        let contextualElementTypes = (<TupleType>contextualTupleLikeType).elementTypes;
+                        for (let i = elementTypes.length; i < contextualElementTypes.length; i++) {
+                            elementTypes.push(contextualElementTypes[i]);
+                        }
+                    }
+                    if (elementTypes.length) {
+                        return createTupleType(elementTypes);
+                    }
                 }
             }
-            return createArrayType(getUnionType(elementTypes));
+            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : undefinedType)
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -7131,6 +7145,14 @@ namespace ts {
                     }
                     typeFlags |= type.flags;
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    // If object literal is contextually typed by the implied type of a binding pattern, and if the
+                    // binding pattern specifies a default value for the property, make the property optional.
+                    if (contextualType && contextualType.flags & TypeFlags.ImpliedType) {
+                        let impliedProp = getPropertyOfType(contextualType, member.name);
+                        if (impliedProp) {
+                            prop.flags |= impliedProp.flags & SymbolFlags.Optional;
+                        }
+                    }
                     prop.declarations = member.declarations;
                     prop.parent = member.parent;
                     if (member.valueDeclaration) {
@@ -7155,6 +7177,17 @@ namespace ts {
                     propertiesTable[member.name] = member;
                 }
                 propertiesArray.push(member);
+            }
+
+            // If object literal is contextually typed by the implied type of a binding pattern, augment the result
+            // type with those properties for which the binding pattern specifies a default value.
+            if (contextualType && contextualType.flags & TypeFlags.ImpliedType) {
+                for (let prop of getPropertiesOfType(contextualType)) {
+                    if (prop.flags & SymbolFlags.Optional && !hasProperty(propertiesTable, prop.name)) {
+                        propertiesTable[prop.name] = prop;
+                        propertiesArray.push(prop);
+                    }
+                }
             }
 
             let stringIndexType = getIndexType(IndexKind.String);
