@@ -57,33 +57,47 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>    var Foo = (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^
+3 >        ^^^
+4 >           ^^^^^^^^^^^^^^->
 1->
   >	
+2 >    export class 
+3 >        Foo
 1->Emitted(3, 5) Source(8, 2) + SourceIndex(0) name (M)
+2 >Emitted(3, 9) Source(8, 15) + SourceIndex(0) name (M)
+3 >Emitted(3, 12) Source(8, 18) + SourceIndex(0) name (M)
 ---
 >>>        function Foo() {
 1->^^^^^^^^
-2 >        ^^->
-1->export class Foo { 
+2 >        ^^^^^^^^^
+3 >                 ^^^
+1-> { 
+2 >        
+3 >                 Foo
 1->Emitted(4, 9) Source(8, 21) + SourceIndex(0) name (M.Foo)
+2 >Emitted(4, 18) Source(8, 15) + SourceIndex(0) name (M.Foo)
+3 >Emitted(4, 21) Source(8, 18) + SourceIndex(0) name (M.Foo)
 ---
 >>>        }
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^^->
-1->constructor() { 
+1 > { constructor() { 
 2 >        }
-1->Emitted(5, 9) Source(8, 37) + SourceIndex(0) name (M.Foo.constructor)
+1 >Emitted(5, 9) Source(8, 37) + SourceIndex(0) name (M.Foo.constructor)
 2 >Emitted(5, 10) Source(8, 38) + SourceIndex(0) name (M.Foo.constructor)
 ---
 >>>        return Foo;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^
 1-> 
-2 >        }
+2 >        
+3 >               Foo { constructor() { } }
 1->Emitted(6, 9) Source(8, 39) + SourceIndex(0) name (M.Foo)
-2 >Emitted(6, 19) Source(8, 40) + SourceIndex(0) name (M.Foo)
+2 >Emitted(6, 16) Source(8, 15) + SourceIndex(0) name (M.Foo)
+3 >Emitted(6, 19) Source(8, 40) + SourceIndex(0) name (M.Foo)
 ---
 >>>    })();
 1 >^^^^
@@ -103,16 +117,19 @@ sourceFile:tsxEmit3.tsx
 >>>    M.Foo = Foo;
 1->^^^^
 2 >    ^^^^^
-3 >         ^^^^^^
-4 >               ^
+3 >         ^^^
+4 >            ^^^
+5 >               ^
 1->
 2 >    Foo
-3 >          { constructor() { } }
-4 >               
+3 >         
+4 >            Foo { constructor() { } }
+5 >               
 1->Emitted(8, 5) Source(8, 15) + SourceIndex(0) name (M)
 2 >Emitted(8, 10) Source(8, 18) + SourceIndex(0) name (M)
-3 >Emitted(8, 16) Source(8, 40) + SourceIndex(0) name (M)
-4 >Emitted(8, 17) Source(8, 40) + SourceIndex(0) name (M)
+3 >Emitted(8, 13) Source(8, 15) + SourceIndex(0) name (M)
+4 >Emitted(8, 16) Source(8, 40) + SourceIndex(0) name (M)
+5 >Emitted(8, 17) Source(8, 40) + SourceIndex(0) name (M)
 ---
 >>>    var S;
 1 >^^^^
@@ -155,33 +172,47 @@ sourceFile:tsxEmit3.tsx
 ---
 >>>        var Bar = (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^
+3 >            ^^^
+4 >               ^^^^^^^^^^^^^^->
 1->
   >		
+2 >        export class 
+3 >            Bar
 1->Emitted(11, 9) Source(10, 3) + SourceIndex(0) name (M.S)
+2 >Emitted(11, 13) Source(10, 16) + SourceIndex(0) name (M.S)
+3 >Emitted(11, 16) Source(10, 19) + SourceIndex(0) name (M.S)
 ---
 >>>            function Bar() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^^^^^^^^^
+3 >                     ^^^
 1->
+2 >            export class 
+3 >                     Bar
 1->Emitted(12, 13) Source(10, 3) + SourceIndex(0) name (M.S.Bar)
+2 >Emitted(12, 22) Source(10, 16) + SourceIndex(0) name (M.S.Bar)
+3 >Emitted(12, 25) Source(10, 19) + SourceIndex(0) name (M.S.Bar)
 ---
 >>>            }
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^^^^^^^^->
-1->export class Bar { 
+1 > { 
 2 >            }
-1->Emitted(13, 13) Source(10, 22) + SourceIndex(0) name (M.S.Bar.constructor)
+1 >Emitted(13, 13) Source(10, 22) + SourceIndex(0) name (M.S.Bar.constructor)
 2 >Emitted(13, 14) Source(10, 23) + SourceIndex(0) name (M.S.Bar.constructor)
 ---
 >>>            return Bar;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^
 1->
-2 >            }
+2 >            
+3 >                   Bar { }
 1->Emitted(14, 13) Source(10, 22) + SourceIndex(0) name (M.S.Bar)
-2 >Emitted(14, 23) Source(10, 23) + SourceIndex(0) name (M.S.Bar)
+2 >Emitted(14, 20) Source(10, 16) + SourceIndex(0) name (M.S.Bar)
+3 >Emitted(14, 23) Source(10, 23) + SourceIndex(0) name (M.S.Bar)
 ---
 >>>        })();
 1 >^^^^^^^^
@@ -201,17 +232,20 @@ sourceFile:tsxEmit3.tsx
 >>>        S.Bar = Bar;
 1->^^^^^^^^
 2 >        ^^^^^
-3 >             ^^^^^^
-4 >                   ^
-5 >                    ^^^^^^^^^^^->
+3 >             ^^^
+4 >                ^^^
+5 >                   ^
+6 >                    ^^^^^^^^^^^->
 1->
 2 >        Bar
-3 >              { }
-4 >                   
+3 >             
+4 >                Bar { }
+5 >                   
 1->Emitted(16, 9) Source(10, 16) + SourceIndex(0) name (M.S)
 2 >Emitted(16, 14) Source(10, 19) + SourceIndex(0) name (M.S)
-3 >Emitted(16, 20) Source(10, 23) + SourceIndex(0) name (M.S)
-4 >Emitted(16, 21) Source(10, 23) + SourceIndex(0) name (M.S)
+3 >Emitted(16, 17) Source(10, 16) + SourceIndex(0) name (M.S)
+4 >Emitted(16, 20) Source(10, 23) + SourceIndex(0) name (M.S)
+5 >Emitted(16, 21) Source(10, 23) + SourceIndex(0) name (M.S)
 ---
 >>>    })(S = M.S || (M.S = {}));
 1->^^^^

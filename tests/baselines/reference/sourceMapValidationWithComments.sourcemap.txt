@@ -10,21 +10,32 @@ sourceFile:sourceMapValidationWithComments.ts
 -------------------------------------------------------------------
 >>>var DebugClass = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^
+4 >              ^^^^^^^^^^^^^^->
 1 >
+2 >class 
+3 >    DebugClass
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 15) Source(1, 17) + SourceIndex(0)
 ---
 >>>    function DebugClass() {
 1->^^^^
-2 >    ^^->
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^^^^
 1->
+2 >    class 
+3 >             DebugClass
 1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (DebugClass)
+2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (DebugClass)
+3 >Emitted(2, 24) Source(1, 17) + SourceIndex(0) name (DebugClass)
 ---
 >>>    }
-1->^^^^
+1 >^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->class DebugClass {
+1 > {
   >
   >    public static debugFunc() {
   >
@@ -46,20 +57,28 @@ sourceFile:sourceMapValidationWithComments.ts
   >    }
   >
 2 >    }
-1->Emitted(3, 5) Source(21, 1) + SourceIndex(0) name (DebugClass.constructor)
+1 >Emitted(3, 5) Source(21, 1) + SourceIndex(0) name (DebugClass.constructor)
 2 >Emitted(3, 6) Source(21, 2) + SourceIndex(0) name (DebugClass.constructor)
 ---
 >>>    DebugClass.debugFunc = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^^
-4 >                           ^^^^^^^^^->
+2 >    
+3 >    ^^^^^^^^^^
+4 >              ^^^^^^^^^^
+5 >                        ^^^
+6 >                           ^^^^^^^^^->
 1->
-2 >    debugFunc
-3 >                        
+2 >    
+3 >    DebugClass
+4 >               {
+  >              
+  >                  public static debugFunc
+5 >                        
 1->Emitted(4, 5) Source(3, 19) + SourceIndex(0) name (DebugClass)
-2 >Emitted(4, 25) Source(3, 28) + SourceIndex(0) name (DebugClass)
-3 >Emitted(4, 28) Source(3, 5) + SourceIndex(0) name (DebugClass)
+2 >Emitted(4, 5) Source(1, 7) + SourceIndex(0) name (DebugClass)
+3 >Emitted(4, 15) Source(1, 17) + SourceIndex(0) name (DebugClass)
+4 >Emitted(4, 25) Source(3, 28) + SourceIndex(0) name (DebugClass)
+5 >Emitted(4, 28) Source(3, 5) + SourceIndex(0) name (DebugClass)
 ---
 >>>        // Start Debugger Test Code
 1->^^^^^^^^
@@ -277,12 +296,35 @@ sourceFile:sourceMapValidationWithComments.ts
 ---
 >>>    return DebugClass;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^
 1->
   >
-2 >    }
+2 >    
+3 >           DebugClass {
+  >           
+  >               public static debugFunc() {
+  >           
+  >                   // Start Debugger Test Code
+  >                   var i = 0;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   i++;
+  >                   // End Debugger Test Code
+  >           
+  >           
+  >                   return true;
+  >               }
+  >           }
 1->Emitted(19, 5) Source(21, 1) + SourceIndex(0) name (DebugClass)
-2 >Emitted(19, 22) Source(21, 2) + SourceIndex(0) name (DebugClass)
+2 >Emitted(19, 12) Source(1, 7) + SourceIndex(0) name (DebugClass)
+3 >Emitted(19, 22) Source(21, 2) + SourceIndex(0) name (DebugClass)
 ---
 >>>})();
 1 >

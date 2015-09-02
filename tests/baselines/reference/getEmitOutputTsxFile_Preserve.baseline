@@ -1,6 +1,6 @@
 EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile1.js.map
-{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["inputFile1.ts"],"names":["Bar","Bar.constructor"],"mappings":"AAAA,kBAAkB;AACjB,IAAI,CAAC,GAAW,CAAC,CAAC;AAClB;IAAAA;IAGAC,CAACA;IAADD,UAACA;AAADA,CAACA,AAHD,IAGC"}FileName : tests/cases/fourslash/inputFile1.js
+{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["inputFile1.ts"],"names":["Bar","Bar.constructor"],"mappings":"AAAA,kBAAkB;AACjB,IAAI,CAAC,GAAW,CAAC,CAAC;AAClB,IAAM,GAAG;IAATA,SAAMA,GAAGA;IAGTC,CAACA;IAADD,OAHMA,GAGLA;AAADA,CAACA,AAHD,IAGC"}FileName : tests/cases/fourslash/inputFile1.js
 // regular ts file
 var t = 5;
 var Bar = (function () {

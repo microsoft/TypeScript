@@ -1,1 +1,1 @@
-{"version":3,"file":"fileC.js","sourceRoot":"SourceRootPath/","sources":["FolderB/FolderC/fileC.ts"],"names":["C","C.constructor"],"mappings":"AAAA;IAAAA;IACAC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC"}
+{"version":3,"file":"fileC.js","sourceRoot":"SourceRootPath/","sources":["FolderB/FolderC/fileC.ts"],"names":["C","C.constructor"],"mappings":"AAAA,IAAM,CAAC;IAAPA,SAAMA,CAACA;IACPC,CAACA;IAADD,OADMA,CACLA;AAADA,CAACA,AADD,IACC"}

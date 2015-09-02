@@ -10,21 +10,34 @@ sourceFile:sourceMapValidationClass.ts
 -------------------------------------------------------------------
 >>>var Greeter = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
+2 >class 
+3 >    Greeter
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 12) Source(1, 14) + SourceIndex(0)
 ---
 >>>    function Greeter(greeting) {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^^^^^^
-1->class Greeter {
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^
+4 >                    ^
+5 >                     ^^^^^^^^
+1-> {
   >    
-2 >    constructor(public 
-3 >                     greeting: string
+2 >    
+3 >             Greeter
+4 >                     {
+  >                        constructor(public 
+5 >                     greeting: string
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(2, 22) Source(2, 24) + SourceIndex(0) name (Greeter)
-3 >Emitted(2, 30) Source(2, 40) + SourceIndex(0) name (Greeter)
+2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(2, 21) Source(1, 14) + SourceIndex(0) name (Greeter)
+4 >Emitted(2, 22) Source(2, 24) + SourceIndex(0) name (Greeter)
+5 >Emitted(2, 30) Source(2, 40) + SourceIndex(0) name (Greeter)
 ---
 >>>        var b = [];
 1 >^^^^^^^^
@@ -115,16 +128,25 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>    Greeter.prototype.greet = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^^^^^^^->
+2 >    
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^^^
+5 >                           ^^^
+6 >                              ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
-2 >    greet
-3 >                           
+2 >    
+3 >    Greeter
+4 >            {
+  >               constructor(public greeting: string, ...b: string[]) {
+  >               }
+  >               greet
+5 >                           
 1->Emitted(10, 5) Source(4, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(10, 28) Source(4, 10) + SourceIndex(0) name (Greeter)
-3 >Emitted(10, 31) Source(4, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(10, 5) Source(1, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(10, 12) Source(1, 14) + SourceIndex(0) name (Greeter)
+4 >Emitted(10, 28) Source(4, 10) + SourceIndex(0) name (Greeter)
+5 >Emitted(10, 31) Source(4, 5) + SourceIndex(0) name (Greeter)
 ---
 >>>        return "<h1>" + this.greeting + "</h1>";
 1->^^^^^^^^
@@ -174,18 +196,32 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>    Greeter.prototype.fn = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^^
-4 >                           ^^^->
+2 >    
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^
+5 >                        ^^^
+6 >                           ^^^->
 1->
   >    private x: string;
   >    private x1: number = 10;
   >    private 
-2 >    fn
-3 >                        
+2 >    
+3 >    Greeter
+4 >            {
+  >               constructor(public greeting: string, ...b: string[]) {
+  >               }
+  >               greet() {
+  >                   return "<h1>" + this.greeting + "</h1>";
+  >               }
+  >               private x: string;
+  >               private x1: number = 10;
+  >               private fn
+5 >                        
 1->Emitted(13, 5) Source(9, 13) + SourceIndex(0) name (Greeter)
-2 >Emitted(13, 25) Source(9, 15) + SourceIndex(0) name (Greeter)
-3 >Emitted(13, 28) Source(9, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(13, 5) Source(1, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(13, 12) Source(1, 14) + SourceIndex(0) name (Greeter)
+4 >Emitted(13, 25) Source(9, 15) + SourceIndex(0) name (Greeter)
+5 >Emitted(13, 28) Source(9, 5) + SourceIndex(0) name (Greeter)
 ---
 >>>        return this.greeting;
 1->^^^^^^^^
@@ -224,14 +260,31 @@ sourceFile:sourceMapValidationClass.ts
 >>>    Object.defineProperty(Greeter.prototype, "greetings", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          
+4 >                          ^^^^^^^
+5 >                                 ^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >    
 2 >    get 
-3 >                          greetings
+3 >                          
+4 >                          Greeter
+5 >                                  {
+  >                                     constructor(public greeting: string, ...b: string[]) {
+  >                                     }
+  >                                     greet() {
+  >                                         return "<h1>" + this.greeting + "</h1>";
+  >                                     }
+  >                                     private x: string;
+  >                                     private x1: number = 10;
+  >                                     private fn() {
+  >                                         return this.greeting;
+  >                                     }
+  >                                     get greetings
 1->Emitted(16, 5) Source(12, 5) + SourceIndex(0) name (Greeter)
 2 >Emitted(16, 27) Source(12, 9) + SourceIndex(0) name (Greeter)
-3 >Emitted(16, 57) Source(12, 18) + SourceIndex(0) name (Greeter)
+3 >Emitted(16, 27) Source(1, 7) + SourceIndex(0) name (Greeter)
+4 >Emitted(16, 34) Source(1, 14) + SourceIndex(0) name (Greeter)
+5 >Emitted(16, 57) Source(12, 18) + SourceIndex(0) name (Greeter)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
@@ -330,15 +383,35 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>    return Greeter;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^
 1->
   >    set greetings(greetings: string) {
   >        this.greeting = greetings;
   >    }
   >
-2 >    }
+2 >    
+3 >           Greeter {
+  >               constructor(public greeting: string, ...b: string[]) {
+  >               }
+  >               greet() {
+  >                   return "<h1>" + this.greeting + "</h1>";
+  >               }
+  >               private x: string;
+  >               private x1: number = 10;
+  >               private fn() {
+  >                   return this.greeting;
+  >               }
+  >               get greetings() {
+  >                   return this.greeting;
+  >               }
+  >               set greetings(greetings: string) {
+  >                   this.greeting = greetings;
+  >               }
+  >           }
 1->Emitted(26, 5) Source(18, 1) + SourceIndex(0) name (Greeter)
-2 >Emitted(26, 19) Source(18, 2) + SourceIndex(0) name (Greeter)
+2 >Emitted(26, 12) Source(1, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(26, 19) Source(18, 2) + SourceIndex(0) name (Greeter)
 ---
 >>>})();
 1 >

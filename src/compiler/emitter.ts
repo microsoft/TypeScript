@@ -3646,7 +3646,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitDeclarationName(node: Declaration) {
                 if (node.name) {
-                    emitNodeWithCommentsAndWithoutSourcemap(node.name);
+                    emit(node.name);
                 }
                 else {
                     write(getGeneratedNameForNode(node));
@@ -5941,7 +5941,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     write("'");
                     if (node.kind === SyntaxKind.Identifier) {
-                        emitNodeWithCommentsAndWithoutSourcemap(node);
+                        emit(node);
                     }
                     else {
                         emitDeclarationName(<Declaration>node);

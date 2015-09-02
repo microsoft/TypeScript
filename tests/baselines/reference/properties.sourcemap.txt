@@ -10,22 +10,33 @@ sourceFile:properties.ts
 -------------------------------------------------------------------
 >>>var MyClass = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^->
 1 >
   >
+2 >class 
+3 >    MyClass
 1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(2, 7) + SourceIndex(0)
+3 >Emitted(1, 12) Source(2, 14) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^
-2 >    ^^->
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^
 1->
+2 >    class 
+3 >             MyClass
 1->Emitted(2, 5) Source(2, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(2, 14) Source(2, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(2, 21) Source(2, 14) + SourceIndex(0) name (MyClass)
 ---
 >>>    }
-1->^^^^
+1 >^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->class MyClass
+1 >
   >{
   >    public get Count(): number
   >    {
@@ -38,19 +49,27 @@ sourceFile:properties.ts
   >    }
   >
 2 >    }
-1->Emitted(3, 5) Source(13, 1) + SourceIndex(0) name (MyClass.constructor)
+1 >Emitted(3, 5) Source(13, 1) + SourceIndex(0) name (MyClass.constructor)
 2 >Emitted(3, 6) Source(13, 2) + SourceIndex(0) name (MyClass.constructor)
 ---
 >>>    Object.defineProperty(MyClass.prototype, "Count", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          
+4 >                          ^^^^^^^
+5 >                                 ^^^^^^^^^^^^^^^^^^^
 1->
 2 >    public get 
-3 >                          Count
+3 >                          
+4 >                          MyClass
+5 >                                 
+  >                                 {
+  >                                     public get Count
 1->Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (MyClass)
 2 >Emitted(4, 27) Source(4, 16) + SourceIndex(0) name (MyClass)
-3 >Emitted(4, 53) Source(4, 21) + SourceIndex(0) name (MyClass)
+3 >Emitted(4, 27) Source(2, 7) + SourceIndex(0) name (MyClass)
+4 >Emitted(4, 34) Source(2, 14) + SourceIndex(0) name (MyClass)
+5 >Emitted(4, 53) Source(4, 21) + SourceIndex(0) name (MyClass)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
@@ -130,7 +149,8 @@ sourceFile:properties.ts
 ---
 >>>    return MyClass;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^
 1->
   >
   >    public set Count(value: number)
@@ -138,9 +158,22 @@ sourceFile:properties.ts
   >        //
   >    }
   >
-2 >    }
+2 >    
+3 >           MyClass
+  >           {
+  >               public get Count(): number
+  >               {
+  >                   return 42;
+  >               }
+  >           
+  >               public set Count(value: number)
+  >               {
+  >                   //
+  >               }
+  >           }
 1->Emitted(14, 5) Source(13, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(14, 19) Source(13, 2) + SourceIndex(0) name (MyClass)
+2 >Emitted(14, 12) Source(2, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(14, 19) Source(13, 2) + SourceIndex(0) name (MyClass)
 ---
 >>>})();
 1 >

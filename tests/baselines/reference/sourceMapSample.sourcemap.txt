@@ -150,24 +150,37 @@ sourceFile:sourceMapSample.ts
 ---
 >>>        var Greeter = (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^
+3 >            ^^^^^^^
+4 >                   ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
+2 >        class 
+3 >            Greeter
 1->Emitted(6, 9) Source(4, 5) + SourceIndex(0) name (Foo.Bar)
+2 >Emitted(6, 13) Source(4, 11) + SourceIndex(0) name (Foo.Bar)
+3 >Emitted(6, 20) Source(4, 18) + SourceIndex(0) name (Foo.Bar)
 ---
 >>>            function Greeter(greeting) {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^
-3 >                             ^^^^^^^^
-4 >                                     ^^^^^->
-1->class Greeter {
+2 >            ^^^^^^^^^
+3 >                     ^^^^^^^
+4 >                            ^
+5 >                             ^^^^^^^^
+6 >                                     ^^^^^->
+1-> {
   >        
-2 >            constructor(public 
-3 >                             greeting: string
+2 >            
+3 >                     Greeter
+4 >                             {
+  >                                    constructor(public 
+5 >                             greeting: string
 1->Emitted(7, 13) Source(5, 9) + SourceIndex(0) name (Foo.Bar.Greeter)
-2 >Emitted(7, 30) Source(5, 28) + SourceIndex(0) name (Foo.Bar.Greeter)
-3 >Emitted(7, 38) Source(5, 44) + SourceIndex(0) name (Foo.Bar.Greeter)
+2 >Emitted(7, 22) Source(4, 11) + SourceIndex(0) name (Foo.Bar.Greeter)
+3 >Emitted(7, 29) Source(4, 18) + SourceIndex(0) name (Foo.Bar.Greeter)
+4 >Emitted(7, 30) Source(5, 28) + SourceIndex(0) name (Foo.Bar.Greeter)
+5 >Emitted(7, 38) Source(5, 44) + SourceIndex(0) name (Foo.Bar.Greeter)
 ---
 >>>                this.greeting = greeting;
 1->^^^^^^^^^^^^^^^^
@@ -198,17 +211,27 @@ sourceFile:sourceMapSample.ts
 ---
 >>>            Greeter.prototype.greet = function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                   ^^^
-4 >                                      ^^^^^^^^^^^^^^^^^^^->
+2 >            
+3 >            ^^^^^^^
+4 >                   ^^^^^^^^^^^^^^^^
+5 >                                   ^^^
+6 >                                      ^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >        
-2 >            greet
-3 >                                   
+2 >            
+3 >            Greeter
+4 >                    {
+  >                           constructor(public greeting: string) {
+  >                           }
+  >                   
+  >                           greet
+5 >                                   
 1->Emitted(10, 13) Source(8, 9) + SourceIndex(0) name (Foo.Bar.Greeter)
-2 >Emitted(10, 36) Source(8, 14) + SourceIndex(0) name (Foo.Bar.Greeter)
-3 >Emitted(10, 39) Source(8, 9) + SourceIndex(0) name (Foo.Bar.Greeter)
+2 >Emitted(10, 13) Source(4, 11) + SourceIndex(0) name (Foo.Bar.Greeter)
+3 >Emitted(10, 20) Source(4, 18) + SourceIndex(0) name (Foo.Bar.Greeter)
+4 >Emitted(10, 36) Source(8, 14) + SourceIndex(0) name (Foo.Bar.Greeter)
+5 >Emitted(10, 39) Source(8, 9) + SourceIndex(0) name (Foo.Bar.Greeter)
 ---
 >>>                return "<h1>" + this.greeting + "</h1>";
 1->^^^^^^^^^^^^^^^^
@@ -258,12 +281,22 @@ sourceFile:sourceMapSample.ts
 ---
 >>>            return Greeter;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^^^^
 1->
   >    
-2 >            }
+2 >            
+3 >                   Greeter {
+  >                           constructor(public greeting: string) {
+  >                           }
+  >                   
+  >                           greet() {
+  >                               return "<h1>" + this.greeting + "</h1>";
+  >                           }
+  >                       }
 1->Emitted(13, 13) Source(11, 5) + SourceIndex(0) name (Foo.Bar.Greeter)
-2 >Emitted(13, 27) Source(11, 6) + SourceIndex(0) name (Foo.Bar.Greeter)
+2 >Emitted(13, 20) Source(4, 11) + SourceIndex(0) name (Foo.Bar.Greeter)
+3 >Emitted(13, 27) Source(11, 6) + SourceIndex(0) name (Foo.Bar.Greeter)
 ---
 >>>        })();
 1 >^^^^^^^^
@@ -289,18 +322,24 @@ sourceFile:sourceMapSample.ts
 ---
 >>>        function foo(greeting) {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^
-3 >                     ^^^^^^^^
-4 >                             ^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^
+3 >                 ^^^
+4 >                    ^
+5 >                     ^^^^^^^^
+6 >                             ^^^^^^^^^^^^^->
 1->
   >
   >
   >    
-2 >        function foo(
-3 >                     greeting: string
+2 >        function 
+3 >                 foo
+4 >                    (
+5 >                     greeting: string
 1->Emitted(15, 9) Source(14, 5) + SourceIndex(0) name (Foo.Bar)
-2 >Emitted(15, 22) Source(14, 18) + SourceIndex(0) name (Foo.Bar)
-3 >Emitted(15, 30) Source(14, 34) + SourceIndex(0) name (Foo.Bar)
+2 >Emitted(15, 18) Source(14, 14) + SourceIndex(0) name (Foo.Bar)
+3 >Emitted(15, 21) Source(14, 17) + SourceIndex(0) name (Foo.Bar)
+4 >Emitted(15, 22) Source(14, 18) + SourceIndex(0) name (Foo.Bar)
+5 >Emitted(15, 30) Source(14, 34) + SourceIndex(0) name (Foo.Bar)
 ---
 >>>            return new Greeter(greeting);
 1->^^^^^^^^^^^^
@@ -408,17 +447,23 @@ sourceFile:sourceMapSample.ts
 ---
 >>>        function foo2(greeting) {
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^^
-3 >                      ^^^^^^^^
-4 >                              ^^^^^^->
+2 >        ^^^^^^^^^
+3 >                 ^^^^
+4 >                     ^
+5 >                      ^^^^^^^^
+6 >                              ^^^^^^->
 1 >
   >
   >    
-2 >        function foo2(
-3 >                      greeting: string
+2 >        function 
+3 >                 foo2
+4 >                     (
+5 >                      greeting: string
 1 >Emitted(20, 9) Source(21, 5) + SourceIndex(0) name (Foo.Bar)
-2 >Emitted(20, 23) Source(21, 19) + SourceIndex(0) name (Foo.Bar)
-3 >Emitted(20, 31) Source(21, 35) + SourceIndex(0) name (Foo.Bar)
+2 >Emitted(20, 18) Source(21, 14) + SourceIndex(0) name (Foo.Bar)
+3 >Emitted(20, 22) Source(21, 18) + SourceIndex(0) name (Foo.Bar)
+4 >Emitted(20, 23) Source(21, 19) + SourceIndex(0) name (Foo.Bar)
+5 >Emitted(20, 31) Source(21, 35) + SourceIndex(0) name (Foo.Bar)
 ---
 >>>            var restGreetings = [];
 1->^^^^^^^^^^^^

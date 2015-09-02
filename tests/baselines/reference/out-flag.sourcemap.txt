@@ -30,22 +30,33 @@ sourceFile:out-flag.ts
 ---
 >>>var MyClass = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^->
 1->
   >
+2 >class 
+3 >    MyClass
 1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(4, 7) + SourceIndex(0)
+3 >Emitted(3, 12) Source(4, 14) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^
-2 >    ^^->
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^
 1->
+2 >    class 
+3 >             MyClass
 1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(4, 14) Source(4, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(4, 21) Source(4, 14) + SourceIndex(0) name (MyClass)
 ---
 >>>    }
-1->^^^^
+1 >^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^->
-1->class MyClass
+1 >
   >{
   >    // my function comments
   >    public Count(): number
@@ -59,7 +70,7 @@ sourceFile:out-flag.ts
   >    }
   >
 2 >    }
-1->Emitted(5, 5) Source(16, 1) + SourceIndex(0) name (MyClass.constructor)
+1 >Emitted(5, 5) Source(16, 1) + SourceIndex(0) name (MyClass.constructor)
 2 >Emitted(5, 6) Source(16, 2) + SourceIndex(0) name (MyClass.constructor)
 ---
 >>>    // my function comments
@@ -73,15 +84,24 @@ sourceFile:out-flag.ts
 ---
 >>>    MyClass.prototype.Count = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                           ^^^
+2 >    
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^^^
+5 >                           ^^^
 1->
   >    public 
-2 >    Count
-3 >                           
+2 >    
+3 >    MyClass
+4 >           
+  >           {
+  >               // my function comments
+  >               public Count
+5 >                           
 1->Emitted(7, 5) Source(7, 12) + SourceIndex(0) name (MyClass)
-2 >Emitted(7, 28) Source(7, 17) + SourceIndex(0) name (MyClass)
-3 >Emitted(7, 31) Source(7, 5) + SourceIndex(0) name (MyClass)
+2 >Emitted(7, 5) Source(4, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(7, 12) Source(4, 14) + SourceIndex(0) name (MyClass)
+4 >Emitted(7, 28) Source(7, 17) + SourceIndex(0) name (MyClass)
+5 >Emitted(7, 31) Source(7, 5) + SourceIndex(0) name (MyClass)
 ---
 >>>        return 42;
 1 >^^^^^^^^
@@ -114,22 +134,36 @@ sourceFile:out-flag.ts
 ---
 >>>    MyClass.prototype.SetCount = function (value) {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^^^
-4 >                                 ^^^^^^^^^^
-5 >                                           ^^^^^
+2 >    
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^^^^^^
+5 >                              ^^^
+6 >                                 ^^^^^^^^^^
+7 >                                           ^^^^^
 1->
   >
   >    public 
-2 >    SetCount
-3 >                              
-4 >                                 public SetCount(
-5 >                                           value: number
+2 >    
+3 >    MyClass
+4 >           
+  >           {
+  >               // my function comments
+  >               public Count(): number
+  >               {
+  >                   return 42;
+  >               }
+  >           
+  >               public SetCount
+5 >                              
+6 >                                 public SetCount(
+7 >                                           value: number
 1->Emitted(10, 5) Source(12, 12) + SourceIndex(0) name (MyClass)
-2 >Emitted(10, 31) Source(12, 20) + SourceIndex(0) name (MyClass)
-3 >Emitted(10, 34) Source(12, 5) + SourceIndex(0) name (MyClass)
-4 >Emitted(10, 44) Source(12, 21) + SourceIndex(0) name (MyClass)
-5 >Emitted(10, 49) Source(12, 34) + SourceIndex(0) name (MyClass)
+2 >Emitted(10, 5) Source(4, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(10, 12) Source(4, 14) + SourceIndex(0) name (MyClass)
+4 >Emitted(10, 31) Source(12, 20) + SourceIndex(0) name (MyClass)
+5 >Emitted(10, 34) Source(12, 5) + SourceIndex(0) name (MyClass)
+6 >Emitted(10, 44) Source(12, 21) + SourceIndex(0) name (MyClass)
+7 >Emitted(10, 49) Source(12, 34) + SourceIndex(0) name (MyClass)
 ---
 >>>        //
 1 >^^^^^^^^
@@ -153,12 +187,27 @@ sourceFile:out-flag.ts
 ---
 >>>    return MyClass;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^
 1->
   >
-2 >    }
+2 >    
+3 >           MyClass
+  >           {
+  >               // my function comments
+  >               public Count(): number
+  >               {
+  >                   return 42;
+  >               }
+  >           
+  >               public SetCount(value: number)
+  >               {
+  >                   //
+  >               }
+  >           }
 1->Emitted(13, 5) Source(16, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(13, 19) Source(16, 2) + SourceIndex(0) name (MyClass)
+2 >Emitted(13, 12) Source(4, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(13, 19) Source(16, 2) + SourceIndex(0) name (MyClass)
 ---
 >>>})();
 1 >

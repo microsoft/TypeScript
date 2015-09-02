@@ -106,22 +106,33 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>        var Test = (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^
+3 >            ^^^^
+4 >                ^^^^^^^^^^^^^^->
 1->
   >    
+2 >        export class 
+3 >            Test
 1->Emitted(5, 9) Source(2, 5) + SourceIndex(0) name (sas.tools)
+2 >Emitted(5, 13) Source(2, 18) + SourceIndex(0) name (sas.tools)
+3 >Emitted(5, 17) Source(2, 22) + SourceIndex(0) name (sas.tools)
 ---
 >>>            function Test() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^^^^^^^^^
+3 >                     ^^^^
 1->
+2 >            export class 
+3 >                     Test
 1->Emitted(6, 13) Source(2, 5) + SourceIndex(0) name (sas.tools.Test)
+2 >Emitted(6, 22) Source(2, 18) + SourceIndex(0) name (sas.tools.Test)
+3 >Emitted(6, 26) Source(2, 22) + SourceIndex(0) name (sas.tools.Test)
 ---
 >>>            }
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->export class Test {
+1 > {
   >        public doX(): void {
   >            let f: number = 2;
   >            switch (f) {
@@ -138,19 +149,26 @@ sourceFile:sourceMap-Comments.ts
   >        }
   >    
 2 >            }
-1->Emitted(7, 13) Source(17, 5) + SourceIndex(0) name (sas.tools.Test.constructor)
+1 >Emitted(7, 13) Source(17, 5) + SourceIndex(0) name (sas.tools.Test.constructor)
 2 >Emitted(7, 14) Source(17, 6) + SourceIndex(0) name (sas.tools.Test.constructor)
 ---
 >>>            Test.prototype.doX = function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^
-3 >                              ^^^
+2 >            
+3 >            ^^^^
+4 >                ^^^^^^^^^^^^^^
+5 >                              ^^^
 1->
-2 >            doX
-3 >                              
+2 >            
+3 >            Test
+4 >                 {
+  >                        public doX
+5 >                              
 1->Emitted(8, 13) Source(3, 16) + SourceIndex(0) name (sas.tools.Test)
-2 >Emitted(8, 31) Source(3, 19) + SourceIndex(0) name (sas.tools.Test)
-3 >Emitted(8, 34) Source(3, 9) + SourceIndex(0) name (sas.tools.Test)
+2 >Emitted(8, 13) Source(2, 18) + SourceIndex(0) name (sas.tools.Test)
+3 >Emitted(8, 17) Source(2, 22) + SourceIndex(0) name (sas.tools.Test)
+4 >Emitted(8, 31) Source(3, 19) + SourceIndex(0) name (sas.tools.Test)
+5 >Emitted(8, 34) Source(3, 9) + SourceIndex(0) name (sas.tools.Test)
 ---
 >>>                var f = 2;
 1 >^^^^^^^^^^^^^^^^
@@ -325,12 +343,30 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>            return Test;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^
 1->
   >    
-2 >            }
+2 >            
+3 >                   Test {
+  >                           public doX(): void {
+  >                               let f: number = 2;
+  >                               switch (f) {
+  >                                   case 1:
+  >                                       break;
+  >                                   case 2:
+  >                                       //line comment 1
+  >                                       //line comment 2
+  >                                       break;
+  >                                   case 3:
+  >                                       //a comment
+  >                                       break;
+  >                               }
+  >                           }
+  >                       }
 1->Emitted(22, 13) Source(17, 5) + SourceIndex(0) name (sas.tools.Test)
-2 >Emitted(22, 24) Source(17, 6) + SourceIndex(0) name (sas.tools.Test)
+2 >Emitted(22, 20) Source(2, 18) + SourceIndex(0) name (sas.tools.Test)
+3 >Emitted(22, 24) Source(17, 6) + SourceIndex(0) name (sas.tools.Test)
 ---
 >>>        })();
 1 >^^^^^^^^
@@ -365,32 +401,35 @@ sourceFile:sourceMap-Comments.ts
 >>>        tools.Test = Test;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^
-3 >                  ^^^^^^^
-4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^^^^^^^->
+3 >                  ^^^
+4 >                     ^^^^
+5 >                         ^
+6 >                          ^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        Test
-3 >                   {
-  >                          public doX(): void {
-  >                              let f: number = 2;
-  >                              switch (f) {
-  >                                  case 1:
-  >                                      break;
-  >                                  case 2:
-  >                                      //line comment 1
-  >                                      //line comment 2
-  >                                      break;
-  >                                  case 3:
-  >                                      //a comment
-  >                                      break;
-  >                              }
-  >                          }
-  >                      }
-4 >                         
+3 >                  
+4 >                     Test {
+  >                             public doX(): void {
+  >                                 let f: number = 2;
+  >                                 switch (f) {
+  >                                     case 1:
+  >                                         break;
+  >                                     case 2:
+  >                                         //line comment 1
+  >                                         //line comment 2
+  >                                         break;
+  >                                     case 3:
+  >                                         //a comment
+  >                                         break;
+  >                                 }
+  >                             }
+  >                         }
+5 >                         
 1->Emitted(24, 9) Source(2, 18) + SourceIndex(0) name (sas.tools)
 2 >Emitted(24, 19) Source(2, 22) + SourceIndex(0) name (sas.tools)
-3 >Emitted(24, 26) Source(17, 6) + SourceIndex(0) name (sas.tools)
-4 >Emitted(24, 27) Source(17, 6) + SourceIndex(0) name (sas.tools)
+3 >Emitted(24, 22) Source(2, 18) + SourceIndex(0) name (sas.tools)
+4 >Emitted(24, 26) Source(17, 6) + SourceIndex(0) name (sas.tools)
+5 >Emitted(24, 27) Source(17, 6) + SourceIndex(0) name (sas.tools)
 ---
 >>>    })(tools = sas.tools || (sas.tools = {}));
 1->^^^^

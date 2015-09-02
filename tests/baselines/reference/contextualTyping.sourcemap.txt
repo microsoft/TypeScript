@@ -30,16 +30,28 @@ sourceFile:contextualTyping.ts
 ---
 >>>var C1T5 = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^^^^^^^^^^^^->
 1 >
   >
+2 >class 
+3 >    C1T5
 1 >Emitted(2, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(14, 7) + SourceIndex(0)
+3 >Emitted(2, 9) Source(14, 11) + SourceIndex(0)
 ---
 >>>    function C1T5() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^
+3 >             ^^^^
+4 >                 ^^^^^^^^^^^^^^^^^->
 1->
+2 >    class 
+3 >             C1T5
 1->Emitted(3, 5) Source(14, 1) + SourceIndex(0) name (C1T5)
+2 >Emitted(3, 14) Source(14, 7) + SourceIndex(0) name (C1T5)
+3 >Emitted(3, 18) Source(14, 11) + SourceIndex(0) name (C1T5)
 ---
 >>>        this.foo = function (i) {
 1->^^^^^^^^
@@ -47,7 +59,7 @@ sourceFile:contextualTyping.ts
 3 >                ^^^
 4 >                   ^^^^^^^^^^
 5 >                             ^
-1->class C1T5 {
+1-> {
   >    
 2 >        foo
 3 >                : (i: number, s: string) => number = 
@@ -101,11 +113,18 @@ sourceFile:contextualTyping.ts
 ---
 >>>    return C1T5;
 1->^^^^
-2 >    ^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
 1->
-2 >    }
+2 >    
+3 >           C1T5 {
+  >               foo: (i: number, s: string) => number = function(i) {
+  >                   return i;
+  >               }
+  >           }
 1->Emitted(8, 5) Source(18, 1) + SourceIndex(0) name (C1T5)
-2 >Emitted(8, 16) Source(18, 2) + SourceIndex(0) name (C1T5)
+2 >Emitted(8, 12) Source(14, 7) + SourceIndex(0) name (C1T5)
+3 >Emitted(8, 16) Source(18, 2) + SourceIndex(0) name (C1T5)
 ---
 >>>})();
 1 >
@@ -951,18 +970,30 @@ sourceFile:contextualTyping.ts
 ---
 >>>var C4T5 = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^^^^^^^^^^^^->
 1 >
   >
+2 >class 
+3 >    C4T5
 1 >Emitted(41, 1) Source(56, 1) + SourceIndex(0)
+2 >Emitted(41, 5) Source(56, 7) + SourceIndex(0)
+3 >Emitted(41, 9) Source(56, 11) + SourceIndex(0)
 ---
 >>>    function C4T5() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->class C4T5 {
+2 >    ^^^^^^^^^
+3 >             ^^^^
+4 >                 ^^^^^^^^^^^^^^^^^^^^->
+1-> {
   >    foo: (i: number, s: string) => string;
   >    
+2 >    
+3 >             C4T5
 1->Emitted(42, 5) Source(58, 5) + SourceIndex(0) name (C4T5)
+2 >Emitted(42, 14) Source(56, 7) + SourceIndex(0) name (C4T5)
+3 >Emitted(42, 18) Source(56, 11) + SourceIndex(0) name (C4T5)
 ---
 >>>        this.foo = function (i, s) {
 1->^^^^^^^^
@@ -974,7 +1005,9 @@ sourceFile:contextualTyping.ts
 7 >                             ^
 8 >                              ^^
 9 >                                ^
-1->constructor() {
+1-> {
+  >    foo: (i: number, s: string) => string;
+  >    constructor() {
   >        
 2 >        this
 3 >            .
@@ -1036,12 +1069,22 @@ sourceFile:contextualTyping.ts
 ---
 >>>    return C4T5;
 1->^^^^
-2 >    ^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
 1->
   >
-2 >    }
+2 >    
+3 >           C4T5 {
+  >               foo: (i: number, s: string) => string;
+  >               constructor() {
+  >                   this.foo = function(i, s) {
+  >                       return s;
+  >                   }
+  >               }
+  >           }
 1->Emitted(47, 5) Source(63, 1) + SourceIndex(0) name (C4T5)
-2 >Emitted(47, 16) Source(63, 2) + SourceIndex(0) name (C4T5)
+2 >Emitted(47, 12) Source(56, 7) + SourceIndex(0) name (C4T5)
+3 >Emitted(47, 16) Source(63, 2) + SourceIndex(0) name (C4T5)
 ---
 >>>})();
 1 >
@@ -2140,21 +2183,27 @@ sourceFile:contextualTyping.ts
 ---
 >>>function c9t5(f) { }
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^
+6 >               ^^^^
+7 >                   ^
 1 >
   >
-2 >function c9t5(
-3 >              f: (n: number) => IFoo
-4 >               ) {
-5 >                   }
+2 >function 
+3 >         c9t5
+4 >             (
+5 >              f: (n: number) => IFoo
+6 >               ) {
+7 >                   }
 1 >Emitted(86, 1) Source(146, 1) + SourceIndex(0)
-2 >Emitted(86, 15) Source(146, 15) + SourceIndex(0)
-3 >Emitted(86, 16) Source(146, 37) + SourceIndex(0)
-4 >Emitted(86, 20) Source(146, 40) + SourceIndex(0) name (c9t5)
-5 >Emitted(86, 21) Source(146, 41) + SourceIndex(0) name (c9t5)
+2 >Emitted(86, 10) Source(146, 10) + SourceIndex(0)
+3 >Emitted(86, 14) Source(146, 14) + SourceIndex(0)
+4 >Emitted(86, 15) Source(146, 15) + SourceIndex(0)
+5 >Emitted(86, 16) Source(146, 37) + SourceIndex(0)
+6 >Emitted(86, 20) Source(146, 40) + SourceIndex(0) name (c9t5)
+7 >Emitted(86, 21) Source(146, 41) + SourceIndex(0) name (c9t5)
 ---
 >>>;
 1 >
@@ -2317,21 +2366,33 @@ sourceFile:contextualTyping.ts
 ---
 >>>var C11t5 = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^^^^^^^^^^^^->
 1->
   >
+2 >class 
+3 >    C11t5
 1->Emitted(94, 1) Source(155, 1) + SourceIndex(0)
+2 >Emitted(94, 5) Source(155, 7) + SourceIndex(0)
+3 >Emitted(94, 10) Source(155, 12) + SourceIndex(0)
 ---
 >>>    function C11t5(f) {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^
-3 >                   ^
-1->class C11t5 { 
-2 >    constructor(
-3 >                   f: (n: number) => IFoo
+2 >    ^^^^^^^^^
+3 >             ^^^^^
+4 >                  ^
+5 >                   ^
+1-> { 
+2 >    
+3 >             C11t5
+4 >                   { constructor(
+5 >                   f: (n: number) => IFoo
 1->Emitted(95, 5) Source(155, 15) + SourceIndex(0) name (C11t5)
-2 >Emitted(95, 20) Source(155, 27) + SourceIndex(0) name (C11t5)
-3 >Emitted(95, 21) Source(155, 49) + SourceIndex(0) name (C11t5)
+2 >Emitted(95, 14) Source(155, 7) + SourceIndex(0) name (C11t5)
+3 >Emitted(95, 19) Source(155, 12) + SourceIndex(0) name (C11t5)
+4 >Emitted(95, 20) Source(155, 27) + SourceIndex(0) name (C11t5)
+5 >Emitted(95, 21) Source(155, 49) + SourceIndex(0) name (C11t5)
 ---
 >>>    }
 1 >^^^^
@@ -2344,11 +2405,14 @@ sourceFile:contextualTyping.ts
 ---
 >>>    return C11t5;
 1->^^^^
-2 >    ^^^^^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^
 1-> 
-2 >    }
+2 >    
+3 >           C11t5 { constructor(f: (n: number) => IFoo) { } }
 1->Emitted(97, 5) Source(155, 55) + SourceIndex(0) name (C11t5)
-2 >Emitted(97, 17) Source(155, 56) + SourceIndex(0) name (C11t5)
+2 >Emitted(97, 12) Source(155, 7) + SourceIndex(0) name (C11t5)
+3 >Emitted(97, 17) Source(155, 56) + SourceIndex(0) name (C11t5)
 ---
 >>>})();
 1 >
@@ -3125,19 +3189,21 @@ sourceFile:contextualTyping.ts
 ---
 >>>function EF1(a, b) { return a + b; }
 1->
-2 >^^^^^^^^^^^^^
-3 >             ^
-4 >              ^^
-5 >                ^
-6 >                 ^^^^
-7 >                     ^^^^^^
-8 >                           ^
-9 >                            ^
-10>                             ^^^
-11>                                ^
-12>                                 ^
-13>                                  ^
-14>                                   ^
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^
+5 >             ^
+6 >              ^^
+7 >                ^
+8 >                 ^^^^
+9 >                     ^^^^^^
+10>                           ^
+11>                            ^
+12>                             ^^^
+13>                                ^
+14>                                 ^
+15>                                  ^
+16>                                   ^
 1->
   >
   >// CONTEXT: Contextual typing declarations
@@ -3146,33 +3212,37 @@ sourceFile:contextualTyping.ts
   >declare function EF1(a:number, b:number):number;
   >
   >
-2 >function EF1(
-3 >             a
-4 >              ,
-5 >                b
-6 >                 ) { 
-7 >                     return
-8 >                            
-9 >                            a
-10>                             +
-11>                                b
-12>                                 ;
-13>                                   
-14>                                   }
+2 >function 
+3 >         EF1
+4 >            (
+5 >             a
+6 >              ,
+7 >                b
+8 >                 ) { 
+9 >                     return
+10>                            
+11>                            a
+12>                             +
+13>                                b
+14>                                 ;
+15>                                   
+16>                                   }
 1->Emitted(124, 1) Source(191, 1) + SourceIndex(0)
-2 >Emitted(124, 14) Source(191, 14) + SourceIndex(0)
-3 >Emitted(124, 15) Source(191, 15) + SourceIndex(0)
-4 >Emitted(124, 17) Source(191, 16) + SourceIndex(0)
-5 >Emitted(124, 18) Source(191, 17) + SourceIndex(0)
-6 >Emitted(124, 22) Source(191, 21) + SourceIndex(0) name (EF1)
-7 >Emitted(124, 28) Source(191, 27) + SourceIndex(0) name (EF1)
-8 >Emitted(124, 29) Source(191, 28) + SourceIndex(0) name (EF1)
-9 >Emitted(124, 30) Source(191, 29) + SourceIndex(0) name (EF1)
-10>Emitted(124, 33) Source(191, 30) + SourceIndex(0) name (EF1)
-11>Emitted(124, 34) Source(191, 31) + SourceIndex(0) name (EF1)
-12>Emitted(124, 35) Source(191, 32) + SourceIndex(0) name (EF1)
-13>Emitted(124, 36) Source(191, 33) + SourceIndex(0) name (EF1)
-14>Emitted(124, 37) Source(191, 34) + SourceIndex(0) name (EF1)
+2 >Emitted(124, 10) Source(191, 10) + SourceIndex(0)
+3 >Emitted(124, 13) Source(191, 13) + SourceIndex(0)
+4 >Emitted(124, 14) Source(191, 14) + SourceIndex(0)
+5 >Emitted(124, 15) Source(191, 15) + SourceIndex(0)
+6 >Emitted(124, 17) Source(191, 16) + SourceIndex(0)
+7 >Emitted(124, 18) Source(191, 17) + SourceIndex(0)
+8 >Emitted(124, 22) Source(191, 21) + SourceIndex(0) name (EF1)
+9 >Emitted(124, 28) Source(191, 27) + SourceIndex(0) name (EF1)
+10>Emitted(124, 29) Source(191, 28) + SourceIndex(0) name (EF1)
+11>Emitted(124, 30) Source(191, 29) + SourceIndex(0) name (EF1)
+12>Emitted(124, 33) Source(191, 30) + SourceIndex(0) name (EF1)
+13>Emitted(124, 34) Source(191, 31) + SourceIndex(0) name (EF1)
+14>Emitted(124, 35) Source(191, 32) + SourceIndex(0) name (EF1)
+15>Emitted(124, 36) Source(191, 33) + SourceIndex(0) name (EF1)
+16>Emitted(124, 37) Source(191, 34) + SourceIndex(0) name (EF1)
 ---
 >>>var efv = EF1(1, 2);
 1 >
@@ -3214,10 +3284,12 @@ sourceFile:contextualTyping.ts
 ---
 >>>function Point(x, y) {
 1->
-2 >^^^^^^^^^^^^^^^
-3 >               ^
-4 >                ^^
-5 >                  ^
+2 >^^^^^^^^^
+3 >         ^^^^^
+4 >              ^
+5 >               ^
+6 >                ^^
+7 >                  ^
 1->
   >
   >
@@ -3233,15 +3305,19 @@ sourceFile:contextualTyping.ts
   >}
   >
   >
-2 >function Point(
-3 >               x
-4 >                , 
-5 >                  y
+2 >function 
+3 >         Point
+4 >              (
+5 >               x
+6 >                , 
+7 >                  y
 1->Emitted(126, 1) Source(207, 1) + SourceIndex(0)
-2 >Emitted(126, 16) Source(207, 16) + SourceIndex(0)
-3 >Emitted(126, 17) Source(207, 17) + SourceIndex(0)
-4 >Emitted(126, 19) Source(207, 19) + SourceIndex(0)
-5 >Emitted(126, 20) Source(207, 20) + SourceIndex(0)
+2 >Emitted(126, 10) Source(207, 10) + SourceIndex(0)
+3 >Emitted(126, 15) Source(207, 15) + SourceIndex(0)
+4 >Emitted(126, 16) Source(207, 16) + SourceIndex(0)
+5 >Emitted(126, 17) Source(207, 17) + SourceIndex(0)
+6 >Emitted(126, 19) Source(207, 19) + SourceIndex(0)
+7 >Emitted(126, 20) Source(207, 20) + SourceIndex(0)
 ---
 >>>    this.x = x;
 1 >^^^^

@@ -10,34 +10,50 @@ sourceFile:sourceMapValidationExportAssignmentCommonjs.ts
 -------------------------------------------------------------------
 >>>var a = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^^^^^^^^^->
 1 >
+2 >class 
+3 >    a
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 8) + SourceIndex(0)
 ---
 >>>    function a() {
 1->^^^^
-2 >    ^^->
+2 >    ^^^^^^^^^
+3 >             ^
 1->
+2 >    class 
+3 >             a
 1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (a)
+2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (a)
+3 >Emitted(2, 15) Source(1, 8) + SourceIndex(0) name (a)
 ---
 >>>    }
-1->^^^^
+1 >^^^^
 2 >    ^
 3 >     ^^^^^^^^^->
-1->class a {
+1 > {
   >    public c;
   >
 2 >    }
-1->Emitted(3, 5) Source(3, 1) + SourceIndex(0) name (a.constructor)
+1 >Emitted(3, 5) Source(3, 1) + SourceIndex(0) name (a.constructor)
 2 >Emitted(3, 6) Source(3, 2) + SourceIndex(0) name (a.constructor)
 ---
 >>>    return a;
 1->^^^^
-2 >    ^^^^^^^^
+2 >    ^^^^^^^
+3 >           ^
 1->
-2 >    }
+2 >    
+3 >           a {
+  >               public c;
+  >           }
 1->Emitted(4, 5) Source(3, 1) + SourceIndex(0) name (a)
-2 >Emitted(4, 13) Source(3, 2) + SourceIndex(0) name (a)
+2 >Emitted(4, 12) Source(1, 7) + SourceIndex(0) name (a)
+3 >Emitted(4, 13) Source(3, 2) + SourceIndex(0) name (a)
 ---
 >>>})();
 1 >
