@@ -243,7 +243,6 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic
             },
-            experimental: true,
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
         }        
     ];
