@@ -1,0 +1,7 @@
+=== tests/cases/compiler/sourceMapValidationDefaultExportClass.ts ===
+class Product { }
+>Product : Product
+
+export default Product;
+>Product : Product
+

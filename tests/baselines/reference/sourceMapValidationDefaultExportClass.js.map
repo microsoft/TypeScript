@@ -1,0 +1,2 @@
+//// [sourceMapValidationDefaultExportClass.js.map]
+{"version":3,"file":"sourceMapValidationDefaultExportClass.js","sourceRoot":"","sources":["sourceMapValidationDefaultExportClass.ts"],"names":["Product","Product.constructor"],"mappings":"AAAA;IAAAA;IAAgBC,CAACA;IAADD,cAACA;AAADA,CAACA,AAAjB,IAAiB;AACjB;kBAAe,OAAO,CAAC"}

@@ -1,0 +1,74 @@
+===================================================================
+JsFile: sourceMapValidationDefaultExportClass.js
+mapUrl: sourceMapValidationDefaultExportClass.js.map
+sourceRoot: 
+sources: sourceMapValidationDefaultExportClass.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDefaultExportClass.js
+sourceFile:sourceMapValidationDefaultExportClass.ts
+-------------------------------------------------------------------
+>>>var Product = (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function Product() {
+1->^^^^
+2 >    ^^->
+1->
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (Product)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^->
+1->class Product { 
+2 >    }
+1->Emitted(3, 5) Source(1, 17) + SourceIndex(0) name (Product.constructor)
+2 >Emitted(3, 6) Source(1, 18) + SourceIndex(0) name (Product.constructor)
+---
+>>>    return Product;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+2 >    }
+1->Emitted(4, 5) Source(1, 17) + SourceIndex(0) name (Product)
+2 >Emitted(4, 19) Source(1, 18) + SourceIndex(0) name (Product)
+---
+>>>})();
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class Product { }
+1 >Emitted(5, 1) Source(1, 17) + SourceIndex(0) name (Product)
+2 >Emitted(5, 2) Source(1, 18) + SourceIndex(0) name (Product)
+3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(5, 6) Source(1, 18) + SourceIndex(0)
+---
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(6, 1) Source(2, 1) + SourceIndex(0)
+---
+>>>exports.default = Product;
+1->^^^^^^^^^^^^^^^^^^
+2 >                  ^^^^^^^
+3 >                         ^
+4 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export default 
+2 >                  Product
+3 >                         ;
+1->Emitted(7, 19) Source(2, 16) + SourceIndex(0)
+2 >Emitted(7, 26) Source(2, 23) + SourceIndex(0)
+3 >Emitted(7, 27) Source(2, 24) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDefaultExportClass.js.map

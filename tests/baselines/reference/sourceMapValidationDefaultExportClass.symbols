@@ -1,0 +1,7 @@
+=== tests/cases/compiler/sourceMapValidationDefaultExportClass.ts ===
+class Product { }
+>Product : Symbol(Product, Decl(sourceMapValidationDefaultExportClass.ts, 0, 0))
+
+export default Product;
+>Product : Symbol(Product, Decl(sourceMapValidationDefaultExportClass.ts, 0, 0))
+
