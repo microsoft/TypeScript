@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns01_ES5.ts ===
+
+(function () {
+>(function () {    var a: any;    var {} = a;    let {} = a;    const {} = a;    var [] = a;    let [] = a;    const [] = a;})() : void
+>(function () {    var a: any;    var {} = a;    let {} = a;    const {} = a;    var [] = a;    let [] = a;    const [] = a;}) : () => void
+>function () {    var a: any;    var {} = a;    let {} = a;    const {} = a;    var [] = a;    let [] = a;    const [] = a;} : () => void
+
+    var a: any;
+>a : any
+
+    var {} = a;
+>a : any
+
+    let {} = a;
+>a : any
+
+    const {} = a;
+>a : any
+
+    var [] = a;
+>a : any
+
+    let [] = a;
+>a : any
+
+    const [] = a;
+>a : any
+
+})();
