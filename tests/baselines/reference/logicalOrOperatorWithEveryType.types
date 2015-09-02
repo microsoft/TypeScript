@@ -187,8 +187,8 @@ var rc5 = a5 || a3;         // void      || number is void | number
 >a3 : number
 
 var rc6 = a6 || a3;         // enum      || number is number
->rc6 : E | number
->a6 || a3 : E | number
+>rc6 : number
+>a6 || a3 : number
 >a6 : E
 >a3 : number
 
@@ -349,8 +349,8 @@ var rg2 = a2 || a6;         // boolean   || enum is boolean | enum
 >a6 : E
 
 var rg3 = a3 || a6;         // number    || enum is number
->rg3 : number | E
->a3 || a6 : number | E
+>rg3 : number
+>a3 || a6 : number
 >a3 : number
 >a6 : E
 

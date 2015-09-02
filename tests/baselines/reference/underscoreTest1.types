@@ -547,7 +547,7 @@ _.flatten([1, [2], [3, [[4]]]]);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : (number | number[] | (number | number[][])[])[]
+>[1, [2], [3, [[4]]]] : (number | (number | number[][])[])[]
 >1 : number
 >[2] : number[]
 >2 : number
@@ -562,7 +562,7 @@ _.flatten([1, [2], [3, [[4]]]], true);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : (number | number[] | (number | number[][])[])[]
+>[1, [2], [3, [[4]]]] : (number | (number | number[][])[])[]
 >1 : number
 >[2] : number[]
 >2 : number
