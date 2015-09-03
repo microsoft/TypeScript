@@ -1866,7 +1866,7 @@ namespace ts {
         let sourceMapText: string;
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
-            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            getSourceFile: (fileName, target) => fileName === normalizeSlashes(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 if (fileExtensionIs(name, ".map")) {
                     Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
