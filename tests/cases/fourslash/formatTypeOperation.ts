@@ -21,6 +21,6 @@ goTo.marker("formatAmpersandOperator");
 verify.currentLineContentIs("type Intersection = Foo & Bar;");
 
 goTo.marker("unionTypeNoIndent");
-verify.currentLineContentIs("Bar |");
+verify.currentLineContentIs("    Bar |");
 goTo.marker("intersectionTypeNoIndent");
-verify.currentLineContentIs("Baz;");
+verify.currentLineContentIs("    Baz;");
