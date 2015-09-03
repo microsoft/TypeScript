@@ -406,6 +406,7 @@ namespace ts.formatting {
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
             switch (kind) {
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
