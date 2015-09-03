@@ -133,7 +133,9 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent.kind, current.kind) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent.kind, current.kind) &&
+                    !isIndentationPrevented(current) && !parentAndChildShareLine) {
+
                     indentationDelta += options.IndentSize;
                 }
 
@@ -474,6 +476,24 @@ namespace ts.formatting {
                 default:
                     return false;
             }
+        }
+
+        function hasBraceShell(node: Node) {
+            let children = node.getChildren();
+            let last = children.length - 1;
+            // Check if node looks like a block
+            return children[0] && children[0].kind === SyntaxKind.OpenBraceToken &&
+                children[last] && children[last].kind === SyntaxKind.CloseBraceToken;
+        }
+
+        export function isIndentationPrevented(node: TextRangeWithKind) {
+            switch (node.kind) {
+                case SyntaxKind.NamedExports:
+                    return hasBraceShell(<NamedExports>node);
+                case SyntaxKind.ImportClause:
+                    return hasBraceShell((<ImportClause>node).namedBindings);
+            }
+            return false;
         }
     }
 }
