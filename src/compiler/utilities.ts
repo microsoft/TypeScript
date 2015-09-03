@@ -243,6 +243,249 @@ namespace ts {
         return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
+    /**
+      * Creates an object used to navigate the ancestor's of a node by following parent pointers.
+      * @param currentNode The current node for the navigator.
+      */
+    export function createParentNavigator(currentNode: Node): ParentNavigator {
+        /** Traverses the parent pointers for the current node to find the root node. */ 
+        function getRoot() {
+            let rootNode = currentNode;
+            while (rootNode && rootNode.parent) {
+                rootNode = rootNode.parent;
+            }
+            
+            return rootNode;
+        }
+        
+        /** Gets the grandparent of the current node, without moving the navigator. */
+        function getGrandparent() {
+            let parent = getParent();
+            return parent ? parent.parent : undefined;
+        }
+        
+        /** Gets the parent of the current node, without moving the navigator. */
+        function getParent() {
+            return currentNode ? currentNode.parent : undefined;
+        }
+        
+        /** Gets the current node. */
+        function getNode() {
+            return currentNode;
+        }
+        
+        /** Gets the SyntaxKind for the current node. */
+        function getKind() {
+            return currentNode ? currentNode.kind : undefined;
+        }
+        
+        /** Navigates to the parent of the current node if it has one. */
+        function moveToParent(): boolean {
+            let parent = getParent();
+            if (parent) {
+                currentNode = parent;
+                return true;
+            }
+            
+            return false;
+        }
+        
+        /** Navigates to the root node for the current node. */
+        function moveToRoot(): boolean {
+            let rootNode = getRoot();
+            if (rootNode) {
+                currentNode = rootNode;
+                return true;
+            }
+            
+            return false;
+        }
+        
+        /** Creates a new ParentNavigator from the current node. */
+        function createParentNavigator() {
+            return ts.createParentNavigator(currentNode);
+        }
+        
+        return {
+            getRoot,
+            getGrandparent,
+            getParent,
+            getNode,
+            getKind,
+            moveToParent,
+            moveToRoot,
+            createParentNavigator,
+        };
+    }
+    
+    /**
+      * Creates a node stack used to maintain parent relationships without parent pointers.
+      */
+    export function createNodeStack(): NodeStack {
+        let stackSize: number = 0;
+        let stack: Node[] = [];
+        let rootNode: Node;
+        let parentNode: Node;
+        let currentNode: Node;
+        
+        /** Gets the node at the bottom of the stack. */
+        function getRoot() {
+            return rootNode;
+        }
+        
+        /** Gets the node two steps back from the top of the stack. */
+        function getGrandparent() {
+            return peekNode(2);
+        }
+        
+        /** Gets the node one step back from the top of the stack. */
+        function getParent() {
+            return parentNode;
+        }
+        
+        /** Gets the node at the top of the stack. */
+        function getNode() {
+            return currentNode;
+        }
+        
+        /** Gets the SyntaxKind for the node at the top of the stack. */
+        function getKind() {
+            return currentNode ? currentNode.kind : undefined;
+        }
+        
+        /** Pushes a node onto the stack. */
+        function pushNode(node: Node): void {
+            stackSize++;
+            if (stackSize > 2) {
+                stack.push(parentNode);
+            }
+            else if (stackSize === 1) {
+                rootNode = node;
+            }
+            parentNode = currentNode;
+            currentNode = node;
+        }
+        
+        /** Pops the top node from the stack. */
+        function popNode(): void {
+            currentNode = parentNode;
+            parentNode = stackSize > 2 ? stack.pop() : undefined;
+            stackSize--;
+            if (stackSize === 0) {
+                rootNode = undefined;
+            }
+        }
+        
+        /** Replaces the node at the top of the stack. */
+        function setNode(node: Node): void {
+            currentNode = node;
+        }
+        
+        /** Peeks at a node a specified number of steps back from the top of the stack. */
+        function peekNode(stackOffset: number): Node {
+            switch (stackOffset) {
+                case 0: return currentNode;
+                case 1: return parentNode;
+                default: return stackSize > 2 ? stack[stackSize - 1 - stackOffset] : undefined;
+            }
+        }
+
+        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        function findAncestorNode(match: (node: Node) => boolean): Node;
+        function findAncestorNode(match: (node: Node) => boolean) {
+            if (parentNode && match(parentNode)) {
+                return parentNode;
+            }
+            for (let i = stack.length; i >= 0; i--) {
+                let node = stack[i];
+                if (match(node)) {
+                    return node;
+                }
+            }
+            return undefined;
+        }
+        
+        /** Creates a parent navigator from the top of the stack. */
+        function createParentNavigator() {
+            return createParentNavigatorFromStackOffset(0);
+        }
+        
+        /** Creates a parent navigator a specified number of steps back from the top of the stack. */
+        function createParentNavigatorFromStackOffset(stackOffset: number): ParentNavigator {
+            /** Gets the node two steps back from the current stack offset. */
+            function getGrandparent() {
+                return peekNode(stackOffset + 2);
+            }
+            
+            /** Gets the node one step back from the current stack offset. */
+            function getParent() {
+                return peekNode(stackOffset + 1);
+            }
+            
+            /** Gets the node at the current stack offset. */
+            function getNode() {
+                return peekNode(stackOffset);
+            }
+            
+            /** Gets the SyntaxKind of the node at the current stack offset. */
+            function getKind() {
+                let node = getNode();
+                return node ? node.kind : undefined; 
+            }
+            
+            /** Navigates to the node one step back from the current stack offset. */
+            function moveToParent() {
+                if (getParent()) {
+                    stackOffset++;
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            /** Navigates to the node at the bottom of the stack. */
+            function moveToRoot() {
+                if (stackSize > 0) {
+                    stackOffset = stackSize;
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            /** Creates a new ParentNavigator from the current stack offset. */
+            function createParentNavigator() {
+                return createParentNavigatorFromStackOffset(stackOffset);
+            }
+            
+            return {
+                getRoot,
+                getGrandparent,
+                getParent,
+                getNode,
+                getKind,
+                moveToRoot,
+                moveToParent,
+                createParentNavigator,
+            };
+        }
+        
+        return {
+            getRoot,
+            getGrandparent,
+            getParent,
+            getNode,
+            getKind,
+            pushNode,
+            popNode,
+            setNode,
+            findAncestorNode,
+            createParentNavigator,
+        };
+    }
+    
     export function isBlockOrCatchScoped(declaration: Declaration) {
         return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
             isCatchClauseVariableDeclaration(declaration);
@@ -250,38 +493,10 @@ namespace ts {
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
-    export function getEnclosingBlockScopeContainer(node: Node): Node;
-
-    /**
-      * Gets the nearest enclosing block scope container that has the provided node
-      * as a descendant, that is not the provided node.
-      * @param node The starting node
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      */
-    export function getEnclosingBlockScopeContainer(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): Node;
-
-    /**
-      * Gets the nearest enclosing block scope container that has the provided node
-      * as a descendant, that is not the provided node.
-      * @param node The starting node
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      * @remarks
-      * The emitter tracks the parent of the current node as it descends into the source file, 
-      * so that we can properly emit synthesized nodes that may not have parent pointers.
-      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
-      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
-      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
-      * offset of two (2) refers to the grandparent, and so on.
-      */
-    export function getEnclosingBlockScopeContainer(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): Node {
-        let current = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
-        while (current) {
+    export function getEnclosingBlockScopeContainer(navigable: ParentNavigable): Node {
+        let nav = navigable.createParentNavigator();
+        while (nav.moveToParent()) {
+            let current = nav.getNode();
             if (isFunctionLike(current)) {
                 return current;
             }
@@ -297,12 +512,10 @@ namespace ts {
                 case SyntaxKind.Block:
                     // function block is not considered block-scope container
                     // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                    if (!isFunctionLike(getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : current.parent)) {
+                    if (!isFunctionLike(nav.getParent())) {
                         return current;
                     }
             }
-
-            current = getAncestorOrSelf ? getAncestorOrSelf(++offset) : current.parent;
         }
     }
 
@@ -397,56 +610,22 @@ namespace ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    /** 
-      * Returns the node flags for this node and all relevant parent nodes.
-      */
-    export function getCombinedNodeFlags(node: Node): NodeFlags;
-
-    /**
-      * Returns the node flags for this node and all relevant parent nodes. 
-      * @param node The starting node
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      */
-    export function getCombinedNodeFlags(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): NodeFlags;
-
-    /**
-      * Returns the node flags for this node and all relevant parent nodes. 
-      * @param node The starting node
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      * @remarks 
-      * This is done so that nodes like variable declarations and binding elements can return 
-      * a view of their flags that includes the modifiers from their container.  i.e. flags like
-      * export/declare aren't stored on the variable declaration directly, but on the containing 
-      * variable statement (if it has one).  Similarly, flags for let/const are store on the 
-      * variable declaration list.  By calling this function, all those flags are combined so 
-      * that the client can treat the node as if it actually had those flags.
-      * 
-      * The emitter tracks the parent of the current node as it descends into the source file, 
-      * so that we can properly emit synthesized nodes that may not have parent pointers.
-      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
-      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
-      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
-      * offset of two (2) refers to the grandparent, and so on.
-      */
-    export function getCombinedNodeFlags(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): NodeFlags {
+    /** Returns the node flags for this node and all relevant parent nodes. */
+    export function getCombinedNodeFlags(navigable: ParentNavigable): NodeFlags {
+        let nav = navigable.createParentNavigator();
+        let node = nav.getNode();
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
+            node = nav.moveToParent() ? nav.getNode() : undefined;
         }
 
         let flags = node.flags;
         if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
+            node = nav.moveToParent() ? nav.getNode() : undefined;
         }
 
         if (node && node.kind === SyntaxKind.VariableDeclarationList) {
             flags |= node.flags;
-            node = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
+            node = nav.moveToParent() ? nav.getNode() : undefined;
         }
 
         if (node && node.kind === SyntaxKind.VariableStatement) {
@@ -456,12 +635,12 @@ namespace ts {
         return flags;
     }
 
-    export function isConst(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
+    export function isConst(navigable: ParentNavigable): boolean {
+        return !!(getCombinedNodeFlags(navigable) & NodeFlags.Const);
     }
 
-    export function isLet(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
+    export function isLet(navigable: ParentNavigable): boolean {
+        return !!(getCombinedNodeFlags(navigable) & NodeFlags.Let);
     }
 
     export function isPrologueDirective(node: Node): boolean {
@@ -716,37 +895,41 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
-    export function getContainingFunction(node: Node): FunctionLikeDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isFunctionLike(node)) {
+    export function getContainingFunction(navigable: ParentNavigable): FunctionLikeDeclaration {
+        let nav = navigable.createParentNavigator();
+        while (nav.moveToParent()) {
+            let node = nav.getNode();
+            if (isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
             }
         }
+        
+        return undefined;
     }
 
-    export function getContainingClass(node: Node): ClassLikeDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isClassLike(node)) {
+    export function getContainingClass(navigable: ParentNavigable): ClassLikeDeclaration {
+        let nav = navigable.createParentNavigator();
+        while (nav.moveToParent()) {
+            let node = nav.getNode();
+            if (isClassLike(node)) {
                 return <ClassLikeDeclaration>node;
             }
         }
+        
+        return undefined;
     }
 
-    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
-        while (true) {
-            node = node.parent;
-            if (!node) {
-                return undefined;
-            }
+    export function getThisContainer(navigable: ParentNavigable, includeArrowFunctions: boolean): Node {
+        let nav = navigable.createParentNavigator();
+        while (nav.moveToParent()) {
+            let node = nav.getNode();
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
                     // If the grandparent node is an object literal (as opposed to a class),
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
+                    if (isClassLike(nav.getGrandparent())) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -754,19 +937,20 @@ namespace ts {
                     // in an object literal, like a method or accessor. But in order for
                     // such a parent to be a this container, the reference must be in
                     // the *body* of the container.
-                    node = node.parent;
+                    nav.moveToParent();
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                    if (nav.getParent().kind === SyntaxKind.Parameter && isClassElement(nav.getGrandparent())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
-                        node = node.parent.parent;
+                        nav.moveToParent();
+                        nav.moveToParent();
                     }
-                    else if (isClassElement(node.parent)) {
+                    else if (isClassElement(nav.getParent())) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
-                        node = node.parent;
+                        nav.moveToParent();
                     }
                     break;
                 case SyntaxKind.ArrowFunction:
@@ -791,17 +975,17 @@ namespace ts {
         }
     }
 
-    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
-        while (true) {
-            node = node.parent;
-            if (!node) return node;
+    export function getSuperContainer(navigable: ParentNavigable, includeFunctions: boolean): Node {
+        let nav = navigable.createParentNavigator();
+        while (nav.moveToParent()) {
+            let node = nav.getNode();
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
                     // If the grandparent node is an object literal (as opposed to a class),
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
+                    if (isClassLike(nav.getGrandparent())) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -809,19 +993,20 @@ namespace ts {
                     // in an object literal, like a method or accessor. But in order for
                     // such a parent to be a super container, the reference must be in
                     // the *body* of the container.
-                    node = node.parent;
+                    nav.moveToParent();
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                    if (nav.getParent().kind === SyntaxKind.Parameter && isClassElement(nav.getGrandparent())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
-                        node = node.parent.parent;
+                        nav.moveToParent();
+                        nav.moveToParent();
                     }
-                    else if (isClassElement(node.parent)) {
+                    else if (isClassElement(nav.getParent())) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
-                        node = node.parent;
+                        nav.moveToParent();
                     }
                     break;
                 case SyntaxKind.FunctionDeclaration:
@@ -867,7 +1052,9 @@ namespace ts {
         return (<CallExpression | Decorator>node).expression;
     }
 
-    export function nodeCanBeDecorated(node: Node): boolean {
+    export function nodeCanBeDecorated(navigable: ParentNavigable): boolean {
+        let nav = navigable.createParentNavigator();
+        let node = nav.getNode();
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
                 // classes are valid targets
@@ -875,17 +1062,17 @@ namespace ts {
 
             case SyntaxKind.PropertyDeclaration:
                 // property declarations are valid if their parent is a class declaration.
-                return node.parent.kind === SyntaxKind.ClassDeclaration;
+                return nav.getParent().kind === SyntaxKind.ClassDeclaration;
 
             case SyntaxKind.Parameter:
                 // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
-                return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>nav.getParent()).body && nav.getGrandparent().kind === SyntaxKind.ClassDeclaration;
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 // if this method has a body and its parent is a class declaration, this is a valid target.
-                return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>node).body && nav.getParent().kind === SyntaxKind.ClassDeclaration;
         }
 
         return false;
@@ -944,142 +1131,151 @@ namespace ts {
         return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
-    /**
-      * Returns whether the node is part of an expression.
-      * @param node The node to test
-      */
-    export function isExpression(node: Node): boolean;
-
-    /**
-      * Returns whether the node is part of an expression.
-      * @param node The node to test
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      */
-    export function isExpression(node: Node, getAncestorOrSelf: (offset: number) => Node, offset: number): boolean;
-
-    /**
-      * Returns whether the node is part of an expression.
-      * @param node The node to test
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      * @remarks
-      * The emitter tracks the parent of the current node as it descends into the source file, 
-      * so that we can properly emit synthesized nodes that may not have parent pointers.
-      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
-      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
-      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
-      * offset of two (2) refers to the grandparent, and so on.
-      */
-    export function isExpression(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
-        let parent: Node;
-        switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
-            case SyntaxKind.SuperKeyword:
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.TrueKeyword:
-            case SyntaxKind.FalseKeyword:
-            case SyntaxKind.RegularExpressionLiteral:
-            case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.ObjectLiteralExpression:
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-            case SyntaxKind.TaggedTemplateExpression:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.ParenthesizedExpression:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.VoidExpression:
-            case SyntaxKind.DeleteExpression:
-            case SyntaxKind.TypeOfExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.BinaryExpression:
-            case SyntaxKind.ConditionalExpression:
-            case SyntaxKind.SpreadElementExpression:
-            case SyntaxKind.TemplateExpression:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.OmittedExpression:
-            case SyntaxKind.JsxElement:
-            case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.YieldExpression:
-                return true;
-            case SyntaxKind.QualifiedName:
-                parent = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
-                while (parent.kind === SyntaxKind.QualifiedName) {
-                    node = parent;
-                    parent = getAncestorOrSelf ? getAncestorOrSelf(++offset) : node.parent;
-                }
-                return parent.kind === SyntaxKind.TypeQuery;
-                
-            case SyntaxKind.Identifier:
-                parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
-                if (parent.kind === SyntaxKind.TypeQuery) {
+    /** Returns whether the node is part of an expression. */
+    export function isExpression(navigable: ParentNavigable): boolean {
+        let nav = navigable.createParentNavigator();
+        while (true) {
+            let node = nav.getNode();
+            switch (node.kind) {
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.YieldExpression:
                     return true;
-                }
-            // fall through
-            case SyntaxKind.NumericLiteral:
-            case SyntaxKind.StringLiteral:
-                parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
-                switch (parent.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.BindingElement:
-                        return (<VariableLikeDeclaration>parent).initializer === node;
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.SwitchStatement:
-                        return (<ExpressionStatement>parent).expression === node;
-                    case SyntaxKind.ForStatement:
-                        let forStatement = <ForStatement>parent;
-                        return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forStatement.condition === node ||
-                            forStatement.incrementor === node;
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                        let forInStatement = <ForInStatement | ForOfStatement>parent;
-                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forInStatement.expression === node;
-                    case SyntaxKind.TypeAssertionExpression:
-                    case SyntaxKind.AsExpression:
-                        return node === (<AssertionExpression>parent).expression;
-                    case SyntaxKind.TemplateSpan:
-                        return node === (<TemplateSpan>parent).expression;
-                    case SyntaxKind.ComputedPropertyName:
-                        return node === (<ComputedPropertyName>parent).expression;
-                    case SyntaxKind.Decorator:
-                    case SyntaxKind.JsxExpression:
-                        return true;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent, getAncestorOrSelf, offset + 1);
-                    default:
-                        if (isExpression(parent, getAncestorOrSelf, offset)) {
-                            return true;
+                case SyntaxKind.QualifiedName:
+                    while (nav.moveToParent()) {
+                        if (nav.getKind() !== SyntaxKind.QualifiedName) {
+                            break;
                         }
-                }
+                    }
+    
+                    return nav.getKind() === SyntaxKind.TypeQuery;
+                    
+                case SyntaxKind.Identifier:
+                    if (nav.getParent().kind === SyntaxKind.TypeQuery) {
+                        return true;
+                    }
+    
+                // fall through
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                    nav.moveToParent();
+                    
+                    let parent = nav.getNode();
+                    switch (parent.kind) {
+                        case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.Parameter:
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.PropertySignature:
+                        case SyntaxKind.EnumMember:
+                        case SyntaxKind.PropertyAssignment:
+                        case SyntaxKind.BindingElement:
+                            return (<VariableLikeDeclaration>parent).initializer === node;
+                        case SyntaxKind.ExpressionStatement:
+                        case SyntaxKind.IfStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.WhileStatement:
+                        case SyntaxKind.ReturnStatement:
+                        case SyntaxKind.WithStatement:
+                        case SyntaxKind.SwitchStatement:
+                        case SyntaxKind.CaseClause:
+                        case SyntaxKind.ThrowStatement:
+                        case SyntaxKind.SwitchStatement:
+                            return (<ExpressionStatement>parent).expression === node;
+                        case SyntaxKind.ForStatement:
+                            let forStatement = <ForStatement>parent;
+                            return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                                forStatement.condition === node ||
+                                forStatement.incrementor === node;
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForOfStatement:
+                            let forInStatement = <ForInStatement | ForOfStatement>parent;
+                            return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                                forInStatement.expression === node;
+                        case SyntaxKind.TypeAssertionExpression:
+                        case SyntaxKind.AsExpression:
+                            return node === (<AssertionExpression>parent).expression;
+                        case SyntaxKind.TemplateSpan:
+                            return node === (<TemplateSpan>parent).expression;
+                        case SyntaxKind.ComputedPropertyName:
+                            return node === (<ComputedPropertyName>parent).expression;
+                        case SyntaxKind.Decorator:
+                        case SyntaxKind.JsxExpression:
+                            return true;
+                        case SyntaxKind.ExpressionWithTypeArguments:
+                            return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(nav);
+                        default:
+                            continue;
+                    }
+            }
+            return false;
         }
-        return false;
     }
 
+    /**
+        * Returns whether the expression has lesser, greater,
+        * or equal precedence to the binary '+' operator
+        */
+    export function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
+        // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
+        // which have greater precedence and '-' which has equal precedence.
+        // All unary operators have a higher precedence apart from yield.
+        // Arrow functions and conditionals have a lower precedence,
+        // although we convert the former into regular function expressions in ES5 mode,
+        // and in ES6 mode this function won't get called anyway.
+        //
+        // TODO (drosen): Note that we need to account for the upcoming 'yield' and
+        //                spread ('...') unary operators that are anticipated for ES6.
+        switch (expression.kind) {
+            case SyntaxKind.BinaryExpression:
+                switch ((<BinaryExpression>expression).operatorToken.kind) {
+                    case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.PercentToken:
+                        return Comparison.GreaterThan;
+                    case SyntaxKind.PlusToken:
+                    case SyntaxKind.MinusToken:
+                        return Comparison.EqualTo;
+                    default:
+                        return Comparison.LessThan;
+                }
+            case SyntaxKind.YieldExpression:
+            case SyntaxKind.ConditionalExpression:
+                return Comparison.LessThan;
+            default:
+                return Comparison.GreaterThan;
+        }
+    }
+    
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         let moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -2103,25 +2299,12 @@ namespace ts {
     /**
       * Tests whether the node is an ExpressionWithTypeArguments node that is part of the `extends` 
       * clause of a class.
-      * @param node The node to test
-      * @param getAncestorOrSelf A callback used to get the ancestor of the starting node, used 
-      * only when traversing the ancestors of the current node in the emitter.
-      * @param offset The offset in the node stack used to get the ancestor of the current node
-      * from the emitter's node stack.
-      * @remarks
-      * The emitter tracks the parent of the current node as it descends into the source file, 
-      * so that we can properly emit synthesized nodes that may not have parent pointers.
-      * We can call `getAncestorOrSelf` with an offset that specifies how far back in the node's 
-      * ancestry to retrieve a parent, grandparent, etc. An offset of zero (0) refers to the 
-      * current node on the top of the node stack, an offset of one (1) refers to its parent, an 
-      * offset of two (2) refers to the grandparent, and so on.
       */
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node, getAncestorOrSelf?: (offset: number) => Node, offset?: number): boolean {
-        if (node.kind === SyntaxKind.ExpressionWithTypeArguments) {
-            let parent = getAncestorOrSelf ? getAncestorOrSelf(offset + 1) : node.parent;
-            if ((<HeritageClause>parent).token === SyntaxKind.ExtendsKeyword) {
-                let grandparent = getAncestorOrSelf ? getAncestorOrSelf(offset + 2) : parent.parent;
-                return isClassLike(grandparent);
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(navigable: ParentNavigable): boolean {
+        let nav = navigable.createParentNavigator();
+        if (nav.getKind() === SyntaxKind.ExpressionWithTypeArguments) {
+            if ((<HeritageClause>nav.getParent()).token === SyntaxKind.ExtendsKeyword) {
+                return isClassLike(nav.getGrandparent());
             }
         }
         return false;

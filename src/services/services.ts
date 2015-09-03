@@ -322,6 +322,10 @@ namespace ts {
 
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
+        
+        public createParentNavigator(): ParentNavigator {
+            return createParentNavigator(this);
+        }
     }
 
     class SymbolObject implements Symbol {

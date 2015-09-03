@@ -441,6 +441,54 @@ namespace ts {
         FailedAndReported = 3
     }
 
+    // @internal
+    export interface ParentNavigable {
+        /** Creates an object used to navigate parent nodes of this node. */
+        createParentNavigator(): ParentNavigator;
+    }
+
+    // @internal
+    export interface ParentNavigator extends ParentNavigable {
+        /** Gets the root node for the current node. */
+        getRoot(): Node;
+        /** Gets the grandparent node for the current node. */
+        getGrandparent(): Node;
+        /** Gets the parent node for the current node.  */
+        getParent(): Node;
+        /** Gets the current node. */
+        getNode(): Node;
+        /** Gets the SyntaxKind of the current node. */
+        getKind(): SyntaxKind;
+        /** Moves the navigator to the parent node of the current node. */
+        moveToParent(): boolean;
+        /** Moves the navigator to the root node of the current node. */
+        moveToRoot(): boolean;
+    }
+
+    // @internal
+    export interface NodeStack extends ParentNavigable {
+        /** Gets the node at the bottom of the stack. */
+        getRoot(): Node;
+        /** Gets the node two steps down from the top of the stack. */
+        getGrandparent(): Node;
+        /** Gets the node one step down from the top of the stack. */
+        getParent(): Node;
+        /** Gets the node at the top of the stack. */
+        getNode(): Node;
+        /** Gets the SyntaxKind for the node at the top of the stack. */
+        getKind(): SyntaxKind;
+        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        findAncestorNode(match: (node: Node) => boolean): Node;
+        /** Pushes a node onto the stack. */
+        pushNode(node: Node): void;
+        /** Replaces the node at the top of the stack. */
+        setNode(node: Node): void;
+        /** Pops the top node from the stack. */
+        popNode(): void;
+    }
+    
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -456,6 +504,7 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ createParentNavigator(): ParentNavigator;
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {

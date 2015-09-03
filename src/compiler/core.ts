@@ -780,6 +780,9 @@ namespace ts {
                 end: -1,
                 flags: 0,
                 parent: undefined,
+                createParentNavigator(): ParentNavigator {
+                    return createParentNavigator(<Node>this);
+                }
             };
             return <any>Node;
         },
