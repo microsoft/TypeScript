@@ -262,7 +262,7 @@ namespace ts.formatting {
             this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
-            this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia]);
+            this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
             this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock = new Rule(RuleDescriptor.create2(this.TypeScriptOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsTypeScriptDeclWithBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a control flow construct
@@ -606,8 +606,6 @@ namespace ts.formatting {
                 case SyntaxKind.CaseBlock:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ModuleBlock:
-                case SyntaxKind.NamedExports:
-                case SyntaxKind.NamedImports:
                     return true;
             }
 
@@ -652,6 +650,10 @@ namespace ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.NamedExports:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.NamedImports:
                     return true;
             }
 
