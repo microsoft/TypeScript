@@ -436,7 +436,6 @@ namespace ts.formatting {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.UnionType:
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
