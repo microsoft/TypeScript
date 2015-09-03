@@ -446,7 +446,7 @@ namespace ts.BreakpointResolver {
                         // fall through.
 
                     case SyntaxKind.CatchClause:
-                        return spanInNode(lastOrUndefined((<Block>node.parent).statements));;
+                        return spanInNode(lastOrUndefined((<Block>node.parent).statements));
 
                     case SyntaxKind.CaseBlock:
                         // breakpoint in last statement of the last clause
@@ -493,9 +493,6 @@ namespace ts.BreakpointResolver {
                     default:
                         return spanInNode(node.parent);
                 }
-
-                // Default to parent node
-                return spanInNode(node.parent);
             }
 
             function spanInColonToken(node: Node): TextSpan {

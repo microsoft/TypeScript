@@ -1,0 +1,10 @@
+=== tests/cases/compiler/reachabilityChecks2.ts ===
+
+while (true) { }
+>true : boolean
+
+const enum E { X }
+>E : E
+>X : E
+
+

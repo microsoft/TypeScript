@@ -1,0 +1,70 @@
+tests/cases/compiler/reachabilityChecks1.ts(3,1): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(7,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(22,11): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(28,12): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(35,10): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(44,16): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/compiler/reachabilityChecks1.ts (6 errors) ====
+    
+    while (true);
+    var x = 1;
+    ~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    
+    module A {
+        while (true);
+        let x;
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function f1(x) {
+        if (x) {
+            return;
+        }
+        else {
+            throw new Error("123");
+        }
+        var x;
+    }
+    
+    function f2() {
+        return;
+        class A {
+              ~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    module B {
+        for (; ;);
+        module C {
+               ~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    function f3() {
+        do {
+        } while (true);
+        enum E {
+             ~
+!!! error TS7027: Unreachable code detected.
+            X = 1
+        }
+    }
+    
+    function f4() {
+        if (true) {
+            throw new Error();
+        }
+        const enum E {
+                   ~
+!!! error TS7027: Unreachable code detected.
+            X = 1
+        }
+    }
+    
+    

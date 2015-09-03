@@ -376,6 +376,8 @@ namespace ts {
         OctalLiteral =      0x00010000,  // Octal numeric literal
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
+        HasImplicitReturn =     0x00080000,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =     0x00100000,  // If function has explicit reachable return on one of codepaths (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -2057,7 +2059,11 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
-        moduleResolution?: ModuleResolutionKind
+        moduleResolution?: ModuleResolutionKind,
+        noUnusedLabels?: boolean,
+        noImplicitReturns?: boolean,
+        noFallthroughCasesInSwitch?: boolean,
+        noUnreachableCode?: boolean,
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

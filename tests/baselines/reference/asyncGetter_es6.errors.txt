@@ -1,5 +1,5 @@
 tests/cases/conformance/async/es6/asyncGetter_es6.ts(2,3): error TS1042: 'async' modifier cannot be used here.
-tests/cases/conformance/async/es6/asyncGetter_es6.ts(2,13): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/es6/asyncGetter_es6.ts(2,13): error TS2378: A 'get' accessor must return a value.
 
 
 ==== tests/cases/conformance/async/es6/asyncGetter_es6.ts (2 errors) ====
@@ -8,6 +8,6 @@ tests/cases/conformance/async/es6/asyncGetter_es6.ts(2,13): error TS2378: A 'get
       ~~~~~
 !!! error TS1042: 'async' modifier cannot be used here.
                 ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value.
       }
     }

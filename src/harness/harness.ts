@@ -1242,6 +1242,18 @@ module Harness {
                                           setting.value.toLowerCase() === "preserve" ? ts.JsxEmit.Preserve :
                                           ts.JsxEmit.None;
                             break;
+                        case "nounusedlabels":
+                            options.noUnusedLabels = setting.value === "true"
+                            break;
+                        case "noimplicitreturns":
+                            options.noImplicitReturns = setting.value === "true"
+                            break;
+                        case "nofallthroughcasesinswitch":
+                            options.noFallthroughCasesInSwitch = setting.value === "true"
+                            break;
+                        case "nounreachablecode":
+                            options.noUnreachableCode = setting.value === "true"
+                            break;
 
                         default:
                             throw new Error("Unsupported compiler setting " + setting.flag);

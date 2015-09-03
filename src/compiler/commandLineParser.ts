@@ -244,7 +244,27 @@ namespace ts {
                 "classic": ModuleResolutionKind.Classic
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
-        }        
+        },
+        {
+            name: "noUnusedLabels",
+            type: "boolean",
+            description: Diagnostics.Report_error_on_unused_labels
+        },
+        {
+            name: "noImplicitReturns",
+            type: "boolean",
+            description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value
+        },
+        {
+            name: "noFallthroughCasesInSwitch",
+            type: "boolean",
+            description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
+        },
+        {
+            name: "noUnreachableCode",
+            type: "boolean",
+            description: Diagnostics.Report_errors_on_unreachable_code
+        }
     ];
 
     /* @internal */
