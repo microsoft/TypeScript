@@ -29,4 +29,5 @@
 //// obj./**/
 
 goTo.marker();
-verify.completionListItemsCountIsGreaterThan(0);
+verify.completionListContains("left");
+verify.completionListContains("right");
