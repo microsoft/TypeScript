@@ -6,6 +6,8 @@
 ////let w=  `bar${3}`/*4*/
 ////String.raw
 //// `template`/*5*/
+////String.raw`foo`/*6*/
+////String.raw  `bar${3}`/*7*/
 
 
 goTo.marker("1");
@@ -26,3 +28,9 @@ verify.currentLineContentIs("let w = `bar${3}`;");
 goTo.marker("5");
 edit.insert(";");
 verify.currentLineContentIs("    `template`;");
+goTo.marker("6");
+edit.insert(";");
+verify.currentLineContentIs("String.raw `foo`;");
+goTo.marker("7");
+edit.insert(";");
+verify.currentLineContentIs("String.raw `bar${3}`;");
