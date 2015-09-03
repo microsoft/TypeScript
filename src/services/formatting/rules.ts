@@ -227,11 +227,13 @@ namespace ts.formatting {
         public SpaceBetweenTagAndTemplateString: Rule;
         public NoSpaceBetweenTagAndTemplateString: Rule;
 
-        // Union type
+        // Type operation
         public SpaceBeforeBar: Rule;
         public NoSpaceBeforeBar: Rule;
         public SpaceAfterBar: Rule;
         public NoSpaceAfterBar: Rule;
+        public SpaceBeforeAmpersand: Rule;
+        public SpaceAfterAmpersand: Rule;
 
         constructor() {
             ///
@@ -272,7 +274,7 @@ namespace ts.formatting {
             this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
-            this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia]);
+            this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword]);
             this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock = new Rule(RuleDescriptor.create2(this.TypeScriptOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsTypeScriptDeclWithBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a control flow construct
@@ -394,12 +396,13 @@ namespace ts.formatting {
             this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
-            // union type
+            // type operation
             this.SpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.SpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-
+            this.SpaceBeforeAmpersand = new Rule(RuleDescriptor.create3(SyntaxKind.AmpersandToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterAmpersand = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.AmpersandToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
@@ -432,6 +435,7 @@ namespace ts.formatting {
                 this.SpaceAfterTypeKeyword, this.NoSpaceAfterTypeKeyword,
                 this.SpaceBetweenTagAndTemplateString, this.NoSpaceBetweenTagAndTemplateString,
                 this.SpaceBeforeBar, this.NoSpaceBeforeBar, this.SpaceAfterBar, this.NoSpaceAfterBar,
+                this.SpaceBeforeAmpersand, this.SpaceAfterAmpersand,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
@@ -663,6 +667,7 @@ namespace ts.formatting {
         static NodeIsTypeScriptDeclWithBlockContext(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeLiteral:
