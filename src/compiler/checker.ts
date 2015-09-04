@@ -3119,7 +3119,7 @@ namespace ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes, /*noDeduplication*/ true)));
+            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes, /*noSubtypeReduction*/ true)));
             let members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
@@ -3449,29 +3449,6 @@ namespace ts {
                 return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
             }
             return undefined;
-        }
-
-        // Check if a property with the given name is known anywhere in the given type. In an object
-        // type, a property is considered known if the object type is empty, if it has any index
-        // signatures, or if the property is actually declared in the type. In a union or intersection
-        // type, a property is considered known if it is known in any constituent type.
-        function isKnownProperty(type: Type, name: string): boolean {
-            if (type.flags & TypeFlags.ObjectType && type !== globalObjectType) {
-                const resolved = resolveStructuredTypeMembers(type);
-                return !!(resolved.properties.length === 0 ||
-                    resolved.stringIndexType ||
-                    resolved.numberIndexType ||
-                    getPropertyOfType(type, name));
-            }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                for (let t of (<UnionOrIntersectionType>type).types) {
-                    if (isKnownProperty(t, name)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return true;
         }
 
         function getSignaturesOfStructuredType(type: Type, kind: SignatureKind): Signature[] {
@@ -4103,73 +4080,20 @@ namespace ts {
             }
         }
 
-        function isObjectLiteralTypeDuplicateOf(source: ObjectType, target: ObjectType): boolean {
-            let sourceProperties = getPropertiesOfObjectType(source);
-            let targetProperties = getPropertiesOfObjectType(target);
-            if (sourceProperties.length !== targetProperties.length) {
-                return false;
-            }
-            for (let sourceProp of sourceProperties) {
-                let targetProp = getPropertyOfObjectType(target, sourceProp.name);
-                if (!targetProp ||
-                    getDeclarationFlagsFromSymbol(targetProp) & (NodeFlags.Private | NodeFlags.Protected) ||
-                    !isTypeDuplicateOf(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function isTupleTypeDuplicateOf(source: TupleType, target: TupleType): boolean {
-            let sourceTypes = source.elementTypes;
-            let targetTypes = target.elementTypes;
-            if (sourceTypes.length !== targetTypes.length) {
-                return false;
-            }
-            for (var i = 0; i < sourceTypes.length; i++) {
-                if (!isTypeDuplicateOf(sourceTypes[i], targetTypes[i])) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        // Returns true if the source type is a duplicate of the target type. A source type is a duplicate of
-        // a target type if the the two are identical, with the exception that the source type may have null or
-        // undefined in places where the target type doesn't. This is by design an asymmetric relationship.
-        function isTypeDuplicateOf(source: Type, target: Type): boolean {
-            if (source === target) {
-                return true;
-            }
-            if (source.flags & TypeFlags.Undefined || source.flags & TypeFlags.Null && !(target.flags & TypeFlags.Undefined)) {
-                return true;
-            }
-            if (source.flags & TypeFlags.ObjectLiteral && target.flags & TypeFlags.ObjectType) {
-                return isObjectLiteralTypeDuplicateOf(<ObjectType>source, <ObjectType>target);
-            }
-            if (isArrayType(source) && isArrayType(target)) {
-                return isTypeDuplicateOf((<TypeReference>source).typeArguments[0], (<TypeReference>target).typeArguments[0]);
-            }
-            if (isTupleType(source) && isTupleType(target)) {
-                return isTupleTypeDuplicateOf(<TupleType>source, <TupleType>target);
-            }
-            return isTypeIdenticalTo(source, target);
-        }
-
-        function isTypeDuplicateOfSomeType(candidate: Type, types: Type[]): boolean {
-            for (let type of types) {
-                if (candidate !== type && isTypeDuplicateOf(candidate, type)) {
+        function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
+            for (let i = 0, len = types.length; i < len; i++) {
+                if (candidate !== types[i] && isTypeSubtypeOf(candidate, types[i])) {
                     return true;
                 }
             }
             return false;
         }
 
-        function removeDuplicateTypes(types: Type[]) {
+        function removeSubtypes(types: Type[]) {
             let i = types.length;
             while (i > 0) {
                 i--;
-                if (isTypeDuplicateOfSomeType(types[i], types)) {
+                if (isSubtypeOfAny(types[i], types)) {
                     types.splice(i, 1);
                 }
             }
@@ -4194,12 +4118,14 @@ namespace ts {
             }
         }
 
-        // We always deduplicate the constituent type set based on object identity, but we'll also deduplicate
-        // based on the structure of the types unless the noDeduplication flag is true, which is the case when
-        // creating a union type from a type node and when instantiating a union type. In both of those cases,
-        // structural deduplication has to be deferred to properly support recursive union types. For example,
-        // a type of the form "type Item = string | (() => Item)" cannot be deduplicated during its declaration.
-        function getUnionType(types: Type[], noDeduplication?: boolean): Type {
+        // We reduce the constituent type set to only include types that aren't subtypes of other types, unless
+        // the noSubtypeReduction flag is specified, in which case we perform a simple deduplication based on
+        // object identity. Subtype reduction is possible only when union types are known not to circularly
+        // reference themselves (as is the case with union types created by expression constructs such as array
+        // literals and the || and ?: operators). Named types can circularly reference themselves and therefore
+        // cannot be deduplicated during their declaration. For example, "type Item = string | (() => Item" is
+        // a named type that circularly references itself.
+        function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
             }
@@ -4208,12 +4134,12 @@ namespace ts {
             if (containsTypeAny(typeSet)) {
                 return anyType;
             }
-            if (noDeduplication) {
+            if (noSubtypeReduction) {
                 removeAllButLast(typeSet, undefinedType);
                 removeAllButLast(typeSet, nullType);
             }
             else {
-                removeDuplicateTypes(typeSet);
+                removeSubtypes(typeSet);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
@@ -4230,7 +4156,7 @@ namespace ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noDeduplication*/ true);
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noSubtypeReduction*/ true);
             }
             return links.resolvedType;
         }
@@ -4526,7 +4452,7 @@ namespace ts {
                     return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noDeduplication*/ true);
+                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noSubtypeReduction*/ true);
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType));
@@ -4622,7 +4548,7 @@ namespace ts {
          * @param target The right-hand-side of the relation.
          * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', or 'subTypeRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
-         * @param errorNode The node upon which all errors will be reported, if defined.
+         * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
          */
@@ -4813,11 +4739,41 @@ namespace ts {
                 return Ternary.False;
             }
 
+            // Check if a property with the given name is known anywhere in the given type. In an object type, a property
+            // is considered known if the object type is empty and the check is for assignability, if the object type has
+            // index signatures, or if the property is actually declared in the object type. In a union or intersection
+            // type, a property is considered known if it is known in any constituent type.
+            function isKnownProperty(type: Type, name: string): boolean {
+                if (type.flags & TypeFlags.ObjectType) {
+                    const resolved = resolveStructuredTypeMembers(type);
+                    if (relation === assignableRelation && (type === globalObjectType || resolved.properties.length === 0) ||
+                        resolved.stringIndexType || resolved.numberIndexType || getPropertyOfType(type, name)) {
+                        return true;
+                    }
+                    return false;
+                }
+                if (type.flags & TypeFlags.UnionOrIntersection) {
+                    for (let t of (<UnionOrIntersectionType>type).types) {
+                        if (isKnownProperty(t, name)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 for (let prop of getPropertiesOfObjectType(source)) {
                     if (!isKnownProperty(target, prop.name)) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(prop), typeToString(target));
+                            // We know *exactly* where things went wrong when comparing the types.
+                            // Use this property as the error node as this will be more helpful in
+                            // reasoning about what went wrong.
+                            errorNode = prop.valueDeclaration
+                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                        symbolToString(prop),
+                                        typeToString(target));
                         }
                         return true;
                     }
@@ -5594,7 +5550,7 @@ namespace ts {
                     return getWidenedTypeOfObjectLiteral(type);
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(map((<UnionType>type).types, getWidenedType));
+                    return getUnionType(map((<UnionType>type).types, getWidenedType), /*noSubtypeReduction*/ true);
                 }
                 if (isArrayType(type)) {
                     return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
