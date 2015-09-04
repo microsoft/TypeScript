@@ -1,0 +1,7 @@
+=== tests/cases/compiler/castExpressionParentheses_ES6.ts ===
+
+No type information for this code.// parentheses should be omitted
+No type information for this code.// numeric literal
+No type information for this code.(<any>0o123).foo;
+No type information for this code.
+No type information for this code.
