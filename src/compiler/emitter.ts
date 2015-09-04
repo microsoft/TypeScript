@@ -903,7 +903,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 
                 if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
                     return node.text;
-                } else {
+                }
+                else {
                     return text;
                 }
             }
