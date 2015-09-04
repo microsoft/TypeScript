@@ -720,10 +720,11 @@ namespace ts.formatting {
                     let tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
                         dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind) :
                         Constants.Unknown;
-                    let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation);
 
                     if (currentTokenInfo.leadingTrivia) {
+                        let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation);
                         let indentNextTokenOrTrivia = true;
+
                         for (let triviaItem of currentTokenInfo.leadingTrivia) {
                             if (!rangeContainsRange(originalRange, triviaItem)) {
                                 continue;
