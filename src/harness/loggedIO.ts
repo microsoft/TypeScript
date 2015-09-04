@@ -93,7 +93,7 @@ module Playback {
         return run;
     }
 
-    export interface PlaybackSystem extends ts.System, PlaybackControl { }
+    export interface PlaybackIO extends Harness.IO, PlaybackControl { }
 
     function createEmptyLog(): IOLog {
         return {
@@ -223,8 +223,8 @@ module Playback {
         // console.log("Swallowed write operation during replay: " + name);
     }
 
-    export function wrapSystem(underlying: ts.System): PlaybackSystem {
-        let wrapper: PlaybackSystem = <any>{};
+    export function wrapIO(underlying: Harness.IO): PlaybackIO {
+        let wrapper: PlaybackIO = <any>{};
         initWrapper(wrapper, underlying);
 
         wrapper.startReplayFromFile = logFn => {
@@ -239,18 +239,24 @@ module Playback {
                 recordLog = undefined;
             }
         };
-
-        Object.defineProperty(wrapper, "args", {
-            get() {
-                if (replayLog !== undefined) {
-                    return replayLog.arguments;
-                } else if (recordLog !== undefined) {
-                    recordLog.arguments = underlying.args;
-                }
-                return underlying.args;
+        
+        wrapper.args = () => {
+            if (replayLog !== undefined) {
+                return replayLog.arguments;
+            } else if (recordLog !== undefined) {
+                recordLog.arguments = underlying.args();
             }
-        });
-
+            return underlying.args();
+        }
+        
+        wrapper.newLine = () => underlying.newLine();
+        wrapper.useCaseSensitiveFileNames = () => underlying.useCaseSensitiveFileNames();
+        wrapper.directoryName = (path): string => { throw new Error("NotSupported"); };
+        wrapper.createDirectory = path => { throw new Error("NotSupported"); };
+        wrapper.directoryExists = (path): boolean => { throw new Error("NotSupported"); };
+        wrapper.deleteFile = path => { throw new Error("NotSupported"); };
+        wrapper.listFiles = (path, filter, options): string[] => { throw new Error("NotSupported"); };
+        wrapper.log = text => underlying.log(text);
 
         wrapper.fileExists = recordReplay(wrapper.fileExists, underlying)(
             (path) => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path: path }),

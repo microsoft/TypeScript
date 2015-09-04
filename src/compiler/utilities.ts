@@ -240,7 +240,7 @@ namespace ts {
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
-        return getBaseFileName(moduleName).replace(/\W/g, "_");
+        return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
     export function isBlockOrCatchScoped(declaration: Declaration) {
@@ -611,11 +611,11 @@ namespace ts {
         return false;
     }
 
-    export function isAccessor(node: Node): boolean {
+    export function isAccessor(node: Node): node is AccessorDeclaration {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node): boolean {
+    export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
@@ -978,6 +978,7 @@ namespace ts {
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
+                    case SyntaxKind.JsxExpression:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -1766,7 +1767,7 @@ namespace ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
                 return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
