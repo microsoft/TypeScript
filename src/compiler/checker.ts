@@ -4013,7 +4013,7 @@ namespace ts {
           */
         function createTypedPropertyDescriptorType(propertyType: Type): Type {
             let globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyObjectType
+            return globalTypedPropertyDescriptorType !== emptyGenericType
                 ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType])
                 : emptyObjectType;
         }
@@ -9132,7 +9132,7 @@ namespace ts {
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
             let globalPromiseType = getGlobalPromiseType();
-            if (globalPromiseType !== emptyObjectType) {
+            if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType);
                 return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
@@ -14589,7 +14589,7 @@ namespace ts {
 
         function createInstantiatedPromiseLikeType(): ObjectType {
             let promiseLikeType = getGlobalPromiseLikeType();
-            if (promiseLikeType !== emptyObjectType) {
+            if (promiseLikeType !== emptyGenericType) {
                 return createTypeReference(<GenericType>promiseLikeType, [anyType]);
             }
 

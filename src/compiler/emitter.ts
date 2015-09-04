@@ -4939,63 +4939,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitSerializedTypeNode(node: TypeNode) {
-                if (!node) {
-                    return;
+                if (node) {
+
+                    switch (node.kind) {
+                        case SyntaxKind.VoidKeyword:
+                            write("void 0");
+                            return;
+
+                        case SyntaxKind.ParenthesizedType:
+                            emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
+                            return;
+
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                            write("Function");
+                            return;
+
+                        case SyntaxKind.ArrayType:
+                        case SyntaxKind.TupleType:
+                            write("Array");
+                            return;
+
+                        case SyntaxKind.TypePredicate:
+                        case SyntaxKind.BooleanKeyword:
+                            write("Boolean");
+                            return;
+
+                        case SyntaxKind.StringKeyword:
+                        case SyntaxKind.StringLiteral:
+                            write("String");
+                            return;
+
+                        case SyntaxKind.NumberKeyword:
+                            write("Number");
+                            return;
+
+                        case SyntaxKind.SymbolKeyword:
+                            write("Symbol");
+                            return;
+
+                        case SyntaxKind.TypeReference:
+                            emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
+                            return;
+
+                        case SyntaxKind.TypeQuery:
+                        case SyntaxKind.TypeLiteral:
+                        case SyntaxKind.UnionType:
+                        case SyntaxKind.IntersectionType:
+                        case SyntaxKind.AnyKeyword:
+                            break;
+
+                        default:
+                            Debug.fail("Cannot serialize unexpected type node.");
+                            break;
+                    }
                 }
-                
-                switch (node.kind) {
-                    case SyntaxKind.VoidKeyword:
-                        write("void 0");
-                        return;
-
-                    case SyntaxKind.ParenthesizedType:
-                        emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
-                        return;
-
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                        write("Function");
-                        return;
-
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                        write("Array");
-                        return;
-
-                    case SyntaxKind.TypePredicate:
-                    case SyntaxKind.BooleanKeyword:
-                        write("Boolean");
-                        return;
-
-                    case SyntaxKind.StringKeyword:
-                    case SyntaxKind.StringLiteral:
-                        write("String");
-                        return;
-
-                    case SyntaxKind.NumberKeyword:
-                        write("Number");
-                        return;
-
-                    case SyntaxKind.SymbolKeyword:
-                        write("Symbol");
-                        return;
-
-                    case SyntaxKind.TypeReference:
-                        emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
-                        return;
-
-                    case SyntaxKind.TypeQuery:
-                    case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.IntersectionType:
-                    case SyntaxKind.AnyKeyword:
-                        break;
-
-                    default:
-                        Debug.fail("Cannot serialize unexpected type node.");
-                        break;
-                }
-
                 write("Object");
             }
 
