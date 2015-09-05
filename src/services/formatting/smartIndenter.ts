@@ -478,20 +478,13 @@ namespace ts.formatting {
             }
         }
 
-        function hasBraceShell(node: Node) {
-            let children = node.getChildren();
-            let last = children.length - 1;
-            // Check if node looks like a block
-            return children[0] && children[0].kind === SyntaxKind.OpenBraceToken &&
-                children[last] && children[last].kind === SyntaxKind.CloseBraceToken;
-        }
-
         export function isIndentationPrevented(node: TextRangeWithKind) {
             switch (node.kind) {
                 case SyntaxKind.NamedExports:
-                    return hasBraceShell(<NamedExports>node);
+                    return true;
+                // Allow indentation only when namedBindings is NamespaceImport.
                 case SyntaxKind.ImportClause:
-                    return hasBraceShell((<ImportClause>node).namedBindings);
+                    return (<ImportClause>node).namedBindings.kind === SyntaxKind.NamedImports;
             }
             return false;
         }
