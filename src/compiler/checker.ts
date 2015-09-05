@@ -12625,6 +12625,10 @@ namespace ts {
             return s.flags & SymbolFlags.Instantiated ? getSymbolLinks(s).target : s;
         }
 
+        function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration {
+            return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
+        }
+
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: ObjectType): void {
 
             // TypeScript 1.0 spec (April 2014): 8.2.3
@@ -12662,14 +12666,20 @@ namespace ts {
                     if (derived === base) {
                         // derived class inherits base without override/redeclaration
 
-                        let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+                        let derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol);
 
                         // It is an error to inherit an abstract member without implementing it or being declared abstract.
                         // If there is no declaration for the derived class (as in the case of class expressions),
                         // then the class cannot be declared abstract.
-                        if ( baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
-                            error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
-                                typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                        if (baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
+                            if (derivedClassDecl.kind === SyntaxKind.ClassExpression) {
+                                error(derivedClassDecl, Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1,
+                                    symbolToString(baseProperty), typeToString(baseType));
+                            }
+                            else {
+                                error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                                    typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                            }
                         }
                     }
                     else {
