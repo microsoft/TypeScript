@@ -200,7 +200,7 @@ function g3([x, y] = []) { }
 >g3 : ([x, y]?: [any, any]) => void
 >x : any
 >y : any
->[] : [any, any]
+>[] : [undefined, undefined]
 
 g3();
 >g3() : void
