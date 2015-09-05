@@ -14,6 +14,7 @@ f1({ x: 1, y: 1 });
 >y : number
 >1 : number
 
+// (arg: { x: any, y?: number }) => void
 function f2({ x, y = 0 }) { }
 >f2 : ({ x, y = 0 }: { x: any; y?: number; }) => void
 >x : any

@@ -3,6 +3,7 @@
 function f1({ x, y }) { }
 f1({ x: 1, y: 1 });
 
+// (arg: { x: any, y?: number }) => void
 function f2({ x, y = 0 }) { }
 f2({ x: 1 });
 f2({ x: 1, y: 1 });
@@ -58,6 +59,7 @@ function f1(_a) {
     var x = _a.x, y = _a.y;
 }
 f1({ x: 1, y: 1 });
+// (arg: { x: any, y?: number }) => void
 function f2(_a) {
     var x = _a.x, _b = _a.y, y = _b === void 0 ? 0 : _b;
 }
