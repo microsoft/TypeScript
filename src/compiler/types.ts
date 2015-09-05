@@ -1795,7 +1795,6 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
-        ImpliedType             = 0x02000000,  // Type implied by object binding pattern
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1812,11 +1811,14 @@ namespace ts {
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
+    export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+
     // Properties common to all types
     export interface Type {
-        flags: TypeFlags;               // Flags
-        /* @internal */ id: number;     // Unique ID
-        symbol?: Symbol;                // Symbol associated with type (if any)
+        flags: TypeFlags;                // Flags
+        /* @internal */ id: number;      // Unique ID
+        symbol?: Symbol;                 // Symbol associated with type (if any)
+        pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
     }
 
     /* @internal */

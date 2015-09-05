@@ -2406,7 +2406,7 @@ namespace ts {
 
             // If the declaration specifies a binding pattern, use the type implied by the binding pattern
             if (isBindingPattern(declaration.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
+                return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false);
             }
 
             // No type specified and nothing can be inferred
@@ -2421,13 +2421,13 @@ namespace ts {
                 return getWidenedType(checkExpressionCached(element.initializer));
             }
             if (isBindingPattern(element.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>element.name);
+                return getTypeFromBindingPattern(<BindingPattern>element.name, /*includePatternInType*/ false);
             }
             return anyType;
         }
 
         // Return the type implied by an object binding pattern
-        function getTypeFromObjectBindingPattern(pattern: BindingPattern): Type {
+        function getTypeFromObjectBindingPattern(pattern: BindingPattern, includePatternInType: boolean): Type {
             let members: SymbolTable = {};
             forEach(pattern.elements, e => {
                 let flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
@@ -2436,28 +2436,27 @@ namespace ts {
                 symbol.type = getTypeFromBindingElement(e);
                 members[symbol.name] = symbol;
             });
-            return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+            let result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+            if (includePatternInType) {
+                result.pattern = pattern;
+            }
+            return result;
         }
 
         // Return the type implied by an array binding pattern
-        function getTypeFromArrayBindingPattern(pattern: BindingPattern): Type {
-            let hasSpreadElement: boolean = false;
-            let elementTypes: Type[] = [];
-            forEach(pattern.elements, e => {
-                elementTypes.push(e.kind === SyntaxKind.OmittedExpression || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
-                if (e.dotDotDotToken) {
-                    hasSpreadElement = true;
-                }
-            });
-            if (!elementTypes.length) {
+        function getTypeFromArrayBindingPattern(pattern: BindingPattern, includePatternInType: boolean): Type {
+            let elements = pattern.elements;
+            if (elements.length === 0 || elements[elements.length - 1].dotDotDotToken) {
                 return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
             }
-            else if (hasSpreadElement) {
-                let unionOfElements = getUnionType(elementTypes);
-                return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
-            }
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
-            return createTupleType(elementTypes);
+            let elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e));
+            let result = createTupleType(elementTypes);
+            if (includePatternInType) {
+                result = clone(result);
+                result.pattern = pattern;
+            }
+            return result;
         }
 
         // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
@@ -2467,10 +2466,10 @@ namespace ts {
         // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
         // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
         // the parameter.
-        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
+        function getTypeFromBindingPattern(pattern: BindingPattern, includePatternInType?: boolean): Type {
             return pattern.kind === SyntaxKind.ObjectBindingPattern
-                ? getTypeFromObjectBindingPattern(pattern)
-                : getTypeFromArrayBindingPattern(pattern);
+                ? getTypeFromObjectBindingPattern(pattern, includePatternInType)
+                : getTypeFromArrayBindingPattern(pattern, includePatternInType);
         }
 
         // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
@@ -6606,16 +6605,10 @@ namespace ts {
                     }
                 }
                 if (isBindingPattern(declaration.name)) {
-                    return createImpliedType(getTypeFromBindingPattern(<BindingPattern>declaration.name));
+                    return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ true);
                 }
             }
             return undefined;
-        }
-
-        function createImpliedType(type: Type): Type {
-            var result = clone(type);
-            result.flags |= TypeFlags.ImpliedType;
-            return result;
         }
 
         function getContextualTypeForReturnExpression(node: Expression): Type {
@@ -7044,17 +7037,28 @@ namespace ts {
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 if (inDestructuringPattern && elementTypes.length) {
-                    return createImpliedType(createTupleType(elementTypes));
+                    let type = clone(createTupleType(elementTypes));
+                    type.pattern = node;
+                    return type;
                 }
                 let contextualType = getContextualType(node);
-                let contextualTupleLikeType = contextualType && contextualTypeIsTupleLikeType(contextualType) ? contextualType : undefined;
-                if (contextualTupleLikeType) {
-                    // If array literal is contextually typed by the implied type of a binding pattern, pad the resulting
-                    // tuple type with elements from the binding tuple type to make the lengths equal.
-                    if (contextualTupleLikeType.flags & TypeFlags.Tuple && contextualTupleLikeType.flags & TypeFlags.ImpliedType) {
-                        let contextualElementTypes = (<TupleType>contextualTupleLikeType).elementTypes;
-                        for (let i = elementTypes.length; i < contextualElementTypes.length; i++) {
-                            elementTypes.push(contextualElementTypes[i]);
+                if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
+                    let pattern = contextualType.pattern;
+                    // If array literal is contextually typed by a binding pattern or an assignment pattern,
+                    // pad the resulting tuple type to make the lengths equal.
+                    if (pattern && pattern.kind === SyntaxKind.ArrayBindingPattern) {
+                        let bindingElements = (<BindingPattern>pattern).elements;
+                        for (let i = elementTypes.length; i < bindingElements.length; i++) {
+                            let hasDefaultValue = bindingElements[i].initializer;
+                            elementTypes.push(hasDefaultValue ? (<TupleType>contextualType).elementTypes[i] : undefinedType);
+                        }
+                    }
+                    else if (pattern && pattern.kind === SyntaxKind.ArrayLiteralExpression) {
+                        let assignmentElements = (<ArrayLiteralExpression>pattern).elements;
+                        for (let i = elementTypes.length; i < assignmentElements.length; i++) {
+                            let hasDefaultValue = assignmentElements[i].kind === SyntaxKind.BinaryExpression &&
+                                (<BinaryExpression>assignmentElements[i]).operatorToken.kind === SyntaxKind.EqualsToken;
+                            elementTypes.push(hasDefaultValue ? (<TupleType>contextualType).elementTypes[i] : undefinedType);
                         }
                     }
                     if (elementTypes.length) {
@@ -7129,6 +7133,8 @@ namespace ts {
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
+            let contextualTypeHasPattern = contextualType && contextualType.pattern &&
+                contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern;
             let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
@@ -7151,7 +7157,7 @@ namespace ts {
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                     // If object literal is contextually typed by the implied type of a binding pattern, and if the
                     // binding pattern specifies a default value for the property, make the property optional.
-                    if (contextualType && contextualType.flags & TypeFlags.ImpliedType) {
+                    if (contextualTypeHasPattern) {
                         let impliedProp = getPropertyOfType(contextualType, member.name);
                         if (impliedProp) {
                             prop.flags |= impliedProp.flags & SymbolFlags.Optional;
@@ -7185,7 +7191,7 @@ namespace ts {
 
             // If object literal is contextually typed by the implied type of a binding pattern, augment the result
             // type with those properties for which the binding pattern specifies a default value.
-            if (contextualType && contextualType.flags & TypeFlags.ImpliedType) {
+            if (contextualTypeHasPattern) {
                 for (let prop of getPropertiesOfType(contextualType)) {
                     if (prop.flags & SymbolFlags.Optional && !hasProperty(propertiesTable, prop.name)) {
                         propertiesTable[prop.name] = prop;
