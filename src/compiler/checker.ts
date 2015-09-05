@@ -7001,6 +7001,11 @@ namespace ts {
             return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
         }
 
+        function hasDefaultValue(node: BindingElement | Expression): boolean {
+            return (node.kind === SyntaxKind.BindingElement && !!(<BindingElement>node).initializer) ||
+                (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
+        }
+
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             let elements = node.elements;
             let hasSpreadElement = false;
@@ -7044,21 +7049,12 @@ namespace ts {
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
                     let pattern = contextualType.pattern;
-                    // If array literal is contextually typed by a binding pattern or an assignment pattern,
-                    // pad the resulting tuple type to make the lengths equal.
-                    if (pattern && pattern.kind === SyntaxKind.ArrayBindingPattern) {
-                        let bindingElements = (<BindingPattern>pattern).elements;
-                        for (let i = elementTypes.length; i < bindingElements.length; i++) {
-                            let hasDefaultValue = bindingElements[i].initializer;
-                            elementTypes.push(hasDefaultValue ? (<TupleType>contextualType).elementTypes[i] : undefinedType);
-                        }
-                    }
-                    else if (pattern && pattern.kind === SyntaxKind.ArrayLiteralExpression) {
-                        let assignmentElements = (<ArrayLiteralExpression>pattern).elements;
-                        for (let i = elementTypes.length; i < assignmentElements.length; i++) {
-                            let hasDefaultValue = assignmentElements[i].kind === SyntaxKind.BinaryExpression &&
-                                (<BinaryExpression>assignmentElements[i]).operatorToken.kind === SyntaxKind.EqualsToken;
-                            elementTypes.push(hasDefaultValue ? (<TupleType>contextualType).elementTypes[i] : undefinedType);
+                    // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the
+                    // resulting tuple type to make the lengths equal.
+                    if (pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
+                        let patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
+                        for (let i = elementTypes.length; i < patternElements.length; i++) {
+                            elementTypes.push(hasDefaultValue(patternElements[i]) ? (<TupleType>contextualType).elementTypes[i] : undefinedType);
                         }
                     }
                     if (elementTypes.length) {
@@ -7134,7 +7130,8 @@ namespace ts {
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
             let contextualTypeHasPattern = contextualType && contextualType.pattern &&
-                contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern;
+                (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
+            let inDestructuringPattern = isAssignmentTarget(node);
             let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
@@ -7155,12 +7152,23 @@ namespace ts {
                     }
                     typeFlags |= type.flags;
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
-                    // If object literal is contextually typed by the implied type of a binding pattern, and if the
-                    // binding pattern specifies a default value for the property, make the property optional.
-                    if (contextualTypeHasPattern) {
+                    if (inDestructuringPattern) {
+                        // If object literal is an assignment pattern and if the assignment pattern specifies a default value
+                        // for the property, make the property optional.
+                        if (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) {
+                            prop.flags |= SymbolFlags.Optional;
+                        }
+                    }
+                    else if (contextualTypeHasPattern) {
+                        // If object literal is contextually typed by the implied type of a binding pattern, and if the
+                        // binding pattern specifies a default value for the property, make the property optional.
                         let impliedProp = getPropertyOfType(contextualType, member.name);
                         if (impliedProp) {
                             prop.flags |= impliedProp.flags & SymbolFlags.Optional;
+                        }
+                        else if (!compilerOptions.suppressExcessPropertyErrors) {
+                            error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                symbolToString(member), typeToString(contextualType));
                         }
                     }
                     prop.declarations = member.declarations;
@@ -7205,6 +7213,9 @@ namespace ts {
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
             let freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
+            if (inDestructuringPattern) {
+                result.pattern = node;
+            }
             return result;
 
             function getIndexType(kind: IndexKind) {
