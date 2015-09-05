@@ -48,19 +48,19 @@
 //// [emptyVariableDeclarationBindingPatterns01_ES5.js]
 (function () {
     var a;
-    var ;
-    var ;
-    var ;
-    var ;
-    var ;
-    var ;
-    var , ;
-    var , ;
-    var , ;
-    var _a = a.p1, _b = a.p2;
-    var _c = a.p1, _d = a.p2;
-    var _e = a.p1, _f = a.p2;
-    for (var _g = {}, _h = {}; false; void 0) {
+    var _a = a;
+    var _b = a;
+    var _c = a;
+    var _d = a;
+    var _e = a;
+    var _f = a;
+    var _g = a, _h = a;
+    var _j = a, _k = a;
+    var _l = a, _m = a;
+    var _o = a.p1, _p = a.p2;
+    var _q = a.p1, _r = a.p2;
+    var _s = a.p1, _t = a.p2;
+    for (var _u = {}, _v = {}; false; void 0) {
     }
 })();
 (function () {
