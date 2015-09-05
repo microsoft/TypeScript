@@ -5105,8 +5105,8 @@ namespace ts {
                 function abstractSignatureRelatedTo(source: Type, sourceSig: Signature, target: Type, targetSig: Signature) {
                     if (sourceSig && targetSig) {
 
-                        let sourceDecl = source.symbol && getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
-                        let targetDecl = target.symbol && getDeclarationOfKind(target.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceDecl = source.symbol && getClassLikeDeclarationOfSymbol(source.symbol);
+                        let targetDecl = target.symbol && getClassLikeDeclarationOfSymbol(target.symbol);
 
                         if (!sourceDecl) {
                             // If the source object isn't itself a class declaration, it can be freely assigned, regardless
@@ -5120,8 +5120,8 @@ namespace ts {
                         let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
                         let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
 
-                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
-                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getClassLikeDeclarationOfSymbol(sourceReturnType.symbol);
+                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getClassLikeDeclarationOfSymbol(targetReturnType.symbol);
                         let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
                         let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
 
@@ -8873,7 +8873,7 @@ namespace ts {
             // Note, only class declarations can be declared abstract.
             // In the case of a merged class-module or class-interface declaration,
             // only the class declaration node will have the Abstract flag set.
-            let valueDecl = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
+            let valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
                 return resolveErrorCall(node);
