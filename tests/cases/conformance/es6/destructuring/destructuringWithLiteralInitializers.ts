@@ -2,6 +2,7 @@
 function f1({ x, y }) { }
 f1({ x: 1, y: 1 });
 
+// (arg: { x: any, y?: number }) => void
 function f2({ x, y = 0 }) { }
 f2({ x: 1 });
 f2({ x: 1, y: 1 });
