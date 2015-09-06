@@ -2416,12 +2416,12 @@ namespace ts {
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
         // pattern. Otherwise, it is the type any.
-        function getTypeFromBindingElement(element: BindingElement): Type {
+        function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean): Type {
             if (element.initializer) {
                 return getWidenedType(checkExpressionCached(element.initializer));
             }
             if (isBindingPattern(element.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>element.name, /*includePatternInType*/ false);
+                return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType);
             }
             return anyType;
         }
@@ -2433,7 +2433,7 @@ namespace ts {
                 let flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
                 let name = e.propertyName || <Identifier>e.name;
                 let symbol = <TransientSymbol>createSymbol(flags, name.text);
-                symbol.type = getTypeFromBindingElement(e);
+                symbol.type = getTypeFromBindingElement(e, includePatternInType);
                 members[symbol.name] = symbol;
             });
             let result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
@@ -2450,7 +2450,7 @@ namespace ts {
                 return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
             }
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
-            let elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e));
+            let elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e, includePatternInType));
             let result = createTupleType(elementTypes);
             if (includePatternInType) {
                 result = clone(result);
