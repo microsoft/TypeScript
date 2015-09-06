@@ -403,16 +403,13 @@ namespace ts.formatting {
                         indentation = parentDynamicIndentation.getIndentation();
                     }
                 }
-                else if (SmartIndenter.isIndentationPrevented(node)) {
+                else if (SmartIndenter.isIndentationPrevented(node) ||
+                    SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
+
                     indentation = parentDynamicIndentation.getIndentation();
                 }
                 else {
-                    if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                        indentation = parentDynamicIndentation.getIndentation();
-                    }
-                    else {
-                        indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
-                    }
+                    indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
                 }
             }
 

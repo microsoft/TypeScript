@@ -482,7 +482,7 @@ namespace ts.formatting {
             switch (node.kind) {
                 case SyntaxKind.NamedExports:
                     return true;
-                // Allow indentation only when namedBindings is NamespaceImport.
+                // NamedImports has its own braces as Block does
                 case SyntaxKind.ImportClause:
                     return (<ImportClause>node).namedBindings.kind === SyntaxKind.NamedImports;
             }
