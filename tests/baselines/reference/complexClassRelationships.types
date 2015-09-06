@@ -1,22 +1,6 @@
 === tests/cases/compiler/complexClassRelationships.ts ===
 // There should be no errors in this file
-class Derived extends Base {
->Derived : Derived
->Base : Base
 
-    public static createEmpty(): Derived {
->createEmpty : () => Derived
->Derived : Derived
-
-        var item = new Derived();
->item : Derived
->new Derived() : Derived
->Derived : typeof Derived
-
-        return item;
->item : Derived
-    }
-}
 class BaseCollection<T extends Base> {
 >BaseCollection : BaseCollection<T>
 >T : T
@@ -43,6 +27,24 @@ class Base {
 >ownerCollection : BaseCollection<Base>
 >BaseCollection : BaseCollection<T>
 >Base : Base
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    public static createEmpty(): Derived {
+>createEmpty : () => Derived
+>Derived : Derived
+
+        var item = new Derived();
+>item : Derived
+>new Derived() : Derived
+>Derived : typeof Derived
+
+        return item;
+>item : Derived
+    }
 }
 
 class Thing {

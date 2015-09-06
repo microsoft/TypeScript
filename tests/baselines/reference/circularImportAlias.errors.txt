@@ -1,0 +1,25 @@
+tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts(5,23): error TS2654: Import declaration references entity before it is declared.
+
+
+==== tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts (1 errors) ====
+    // expected no error
+    
+    module A {
+        export class C { name: string }
+        export import b = B;
+                          ~
+!!! error TS2654: Import declaration references entity before it is declared.
+    }
+    
+    module B {
+        export import a = A;
+        export class D extends a.C {
+            id: number;
+        }
+    }
+    
+    var c: { name: string };
+    var c = new B.a.C();
+    
+    
+    

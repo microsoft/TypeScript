@@ -1,0 +1,24 @@
+tests/cases/compiler/baseClassExpressionOutOfOrder.ts(1,25): error TS2653: Base expression references type before it is declared.
+tests/cases/compiler/baseClassExpressionOutOfOrder.ts(3,24): error TS2653: Base expression references type before it is declared.
+
+
+==== tests/cases/compiler/baseClassExpressionOutOfOrder.ts (2 errors) ====
+    var c = class A extends B { // error
+                            ~
+!!! error TS2653: Base expression references type before it is declared.
+    }
+    var c2 = class extends B { // error
+                           ~
+!!! error TS2653: Base expression references type before it is declared.
+    }
+    var c3 = class B extends class A { // No error
+    }{
+    }
+    var c4 =class extends class { // no error
+    }{
+    }
+    var c5 = class extends class B3 extends class C { // no error
+    }{
+    }{ }
+    class B {
+    }

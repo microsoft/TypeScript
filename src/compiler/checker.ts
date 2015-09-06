@@ -381,11 +381,16 @@ namespace ts {
         }
 
         /** Returns true if node1 is defined before node 2**/
-        function isDefinedBefore(node1: Node, node2: Node): boolean {
-            let file1 = getSourceFileOfNode(node1);
-            let file2 = getSourceFileOfNode(node2);
-            if (file1 === file2) {
-                return node1.pos <= node2.pos;
+        function isDefinedBefore(referenceDeclaration: Node, locationNode: Node): boolean {
+            if (isAliasSymbolDeclaration(referenceDeclaration) && !isInternalModuleImportEqualsDeclaration(referenceDeclaration)) {
+                // external aliases always declared before use
+                return true;
+            }
+
+            let referenceDeclarationFile = getSourceFileOfNode(referenceDeclaration);
+            let locationNodeFile = getSourceFileOfNode(locationNode);
+            if (referenceDeclarationFile === locationNodeFile) {
+                return referenceDeclaration.pos <= locationNode.pos || !isInSameContainingFunction();
             }
 
             if (!compilerOptions.outFile && !compilerOptions.out) {
@@ -393,9 +398,13 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
-        }
+            return indexOf(sourceFiles, referenceDeclarationFile) <= indexOf(sourceFiles, locationNodeFile) || !isInSameContainingFunction(); 
 
+            function isInSameContainingFunction() {
+                return getContainingFunction(referenceDeclaration) === getContainingFunction(locationNode);
+            }
+        }
+        
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
@@ -12594,6 +12603,15 @@ namespace ts {
                         }
                     }
                     checkKindsOfPropertyMemberOverrides(type, baseType);
+                        
+                    // Check if base type declaration appears before heritage clause to avoid false errors for 
+                    // base type declarations in the extend clause itself
+                    // eg. class A extends class B { } { } 
+                    // Should not error on class B even though it is declared in its heritage clause
+                    let baseTypeDeclaration = getLeftmostAliasDeclarationFromExpressionOrEnityName(baseTypeNode.expression) || baseType.symbol.declarations[0];
+                    if (!isDefinedBefore(baseTypeDeclaration, baseTypeNode)) {
+                        error(baseTypeNode, Diagnostics.Base_expression_references_type_before_it_is_declared);
+                    }
                 }
             }
 
@@ -12622,6 +12640,39 @@ namespace ts {
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
+            }
+        }
+
+        function getLeftmostAliasDeclarationFromExpressionOrEnityName(node: Expression | EntityName): Declaration {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    let result = getLeftmostAliasDeclarationFromExpressionOrEnityName((<PropertyAccessExpression>node).expression);
+                    if (result) {
+                        return result;
+                    }
+                    break;
+
+                case SyntaxKind.QualifiedName:
+                    let result2 = getLeftmostAliasDeclarationFromExpressionOrEnityName((<QualifiedName>node).left);
+                    if (result2) {
+                        return result2;
+                    }
+
+                case SyntaxKind.Identifier:
+                    break;
+
+                default:
+                    return;
+            }
+
+            let meaning = node.parent.kind === SyntaxKind.QualifiedName ?
+                SymbolFlags.Namespace :
+                node.parent.kind === SyntaxKind.PropertyAccessExpression ?
+                    SymbolFlags.Namespace | SymbolFlags.Value :
+                    SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
+            let resolvedSymbol = resolveEntityName(node, meaning | SymbolFlags.Alias, /*ignoreErrors*/ true);
+            if (resolvedSymbol && !!(resolvedSymbol.flags & SymbolFlags.Alias)) {
+                return getDeclarationOfAliasSymbol(resolvedSymbol);
             }
         }
 
@@ -13289,6 +13340,11 @@ namespace ts {
                             let moduleName = getFirstIdentifier(<EntityName>node.moduleReference);
                             if (!(resolveEntityName(moduleName, SymbolFlags.Value | SymbolFlags.Namespace).flags & SymbolFlags.Namespace)) {
                                 error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
+                            }
+
+                            let internalReferenceDecl = getLeftmostAliasDeclarationFromExpressionOrEnityName(<EntityName>node.moduleReference) || target.declarations[0];
+                            if (!isDefinedBefore(internalReferenceDecl, node.moduleReference)) {
+                                error(node.moduleReference, Diagnostics.Import_declaration_references_entity_before_it_is_declared);
                             }
                         }
                         if (target.flags & SymbolFlags.Type) {

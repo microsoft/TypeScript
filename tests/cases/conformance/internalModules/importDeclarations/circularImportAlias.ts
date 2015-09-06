@@ -1,15 +1,15 @@
 // expected no error
 
+module A {
+    export class C { name: string }
+    export import b = B;
+}
+
 module B {
     export import a = A;
     export class D extends a.C {
         id: number;
     }
-}
-
-module A {
-    export class C { name: string }
-    export import b = B;
 }
 
 var c: { name: string };

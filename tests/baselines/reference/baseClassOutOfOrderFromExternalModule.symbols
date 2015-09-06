@@ -1,0 +1,26 @@
+=== tests/cases/compiler/mod2.ts ===
+export default class D {
+>D : Symbol(D, Decl(mod2.ts, 0, 0))
+}
+
+=== tests/cases/compiler/file1.ts ===
+import C from "mod";
+>C : Symbol(C, Decl(file1.ts, 0, 6))
+
+import D from "mod2";
+>D : Symbol(D, Decl(file1.ts, 1, 6))
+
+class B extends C { // no error here
+>B : Symbol(B, Decl(file1.ts, 1, 21))
+>C : Symbol(C, Decl(file1.ts, 0, 6))
+}
+class A extends D { // no error here
+>A : Symbol(A, Decl(file1.ts, 3, 1))
+>D : Symbol(D, Decl(file1.ts, 1, 6))
+}
+
+=== tests/cases/compiler/mod.ts ===
+export default class C {
+>C : Symbol(C, Decl(mod.ts, 0, 0))
+}
+

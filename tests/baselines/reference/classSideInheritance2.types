@@ -9,6 +9,27 @@ interface IText {
 interface TextSpan {}
 >TextSpan : TextSpan
 
+class TextBase implements IText {
+>TextBase : TextBase
+>IText : IText
+
+    public foo: number;
+>foo : number
+
+    public subText(span: TextSpan): IText {
+>subText : (span: TextSpan) => IText
+>span : TextSpan
+>TextSpan : TextSpan
+>IText : IText
+
+        return new SubText(this, span);
+>new SubText(this, span) : SubText
+>SubText : typeof SubText
+>this : TextBase
+>span : TextSpan
+    }
+}
+
 class SubText extends TextBase {
 >SubText : SubText
 >TextBase : TextBase
@@ -22,26 +43,5 @@ class SubText extends TextBase {
             super();
 >super() : void
 >super : typeof TextBase
-        }
-}
-
-class TextBase implements IText {
->TextBase : TextBase
->IText : IText
-
-        public foo: number;
->foo : number
-
-        public subText(span: TextSpan): IText {
->subText : (span: TextSpan) => IText
->span : TextSpan
->TextSpan : TextSpan
->IText : IText
-
-            return new SubText(this, span);
->new SubText(this, span) : SubText
->SubText : typeof SubText
->this : TextBase
->span : TextSpan
         }
 }

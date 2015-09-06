@@ -1,52 +1,52 @@
 === tests/cases/compiler/baseTypeWrappingInstantiationChain.ts ===
-class C<T1> extends CBase<T1> {
->C : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
->T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 0, 8))
->CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 9, 1))
->T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 0, 8))
+class CBaseBase<T3> {
+>CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
+>T3 : Symbol(T3, Decl(baseTypeWrappingInstantiationChain.ts, 0, 16))
 
-    public works() {
->works : Symbol(works, Decl(baseTypeWrappingInstantiationChain.ts, 0, 31))
-
-        new CBaseBase<Wrapper<T1>>(this);
->CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 13, 1))
->Wrapper : Symbol(Wrapper, Decl(baseTypeWrappingInstantiationChain.ts, 21, 1))
->T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 0, 8))
->this : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
-    }
-    public alsoWorks() {
->alsoWorks : Symbol(alsoWorks, Decl(baseTypeWrappingInstantiationChain.ts, 3, 5))
-
-        new CBase<T1>(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
->CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 9, 1))
->T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 0, 8))
->this : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
-    }
-
-    public method(t: Wrapper<T1>) { }
->method : Symbol(method, Decl(baseTypeWrappingInstantiationChain.ts, 6, 5))
->t : Symbol(t, Decl(baseTypeWrappingInstantiationChain.ts, 8, 18))
->Wrapper : Symbol(Wrapper, Decl(baseTypeWrappingInstantiationChain.ts, 21, 1))
->T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 0, 8))
+    constructor(x: Parameter<T3>) { }
+>x : Symbol(x, Decl(baseTypeWrappingInstantiationChain.ts, 1, 16))
+>Parameter : Symbol(Parameter, Decl(baseTypeWrappingInstantiationChain.ts, 17, 1))
+>T3 : Symbol(T3, Decl(baseTypeWrappingInstantiationChain.ts, 0, 16))
 }
 
 class CBase<T2> extends CBaseBase<Wrapper<T2>> {
->CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 9, 1))
->T2 : Symbol(T2, Decl(baseTypeWrappingInstantiationChain.ts, 11, 12))
->CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 13, 1))
+>CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 2, 1))
+>T2 : Symbol(T2, Decl(baseTypeWrappingInstantiationChain.ts, 4, 12))
+>CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
 >Wrapper : Symbol(Wrapper, Decl(baseTypeWrappingInstantiationChain.ts, 21, 1))
->T2 : Symbol(T2, Decl(baseTypeWrappingInstantiationChain.ts, 11, 12))
+>T2 : Symbol(T2, Decl(baseTypeWrappingInstantiationChain.ts, 4, 12))
 
 }
 
-class CBaseBase<T3> {
->CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 13, 1))
->T3 : Symbol(T3, Decl(baseTypeWrappingInstantiationChain.ts, 15, 16))
+class C<T1> extends CBase<T1> {
+>C : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 6, 1))
+>T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 8, 8))
+>CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 2, 1))
+>T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 8, 8))
 
-    constructor(x: Parameter<T3>) { }
->x : Symbol(x, Decl(baseTypeWrappingInstantiationChain.ts, 16, 16))
->Parameter : Symbol(Parameter, Decl(baseTypeWrappingInstantiationChain.ts, 17, 1))
->T3 : Symbol(T3, Decl(baseTypeWrappingInstantiationChain.ts, 15, 16))
+    public works() {
+>works : Symbol(works, Decl(baseTypeWrappingInstantiationChain.ts, 8, 31))
+
+        new CBaseBase<Wrapper<T1>>(this);
+>CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
+>Wrapper : Symbol(Wrapper, Decl(baseTypeWrappingInstantiationChain.ts, 21, 1))
+>T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 8, 8))
+>this : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 6, 1))
+    }
+    public alsoWorks() {
+>alsoWorks : Symbol(alsoWorks, Decl(baseTypeWrappingInstantiationChain.ts, 11, 5))
+
+        new CBase<T1>(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
+>CBase : Symbol(CBase, Decl(baseTypeWrappingInstantiationChain.ts, 2, 1))
+>T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 8, 8))
+>this : Symbol(C, Decl(baseTypeWrappingInstantiationChain.ts, 6, 1))
+    }
+
+    public method(t: Wrapper<T1>) { }
+>method : Symbol(method, Decl(baseTypeWrappingInstantiationChain.ts, 14, 5))
+>t : Symbol(t, Decl(baseTypeWrappingInstantiationChain.ts, 16, 18))
+>Wrapper : Symbol(Wrapper, Decl(baseTypeWrappingInstantiationChain.ts, 21, 1))
+>T1 : Symbol(T1, Decl(baseTypeWrappingInstantiationChain.ts, 8, 8))
 }
 
 class Parameter<T4> {

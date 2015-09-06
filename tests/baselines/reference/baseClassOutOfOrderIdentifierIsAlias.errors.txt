@@ -1,0 +1,20 @@
+tests/cases/compiler/baseClassOutOfOrderIdentifierIsAlias.ts(8,17): error TS2653: Base expression references type before it is declared.
+
+
+==== tests/cases/compiler/baseClassOutOfOrderIdentifierIsAlias.ts (1 errors) ====
+    module M {
+        export class c {
+        }
+    }
+    
+    import im2 = M.c;
+    
+    class B extends im { //error
+                    ~~
+!!! error TS2653: Base expression references type before it is declared.
+    }
+    
+    class C extends im2 { // no error
+    }
+    
+    import im = M.c;

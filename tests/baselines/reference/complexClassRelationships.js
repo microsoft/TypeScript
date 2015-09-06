@@ -1,11 +1,6 @@
 //// [complexClassRelationships.ts]
 // There should be no errors in this file
-class Derived extends Base {
-    public static createEmpty(): Derived {
-        var item = new Derived();
-        return item;
-    }
-}
+
 class BaseCollection<T extends Base> {
     constructor(f: () => T) {
         (item: Thing) => { return [item.Components]; };
@@ -13,6 +8,13 @@ class BaseCollection<T extends Base> {
 }
 class Base {
     ownerCollection: BaseCollection<Base>;
+}
+
+class Derived extends Base {
+    public static createEmpty(): Derived {
+        var item = new Derived();
+        return item;
+    }
 }
 
 class Thing {
@@ -48,23 +50,12 @@ class FooBase {
 }
 
 //// [complexClassRelationships.js]
+// There should be no errors in this file
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-// There should be no errors in this file
-var Derived = (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
-        _super.apply(this, arguments);
-    }
-    Derived.createEmpty = function () {
-        var item = new Derived();
-        return item;
-    };
-    return Derived;
-})(Base);
 var BaseCollection = (function () {
     function BaseCollection(f) {
         (function (item) { return [item.Components]; });
@@ -76,6 +67,17 @@ var Base = (function () {
     }
     return Base;
 })();
+var Derived = (function (_super) {
+    __extends(Derived, _super);
+    function Derived() {
+        _super.apply(this, arguments);
+    }
+    Derived.createEmpty = function () {
+        var item = new Derived();
+        return item;
+    };
+    return Derived;
+})(Base);
 var Thing = (function () {
     function Thing() {
     }

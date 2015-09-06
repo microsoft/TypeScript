@@ -1,9 +1,9 @@
 //// [genericClassInheritsConstructorFromNonGenericClass.ts]
-class A extends B<string> { }
-class B<U> extends C { }
 class C {
     constructor(p: string) { }
 }
+class B<U> extends C { }
+class A extends B<string> { }
 
 //// [genericClassInheritsConstructorFromNonGenericClass.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -11,13 +11,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var A = (function (_super) {
-    __extends(A, _super);
-    function A() {
-        _super.apply(this, arguments);
+var C = (function () {
+    function C(p) {
     }
-    return A;
-})(B);
+    return C;
+})();
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -25,8 +23,10 @@ var B = (function (_super) {
     }
     return B;
 })(C);
-var C = (function () {
-    function C(p) {
+var A = (function (_super) {
+    __extends(A, _super);
+    function A() {
+        _super.apply(this, arguments);
     }
-    return C;
-})();
+    return A;
+})(B);

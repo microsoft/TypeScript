@@ -1,4 +1,23 @@
 === tests/cases/compiler/baseTypeWrappingInstantiationChain.ts ===
+class CBaseBase<T3> {
+>CBaseBase : CBaseBase<T3>
+>T3 : T3
+
+    constructor(x: Parameter<T3>) { }
+>x : Parameter<T3>
+>Parameter : Parameter<T4>
+>T3 : T3
+}
+
+class CBase<T2> extends CBaseBase<Wrapper<T2>> {
+>CBase : CBase<T2>
+>T2 : T2
+>CBaseBase : CBaseBase<Wrapper<T2>>
+>Wrapper : Wrapper<T5>
+>T2 : T2
+
+}
+
 class C<T1> extends CBase<T1> {
 >C : C<T1>
 >T1 : T1
@@ -30,25 +49,6 @@ class C<T1> extends CBase<T1> {
 >t : Wrapper<T1>
 >Wrapper : Wrapper<T5>
 >T1 : T1
-}
-
-class CBase<T2> extends CBaseBase<Wrapper<T2>> {
->CBase : CBase<T2>
->T2 : T2
->CBaseBase : CBaseBase<Wrapper<T2>>
->Wrapper : Wrapper<T5>
->T2 : T2
-
-}
-
-class CBaseBase<T3> {
->CBaseBase : CBaseBase<T3>
->T3 : T3
-
-    constructor(x: Parameter<T3>) { }
->x : Parameter<T3>
->Parameter : Parameter<T4>
->T3 : T3
 }
 
 class Parameter<T4> {
