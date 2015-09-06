@@ -33,6 +33,14 @@ f6({ x: 1 });
 f6({ y: 1 });
 f6({ x: 1, y: 1 });
 
+// (arg?: { a: { x?: number, y?: number } }) => void
+function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
+f7();
+f7({ a: {} });
+f7({ a: { x: 1 } });
+f7({ a: { y: 1 } });
+f7({ a: { x: 1, y: 1 } });
+
 // (arg: [any, any]) => void
 function g1([x, y]) { }
 g1([1, 1]);
