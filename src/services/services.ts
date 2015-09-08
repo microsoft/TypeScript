@@ -4630,9 +4630,9 @@ namespace ts {
                 return undefined;
             }
 
-            if (type.flags & TypeFlags.Union) {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
                 let result: DefinitionInfo[] = [];
-                forEach((<UnionType>type).types, t => {
+                forEach((<UnionOrIntersectionType>type).types, t => {
                     if (t.symbol) {
                         addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(t.symbol, node));
                     }
