@@ -1,6 +1,6 @@
 /// <reference path="factory.ts" />
 /// <reference path="transform.generated.ts" />
-const FORCE_TRANSFORMS = true;
+const FORCE_TRANSFORMS = false;
 
 /* @internal */
 namespace ts {

@@ -362,7 +362,7 @@ namespace ts.transform {
         let name = <Identifier>getDeclarationName(node);
         Debug.assert(isIdentifier(name));
 
-        if (getCombinedNodeFlags(node, peekNode, 0) & NodeFlags.Export) {
+        if (getCombinedNodeFlags(node) & NodeFlags.Export) {
             let container = getContainingModuleName();
             let propExpr = factory.createPropertyAccessExpression2(container, name);
             return propExpr;
@@ -1319,8 +1319,17 @@ namespace ts.transform {
 
     /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
     function serializeTypeReferenceNode(node: TypeReferenceNode) {
-        let typeName = node.typeName;
-        let result = resolver.getTypeReferenceSerializationKind(node);
+        Debug.fail("parent pointer");
+        let location: Node = node.parent;
+        while (isDeclaration(location) || isTypeNode(location)) {
+            location = location.parent;
+        }
+
+        // Clone the type name and parent it to a location outside of the current declaration.
+        let typeName = cloneEntityName(node.typeName);
+        typeName.parent = location;
+
+        let result = resolver.getTypeReferenceSerializationKind(typeName);
         switch (result) {
             case TypeReferenceSerializationKind.Unknown:
                 let tempVar = declareLocal();

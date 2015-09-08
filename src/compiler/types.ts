@@ -9,6 +9,7 @@ namespace ts {
         contains(fileName: string): boolean;
         remove(fileName: string): void;
         forEachValue(f: (v: T) => void): void;
+        clear(): void;
     }
 
     export interface TextRange {
@@ -17,6 +18,7 @@ namespace ts {
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
+    // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
         Unknown,
         EndOfFileToken,
@@ -24,6 +26,8 @@ namespace ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        // We detect and preserve #! on the first line
+        ShebangTrivia,
         // We detect and provide better error recovery when we encounter a git merge marker.  This
         // allows us to edit files with git-conflict markers in them in a much more pleasant manner.
         ConflictMarkerTrivia,
@@ -625,6 +629,54 @@ namespace ts {
         Failed = 2,
         FailedAndReported = 3
     }
+
+    // @internal
+    export interface ParentNavigable {
+        /** Creates an object used to navigate parent nodes of this node. */
+        createParentNavigator(): ParentNavigator;
+    }
+
+    // @internal
+    export interface ParentNavigator extends ParentNavigable {
+        /** Gets the root node for the current node. */
+        getRoot(): Node;
+        /** Gets the grandparent node for the current node. */
+        getGrandparent(): Node;
+        /** Gets the parent node for the current node.  */
+        getParent(): Node;
+        /** Gets the current node. */
+        getNode(): Node;
+        /** Gets the SyntaxKind of the current node. */
+        getKind(): SyntaxKind;
+        /** Moves the navigator to the parent node of the current node. */
+        moveToParent(): boolean;
+        /** Moves the navigator to the root node of the current node. */
+        moveToRoot(): boolean;
+    }
+
+    // @internal
+    export interface NodeStack extends ParentNavigable {
+        /** Gets the node at the bottom of the stack. */
+        getRoot(): Node;
+        /** Gets the node two steps down from the top of the stack. */
+        getGrandparent(): Node;
+        /** Gets the node one step down from the top of the stack. */
+        getParent(): Node;
+        /** Gets the node at the top of the stack. */
+        getNode(): Node;
+        /** Gets the SyntaxKind for the node at the top of the stack. */
+        getKind(): SyntaxKind;
+        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        findAncestorNode(match: (node: Node) => boolean): Node;
+        /** Pushes a node onto the stack. */
+        pushNode(node: Node): void;
+        /** Replaces the node at the top of the stack. */
+        setNode(node: Node): void;
+        /** Pops the top node from the stack. */
+        popNode(): void;
+    }
     
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
@@ -652,6 +704,7 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ createParentNavigator(): ParentNavigator;
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -857,11 +910,10 @@ namespace ts {
      * Several node kinds share function-like features such as a signature,
      * a name, and a body. These nodes should extend FunctionLikeDeclaration.
      * Examples:
-     *  FunctionDeclaration
-     *  MethodDeclaration
-     *  AccessorDeclaration
+     * - FunctionDeclaration
+     * - MethodDeclaration
+     * - AccessorDeclaration
      */
-    // @
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
 
@@ -1791,6 +1843,10 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+        
+        // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
+        /* @internal */
+        renamedDependencies?: Map<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1823,8 +1879,12 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-
         /* @internal */ classifiableNames?: Map<string>;
+        // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
+        // It is used to resolve module names in the checker.
+        // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
+        /* @internal */ resolvedModules: Map<string>;
+        /* @internal */ imports: LiteralExpression[];
     }
 
     export interface ScriptReferenceHost {
@@ -1833,7 +1893,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost {
+    export interface ParseConfigHost extends ModuleResolutionHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -1851,6 +1911,12 @@ namespace ts {
     }
 
     export interface Program extends ScriptReferenceHost {
+        
+        /**
+         * Get a list of root file names that were passed to a 'createProgram'
+         */
+        getRootFileNames(): string[]
+        
         /**
          * Get a list of files in the program
          */
@@ -1891,6 +1957,9 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+
+        // For testing purposes only.
+        /* @internal */ structureIsReused?: boolean;
     }
 
     export interface SourceMapSpan {
@@ -1941,6 +2010,7 @@ namespace ts {
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
@@ -1982,6 +2052,7 @@ namespace ts {
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
+        isOptionalParameter(node: ParameterDeclaration): boolean;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2080,8 +2151,8 @@ namespace ts {
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
-    
-    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
+
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator
       * metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
@@ -2125,7 +2196,8 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(node: TypeReferenceNode): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
+        isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
     export const enum SymbolFlags {
@@ -2319,7 +2391,9 @@ namespace ts {
         ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
-        ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
+        /* @internal */
+        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
+        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2331,7 +2405,9 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
+        /* @internal */
+        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
     // Properties common to all types
@@ -2476,6 +2552,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
                                     // The identity mapper and regular instantiation mappers do not need it.
@@ -2532,7 +2609,12 @@ namespace ts {
         Error,
         Message,
     }
-
+    
+    export const enum ModuleResolutionKind {
+        Classic  = 1,
+        NodeJs  = 2
+    }
+    
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2540,6 +2622,7 @@ namespace ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
@@ -2556,6 +2639,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
+        outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;
@@ -2563,6 +2647,7 @@ namespace ts {
         rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
@@ -2571,6 +2656,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        moduleResolution?: ModuleResolutionKind;
         /* @internal */ experimentalTransforms?: boolean;
         /* @internal */ stripInternal?: boolean;
 
@@ -2772,9 +2858,23 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }   
+    
+    export interface ModuleResolutionHost {
+        fileExists(fileName: string): boolean;
+        // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
+        // to determine location of bundled typings for node module 
+        readFile(fileName: string): string;
     }
+    
+    export interface ResolvedModule {
+        resolvedFileName: string;
+        failedLookupLocations: string[];
+    }
+    
+    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
 
-    export interface CompilerHost {
+    export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
@@ -2783,6 +2883,15 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        
+        /*
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
+         * 'throw new Error("NotImplemented")'  
+         */
+        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
     }
 
     export interface TextSpan {

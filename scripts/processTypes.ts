@@ -1480,7 +1480,7 @@ class KindAnnotation extends Annotation {
     public kind: SyntaxKind;
     public kindSymbol: Symbol;
     public options: KindOptions;
-    constructor([{ value, symbol }, { create = true, update = true, test = true } = {}, ..._arguments]: [EnumValue<SyntaxKind>, KindOptions, any]) {
+    constructor([{ value, symbol }, { create = true, update = true, test = true } = <KindOptions>{}, ..._arguments]: [EnumValue<SyntaxKind>, KindOptions, any]) {
         super(_arguments);
         this.kind = value;
         this.kindSymbol = symbol;

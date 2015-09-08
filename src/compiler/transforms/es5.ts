@@ -526,7 +526,7 @@ namespace ts.transform {
     }
     
     function transformThisKeyword(node: LeftHandSideExpression): LeftHandSideExpression {
-        let container = getThisContainer(node, /*includeArrowFunctions*/ true, peekNode, /*offset*/ 0);
+        let container = getThisContainer(node, /*includeArrowFunctions*/ true);
         if (isArrowFunction(container)) {
             let thisName = factory.createIdentifier("_this");
             return thisName;

@@ -18,12 +18,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts(47,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived'.
+      Type 'Base' is not assignable to type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts(50,9): error TS2322: Type '{ [x: string]: Derived2; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts(51,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived2'.
+      Type 'Base' is not assignable to type 'Derived2'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts (8 errors) ====
@@ -100,6 +102,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived'.
+!!! error TS2322:       Type 'Base' is not assignable to type 'Derived'.
     
             var b4: { [x: string]: Derived2; };
             a3 = b4; // error
@@ -112,5 +115,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived2'.
+!!! error TS2322:       Type 'Base' is not assignable to type 'Derived2'.
         }
     }

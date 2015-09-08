@@ -3,7 +3,7 @@
 
 namespace ts {
     export interface SourceFile {
-        fileWatcher: FileWatcher;
+        fileWatcher?: FileWatcher;
     }
 
     /**
@@ -14,7 +14,7 @@ namespace ts {
         let matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
         if (!matchResult) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, 'en', 'ja-jp'));
+            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
             return false;
         }
 
@@ -49,7 +49,7 @@ namespace ts {
         }
 
         // TODO: Add codePage support for readFile?
-        let fileContents = '';
+        let fileContents = "";
         try {
             fileContents = sys.readFile(filePath);
         }
@@ -159,6 +159,11 @@ namespace ts {
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
+        if (commandLine.options.init) {
+            writeConfigFile(commandLine.options, commandLine.fileNames);
+            return sys.exit(ExitStatus.Success);
+        }
+
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
@@ -245,7 +250,7 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
             // Return existing SourceFile object if one is available
             if (cachedProgram) {
                 let sourceFile = cachedProgram.getSourceFile(fileName);
@@ -357,21 +362,22 @@ namespace ts {
         return { program, exitStatus };
 
         function compileProgram(): ExitStatus {
-            // First get any syntactic errors.
-            let diagnostics = program.getSyntacticDiagnostics();
-            reportDiagnostics(diagnostics);
+            let diagnostics: Diagnostic[];
+            
+            // First get and report any syntactic errors.
+            diagnostics = program.getSyntacticDiagnostics();
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                let diagnostics = program.getGlobalDiagnostics();
-                reportDiagnostics(diagnostics);
+                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
-                    let diagnostics = program.getSemanticDiagnostics();
-                    reportDiagnostics(diagnostics);
+                    diagnostics = program.getSemanticDiagnostics();
                 }
             }
+
+            reportDiagnostics(diagnostics);
 
             // If the user doesn't want us to emit, then we're done at this point.
             if (compilerOptions.noEmit) {
@@ -488,6 +494,70 @@ namespace ts {
 
         function makePadding(paddingLength: number): string {
             return Array(paddingLength + 1).join(" ");
+        }
+    }
+
+    function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
+        let currentDirectory = sys.getCurrentDirectory();
+        let file = combinePaths(currentDirectory, 'tsconfig.json');
+        if (sys.fileExists(file)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+        }
+        else {
+            let compilerOptions = extend(options, defaultInitCompilerOptions);
+            let configurations: any = {
+                compilerOptions: serializeCompilerOptions(compilerOptions),
+                exclude: ["node_modules"]
+            };
+
+            if (fileNames && fileNames.length) {
+                // only set the files property if we have at least one file
+                configurations.files = fileNames;
+            }
+
+            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+        }
+
+        return;
+
+        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
+            let result: Map<string|number|boolean> = {};
+            let optionsNameMap = getOptionNameMap().optionNameMap;
+
+            for (let name in options) {
+                if (hasProperty(options, name)) {
+                    let value = options[name];
+                    switch (name) {
+                        case "init":
+                        case "watch":
+                        case "version":
+                        case "help":
+                        case "project":
+                            break;
+                        default:
+                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            if (optionDefinition) {
+                                if (typeof optionDefinition.type === "string") {
+                                    // string, number or boolean
+                                    result[name] = value;
+                                }
+                                else {
+                                    // Enum
+                                    let typeMap = <Map<number>>optionDefinition.type;
+                                    for (let key in typeMap) {
+                                        if (hasProperty(typeMap, key)) {
+                                            if (typeMap[key] === value)
+                                                result[name] = key;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return result;
         }
     }
     

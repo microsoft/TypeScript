@@ -1,4 +1,4 @@
-/// <reference path="../bin/typescript.d.ts" />
+/// <reference path="../lib/typescript.d.ts" />
 import { SourceFile, Node, Map, Symbol } from "typescript";
 
 export * from "typescript";

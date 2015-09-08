@@ -74,7 +74,7 @@ namespace ts {
         // If the current node is a container that also container that also contains locals.  Examples:
         //
         //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals   = IsContainer | HasLocals
+        IsContainerWithLocals = IsContainer | HasLocals
     }
 
     export function bindSourceFile(file: SourceFile) {
@@ -145,7 +145,7 @@ namespace ts {
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + (<LiteralExpression>node.name).text + '"';
+                    return `"${(<LiteralExpression>node.name).text}"`;
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     let nameExpression = (<ComputedPropertyName>node.name).expression;
@@ -865,7 +865,7 @@ namespace ts {
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
-            return nodeText === '"use strict"' || nodeText === "'use strict'";
+            return nodeText === "\"use strict\"" || nodeText === "'use strict'";
         }
 
         function bindWorker(node: Node) {
@@ -966,7 +966,7 @@ namespace ts {
         function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
-                bindAnonymousDeclaration(file, SymbolFlags.ValueModule, '"' + removeFileExtension(file.fileName) + '"');
+                bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"`);
             }
         }
 
@@ -1009,6 +1009,10 @@ namespace ts {
             else {
                 let bindingName = node.name ? node.name.text : "__class";
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
+                // Add name of class expression into the map for semantic classifier
+                if (node.name) {
+                    classifiableNames[node.name.text] = node.name.text;
+                }
             }
 
             let symbol = node.symbol;

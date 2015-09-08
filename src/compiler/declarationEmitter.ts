@@ -750,14 +750,18 @@ namespace ts {
         }
 
         function writeTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            let prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
             writeTextOfNode(currentSourceFile, node.name);
+            emitTypeParameters(node.typeParameters);
             write(" = ");
             emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
             write(";");
             writeLine();
+            enclosingDeclaration = prevEnclosingDeclaration;
 
             function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                 return {
@@ -891,6 +895,9 @@ namespace ts {
             function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
                 if (isSupportedExpressionWithTypeArguments(node)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
+                }
+                else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
+                    write("null");
                 }
 
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
@@ -1371,7 +1378,7 @@ namespace ts {
             else {
                 writeTextOfNode(currentSourceFile, node.name);
             }
-            if (node.initializer || hasQuestionToken(node)) {
+            if (resolver.isOptionalParameter(node)) {
                 write("?");
             }
             decreaseIndent();
@@ -1497,11 +1504,8 @@ namespace ts {
                         //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
                         writeTextOfNode(currentSourceFile, bindingElement.propertyName);
                         write(": ");
-
-                        // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
-                        emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
-                    else if (bindingElement.name) {
+                    if (bindingElement.name) {
                         if (isBindingPattern(bindingElement.name)) {
                             // If it is a nested binding pattern, we will recursively descend into each element and emit each one separately.
                             // In the case of rest element, we will omit rest element.
@@ -1573,7 +1577,7 @@ namespace ts {
                 ? referencedFile.fileName // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
+                    : removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts"; // Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),

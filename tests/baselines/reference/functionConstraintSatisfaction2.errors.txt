@@ -14,7 +14,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(34,16): error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(36,38): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(37,10): error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
-  Type 'void' is not assignable to type 'string'.
+  Type '() => void' is not assignable to type '(x: string) => string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(38,10): error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
 
 
@@ -85,7 +85,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
         foo2(x);
              ~
 !!! error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
-!!! error TS2345:   Type 'void' is not assignable to type 'string'.
+!!! error TS2345:   Type '() => void' is not assignable to type '(x: string) => string'.
         foo2(y);
              ~
 !!! error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.

@@ -1,1 +1,1 @@
-module.exports = require("../bin/typescript");
+module.exports = require("../lib/typescript");
