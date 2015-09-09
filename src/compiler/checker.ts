@@ -5507,6 +5507,7 @@ namespace ts {
                     regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
                     regularType.stringIndexType = (<ResolvedType>type).stringIndexType;
                     regularType.numberIndexType = (<ResolvedType>type).numberIndexType;
+                    (<FreshObjectLiteralType>type).regularType = regularType;
                 }
                 return regularType;
             }
