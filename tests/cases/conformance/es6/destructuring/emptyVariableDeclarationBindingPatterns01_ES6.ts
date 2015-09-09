@@ -21,6 +21,10 @@
 
     for (var {} = {}, {} = {}; false; void 0) {
     }
+
+    function f({} = a, [] = a, { p: {} = a} = a) {
+        return ({} = a, [] = a, { p: {} = a } = a) => a;
+    }
 })();
 
 (function () {
