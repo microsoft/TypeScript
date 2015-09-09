@@ -1590,7 +1590,7 @@ namespace ts {
         // Scans a JSX identifier; these differ from normal identifiers in that
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
-            if (token === SyntaxKind.Identifier) {
+            if (tokenIsIdentifierOrKeyword(token)) {
                 let firstCharPosition = pos;
                 while (pos < end) {
                     let ch = text.charCodeAt(pos);

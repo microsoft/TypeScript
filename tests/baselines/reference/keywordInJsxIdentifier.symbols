@@ -1,0 +1,8 @@
+=== tests/cases/compiler/keywordInJsxIdentifier.tsx ===
+
+declare var React: any;
+>React : Symbol(React, Decl(keywordInJsxIdentifier.tsx, 1, 11))
+
+<foo class-id/>
+>class-id : Symbol(unknown)
+

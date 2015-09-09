@@ -12,6 +12,10 @@ namespace ts {
     export function createNode(kind: SyntaxKind): Node {
         return new (getNodeConstructor(kind))();
     }
+    
+    export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.Identifier;
+    }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
         if (node) {
@@ -4102,7 +4106,7 @@ namespace ts {
         }
 
         function isIdentifierOrKeyword() {
-            return token >= SyntaxKind.Identifier;
+            return tokenIsIdentifierOrKeyword(token);
         }
 
         function nextTokenIsIdentifierOrKeywordOnSameLine() {
