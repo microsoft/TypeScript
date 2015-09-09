@@ -19,7 +19,7 @@ sourceFile:sourceMapValidationFunctionPropertyAssignment.ts
 8 >                           ^
 9 >                            ^^
 10>                              ^
-11>                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                               ^^->
 1 >
 2 >var 
 3 >    x

@@ -27,6 +27,7 @@ sourceFile:sourceMapValidationFor.ts
 16>                         ^^
 17>                           ^^
 18>                             ^
+19>                              ^^->
 1 >
 2 >for
 3 >    
@@ -65,7 +66,7 @@ sourceFile:sourceMapValidationFor.ts
 18>Emitted(1, 31) Source(1, 31) + SourceIndex(0)
 ---
 >>>    WScript.Echo("i: " + i);
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^
 3 >           ^
 4 >            ^^^^
@@ -75,7 +76,8 @@ sourceFile:sourceMapValidationFor.ts
 8 >                         ^
 9 >                          ^
 10>                           ^
-1 >
+11>                            ^^->
+1->
   >    
 2 >    WScript
 3 >           .
@@ -86,7 +88,7 @@ sourceFile:sourceMapValidationFor.ts
 8 >                         i
 9 >                          )
 10>                           ;
-1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 4 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
@@ -98,13 +100,13 @@ sourceFile:sourceMapValidationFor.ts
 10>Emitted(2, 29) Source(2, 29) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+1->Emitted(3, 1) Source(3, 1) + SourceIndex(0)
 2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>for (i = 0; i < 10; i++) {
@@ -124,7 +126,7 @@ sourceFile:sourceMapValidationFor.ts
 14>                     ^^
 15>                       ^^
 16>                         ^
-17>                          ^^^->
+17>                          ^^->
 1->
   >
 2 >for
@@ -171,6 +173,7 @@ sourceFile:sourceMapValidationFor.ts
 8 >                         ^
 9 >                          ^
 10>                           ^
+11>                            ^^->
 1->
   >    
 2 >    WScript
@@ -194,13 +197,13 @@ sourceFile:sourceMapValidationFor.ts
 10>Emitted(5, 29) Source(6, 29) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(6, 1) Source(7, 1) + SourceIndex(0)
+1->Emitted(6, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(6, 2) Source(7, 2) + SourceIndex(0)
 ---
 >>>for (var j = 0; j < 10;) {
@@ -219,6 +222,7 @@ sourceFile:sourceMapValidationFor.ts
 13>                    ^^
 14>                      ^^^
 15>                         ^
+16>                          ^^->
 1->
   >
 2 >for
@@ -252,17 +256,17 @@ sourceFile:sourceMapValidationFor.ts
 15>Emitted(7, 27) Source(8, 28) + SourceIndex(0)
 ---
 >>>    j++;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^->
-1 >
+5 >        ^^->
+1->
   >    
 2 >    j
 3 >     ++
 4 >       ;
-1 >Emitted(8, 5) Source(9, 5) + SourceIndex(0)
+1->Emitted(8, 5) Source(9, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(9, 6) + SourceIndex(0)
 3 >Emitted(8, 8) Source(9, 8) + SourceIndex(0)
 4 >Emitted(8, 9) Source(9, 9) + SourceIndex(0)
@@ -278,7 +282,7 @@ sourceFile:sourceMapValidationFor.ts
 8 >              ^
 9 >               ^
 10>                ^
-11>                 ^->
+11>                 ^^->
 1->
   >    
 2 >    if
@@ -305,6 +309,7 @@ sourceFile:sourceMapValidationFor.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^
 3 >                ^
+4 >                 ^^->
 1->
   >        
 2 >        continue
@@ -314,22 +319,23 @@ sourceFile:sourceMapValidationFor.ts
 3 >Emitted(10, 18) Source(11, 18) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-1 >
+3 >     ^^->
+1->
   >    
 2 >    }
-1 >Emitted(11, 5) Source(12, 5) + SourceIndex(0)
+1->Emitted(11, 5) Source(12, 5) + SourceIndex(0)
 2 >Emitted(11, 6) Source(12, 6) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(12, 1) Source(13, 1) + SourceIndex(0)
+1->Emitted(12, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(12, 2) Source(13, 2) + SourceIndex(0)
 ---
 >>>for (j = 0; j < 10;) {
@@ -346,6 +352,7 @@ sourceFile:sourceMapValidationFor.ts
 11>                ^^
 12>                  ^^^
 13>                     ^
+14>                      ^^->
 1->
   >
 2 >for
@@ -376,28 +383,29 @@ sourceFile:sourceMapValidationFor.ts
 13>Emitted(13, 23) Source(15, 2) + SourceIndex(0)
 ---
 >>>    j++;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-1 >
+5 >        ^^->
+1->
   >    
 2 >    j
 3 >     ++
 4 >       ;
-1 >Emitted(14, 5) Source(16, 5) + SourceIndex(0)
+1->Emitted(14, 5) Source(16, 5) + SourceIndex(0)
 2 >Emitted(14, 6) Source(16, 6) + SourceIndex(0)
 3 >Emitted(14, 8) Source(16, 8) + SourceIndex(0)
 4 >Emitted(14, 9) Source(16, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(15, 1) Source(17, 1) + SourceIndex(0)
+1->Emitted(15, 1) Source(17, 1) + SourceIndex(0)
 2 >Emitted(15, 2) Source(17, 2) + SourceIndex(0)
 ---
 >>>for (var k = 0;; k++) {
@@ -415,6 +423,7 @@ sourceFile:sourceMapValidationFor.ts
 12>                  ^^
 13>                    ^^
 14>                      ^
+15>                       ^^->
 1->
   >
 2 >for
@@ -446,13 +455,13 @@ sourceFile:sourceMapValidationFor.ts
 14>Emitted(16, 24) Source(18, 24) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(17, 1) Source(19, 1) + SourceIndex(0)
+1->Emitted(17, 1) Source(19, 1) + SourceIndex(0)
 2 >Emitted(17, 2) Source(19, 2) + SourceIndex(0)
 ---
 >>>for (k = 0;; k++) {
@@ -468,6 +477,7 @@ sourceFile:sourceMapValidationFor.ts
 10>              ^^
 11>                ^^
 12>                  ^
+13>                   ^^->
 1->
   >
 2 >for
@@ -496,13 +506,13 @@ sourceFile:sourceMapValidationFor.ts
 12>Emitted(18, 20) Source(21, 2) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(19, 1) Source(22, 1) + SourceIndex(0)
+1->Emitted(19, 1) Source(22, 1) + SourceIndex(0)
 2 >Emitted(19, 2) Source(22, 2) + SourceIndex(0)
 ---
 >>>for (; k < 10; k++) {
@@ -519,6 +529,7 @@ sourceFile:sourceMapValidationFor.ts
 11>                ^^
 12>                  ^^
 13>                    ^
+14>                     ^^->
 1->
   >
 2 >for
@@ -548,13 +559,13 @@ sourceFile:sourceMapValidationFor.ts
 13>Emitted(20, 22) Source(23, 22) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(21, 1) Source(24, 1) + SourceIndex(0)
+1->Emitted(21, 1) Source(24, 1) + SourceIndex(0)
 2 >Emitted(21, 2) Source(24, 2) + SourceIndex(0)
 ---
 >>>for (;;) {
@@ -564,6 +575,7 @@ sourceFile:sourceMapValidationFor.ts
 4 >    ^
 5 >     ^^^^
 6 >         ^
+7 >          ^^->
 1->
   >
 2 >for
@@ -579,28 +591,29 @@ sourceFile:sourceMapValidationFor.ts
 6 >Emitted(22, 11) Source(25, 11) + SourceIndex(0)
 ---
 >>>    i++;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-1 >
+5 >        ^^->
+1->
   >    
 2 >    i
 3 >     ++
 4 >       ;
-1 >Emitted(23, 5) Source(26, 5) + SourceIndex(0)
+1->Emitted(23, 5) Source(26, 5) + SourceIndex(0)
 2 >Emitted(23, 6) Source(26, 6) + SourceIndex(0)
 3 >Emitted(23, 8) Source(26, 8) + SourceIndex(0)
 4 >Emitted(23, 9) Source(26, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(24, 1) Source(27, 1) + SourceIndex(0)
+1->Emitted(24, 1) Source(27, 1) + SourceIndex(0)
 2 >Emitted(24, 2) Source(27, 2) + SourceIndex(0)
 ---
 >>>for (;;) {
@@ -610,6 +623,7 @@ sourceFile:sourceMapValidationFor.ts
 4 >    ^
 5 >     ^^^^
 6 >         ^
+7 >          ^^->
 1->
   >
 2 >for
@@ -626,28 +640,29 @@ sourceFile:sourceMapValidationFor.ts
 6 >Emitted(25, 11) Source(29, 2) + SourceIndex(0)
 ---
 >>>    i++;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-1 >
+5 >        ^^->
+1->
   >    
 2 >    i
 3 >     ++
 4 >       ;
-1 >Emitted(26, 5) Source(30, 5) + SourceIndex(0)
+1->Emitted(26, 5) Source(30, 5) + SourceIndex(0)
 2 >Emitted(26, 6) Source(30, 6) + SourceIndex(0)
 3 >Emitted(26, 8) Source(30, 8) + SourceIndex(0)
 4 >Emitted(26, 9) Source(30, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(27, 1) Source(31, 1) + SourceIndex(0)
+1->Emitted(27, 1) Source(31, 1) + SourceIndex(0)
 2 >Emitted(27, 2) Source(31, 2) + SourceIndex(0)
 ---
 >>>for (i = 0, j = 20; j < 20, i < 20; j++) {
@@ -675,6 +690,7 @@ sourceFile:sourceMapValidationFor.ts
 22>                                     ^^
 23>                                       ^^
 24>                                         ^
+25>                                          ^^->
 1->
   >
 2 >for
@@ -726,13 +742,13 @@ sourceFile:sourceMapValidationFor.ts
 24>Emitted(28, 43) Source(32, 43) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(29, 1) Source(33, 1) + SourceIndex(0)
+1->Emitted(29, 1) Source(33, 1) + SourceIndex(0)
 2 >Emitted(29, 2) Source(33, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationFor.js.map

@@ -12,7 +12,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 1 >
 2 >^^^^
 3 >    ^^^^^^^
-4 >           ^^^^^^^^^^^^^^->
+4 >           ^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >class 
 3 >    Greeter
@@ -24,7 +24,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^
-4 >                    ^->
+4 >                    ^^^^^^->
 1->
 2 >    class 
 3 >             Greeter
@@ -38,7 +38,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 3 >              ^^^
 4 >                 ^^
 5 >                   ^
-6 >                    ^^^^^^^^->
+6 >                    ^^->
 1-> {
   >    public 
 2 >        a
@@ -57,6 +57,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 3 >                  ^^^
 4 >                     ^^^^^
 5 >                          ^
+6 >                           ^^->
 1->
   >    public 
 2 >        nameA
@@ -70,19 +71,20 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 5 >Emitted(4, 28) Source(3, 26) + SourceIndex(0) name (Greeter.constructor)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
-1 >
+3 >     ^^->
+1->
   >
 2 >    }
-1 >Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (Greeter.constructor)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (Greeter.constructor)
 2 >Emitted(5, 6) Source(4, 2) + SourceIndex(0) name (Greeter.constructor)
 ---
 >>>    return Greeter;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^^^
+4 >                  ^^^->
 1->
 2 >    
 3 >           Greeter {
@@ -94,19 +96,19 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 3 >Emitted(6, 19) Source(4, 2) + SourceIndex(0) name (Greeter)
 ---
 >>>})();
-1 >
+1->
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+5 >     ^^->
+1->
 2 >}
 3 > 
 4 > class Greeter {
   >     public a = 10;
   >     public nameA = "Ten";
   > }
-1 >Emitted(7, 1) Source(4, 1) + SourceIndex(0) name (Greeter)
+1->Emitted(7, 1) Source(4, 1) + SourceIndex(0) name (Greeter)
 2 >Emitted(7, 2) Source(4, 2) + SourceIndex(0) name (Greeter)
 3 >Emitted(7, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(7, 6) Source(4, 2) + SourceIndex(0)

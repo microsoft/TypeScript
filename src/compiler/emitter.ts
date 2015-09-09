@@ -322,10 +322,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Last recorded and encoded spans
                 let lastRecordedSourceMapSpan: SourceMapSpan;
                 let lastEncodedSourceMapSpan: SourceMapSpan = {
-                    emittedLine: 1,
-                    emittedColumn: 1,
-                    sourceLine: 1,
-                    sourceColumn: 1,
+                    emittedLine: 0,
+                    emittedColumn: 0,
+                    sourceLine: 0,
+                    sourceColumn: 0,
                     sourceIndex: 0
                 };
                 let lastEncodedNameIndex = 0;
@@ -349,7 +349,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         for (let encodedLine = lastEncodedSourceMapSpan.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
                             sourceMapData.sourceMapMappings += ";";
                         }
-                        prevEncodedEmittedColumn = 1;
+                        prevEncodedEmittedColumn = 0;
                     }
 
                     // 1. Relative Column 0 based
@@ -410,12 +410,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 function recordSourceMapSpan(pos: number) {
+                    // 0 based source and emitted line, column position
                     let sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
-
-                    // Convert the location to be one-based.
-                    sourceLinePos.line++;
-                    sourceLinePos.character++;
-
                     let emittedLine = writer.getLine();
                     let emittedColumn = writer.getColumn();
 

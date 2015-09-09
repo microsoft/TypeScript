@@ -11,7 +11,7 @@ sourceFile:sourceMap-SemiColon1.ts
 >>>;
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^->
 1 >
 2 >;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)

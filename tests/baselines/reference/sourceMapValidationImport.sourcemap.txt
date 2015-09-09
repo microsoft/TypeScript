@@ -13,7 +13,7 @@ sourceFile:sourceMapValidationImport.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^->
 1 >
 2 >export module 
 3 >    m
@@ -32,7 +32,7 @@ sourceFile:sourceMapValidationImport.ts
 3 >           ^
 4 >            ^^
 5 >              ^
-6 >               ^^^^^^^^^^^^->
+6 >               ^^->
 1->
 2 >export module 
 3 >           m
@@ -48,7 +48,7 @@ sourceFile:sourceMapValidationImport.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^^^^^^^^^^^^->
+4 >         ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
 2 >    export class 
@@ -61,6 +61,7 @@ sourceFile:sourceMapValidationImport.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^
 3 >                 ^
+4 >                  ^^^^^^->
 1->
 2 >        export class 
 3 >                 c
@@ -69,19 +70,20 @@ sourceFile:sourceMapValidationImport.ts
 3 >Emitted(4, 19) Source(2, 19) + SourceIndex(0) name (m.c)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^->
-1 > {
+3 >         ^^->
+1-> {
   >    
 2 >        }
-1 >Emitted(5, 9) Source(3, 5) + SourceIndex(0) name (m.c.constructor)
+1->Emitted(5, 9) Source(3, 5) + SourceIndex(0) name (m.c.constructor)
 2 >Emitted(5, 10) Source(3, 6) + SourceIndex(0) name (m.c.constructor)
 ---
 >>>        return c;
 1->^^^^^^^^
 2 >        ^^^^^^^
 3 >               ^
+4 >                ^^^->
 1->
 2 >        
 3 >               c {
@@ -91,17 +93,17 @@ sourceFile:sourceMapValidationImport.ts
 3 >Emitted(6, 17) Source(3, 6) + SourceIndex(0) name (m.c)
 ---
 >>>    })();
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^->
-1 >
+5 >         ^^->
+1->
 2 >    }
 3 >     
 4 >     export class c {
   >         }
-1 >Emitted(7, 5) Source(3, 5) + SourceIndex(0) name (m.c)
+1->Emitted(7, 5) Source(3, 5) + SourceIndex(0) name (m.c)
 2 >Emitted(7, 6) Source(3, 6) + SourceIndex(0) name (m.c)
 3 >Emitted(7, 6) Source(2, 5) + SourceIndex(0) name (m)
 4 >Emitted(7, 10) Source(3, 6) + SourceIndex(0) name (m)
@@ -112,7 +114,7 @@ sourceFile:sourceMapValidationImport.ts
 3 >       ^^^
 4 >          ^
 5 >           ^
-6 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >            ^^->
 1->
 2 >    c
 3 >       
@@ -135,6 +137,7 @@ sourceFile:sourceMapValidationImport.ts
 7 >                ^^^^^
 8 >                     ^^^^^^^^^
 9 >                              ^^^^^^^^
+10>                                      ^^->
 1->
   >
 2 >}
@@ -159,7 +162,7 @@ sourceFile:sourceMapValidationImport.ts
 9 >Emitted(9, 39) Source(4, 2) + SourceIndex(0)
 ---
 >>>var a = m.c;
-1 >
+1->
 2 >^^^^
 3 >    ^
 4 >     ^^^
@@ -167,8 +170,8 @@ sourceFile:sourceMapValidationImport.ts
 6 >         ^
 7 >          ^
 8 >           ^
-9 >            ^^^^^->
-1 >
+9 >            ^^->
+1->
   >
 2 >import 
 3 >    a
@@ -177,7 +180,7 @@ sourceFile:sourceMapValidationImport.ts
 6 >         .
 7 >          c
 8 >           ;
-1 >Emitted(10, 1) Source(5, 1) + SourceIndex(0)
+1->Emitted(10, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(10, 5) Source(5, 8) + SourceIndex(0)
 3 >Emitted(10, 6) Source(5, 9) + SourceIndex(0)
 4 >Emitted(10, 9) Source(5, 12) + SourceIndex(0)
@@ -194,7 +197,7 @@ sourceFile:sourceMapValidationImport.ts
 5 >             ^
 6 >              ^
 7 >               ^
-8 >                ^->
+8 >                ^^->
 1->
   >export import 
 2 >b
@@ -220,7 +223,7 @@ sourceFile:sourceMapValidationImport.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^^^^^^^^^->
+9 >                ^^->
 1->
   >
 2 >var 
@@ -248,7 +251,7 @@ sourceFile:sourceMapValidationImport.ts
 6 >            ^^^^^^^^^
 7 >                     ^^
 8 >                       ^
-9 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                        ^^->
 1->
   >
 2 >var 

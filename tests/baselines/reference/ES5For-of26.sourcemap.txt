@@ -25,7 +25,7 @@ sourceFile:ES5For-of26.ts
 14>                                            ^^
 15>                                              ^^^^
 16>                                                  ^
-17>                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+17>                                                   ^^^^->
 1 >
 2 >for
 3 >    
@@ -70,6 +70,7 @@ sourceFile:ES5For-of26.ts
 8 >                                                                          ^^^^^^^^^^^^^^^^^^^
 9 >                                                                                             ^
 10>                                                                                              ^^^^^
+11>                                                                                                   ^^^->
 1->
 2 >    var [
 3 >                                 a
@@ -92,15 +93,15 @@ sourceFile:ES5For-of26.ts
 10>Emitted(2, 100) Source(1, 24) + SourceIndex(0)
 ---
 >>>    a;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^
-4 >      ^->
-1 > of [2, 3]) {
+4 >      ^^->
+1-> of [2, 3]) {
   >    
 2 >    a
 3 >     ;
-1 >Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(3, 6) Source(2, 6) + SourceIndex(0)
 3 >Emitted(3, 7) Source(2, 7) + SourceIndex(0)
 ---
@@ -108,6 +109,7 @@ sourceFile:ES5For-of26.ts
 1->^^^^
 2 >    ^
 3 >     ^
+4 >      ^^->
 1->
   >    
 2 >    b
@@ -117,10 +119,10 @@ sourceFile:ES5For-of26.ts
 3 >Emitted(4, 7) Source(3, 7) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->^
+2 > ^^->
+1->
   >}
-1 >Emitted(5, 2) Source(4, 2) + SourceIndex(0)
+1->Emitted(5, 2) Source(4, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=ES5For-of26.js.map

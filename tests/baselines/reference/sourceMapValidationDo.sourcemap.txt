@@ -15,6 +15,7 @@ sourceFile:sourceMapValidationDo.ts
 4 >     ^^^
 5 >        ^
 6 >         ^
+7 >          ^^->
 1 >
 2 >var 
 3 >    i
@@ -29,16 +30,16 @@ sourceFile:sourceMapValidationDo.ts
 6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
 ---
 >>>do {
-1 >
+1->
 2 >^^^
 3 >   ^
-4 >    ^^^^^->
-1 >
+4 >    ^^->
+1->
   >
 2 >do
   >
 3 >   {
-1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 4) Source(3, 1) + SourceIndex(0)
 3 >Emitted(2, 5) Source(3, 2) + SourceIndex(0)
 ---
@@ -47,7 +48,7 @@ sourceFile:sourceMapValidationDo.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^->
+5 >        ^^->
 1->
   >    
 2 >    i
@@ -66,6 +67,7 @@ sourceFile:sourceMapValidationDo.ts
 5 >          ^^^
 6 >             ^^
 7 >               ^^
+8 >                 ^^->
 1->
   >
 2 >}
@@ -83,15 +85,15 @@ sourceFile:sourceMapValidationDo.ts
 7 >Emitted(4, 18) Source(5, 18) + SourceIndex(0)
 ---
 >>>do {
-1 >
+1->
 2 >^^^
 3 >   ^
-4 >    ^^^^^->
-1 >
+4 >    ^^->
+1->
   >
 2 >do 
 3 >   {
-1 >Emitted(5, 1) Source(6, 1) + SourceIndex(0)
+1->Emitted(5, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(5, 4) Source(6, 4) + SourceIndex(0)
 3 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 ---
@@ -100,7 +102,7 @@ sourceFile:sourceMapValidationDo.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^->
+5 >        ^^->
 1->
   >    
 2 >    i
@@ -119,7 +121,7 @@ sourceFile:sourceMapValidationDo.ts
 5 >          ^^^
 6 >             ^^
 7 >               ^^
-8 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                 ^^->
 1->
   >
 2 >}

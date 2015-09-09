@@ -38,6 +38,7 @@ sourceFile:sourceMapValidationSwitch.ts
 6 >         ^
 7 >          ^
 8 >           ^
+9 >            ^^->
 1->
   >
 2 >switch
@@ -57,15 +58,15 @@ sourceFile:sourceMapValidationSwitch.ts
 8 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 ---
 >>>    case 5:
-1 >^^^^
+1->^^^^
 2 >    ^^^^^
 3 >         ^
 4 >          ^^^->
-1 >
+1->
   >    
 2 >    case 
 3 >         5
-1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+1->Emitted(3, 5) Source(3, 5) + SourceIndex(0)
 2 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
 3 >Emitted(3, 11) Source(3, 11) + SourceIndex(0)
 ---
@@ -74,7 +75,7 @@ sourceFile:sourceMapValidationSwitch.ts
 2 >        ^
 3 >         ^^
 4 >           ^
-5 >            ^^^->
+5 >            ^^->
 1->:
   >        
 2 >        x
@@ -89,6 +90,7 @@ sourceFile:sourceMapValidationSwitch.ts
 1->^^^^^^^^
 2 >        ^^^^^
 3 >             ^
+4 >              ^^->
 1->
   >        
 2 >        break
@@ -98,25 +100,26 @@ sourceFile:sourceMapValidationSwitch.ts
 3 >Emitted(5, 15) Source(5, 15) + SourceIndex(0)
 ---
 >>>    case 10:
-1 >^^^^
+1->^^^^
 2 >    ^^^^^
 3 >         ^^
-1 >
+4 >           ^^^->
+1->
   >    
 2 >    case 
 3 >         10
-1 >Emitted(6, 5) Source(6, 5) + SourceIndex(0)
+1->Emitted(6, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
 3 >Emitted(6, 12) Source(6, 12) + SourceIndex(0)
 ---
 >>>        {
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^->
-1 >:
+3 >         ^^->
+1->:
   >        
 2 >        {
-1 >Emitted(7, 9) Source(7, 9) + SourceIndex(0)
+1->Emitted(7, 9) Source(7, 9) + SourceIndex(0)
 2 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
 ---
 >>>            x--;
@@ -124,7 +127,7 @@ sourceFile:sourceMapValidationSwitch.ts
 2 >            ^
 3 >             ^^
 4 >               ^
-5 >                ^^^->
+5 >                ^^->
 1->
   >            
 2 >            x
@@ -139,6 +142,7 @@ sourceFile:sourceMapValidationSwitch.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^
 3 >                 ^
+4 >                  ^^->
 1->
   >            
 2 >            break
@@ -148,18 +152,18 @@ sourceFile:sourceMapValidationSwitch.ts
 3 >Emitted(9, 19) Source(9, 19) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-3 >         ^^^^->
-1 >
+3 >         ^^->
+1->
   >        
 2 >        }
-1 >Emitted(10, 9) Source(10, 9) + SourceIndex(0)
+1->Emitted(10, 9) Source(10, 9) + SourceIndex(0)
 2 >Emitted(10, 10) Source(10, 10) + SourceIndex(0)
 ---
 >>>    default:
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^->
 1->
   >    
 1->Emitted(11, 5) Source(11, 5) + SourceIndex(0)
@@ -172,6 +176,7 @@ sourceFile:sourceMapValidationSwitch.ts
 5 >             ^^^
 6 >                ^^
 7 >                  ^
+8 >                   ^^->
 1->default:
   >        
 2 >        x
@@ -189,13 +194,13 @@ sourceFile:sourceMapValidationSwitch.ts
 7 >Emitted(12, 20) Source(12, 19) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(13, 1) Source(13, 1) + SourceIndex(0)
+1->Emitted(13, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(13, 2) Source(13, 2) + SourceIndex(0)
 ---
 >>>switch (x) {
@@ -207,6 +212,7 @@ sourceFile:sourceMapValidationSwitch.ts
 6 >         ^
 7 >          ^
 8 >           ^
+9 >            ^^->
 1->
   >
 2 >switch
@@ -227,15 +233,15 @@ sourceFile:sourceMapValidationSwitch.ts
 8 >Emitted(14, 13) Source(15, 2) + SourceIndex(0)
 ---
 >>>    case 5:
-1 >^^^^
+1->^^^^
 2 >    ^^^^^
 3 >         ^
 4 >          ^^^->
-1 >
+1->
   >    
 2 >    case 
 3 >         5
-1 >Emitted(15, 5) Source(16, 5) + SourceIndex(0)
+1->Emitted(15, 5) Source(16, 5) + SourceIndex(0)
 2 >Emitted(15, 10) Source(16, 10) + SourceIndex(0)
 3 >Emitted(15, 11) Source(16, 11) + SourceIndex(0)
 ---
@@ -244,7 +250,7 @@ sourceFile:sourceMapValidationSwitch.ts
 2 >        ^
 3 >         ^^
 4 >           ^
-5 >            ^^^->
+5 >            ^^->
 1->:
   >        
 2 >        x
@@ -259,6 +265,7 @@ sourceFile:sourceMapValidationSwitch.ts
 1->^^^^^^^^
 2 >        ^^^^^
 3 >             ^
+4 >              ^^->
 1->
   >        
 2 >        break
@@ -268,25 +275,26 @@ sourceFile:sourceMapValidationSwitch.ts
 3 >Emitted(17, 15) Source(18, 15) + SourceIndex(0)
 ---
 >>>    case 10:
-1 >^^^^
+1->^^^^
 2 >    ^^^^^
 3 >         ^^
-1 >
+4 >           ^^^->
+1->
   >    
 2 >    case 
 3 >         10
-1 >Emitted(18, 5) Source(19, 5) + SourceIndex(0)
+1->Emitted(18, 5) Source(19, 5) + SourceIndex(0)
 2 >Emitted(18, 10) Source(19, 10) + SourceIndex(0)
 3 >Emitted(18, 12) Source(19, 12) + SourceIndex(0)
 ---
 >>>        {
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^->
-1 >:
+3 >         ^^->
+1->:
   >        
 2 >        {
-1 >Emitted(19, 9) Source(20, 9) + SourceIndex(0)
+1->Emitted(19, 9) Source(20, 9) + SourceIndex(0)
 2 >Emitted(19, 10) Source(20, 10) + SourceIndex(0)
 ---
 >>>            x--;
@@ -294,7 +302,7 @@ sourceFile:sourceMapValidationSwitch.ts
 2 >            ^
 3 >             ^^
 4 >               ^
-5 >                ^^^->
+5 >                ^^->
 1->
   >            
 2 >            x
@@ -309,6 +317,7 @@ sourceFile:sourceMapValidationSwitch.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^
 3 >                 ^
+4 >                  ^^->
 1->
   >            
 2 >            break
@@ -318,18 +327,18 @@ sourceFile:sourceMapValidationSwitch.ts
 3 >Emitted(21, 19) Source(22, 19) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-3 >         ^^^^->
-1 >
+3 >         ^^->
+1->
   >        
 2 >        }
-1 >Emitted(22, 9) Source(23, 9) + SourceIndex(0)
+1->Emitted(22, 9) Source(23, 9) + SourceIndex(0)
 2 >Emitted(22, 10) Source(23, 10) + SourceIndex(0)
 ---
 >>>    default:
 1->^^^^
-2 >    ^^^^^^->
+2 >    ^^^^^^^^^^->
 1->
   >    
 1->Emitted(23, 5) Source(24, 5) + SourceIndex(0)
@@ -337,7 +346,7 @@ sourceFile:sourceMapValidationSwitch.ts
 >>>        {
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^->
+3 >         ^^->
 1->default:
   >        
 2 >        {
@@ -352,6 +361,7 @@ sourceFile:sourceMapValidationSwitch.ts
 5 >                 ^^^
 6 >                    ^^
 7 >                      ^
+8 >                       ^^->
 1->
   >            
 2 >            x
@@ -369,22 +379,23 @@ sourceFile:sourceMapValidationSwitch.ts
 7 >Emitted(25, 24) Source(26, 24) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-1 >
+3 >         ^^->
+1->
   >        
 2 >        }
-1 >Emitted(26, 9) Source(27, 9) + SourceIndex(0)
+1->Emitted(26, 9) Source(27, 9) + SourceIndex(0)
 2 >Emitted(26, 10) Source(27, 10) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(27, 1) Source(28, 1) + SourceIndex(0)
+1->Emitted(27, 1) Source(28, 1) + SourceIndex(0)
 2 >Emitted(27, 2) Source(28, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationSwitch.js.map

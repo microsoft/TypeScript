@@ -12,7 +12,7 @@ sourceFile:sourceMapValidationEnums.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^^^^^^^^^^->
+4 >     ^^^->
 1 >
 2 >enum 
 3 >    e {
@@ -28,7 +28,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^^^^^^^->
+4 >            ^^^^^->
 1->
 2 >enum 
 3 >           e
@@ -40,7 +40,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^
 3 >                       ^
-4 >                        ^->
+4 >                        ^^->
 1-> {
   >    
 2 >    x
@@ -53,7 +53,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^
 3 >                       ^
-4 >                        ^->
+4 >                        ^^->
 1->,
   >    
 2 >    y
@@ -66,6 +66,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^
 3 >                       ^
+4 >                        ^^->
 1->,
   >    
 2 >    x
@@ -75,14 +76,15 @@ sourceFile:sourceMapValidationEnums.ts
 3 >Emitted(5, 25) Source(4, 6) + SourceIndex(0) name (e)
 ---
 >>>})(e || (e = {}));
-1 >
+1->
 2 >^
 3 > ^^
 4 >   ^
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-1 >
+8 >                  ^^->
+1->
   >
 2 >}
 3 > 
@@ -94,7 +96,7 @@ sourceFile:sourceMapValidationEnums.ts
   >              y,
   >              x
   >          }
-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0) name (e)
+1->Emitted(6, 1) Source(5, 1) + SourceIndex(0) name (e)
 2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0) name (e)
 3 >Emitted(6, 4) Source(1, 6) + SourceIndex(0)
 4 >Emitted(6, 5) Source(1, 7) + SourceIndex(0)
@@ -103,11 +105,11 @@ sourceFile:sourceMapValidationEnums.ts
 7 >Emitted(6, 19) Source(5, 2) + SourceIndex(0)
 ---
 >>>var e2;
-1 >
+1->
 2 >^^^^
 3 >    ^^
-4 >      ^^^^^^^^^^^->
-1 >
+4 >      ^^^->
+1->
   >
 2 >enum 
 3 >    e2 {
@@ -116,7 +118,7 @@ sourceFile:sourceMapValidationEnums.ts
   >        z,
   >        x2
   >    }
-1 >Emitted(7, 1) Source(6, 1) + SourceIndex(0)
+1->Emitted(7, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(7, 5) Source(6, 6) + SourceIndex(0)
 3 >Emitted(7, 7) Source(11, 2) + SourceIndex(0)
 ---
@@ -124,7 +126,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^
-4 >             ^^^^^^^^^^^^^^^->
+4 >             ^^^^^->
 1->
 2 >enum 
 3 >           e2
@@ -136,7 +138,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 3 >                          ^
-4 >                           ^->
+4 >                           ^^->
 1-> {
   >    
 2 >    x = 10
@@ -149,7 +151,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 3 >                          ^
-4 >                           ^->
+4 >                           ^^->
 1->,
   >    
 2 >    y = 10
@@ -162,7 +164,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 3 >                          ^
-4 >                           ^^^->
+4 >                           ^^->
 1->,
   >    
 2 >    z
@@ -175,6 +177,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                            ^
+4 >                             ^^->
 1->,
   >    
 2 >    x2
@@ -184,14 +187,15 @@ sourceFile:sourceMapValidationEnums.ts
 3 >Emitted(12, 30) Source(10, 7) + SourceIndex(0) name (e2)
 ---
 >>>})(e2 || (e2 = {}));
-1 >
+1->
 2 >^
 3 > ^^
 4 >   ^^
 5 >     ^^^^^
 6 >          ^^
 7 >            ^^^^^^^^
-1 >
+8 >                    ^^->
+1->
   >
 2 >}
 3 > 
@@ -204,7 +208,7 @@ sourceFile:sourceMapValidationEnums.ts
   >                z,
   >                x2
   >            }
-1 >Emitted(13, 1) Source(11, 1) + SourceIndex(0) name (e2)
+1->Emitted(13, 1) Source(11, 1) + SourceIndex(0) name (e2)
 2 >Emitted(13, 2) Source(11, 2) + SourceIndex(0) name (e2)
 3 >Emitted(13, 4) Source(6, 6) + SourceIndex(0)
 4 >Emitted(13, 6) Source(6, 8) + SourceIndex(0)
@@ -213,16 +217,16 @@ sourceFile:sourceMapValidationEnums.ts
 7 >Emitted(13, 21) Source(11, 2) + SourceIndex(0)
 ---
 >>>var e3;
-1 >
+1->
 2 >^^^^
 3 >    ^^
-4 >      ^^^^^^^^^^^->
-1 >
+4 >      ^^^->
+1->
   >
 2 >enum 
 3 >    e3 {
   >    }
-1 >Emitted(14, 1) Source(12, 1) + SourceIndex(0)
+1->Emitted(14, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(14, 5) Source(12, 6) + SourceIndex(0)
 3 >Emitted(14, 7) Source(13, 2) + SourceIndex(0)
 ---
@@ -230,7 +234,7 @@ sourceFile:sourceMapValidationEnums.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^
-4 >             ^^^^^^^^->
+4 >             ^^^^^->
 1->
 2 >enum 
 3 >           e3
@@ -246,7 +250,7 @@ sourceFile:sourceMapValidationEnums.ts
 5 >     ^^^^^
 6 >          ^^
 7 >            ^^^^^^^^
-8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                    ^^->
 1-> {
   >
 2 >}

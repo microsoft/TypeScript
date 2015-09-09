@@ -11,6 +11,7 @@ sourceFile:inlineSourceMap2.ts
 >>>// configuration errors
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^
+3 >                       ^^->
 1 >
   >
 2 >// configuration errors
@@ -18,14 +19,14 @@ sourceFile:inlineSourceMap2.ts
 2 >Emitted(1, 24) Source(2, 24) + SourceIndex(0)
 ---
 >>>var x = 0;
-1 >
+1->
 2 >^^^^
 3 >    ^
 4 >     ^^^
 5 >        ^
 6 >         ^
-7 >          ^^^^^^->
-1 >
+7 >          ^^->
+1->
   >
   >
 2 >var 
@@ -33,7 +34,7 @@ sourceFile:inlineSourceMap2.ts
 4 >      = 
 5 >        0
 6 >         ;
-1 >Emitted(2, 1) Source(4, 1) + SourceIndex(0)
+1->Emitted(2, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(4, 5) + SourceIndex(0)
 3 >Emitted(2, 6) Source(4, 6) + SourceIndex(0)
 4 >Emitted(2, 9) Source(4, 9) + SourceIndex(0)
@@ -49,7 +50,7 @@ sourceFile:inlineSourceMap2.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^->
 1->
   >
 2 >console

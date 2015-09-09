@@ -12,7 +12,7 @@ sourceFile:sourceMapValidationDebugger.ts
 1 >
 2 >^^^^^^^^
 3 >        ^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >         ^^->
 1 >
 2 >debugger
 3 >        ;

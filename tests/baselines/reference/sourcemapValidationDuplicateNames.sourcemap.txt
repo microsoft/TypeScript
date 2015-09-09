@@ -13,7 +13,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 2 >^^^^
 3 >    ^^
 4 >      ^
-5 >       ^^^^^^^^^^->
+5 >       ^^->
 1 >
 2 >module 
 3 >    m1
@@ -33,6 +33,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 3 >           ^^
 4 >             ^^
 5 >               ^
+6 >                ^^->
 1->
 2 >module 
 3 >           m1
@@ -45,21 +46,21 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 5 >Emitted(2, 17) Source(1, 12) + SourceIndex(0)
 ---
 >>>    var x = 10;
-1 >^^^^
+1->^^^^
 2 >    ^^^^
 3 >        ^
 4 >         ^^^
 5 >            ^^
 6 >              ^
-7 >               ^^^^^^^^^^^^->
-1 >
+7 >               ^^->
+1->
   >    
 2 >    var 
 3 >        x
 4 >          = 
 5 >            10
 6 >              ;
-1 >Emitted(3, 5) Source(2, 5) + SourceIndex(0) name (m1)
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0) name (m1)
 2 >Emitted(3, 9) Source(2, 9) + SourceIndex(0) name (m1)
 3 >Emitted(3, 10) Source(2, 10) + SourceIndex(0) name (m1)
 4 >Emitted(3, 13) Source(2, 13) + SourceIndex(0) name (m1)
@@ -70,7 +71,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^^^^^^^^^^^^->
+4 >         ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
 2 >    export class 
@@ -83,6 +84,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^
 3 >                 ^
+4 >                  ^^^^^^->
 1->
 2 >        export class 
 3 >                 c
@@ -91,19 +93,20 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 3 >Emitted(5, 19) Source(3, 19) + SourceIndex(0) name (m1.c)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^->
-1 > {
+3 >         ^^->
+1-> {
   >    
 2 >        }
-1 >Emitted(6, 9) Source(4, 5) + SourceIndex(0) name (m1.c.constructor)
+1->Emitted(6, 9) Source(4, 5) + SourceIndex(0) name (m1.c.constructor)
 2 >Emitted(6, 10) Source(4, 6) + SourceIndex(0) name (m1.c.constructor)
 ---
 >>>        return c;
 1->^^^^^^^^
 2 >        ^^^^^^^
 3 >               ^
+4 >                ^^^->
 1->
 2 >        
 3 >               c {
@@ -113,17 +116,17 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 3 >Emitted(7, 17) Source(4, 6) + SourceIndex(0) name (m1.c)
 ---
 >>>    })();
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^->
-1 >
+5 >         ^^->
+1->
 2 >    }
 3 >     
 4 >     export class c {
   >         }
-1 >Emitted(8, 5) Source(4, 5) + SourceIndex(0) name (m1.c)
+1->Emitted(8, 5) Source(4, 5) + SourceIndex(0) name (m1.c)
 2 >Emitted(8, 6) Source(4, 6) + SourceIndex(0) name (m1.c)
 3 >Emitted(8, 6) Source(3, 5) + SourceIndex(0) name (m1)
 4 >Emitted(8, 10) Source(4, 6) + SourceIndex(0) name (m1)
@@ -134,7 +137,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 3 >        ^^^
 4 >           ^
 5 >            ^
-6 >             ^^^^^^^^->
+6 >             ^^->
 1->
 2 >    c
 3 >        
@@ -155,6 +158,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 5 >     ^^^^^
 6 >          ^^
 7 >            ^^^^^^^^
+8 >                    ^^->
 1->
   >
 2 >}
@@ -176,19 +180,19 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 7 >Emitted(10, 21) Source(5, 2) + SourceIndex(0)
 ---
 >>>var m1;
-1 >
+1->
 2 >^^^^
 3 >    ^^
 4 >      ^
-5 >       ^^^^^^^^^^->
-1 >
+5 >       ^^->
+1->
   >
 2 >module 
 3 >    m1
 4 >       {
   >          var b = new m1.c();
   >      }
-1 >Emitted(11, 1) Source(6, 1) + SourceIndex(0)
+1->Emitted(11, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(11, 5) Source(6, 8) + SourceIndex(0)
 3 >Emitted(11, 7) Source(6, 10) + SourceIndex(0)
 4 >Emitted(11, 8) Source(8, 2) + SourceIndex(0)
@@ -199,7 +203,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 3 >           ^^
 4 >             ^^
 5 >               ^
-6 >                ^^^^^^^^->
+6 >                ^^->
 1->
 2 >module 
 3 >           m1
@@ -222,6 +226,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 8 >                   ^
 9 >                    ^^
 10>                      ^
+11>                       ^^->
 1->
   >    
 2 >    var 
@@ -245,15 +250,15 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 10>Emitted(13, 24) Source(7, 24) + SourceIndex(0) name (m1)
 ---
 >>>})(m1 || (m1 = {}));
-1 >
+1->
 2 >^
 3 > ^^
 4 >   ^^
 5 >     ^^^^^
 6 >          ^^
 7 >            ^^^^^^^^
-8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+8 >                    ^^->
+1->
   >
 2 >}
 3 > 
@@ -263,7 +268,7 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 7 >             {
   >                var b = new m1.c();
   >            }
-1 >Emitted(14, 1) Source(8, 1) + SourceIndex(0) name (m1)
+1->Emitted(14, 1) Source(8, 1) + SourceIndex(0) name (m1)
 2 >Emitted(14, 2) Source(8, 2) + SourceIndex(0) name (m1)
 3 >Emitted(14, 4) Source(6, 8) + SourceIndex(0)
 4 >Emitted(14, 6) Source(6, 10) + SourceIndex(0)

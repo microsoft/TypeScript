@@ -1718,8 +1718,8 @@ namespace ts {
             decreaseIndent: () => indent--,
             getIndent: () => indent,
             getTextPos: () => output.length,
-            getLine: () => lineCount + 1,
-            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+            getLine: () => lineCount,
+            getColumn: () => lineStart ? indent * getIndentSize() : output.length - linePos,
             getText: () => output,
         };
     }

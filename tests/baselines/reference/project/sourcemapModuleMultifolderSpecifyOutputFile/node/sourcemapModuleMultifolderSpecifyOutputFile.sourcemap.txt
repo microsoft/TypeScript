@@ -14,7 +14,7 @@ sourceFile:m1.ts
 3 >             ^^^
 4 >                ^^
 5 >                  ^
-6 >                   ^^^^^^^^->
+6 >                   ^^->
 1 >export var 
 2 >m1_a1
 3 >              = 
@@ -30,7 +30,7 @@ sourceFile:m1.ts
 1->
 2 >^^^^
 3 >    ^^^^^
-4 >         ^^^^^^^^^^^^^^->
+4 >         ^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >export class 
@@ -43,6 +43,7 @@ sourceFile:m1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^
+4 >                  ^^^^^^->
 1->
 2 >    export class 
 3 >             m1_c1
@@ -51,20 +52,21 @@ sourceFile:m1.ts
 3 >Emitted(3, 19) Source(2, 19) + SourceIndex(0) name (m1_c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^->
-1 > {
+3 >     ^^->
+1-> {
   >    public m1_c1_p1: number;
   >
 2 >    }
-1 >Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
 2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (m1_c1.constructor)
 ---
 >>>    return m1_c1;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^
+4 >                ^^^->
 1->
 2 >    
 3 >           m1_c1 {
@@ -75,18 +77,18 @@ sourceFile:m1.ts
 3 >Emitted(5, 17) Source(4, 2) + SourceIndex(0) name (m1_c1)
 ---
 >>>})();
-1 >
+1->
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^->
-1 >
+5 >     ^^->
+1->
 2 >}
 3 > 
 4 > export class m1_c1 {
   >     public m1_c1_p1: number;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m1_c1)
+1->Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m1_c1)
 2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (m1_c1)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
@@ -97,7 +99,7 @@ sourceFile:m1.ts
 3 >             ^^^
 4 >                ^^^^^
 5 >                     ^
-6 >                      ^^^^^^^^^^^^^^->
+6 >                      ^^->
 1->
 2 >m1_c1
 3 >             
@@ -119,6 +121,7 @@ sourceFile:m1.ts
 5 >                           ^^^^^
 6 >                                ^^
 7 >                                  ^
+8 >                                   ^^->
 1->
   >
   >export var 
@@ -137,15 +140,15 @@ sourceFile:m1.ts
 7 >Emitted(8, 36) Source(6, 39) + SourceIndex(0)
 ---
 >>>function m1_f1() {
-1 >
+1->
 2 >^^^^^^^^^
 3 >         ^^^^^
-4 >              ^^^^^^^^^^^^^^^^^^^->
-1 >
+4 >              ^^^^^^->
+1->
   >
 2 >export function 
 3 >         m1_f1
-1 >Emitted(9, 1) Source(7, 1) + SourceIndex(0)
+1->Emitted(9, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(9, 10) Source(7, 17) + SourceIndex(0)
 3 >Emitted(9, 15) Source(7, 22) + SourceIndex(0)
 ---
@@ -155,6 +158,7 @@ sourceFile:m1.ts
 3 >          ^
 4 >           ^^^^^^^^^^^^^^^^^^^^
 5 >                               ^
+6 >                                ^^->
 1->() {
   >    
 2 >    return
@@ -168,13 +172,13 @@ sourceFile:m1.ts
 5 >Emitted(10, 33) Source(8, 25) + SourceIndex(0) name (m1_f1)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(11, 1) Source(9, 1) + SourceIndex(0) name (m1_f1)
+1->Emitted(11, 1) Source(9, 1) + SourceIndex(0) name (m1_f1)
 2 >Emitted(11, 2) Source(9, 2) + SourceIndex(0) name (m1_f1)
 ---
 >>>exports.m1_f1 = m1_f1;
@@ -183,7 +187,7 @@ sourceFile:m1.ts
 3 >             ^^^
 4 >                ^^^^^
 5 >                     ^
-6 >                      ^^^^^^^->
+6 >                      ^^->
 1->
 2 >m1_f1
 3 >             
@@ -213,7 +217,7 @@ sourceFile:m2.ts
 3 >             ^^^
 4 >                ^^
 5 >                  ^
-6 >                   ^^^^^^^^->
+6 >                   ^^->
 1 >export var 
 2 >m2_a1
 3 >              = 
@@ -229,7 +233,7 @@ sourceFile:m2.ts
 1->
 2 >^^^^
 3 >    ^^^^^
-4 >         ^^^^^^^^^^^^^^->
+4 >         ^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >export class 
@@ -242,6 +246,7 @@ sourceFile:m2.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^
+4 >                  ^^^^^^->
 1->
 2 >    export class 
 3 >             m2_c1
@@ -250,20 +255,21 @@ sourceFile:m2.ts
 3 >Emitted(3, 19) Source(2, 19) + SourceIndex(0) name (m2_c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^->
-1 > {
+3 >     ^^->
+1-> {
   >    public m2_c1_p1: number;
   >
 2 >    }
-1 >Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m2_c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m2_c1.constructor)
 2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (m2_c1.constructor)
 ---
 >>>    return m2_c1;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^
+4 >                ^^^->
 1->
 2 >    
 3 >           m2_c1 {
@@ -274,18 +280,18 @@ sourceFile:m2.ts
 3 >Emitted(5, 17) Source(4, 2) + SourceIndex(0) name (m2_c1)
 ---
 >>>})();
-1 >
+1->
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^->
-1 >
+5 >     ^^->
+1->
 2 >}
 3 > 
 4 > export class m2_c1 {
   >     public m2_c1_p1: number;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m2_c1)
+1->Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m2_c1)
 2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (m2_c1)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
@@ -296,7 +302,7 @@ sourceFile:m2.ts
 3 >             ^^^
 4 >                ^^^^^
 5 >                     ^
-6 >                      ^^^^^^^^^^^^^^->
+6 >                      ^^->
 1->
 2 >m2_c1
 3 >             
@@ -318,6 +324,7 @@ sourceFile:m2.ts
 5 >                           ^^^^^
 6 >                                ^^
 7 >                                  ^
+8 >                                   ^^->
 1->
   >
   >export var 
@@ -336,15 +343,15 @@ sourceFile:m2.ts
 7 >Emitted(8, 36) Source(6, 39) + SourceIndex(0)
 ---
 >>>function m2_f1() {
-1 >
+1->
 2 >^^^^^^^^^
 3 >         ^^^^^
-4 >              ^^^^^^^^^^^^^^^^^^^->
-1 >
+4 >              ^^^^^^->
+1->
   >
 2 >export function 
 3 >         m2_f1
-1 >Emitted(9, 1) Source(7, 1) + SourceIndex(0)
+1->Emitted(9, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(9, 10) Source(7, 17) + SourceIndex(0)
 3 >Emitted(9, 15) Source(7, 22) + SourceIndex(0)
 ---
@@ -354,6 +361,7 @@ sourceFile:m2.ts
 3 >          ^
 4 >           ^^^^^^^^^^^^^^^^^^^^
 5 >                               ^
+6 >                                ^^->
 1->() {
   >    
 2 >    return
@@ -367,13 +375,13 @@ sourceFile:m2.ts
 5 >Emitted(10, 33) Source(8, 25) + SourceIndex(0) name (m2_f1)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(11, 1) Source(9, 1) + SourceIndex(0) name (m2_f1)
+1->Emitted(11, 1) Source(9, 1) + SourceIndex(0) name (m2_f1)
 2 >Emitted(11, 2) Source(9, 2) + SourceIndex(0) name (m2_f1)
 ---
 >>>exports.m2_f1 = m2_f1;
@@ -382,7 +390,7 @@ sourceFile:m2.ts
 3 >             ^^^
 4 >                ^^^^^
 5 >                     ^
-6 >                      ^^^^^^^->
+6 >                      ^^->
 1->
 2 >m2_f1
 3 >             
@@ -414,7 +422,7 @@ sourceFile:test.ts
 5 >                 ^^^^^^^^
 6 >                         ^
 7 >                          ^
-8 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                           ^^->
 1 >
 2 >import 
 3 >    m1
@@ -438,6 +446,7 @@ sourceFile:test.ts
 5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 6 >                                                         ^
 7 >                                                          ^
+8 >                                                           ^^->
 1->
   >
 2 >import 
@@ -455,19 +464,19 @@ sourceFile:test.ts
 7 >Emitted(2, 60) Source(2, 63) + SourceIndex(0)
 ---
 >>>exports.a1 = 10;
-1 >
+1->
 2 >^^^^^^^^^^
 3 >          ^^^
 4 >             ^^
 5 >               ^
-6 >                ^^^^^^^^->
-1 >
+6 >                ^^->
+1->
   >export var 
 2 >a1
 3 >           = 
 4 >             10
 5 >               ;
-1 >Emitted(3, 1) Source(3, 12) + SourceIndex(0)
+1->Emitted(3, 1) Source(3, 12) + SourceIndex(0)
 2 >Emitted(3, 11) Source(3, 14) + SourceIndex(0)
 3 >Emitted(3, 14) Source(3, 17) + SourceIndex(0)
 4 >Emitted(3, 16) Source(3, 19) + SourceIndex(0)
@@ -477,7 +486,7 @@ sourceFile:test.ts
 1->
 2 >^^^^
 3 >    ^^
-4 >      ^^^^^^^^^^^^^^->
+4 >      ^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >export class 
@@ -490,6 +499,7 @@ sourceFile:test.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^
+4 >               ^^^^^^->
 1->
 2 >    export class 
 3 >             c1
@@ -498,20 +508,21 @@ sourceFile:test.ts
 3 >Emitted(5, 16) Source(4, 16) + SourceIndex(0) name (c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^->
-1 > {
+3 >     ^^->
+1-> {
   >    public p1: number;
   >
 2 >    }
-1 >Emitted(6, 5) Source(6, 1) + SourceIndex(0) name (c1.constructor)
+1->Emitted(6, 5) Source(6, 1) + SourceIndex(0) name (c1.constructor)
 2 >Emitted(6, 6) Source(6, 2) + SourceIndex(0) name (c1.constructor)
 ---
 >>>    return c1;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^
+4 >             ^^^->
 1->
 2 >    
 3 >           c1 {
@@ -522,18 +533,18 @@ sourceFile:test.ts
 3 >Emitted(7, 14) Source(6, 2) + SourceIndex(0) name (c1)
 ---
 >>>})();
-1 >
+1->
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^->
-1 >
+5 >     ^^->
+1->
 2 >}
 3 > 
 4 > export class c1 {
   >     public p1: number;
   > }
-1 >Emitted(8, 1) Source(6, 1) + SourceIndex(0) name (c1)
+1->Emitted(8, 1) Source(6, 1) + SourceIndex(0) name (c1)
 2 >Emitted(8, 2) Source(6, 2) + SourceIndex(0) name (c1)
 3 >Emitted(8, 2) Source(4, 1) + SourceIndex(0)
 4 >Emitted(8, 6) Source(6, 2) + SourceIndex(0)
@@ -544,7 +555,7 @@ sourceFile:test.ts
 3 >          ^^^
 4 >             ^^
 5 >               ^
-6 >                ^^^^^^^^^^^^^^->
+6 >                ^^->
 1->
 2 >c1
 3 >          
@@ -566,6 +577,7 @@ sourceFile:test.ts
 5 >                        ^^
 6 >                          ^^
 7 >                            ^
+8 >                             ^^->
 1->
   >
   >export var 
@@ -584,15 +596,15 @@ sourceFile:test.ts
 7 >Emitted(10, 30) Source(8, 33) + SourceIndex(0)
 ---
 >>>function f1() {
-1 >
+1->
 2 >^^^^^^^^^
 3 >         ^^
-4 >           ^^^^^^^^^^^^^^^^^^^->
-1 >
+4 >           ^^^^^^->
+1->
   >
 2 >export function 
 3 >         f1
-1 >Emitted(11, 1) Source(9, 1) + SourceIndex(0)
+1->Emitted(11, 1) Source(9, 1) + SourceIndex(0)
 2 >Emitted(11, 10) Source(9, 17) + SourceIndex(0)
 3 >Emitted(11, 12) Source(9, 19) + SourceIndex(0)
 ---
@@ -602,6 +614,7 @@ sourceFile:test.ts
 3 >          ^
 4 >           ^^^^^^^^^^^^^^^^^
 5 >                            ^
+6 >                             ^^->
 1->() {
   >    
 2 >    return
@@ -615,13 +628,13 @@ sourceFile:test.ts
 5 >Emitted(12, 30) Source(10, 22) + SourceIndex(0) name (f1)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(13, 1) Source(11, 1) + SourceIndex(0) name (f1)
+1->Emitted(13, 1) Source(11, 1) + SourceIndex(0) name (f1)
 2 >Emitted(13, 2) Source(11, 2) + SourceIndex(0) name (f1)
 ---
 >>>exports.f1 = f1;
@@ -630,7 +643,7 @@ sourceFile:test.ts
 3 >          ^^^
 4 >             ^^
 5 >               ^
-6 >                ^^^^^^^->
+6 >                ^^->
 1->
 2 >f1
 3 >          
@@ -652,7 +665,7 @@ sourceFile:test.ts
 5 >               ^
 6 >                ^^^^^
 7 >                     ^
-8 >                      ^->
+8 >                      ^^->
 1->
   >
   >export var 
@@ -678,7 +691,7 @@ sourceFile:test.ts
 5 >               ^
 6 >                ^^^^^
 7 >                     ^
-8 >                      ^^^^^^^^^->
+8 >                      ^^->
 1->
   >export var 
 2 >a3

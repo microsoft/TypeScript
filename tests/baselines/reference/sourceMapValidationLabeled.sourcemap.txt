@@ -17,7 +17,7 @@ sourceFile:sourceMapValidationLabeled.ts
 6 >        ^^^
 7 >           ^^
 8 >             ^
-9 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >              ^^->
 1 >
 2 >x
 3 > :

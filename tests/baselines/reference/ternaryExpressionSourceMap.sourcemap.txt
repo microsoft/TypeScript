@@ -15,7 +15,7 @@ sourceFile:ternaryExpressionSourceMap.ts
 4 >     ^^^
 5 >        ^
 6 >         ^
-7 >          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >          ^^->
 1 >
   >
 2 >var 
@@ -49,6 +49,7 @@ sourceFile:ternaryExpressionSourceMap.ts
 16>                                                                ^^
 17>                                                                  ^
 18>                                                                   ^
+19>                                                                    ^^->
 1->
   >
 2 >var 

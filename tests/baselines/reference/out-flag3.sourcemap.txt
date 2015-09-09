@@ -11,6 +11,7 @@ sourceFile:tests/cases/compiler/a.ts
 >>>// --out and --outFile error
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                            ^^->
 1 >
   >
 2 >// --out and --outFile error
@@ -18,16 +19,16 @@ sourceFile:tests/cases/compiler/a.ts
 2 >Emitted(1, 29) Source(2, 29) + SourceIndex(0)
 ---
 >>>var A = (function () {
-1 >
+1->
 2 >^^^^
 3 >    ^
-4 >     ^^^^^^^^^^^^^^->
-1 >
+4 >     ^^^^^^^^^^^^^^^^^^^->
+1->
   >
   >
 2 >class 
 3 >    A
-1 >Emitted(2, 1) Source(4, 1) + SourceIndex(0)
+1->Emitted(2, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(4, 7) + SourceIndex(0)
 3 >Emitted(2, 6) Source(4, 8) + SourceIndex(0)
 ---
@@ -35,6 +36,7 @@ sourceFile:tests/cases/compiler/a.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
+4 >              ^^^^^^->
 1->
 2 >    class 
 3 >             A
@@ -43,18 +45,19 @@ sourceFile:tests/cases/compiler/a.ts
 3 >Emitted(3, 15) Source(4, 8) + SourceIndex(0) name (A)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
-1 > { 
+3 >     ^^->
+1-> { 
 2 >    }
-1 >Emitted(4, 5) Source(4, 11) + SourceIndex(0) name (A.constructor)
+1->Emitted(4, 5) Source(4, 11) + SourceIndex(0) name (A.constructor)
 2 >Emitted(4, 6) Source(4, 12) + SourceIndex(0) name (A.constructor)
 ---
 >>>    return A;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^
+4 >            ^^^->
 1->
 2 >    
 3 >           A { }
@@ -63,16 +66,16 @@ sourceFile:tests/cases/compiler/a.ts
 3 >Emitted(5, 13) Source(4, 12) + SourceIndex(0) name (A)
 ---
 >>>})();
-1 >
+1->
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^->
-1 >
+5 >     ^^->
+1->
 2 >}
 3 > 
 4 > class A { }
-1 >Emitted(6, 1) Source(4, 11) + SourceIndex(0) name (A)
+1->Emitted(6, 1) Source(4, 11) + SourceIndex(0) name (A)
 2 >Emitted(6, 2) Source(4, 12) + SourceIndex(0) name (A)
 3 >Emitted(6, 2) Source(4, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 12) + SourceIndex(0)
@@ -85,7 +88,7 @@ sourceFile:tests/cases/compiler/b.ts
 1->
 2 >^^^^
 3 >    ^
-4 >     ^^^^^^^^^^^^^^->
+4 >     ^^^^^^^^^^^^^^^^^^^->
 1->
 2 >class 
 3 >    B
@@ -97,6 +100,7 @@ sourceFile:tests/cases/compiler/b.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
+4 >              ^^^^^^->
 1->
 2 >    class 
 3 >             B
@@ -105,18 +109,19 @@ sourceFile:tests/cases/compiler/b.ts
 3 >Emitted(8, 15) Source(1, 8) + SourceIndex(1) name (B)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
-1 > { 
+3 >     ^^->
+1-> { 
 2 >    }
-1 >Emitted(9, 5) Source(1, 11) + SourceIndex(1) name (B.constructor)
+1->Emitted(9, 5) Source(1, 11) + SourceIndex(1) name (B.constructor)
 2 >Emitted(9, 6) Source(1, 12) + SourceIndex(1) name (B.constructor)
 ---
 >>>    return B;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^
+4 >            ^^^->
 1->
 2 >    
 3 >           B { }
@@ -125,16 +130,16 @@ sourceFile:tests/cases/compiler/b.ts
 3 >Emitted(10, 13) Source(1, 12) + SourceIndex(1) name (B)
 ---
 >>>})();
-1 >
+1->
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+5 >     ^^->
+1->
 2 >}
 3 > 
 4 > class B { }
-1 >Emitted(11, 1) Source(1, 11) + SourceIndex(1) name (B)
+1->Emitted(11, 1) Source(1, 11) + SourceIndex(1) name (B)
 2 >Emitted(11, 2) Source(1, 12) + SourceIndex(1) name (B)
 3 >Emitted(11, 2) Source(1, 1) + SourceIndex(1)
 4 >Emitted(11, 6) Source(1, 12) + SourceIndex(1)

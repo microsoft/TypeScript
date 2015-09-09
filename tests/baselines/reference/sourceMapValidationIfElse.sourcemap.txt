@@ -15,7 +15,7 @@ sourceFile:sourceMapValidationIfElse.ts
 4 >     ^^^
 5 >        ^^
 6 >          ^
-7 >           ^^^^->
+7 >           ^^->
 1 >
 2 >var 
 3 >    i
@@ -40,6 +40,7 @@ sourceFile:sourceMapValidationIfElse.ts
 8 >           ^
 9 >            ^
 10>             ^
+11>              ^^->
 1->
   >
 2 >if
@@ -63,28 +64,29 @@ sourceFile:sourceMapValidationIfElse.ts
 10>Emitted(2, 15) Source(2, 15) + SourceIndex(0)
 ---
 >>>    i++;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-1 >
+5 >        ^^->
+1->
   >    
 2 >    i
 3 >     ++
 4 >       ;
-1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+1->Emitted(3, 5) Source(3, 5) + SourceIndex(0)
 2 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
 3 >Emitted(3, 8) Source(3, 8) + SourceIndex(0)
 4 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
 ---
 >>>else {
@@ -92,6 +94,7 @@ sourceFile:sourceMapValidationIfElse.ts
 2 >^^^^
 3 >    ^
 4 >     ^
+5 >      ^^->
 1-> 
 2 >else
 3 >    
@@ -103,13 +106,13 @@ sourceFile:sourceMapValidationIfElse.ts
 4 >Emitted(5, 7) Source(5, 2) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(6, 1) Source(6, 1) + SourceIndex(0)
+1->Emitted(6, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
 ---
 >>>if (i == 10) {
@@ -123,6 +126,7 @@ sourceFile:sourceMapValidationIfElse.ts
 8 >           ^
 9 >            ^
 10>             ^
+11>              ^^->
 1->
   >
 2 >if
@@ -147,28 +151,29 @@ sourceFile:sourceMapValidationIfElse.ts
 10>Emitted(7, 15) Source(8, 2) + SourceIndex(0)
 ---
 >>>    i++;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-1 >
+5 >        ^^->
+1->
   >    
 2 >    i
 3 >     ++
 4 >       ;
-1 >Emitted(8, 5) Source(9, 5) + SourceIndex(0)
+1->Emitted(8, 5) Source(9, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(9, 6) + SourceIndex(0)
 3 >Emitted(8, 8) Source(9, 8) + SourceIndex(0)
 4 >Emitted(8, 9) Source(9, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(9, 1) Source(10, 1) + SourceIndex(0)
+1->Emitted(9, 1) Source(10, 1) + SourceIndex(0)
 2 >Emitted(9, 2) Source(10, 2) + SourceIndex(0)
 ---
 >>>else if (i == 20) {
@@ -184,6 +189,7 @@ sourceFile:sourceMapValidationIfElse.ts
 10>                ^
 11>                 ^
 12>                  ^
+13>                   ^^->
 1->
   >
 2 >else
@@ -211,28 +217,29 @@ sourceFile:sourceMapValidationIfElse.ts
 12>Emitted(10, 20) Source(11, 20) + SourceIndex(0)
 ---
 >>>    i--;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^
-1 >
+5 >        ^^->
+1->
   >    
 2 >    i
 3 >     --
 4 >       ;
-1 >Emitted(11, 5) Source(12, 5) + SourceIndex(0)
+1->Emitted(11, 5) Source(12, 5) + SourceIndex(0)
 2 >Emitted(11, 6) Source(12, 6) + SourceIndex(0)
 3 >Emitted(11, 8) Source(12, 8) + SourceIndex(0)
 4 >Emitted(11, 9) Source(12, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(12, 1) Source(13, 1) + SourceIndex(0)
+1->Emitted(12, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(12, 2) Source(13, 2) + SourceIndex(0)
 ---
 >>>else if (i == 30) {
@@ -248,6 +255,7 @@ sourceFile:sourceMapValidationIfElse.ts
 10>                ^
 11>                 ^
 12>                  ^
+13>                   ^^->
 1-> 
 2 >else
 3 >     
@@ -274,31 +282,32 @@ sourceFile:sourceMapValidationIfElse.ts
 12>Emitted(13, 20) Source(13, 22) + SourceIndex(0)
 ---
 >>>    i += 70;
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^
 4 >         ^^
 5 >           ^
-1 >
+6 >            ^^->
+1->
   >    
 2 >    i
 3 >      += 
 4 >         70
 5 >           ;
-1 >Emitted(14, 5) Source(14, 5) + SourceIndex(0)
+1->Emitted(14, 5) Source(14, 5) + SourceIndex(0)
 2 >Emitted(14, 6) Source(14, 6) + SourceIndex(0)
 3 >Emitted(14, 10) Source(14, 10) + SourceIndex(0)
 4 >Emitted(14, 12) Source(14, 12) + SourceIndex(0)
 5 >Emitted(14, 13) Source(14, 13) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(15, 1) Source(15, 1) + SourceIndex(0)
+1->Emitted(15, 1) Source(15, 1) + SourceIndex(0)
 2 >Emitted(15, 2) Source(15, 2) + SourceIndex(0)
 ---
 >>>else {
@@ -306,7 +315,7 @@ sourceFile:sourceMapValidationIfElse.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^->
+5 >      ^^->
 1-> 
 2 >else
 3 >     
@@ -321,6 +330,7 @@ sourceFile:sourceMapValidationIfElse.ts
 2 >    ^
 3 >     ^^
 4 >       ^
+5 >        ^^->
 1->
   >    
 2 >    i
@@ -332,13 +342,13 @@ sourceFile:sourceMapValidationIfElse.ts
 4 >Emitted(17, 9) Source(16, 9) + SourceIndex(0)
 ---
 >>>}
-1 >
+1->
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+3 > ^^->
+1->
   >
 2 >}
-1 >Emitted(18, 1) Source(17, 1) + SourceIndex(0)
+1->Emitted(18, 1) Source(17, 1) + SourceIndex(0)
 2 >Emitted(18, 2) Source(17, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationIfElse.js.map
