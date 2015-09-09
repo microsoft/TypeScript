@@ -432,6 +432,7 @@ namespace ts.formatting {
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxElement:
                 case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
