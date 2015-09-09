@@ -639,6 +639,13 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            // For JavaScript files, we don't want to report the normal typescript semantic errors.
+            // Instead, we just report errors for using TypeScript-only constructs from within a
+            // JavaScript file.
+            if (isJavaScript(sourceFile.fileName)) {
+                return getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken);
+            }
+
             return runWithCancellationToken(() => {
                 let typeChecker = getDiagnosticsProducingTypeChecker();
 
@@ -648,6 +655,165 @@ namespace ts {
                 let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
 
                 return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+            });
+        }
+
+        function getJavaScriptSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return runWithCancellationToken(() => {
+                let diagnostics: Diagnostic[] = [];
+                walk(sourceFile);
+
+                return diagnostics;
+
+                function walk(node: Node): boolean {
+                    if (!node) {
+                        return false;
+                    }
+
+                    switch (node.kind) {
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.ExportAssignment:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.ClassDeclaration:
+                            let classDeclaration = <ClassDeclaration>node;
+                            if (checkModifiers(classDeclaration.modifiers) ||
+                                checkTypeParameters(classDeclaration.typeParameters)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.HeritageClause:
+                            let heritageClause = <HeritageClause>node;
+                            if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.InterfaceDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.ModuleDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.TypeAliasDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.FunctionDeclaration:
+                            let functionDeclaration = <FunctionLikeDeclaration>node;
+                            if (checkModifiers(functionDeclaration.modifiers) ||
+                                checkTypeParameters(functionDeclaration.typeParameters) ||
+                                checkTypeAnnotation(functionDeclaration.type)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.VariableStatement:
+                            let variableStatement = <VariableStatement>node;
+                            if (checkModifiers(variableStatement.modifiers)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.VariableDeclaration:
+                            let variableDeclaration = <VariableDeclaration>node;
+                            if (checkTypeAnnotation(variableDeclaration.type)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            let expression = <CallExpression>node;
+                            if (expression.typeArguments && expression.typeArguments.length > 0) {
+                                let start = expression.typeArguments.pos;
+                                diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
+                                    Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.Parameter:
+                            let parameter = <ParameterDeclaration>node;
+                            if (parameter.modifiers) {
+                                let start = parameter.modifiers.pos;
+                                diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
+                                    Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            if (parameter.questionToken) {
+                                diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, '?'));
+                                return true;
+                            }
+                            if (parameter.type) {
+                                diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.PropertyDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.EnumDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.TypeAssertionExpression:
+                            let typeAssertionExpression = <TypeAssertion>node;
+                            diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.Decorator:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
+                            return true;
+                    }
+
+                    return forEachChild(node, walk);
+                }
+
+                function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+                    if (typeParameters) {
+                        let start = typeParameters.pos;
+                        diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
+                    }
+                    return false;
+                }
+
+                function checkTypeAnnotation(type: TypeNode): boolean {
+                    if (type) {
+                        diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                function checkModifiers(modifiers: ModifiersArray): boolean {
+                    if (modifiers) {
+                        for (let modifier of modifiers) {
+                            switch (modifier.kind) {
+                                case SyntaxKind.PublicKeyword:
+                                case SyntaxKind.PrivateKeyword:
+                                case SyntaxKind.ProtectedKeyword:
+                                case SyntaxKind.DeclareKeyword:
+                                    diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                    return true;
+
+                                // These are all legal modifiers.
+                                case SyntaxKind.StaticKeyword:
+                                case SyntaxKind.ExportKeyword:
+                                case SyntaxKind.ConstKeyword:
+                                case SyntaxKind.DefaultKeyword:
+                                case SyntaxKind.AbstractKeyword:
+                            }
+                        }
+                    }
+
+                    return false;
+                }
             });
         }
 
