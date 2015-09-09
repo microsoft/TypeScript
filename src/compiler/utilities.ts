@@ -1769,8 +1769,9 @@ namespace ts {
         if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
-                // 2. non .js file
-                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
+                // 2. non supported extension file
+                return compilerOptions.isolatedModules ||
+                    forEach(supportedExtensions, extension => fileExtensionIs(sourceFile.fileName, extension));
             }
             return false;
         }
