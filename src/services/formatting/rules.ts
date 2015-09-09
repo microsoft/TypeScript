@@ -219,12 +219,6 @@ namespace ts.formatting {
         // Tagged template string
         public SpaceBetweenTagAndTemplateString: Rule;
 
-        // Type operation
-        public SpaceBeforeBar: Rule;
-        public SpaceAfterBar: Rule;
-        public SpaceBeforeAmpersand: Rule;
-        public SpaceAfterAmpersand: Rule;
-
         constructor() {
             ///
             /// Common Rules
@@ -383,12 +377,6 @@ namespace ts.formatting {
             // template string
             this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
-            // type operation
-            this.SpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.SpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.SpaceBeforeAmpersand = new Rule(RuleDescriptor.create3(SyntaxKind.AmpersandToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.SpaceAfterAmpersand = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.AmpersandToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
             [
@@ -417,8 +405,6 @@ namespace ts.formatting {
                 this.SpaceAfterVoidOperator,
                 this.SpaceBetweenAsyncAndFunctionKeyword,
                 this.SpaceBetweenTagAndTemplateString,
-                this.SpaceBeforeBar, this.SpaceAfterBar,
-                this.SpaceBeforeAmpersand, this.SpaceAfterAmpersand,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
@@ -522,6 +508,8 @@ namespace ts.formatting {
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.AsExpression:
                 case SyntaxKind.TypePredicate:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.IntersectionType:
                     return true;
 
                 // equals in binding elements: function foo([[x, y] = [1, 2]])
