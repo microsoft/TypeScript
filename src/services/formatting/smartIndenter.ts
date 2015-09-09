@@ -478,12 +478,15 @@ namespace ts.formatting {
             }
         }
 
+        /**
+         * Function returns true if a node should not get additional indentation in its parent node.
+         */
         export function isIndentationPrevented(node: TextRangeWithKind) {
             switch (node.kind) {
                 case SyntaxKind.NamedExports:
                     return true;
-                // NamedImports has its own braces as Block does
                 case SyntaxKind.ImportClause:
+                    // NamedImports has its own braces as Block does
                     return (<ImportClause>node).namedBindings.kind === SyntaxKind.NamedImports;
             }
             return false;
