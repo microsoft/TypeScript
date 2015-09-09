@@ -600,6 +600,11 @@ namespace ts.transform {
                     <EnumMember>node, 
                     <DeclarationName>visitNode((<EnumMember>node).name, visitor), 
                     <Expression>visitNode((<EnumMember>node).initializer, visitor)));
+            case SyntaxKind.SourceFile:
+                return write(factory.updateSourceFile(
+                    <SourceFile>node, 
+                    <NodeArray<Statement>>visitNodes((<SourceFile>node).statements, visitor), 
+                    (<SourceFile>node).endOfFileToken));
             case SyntaxKind.JSDocTypeExpression:
                 return write(factory.updateJSDocTypeExpression(
                     <JSDocTypeExpression>node, 

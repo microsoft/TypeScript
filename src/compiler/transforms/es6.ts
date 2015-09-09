@@ -9,7 +9,7 @@ namespace ts.transform {
         resolver = getEmitResolver();
         compilerOptions = getCompilerOptions();
         languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        return visitNodes(statements, transformNode, /*newLexicalEnvironment*/ true);
+        return visitNodes(statements, transformNode, VisitorFlags.NewLexicalEnvironment);
     }
     
     /**
@@ -74,24 +74,6 @@ namespace ts.transform {
         }
         
         switch (node.kind) {
-            // case SyntaxKind.Block:
-            // case SyntaxKind.ModuleBlock:
-            // case SyntaxKind.CaseClause:
-            // case SyntaxKind.DefaultClause:
-            //     // These nodes contain statement lists which may need to be expanded to include multiple statements...
-            //     // See NodeArraywrite in transform.ts for approach
-                
-            // case SyntaxKind.DoStatement:
-            // case SyntaxKind.WhileStatement:
-            // case SyntaxKind.ForStatement:
-            // case SyntaxKind.ForInStatement:
-            // case SyntaxKind.ForOfStatement:
-            // case SyntaxKind.IfStatement:
-            // case SyntaxKind.LabeledStatement:
-            // case SyntaxKind.WithStatement:
-            //     // These nodes contain single statement nodes that may need to be switched to a block if a child node needs multiple statements...
-            //     // See Statementwrite in transform.ts for approach
-            
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
@@ -100,6 +82,7 @@ namespace ts.transform {
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.DeclareKeyword:
                 // TypeScript accessibility modifiers are elided.
+                return;
                 
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
@@ -118,31 +101,37 @@ namespace ts.transform {
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 // TypeScript type nodes are elided.
+                return;
                 
             case SyntaxKind.IndexSignature:
                 // TypeScript index signatures are elided.
+                return;
                 
             case SyntaxKind.Decorator:
                 // TypeScript decorators are elided. They will be emitted as part of transformClassDeclaration.
+                return;
                 
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
                 // TypeScript type-only declarations are elided
+                return;
 
             case SyntaxKind.PropertyDeclaration:
                 // TypeScript property declarations are elided.
+                return;
                 
             case SyntaxKind.IndexSignature:
                 // TypeScript index signatures are elided.
+                return;
                 
             case SyntaxKind.Constructor:
                 // TypeScript constructors are elided. The constructor of a class will be
                 // reordered to the start of the member list in `transformClassDeclaration`.
+                return;
                 
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
                 // TypeScript interfaces and type aliases are elided.
-
                 return;
                 
             case SyntaxKind.ClassDeclaration:
@@ -233,9 +222,9 @@ namespace ts.transform {
                 // TypeScript 'await' expressions must be transformed.
                 return transformAwaitExpression(<AwaitExpression>node, write);
                 
-            // case SyntaxKind.VariableStatement:
-            //     // TypeScript namespace exports for variable statements must be transformed.
-            //     return transformVariableStatement(<VariableStatement>node, write);
+            case SyntaxKind.VariableStatement:
+                // TypeScript namespace exports for variable statements must be transformed.
+                return transformVariableStatement(<VariableStatement>node, write);
                 
             case SyntaxKind.ModuleDeclaration:
                 // TypeScript namespace declarations must be transformed.
@@ -362,7 +351,7 @@ namespace ts.transform {
         let name = <Identifier>getDeclarationName(node);
         Debug.assert(isIdentifier(name));
 
-        if (getCombinedNodeFlags(node) & NodeFlags.Export) {
+        if (getCombinedNodeFlags(transform) & NodeFlags.Export) {
             let container = getContainingModuleName();
             let propExpr = factory.createPropertyAccessExpression2(container, name);
             return propExpr;
@@ -788,16 +777,27 @@ namespace ts.transform {
     }
     
     function transformVariableDeclarationList(node: VariableDeclarationList, write: (node: Statement) => void) {
-        let expressions = visitNodes<VariableDeclaration, Expression>(node.declarations, transformVariableDeclaration, /*newLexicalEnvironment*/ false, /*returnUndefinedIfEmpty*/ true);
-        if (expressions) {
+        let expressions: Expression[] = [];
+        emitNodes(node.declarations, expressions, transformVariableDeclaration);
+        
+        if (expressions.length) {
             let exprStmt = factory.createExpressionStatement(factory.inlineExpressions(expressions));
             write(exprStmt);
         }
     }
     
     function transformVariableDeclaration(node: VariableDeclaration, write: (node: Expression) => void) {
-        if (isBindingPattern(node.name)) {
-            Debug.fail("Transform not yet supported.");
+        if (!node.initializer) {
+            return;
+        }
+        
+        let name = node.name;
+        if (isBindingPattern(name)) {
+            let expr = visitNode<BindingPattern, Expression>(name, transformBindingPatternToExpression);
+            let initializer = visitNode(node.initializer, transformNode);
+            let assignExpr = factory.createAssignmentExpression(expr, initializer);
+            let parenExpr = factory.createParenthesizedExpression(assignExpr);
+            write(parenExpr);
         }
         else {
             let name = getModuleMemberName(node);
@@ -805,6 +805,27 @@ namespace ts.transform {
             let assignExpr = factory.createAssignmentExpression(name, initializer);
             write(assignExpr);
         }
+    }
+    
+    function transformBindingPatternToExpression(node: BindingPattern, write: (node: Expression) => void) {
+        switch (node.kind) {
+            case SyntaxKind.ObjectBindingPattern:
+                return transformObjectBindingPatternToExpression(<ObjectBindingPattern>node, write);
+            
+            case SyntaxKind.ArrayBindingPattern:
+                return transformArrayBindingPatternToExpression(<ObjectBindingPattern>node, write);
+        }
+    }
+    
+    function transformObjectBindingPatternToExpression(node: ObjectBindingPattern, write: (node: Expression) => void) {
+        let properties: ObjectLiteralElement[] = [];
+        
+        write(factory.createObjectLiteralExpression2(properties));
+    }
+
+    function transformArrayBindingPatternToExpression(node: ArrayBindingPattern, write: (node: Expression) => void) {
+        let elements: Expression[] = [];
+        write(factory.createArrayLiteralExpression(elements));
     }
 
     function transformModuleDeclaration(node: ModuleDeclaration, write: (node: Statement) => void) {

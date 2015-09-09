@@ -225,7 +225,7 @@ namespace ts {
         public getText(sourceFile?: SourceFile): string {
             return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
         }
-
+        
         private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {

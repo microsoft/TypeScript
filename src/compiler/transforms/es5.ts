@@ -2,7 +2,7 @@
 /*@internal*/
 namespace ts.transform {
     export function toES5(statements: NodeArray<Statement>) {
-        return visitNodes(statements, transformNode, /*newLexicalEnvironment*/ true);
+        return visitNodes(statements, transformNode, VisitorFlags.NewLexicalEnvironment);
     }
     
     /**
@@ -153,7 +153,7 @@ namespace ts.transform {
         let body = factory.createBlock([]);
 
         if (constructor) {
-            emitNode(constructor, body.statements, transformConstructor, /*newLexicalEnvironment*/ true);
+            emitNode(constructor, body.statements, transformConstructor, VisitorFlags.NewLexicalEnvironment);
         }
         else if (baseTypeNode) {
             let superCall = createDefaultSuperCall();
@@ -453,14 +453,14 @@ namespace ts.transform {
     function rewriteFunctionExpression(node: FunctionLikeDeclaration, name: Identifier, location: TextRange): FunctionExpression {
         let parameters = visitNodes(node.parameters, transformNode);
         let body = factory.createBlock([], node.body);
-        emitNode(node, body.statements, transformFunctionBody, /*newLexicalEnvironment*/ true);
+        emitNode(node, body.statements, transformFunctionBody, VisitorFlags.NewLexicalEnvironment);
         return factory.createFunctionExpression2(name, parameters, body, location);
     }
 
     function transformFunctionDeclaration(node: FunctionDeclaration, write: (node: Statement) => void): void {
         let parameters = visitNodes(node.parameters, transformNode);
         let body = factory.createBlock([], node.body);
-        emitNode(node, body.statements, transformFunctionBody, /*newLexicalEnvironment*/ true);
+        emitNode(node, body.statements, transformFunctionBody, VisitorFlags.NewLexicalEnvironment);
         write(factory.createFunctionDeclaration2(node.name, parameters, body, /*location*/ node));
     }
     
@@ -469,7 +469,7 @@ namespace ts.transform {
 
         let parameters = visitNodes(node.parameters, transformNode);
         let newBody = factory.createBlock([], /*location*/ isBlock(node.body) ? node.body : undefined);
-        emitNode(node, newBody.statements, transformFunctionBody, /*newLexicalEnvironment*/ true);
+        emitNode(node, newBody.statements, transformFunctionBody, VisitorFlags.NewLexicalEnvironment);
         
         let func = createfn(name, parameters, newBody, location);
         return func;
@@ -526,7 +526,7 @@ namespace ts.transform {
     }
     
     function transformThisKeyword(node: LeftHandSideExpression): LeftHandSideExpression {
-        let container = getThisContainer(node, /*includeArrowFunctions*/ true);
+        let container = getThisContainer(transform, /*includeArrowFunctions*/ true);
         if (isArrowFunction(container)) {
             let thisName = factory.createIdentifier("_this");
             return thisName;

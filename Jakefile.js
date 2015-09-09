@@ -31,9 +31,9 @@ if (process.env.path !== undefined) {
 }
 
 var compilerSources = [
+    "types.ts",
     "core.ts",
     "sys.ts",
-    "types.ts",
     "scanner.ts",
     "factory.ts",
     "factory.generated.ts",
@@ -60,6 +60,8 @@ var servicesSources = [
     "sys.ts",
     "types.ts",
     "scanner.ts",
+    "factory.ts",
+    "factory.generated.ts",
     "parser.ts",
     "utilities.ts",
     "binder.ts",

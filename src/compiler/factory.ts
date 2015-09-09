@@ -10,7 +10,7 @@ namespace ts {
     export function createNode<T extends Node>(kind: SyntaxKind): T {
         return factory.createNode<T>(kind);
     }
-
+    
     // @internal
     export namespace factory {
         export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {
@@ -126,6 +126,16 @@ namespace ts {
         
         export function createSourceFile(): SourceFile {
             let node = <SourceFile>createNode(SyntaxKind.SourceFile);
+            return node;
+        }
+        
+        export function updateSourceFile(node: SourceFile, statements: NodeArray<Statement>, endOfFileToken: Node): SourceFile {
+            if (statements !== node.statements || endOfFileToken !== node.endOfFileToken) {
+                let newNode = createSourceFile();
+                newNode.statements = statements;
+                newNode.endOfFileToken = endOfFileToken;
+                return updateFrom(node, newNode); 
+            }
             return node;
         }
         

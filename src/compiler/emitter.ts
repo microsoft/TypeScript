@@ -2814,9 +2814,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
-                let parentNode = nodeStack.getParent();
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
+                
+                let parentNode = nodeStack.getParent();
                 scopeEmitStart(parentNode);
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     Debug.assert(parentNode.kind === SyntaxKind.ModuleDeclaration);

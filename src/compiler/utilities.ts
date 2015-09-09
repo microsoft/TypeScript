@@ -391,7 +391,7 @@ namespace ts {
 
         return flags;
     }
-
+    
     export function isConst(navigable: ParentNavigable): boolean {
         return !!(getCombinedNodeFlags(navigable) & NodeFlags.Const);
     }
@@ -717,7 +717,7 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (nav.getParent().kind === SyntaxKind.Parameter && isClassElement(nav.getGrandparent())) {
+                    if (isParameter(nav.getParent()) && isClassElement(nav.getGrandparent())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
                         nav.moveToParent();
@@ -773,7 +773,8 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (nav.getParent().kind === SyntaxKind.Parameter && isClassElement(nav.getGrandparent())) {
+                    if (isParameter(nav.getParent()) 
+                        && isClassElement(nav.getGrandparent())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
                         nav.moveToParent();

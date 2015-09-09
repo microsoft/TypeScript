@@ -1830,8 +1830,10 @@ namespace ts {
     }
 
     // Source files are declarations when they are external modules.
-    // @kind(SyntaxKind.SourceFile)
-    // @factoryhidden
+    // @kind(SyntaxKind.SourceFile, { create: false, update: false })
+    // @factoryhidden("decorators")
+    // @factoryhidden("modifiers")
+    // @factoryhidden("name")
     export interface SourceFile extends Declaration {
         statements: NodeArray<Statement>;
         endOfFileToken: Node;
@@ -1861,6 +1863,7 @@ namespace ts {
         languageVersion: ScriptTarget;
 
         // The first node that causes this file to be an external module
+        // @factoryhidden
         /* @internal */ externalModuleIndicator: Node;
 
         /* @internal */ isDefaultLib: boolean;
