@@ -3994,7 +3994,7 @@ namespace ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.SyntheticProperty) {
-                    // If synthetic property is result of union of non method (property/accessors/variables), it is labeled as property
+                    // If a synthetic property is result of union/intersection of non method (property/accessors/variables), it is labeled as property
                     let syntheticPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                         let rootSymbolFlags = rootSymbol.getFlags();
                         if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
