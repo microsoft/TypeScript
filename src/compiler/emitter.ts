@@ -1292,8 +1292,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emit(node.name);
-                    write("=");
-                    emit(node.initializer);
+                    if (node.initializer) {
+                        write("=");
+                        emit(node.initializer);
+                    }
                 }
 
                 function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
