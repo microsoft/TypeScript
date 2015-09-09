@@ -21,6 +21,10 @@
 
     for (var {} = {}, {} = {}; false; void 0) {
     }
+
+    function f({} = a, [] = a, { p: {} = a} = a) {
+        return ({} = a, [] = a, { p: {} = a } = a) => a;
+    }
 })();
 
 (function () {
@@ -61,6 +65,17 @@
     var _q = a.p1, _r = a.p2;
     var _s = a.p1, _t = a.p2;
     for (var _u = {}, _v = {}; false; void 0) {
+    }
+    function f(_a, _b, _c) {
+        var _a = a;
+        var _b = a;
+        var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+        return function (_a, _b, _c) {
+            var _a = a;
+            var _b = a;
+            var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+            return a;
+        };
     }
 })();
 (function () {

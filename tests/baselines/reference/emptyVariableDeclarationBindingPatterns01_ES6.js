@@ -21,6 +21,10 @@
 
     for (var {} = {}, {} = {}; false; void 0) {
     }
+
+    function f({} = a, [] = a, { p: {} = a} = a) {
+        return ({} = a, [] = a, { p: {} = a } = a) => a;
+    }
 })();
 
 (function () {
@@ -61,6 +65,9 @@
     let { p1: {  }, p2: [] } = a;
     const { p1: {  }, p2: [] } = a;
     for (var {  } = {}, {  } = {}; false; void 0) {
+    }
+    function f({  } = a, [] = a, { p: {  } = a } = a) {
+        return ({  } = a, [] = a, { p: {  } = a } = a) => a;
     }
 })();
 (function () {
