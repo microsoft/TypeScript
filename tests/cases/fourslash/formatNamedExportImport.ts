@@ -23,6 +23,10 @@
 ////export/*formatOnEnter*/{/*formatOnEnterOpenBrace*/
 /////*differentLineIndent*/x/*differentLineAutoformat*/
 ////} from "abc"
+////
+////export {
+/////*incompleteExportDeclIndent*/
+/////*incompleteExportDeclIndent2*/
 
 format.selection("selectionStart", "selectionEnd");
 
@@ -69,3 +73,9 @@ verify.indentationIs(4);
 edit.insertLine('');
 goTo.marker("differentLineAutoformat");
 verify.currentLineContentIs("    x");
+
+goTo.marker("incompleteExportDeclIndent")
+verify.indentationIs(4);
+edit.insert("} from");
+goTo.marker("incompleteExportDeclIndent2");
+verify.indentationIs(4);
