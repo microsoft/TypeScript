@@ -792,7 +792,7 @@ namespace ts {
     };
 
     /**
-      * Creates an object used to navigate the ancestor's of a node by following parent pointers.
+      * Creates an object used to navigate the ancestors of a node by following parent pointers.
       * @param currentNode The current node for the navigator.
       */
     export function createParentNavigator(currentNode: Node): ParentNavigator {
@@ -938,15 +938,15 @@ namespace ts {
             }
         }
 
-        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        /** Traverses the stack from top to bottom until it finds an ancestor of the current node that matches the supplied predicate. */
         function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
-        /** Traverses the stack from top to bottom until it finds a node that matches the supplied predicate. */
+        /** Traverses the stack from top to bottom until it finds an ancestor of the current node that matches the supplied predicate. */
         function findAncestorNode(match: (node: Node) => boolean): Node;
         function findAncestorNode(match: (node: Node) => boolean) {
             if (parentNode && match(parentNode)) {
                 return parentNode;
             }
-            for (let i = stack.length; i >= 0; i--) {
+            for (let i = stack.length - 1; i >= 0; i--) {
                 let node = stack[i];
                 if (match(node)) {
                     return node;
