@@ -449,8 +449,6 @@ namespace ts {
 
     // @internal
     export interface ParentNavigator extends ParentNavigable {
-        /** Gets the root node for the current node. */
-        getRoot(): Node;
         /** Gets the grandparent node for the current node. */
         getGrandparent(): Node;
         /** Gets the parent node for the current node.  */
@@ -461,14 +459,10 @@ namespace ts {
         getKind(): SyntaxKind;
         /** Moves the navigator to the parent node of the current node. */
         moveToParent(): boolean;
-        /** Moves the navigator to the root node of the current node. */
-        moveToRoot(): boolean;
     }
 
     // @internal
     export interface NodeStack extends ParentNavigable {
-        /** Gets the node at the bottom of the stack. */
-        getRoot(): Node;
         /** Gets the node two steps down from the top of the stack. */
         getGrandparent(): Node;
         /** Gets the node one step down from the top of the stack. */
