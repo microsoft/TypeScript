@@ -476,7 +476,13 @@ namespace ts {
                 let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
                 for (let i = 0; i < sysFiles.length; i++) {
                     let name = sysFiles[i];
-                    if (fileExtensionIs(name, ".d.ts")) {
+                    if (fileExtensionIs(name, ".js")) {
+                        let baseName = name.substr(0, name.length - ".js".length);
+                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts") && !contains(sysFiles, baseName + ".d.ts")) {
+                            fileNames.push(name);
+                        }
+                    }
+                    else if (fileExtensionIs(name, ".d.ts")) {
                         let baseName = name.substr(0, name.length - ".d.ts".length);
                         if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
                             fileNames.push(name);
