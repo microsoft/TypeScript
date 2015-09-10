@@ -1697,6 +1697,14 @@
         "category": "Error",
         "code": 2652
     },
+    "Proper external module that carries external typings cannot contain tripleslash references.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Proper external module that carries external typings should be '.d.ts' file.": {
+        "category": "Error",
+        "code": 2655
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
