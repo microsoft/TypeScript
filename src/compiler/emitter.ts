@@ -897,17 +897,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(text);
                 }
             }
-            
-            function getEmittingNumericLiteralText(node: LiteralExpression): string {
-                let text = getLiteralText(node);
-                
-                if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
-                    return node.text;
-                }
-                else {
-                    return text;
-                }
-            }
 
             function getLiteralText(node: LiteralExpression) {
                 // Any template literal or string literal with an extended escape
@@ -2364,7 +2353,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             operand.kind !== SyntaxKind.NewExpression &&
                             !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                             !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
-                            !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression && !/^0[box]|[e.]/i.test(getEmittingNumericLiteralText(<LiteralExpression>operand)))) {
+                            !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
                             emit(operand);
                             return;
                         }
