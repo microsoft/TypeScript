@@ -1,0 +1,10 @@
+=== tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts ===
+/*!
+
+    multi line
+    comment
+*/
+
+var x = 10;
+>x : Symbol(x, Decl(emitPinnedCommentsOnTopOfFile.ts, 6, 3))
+

@@ -334,7 +334,8 @@ namespace ts {
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
-        let diagnostics = createDiagnosticCollection();
+        let fileProcessingDiagnostics = createDiagnosticCollection();
+        let programDiagnostics = createDiagnosticCollection();
 
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
@@ -404,6 +405,7 @@ namespace ts {
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
+            getFileProcessingDiagnostics: () => fileProcessingDiagnostics
         };
         return program;
 
@@ -436,6 +438,7 @@ namespace ts {
             
             // check if program source files has changed in the way that can affect structure of the program
             let newSourceFiles: SourceFile[] = [];
+            let modifiedSourceFiles: SourceFile[] = [];
             for (let oldSourceFile of oldProgram.getSourceFiles()) {
                 let newSourceFile = host.getSourceFile(oldSourceFile.fileName, options.target);
                 if (!newSourceFile) {
@@ -482,6 +485,7 @@ namespace ts {
                     }
                     // pass the cache of module resolutions from the old source file
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
+                    modifiedSourceFiles.push(newSourceFile);
                 }
                 else {
                     // file has no changes - use it as is
@@ -498,7 +502,11 @@ namespace ts {
             }
             
             files = newSourceFiles;
+            fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
             
+            for (let modifiedFile of modifiedSourceFiles) {
+                fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile);
+            }
             oldProgram.structureIsReused = true;
                 
             return true;
@@ -628,9 +636,10 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 let bindDiagnostics = sourceFile.bindDiagnostics;
                 let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
-                let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+                let fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
+                let programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-                return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
             });
         }
 
@@ -647,7 +656,8 @@ namespace ts {
 
         function getOptionsDiagnostics(): Diagnostic[] {
             let allDiagnostics: Diagnostic[] = [];
-            addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+            addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics())
+            addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
@@ -755,10 +765,10 @@ namespace ts {
 
             if (diagnostic) {
                 if (refFile !== undefined && refEnd !== undefined && refPos !== undefined) {
-                    diagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...diagnosticArgument));
+                    fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...diagnosticArgument));
                 }
                 else {
-                    diagnostics.add(createCompilerDiagnostic(diagnostic, ...diagnosticArgument));
+                    fileProcessingDiagnostics.add(createCompilerDiagnostic(diagnostic, ...diagnosticArgument));
                 }
             }
         }
@@ -780,11 +790,11 @@ namespace ts {
                 // We haven't looked for this file, do so now and cache result
                 let file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                     if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
-                        diagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
+                        fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
                             Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                     else {
-                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
+                        fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
                 filesByName.set(canonicalName, file);
@@ -820,11 +830,11 @@ namespace ts {
                     let sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
                         if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
-                            diagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
+                            fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
                                 Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
                         }
                         else {
-                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
+                            fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
                         }
                     }
                 }
@@ -874,7 +884,7 @@ namespace ts {
             return;
 
             function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
-                return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end);
+                return findSourceFile(fileName, /* isDefaultLib */ false, file, skipTrivia(file.text, nameLiteral.pos), nameLiteral.end);
             }
         }
 
@@ -899,7 +909,7 @@ namespace ts {
                 for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
                     if (commonPathComponents[i] !== sourcePathComponents[i]) {
                         if (i === 0) {
-                            diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
                             return;
                         }
 
@@ -928,7 +938,7 @@ namespace ts {
                     if (!isDeclarationFile(sourceFile)) {
                         let absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
                             allFilesBelongToPath = false;
                         }
                     }
@@ -941,52 +951,52 @@ namespace ts {
         function verifyCompilerOptions() {
             if (options.isolatedModules) {
                 if (options.declaration) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules"));
                 }
 
                 if (options.noEmitOnError) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmitOnError", "isolatedModules"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmitOnError", "isolatedModules"));
                 }
 
                 if (options.out) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules"));
                 }
 
                 if (options.outFile) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules"));
                 }
             }
 
             if (options.inlineSourceMap) {
                 if (options.sourceMap) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceMap", "inlineSourceMap"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceMap", "inlineSourceMap"));
                 }
                 if (options.mapRoot) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"));
                 }
                 if (options.sourceRoot) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSourceMap"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSourceMap"));
                 }
             }
 
 
             if (options.inlineSources) {
                 if (!options.sourceMap && !options.inlineSourceMap) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
                 }
             }
 
             if (options.out && options.outFile) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
             }
 
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
                 }
                 if (options.sourceRoot) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
                 }
                 return;
             }
@@ -997,24 +1007,24 @@ namespace ts {
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (options.isolatedModules) {
                 if (!options.module && languageVersion < ScriptTarget.ES6) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
                 }
 
                 let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
                 if (firstNonExternalModuleSourceFile) {
                     let span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
-                    diagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
+                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
                 }
             }
             else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && !options.module) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided));
+                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided));
             }
 
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= ScriptTarget.ES6) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot
@@ -1043,30 +1053,30 @@ namespace ts {
 
             if (options.noEmit) {
                 if (options.out) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "out"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "out"));
                 }
 
                 if (options.outFile) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outFile"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outFile"));
                 }
 
                 if (options.outDir) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outDir"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outDir"));
                 }
 
                 if (options.declaration) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "declaration"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "declaration"));
                 }
             }
 
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
             if (options.experimentalAsyncFunctions &&
                 options.target !== ScriptTarget.ES6) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
             }
         }
     }
