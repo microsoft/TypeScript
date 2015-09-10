@@ -780,6 +780,9 @@ namespace ts {
                 end: -1,
                 flags: 0,
                 parent: undefined,
+                createParentNavigator(): ParentNavigator {
+                    return createParentNavigator(<Node>this);
+                }
             };
             return <any>Node;
         },
@@ -788,6 +791,213 @@ namespace ts {
         getSignatureConstructor: () => <any>Signature
     };
 
+    /**
+      * Creates an object used to navigate the ancestors of a node by following parent pointers.
+      * @param currentNode The current node for the navigator.
+      */
+    export function createParentNavigator(currentNode: Node): ParentNavigator {
+        /** Gets the grandparent of the current node, without moving the navigator. */
+        function getGrandparent() {
+            let parent = getParent();
+            return parent ? parent.parent : undefined;
+        }
+        
+        /** Gets the parent of the current node, without moving the navigator. */
+        function getParent() {
+            return currentNode ? currentNode.parent : undefined;
+        }
+        
+        /** Gets the current node. */
+        function getNode() {
+            return currentNode;
+        }
+        
+        /** Gets the SyntaxKind for the current node. */
+        function getKind() {
+            return currentNode ? currentNode.kind : undefined;
+        }
+        
+        /** Navigates to the parent of the current node if it has one. */
+        function moveToParent(): boolean {
+            let parent = getParent();
+            if (parent) {
+                currentNode = parent;
+                return true;
+            }
+            
+            return false;
+        }
+        
+        /** Creates a new ParentNavigator from the current node. */
+        function createParentNavigator() {
+            return ts.createParentNavigator(currentNode);
+        }
+        
+        return {
+            getGrandparent,
+            getParent,
+            getNode,
+            getKind,
+            moveToParent,
+            createParentNavigator,
+        };
+    }
+    
+    /**
+      * Creates a node stack used to maintain parent relationships without parent pointers.
+      */
+    export function createNodeStack(): NodeStack {
+        let stackSize: number = 0;
+        let stack: Node[] = [];
+        let rootNode: Node;
+        let parentNode: Node;
+        let currentNode: Node;
+        
+        /** Gets the node two steps back from the top of the stack. */
+        function getGrandparent() {
+            return peekNode(2);
+        }
+        
+        /** Gets the node one step back from the top of the stack. */
+        function getParent() {
+            return parentNode;
+        }
+        
+        /** Gets the node at the top of the stack. */
+        function getNode() {
+            return currentNode;
+        }
+        
+        /** Gets the SyntaxKind for the node at the top of the stack. */
+        function getKind() {
+            return currentNode ? currentNode.kind : undefined;
+        }
+        
+        /** Pushes a node onto the stack. */
+        function pushNode(node: Node): void {
+            stackSize++;
+            if (stackSize > 2) {
+                stack.push(parentNode);
+            }
+            else if (stackSize === 1) {
+                rootNode = node;
+            }
+            parentNode = currentNode;
+            currentNode = node;
+        }
+        
+        /** Pops the top node from the stack. */
+        function popNode(): void {
+            currentNode = parentNode;
+            parentNode = stackSize > 2 ? stack.pop() : undefined;
+            stackSize--;
+            if (stackSize === 0) {
+                rootNode = undefined;
+            }
+        }
+        
+        /** Replaces the node at the top of the stack. */
+        function setNode(node: Node): void {
+            currentNode = node;
+        }
+        
+        /** Peeks at a node a specified number of steps back from the top of the stack. */
+        function peekNode(stackOffset: number): Node {
+            switch (stackOffset) {
+                case 0:
+                    return currentNode;
+                case 1:
+                    return parentNode;
+                default:
+                    return stackSize > 2 ? stack[stackSize - 1 - stackOffset] : undefined;
+            }
+        }
+
+        /** Traverses the stack from top to bottom until it finds an ancestor of the current node 
+          * that matches the supplied predicate. */
+        function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        /** Traverses the stack from top to bottom until it finds an ancestor of the current node 
+          * that matches the supplied predicate. */
+        function findAncestorNode(match: (node: Node) => boolean): Node;
+        function findAncestorNode(match: (node: Node) => boolean) {
+            if (parentNode && match(parentNode)) {
+                return parentNode;
+            }
+            for (let i = stack.length - 1; i >= 0; i--) {
+                let node = stack[i];
+                if (match(node)) {
+                    return node;
+                }
+            }
+            return undefined;
+        }
+        
+        /** Creates a parent navigator from the top of the stack. */
+        function createParentNavigator() {
+            return createParentNavigatorFromStackOffset(0);
+        }
+        
+        /** Creates a parent navigator a specified number of steps back from the top of the stack. */
+        function createParentNavigatorFromStackOffset(stackOffset: number): ParentNavigator {
+            /** Gets the node two steps back from the current stack offset. */
+            function getGrandparent() {
+                return peekNode(stackOffset + 2);
+            }
+            
+            /** Gets the node one step back from the current stack offset. */
+            function getParent() {
+                return peekNode(stackOffset + 1);
+            }
+            
+            /** Gets the node at the current stack offset. */
+            function getNode() {
+                return peekNode(stackOffset);
+            }
+            
+            /** Gets the SyntaxKind of the node at the current stack offset. */
+            function getKind() {
+                let node = getNode();
+                return node ? node.kind : undefined; 
+            }
+            
+            /** Navigates to the node one step back from the current stack offset. */
+            function moveToParent() {
+                if (getParent()) {
+                    stackOffset++;
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            /** Creates a new ParentNavigator from the current stack offset. */
+            function createParentNavigator() {
+                return createParentNavigatorFromStackOffset(stackOffset);
+            }
+            
+            return {
+                getGrandparent,
+                getParent,
+                getNode,
+                getKind,
+                moveToParent,
+                createParentNavigator,
+            };
+        }
+        
+        return {
+            getGrandparent,
+            getParent,
+            getNode,
+            getKind,
+            pushNode,
+            popNode,
+            setNode,
+            findAncestorNode,
+            createParentNavigator,
+        };
+    }
+    
     export const enum AssertionLevel {
         None = 0,
         Normal = 1,
