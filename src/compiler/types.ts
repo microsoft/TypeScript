@@ -2270,12 +2270,12 @@ namespace ts {
     export interface ResolvedModule {
         resolvedFileName: string;
         /*
-         * Denotes if 'resolvedFileName' should be proper external module:
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
          * - be a .d.ts file 
          * - use top level imports\exports
          * - don't use tripleslash references
          */
-        shouldBeProperExternalModule?: boolean;
+        isExternalLibraryImport?: boolean;
     }
     
     export interface ResolvedModuleWithFailedLookupLocations {

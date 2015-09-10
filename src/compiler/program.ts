@@ -129,12 +129,12 @@ namespace ts {
                 let candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
                 let result = loadNodeModuleFromFile(candidate, /* loadOnlyDts */ true, failedLookupLocations, host);
                 if (result) {
-                    return { resolvedModule: { resolvedFileName: result, shouldBeProperExternalModule: true }, failedLookupLocations };
+                    return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
                 
                 result = loadNodeModuleFromDirectory(candidate, /* loadOnlyDts */ true, failedLookupLocations, host);
                 if (result) {
-                    return { resolvedModule: { resolvedFileName: result, shouldBeProperExternalModule: true }, failedLookupLocations };
+                    return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
             }
             
@@ -472,7 +472,7 @@ namespace ts {
                             let resolutionChanged = oldResolution
                                 ? !newResolution || 
                                   oldResolution.resolvedFileName !== newResolution.resolvedFileName ||
-                                  !!oldResolution.shouldBeProperExternalModule !== !!newResolution.shouldBeProperExternalModule
+                                  !!oldResolution.isExternalLibraryImport !== !!newResolution.isExternalLibraryImport
                                 : newResolution;
                                 
                             if (resolutionChanged) {
@@ -850,18 +850,18 @@ namespace ts {
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
                         const importedFile = findModuleSourceFile(resolution.resolvedFileName, file.imports[i]);
-                        if (importedFile && resolution.shouldBeProperExternalModule) {
+                        if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {
                                 let start = getTokenPosOfNode(file.imports[i], file)
                                 diagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.File_0_is_not_a_module, importedFile.fileName));
                             }
                             else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
                                 let start = getTokenPosOfNode(file.imports[i], file)
-                                diagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Proper_external_module_that_carries_external_typings_should_be_d_ts_file));
+                                diagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_can_only_be_in_d_ts_files_Please_contact_the_package_author_to_update_the_package_definition));
                             }
                             else if (importedFile.referencedFiles.length) {
                                 let firstRef = importedFile.referencedFiles[0];
-                                diagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Proper_external_module_that_carries_external_typings_cannot_contain_tripleslash_references));
+                                diagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
                             }
                         }
                     }
