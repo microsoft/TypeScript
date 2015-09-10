@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/tsxElementResolution15.tsx(3,12): error TS2608: The global type 'JSX.ElementAttributesProperty' may not have more than one property
+tests/cases/conformance/jsx/file.tsx(3,12): error TS2608: The global type 'JSX.ElementAttributesProperty' may not have more than one property
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution15.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementAttributesProperty { pr1: any; pr2: any; }

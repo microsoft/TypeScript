@@ -1,4 +1,4 @@
-//// [tsxEmit1.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -40,7 +40,7 @@ var whitespace3 = <div>
       </div>;
 
 
-//// [tsxEmit1.jsx]
+//// [file.jsx]
 var p;
 var selfClosed1 = <div />;
 var selfClosed2 = <div x="1"/>;

@@ -1,4 +1,4 @@
-//// [tsxElementResolution14.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 }
@@ -10,6 +10,6 @@ var obj1: Obj1;
 <obj1 x={10} />; // OK
 
 
-//// [tsxElementResolution14.jsx]
+//// [file.jsx]
 var obj1;
 <obj1 x={10}/>; // OK

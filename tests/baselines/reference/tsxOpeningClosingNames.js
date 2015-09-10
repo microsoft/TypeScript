@@ -1,4 +1,4 @@
-//// [tsxOpeningClosingNames.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 }
@@ -10,5 +10,5 @@ declare module A.B.C {
 <A.B.C.D>foo</A . B . C.D>
 
 
-//// [tsxOpeningClosingNames.jsx]
+//// [file.jsx]
 <A.B.C.D>foo</A.B.C.D>;

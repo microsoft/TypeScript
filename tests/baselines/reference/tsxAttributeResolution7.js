@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution7.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -15,7 +15,7 @@ declare module JSX {
 <test1 data-bar={32} />;
 
 
-//// [tsxAttributeResolution7.jsx]
+//// [file.jsx]
 // Error
 <test1 data-foo={32}/>;
 // OK

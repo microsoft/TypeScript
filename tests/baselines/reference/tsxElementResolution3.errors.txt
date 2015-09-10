@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/tsxElementResolution3.tsx(12,1): error TS2324: Property 'n' is missing in type '{ n: string; }'.
-tests/cases/conformance/jsx/tsxElementResolution3.tsx(12,7): error TS2339: Property 'w' does not exist on type '{ n: string; }'.
+tests/cases/conformance/jsx/file.tsx(12,1): error TS2324: Property 'n' is missing in type '{ n: string; }'.
+tests/cases/conformance/jsx/file.tsx(12,7): error TS2339: Property 'w' does not exist on type '{ n: string; }'.
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution3.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

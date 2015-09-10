@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/tsxElementResolution4.tsx(16,1): error TS2324: Property 'm' is missing in type '{ m: string; }'.
-tests/cases/conformance/jsx/tsxElementResolution4.tsx(16,7): error TS2339: Property 'q' does not exist on type '{ m: string; }'.
+tests/cases/conformance/jsx/file.tsx(16,1): error TS2324: Property 'm' is missing in type '{ m: string; }'.
+tests/cases/conformance/jsx/file.tsx(16,7): error TS2339: Property 'q' does not exist on type '{ m: string; }'.
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution4.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

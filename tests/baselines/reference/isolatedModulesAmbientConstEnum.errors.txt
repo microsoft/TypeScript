@@ -1,7 +1,7 @@
-tests/cases/compiler/isolatedModulesAmbientConstEnum.ts(3,20): error TS1209: Ambient const enums are not allowed when the '--isolatedModules' flag is provided.
+tests/cases/compiler/file1.ts(3,20): error TS1209: Ambient const enums are not allowed when the '--isolatedModules' flag is provided.
 
 
-==== tests/cases/compiler/isolatedModulesAmbientConstEnum.ts (1 errors) ====
+==== tests/cases/compiler/file1.ts (1 errors) ====
     
     
     declare const enum E { X = 1}

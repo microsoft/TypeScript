@@ -1,4 +1,4 @@
-=== tests/cases/compiler/isolatedModulesNonAmbientConstEnum.ts ===
+=== tests/cases/compiler/file1.ts ===
 
 const enum E { X = 100 };
 >E : E

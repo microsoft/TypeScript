@@ -1,4 +1,4 @@
-//// [tsxAttributeInvalidNames.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -11,7 +11,7 @@ declare module JSX {
 <test1 32data={32} />;
 <test2 -data={32} />;
 
-//// [tsxAttributeInvalidNames.jsx]
+//// [file.jsx]
 // Invalid names
 <test1 />;
 32;

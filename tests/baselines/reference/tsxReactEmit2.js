@@ -1,4 +1,4 @@
-//// [tsxReactEmit2.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -15,7 +15,7 @@ var spreads4 = <div {...p1} x={p3} >{p2}</div>;
 var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 
 
-//// [tsxReactEmit2.js]
+//// [file.js]
 var p1, p2, p3;
 var spreads1 = React.createElement("div", React.__spread({}, p1), p2);
 var spreads2 = React.createElement("div", React.__spread({}, p1), p2);

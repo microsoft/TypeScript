@@ -1,4 +1,4 @@
-//// [tsxElementResolution11.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface ElementAttributesProperty { }
@@ -24,7 +24,7 @@ var Obj3: Obj3type;
 <Obj3 x={10} />; // OK
 
 
-//// [tsxElementResolution11.jsx]
+//// [file.jsx]
 var Obj1;
 <Obj1 x={10}/>; // OK
 var Obj2;

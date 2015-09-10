@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/tsxAttributeResolution5.tsx(21,16): error TS2606: Property 'x' of JSX spread attribute is not assignable to target property.
+tests/cases/conformance/jsx/file.tsx(21,16): error TS2606: Property 'x' of JSX spread attribute is not assignable to target property.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/tsxAttributeResolution5.tsx(25,9): error TS2324: Property 'x' is missing in type 'Attribs1'.
-tests/cases/conformance/jsx/tsxAttributeResolution5.tsx(29,1): error TS2324: Property 'x' is missing in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(25,9): error TS2324: Property 'x' is missing in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(29,1): error TS2324: Property 'x' is missing in type 'Attribs1'.
 
 
-==== tests/cases/conformance/jsx/tsxAttributeResolution5.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

@@ -1,4 +1,4 @@
-//// [tsxElementResolution12.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface ElementAttributesProperty { pr: any; }
@@ -31,7 +31,7 @@ var Obj4: Obj4type;
 <Obj4 x={'10'} />; // Error
 
 
-//// [tsxElementResolution12.jsx]
+//// [file.jsx]
 var Obj1;
 <Obj1 x={10}/>; // OK
 var obj2;

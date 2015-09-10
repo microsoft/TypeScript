@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/tsxElementResolution16.tsx(8,1): error TS2602: JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.
-tests/cases/conformance/jsx/tsxElementResolution16.tsx(8,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists
+tests/cases/conformance/jsx/file.tsx(8,1): error TS2602: JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.
+tests/cases/conformance/jsx/file.tsx(8,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution16.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     declare module JSX {
     }
     

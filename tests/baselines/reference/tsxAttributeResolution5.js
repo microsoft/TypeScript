@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution5.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -31,7 +31,7 @@ function make3<T extends {y: string}> (obj: T) {
 <test2 {...{}} />; // OK
 
 
-//// [tsxAttributeResolution5.jsx]
+//// [file.jsx]
 function make1(obj) {
     return <test1 {...obj}/>; // OK
 }

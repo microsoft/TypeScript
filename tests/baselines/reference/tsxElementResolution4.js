@@ -1,4 +1,4 @@
-//// [tsxElementResolution4.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -17,7 +17,7 @@ declare module JSX {
 <span q='' />;
 
 
-//// [tsxElementResolution4.jsx]
+//// [file.jsx]
 // OK
 <div n='x'/>;
 // OK

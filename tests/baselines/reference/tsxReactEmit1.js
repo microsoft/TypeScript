@@ -1,4 +1,4 @@
-//// [tsxReactEmit1.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -41,7 +41,7 @@ var whitespace3 = <div>
       </div>;
 
 
-//// [tsxReactEmit1.js]
+//// [file.js]
 var p;
 var selfClosed1 = React.createElement("div", null);
 var selfClosed2 = React.createElement("div", {x: "1"});

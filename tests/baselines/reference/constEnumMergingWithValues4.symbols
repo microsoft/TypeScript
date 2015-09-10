@@ -1,21 +1,21 @@
-=== tests/cases/compiler/constEnumMergingWithValues4.ts ===
+=== tests/cases/compiler/m1.ts ===
 
 module foo {
->foo : Symbol(foo, Decl(constEnumMergingWithValues4.ts, 0, 0), Decl(constEnumMergingWithValues4.ts, 3, 1))
+>foo : Symbol(foo, Decl(m1.ts, 0, 0), Decl(m1.ts, 3, 1))
 
     const enum E { X }
->E : Symbol(E, Decl(constEnumMergingWithValues4.ts, 1, 12))
->X : Symbol(E.X, Decl(constEnumMergingWithValues4.ts, 2, 18))
+>E : Symbol(E, Decl(m1.ts, 1, 12))
+>X : Symbol(E.X, Decl(m1.ts, 2, 18))
 }
 
 module foo {
->foo : Symbol(foo, Decl(constEnumMergingWithValues4.ts, 0, 0), Decl(constEnumMergingWithValues4.ts, 3, 1))
+>foo : Symbol(foo, Decl(m1.ts, 0, 0), Decl(m1.ts, 3, 1))
 
     var x = 1;
->x : Symbol(x, Decl(constEnumMergingWithValues4.ts, 6, 7))
+>x : Symbol(x, Decl(m1.ts, 6, 7))
 }
 
 
 export = foo
->foo : Symbol(foo, Decl(constEnumMergingWithValues4.ts, 0, 0), Decl(constEnumMergingWithValues4.ts, 3, 1))
+>foo : Symbol(foo, Decl(m1.ts, 0, 0), Decl(m1.ts, 3, 1))
 

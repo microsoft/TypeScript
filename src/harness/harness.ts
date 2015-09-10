@@ -1673,7 +1673,7 @@ module Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = testUnitData.length > 0 ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 || currentFileName ? currentFileName : Path.getFileName(fileName);
 
             // EOF, push whatever remains
             let newTestFile2 = {

@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution2.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -18,7 +18,7 @@ interface Attribs1 {
 <test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
 
 
-//// [tsxAttributeResolution2.jsx]
+//// [file.jsx]
 // OK
 <test1 c1={function (x) { return x.length; }}/>; // OK
 <test1 data-c1={function (x) { return x.leng; }}/>; // OK

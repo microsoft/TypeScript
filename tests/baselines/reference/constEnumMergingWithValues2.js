@@ -1,4 +1,4 @@
-//// [constEnumMergingWithValues2.ts]
+//// [m1.ts]
 
 class foo {}
 module foo {
@@ -7,7 +7,7 @@ module foo {
 
 export = foo
 
-//// [constEnumMergingWithValues2.js]
+//// [m1.js]
 define(["require", "exports"], function (require, exports) {
     var foo = (function () {
         function foo() {

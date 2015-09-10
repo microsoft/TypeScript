@@ -1,2 +1,2 @@
-//// [isolatedModulesSourceMap.js.map]
-{"version":3,"file":"isolatedModulesSourceMap.js","sourceRoot":"","sources":["isolatedModulesSourceMap.ts"],"names":[],"mappings":"AACA,WAAW,CAAC,GAAG,CAAC,CAAC"}
+//// [file1.js.map]
+{"version":3,"file":"file1.js","sourceRoot":"","sources":["file1.ts"],"names":[],"mappings":"AACA,WAAW,CAAC,GAAG,CAAC,CAAC"}

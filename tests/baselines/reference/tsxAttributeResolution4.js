@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution4.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -16,7 +16,7 @@ interface Attribs1 {
 <test1 {... {x: (n) => n.len} } />;
 
 
-//// [tsxAttributeResolution4.jsx]
+//// [file.jsx]
 // OK
 <test1 {...{ x: function (n) { return 0; } }}/>;
 // Error, no member 'len' on 'string'

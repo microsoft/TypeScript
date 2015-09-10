@@ -1,4 +1,4 @@
-//// [tsxElementResolution9.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -26,7 +26,7 @@ var Obj3: Obj3;
 <Obj3 x={42} />; // OK
 
 
-//// [tsxElementResolution9.jsx]
+//// [file.jsx]
 var Obj1;
 <Obj1 />; // Error, return type is not an object type
 var Obj2;

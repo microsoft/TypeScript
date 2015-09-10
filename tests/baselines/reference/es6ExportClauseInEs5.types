@@ -1,4 +1,4 @@
-=== tests/cases/compiler/es6ExportClauseInEs5.ts ===
+=== tests/cases/compiler/server.ts ===
 
 class c {
 >c : c

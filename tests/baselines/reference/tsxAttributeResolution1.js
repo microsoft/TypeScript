@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution1.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -34,7 +34,7 @@ interface Attribs1 {
 <var var='var' />;
 
 
-//// [tsxAttributeResolution1.jsx]
+//// [file.jsx]
 // OK
 <test1 x={0}/>; // OK
 <test1 />; // OK

@@ -1,15 +1,15 @@
-=== tests/cases/compiler/isolatedModulesNonAmbientConstEnum.ts ===
+=== tests/cases/compiler/file1.ts ===
 
 const enum E { X = 100 };
->E : Symbol(E, Decl(isolatedModulesNonAmbientConstEnum.ts, 0, 0))
->X : Symbol(E.X, Decl(isolatedModulesNonAmbientConstEnum.ts, 1, 14))
+>E : Symbol(E, Decl(file1.ts, 0, 0))
+>X : Symbol(E.X, Decl(file1.ts, 1, 14))
 
 var e = E.X;
->e : Symbol(e, Decl(isolatedModulesNonAmbientConstEnum.ts, 2, 3))
->E.X : Symbol(E.X, Decl(isolatedModulesNonAmbientConstEnum.ts, 1, 14))
->E : Symbol(E, Decl(isolatedModulesNonAmbientConstEnum.ts, 0, 0))
->X : Symbol(E.X, Decl(isolatedModulesNonAmbientConstEnum.ts, 1, 14))
+>e : Symbol(e, Decl(file1.ts, 2, 3))
+>E.X : Symbol(E.X, Decl(file1.ts, 1, 14))
+>E : Symbol(E, Decl(file1.ts, 0, 0))
+>X : Symbol(E.X, Decl(file1.ts, 1, 14))
 
 export var x;
->x : Symbol(x, Decl(isolatedModulesNonAmbientConstEnum.ts, 3, 10))
+>x : Symbol(x, Decl(file1.ts, 3, 10))
 

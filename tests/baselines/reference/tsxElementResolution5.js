@@ -1,4 +1,4 @@
-//// [tsxElementResolution5.tsx]
+//// [file1.tsx]
 declare module JSX {
 	interface Element { }
 }
@@ -7,6 +7,6 @@ declare module JSX {
 <div n='x' />;
 
 
-//// [tsxElementResolution5.jsx]
+//// [file1.jsx]
 // OK, but implicit any
 <div n='x'/>;

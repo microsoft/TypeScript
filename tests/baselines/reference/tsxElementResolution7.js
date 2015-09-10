@@ -1,4 +1,4 @@
-//// [tsxElementResolution7.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -21,7 +21,7 @@ module q {
 }
 
 
-//// [tsxElementResolution7.jsx]
+//// [file.jsx]
 var my;
 (function (my) {
 })(my || (my = {}));

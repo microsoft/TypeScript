@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/tsxElementResolution1.tsx(12,1): error TS2339: Property 'span' does not exist on type 'JSX.IntrinsicElements'.
+tests/cases/conformance/jsx/file.tsx(12,1): error TS2339: Property 'span' does not exist on type 'JSX.IntrinsicElements'.
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution1.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

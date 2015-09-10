@@ -1,12 +1,12 @@
 ===================================================================
-JsFile: tsxEmit3.jsx
-mapUrl: tsxEmit3.jsx.map
+JsFile: file.jsx
+mapUrl: file.jsx.map
 sourceRoot: 
-sources: tsxEmit3.tsx
+sources: file.tsx
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/jsx/tsxEmit3.jsx
-sourceFile:tsxEmit3.tsx
+emittedFile:tests/cases/conformance/jsx/file.jsx
+sourceFile:file.tsx
 -------------------------------------------------------------------
 >>>var M;
 1 >
@@ -761,7 +761,7 @@ sourceFile:tsxEmit3.tsx
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -782,4 +782,4 @@ sourceFile:tsxEmit3.tsx
 6 >Emitted(41, 11) Source(36, 9) + SourceIndex(0)
 7 >Emitted(41, 19) Source(40, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=tsxEmit3.jsx.map
+>>>//# sourceMappingURL=file.jsx.map
