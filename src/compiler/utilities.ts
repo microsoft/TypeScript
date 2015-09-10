@@ -1507,11 +1507,22 @@ namespace ts {
             add,
             getGlobalDiagnostics,
             getDiagnostics,
-            getModificationCount
+            getModificationCount,
+            reattachFileDiagnostics
         };
 
         function getModificationCount() {
             return modificationCount;
+        }
+        
+        function reattachFileDiagnostics(newFile: SourceFile): void {
+            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+                return;
+            }
+            
+            for (let diagnostic of fileDiagnostics[newFile.fileName]) {
+                diagnostic.file = newFile;
+            }
         }
 
         function add(diagnostic: Diagnostic): void {
