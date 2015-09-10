@@ -5524,67 +5524,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSerializedTypeNode(node: TypeNode) {
                 verifyStackBehavior(StackBehavior.ParentIsOnTopOfStack, node);
                 
-                if (!node) {
-                    return;
-                }
-                
-                switch (node.kind) {
-                    case SyntaxKind.VoidKeyword:
-                        write("void 0");
-                        return;
+                if (node) {
 
-                    case SyntaxKind.ParenthesizedType:
+                    switch (node.kind) {
+                        case SyntaxKind.VoidKeyword:
+                            write("void 0");
+                            return;
+
+                        case SyntaxKind.ParenthesizedType:
                         pushNode(node);
-                        emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
+                            emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
                         popNode();
-                        return;
+                            return;
 
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                        write("Function");
-                        return;
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                            write("Function");
+                            return;
 
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                        write("Array");
-                        return;
+                        case SyntaxKind.ArrayType:
+                        case SyntaxKind.TupleType:
+                            write("Array");
+                            return;
 
-                    case SyntaxKind.TypePredicate:
-                    case SyntaxKind.BooleanKeyword:
-                        write("Boolean");
-                        return;
+                        case SyntaxKind.TypePredicate:
+                        case SyntaxKind.BooleanKeyword:
+                            write("Boolean");
+                            return;
 
-                    case SyntaxKind.StringKeyword:
-                    case SyntaxKind.StringLiteral:
-                        write("String");
-                        return;
+                        case SyntaxKind.StringKeyword:
+                        case SyntaxKind.StringLiteral:
+                            write("String");
+                            return;
 
-                    case SyntaxKind.NumberKeyword:
-                        write("Number");
-                        return;
+                        case SyntaxKind.NumberKeyword:
+                            write("Number");
+                            return;
 
-                    case SyntaxKind.SymbolKeyword:
-                        write("Symbol");
-                        return;
+                        case SyntaxKind.SymbolKeyword:
+                            write("Symbol");
+                            return;
 
-                    case SyntaxKind.TypeReference:
+                        case SyntaxKind.TypeReference:
                         pushNode(node);
-                        emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
+                            emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
                         popNode();
-                        return;
+                            return;
 
-                    case SyntaxKind.TypeQuery:
-                    case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.IntersectionType:
-                    case SyntaxKind.AnyKeyword:
-                        break;
+                        case SyntaxKind.TypeQuery:
+                        case SyntaxKind.TypeLiteral:
+                        case SyntaxKind.UnionType:
+                        case SyntaxKind.IntersectionType:
+                        case SyntaxKind.AnyKeyword:
+                            break;
 
-                    default:
-                        Debug.fail("Cannot serialize unexpected type node.");
-                        break;
+                        default:
+                            Debug.fail("Cannot serialize unexpected type node.");
+                            break;
+                    }
                 }
-
                 write("Object");
             }
 

@@ -965,7 +965,7 @@
         "category": "Error",
         "code": 2341
     },
-    "An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.": {
+    "An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.": {
         "category": "Error",
         "code": 2342
     },
@@ -1692,11 +1692,16 @@
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
-    },    
+    },
     "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead.": {
         "category": "Error",
         "code": 2652
     },
+    "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
+        "category": "Error",
+        "code": 2653
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

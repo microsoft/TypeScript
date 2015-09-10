@@ -32,7 +32,7 @@ namespace ts.formatting {
      */
     interface DynamicIndentation {
         getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind): number;
-        getIndentationForComment(owningToken: SyntaxKind): number;
+        getIndentationForComment(owningToken: SyntaxKind, tokenIndentation: number): number;
         /**
           * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
           * ... {
@@ -455,7 +455,7 @@ namespace ts.formatting {
 
         function getDynamicIndentation(node: Node, nodeStartLine: number, indentation: number, delta: number): DynamicIndentation {
             return {
-                getIndentationForComment: kind => {
+                getIndentationForComment: (kind, tokenIndentation) => {
                     switch (kind) {
                         // preceding comment to the token that closes the indentation scope inherits the indentation from the scope
                         // ..  {
@@ -463,9 +463,10 @@ namespace ts.formatting {
                         // }
                         case SyntaxKind.CloseBraceToken:
                         case SyntaxKind.CloseBracketToken:
+                        case SyntaxKind.CloseParenToken:
                             return indentation + delta;
                     }
-                    return indentation;
+                    return tokenIndentation !== Constants.Unknown ? tokenIndentation : indentation;
                 },
                 getIndentationForToken: (line, kind) => {
                     if (nodeStartLine !== line && node.decorators) {
@@ -716,8 +717,14 @@ namespace ts.formatting {
                 }
 
                 if (indentToken) {
-                    let indentNextTokenOrTrivia = true;
+                    let tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
+                        dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind) :
+                        Constants.Unknown;
+
                     if (currentTokenInfo.leadingTrivia) {
+                        let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation);
+                        let indentNextTokenOrTrivia = true;
+
                         for (let triviaItem of currentTokenInfo.leadingTrivia) {
                             if (!rangeContainsRange(originalRange, triviaItem)) {
                                 continue;
@@ -725,13 +732,11 @@ namespace ts.formatting {
 
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
-                                    let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
                                     indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.SingleLineCommentTrivia:
                                     if (indentNextTokenOrTrivia) {
-                                        let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
                                         insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
                                         indentNextTokenOrTrivia = false;
                                     }
@@ -744,8 +749,7 @@ namespace ts.formatting {
                     }
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
-                    if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
-                        let tokenIndentation = dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind);
+                    if (tokenIndentation !== Constants.Unknown) {
                         insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
                         
                         lastIndentedLine = tokenStart.line;

@@ -1,8 +1,8 @@
-tests/cases/compiler/arrayLiteralTypeInference.ts(13,5): error TS2322: Type '({ id: number; trueness: boolean; } | { id: number; name: string; })[]' is not assignable to type 'Action[]'.
+tests/cases/compiler/arrayLiteralTypeInference.ts(14,14): error TS2322: Type '({ id: number; trueness: boolean; } | { id: number; name: string; })[]' is not assignable to type 'Action[]'.
   Type '{ id: number; trueness: boolean; } | { id: number; name: string; }' is not assignable to type 'Action'.
     Type '{ id: number; trueness: boolean; }' is not assignable to type 'Action'.
       Object literal may only specify known properties, and 'trueness' does not exist in type 'Action'.
-tests/cases/compiler/arrayLiteralTypeInference.ts(29,5): error TS2322: Type '({ id: number; trueness: boolean; } | { id: number; name: string; })[]' is not assignable to type '{ id: number; }[]'.
+tests/cases/compiler/arrayLiteralTypeInference.ts(31,18): error TS2322: Type '({ id: number; trueness: boolean; } | { id: number; name: string; })[]' is not assignable to type '{ id: number; }[]'.
   Type '{ id: number; trueness: boolean; } | { id: number; name: string; }' is not assignable to type '{ id: number; }'.
     Type '{ id: number; trueness: boolean; }' is not assignable to type '{ id: number; }'.
       Object literal may only specify known properties, and 'trueness' does not exist in type '{ id: number; }'.
@@ -22,12 +22,12 @@ tests/cases/compiler/arrayLiteralTypeInference.ts(29,5): error TS2322: Type '({ 
     }
     
     var x1: Action[] = [
-        ~~
+        { id: 2, trueness: false },
+                 ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '({ id: number; trueness: boolean; } | { id: number; name: string; })[]' is not assignable to type 'Action[]'.
 !!! error TS2322:   Type '{ id: number; trueness: boolean; } | { id: number; name: string; }' is not assignable to type 'Action'.
 !!! error TS2322:     Type '{ id: number; trueness: boolean; }' is not assignable to type 'Action'.
 !!! error TS2322:       Object literal may only specify known properties, and 'trueness' does not exist in type 'Action'.
-        { id: 2, trueness: false },
         { id: 3, name: "three" }
     ]
     
@@ -43,13 +43,13 @@ tests/cases/compiler/arrayLiteralTypeInference.ts(29,5): error TS2322: Type '({ 
     ]
     
     var z1: { id: number }[] =
-        ~~
+        [
+            { id: 2, trueness: false },
+                     ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '({ id: number; trueness: boolean; } | { id: number; name: string; })[]' is not assignable to type '{ id: number; }[]'.
 !!! error TS2322:   Type '{ id: number; trueness: boolean; } | { id: number; name: string; }' is not assignable to type '{ id: number; }'.
 !!! error TS2322:     Type '{ id: number; trueness: boolean; }' is not assignable to type '{ id: number; }'.
 !!! error TS2322:       Object literal may only specify known properties, and 'trueness' does not exist in type '{ id: number; }'.
-        [
-            { id: 2, trueness: false },
             { id: 3, name: "three" }
         ]
     
