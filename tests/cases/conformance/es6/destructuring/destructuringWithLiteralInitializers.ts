@@ -49,12 +49,17 @@ g1([1, 1]);
 function g2([x = 0, y = 0]) { }
 g2([1, 1]);
 
-// (arg?: [any, any]) => void
-function g3([x, y] = []) { }
+// (arg?: [number, number]) => void
+function g3([x, y] = [0, 0]) { }
 g3();
 g3([1, 1]);
 
 // (arg?: [number, number]) => void
-function g4([x, y] = [0, 0]) { }
+function g4([x, y = 0] = [0]) { }
 g4();
 g4([1, 1]);
+
+// (arg?: [number, number]) => void
+function g5([x = 0, y = 0] = []) { }
+g5();
+g5([1, 1]);

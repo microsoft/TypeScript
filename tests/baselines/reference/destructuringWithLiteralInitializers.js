@@ -50,15 +50,20 @@ g1([1, 1]);
 function g2([x = 0, y = 0]) { }
 g2([1, 1]);
 
-// (arg?: [any, any]) => void
-function g3([x, y] = []) { }
+// (arg?: [number, number]) => void
+function g3([x, y] = [0, 0]) { }
 g3();
 g3([1, 1]);
 
 // (arg?: [number, number]) => void
-function g4([x, y] = [0, 0]) { }
+function g4([x, y = 0] = [0]) { }
 g4();
 g4([1, 1]);
+
+// (arg?: [number, number]) => void
+function g5([x = 0, y = 0] = []) { }
+g5();
+g5([1, 1]);
 
 
 //// [destructuringWithLiteralInitializers.js]
@@ -122,15 +127,21 @@ function g2(_a) {
     var _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 0 : _c;
 }
 g2([1, 1]);
-// (arg?: [any, any]) => void
+// (arg?: [number, number]) => void
 function g3(_a) {
-    var _b = _a === void 0 ? [] : _a, x = _b[0], y = _b[1];
+    var _b = _a === void 0 ? [0, 0] : _a, x = _b[0], y = _b[1];
 }
 g3();
 g3([1, 1]);
 // (arg?: [number, number]) => void
 function g4(_a) {
-    var _b = _a === void 0 ? [0, 0] : _a, x = _b[0], y = _b[1];
+    var _b = _a === void 0 ? [0] : _a, x = _b[0], _c = _b[1], y = _c === void 0 ? 0 : _c;
 }
 g4();
 g4([1, 1]);
+// (arg?: [number, number]) => void
+function g5(_a) {
+    var _b = _a === void 0 ? [] : _a, _c = _b[0], x = _c === void 0 ? 0 : _c, _d = _b[1], y = _d === void 0 ? 0 : _d;
+}
+g5();
+g5([1, 1]);

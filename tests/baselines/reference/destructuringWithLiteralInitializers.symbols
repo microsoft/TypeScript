@@ -156,8 +156,8 @@ function g2([x = 0, y = 0]) { }
 g2([1, 1]);
 >g2 : Symbol(g2, Decl(destructuringWithLiteralInitializers.ts, 45, 11))
 
-// (arg?: [any, any]) => void
-function g3([x, y] = []) { }
+// (arg?: [number, number]) => void
+function g3([x, y] = [0, 0]) { }
 >g3 : Symbol(g3, Decl(destructuringWithLiteralInitializers.ts, 49, 11))
 >x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 52, 13))
 >y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 52, 15))
@@ -169,7 +169,7 @@ g3([1, 1]);
 >g3 : Symbol(g3, Decl(destructuringWithLiteralInitializers.ts, 49, 11))
 
 // (arg?: [number, number]) => void
-function g4([x, y] = [0, 0]) { }
+function g4([x, y = 0] = [0]) { }
 >g4 : Symbol(g4, Decl(destructuringWithLiteralInitializers.ts, 54, 11))
 >x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 57, 13))
 >y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 57, 15))
@@ -179,4 +179,16 @@ g4();
 
 g4([1, 1]);
 >g4 : Symbol(g4, Decl(destructuringWithLiteralInitializers.ts, 54, 11))
+
+// (arg?: [number, number]) => void
+function g5([x = 0, y = 0] = []) { }
+>g5 : Symbol(g5, Decl(destructuringWithLiteralInitializers.ts, 59, 11))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 62, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 62, 19))
+
+g5();
+>g5 : Symbol(g5, Decl(destructuringWithLiteralInitializers.ts, 59, 11))
+
+g5([1, 1]);
+>g5 : Symbol(g5, Decl(destructuringWithLiteralInitializers.ts, 59, 11))
 

@@ -248,40 +248,62 @@ g2([1, 1]);
 >1 : number
 >1 : number
 
-// (arg?: [any, any]) => void
-function g3([x, y] = []) { }
->g3 : ([x, y]?: [any, any]) => void
->x : any
->y : any
->[] : [undefined, undefined]
-
-g3();
->g3() : void
->g3 : ([x, y]?: [any, any]) => void
-
-g3([1, 1]);
->g3([1, 1]) : void
->g3 : ([x, y]?: [any, any]) => void
->[1, 1] : [number, number]
->1 : number
->1 : number
-
 // (arg?: [number, number]) => void
-function g4([x, y] = [0, 0]) { }
->g4 : ([x, y]?: [number, number]) => void
+function g3([x, y] = [0, 0]) { }
+>g3 : ([x, y]?: [number, number]) => void
 >x : number
 >y : number
 >[0, 0] : [number, number]
 >0 : number
 >0 : number
 
+g3();
+>g3() : void
+>g3 : ([x, y]?: [number, number]) => void
+
+g3([1, 1]);
+>g3([1, 1]) : void
+>g3 : ([x, y]?: [number, number]) => void
+>[1, 1] : [number, number]
+>1 : number
+>1 : number
+
+// (arg?: [number, number]) => void
+function g4([x, y = 0] = [0]) { }
+>g4 : ([x, y = 0]?: [number, number]) => void
+>x : number
+>y : number
+>0 : number
+>[0] : [number, number]
+>0 : number
+
 g4();
 >g4() : void
->g4 : ([x, y]?: [number, number]) => void
+>g4 : ([x, y = 0]?: [number, number]) => void
 
 g4([1, 1]);
 >g4([1, 1]) : void
->g4 : ([x, y]?: [number, number]) => void
+>g4 : ([x, y = 0]?: [number, number]) => void
+>[1, 1] : [number, number]
+>1 : number
+>1 : number
+
+// (arg?: [number, number]) => void
+function g5([x = 0, y = 0] = []) { }
+>g5 : ([x = 0, y = 0]?: [number, number]) => void
+>x : number
+>0 : number
+>y : number
+>0 : number
+>[] : [number, number]
+
+g5();
+>g5() : void
+>g5 : ([x = 0, y = 0]?: [number, number]) => void
+
+g5([1, 1]);
+>g5([1, 1]) : void
+>g5 : ([x = 0, y = 0]?: [number, number]) => void
 >[1, 1] : [number, number]
 >1 : number
 >1 : number
