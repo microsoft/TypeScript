@@ -3,6 +3,15 @@
 declare var React: any;
 >React : Symbol(React, Decl(keywordInJsxIdentifier.tsx, 1, 11))
 
-<foo class-id/>
+<foo class-id/>;
 >class-id : Symbol(unknown)
+
+<foo class/>;
+>class : Symbol(unknown)
+
+<foo class-id="1"/>;
+>class-id : Symbol(unknown)
+
+<foo class="1"/>;
+>class : Symbol(unknown)
 

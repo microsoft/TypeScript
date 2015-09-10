@@ -6,6 +6,11 @@ namespace ts {
         (message: DiagnosticMessage, length: number): void;
     }
 
+    /* @internal */
+    export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.Identifier;
+    }
+
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
