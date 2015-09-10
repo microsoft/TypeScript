@@ -99,20 +99,20 @@ namespace ts {
         return true;
     }    
    
-    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+    export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
 
-    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
-        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
-    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = {};
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
+        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
