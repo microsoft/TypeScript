@@ -134,7 +134,7 @@ namespace ts.formatting {
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
                 if (shouldIndentChildNode(parent.kind, current.kind) &&
-                    !isIndentationPrevented(current) && !parentAndChildShareLine) {
+                    !shouldInheritParentIndentation(current) && !parentAndChildShareLine) {
 
                     indentationDelta += options.IndentSize;
                 }
@@ -481,7 +481,7 @@ namespace ts.formatting {
         /**
          * Function returns true if a node should not get additional indentation in its parent node.
          */
-        export function isIndentationPrevented(node: TextRangeWithKind) {
+        export function shouldInheritParentIndentation(node: TextRangeWithKind) {
             switch (node.kind) {
                 case SyntaxKind.NamedExports:
                     return true;

@@ -403,7 +403,7 @@ namespace ts.formatting {
                         indentation = parentDynamicIndentation.getIndentation();
                     }
                 }
-                else if (SmartIndenter.isIndentationPrevented(node) ||
+                else if (SmartIndenter.shouldInheritParentIndentation(node) ||
                     SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
 
                     indentation = parentDynamicIndentation.getIndentation();
