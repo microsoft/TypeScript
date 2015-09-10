@@ -2771,7 +2771,7 @@ namespace ts {
             // Therefore only get diagnostics for given file.
 
             let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
-            if (!program.getCompilerOptions().declaration || isJavaScript(fileName)) {
+            if (!program.getCompilerOptions().declaration) {
                 return semanticDiagnostics;
             }
 
