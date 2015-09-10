@@ -190,6 +190,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
+            /** If removeComments is true, no leading-comments needed to be emitted **/
+            let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
+
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 initializeEmitterWithSourceMaps();
             }
@@ -6986,9 +6989,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function isPinnedComments(comment: CommentRange) {
-                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-                    return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-                }
+                return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
             }
 
             /**
@@ -6996,7 +6998,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              *
              * @return true if the comment is a triple-slash comment else false
              **/
-            function isTripleSlashComments(comment: CommentRange) {
+            function isTripleSlashComment(comment: CommentRange) {
                 // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
                 // so that we don't end up computing comment string and doing match for all // comments
                 if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
@@ -7065,7 +7067,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //      interface F {}
                     //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
                     if (node.pos === 0) {
-                        leadingComments = filter(getLeadingCommentsToEmit(node), isTripleSlashComments); 
+                        leadingComments = filter(getLeadingCommentsToEmit(node), isTripleSlashComment);
                     }
                 }
 
@@ -7103,7 +7105,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitLeadingCommentsOfPosition(pos: number) {
+            function emitLeadingCommentsOfPositionWorker(pos: number) {
                 if (compilerOptions.removeComments) {
                     return;
                 }
