@@ -4,7 +4,12 @@ module ElidedModule3 {
 >ElidedModule3 : any
 }
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 module ElidedModule {
 >ElidedModule : any
 }
