@@ -2354,7 +2354,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
                             !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
-                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
+                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
+                            !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
                             emit(operand);
                             return;
                         }
