@@ -1649,6 +1649,10 @@
         "category": "Error",
         "code": 2524
     },
+    "Initializer provides no value for this binding element and the binding element has no default value": {
+        "category": "Error",
+        "code": 2525
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600

@@ -2434,6 +2434,7 @@ namespace ts {
                 let name = e.propertyName || <Identifier>e.name;
                 let symbol = <TransientSymbol>createSymbol(flags, name.text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType);
+                symbol.bindingElement = e;
                 members[symbol.name] = symbol;
             });
             let result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
@@ -2451,12 +2452,12 @@ namespace ts {
             }
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
             let elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e, includePatternInType));
-            let result = createTupleType(elementTypes);
             if (includePatternInType) {
-                result = clone(result);
+                let result = createNewTupleType(elementTypes);
                 result.pattern = pattern;
+                return result;
             }
-            return result;
+            return createTupleType(elementTypes);
         }
 
         // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
@@ -3124,7 +3125,7 @@ namespace ts {
         }
 
         function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreReturnTypes: boolean): Signature {
-            for (let s of signatureList)  {
+            for (let s of signatureList) {
                 if (compareSignatures(s, signature, partialMatch, ignoreReturnTypes, compareTypes)) {
                     return s;
                 }
@@ -4045,11 +4046,12 @@ namespace ts {
 
         function createTupleType(elementTypes: Type[]) {
             let id = getTypeListId(elementTypes);
-            let type = tupleTypes[id];
-            if (!type) {
-                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getPropagatingFlagsOfTypes(elementTypes));
-                type.elementTypes = elementTypes;
-            }
+            return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes));
+        }
+
+        function createNewTupleType(elementTypes: Type[]) {
+            let type = <TupleType>createObjectType(TypeFlags.Tuple | getPropagatingFlagsOfTypes(elementTypes));
+            type.elementTypes = elementTypes;
             return type;
         }
 
@@ -7042,19 +7044,28 @@ namespace ts {
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 if (inDestructuringPattern && elementTypes.length) {
-                    let type = clone(createTupleType(elementTypes));
+                    let type = createNewTupleType(elementTypes);
                     type.pattern = node;
                     return type;
                 }
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
                     let pattern = contextualType.pattern;
-                    // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the
-                    // resulting tuple type to make the lengths equal.
+                    // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
+                    // tuple type with the corresponding binding or assignment element types to make the lengths equal.
                     if (pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
                         let patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
                         for (let i = elementTypes.length; i < patternElements.length; i++) {
-                            elementTypes.push(hasDefaultValue(patternElements[i]) ? (<TupleType>contextualType).elementTypes[i] : undefinedType);
+                            let patternElement = patternElements[i];
+                            if (hasDefaultValue(patternElement)) {
+                                elementTypes.push((<TupleType>contextualType).elementTypes[i]);
+                            }
+                            else {
+                                if (patternElement.kind !== SyntaxKind.OmittedExpression) {
+                                    error(patternElement, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                                }
+                                elementTypes.push(unknownType);
+                            }
                         }
                     }
                     if (elementTypes.length) {
@@ -7201,7 +7212,11 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             if (contextualTypeHasPattern) {
                 for (let prop of getPropertiesOfType(contextualType)) {
-                    if (prop.flags & SymbolFlags.Optional && !hasProperty(propertiesTable, prop.name)) {
+                    if (!hasProperty(propertiesTable, prop.name)) {
+                        if (!(prop.flags & SymbolFlags.Optional)) {
+                            error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
+                                Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                        }
                         propertiesTable[prop.name] = prop;
                         propertiesArray.push(prop);
                     }

@@ -1714,6 +1714,7 @@ namespace ts {
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        bindingElement?: BindingElement;    // Binding element associated with property symbol
     }
 
     /* @internal */
