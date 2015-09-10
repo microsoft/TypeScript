@@ -327,11 +327,8 @@ namespace ts {
                                 if (hasProperty(map, key)) {
                                     options[opt.name] = map[key];
                                 }
-                                else if (opt.error) {
-                                    errors.push(createCompilerDiagnostic(opt.error));
-                                }
                                 else {
-                                    Debug.fail(`Command line option for '${opt.name}' doesn't account for invalid options.`);
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                 }
                         }
                     }
@@ -444,7 +441,7 @@ namespace ts {
                                     value = optType[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                     value = 0;
                                 }
                             }
