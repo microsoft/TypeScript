@@ -7153,6 +7153,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         }
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
+            if (forEach(host.getSourceFiles(), sourceFile => jsFilePath === sourceFile.fileName)) {
+                // TODO(shkamat) Verify if this works if same file is referred via different paths ..\foo\a.js and a.js refering to same one
+                // Report error and dont emit this file
+                diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_which_is_one_of_the_input_files, jsFilePath));
+                return;
+            }
+
             emitJavaScript(jsFilePath, sourceFile);
 
             if (compilerOptions.declaration) {

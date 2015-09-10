@@ -2042,6 +2042,10 @@
         "category": "Error",
         "code": 5053
     },
+    "Could not write file '{0}' which is one of the input files.": {
+        "category": "Error",
+        "code": 5054
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",

@@ -513,6 +513,7 @@ namespace ts {
         Option_0_cannot_be_specified_without_specifying_option_1: { code: 5052, category: DiagnosticCategory.Error, key: "Option '{0}' cannot be specified without specifying option '{1}'." },
         Option_0_cannot_be_specified_with_option_1: { code: 5053, category: DiagnosticCategory.Error, key: "Option '{0}' cannot be specified with option '{1}'." },
         A_tsconfig_json_file_is_already_defined_at_Colon_0: { code: 5053, category: DiagnosticCategory.Error, key: "A 'tsconfig.json' file is already defined at: '{0}'." },
+        Could_not_write_file_0_which_is_one_of_the_input_files: { code: 5054, category: DiagnosticCategory.Error, key: "Could not write file '{0}' which is one of the input files." },
         Concatenate_and_emit_output_to_single_file: { code: 6001, category: DiagnosticCategory.Message, key: "Concatenate and emit output to single file." },
         Generates_corresponding_d_ts_file: { code: 6002, category: DiagnosticCategory.Message, key: "Generates corresponding '.d.ts' file." },
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: { code: 6003, category: DiagnosticCategory.Message, key: "Specifies the location where debugger should locate map files instead of generated locations." },
