@@ -485,7 +485,7 @@ namespace ts.formatting {
         } 
 
         /**
-         * Function returns true if a node should not get additional indentation in its parent node.
+         * Function returns true if existing node content indentation should be suppressed for a specific child
          */
         export function shouldInheritParentIndentation(parent: TextRangeWithKind, child: TextRangeWithKind) {
             return !nodeWillIndentChild(parent, child, true);
