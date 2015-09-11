@@ -1715,6 +1715,7 @@ namespace ts {
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        bindingElement?: BindingElement;    // Binding element associated with property symbol
     }
 
     /* @internal */
@@ -1812,11 +1813,14 @@ namespace ts {
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
+    export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+
     // Properties common to all types
     export interface Type {
-        flags: TypeFlags;               // Flags
-        /* @internal */ id: number;     // Unique ID
-        symbol?: Symbol;                // Symbol associated with type (if any)
+        flags: TypeFlags;                // Flags
+        /* @internal */ id: number;      // Unique ID
+        symbol?: Symbol;                 // Symbol associated with type (if any)
+        pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
     }
 
     /* @internal */
@@ -1865,8 +1869,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];          // Element types
-        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
+        elementTypes: Type[];           // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {

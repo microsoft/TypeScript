@@ -3,8 +3,8 @@ function f0() {
     var [] = [1, "hello"];
     var [x] = [1, "hello"];
     var [x, y] = [1, "hello"];
-    var [x, y, z] = [1, "hello"];  // Error
-    var [,, z] = [0, 1, 2];
+    var [x, y, z] = [1, "hello"];
+    var [,, x] = [0, 1, 2];
     var x: number;
     var y: string;
 }
@@ -20,14 +20,14 @@ function f1() {
 }
 
 function f2() {
-    var { } = { x: 5, y: "hello" };
-    var { x } = { x: 5, y: "hello" };
-    var { y } = { x: 5, y: "hello" };
+    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+    var { x } = { x: 5, y: "hello" };     // Error, no y in target
+    var { y } = { x: 5, y: "hello" };     // Error, no x in target
     var { x, y } = { x: 5, y: "hello" };
     var x: number;
     var y: string;
-    var { x: a } = { x: 5, y: "hello" };
-    var { y: b } = { x: 5, y: "hello" };
+    var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
+    var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
     var { x: a, y: b } = { x: 5, y: "hello" };
     var a: number;
     var b: string;
@@ -185,8 +185,8 @@ function f0() {
     var _a = [1, "hello"];
     var x = [1, "hello"][0];
     var _b = [1, "hello"], x = _b[0], y = _b[1];
-    var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2]; // Error
-    var _d = [0, 1, 2], z = _d[2];
+    var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2];
+    var _d = [0, 1, 2], x = _d[2];
     var x;
     var y;
 }
@@ -200,14 +200,14 @@ function f1() {
     var z;
 }
 function f2() {
-    var _a = { x: 5, y: "hello" };
-    var x = { x: 5, y: "hello" }.x;
-    var y = { x: 5, y: "hello" }.y;
+    var _a = { x: 5, y: "hello" }; // Error, no x and y in target
+    var x = { x: 5, y: "hello" }.x; // Error, no y in target
+    var y = { x: 5, y: "hello" }.y; // Error, no x in target
     var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
     var x;
     var y;
-    var a = { x: 5, y: "hello" }.x;
-    var b = { x: 5, y: "hello" }.y;
+    var a = { x: 5, y: "hello" }.x; // Error, no y in target
+    var b = { x: 5, y: "hello" }.y; // Error, no x in target
     var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
     var a;
     var b;
