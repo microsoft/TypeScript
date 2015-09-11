@@ -282,19 +282,19 @@ namespace ts.formatting {
      */
     function getOwnOrInheritedDelta(n: Node, options: FormatCodeOptions, sourceFile: SourceFile): number {
         let previousLine = Constants.Unknown;
-        let childKind = SyntaxKind.Unknown;
+        let child: Node = null;
         while (n) {
             let line = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile)).line;
             if (previousLine !== Constants.Unknown && line !== previousLine) {
                 break;
             }
 
-            if (SmartIndenter.shouldIndentChildNode(n.kind, childKind)) {
+            if (SmartIndenter.shouldIndentChildNode(n, child)) {
                 return options.IndentSize;
             }
 
             previousLine = line;
-            childKind = n.kind;
+            child = n;
             n = n.parent;
         }
         return 0;
@@ -386,24 +386,9 @@ namespace ts.formatting {
             effectiveParentStartLine: number): Indentation {
 
             let indentation = inheritedIndentation;
-            if (indentation === Constants.Unknown) {
-                if (isSomeBlock(node.kind)) {
-                    // blocks should be indented in 
-                    // - other blocks
-                    // - source file 
-                    // - switch\default clauses
-                    if (isSomeBlock(parent.kind) ||
-                        parent.kind === SyntaxKind.SourceFile ||
-                        parent.kind === SyntaxKind.CaseClause ||
-                        parent.kind === SyntaxKind.DefaultClause) {
 
-                        indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
-                    }
-                    else {
-                        indentation = parentDynamicIndentation.getIndentation();
-                    }
-                }
-                else if (SmartIndenter.shouldInheritParentIndentation(node) ||
+            if (indentation === Constants.Unknown) {
+                if (SmartIndenter.shouldInheritParentIndentation(parent, node) ||
                     SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
 
                     indentation = parentDynamicIndentation.getIndentation();
@@ -413,7 +398,7 @@ namespace ts.formatting {
                 }
             }
 
-            var delta = SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown) ? options.IndentSize : 0;
+            var delta = SmartIndenter.shouldIndentChildNode(node, null) ? options.IndentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
@@ -495,7 +480,7 @@ namespace ts.formatting {
                 getIndentation: () => indentation,
                 getDelta: () => delta,
                 recomputeIndentation: lineAdded => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent.kind, node.kind)) {
+                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
                             indentation += options.IndentSize;
                         }
@@ -503,7 +488,7 @@ namespace ts.formatting {
                             indentation -= options.IndentSize;
                         }
 
-                        if (SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown)) {
+                        if (SmartIndenter.shouldIndentChildNode(node, null)) {
                             delta = options.IndentSize;
                         }
                         else {
