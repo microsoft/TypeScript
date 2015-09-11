@@ -148,12 +148,12 @@ var __define = (this && this.__define) || (function() {
 
         if (targetSourceFile === undefined) {
             if (!compilerOptions.bundle) {
-                forEach(host.getSourceFiles(), sourceFile => {
+                for (var sourceFile of host.getSourceFiles()) {
                     if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                         let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
                         emitFile(jsFilePath, sourceFile);
                     }
-                });
+                }
             }
 
             if (compilerOptions.outFile || compilerOptions.out) {
