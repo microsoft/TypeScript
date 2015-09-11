@@ -184,7 +184,11 @@ module ts {
     describe("Reuse program structure", () => {
         let target = ScriptTarget.Latest;
         let files = [
-            { name: "a.ts", text: SourceText.New(`/// <reference path='b.ts'/>`, "", `var x = 1`) },
+            { name: "a.ts", text: SourceText.New(
+                `
+/// <reference path='b.ts'/>
+/// <reference path='non-existing-file.ts'/>
+`, "",`var x = 1`) },
             { name: "b.ts", text: SourceText.New(`/// <reference path='c.ts'/>`, "", `var y = 2`) },
             { name: "c.ts", text: SourceText.New("", "", `var z = 1;`) },
         ]
@@ -195,6 +199,9 @@ module ts {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
             assert.isTrue(program_1.structureIsReused);
+            let program1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("a.ts"))
+            let program2Diagnostics = program_2.getSemanticDiagnostics(program_1.getSourceFile("a.ts"))
+            assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
         it("fails if change affects tripleslash references", () => {
