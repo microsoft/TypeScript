@@ -213,27 +213,11 @@ namespace ts.formatting {
         public NoSpaceBetweenYieldKeywordAndStar: Rule;
         public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
 
-        // Async-await
+        // Async functions
         public SpaceBetweenAsyncAndFunctionKeyword: Rule;
-        public NoSpaceBetweenAsyncAndFunctionKeyword: Rule;
-        public SpaceAfterAwaitKeyword: Rule;
-        public NoSpaceAfterAwaitKeyword: Rule;
-
-        // Type alias declaration
-        public SpaceAfterTypeKeyword: Rule;
-        public NoSpaceAfterTypeKeyword: Rule;
 
         // Tagged template string
         public SpaceBetweenTagAndTemplateString: Rule;
-        public NoSpaceBetweenTagAndTemplateString: Rule;
-
-        // Type operation
-        public SpaceBeforeBar: Rule;
-        public NoSpaceBeforeBar: Rule;
-        public SpaceAfterBar: Rule;
-        public NoSpaceAfterBar: Rule;
-        public SpaceBeforeAmpersand: Rule;
-        public SpaceAfterAmpersand: Rule;
 
         constructor() {
             ///
@@ -315,7 +299,7 @@ namespace ts.formatting {
 
             this.NoSpaceBeforeComma = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CommaToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
-            this.SpaceAfterCertainKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.VarKeyword, SyntaxKind.ThrowKeyword, SyntaxKind.NewKeyword, SyntaxKind.DeleteKeyword, SyntaxKind.ReturnKeyword, SyntaxKind.TypeOfKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterCertainKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.VarKeyword, SyntaxKind.ThrowKeyword, SyntaxKind.NewKeyword, SyntaxKind.DeleteKeyword, SyntaxKind.ReturnKeyword, SyntaxKind.TypeOfKeyword, SyntaxKind.AwaitKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceAfterLetConstInVariableDeclaration = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.LetKeyword, SyntaxKind.ConstKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsStartOfVariableDeclarationList), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncCall = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsFunctionCallOrNewContext, Rules.IsPreviousTokenNotComma), RuleAction.Delete));
             this.SpaceAfterFunctionInFuncDecl = new Rule(RuleDescriptor.create3(SyntaxKind.FunctionKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
@@ -348,7 +332,7 @@ namespace ts.formatting {
             this.NoSpaceAfterModuleImport = new Rule(RuleDescriptor.create2(Shared.TokenRange.FromTokens([SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword]), SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Add a space around certain TypeScript keywords
-            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword, SyntaxKind.FromKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword, SyntaxKind.TypeKeyword, SyntaxKind.FromKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceBeforeCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
@@ -384,25 +368,9 @@ namespace ts.formatting {
 
             // Async-await
             this.SpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.SpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceAfterAwaitKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.AwaitKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-
-            // Type alias declaration
-            this.SpaceAfterTypeKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.TypeKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceAfterTypeKeyword = new Rule(RuleDescriptor.create3(SyntaxKind.TypeKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // template string
             this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-
-            // type operation
-            this.SpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceBeforeBar = new Rule(RuleDescriptor.create3(SyntaxKind.BarToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.SpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceAfterBar = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.BarToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.SpaceBeforeAmpersand = new Rule(RuleDescriptor.create3(SyntaxKind.AmpersandToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.SpaceAfterAmpersand = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.AmpersandToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
@@ -430,12 +398,8 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
-                this.SpaceBetweenAsyncAndFunctionKeyword, this.NoSpaceBetweenAsyncAndFunctionKeyword,
-                this.SpaceAfterAwaitKeyword, this.NoSpaceAfterAwaitKeyword,
-                this.SpaceAfterTypeKeyword, this.NoSpaceAfterTypeKeyword,
-                this.SpaceBetweenTagAndTemplateString, this.NoSpaceBetweenTagAndTemplateString,
-                this.SpaceBeforeBar, this.NoSpaceBeforeBar, this.SpaceAfterBar, this.NoSpaceAfterBar,
-                this.SpaceBeforeAmpersand, this.SpaceAfterAmpersand,
+                this.SpaceBetweenAsyncAndFunctionKeyword,
+                this.SpaceBetweenTagAndTemplateString,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
@@ -541,6 +505,8 @@ namespace ts.formatting {
                 case SyntaxKind.ExportSpecifier:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.TypePredicate:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.IntersectionType:
                     return true;
 
                 // equals in binding elements: function foo([[x, y] = [1, 2]])

@@ -431,6 +431,7 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:

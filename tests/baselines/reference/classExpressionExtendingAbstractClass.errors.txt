@@ -1,0 +1,14 @@
+tests/cases/compiler/classExpressionExtendingAbstractClass.ts(5,9): error TS2653: Non-abstract class expression does not implement inherited abstract member 'foo' from class 'A'.
+
+
+==== tests/cases/compiler/classExpressionExtendingAbstractClass.ts (1 errors) ====
+    abstract class A {
+        abstract foo(): void;
+    }
+    
+    var C = class extends A {     // no error reported!
+            ~~~~~
+!!! error TS2653: Non-abstract class expression does not implement inherited abstract member 'foo' from class 'A'.
+    };
+    
+    

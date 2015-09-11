@@ -435,6 +435,7 @@ namespace ts {
     }
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
 
     export function isTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -1507,11 +1508,22 @@ namespace ts {
             add,
             getGlobalDiagnostics,
             getDiagnostics,
-            getModificationCount
+            getModificationCount,
+            reattachFileDiagnostics
         };
 
         function getModificationCount() {
             return modificationCount;
+        }
+        
+        function reattachFileDiagnostics(newFile: SourceFile): void {
+            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+                return;
+            }
+            
+            for (let diagnostic of fileDiagnostics[newFile.fileName]) {
+                diagnostic.file = newFile;
+            }
         }
 
         function add(diagnostic: Diagnostic): void {
