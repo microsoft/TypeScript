@@ -3142,6 +3142,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             function emitExportSpecifierInSystemModule(specifier: ExportSpecifier): void {
                 Debug.assert(compilerOptions.module === ModuleKind.System);
+
+                if (!resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name) && !resolver.isValueAliasDeclaration(specifier) ) {
+                    return;
+                }
                 
                 writeLine();
                 emitStart(specifier.name);
@@ -6089,7 +6093,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return;
                     }
 
-                    if (isInternalModuleImportEqualsDeclaration(node)) {
+                    if (isInternalModuleImportEqualsDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }
