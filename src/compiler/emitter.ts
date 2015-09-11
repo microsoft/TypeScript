@@ -270,7 +270,7 @@ var __define = (this && this.__define) || (function() {
                     write(`System.register([], function(${exportFunctionForFile}) {`);
                     writeLine();
                     increaseIndent();
-                    let exportStarName = emitExportStarFunction(undefined);
+                    let exportStarName = emitExportStarFunction(/*localNames*/undefined);
                     exportFunctionForFile = undefined;
                     currentSourceFile = undefined;
                     writeLine();
@@ -344,13 +344,16 @@ var __define = (this && this.__define) || (function() {
                     forEach(host.getSourceFiles(), emitEmitHelpers);
                     writeLine();
                 }
+
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
-                    } else if (compilerOptions.bundle && isExternalModule(sourceFile)) {
+                    }
+                    else if (compilerOptions.bundle && isExternalModule(sourceFile)) {
                         emitBundledFile(sourceFile);
                     }
                 });
+
                 if (compilerOptions.bundle) {
                     writeLines(`return __define.require("${removeFileExtension(compilerOptions.bundle)}");`);
                     decreaseIndent();
@@ -371,14 +374,9 @@ var __define = (this && this.__define) || (function() {
             }
             
             function emitBundledFile(sourceFile: SourceFile): void {
+                let dir = host.getCurrentDirectory();
                 let canonicalName = removeFileExtension(
-                    getRelativePathToDirectoryOrUrl(
-                        host.getCurrentDirectory(),
-                        sourceFile.fileName,
-                        host.getCurrentDirectory(),
-                        host.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/false
-                    )
+                    getRelativePathToDirectoryOrUrl(dir, sourceFile.fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/false)
                 );
                 writeLine();
                 write(`__define("/${canonicalName}", function(require, exports, module){`);
@@ -6470,7 +6468,7 @@ var __define = (this && this.__define) || (function() {
                 writeLine();
                 write(`var exports = {};`);
                 writeLine();
-                write(`for(var n in m) {`);
+                write(`for (var n in m) {`);
                 increaseIndent();
                 writeLine();
                 write(`if (n !== "default"`);
