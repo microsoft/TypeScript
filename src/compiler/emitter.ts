@@ -246,24 +246,24 @@ var __define = (this && this.__define) || (function() {
             let emitEnd = function (node: Node) { };
 
             /** Called to build the opening part of a bundled module wrapper */
-            let emitBundleWrapperStart: Map<Function>  = {
-                [ModuleKind.CommonJS]: () => {
+            let emitBundleWrapperStart: Map<() => void>  = {
+                [ModuleKind.CommonJS]() {
                     write("module.exports = ");
                 },
-                [ModuleKind.AMD]: () => { //TODO: handle external deps with amd better
+                [ModuleKind.AMD]() { //TODO: handle external deps with amd better
                     write("define([\"require\"], function(require){");
                     writeLine();
                     increaseIndent();
                     write("return ");
                 },
-                [ModuleKind.UMD]: () => {
+                [ModuleKind.UMD]() {
                     writeLines(umdHelper);
                     write("[\"require\"], function(require){");
                     writeLine();
                     increaseIndent();
                     write("return ");
                 },
-                [ModuleKind.System]: () => { //TODO: handle external deps with system
+                [ModuleKind.System]() { //TODO: handle external deps with system
                     currentSourceFile = <any>{identifiers: []};
                     exportFunctionForFile = makeUniqueName("exports");
                     writeLine();
@@ -279,23 +279,23 @@ var __define = (this && this.__define) || (function() {
             }
 
             /** Called to build the closing part of a bundled module wrapper */
-            let emitBundleWrapperEnd: Map<Function> = {
-                [ModuleKind.CommonJS]: () => {
+            let emitBundleWrapperEnd: Map<() => void> = {
+                [ModuleKind.CommonJS]() {
                     write(";");
                 },
-                [ModuleKind.AMD]: () => {
-                    write(";");
-                    decreaseIndent();
-                    writeLine();
-                    write("});");
-                },
-                [ModuleKind.UMD]: () => {
+                [ModuleKind.AMD]() {
                     write(";");
                     decreaseIndent();
                     writeLine();
                     write("});");
                 },
-                [ModuleKind.System]: () => {
+                [ModuleKind.UMD]() {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                },
+                [ModuleKind.System]() {
                     write(");");
                     decreaseIndent();
                     writeLine();
@@ -341,9 +341,7 @@ var __define = (this && this.__define) || (function() {
                     write("(function() {");
                     increaseIndent();
                     writeLines(defineHelper);
-                    forEach(host.getSourceFiles(), file => {
-                        emitEmitHelpers(file);
-                    });
+                    forEach(host.getSourceFiles(), emitEmitHelpers);
                     writeLine();
                 }
                 forEach(host.getSourceFiles(), sourceFile => {
