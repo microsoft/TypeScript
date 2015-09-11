@@ -62,6 +62,67 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
     });
 };`;
 
+        const defineHelper = `
+var __define = (this && this.__define) || (function() {
+    var cache = {},
+    id = 0,
+    idMap = {},
+    builtinRequire = require || function() {},
+    normalizeSlashes = function(path) { return path.replace("\\\\", "/"); },
+    forEach = function(array, callback) {
+        if (array) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                var result = callback(array[i], i);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return undefined;
+    },
+    resolvePath = function(base, name) {
+        var result = normalizeSlashes(base).split("/");
+        result.pop();
+        forEach(normalizeSlashes(name).split("/"), function(part, index) {
+            switch(part) {
+                case "":
+                case ".":
+                break;
+                case "..":
+                result.pop();
+                break;
+                default:
+                result.push(part);
+                break;
+            }
+        });
+        return result.join("/");
+    },
+    resolveRequire = function(name) {
+        if (typeof cache[name] === "function") {
+            cache[name]();
+        }
+        return (cache[name] ? cache[name].exports : builtinRequire(name));
+    },
+    define = function (declaredName, factory) {
+        idMap[++id] = declaredName;
+        var module = {
+            id: id,
+            exports: {}
+        };
+        var require = function(name) {
+            if (typeof name === "number") return resolveRequire(idMap[name]);
+            return resolveRequire(resolvePath(declaredName, name));
+        };
+        cache[declaredName] = function() {
+            cache[declaredName] = module;
+            factory(require, module.exports, module);
+        };
+    };
+    define.require = resolveRequire;
+    return define;
+})();`;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
@@ -71,12 +132,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
 
         if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
-                }
-            });
+            if (!compilerOptions.bundle) {
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                        let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
+                        emitFile(jsFilePath, sourceFile);
+                    }
+                });
+            }
 
             if (compilerOptions.outFile || compilerOptions.out) {
                 emitFile(compilerOptions.outFile || compilerOptions.out);
@@ -198,11 +261,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSourceFile(root);
             }
             else {
+                if (compilerOptions.bundle) {
+                    writeLines("module.exports = (function() {");
+                    increaseIndent();
+                    writeLines(defineHelper);
+                    writeLine();
+                }
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
+                    } else if (compilerOptions.bundle && isExternalModule(sourceFile)) {
+                        emitBundledFile(sourceFile);
                     }
                 });
+                if (compilerOptions.bundle) {
+                    writeLines(`return __define.require("${removeFileExtension(compilerOptions.bundle)}");`);
+                    decreaseIndent();
+                    writeLines("})();");
+                }
             }
 
             writeLine();
@@ -213,6 +289,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
                 emit(sourceFile);
+            }
+            
+            function emitBundledFile(sourceFile: SourceFile): void {
+                let canonicalName = removeFileExtension(
+                    getRelativePathToDirectoryOrUrl(
+                        host.getCurrentDirectory(),
+                        host.getCanonicalFileName(sourceFile.fileName),
+                        host.getCurrentDirectory(),
+                        host.getCanonicalFileName,
+                        /*isAbsolutePathAnUrl*/false
+                    )
+                );
+                writeLine();
+                write(`__define("${canonicalName}", function(require, exports, module){`);
+                writeLine();
+                increaseIndent();
+                emitBundledSourceFileNode(sourceFile);
+                decreaseIndent();
+                writeLine();
+                write("});");
             }
 
             function isUniqueName(name: string): boolean {
@@ -6715,6 +6811,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitLeadingComments(node.endOfFileToken);
+            }
+            
+            function emitBundledSourceFileNode(node: SourceFile) {
+                currentSourceFile = node;
+                exportFunctionForFile = undefined;
+                writeLine();
+                emitShebang();
+                emitDetachedComments(node);
+
+                // emit prologue directives prior to __extends
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                emitCommonJSModule(node, startIndex);
+                emitLeadingComments(node.endOfFileToken);                
             }
 
             function emitNodeWithCommentsAndWithoutSourcemap(node: Node): void {

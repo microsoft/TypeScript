@@ -1029,6 +1029,10 @@ namespace ts {
             if (options.module && languageVersion >= ScriptTarget.ES6) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
             }
+            
+            if (options.bundle && !(options.module && outFile) ) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_requires_both_1_and_2, "bundle", "outFile", "module"));
+            }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
