@@ -1026,8 +1026,8 @@ namespace ts {
             }
 
             // Cannot specify module gen target when in es6 or above
-            if (options.module && languageVersion >= ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
+            if (options.module && languageVersion >= ScriptTarget.ES6 && !(options.bundle)) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher_unless_bundle_is_specified));
             }
             
             if (options.bundle && !(options.module && outFile) ) {

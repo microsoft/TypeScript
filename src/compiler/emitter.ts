@@ -67,18 +67,12 @@ var __define = (this && this.__define) || (function() {
     var cache = {},
     id = 0,
     idMap = {},
-    builtinRequire = require || function() {},
+    builtinRequire = typeof require === "function" ? require : function() {},
     normalizeSlashes = function(path) { return path.replace("\\\\", "/"); },
     forEach = function(array, callback) {
-        if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
-                var result = callback(array[i], i);
-                if (result) {
-                    return result;
-                }
-            }
+        for (var i = 0, len = array.length; i < len; i++) {
+            callback(array[i], i);
         }
-        return undefined;
     },
     resolvePath = function(base, name) {
         var result = normalizeSlashes(base).split("/");
@@ -89,6 +83,16 @@ var __define = (this && this.__define) || (function() {
                 case ".":
                 break;
                 case "..":
+                if (result.length <= 1) {
+                    if (result[0] === "..") {
+                        result.push("..");
+                        break;
+                    }
+                    else if (result[0] === "." || result[0] === "") {
+                        result[0] = "..";
+                        break;
+                    }
+                }
                 result.pop();
                 break;
                 default:
@@ -96,13 +100,15 @@ var __define = (this && this.__define) || (function() {
                 break;
             }
         });
-        return result.join("/");
+        if (result[0] === "") result.shift();
+        return "/"+result.join("/");
     },
-    resolveRequire = function(name) {
-        if (typeof cache[name] === "function") {
-            cache[name]();
+    resolveRequire = function(name, from) {
+        var resolved = resolvePath(from || "/", name);
+        if (typeof cache[resolved] === "function") {
+            cache[resolved]();
         }
-        return (cache[name] ? cache[name].exports : builtinRequire(name));
+        return (cache[resolved] ? cache[resolved].exports : builtinRequire(name));
     },
     define = function (declaredName, factory) {
         idMap[++id] = declaredName;
@@ -112,7 +118,7 @@ var __define = (this && this.__define) || (function() {
         };
         var require = function(name) {
             if (typeof name === "number") return resolveRequire(idMap[name]);
-            return resolveRequire(resolvePath(declaredName, name));
+            return resolveRequire(name, declaredName);
         };
         cache[declaredName] = function() {
             cache[declaredName] = module;
@@ -122,6 +128,15 @@ var __define = (this && this.__define) || (function() {
     define.require = resolveRequire;
     return define;
 })();`;
+
+        const umdHelper = `(function (deps, factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define(deps, factory);
+    }
+})(`;
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -230,6 +245,64 @@ var __define = (this && this.__define) || (function() {
             /** Called once the emit of the node is done */
             let emitEnd = function (node: Node) { };
 
+            /** Called to build the opening part of a bundled module wrapper */
+            let emitBundleWrapperStart: Map<Function>  = {
+                [ModuleKind.CommonJS]: () => {
+                    write("module.exports = ");
+                },
+                [ModuleKind.AMD]: () => { //TODO: handle external deps with amd better
+                    write("define([\"require\"], function(require){");
+                    writeLine();
+                    increaseIndent();
+                    write("return ");
+                },
+                [ModuleKind.UMD]: () => {
+                    writeLines(umdHelper);
+                    write("[\"require\"], function(require){");
+                    writeLine();
+                    increaseIndent();
+                    write("return ");
+                },
+                [ModuleKind.System]: () => { //TODO: handle external deps with system
+                    currentSourceFile = <any>{identifiers: []};
+                    exportFunctionForFile = makeUniqueName("exports");
+                    writeLine();
+                    write(`System.register([], function(${exportFunctionForFile}) {`);
+                    writeLine();
+                    increaseIndent();
+                    let exportStarName = emitExportStarFunction(undefined);
+                    exportFunctionForFile = undefined;
+                    currentSourceFile = undefined;
+                    writeLine();
+                    write(`${exportStarName}(`);
+                }
+            }
+
+            /** Called to build the closing part of a bundled module wrapper */
+            let emitBundleWrapperEnd: Map<Function> = {
+                [ModuleKind.CommonJS]: () => {
+                    write(";");
+                },
+                [ModuleKind.AMD]: () => {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                },
+                [ModuleKind.UMD]: () => {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                },
+                [ModuleKind.System]: () => {
+                    write(");");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                }
+            }
+
             /** Emit the text for the given token that comes after startPos
               * This by default writes the text provided with the given tokenKind
               * but if optional emitFn callback is provided the text is emitted using the callback instead of default text
@@ -261,10 +334,16 @@ var __define = (this && this.__define) || (function() {
                 emitSourceFile(root);
             }
             else {
+                let originalKind = compilerOptions.module;
                 if (compilerOptions.bundle) {
-                    writeLines("module.exports = (function() {");
+                    compilerOptions.module = ModuleKind.CommonJS;
+                    emitBundleWrapperStart[originalKind]();
+                    write("(function() {");
                     increaseIndent();
                     writeLines(defineHelper);
+                    forEach(host.getSourceFiles(), file => {
+                        emitEmitHelpers(file);
+                    });
                     writeLine();
                 }
                 forEach(host.getSourceFiles(), sourceFile => {
@@ -277,7 +356,9 @@ var __define = (this && this.__define) || (function() {
                 if (compilerOptions.bundle) {
                     writeLines(`return __define.require("${removeFileExtension(compilerOptions.bundle)}");`);
                     decreaseIndent();
-                    writeLines("})();");
+                    writeLines("})()");
+                    emitBundleWrapperEnd[originalKind]();
+                    compilerOptions.module = originalKind;
                 }
             }
 
@@ -295,14 +376,14 @@ var __define = (this && this.__define) || (function() {
                 let canonicalName = removeFileExtension(
                     getRelativePathToDirectoryOrUrl(
                         host.getCurrentDirectory(),
-                        host.getCanonicalFileName(sourceFile.fileName),
+                        sourceFile.fileName,
                         host.getCurrentDirectory(),
                         host.getCanonicalFileName,
                         /*isAbsolutePathAnUrl*/false
                     )
                 );
                 writeLine();
-                write(`__define("${canonicalName}", function(require, exports, module){`);
+                write(`__define("/${canonicalName}", function(require, exports, module){`);
                 writeLine();
                 increaseIndent();
                 emitBundledSourceFileNode(sourceFile);
@@ -1589,7 +1670,7 @@ var __define = (this && this.__define) || (function() {
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
                         // Identifier references module export
-                        if (languageVersion < ScriptTarget.ES6 && compilerOptions.module !== ModuleKind.System) {
+                        if ((languageVersion < ScriptTarget.ES6 || compilerOptions.bundle) && compilerOptions.module !== ModuleKind.System) {
                             write("exports.");
                         }
                     }
@@ -1599,7 +1680,7 @@ var __define = (this && this.__define) || (function() {
                         write(".");
                     }
                 }
-                else if (languageVersion < ScriptTarget.ES6) {
+                else if (languageVersion < ScriptTarget.ES6 || compilerOptions.bundle) {
                     let declaration = resolver.getReferencedImportDeclaration(node);
                     if (declaration) {
                         if (declaration.kind === SyntaxKind.ImportClause) {
@@ -3145,7 +3226,7 @@ var __define = (this && this.__define) || (function() {
                         write(getGeneratedNameForNode(container));
                         write(".");
                     }
-                    else if (languageVersion < ScriptTarget.ES6 && compilerOptions.module !== ModuleKind.System) {
+                    else if ((languageVersion < ScriptTarget.ES6 || compilerOptions.bundle) && compilerOptions.module !== ModuleKind.System) {
                         write("exports.");
                     }
                 }
@@ -3562,6 +3643,7 @@ var __define = (this && this.__define) || (function() {
             function isES6ExportedDeclaration(node: Node) {
                 return !!(node.flags & NodeFlags.Export) &&
                     languageVersion >= ScriptTarget.ES6 &&
+                    !compilerOptions.bundle &&
                     node.parent.kind === SyntaxKind.SourceFile;
             }
 
@@ -4661,7 +4743,7 @@ var __define = (this && this.__define) || (function() {
                     emitEnd(node);
                     write(";");
                 }
-                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
+                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated && !compilerOptions.bundle) {
                     // if this is a top level default export of decorated class, write the export after the declaration.
                     writeLine();
                     write("export default ");
@@ -5513,7 +5595,7 @@ var __define = (this && this.__define) || (function() {
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6 || compilerOptions.bundle) {
                     return emitExternalImportDeclaration(node);
                 }
 
@@ -5678,7 +5760,7 @@ var __define = (this && this.__define) || (function() {
             function emitExportDeclaration(node: ExportDeclaration) {
                 Debug.assert(compilerOptions.module !== ModuleKind.System);
 
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6 || compilerOptions.bundle) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                         emitStart(node);
                         let generatedName = getGeneratedNameForNode(node);
@@ -5764,7 +5846,7 @@ var __define = (this && this.__define) || (function() {
 
             function emitExportAssignment(node: ExportAssignment) {
                 if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                    if (languageVersion >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6 && !compilerOptions.bundle) {
                         writeLine();
                         emitStart(node);
                         write("export default ");
@@ -5994,37 +6076,6 @@ var __define = (this && this.__define) || (function() {
                 write("};");
 
                 return emitExportStarFunction(exportedNamesStorageRef);
-
-                function emitExportStarFunction(localNames: string): string {
-                    const exportStarFunction = makeUniqueName("exportStar");
-
-                    writeLine();
-
-                    // define an export star helper function
-                    write(`function ${exportStarFunction}(m) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`var exports = {};`);
-                    writeLine();
-                    write(`for(var n in m) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`if (n !== "default"`);
-                    if (localNames) {
-                        write(`&& !${localNames}.hasOwnProperty(n)`);
-                    }
-                    write(`) exports[n] = m[n];`);
-                    decreaseIndent();
-                    writeLine();
-                    write("}");
-                    writeLine();
-                    write(`${exportFunctionForFile}(exports);`);
-                    decreaseIndent();
-                    writeLine();
-                    write("}");
-
-                    return exportStarFunction;
-                }
 
                 function writeExportedName(node: Identifier | Declaration): void {
                     // do not record default exports
@@ -6410,6 +6461,37 @@ var __define = (this && this.__define) || (function() {
                 write("}"); // execute
             }
             
+            function emitExportStarFunction(localNames: string): string {
+                const exportStarFunction = makeUniqueName("exportStar");
+
+                writeLine();
+
+                // define an export star helper function
+                write(`function ${exportStarFunction}(m) {`);
+                increaseIndent();
+                writeLine();
+                write(`var exports = {};`);
+                writeLine();
+                write(`for(var n in m) {`);
+                increaseIndent();
+                writeLine();
+                write(`if (n !== "default"`);
+                if (localNames) {
+                    write(`&& !${localNames}.hasOwnProperty(n)`);
+                }
+                write(`) exports[n] = m[n];`);
+                decreaseIndent();
+                writeLine();
+                write("}");
+                writeLine();
+                write(`${exportFunctionForFile}(exports);`);
+                decreaseIndent();
+                writeLine();
+                write("}");
+
+                return exportStarFunction;
+            }
+            
             type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
             
             function emitSystemModule(node: SourceFile, startIndex: number): void {
@@ -6565,14 +6647,7 @@ var __define = (this && this.__define) || (function() {
                 collectExternalModuleInfo(node);
 
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
-                writeLines(`(function (deps, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
-    }
-})(`);
+                writeLines(umdHelper);
                 emitAMDDependencies(node, false);
                 write(") {");
                 increaseIndent();
@@ -6783,7 +6858,7 @@ var __define = (this && this.__define) || (function() {
                 let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    if (languageVersion >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6 && !compilerOptions.bundle) {
                         emitES6Module(node, startIndex);
                     }
                     else if (compilerOptions.module === ModuleKind.AMD) {
