@@ -4014,24 +4014,24 @@ namespace ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.SyntheticProperty) {
-                    // If union property is result of union of non method (property/accessors/variables), it is labeled as property
-                    let unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
+                    // If a synthetic property is result of union/intersection of non method (property/accessors/variables), it is labeled as property
+                    let syntheticPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                         let rootSymbolFlags = rootSymbol.getFlags();
                         if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                             return ScriptElementKind.memberVariableElement;
                         }
                         Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
                     });
-                    if (!unionPropertyKind) {
-                        // If this was union of all methods,
-                        //make sure it has call signatures before we can label it as method
-                        let typeOfUnionProperty = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
-                        if (typeOfUnionProperty.getCallSignatures().length) {
+                    if (!syntheticPropertyKind) {
+                        // If this was union/intersection of all methods,
+                        // make sure it has call signatures before we can label it as method
+                        let typeOfSyntheticProperty = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+                        if (typeOfSyntheticProperty.getCallSignatures().length) {
                             return ScriptElementKind.memberFunctionElement;
                         }
                         return ScriptElementKind.memberVariableElement;
                     }
-                    return unionPropertyKind;
+                    return syntheticPropertyKind;
                 }
                 return ScriptElementKind.memberVariableElement;
             }
@@ -4650,9 +4650,9 @@ namespace ts {
                 return undefined;
             }
 
-            if (type.flags & TypeFlags.Union) {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
                 let result: DefinitionInfo[] = [];
-                forEach((<UnionType>type).types, t => {
+                forEach((<UnionOrIntersectionType>type).types, t => {
                     if (t.symbol) {
                         addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(t.symbol, node));
                     }
