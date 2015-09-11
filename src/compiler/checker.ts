@@ -976,8 +976,8 @@ namespace ts {
                 }
             }
 
-            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral.text);
-            let sourceFile = fileName && host.getSourceFile(fileName);
+            let resolvedModule = getResolvedModule(getSourceFile(location), moduleReferenceLiteral.text);
+            let sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;

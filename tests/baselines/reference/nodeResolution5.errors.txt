@@ -1,0 +1,14 @@
+tests/cases/compiler/b.ts(1,20): error TS2306: File 'tests/cases/compiler/node_modules/a.d.ts' is not a module.
+
+
+==== tests/cases/compiler/b.ts (1 errors) ====
+    import y = require("a"); 
+                       ~~~
+!!! error TS2306: File 'a.d.ts' is not a module.
+    
+==== tests/cases/compiler/node_modules/a.d.ts (0 errors) ====
+    
+    declare module "a" {
+        var x: number;
+    }
+    
