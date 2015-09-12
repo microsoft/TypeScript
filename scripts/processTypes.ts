@@ -532,7 +532,7 @@ function generateFactory(outputFile: string) {
             return;
         }
 
-        // Skip the is function for this node if it is already defined 
+        // Skip the is function for this node if it is already defined
         if (resolveQualifiedName(factorySourceFile, `ts.is${syntaxNode.kindName}`, SymbolFlags.Function)) {
             return;
         }
@@ -552,8 +552,24 @@ function generateFactory(outputFile: string) {
             return;
         }
         
+        let typeNames = splitTypeName(typeName);
+        let nodeTestFunction: string;
+        if (typeNames.length === 1) {
+            let typeSymbol = resolveExportedQualifiedName(tsModuleSymbol, typeName, SymbolFlags.Type);
+            if (typeSymbol) {
+                let nodeTestAnnotation = findFirstAnnotation(typeSymbol, NodeTestAnnotation.match);
+                if (nodeTestAnnotation) {
+                    nodeTestFunction = nodeTestAnnotation.functionName;
+                }
+            }
+        }
+        
+        if (!nodeTestFunction) {
+            nodeTestFunction = `is${typeNameToMethodNameSuffix(typeName)}`;
+        }
+        
         // Skip the is function for this type if it is already defined in factory.ts
-        if (resolveQualifiedName(factorySourceFile, `ts.is${typeNameToMethodNameSuffix(typeName)}`, SymbolFlags.Function)) {
+        if (resolveQualifiedName(factorySourceFile, `ts.${nodeTestFunction}`, SymbolFlags.Function)) {
             return;
         }
         
@@ -562,7 +578,7 @@ function generateFactory(outputFile: string) {
             return;
         }
         
-        writer.write(`export function is${typeNameToMethodNameSuffix(typeName)}(node: Node): node is ${typeName} {`);
+        writer.write(`export function ${nodeTestFunction}(node: Node): node is ${typeName} {`);
         writer.writeLine();
         writer.increaseIndent();
         
@@ -1307,6 +1323,8 @@ function createLineWrappingTextWriter(newLine: string, maxWidth: number): EmitTe
 // Annotations
 //
 
+function findFirstAnnotation<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => annotation is TAnnotation): TAnnotation;
+function findFirstAnnotation<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation;
 function findFirstAnnotation<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation {
     for (let annotation of getAnnotations(symbol)) {
         if (match(annotation)) {
@@ -1317,6 +1335,8 @@ function findFirstAnnotation<TAnnotation extends Annotation>(symbol: Symbol, mat
     return undefined;
 }
 
+function findAllAnnotations<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => annotation is TAnnotation): TAnnotation[];
+function findAllAnnotations<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation[];
 function findAllAnnotations<TAnnotation extends Annotation>(symbol: Symbol, match: (annotation: Annotation) => boolean): TAnnotation[] {
     let annotations: TAnnotation[];
     for (let annotation of getAnnotations(symbol)) {
@@ -1567,6 +1587,20 @@ class NewLexicalEnvironmentAnnotation extends Annotation {
     
     public static match(annotation: Annotation): annotation is NewLexicalEnvironmentAnnotation {
         return annotation instanceof NewLexicalEnvironmentAnnotation;
+    }
+}
+
+@annotation("nodetest")
+class NodeTestAnnotation extends Annotation {
+    public name = "nodetest";
+    public functionName: string;
+    constructor([functionName, ..._arguments]: [string, any]) {
+        super(_arguments);
+        this.functionName = functionName
+    }
+    
+    public static match(annotation: Annotation): annotation is NodeTestAnnotation {
+        return annotation instanceof NodeTestAnnotation;
     }
 }
 

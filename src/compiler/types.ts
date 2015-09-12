@@ -638,8 +638,6 @@ namespace ts {
 
     // @internal
     export interface ParentNavigator extends ParentNavigable {
-        /** Gets the root node for the current node. */
-        getRoot(): Node;
         /** Gets the grandparent node for the current node. */
         getGrandparent(): Node;
         /** Gets the parent node for the current node.  */
@@ -650,14 +648,10 @@ namespace ts {
         getKind(): SyntaxKind;
         /** Moves the navigator to the parent node of the current node. */
         moveToParent(): boolean;
-        /** Moves the navigator to the root node of the current node. */
-        moveToRoot(): boolean;
     }
 
     // @internal
     export interface NodeStack extends ParentNavigable {
-        /** Gets the node at the bottom of the stack. */
-        getRoot(): Node;
         /** Gets the node two steps down from the top of the stack. */
         getGrandparent(): Node;
         /** Gets the node one step down from the top of the stack. */
@@ -672,6 +666,8 @@ namespace ts {
         findAncestorNode(match: (node: Node) => boolean): Node;
         /** Pushes a node onto the stack. */
         pushNode(node: Node): void;
+        /** Pushes a node onto the stack if it is not already at the top of the stack. */
+        tryPushNode(node: Node): boolean;
         /** Replaces the node at the top of the stack. */
         setNode(node: Node): void;
         /** Pops the top node from the stack. */
@@ -1102,6 +1098,7 @@ namespace ts {
     // checker actually thinks you have something of the right type.  Note: the brands are
     // never actually given values.  At runtime they have zero cost.
     // @kind(SyntaxKind.OmittedExpression)
+    // @nodetest("isExpressionNode")
     export interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
@@ -1372,6 +1369,7 @@ namespace ts {
 
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
 
+    // @nodetest("isStatementNode")
     export interface Statement extends Node {
         _statementBrand: any;
     }

@@ -189,6 +189,34 @@ namespace ts {
             }
         }
     }
+    
+    export function trimArray<T>(array: T[]): T[] {
+        let result: T[];
+        if (array) {
+            result = [];
+            for (let v of array) {
+                if (v !== undefined) {
+                    result.push(v);
+                }
+            }
+        }
+        return result;
+    }
+    
+    export function append<T>(to: T[], ...values: T[]): T[] {
+        let result: T[];
+        if (to) {
+            for (let v of values) {
+                if (v !== undefined) {
+                    if (!result) {
+                        result = to.slice(0);
+                    }
+                    result.push(v);
+                }
+            }
+        }
+        return result || to;
+    }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
         while (pos < end) {
@@ -835,16 +863,6 @@ namespace ts {
       * @param currentNode The current node for the navigator.
       */
     export function createParentNavigator(currentNode: Node): ParentNavigator {
-        /** Traverses the parent pointers for the current node to find the root node. */ 
-        function getRoot() {
-            let rootNode = currentNode;
-            while (rootNode && rootNode.parent) {
-                rootNode = rootNode.parent;
-            }
-            
-            return rootNode;
-        }
-        
         /** Gets the grandparent of the current node, without moving the navigator. */
         function getGrandparent() {
             let parent = getParent();
@@ -877,30 +895,17 @@ namespace ts {
             return false;
         }
         
-        /** Navigates to the root node for the current node. */
-        function moveToRoot(): boolean {
-            let rootNode = getRoot();
-            if (rootNode) {
-                currentNode = rootNode;
-                return true;
-            }
-            
-            return false;
-        }
-        
         /** Creates a new ParentNavigator from the current node. */
         function createParentNavigator() {
             return ts.createParentNavigator(currentNode);
         }
         
         return {
-            getRoot,
             getGrandparent,
             getParent,
             getNode,
             getKind,
             moveToParent,
-            moveToRoot,
             createParentNavigator,
         };
     }
@@ -914,11 +919,6 @@ namespace ts {
         let rootNode: Node;
         let parentNode: Node;
         let currentNode: Node;
-        
-        /** Gets the node at the bottom of the stack. */
-        function getRoot() {
-            return rootNode;
-        }
         
         /** Gets the node two steps back from the top of the stack. */
         function getGrandparent() {
@@ -953,6 +953,16 @@ namespace ts {
             currentNode = node;
         }
         
+        /** Pushes a node onto the stack if it is not already at the top of the stack. */
+        function tryPushNode(node: Node): boolean {
+            if (currentNode !== node) {
+                return false;
+            }
+            
+            pushNode(node);
+            return true;
+        }
+        
         /** Pops the top node from the stack. */
         function popNode(): void {
             currentNode = parentNode;
@@ -985,7 +995,7 @@ namespace ts {
             if (parentNode && match(parentNode)) {
                 return parentNode;
             }
-            for (let i = stack.length; i >= 0; i--) {
+            for (let i = stack.length - 1; i >= 0; i--) {
                 let node = stack[i];
                 if (match(node)) {
                     return node;
@@ -1048,26 +1058,24 @@ namespace ts {
             }
             
             return {
-                getRoot,
                 getGrandparent,
                 getParent,
                 getNode,
                 getKind,
-                moveToRoot,
                 moveToParent,
                 createParentNavigator,
             };
         }
         
         return {
-            getRoot,
             getGrandparent,
             getParent,
             getNode,
             getKind,
             pushNode,
-            popNode,
+            tryPushNode,
             setNode,
+            popNode,
             findAncestorNode,
             createParentNavigator,
         };

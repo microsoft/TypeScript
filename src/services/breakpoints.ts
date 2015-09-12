@@ -59,7 +59,7 @@ namespace ts.BreakpointResolver {
 
         function spanInNode(node: Node): TextSpan {
             if (node) {
-                if (isPartOfExpression(node)) {
+                if (isExpression(node)) {
                     if (node.parent.kind === SyntaxKind.DoStatement) {
                         // Set span as if on while keyword
                         return spanInPreviousNode(node);

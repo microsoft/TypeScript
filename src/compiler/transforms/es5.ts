@@ -115,7 +115,7 @@ namespace ts.transform {
     function transformClassLikeDeclaration(node: ClassLikeDeclaration, name: Identifier): LeftHandSideExpression {
         let baseTypeNode = getClassExtendsHeritageClauseElement(node);
         let classBody = factory.createBlock([]);
-        emitNode(node, classBody.statements, transformClassBody);
+        emitNode(node, transformClassBody, classBody.statements);
         
         let superExpr = baseTypeNode ? visitNode(baseTypeNode.expression, transformNode) : undefined;
         let superName = baseTypeNode ? factory.createIdentifier("_super") : undefined;
@@ -153,7 +153,7 @@ namespace ts.transform {
         let body = factory.createBlock([]);
 
         if (constructor) {
-            emitNode(constructor, body.statements, transformConstructor, VisitorFlags.NewLexicalEnvironment);
+            emitNode(constructor, transformConstructor, body.statements, VisitorFlags.NewLexicalEnvironment);
         }
         else if (baseTypeNode) {
             let superCall = createDefaultSuperCall();
@@ -168,7 +168,7 @@ namespace ts.transform {
         emitCaptureThisForNode(constructor, write);
         emitDefaultValueAssignments(constructor, write);
         emitRestParameter(constructor, write);
-        pipeNodes(constructor.body.statements, write, transformNode);
+        pipeNodes(constructor.body.statements, transformNode, write);
     }
     
     function transformParameter(node: ParameterDeclaration, write: (node: ParameterDeclaration) => void) {
@@ -194,7 +194,7 @@ namespace ts.transform {
 
     function emitDefaultValueAssignments(node: FunctionLikeDeclaration, write: (node: Statement) => void) {
         if (!(node.transformFlags & (TransformFlags.SubtreeContainsParameterInitializer | TransformFlags.SubtreeContainsParameterBindingPattern))) {
-            return
+            return;
         }
         
         for (let parameter of node.parameters) {
@@ -453,14 +453,14 @@ namespace ts.transform {
     function rewriteFunctionExpression(node: FunctionLikeDeclaration, name: Identifier, location: TextRange): FunctionExpression {
         let parameters = visitNodes(node.parameters, transformNode);
         let body = factory.createBlock([], node.body);
-        emitNode(node, body.statements, transformFunctionBody, VisitorFlags.NewLexicalEnvironment);
+        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.NewLexicalEnvironment);
         return factory.createFunctionExpression2(name, parameters, body, location);
     }
 
     function transformFunctionDeclaration(node: FunctionDeclaration, write: (node: Statement) => void): void {
         let parameters = visitNodes(node.parameters, transformNode);
         let body = factory.createBlock([], node.body);
-        emitNode(node, body.statements, transformFunctionBody, VisitorFlags.NewLexicalEnvironment);
+        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.NewLexicalEnvironment);
         write(factory.createFunctionDeclaration2(node.name, parameters, body, /*location*/ node));
     }
     
@@ -469,7 +469,7 @@ namespace ts.transform {
 
         let parameters = visitNodes(node.parameters, transformNode);
         let newBody = factory.createBlock([], /*location*/ isBlock(node.body) ? node.body : undefined);
-        emitNode(node, newBody.statements, transformFunctionBody, VisitorFlags.NewLexicalEnvironment);
+        emitNode(node, transformFunctionBody, newBody.statements, VisitorFlags.NewLexicalEnvironment);
         
         let func = createfn(name, parameters, newBody, location);
         return func;
@@ -482,7 +482,7 @@ namespace ts.transform {
         
         let body = node.body;
         if (isBlock(body)) {
-            pipeNodes(body.statements, write, transformNode);
+            pipeNodes(body.statements, transformNode, write);
         }
         else {
             let expr = visitNode(body, transformNode);

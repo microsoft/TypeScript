@@ -1400,7 +1400,7 @@ namespace ts {
         }
         
         function isEntityNameOrExpression(node: Node): node is EntityName | Expression {
-            return isEntityName(node) || isExpression(node);
+            return isEntityName(node) || isExpressionNode(node);
         }
 
         function isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult {
@@ -13951,7 +13951,7 @@ namespace ts {
                      (entityName.parent.kind === SyntaxKind.JsxClosingElement)) {
                 return getJsxElementTagSymbol(<JsxOpeningLikeElement>entityName.parent);
             }
-            else if (isPartOfExpression(entityName)) {
+            else if (isExpression(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.
                     return undefined;
@@ -14089,7 +14089,7 @@ namespace ts {
                 return getTypeFromTypeNode(<TypeNode>node);
             }
 
-            if (isPartOfExpression(node)) {
+            if (isExpression(node)) {
                 return getTypeOfExpression(<Expression>node);
             }
 

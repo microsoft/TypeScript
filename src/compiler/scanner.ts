@@ -418,6 +418,10 @@ namespace ts {
 
       /* @internal */
       export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+          if (pos < 0) {
+              return pos;
+          }
+          
           // Keep in sync with couldStartTrivia
           while (true) {
               let ch = text.charCodeAt(pos);

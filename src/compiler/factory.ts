@@ -140,23 +140,20 @@ namespace ts {
         }
         
         export function createNumericLiteral2(value: number, location?: TextRange, flags?: NodeFlags): LiteralExpression {
-            let node = factory.createNumericLiteral(String(value), location, flags);
+            let node = createNumericLiteral(String(value), location, flags);
             return node;
         }
 
         export function createPropertyAccessExpression2(expression: Expression, name: Identifier, location?: TextRange, flags?: NodeFlags) {
-            return factory.createPropertyAccessExpression(
-                factory.parenthesizeForAccess(expression),
-                factory.createNode(SyntaxKind.DotToken),
-                name,
-                location,
-                flags
-            );
+            return createPropertyAccessExpression(parenthesizeForAccess(expression), createNode(SyntaxKind.DotToken), name, location, flags);
+        }
+
+        export function createPropertyAccessExpression3(expression: Expression, name: string, location?: TextRange, flags?: NodeFlags) {
+            return createPropertyAccessExpression(parenthesizeForAccess(expression), createNode(SyntaxKind.DotToken), createIdentifier(name), location, flags);
         }
         
-        export const enum BinaryOperand {
-            Left,
-            Right
+        export function makeSynthesized<TNode extends Node>(node: TNode): TNode {
+            return nodeIsSynthesized(node) ? node : cloneNode(node);
         }
 
         export function parenthesizeForBinary(expr: Expression, operator: SyntaxKind) {
@@ -175,7 +172,7 @@ namespace ts {
             let operatorPrecedence = getBinaryOperatorPrecedence(operator);
             if (exprPrecedence < operatorPrecedence) {
                 // lower precedence, the expression needs parenthesis
-                return factory.createParenthesizedExpression(expr);
+                return createParenthesizedExpression(expr);
             }
             else {
                 // higher precedence. 
@@ -205,25 +202,15 @@ namespace ts {
                 return <LeftHandSideExpression>expr;
             }
             
-            return factory.createParenthesizedExpression(expr);
+            return createParenthesizedExpression(expr);
         }
 
         export function createCallExpression2(expression: Expression, _arguments?: Expression[], location?: TextRange, flags?: NodeFlags) {
-            return factory.createCallExpression(
-                parenthesizeForAccess(expression),
-                /*typeArguments*/ undefined,
-                _arguments,
-                location,
-                flags
-            );
+            return createCallExpression(parenthesizeForAccess(expression), undefined, _arguments, location, flags);
         }
         
         export function createObjectLiteralExpression2(properties?: ObjectLiteralElement[]) {
-            return createObjectLiteralExpression(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                createNodeArray(properties)
-            );
+            return createObjectLiteralExpression(undefined, undefined, createNodeArray(properties));
         }
         
         export function createAssignmentExpression(left: Expression, right: Expression) {
@@ -251,353 +238,150 @@ namespace ts {
         }
 
         export function createBinaryExpression2(left: Expression, operator: SyntaxKind, right: Expression) {
-            return factory.createBinaryExpression(
-                parenthesizeForBinary(left, operator),
-                factory.createNode(operator),
-                parenthesizeForBinary(right, operator)
-            );
+            return createBinaryExpression(parenthesizeForBinary(left, operator), createNode(operator), parenthesizeForBinary(right, operator));
         }
         
         export function createConditionalExpression2(condition: Expression, whenTrue: Expression, whenFalse: Expression, location?: TextRange, flags?: NodeFlags) {
-            return factory.createConditionalExpression(
-                condition,
-                factory.createNode(SyntaxKind.QuestionToken),
-                whenTrue,
-                factory.createNode(SyntaxKind.ColonToken),
-                whenFalse,
-                location,
-                flags
-            );
+            return createConditionalExpression(condition, createNode(SyntaxKind.QuestionToken), whenTrue, createNode(SyntaxKind.ColonToken), whenFalse, location, flags);
         }
         
         export function createParameter2(name: BindingPattern | Identifier, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
-            return factory.createParameter(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*dotDotDotToken*/ undefined,
-                name,
-                /*questionToken*/ undefined,
-                /*type*/ undefined,
-                initializer,
-                location,
-                flags
-            );
+            return createParameter(undefined, undefined, undefined, name, undefined, undefined, initializer, location, flags);
         }
         
         export function createRestParameter(name: Identifier, location?: TextRange, flags?: NodeFlags) {
-            return factory.createParameter(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                factory.createNode(SyntaxKind.DotDotDotToken),
-                name,
-                /*questionToken*/ undefined,
-                /*type*/ undefined,
-                /*initializer*/ undefined,
-                location,
-                flags
-            );
-        }
-        
-        export function createVariableStatement2(declarationList: VariableDeclarationList, location?: TextRange, flags?: NodeFlags) {
-            return factory.createVariableStatement(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                declarationList,
-                location,
-                flags
-            );
+            return createParameter(undefined, undefined, createNode(SyntaxKind.DotDotDotToken), name, undefined, undefined, undefined, location, flags);
         }
         
         export function createVariableDeclaration2(name: Identifier | BindingPattern, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
-            return factory.createVariableDeclaration(
-                name,
-                /*type*/ undefined,
-                initializer,
-                location,
-                flags
-            );
+            return createVariableDeclaration(name, undefined, initializer, location, flags);
         }
         
-        export function createClassDeclaration2(name: Identifier, heritageClause: HeritageClause, members: ClassElement[], location?: TextRange, flags?: NodeFlags): ClassDeclaration {
-            return factory.createClassDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                name,
-                /*typeParameters*/ undefined,
-                heritageClause ? [heritageClause] : undefined,
-                members,
-                location,
-                flags
-            );
+        export function createVariableStatement2(declarationList: VariableDeclarationList, location?: TextRange, flags?: NodeFlags) {
+            return createVariableStatement(undefined, undefined, declarationList, location, flags);
+        }
+        
+        export function createSimpleLetStatement(name: Identifier, initializer: Expression, location?: TextRange, exported?: boolean) {
+            let varDecl = createVariableDeclaration2(name, initializer);
+            let varDeclList = createVariableDeclarationList([varDecl], undefined, NodeFlags.Let);
+            let varStmt = createVariableStatement2(varDeclList, location, exported ? NodeFlags.Export : 0);
+            return varStmt;
+        }
+        
+        export function createExportDefaultStatement(expression: Expression): ExportAssignment {
+            return createExportAssignment(undefined, undefined, expression);
+        }
+        
+        function createClassHeritageClauses(baseTypeNode: ExpressionWithTypeArguments) {
+            return baseTypeNode ? [createHeritageClause(SyntaxKind.ExtendsKeyword, [baseTypeNode])] : undefined;
         }
 
-        export function createClassExpression2(name: Identifier, heritageClause: HeritageClause, members: ClassElement[]): ClassExpression {
-            return factory.createClassExpression(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                name,
-                /*typeParameters*/ undefined,
-                heritageClause ? [heritageClause] : undefined,
-                members
-            );
+        export function createClassDeclaration2(name: Identifier, baseTypeNode: ExpressionWithTypeArguments, members: ClassElement[], location?: TextRange, flags?: NodeFlags): ClassDeclaration {
+            return createClassDeclaration(undefined, undefined, name, undefined, createClassHeritageClauses(baseTypeNode), members, location, flags);
+        }
+
+        export function createClassExpression2(name: Identifier, baseTypeNode: ExpressionWithTypeArguments, members: ClassElement[]): ClassExpression {
+            return createClassExpression(undefined, undefined, name, undefined, createClassHeritageClauses(baseTypeNode), members);
+        }
+
+        export function createClassExpression3(baseTypeNode: ExpressionWithTypeArguments, members: ClassElement[]): ClassExpression {
+            return createClassExpression2(undefined, baseTypeNode, members);
         }
         
         export function createConstructor2(parameters: Array<ParameterDeclaration>, body: Block, location?: TextRange, flags?: NodeFlags): ConstructorDeclaration {
-            return factory.createConstructor(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createConstructor(undefined, undefined, parameters, undefined, body, location, flags);
         }
-        
+
         export function createMethodDeclaration2(name: PropertyName, parameters: Array<ParameterDeclaration>, body: Block, location?: TextRange, flags?: NodeFlags): MethodDeclaration {
-            return factory.createMethodDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*asteriskToken*/ undefined,
-                name,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createMethodDeclaration(undefined, undefined, undefined, name, undefined, parameters, undefined, body, location, flags);
         }
 
         export function createGetAccessor2(name: PropertyName, parameters: Array<ParameterDeclaration>, body: Block, location?: TextRange, flags?: NodeFlags): GetAccessorDeclaration {
-            return factory.createGetAccessor(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                name,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createGetAccessor(undefined, undefined, name, parameters, undefined, body, location, flags);
         }
 
         export function createSetAccessor2(name: PropertyName, parameters: Array<ParameterDeclaration>, body: Block, location?: TextRange, flags?: NodeFlags): SetAccessorDeclaration {
-            return factory.createSetAccessor(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                name,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createSetAccessor(undefined, undefined, name, parameters, undefined, body, location, flags);
         }
         
         export function createFunctionDeclaration2(name: Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
-            return factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*asteriskToken*/ undefined,
-                name,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createFunctionDeclaration(undefined, undefined, undefined, name, undefined, parameters, undefined, body, location, flags);
         }
         
         export function createFunctionDeclaration3(asteriskToken: Node, name: Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
-            return factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                asteriskToken,
-                name,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
-        }        
+            return createFunctionDeclaration(undefined, undefined, asteriskToken, name, undefined, parameters, undefined, body, location, flags);
+        }
         
         export function createFunctionExpression2(name: Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
-            return factory.createFunctionExpression(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*asteriskToken*/ undefined,
-                name,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createFunctionExpression(undefined, undefined, undefined, name, undefined, parameters, undefined, body, location, flags);
         }
         
         export function createFunctionExpression3(asteriskToken: Node, name: Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
-            return factory.createFunctionExpression(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                asteriskToken,
-                name,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+            return createFunctionExpression(undefined, undefined, asteriskToken, name, undefined, parameters, undefined, body, location, flags);
         }
         
-        export function createGeneratorFunctionExpression(name: Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
-            return factory.createFunctionExpression(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                createNode(SyntaxKind.AsteriskToken),
-                name,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body,
-                location,
-                flags
-            );
+        export function createGeneratorFunctionExpression(parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
+            return createFunctionExpression(undefined, undefined, createNode(SyntaxKind.AsteriskToken), undefined, undefined, parameters, undefined, body, location, flags);
         }
         
         export function createVoidZeroExpression(location?: TextRange, flags?: NodeFlags): VoidExpression {
-            return factory.createVoidExpression(
-                factory.createNumericLiteral2(0),
-                location,
-                flags);
+            return createVoidExpression(createNumericLiteral2(0), location, flags);
         }
-
+        
         export function createPropertyOrElementAccessExpression(expression: Expression, propName: Identifier | LiteralExpression, location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            if (!nodeIsSynthesized(propName)) {
-                propName = cloneNode(propName);
-            }
-            
-            if (propName.kind !== SyntaxKind.Identifier) {
-                return createElementAccessExpression2(expression, propName, location, flags);
-            }
-            
-            return createPropertyAccessExpression2(expression, <Identifier>propName, location, flags);
+            return isIdentifier(propName)
+                ? createPropertyAccessExpression2(expression, makeSynthesized(propName), location, flags)
+                : createElementAccessExpression2(expression, makeSynthesized(propName), location, flags);
         }
         
         export function createElementAccessExpression2(expression: Expression, argumentExpression: Expression, location?: TextRange, flags?: NodeFlags): ElementAccessExpression {
-            return factory.createElementAccessExpression(
-                factory.parenthesizeForAccess(expression),
-                argumentExpression,
-                location,
-                flags
-            );
+            return createElementAccessExpression(parenthesizeForAccess(expression), argumentExpression, location, flags);
         }
 
         export function createElementAccessExpression3(expression: Expression, index: number, location?: TextRange, flags?: NodeFlags): ElementAccessExpression {
-            return factory.createElementAccessExpression2(
-                expression,
-                factory.createNumericLiteral2(index),
-                location,
-                flags
-            );
+            return createElementAccessExpression2(expression, createNumericLiteral2(index), location, flags);
         }
 
         export function createSliceCall(value: Expression, sliceIndex: number, location?: TextRange, flags?: NodeFlags): CallExpression {
-            return factory.createCallExpression2(
-                factory.createPropertyAccessExpression2(
-                    factory.parenthesizeForAccess(value),
-                    factory.createIdentifier("slice")
-                ),
-                [factory.createNumericLiteral2(sliceIndex)],
-                location,
-                flags
-            );
+            return createCallExpression2(createPropertyAccessExpression3(value, "slice"), [createNumericLiteral2(sliceIndex)], location, flags);
         }
         
         export function createApplyCall(target: Expression, thisArg: Expression, _arguments: Expression, location?: TextRange, flags?: NodeFlags) {
-            let applyName = createIdentifier("apply");
-            let propExpr = createPropertyAccessExpression2(target, applyName);
-            return factory.createCallExpression2(propExpr, [thisArg, _arguments], location, flags);
+            return factory.createCallExpression2(createPropertyAccessExpression3(target, "apply"), [thisArg, _arguments], location, flags);
         }
 
         export function createExtendsHelperCall(name: Identifier) {
-            let extendsName = factory.createIdentifier("__extends");
-            let superName = factory.createIdentifier("_super");
-            let callExpr = factory.createCallExpression2(extendsName, [name, superName]);
-            return callExpr;
+            return factory.createCallExpression2(createIdentifier("__extends"), [name, createIdentifier("_super")]);
         }
         
         export function createAwaiterHelperCall(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
-            let thisExpr = factory.createThisKeyword();
-            let awaiterName = factory.createIdentifier("__awaiter");
-            let argumentsExpr = hasLexicalArguments ? factory.createIdentifier("arguments") : factory.createVoidZeroExpression();
-            let promiseExpr = promiseConstructor ? convertEntityNameToExpression(promiseConstructor) : factory.createIdentifier("Promise");
-            let generatorFunc = factory.createGeneratorFunctionExpression(/*name*/ undefined, [], body);
-            let callExpr = factory.createCallExpression2(awaiterName, [thisExpr, argumentsExpr, promiseExpr, generatorFunc]);
-            return callExpr;
+            let argumentsExpr = hasLexicalArguments ? createIdentifier("arguments") : createVoidZeroExpression();
+            let promiseExpr = promiseConstructor ? convertEntityNameToExpression(promiseConstructor) : createIdentifier("Promise");
+            return createCallExpression2(createIdentifier("__awaiter"), [createThisKeyword(), argumentsExpr, promiseExpr, createGeneratorFunctionExpression([], body)]);
         }
         
         function convertEntityNameToExpression(node: EntityName | Expression): Expression {
-            if (isQualifiedName(node)) {
-                let left = convertEntityNameToExpression(node.left);
-                let right = factory.cloneNode(node.right);
-                return factory.createPropertyAccessExpression2(left, right);
-            }
-            else {
-                return factory.cloneNode(node);
-            }
+            return isQualifiedName(node) ? createPropertyAccessExpression2(convertEntityNameToExpression(node.left), cloneNode(node.right)) : cloneNode(node);
         }
         
         export function createDecorateHelperCall(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression) {
-            let _arguments: Expression[] = [
-                factory.createArrayLiteralExpression(decoratorExpressions),
-                target
-            ];
-            if (memberName) {
-                _arguments.push(memberName);
-                if (descriptor) {
-                    _arguments.push(descriptor);
-                }
-            }
-            let decorateHelperName = factory.createIdentifier("__decorate");
-            let decoratorsExpr = factory.createArrayLiteralExpression(decoratorExpressions);
-            let callExpr = factory.createCallExpression2(decorateHelperName, _arguments);
-            return callExpr;
+            return createCallExpression2(createIdentifier("__decorate"), append([createArrayLiteralExpression(decoratorExpressions), target], memberName, descriptor));
         }
         
         export function createParamHelperCall(parameterIndex: number, decoratorExpression: Expression) {
-            let paramHelperName = factory.createIdentifier("__param");
-            let parameterIndexExpr = factory.createNumericLiteral(String(parameterIndex));
-            let callExpr = factory.createCallExpression2(paramHelperName, [parameterIndexExpr, decoratorExpression]);
-            return callExpr;
+            return createCallExpression2(createIdentifier("__param"), [createNumericLiteral2(parameterIndex), decoratorExpression]);
         }
         
         export function createMetadataHelperCall(metadataKey: string, metadataValue: Expression) {
-            let metadataHelperName = factory.createIdentifier("__metadata");
-            let metadataKeyExpr = factory.createStringLiteral(metadataKey);
-            let callExpr = factory.createCallExpression2(metadataHelperName, [metadataKeyExpr, metadataValue]);
-            return callExpr;
+            return createCallExpression2(createIdentifier("__metadata"), [createStringLiteral(metadataKey), metadataValue]);
         }
 
         export function createDefinePropertyCall(target: Expression, memberName: Expression, descriptor: Expression) {
-            let globalObjectName = factory.createIdentifier("Object");
-            let definePropertyName = factory.createIdentifier("defineProperty");
-            let propExpr = factory.createPropertyAccessExpression(globalObjectName, factory.createNode(SyntaxKind.DotToken), definePropertyName);
-            let callExpr = factory.createCallExpression2(propExpr, [target, memberName, descriptor]);
-            return callExpr;
+            return createCallExpression2(createPropertyAccessExpression3(createIdentifier("Object"), "defineProperty"), [target, memberName, descriptor]);
         }
         
         export function createGetOwnPropertyDescriptorCall(target: Expression, memberName: Expression) {
-            let globalObjectName = factory.createIdentifier("Object");
-            let getOwnPropertyDescriptorName = factory.createIdentifier("getOwnPropertyDescriptor");
-            let propExpr = factory.createPropertyAccessExpression(globalObjectName, factory.createNode(SyntaxKind.DotToken), getOwnPropertyDescriptorName);
-            let callExpr = factory.createCallExpression2(propExpr, [target, memberName]);
-            return callExpr;
+            return createCallExpression2(createPropertyAccessExpression3(createIdentifier("Object"), "getOwnPropertyDescriptor"), [target, memberName]);
         }
     
         export function createDefaultValueCheck(value: Expression, defaultValue: Expression, ensureIdentifier: (value: Expression) => Expression, location?: TextRange, flags?: NodeFlags): Expression {
@@ -609,45 +393,16 @@ namespace ts {
             return factory.createConditionalExpression2(factory.createStrictEqualityExpression(value, factory.createVoidZeroExpression()), defaultValue, value, location, flags);
         }
 
-        export function createMemberAccessForPropertyName(target: Expression, memberName: DeclarationName, location?: TextRange, flags?: NodeFlags): MemberExpression {
-            if (isStringLiteral(memberName) || isNumericLiteral(memberName)) {
-                return factory.createElementAccessExpression2(
-                    target,
-                    cloneNode(memberName),
-                    location,
-                    flags
-                );
-            }
-            else if (isComputedPropertyName(memberName)) {
-                // TODO(rbuckton): Decorators? Will be handled higher in the stack I think.
-                return factory.createElementAccessExpression2(
-                    target,
-                    cloneNode(memberName.expression),
-                    location,
-                    flags
-                );
-            }
-            else {
-                return factory.createPropertyAccessExpression2(
-                    target,
-                    cloneNode(<Identifier>memberName),
-                    location,
-                    flags
-                )
-            }
+        export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange, flags?: NodeFlags): MemberExpression {
+            return isIdentifier(memberName)
+                ? createPropertyAccessExpression2(target, cloneNode(memberName), location, flags)
+                : isComputedPropertyName(memberName)
+                    ? createElementAccessExpression2(target, cloneNode(memberName.expression), location, flags)
+                    : createElementAccessExpression2(target, cloneNode(memberName), location, flags);
         }
         
         export function inlineExpressions(expressions: Expression[]) {
-            let expression = expressions[0];
-            for (let i = 1; i < expressions.length; i++) {
-                expression = createBinaryExpression2(
-                    expression,
-                    SyntaxKind.CommaToken,
-                    expressions[i]
-                );
-            }
-            
-            return expression;
+            return reduceLeft(expressions, createCommaExpression);
         }
     }
 

@@ -67,7 +67,7 @@ namespace ts.transform {
       * @param context Context information for the transform.
       * @param node The node to transform.
       */
-    function transformNodeWorker(node: Node, write?: (node: Node) => void): void {
+    function transformNodeWorker(node: Node, write: (node: Node) => void): void {
         // TypeScript ambient declarations are elided.
         if (node.flags & NodeFlags.Ambient) {
             return;
@@ -118,10 +118,6 @@ namespace ts.transform {
 
             case SyntaxKind.PropertyDeclaration:
                 // TypeScript property declarations are elided.
-                return;
-                
-            case SyntaxKind.IndexSignature:
-                // TypeScript index signatures are elided.
                 return;
                 
             case SyntaxKind.Constructor:
@@ -240,36 +236,33 @@ namespace ts.transform {
                 return accept(node, transformNode, write);
         }
     }
-        
+    
     /**
       * Transforms a TypeScript class declaration with syntax extensions into compatible ES6.
       * @param context Context information for the transform.
       * @param node The node to transform.
       */
     function transformClassDeclaration(node: ClassDeclaration, write: (node: Statement) => void) {
-        let thisNodeIsNamespaceExport = isNamespaceLevelExport(node);
-        let name = getDeclarationName(node);
-        let heritageClauses = visitNodes(node.heritageClauses, transformNode);
-        let extendsClause = heritageClauses && firstOrUndefined(heritageClauses);
-        let baseTypeNode = extendsClause && firstOrUndefined(extendsClause.types);
+        let baseTypeNode = visitAndGetClassExtendsHeritageClauseElement(node);
+        let classMembers: ClassElement[] = [];
         let constructor = transformConstructor(node, baseTypeNode);
-        let members = visitNodes(node.members, transformNode);
-        let classMembers: ClassElement[] = constructor ? [constructor, ...members] : members;
-
+        if (constructor) {
+            classMembers.push(constructor);
+        }
+        
+        emitNodes(node.members, transformNode, classMembers);
+        
         if (nodeIsDecorated(node)) {
-            let classExpr = factory.createClassExpression2(/*name*/ undefined, extendsClause, classMembers);
-            let varDecl = factory.createVariableDeclaration2(name, classExpr);
-            let varDeclList = factory.createVariableDeclarationList([varDecl], /*location*/ undefined, NodeFlags.Let);
-            let exportFlags = isTopLevelNonDefaultExport(node) ? NodeFlags.Export : undefined; 
-            let varStmt = factory.createVariableStatement2(varDeclList, /*location*/ node, exportFlags);
+            // If the class has been decorated, we need to emit the class as part of a `let` declaration
+            // to avoid the pitfalls of the doubly-bound class name. 
+            let classExpr = factory.createClassExpression3(baseTypeNode, classMembers);
+            let varStmt = factory.createSimpleLetStatement(getDeclarationName(node), classExpr, /*location*/ node, isTopLevelNonDefaultExport(node));
             varStmt.original = node;
             write(varStmt);
         }
         else {
-            let exportFlags = thisNodeIsNamespaceExport
-                ? undefined
-                : node.flags & (NodeFlags.Export | NodeFlags.Default);
-            let classDecl = factory.createClassDeclaration2(name, extendsClause, classMembers, /*location*/ node, exportFlags);
+            let exportFlags = isNamespaceLevelExport(node) ? undefined : node.flags & (NodeFlags.Export | NodeFlags.Default);
+            let classDecl = factory.createClassDeclaration2(getDeclarationName(node), baseTypeNode, classMembers, /*location*/ node, exportFlags);
             classDecl.original = node;
             write(classDecl);
         }
@@ -279,50 +272,49 @@ namespace ts.transform {
         transformDecoratorsOfMembers(node, /*isStatic*/ true, write);
         transformDecoratorsOfConstructor(node, write);
         
-        if (thisNodeIsNamespaceExport) {
-            let namespaceExportExpr = factory.createAssignmentExpression(getModuleMemberName(node), name);
-            let exprStmt = factory.createExpressionStatement(namespaceExportExpr);
-            write(exprStmt);
+        if (isNamespaceLevelExport(node)) {
+            write(factory.createExpressionStatement(factory.createAssignmentExpression(getModuleMemberName(node), getDeclarationName(node))));
         }
         else if (isTopLevelDefaultExport(node) && nodeIsDecorated(node)) {
-            let exportDefaultStmt = factory.createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, name);
-            write(exportDefaultStmt);
+            write(factory.createExportDefaultStatement(getDeclarationName(node)));
         }
     }
     
     function transformClassExpression(node: ClassExpression, write: (node: LeftHandSideExpression) => void) {
-        let name = getDeclarationName(node);
-        let heritageClauses = visitNodes(node.heritageClauses, transformNode);
-        let extendsClause = heritageClauses ? firstOrUndefined(heritageClauses) : undefined;
-        let baseTypeNode = extendsClause ? firstOrUndefined(extendsClause.types) : undefined;
+        let baseTypeNode = visitAndGetClassExtendsHeritageClauseElement(node);
+        let classMembers: ClassElement[] = [];
         let constructor = transformConstructor(node, baseTypeNode);
-        let members = visitNodes(node.members, transformNodeWorker);
-        let classMembers = constructor ? [constructor, ...members] : members;
-
-        let newNode = factory.createClassExpression2(
-            name,
-            extendsClause,
-            classMembers
-        );
+        if (constructor) {
+            classMembers.push(constructor);
+        }
         
+        emitNodes(node.members, transformNode, classMembers);
+
+        let classExpr = factory.createClassExpression2(getDeclarationName(node), baseTypeNode, classMembers);
         let staticPropertyAssignments = getInitializedProperties(node, /*isStatic*/ true);
         if (staticPropertyAssignments) {
             let expressions: Expression[] = [];
             let tempVar = declareLocal();
-            let cacheExpr = factory.createAssignmentExpression(tempVar, newNode);
+            let cacheExpr = factory.createAssignmentExpression(tempVar, classExpr);
             expressions.push(cacheExpr);
             transformPropertyDeclarationsToExpressions(node, staticPropertyAssignments, expressions);
             expressions.push(tempVar);
             write(factory.createParenthesizedExpression(factory.inlineExpressions(expressions)));
         }
         else {
-            write(newNode);
+            write(classExpr);
         }
     }
 
+    function visitAndGetClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+        let heritageClauses = visitNodes(node.heritageClauses, transformNode);
+        let extendsClause = heritageClauses && firstOrUndefined(heritageClauses);
+        let baseTypeNode = extendsClause && firstOrUndefined(extendsClause.types);
+        return baseTypeNode;
+    }
+
     function isTopLevelExport(node: Node) {
-        return !!(node.flags & NodeFlags.Export) &&
-            getParentNode().kind === SyntaxKind.SourceFile;
+        return !!(node.flags & NodeFlags.Export) && isSourceFile(getParentNode());
     }
     
     function isTopLevelDefaultExport(node: Node) {
@@ -334,8 +326,7 @@ namespace ts.transform {
     }
     
     function isNamespaceLevelExport(node: Node) {
-        return !!(node.flags & NodeFlags.Export) &&
-            getParentNode().kind !== SyntaxKind.SourceFile;
+        return !!(node.flags & NodeFlags.Export) && !isSourceFile(getParentNode());
     }
     
     function getContainingModule(): ModuleDeclaration {
@@ -366,53 +357,29 @@ namespace ts.transform {
         let constructor = getFirstConstructorWithBody(node);
         let parameterPropertyAssignments = constructor ? getParametersWithPropertyAssignments(constructor) : undefined;
         let instancePropertyAssignments = getInitializedProperties(node, /*isStatic*/ false);
-        // let leadingCommentRanges: CommentRange[];
-        // let trailingCommentRanges: CommentRange[];
-        // for (let member of node.members) {
-        //     if (isConstructor(member) && !member.body) {
-        //         let leadingCommentRangesOfMember = context.getLeadingCommentRanges(member, /*onlyPinnedOrTripleSlashComments*/ true);
-        //         leadingCommentRanges = concatenate(leadingCommentRanges, leadingCommentRangesOfMember);
-        //     }
-        // }
         
         // For target ES6 and above, if there is no property assignment
         // do not emit constructor in class declaration.
         if (!parameterPropertyAssignments && !instancePropertyAssignments) {
-            // if (leadingCommentRanges) {
-            //     leadingCommentRanges = concatenate(leadingCommentRanges, context.getLeadingCommentRanges(ctor));
-            //     ctor = factory.cloneNode(ctor);
-            //     factory.attachCommentRanges(ctor, leadingCommentRanges, trailingCommentRanges);
-            // }
-
             return constructor;
         }
         
-        
-        let parameters =
-            constructor ? visitNodes(constructor.parameters, transformNode) :
-            baseTypeNode ? [factory.createRestParameter(factory.createIdentifier("args"), /*location*/ undefined, NodeFlags.GeneratedRest)] :
-            [];
-            
-        // let parameters =
-        //     constructor ? transformSignatureParameters(constructor.parameters) :
-        //     hasBaseType ? [factory.createRestParameter(tag_id`args`, /*location*/ undefined, NodeFlags.GeneratedRest)] :
-        //     [];
-
+        let parameters = constructor 
+            ? visitNodes(constructor.parameters, transformNode) 
+            : baseTypeNode 
+                ? [factory.createRestParameter(factory.createIdentifier("args"), /*location*/ undefined, NodeFlags.GeneratedRest)] 
+                : [];
+                
         let statements: Statement[] = [];
         let superCall: ExpressionStatement;
         if (constructor) {
-            // leadingCommentRanges = concatenate(
-            //     leadingCommentRanges,
-            //     context.getLeadingCommentRanges(ctor)
-            // );
-            // trailingCommentRanges = context.getTrailingCommentRanges(ctor);
-            
             if (baseTypeNode) {
                 superCall = findInitialSuperCall(constructor);
                 if (superCall) {
                     statements.push(superCall);
                 }
             }
+            
             if (parameterPropertyAssignments) {
                 for (let parameter of parameterPropertyAssignments) {
                     let name = <Identifier>factory.cloneNode(parameter.name);
@@ -438,19 +405,11 @@ namespace ts.transform {
         transformPropertyDeclarationsToStatements(node, instancePropertyAssignments, n => { statements.push(n); });
         
         if (constructor) {
-            let bodyStatements = superCall
-                ? constructor.body.statements.slice(1)
-                : constructor.body.statements;
-            statements.push(...visitNodes(bodyStatements, transformNode));
+            let bodyStatements = constructor.body.statements;
+            emitNodes(superCall ? bodyStatements.slice(1) : bodyStatements, transformNode, statements, VisitorFlags.NewLexicalEnvironment);
         }
         
-        let body = constructor 
-            ? factory.updateBlock(constructor.body, statements) 
-            : factory.createBlock(statements);
-        
-        let newConstructor = factory.createConstructor2(parameters, body, /*location*/ constructor);
-        // factory.attachCommentRanges(newConstructor, leadingCommentRanges, trailingCommentRanges);
-        return newConstructor;
+        return factory.createConstructor2(parameters, factory.createBlock(statements), /*location*/ constructor);
     }
     
     function transformHeritageClause(node: HeritageClause, write: (node: HeritageClause) => void) {
@@ -772,13 +731,14 @@ namespace ts.transform {
     
     function transformVariableStatement(node: VariableStatement, write: (node: Statement) => void) {
         // TODO(rbuckton): transform namespace exports for a variable declaration list
-        Debug.assert(isNamespaceLevelExport(node), "Should only reach here for exported variables.");
-        pipeNode(node.declarationList, write, transformVariableDeclarationList);
+        // Debug.assert(isNamespaceLevelExport(node), "Should only reach here for exported variables." + node.declarationList.declarations[0].name);
+        // pipeNode(node.declarationList, write, transformVariableDeclarationList);
+        return accept(node, transformNode, write);
     }
     
     function transformVariableDeclarationList(node: VariableDeclarationList, write: (node: Statement) => void) {
         let expressions: Expression[] = [];
-        emitNodes(node.declarations, expressions, transformVariableDeclaration);
+        emitNodes(node.declarations, transformVariableDeclaration, expressions);
         
         if (expressions.length) {
             let exprStmt = factory.createExpressionStatement(factory.inlineExpressions(expressions));

@@ -2967,7 +2967,7 @@ namespace ts {
         }
         return false; 
     }
-    export function isExpression(node: Node): node is Expression {
+    export function isExpressionNode(node: Node): node is Expression {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.OmittedExpression:
@@ -3381,6 +3381,45 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
+                    return true;
+            }
+        }
+        return false; 
+    }
+    export function isStatementNode(node: Node): node is Statement {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Block:
+                case SyntaxKind.EmptyStatement:
+                case SyntaxKind.DebuggerStatement:
+                case SyntaxKind.MissingDeclaration:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.ExportAssignment:
                     return true;
             }
         }

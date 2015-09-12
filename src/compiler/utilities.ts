@@ -918,7 +918,7 @@ namespace ts {
     }
 
     /** Returns whether the node is part of an expression. */
-    export function isPartOfExpression(navigable: ParentNavigable): boolean {
+    export function isExpression(navigable: ParentNavigable): boolean {
         let nav = navigable.createParentNavigator();
         while (true) {
             let node = nav.getNode();
@@ -1702,6 +1702,10 @@ namespace ts {
     export function nodeIsSynthesized(node: Node): boolean {
         return node && node.pos === -1;
     }
+    
+    export function positionIsSynthesized(pos: number): boolean {
+        return pos === -1;
+    }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
@@ -1957,7 +1961,7 @@ namespace ts {
     }
 
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
-        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+        return !positionIsSynthesized(pos) ? getLineAndCharacterOfPosition(currentSourceFile, pos).line : NaN;
     }
 
     export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {

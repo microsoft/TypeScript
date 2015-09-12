@@ -504,11 +504,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 function writeTextWithSpanRecord(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
-                    let tokenStartPos = ts.skipTrivia(currentSourceFile.text, startPos);
-                    recordSourceMapSpan(tokenStartPos);
-                    let tokenEndPos = emitTokenText(tokenKind, tokenStartPos, emitFn);
-                    recordSourceMapSpan(tokenEndPos);
-                    return tokenEndPos;
+                    if (!positionIsSynthesized(startPos)) {
+                        let tokenStartPos = skipTrivia(currentSourceFile.text, startPos);
+                        recordSourceMapSpan(tokenStartPos);
+                        let tokenEndPos = emitTokenText(tokenKind, tokenStartPos, emitFn);
+                        recordSourceMapSpan(tokenEndPos);
+                        return tokenEndPos;
+                    }
+                    else {
+                        emitTokenText(tokenKind, startPos, emitFn);
+                    }
                 }
 
                 function recordNewSourceFileStart(node: SourceFile) {
@@ -1112,7 +1117,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let nav = nodeStack.createParentNavigator();
                 nav.moveToParent();
                 
-                let emitOuterParens = isPartOfExpression(nav) && templateNeedsParens(node);
+                let emitOuterParens = isExpression(nav) && templateNeedsParens(node);
                 if (emitOuterParens) {
                     write("(");
                 }
@@ -4389,7 +4394,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 pushNode(body);
                 let preambleEmitted = writer.getTextPos() !== initialTextPos;
-                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body) 
+                if (!preambleEmitted && !nodeIsSynthesized(body) 
+                    && nodeEndIsOnSameLineAsNodeStart(body, body) 
                     && !isBlockWithSynthesizedStatementsOnNewLine(body)
                     && (!nodeIsSynthesized(body) || isSingleLineSynthesizedBlock(body))) {
                     for (let statement of body.statements) {
