@@ -48,7 +48,7 @@ namespace ts.formatting {
             let indentationDelta: number;
 
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown)) {
+                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -133,7 +133,7 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent.kind, current.kind) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, current) && !parentAndChildShareLine) {
                     indentationDelta += options.IndentSize;
                 }
 
@@ -446,11 +446,12 @@ namespace ts.formatting {
             return false;
         }
 
-        export function shouldIndentChildNode(parent: SyntaxKind, child: SyntaxKind): boolean {
-            if (nodeContentIsAlwaysIndented(parent)) {
-                return true;
-            }
-            switch (parent) {
+        /**
+         * Function returns true when a node with conditional indentation rule will indent certain child node.
+         */
+        function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
+            let childKind = child ? child.kind : SyntaxKind.Unknown;
+            switch (parent.kind) {
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
@@ -464,10 +465,25 @@ namespace ts.formatting {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return child !== SyntaxKind.Block;
-                default:
-                    return false;
+                    return childKind !== SyntaxKind.Block;
             }
+            // No explicit rule for selected nodes, so result will follow the default value argument. 
+            return indentByDefault;
+        }
+
+        export function shouldIndentChildNode(parent: TextRangeWithKind, child: TextRangeWithKind): boolean {
+            if (nodeContentIsAlwaysIndented(parent.kind)) {
+                return true;
+            }
+            return nodeWillIndentChild(parent, child, false); 
+        }
+
+        /**
+         * Function returns true if a node should not get additional indentation in its parent node.
+         */
+        export function shouldInheritParentIndentation(parent: TextRangeWithKind, child: TextRangeWithKind): boolean {
+            // Check if 
+            return !nodeWillIndentChild(parent, child, true);
         }
     }
 }
