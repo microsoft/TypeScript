@@ -428,6 +428,7 @@ module Harness {
         args(): string[];
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
     }
     export var IO: IO;
     
@@ -464,6 +465,7 @@ module Harness {
             export const directoryExists: typeof IO.directoryExists = fso.FolderExists;
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
 
             export function createDirectory(path: string) {
                 if (directoryExists(path)) {
@@ -531,6 +533,8 @@ module Harness {
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
             export const fileExists: typeof IO.fileExists = fs.existsSync;
             export const log: typeof IO.log = s => console.log(s);
+
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -729,6 +733,10 @@ module Harness {
 
             export function writeFile(path: string, contents: string) {
                 Http.writeToServerSync(serverRoot + path, "WRITE", contents);
+            }
+
+            export function readDirectory(path: string, extension?: string, exclude?: string[]) {
+                return listFiles(path).filter(f => !extension || ts.fileExtensionIs(f, extension));
             }
         }
     }

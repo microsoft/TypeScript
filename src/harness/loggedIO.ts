@@ -59,6 +59,12 @@ interface IOLog {
         path: string;
         result?: string;
     }[];
+    directoriesRead: {
+        path: string,
+        extension: string,
+        exclude: string[],
+        result: string[]
+    }[];
 }
 
 interface PlaybackControl {
@@ -103,6 +109,7 @@ module Playback {
             arguments: [],
             currentDirectory: "",
             filesRead: [],
+            directoriesRead: [],
             filesWritten: [],
             filesDeleted: [],
             filesAppended: [],
@@ -118,7 +125,7 @@ module Playback {
 
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
-    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void  {
+    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
         ts.forEach(Object.keys(underlying), prop => {
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
@@ -202,6 +209,15 @@ module Playback {
                 return result;
             },
             memoize((path) => findResultByPath(wrapper, replayLog.filesRead, path).contents));
+
+        wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
+            (path, extension, exclude) => {
+                let result = (<ts.System>underlying).readDirectory(path, extension, exclude);
+                let logEntry = { path, extension, exclude, result };
+                recordLog.directoriesRead.push(logEntry);
+                return result;
+            },
+            (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead.filter(d => d.extension === extension && ts.arrayIsEqualTo(d.exclude, exclude)), path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path, contents) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path: path, contents: contents, bom: false }),
