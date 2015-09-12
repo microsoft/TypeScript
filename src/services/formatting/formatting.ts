@@ -54,7 +54,7 @@ namespace ts.formatting {
           * so bar inherits indentation from foo and bar.delta will be 4
           * 
           */
-        getDelta(): number;
+        getDelta(child: TextRangeWithKind): number;
         /**
           * Formatter calls this function when rule adds or deletes new lines from the text 
           * so indentation scope can adjust values of indentation and delta.
@@ -386,15 +386,6 @@ namespace ts.formatting {
             effectiveParentStartLine: number): Indentation {
 
             let indentation = inheritedIndentation;
-            if (indentation === Constants.Unknown) {
-                if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                    indentation = parentDynamicIndentation.getIndentation();
-                }
-                else {
-                    indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
-                }
-            }
-
             var delta = SmartIndenter.shouldIndentChildNode(node, null) ? options.IndentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
@@ -404,8 +395,17 @@ namespace ts.formatting {
                 indentation = startLine === lastIndentedLine 
                     ? indentationOnLastIndentedLine 
                     : parentDynamicIndentation.getIndentation();
-                delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
+                delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta(node) + delta);
             }
+            else if (indentation === Constants.Unknown) {
+                if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
+                    indentation = parentDynamicIndentation.getIndentation();
+                }
+                else {
+                    indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node);
+                }
+            }
+
             return {
                 indentation,
                 delta
@@ -475,7 +475,14 @@ namespace ts.formatting {
                     }
                 },
                 getIndentation: () => indentation,
-                getDelta: () => delta,
+                getDelta: (child: TextRangeWithKind) => {
+                    if (SmartIndenter.shouldInheritParentIndentation(node, child)) {
+                        return 0;
+                    }
+                    else {
+                        return delta;
+                    }
+                },
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
@@ -586,10 +593,6 @@ namespace ts.formatting {
 
                 if (!formattingScanner.isOnToken()) {
                     return inheritedIndentation;
-                }
-
-                if (SmartIndenter.shouldInheritParentIndentation(parent, child)) {
-                    parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentation, 0);
                 }
 
                 if (isToken(child)) {
