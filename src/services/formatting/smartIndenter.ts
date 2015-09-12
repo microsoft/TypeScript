@@ -447,7 +447,7 @@ namespace ts.formatting {
         }
 
         /**
-         * Function returns true when a node with conditional indentation rule will indent certain child node.
+         * Function returns true when a node with conditional indentation rule will indent certain child node
          */
         function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
             let childKind = child ? child.kind : SyntaxKind.Unknown;
@@ -467,7 +467,7 @@ namespace ts.formatting {
                 case SyntaxKind.SetAccessor:
                     return childKind !== SyntaxKind.Block;
             }
-            // No explicit rule for selected nodes, so result will follow the default value argument. 
+            // No explicit rule for selected nodes, so result will follow the default value argument
             return indentByDefault;
         }
 
@@ -479,10 +479,11 @@ namespace ts.formatting {
         }
 
         /**
-         * Function returns true if a node should not get additional indentation in its parent node.
+         * Function returns true if existing node content indentation should be suppressed for a specific child
          */
         export function shouldInheritParentIndentation(parent: TextRangeWithKind, child: TextRangeWithKind): boolean {
-            // Check if 
+            // Consider parents without indentation rules can indent their children
+            // so that they can apply inherited delta value to them
             return !nodeWillIndentChild(parent, child, true);
         }
     }
