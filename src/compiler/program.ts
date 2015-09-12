@@ -863,7 +863,7 @@ namespace ts {
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {
                                 let start = getTokenPosOfNode(file.imports[i], file)
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.File_0_is_not_a_module, importedFile.fileName));
+                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
                             }
                             else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
                                 let start = getTokenPosOfNode(file.imports[i], file)
