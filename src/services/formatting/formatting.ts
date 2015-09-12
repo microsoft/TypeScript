@@ -387,9 +387,7 @@ namespace ts.formatting {
 
             let indentation = inheritedIndentation;
             if (indentation === Constants.Unknown) {
-                if (SmartIndenter.shouldInheritParentIndentation(parent, node) ||
-                    SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-
+                if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
                     indentation = parentDynamicIndentation.getIndentation();
                 }
                 else {
@@ -588,6 +586,10 @@ namespace ts.formatting {
 
                 if (!formattingScanner.isOnToken()) {
                     return inheritedIndentation;
+                }
+
+                if (SmartIndenter.shouldInheritParentIndentation(parent, child)) {
+                    parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentation, 0);
                 }
 
                 if (isToken(child)) {
