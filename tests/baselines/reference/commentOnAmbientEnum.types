@@ -4,7 +4,12 @@ declare enum E {
 >E : E
 }
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare enum C {
 >C : C
 

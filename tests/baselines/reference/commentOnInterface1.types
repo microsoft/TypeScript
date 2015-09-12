@@ -4,7 +4,12 @@ interface I3 {
 >I3 : I3
 }
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 interface I {
 >I : I
 }

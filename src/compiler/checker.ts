@@ -4640,7 +4640,9 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    source = getRegularTypeOfObjectLiteral(source);
+                    if (target.flags & TypeFlags.UnionOrIntersection) {
+                        source = getRegularTypeOfObjectLiteral(source);
+                    }
                 }
 
                 let saveErrorInfo = errorInfo;
@@ -5111,8 +5113,8 @@ namespace ts {
                 function abstractSignatureRelatedTo(source: Type, sourceSig: Signature, target: Type, targetSig: Signature) {
                     if (sourceSig && targetSig) {
 
-                        let sourceDecl = source.symbol && getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
-                        let targetDecl = target.symbol && getDeclarationOfKind(target.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceDecl = source.symbol && getClassLikeDeclarationOfSymbol(source.symbol);
+                        let targetDecl = target.symbol && getClassLikeDeclarationOfSymbol(target.symbol);
 
                         if (!sourceDecl) {
                             // If the source object isn't itself a class declaration, it can be freely assigned, regardless
@@ -5126,8 +5128,8 @@ namespace ts {
                         let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
                         let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
 
-                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
-                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getClassLikeDeclarationOfSymbol(sourceReturnType.symbol);
+                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getClassLikeDeclarationOfSymbol(targetReturnType.symbol);
                         let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
                         let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
 
@@ -5511,6 +5513,7 @@ namespace ts {
                     regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
                     regularType.stringIndexType = (<ResolvedType>type).stringIndexType;
                     regularType.numberIndexType = (<ResolvedType>type).numberIndexType;
+                    (<FreshObjectLiteralType>type).regularType = regularType;
                 }
                 return regularType;
             }
@@ -8879,7 +8882,7 @@ namespace ts {
             // Note, only class declarations can be declared abstract.
             // In the case of a merged class-module or class-interface declaration,
             // only the class declaration node will have the Abstract flag set.
-            let valueDecl = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
+            let valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
                 return resolveErrorCall(node);
@@ -12631,6 +12634,10 @@ namespace ts {
             return s.flags & SymbolFlags.Instantiated ? getSymbolLinks(s).target : s;
         }
 
+        function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration {
+            return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
+        }
+
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: ObjectType): void {
 
             // TypeScript 1.0 spec (April 2014): 8.2.3
@@ -12668,14 +12675,20 @@ namespace ts {
                     if (derived === base) {
                         // derived class inherits base without override/redeclaration
 
-                        let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+                        let derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol);
 
                         // It is an error to inherit an abstract member without implementing it or being declared abstract.
                         // If there is no declaration for the derived class (as in the case of class expressions),
                         // then the class cannot be declared abstract.
-                        if ( baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
-                            error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
-                                typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                        if (baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
+                            if (derivedClassDecl.kind === SyntaxKind.ClassExpression) {
+                                error(derivedClassDecl, Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1,
+                                    symbolToString(baseProperty), typeToString(baseType));
+                            }
+                            else {
+                                error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                                    typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                            }
                         }
                     }
                     else {
