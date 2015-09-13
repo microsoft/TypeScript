@@ -282,7 +282,7 @@ namespace ts.formatting {
      */
     function getOwnOrInheritedDelta(n: Node, options: FormatCodeOptions, sourceFile: SourceFile): number {
         let previousLine = Constants.Unknown;
-        let child: Node = null;
+        let child: Node;
         while (n) {
             let line = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile)).line;
             if (previousLine !== Constants.Unknown && line !== previousLine) {
