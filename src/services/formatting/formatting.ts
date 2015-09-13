@@ -60,6 +60,11 @@ namespace ts.formatting {
           * so indentation scope can adjust values of indentation and delta.
           */
         recomputeIndentation(lineAddedByFormatting: boolean): void;
+
+        /**
+          * Returns DynamicIndentation object that includes modified delta value for specific child node.
+          */
+        getCopyForSpecificChild(child: Node): DynamicIndentation;
     }
 
     interface Indentation {
@@ -475,14 +480,7 @@ namespace ts.formatting {
                     }
                 },
                 getIndentation: () => indentation,
-                getDelta: (child: TextRangeWithKind) => {
-                    if (SmartIndenter.shouldInheritParentIndentation(node, child)) {
-                        return 0;
-                    }
-                    else {
-                        return delta;
-                    }
-                },
+                getDelta: (child) => (!delta || SmartIndenter.shouldInheritParentIndentation(node, child)) ? 0 : delta,
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
@@ -500,6 +498,13 @@ namespace ts.formatting {
                         }
                     }
                 },
+                getCopyForSpecificChild(child) {
+                    if (!delta) {
+                        // delta value is already 0, so do not copy
+                        return this;
+                    }
+                    return getDynamicIndentation(node, nodeStartLine, indentation, (<DynamicIndentation>this).getDelta(child));
+                }
             }
         }
 
@@ -599,7 +604,7 @@ namespace ts.formatting {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation.getCopyForSpecificChild(child));
                     return inheritedIndentation;
                 }
 
