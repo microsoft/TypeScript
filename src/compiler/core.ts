@@ -203,6 +203,21 @@ namespace ts {
         return result;
     }
     
+    export function skip<T>(array: T[], count: number) {
+        if (array) {
+            return count === 0 ? array : array.slice(count); 
+        }
+        return undefined;
+    }
+    
+    export function take<T>(array: T[], count: number) {
+        if (array) {
+            return count === array.length ? array : array.slice(0, count);
+        }
+        
+        return undefined;
+    }
+    
     export function append<T>(to: T[], ...values: T[]): T[] {
         let result: T[];
         if (to) {

@@ -101,7 +101,7 @@ namespace ts {
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
         let classifiableNames: Map<string> = {};
-        let transformFlags: TransformFlags;
+        let subtreeTransformFlags: TransformFlags;
         let skipTransformFlagAggregation: boolean;
 
         if (!file.locals) {
@@ -817,10 +817,10 @@ namespace ts {
         
         function aggregateTransformFlagsAnd<T>(cbNode: (node: Node) => T, node: Node): T {
             if (!skipTransformFlagAggregation) {
-                let saveTransformFlags = transformFlags;
-                transformFlags = 0;
+                let savedSubtreeTransformFlags = subtreeTransformFlags;
+                subtreeTransformFlags = 0;
                 let result = cbNode(node);
-                transformFlags = saveTransformFlags | computeTransformFlagsForNode(node, transformFlags);
+                subtreeTransformFlags = savedSubtreeTransformFlags | (computeTransformFlagsForNode(node, subtreeTransformFlags) & ~TransformFlags.NodeExcludes);
                 return result;
             }
             

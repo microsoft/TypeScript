@@ -4,6 +4,9 @@ namespace ts.transform {
     let resolver: EmitResolver;
     let compilerOptions: CompilerOptions;
     let languageVersion: ScriptTarget;
+    let currentLexicalEnvironment: SourceFile | FunctionLikeDeclaration | ModuleDeclaration
+    let currentModuleDeclaration: ModuleDeclaration;
+    let currentClassLikeDeclaration: ClassLikeDeclaration;
     let currentBaseTypeNode: ExpressionWithTypeArguments;
     let currentConstructor: ConstructorDeclaration;
     let currentParametersWithPropertyAssignments: ParameterDeclaration[];
@@ -13,7 +16,8 @@ namespace ts.transform {
         resolver = getEmitResolver();
         compilerOptions = getCompilerOptions();
         languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        return visitNodes(statements, transformNode, VisitorFlags.LexicalEnvironment);
+        currentLexicalEnvironment = getRootNode();
+        return visitNodes(statements, transformNode, PipelineFlags.LexicalEnvironment);
     }
     
     /**
@@ -33,11 +37,7 @@ namespace ts.transform {
       * If no part of this node or its subtree requires transformation, the node 
       * is returned, unchanged.
       */
-    function transformNode<T extends Node>(node: T, write: (node: T) => void): void {
-        if (!node) {
-            return;
-        }
-
+    function transformNode(node: Node, write: (node: Node) => void): void {
         // Debug.assert(
         //     !needsTransform(node, TransformFlags.ThisNodeNeedsTransformToES7), 
         //     "Cannot transform node with post-ES7 syntax.");
@@ -54,10 +54,6 @@ namespace ts.transform {
     }
     
     function transformModuleElement(node: Node, write: (node: Node) => void): void {
-        if (!node) {
-            return;
-        }
-        
         if (node.flags & NodeFlags.Export) {
             transformNodeWorker(node, write);
         }
@@ -165,11 +161,11 @@ namespace ts.transform {
                 //
                 // TypeScript heritage clause extensions include:
                 // - `implements` clause
-                return transformHeritageClause(<HeritageClause>node, write);
+                return visitHeritageClause(<HeritageClause>node, write);
                 
             case SyntaxKind.ExpressionWithTypeArguments:
                 // TypeScript supports type arguments on an expression in an `extends` heritage clause.
-                return transformExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, write);
+                return visitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, write);
             
             case SyntaxKind.MethodDeclaration:
                 // TypeScript method declarations may be 'async', and may have decorators, modifiers
@@ -247,31 +243,30 @@ namespace ts.transform {
       * @param node The node to transform.
       */
     function transformClassDeclaration(node: ClassDeclaration, write: (node: Statement) => void) {
-        let baseTypeNode = visitAndGetClassExtendsHeritageClauseElement(node);
-        let classMembers: ClassElement[] = [];
-        let constructor = transformConstructor(node, baseTypeNode);
-        if (constructor) {
-            classMembers.push(constructor);
-        }
+        let savedCurrentBaseTypeNode = currentBaseTypeNode;
+        let savedCurrentClassLikeDeclaration = currentClassLikeDeclaration;
+        currentClassLikeDeclaration = node;
+        currentBaseTypeNode = getAndVisitClassExtendsHeritageClauseElement(node);
         
+        let classMembers: ClassElement[] = [];
+        emitNode(node, emitConstructor, classMembers);
         emitNodes(node.members, transformNode, classMembers);
         
         if (nodeIsDecorated(node)) {
             // If the class has been decorated, we need to emit the class as part of a `let` declaration
             // to avoid the pitfalls of the doubly-bound class name. 
-            let classExpr = createClassExpression3(baseTypeNode, classMembers);
+            let classExpr = createClassExpression3(currentBaseTypeNode, classMembers);
             let varStmt = createSimpleLetStatement(getDeclarationName(node), classExpr, /*location*/ node, isTopLevelNonDefaultExport(node));
-            varStmt.original = node;
-            write(varStmt);
+            write(setOriginalNode(varStmt, node));
         }
         else {
             let exportFlags = isNamespaceLevelExport(node) ? undefined : node.flags & (NodeFlags.Export | NodeFlags.Default);
-            let classDecl = createClassDeclaration2(getDeclarationName(node), baseTypeNode, classMembers, /*location*/ node, exportFlags);
-            classDecl.original = node;
-            write(classDecl);
+            let classDecl = createClassDeclaration2(getDeclarationName(node), currentBaseTypeNode, classMembers, /*location*/ node, exportFlags);
+            write(setOriginalNode(classDecl, node));
         }
         
-        transformPropertyDeclarationsToStatements(node, getInitializedProperties(node, /*isStatic*/ true), write);
+        pipeNodes(getInitializedProperties(node, /*isStatic*/ true), transformPropertyDeclarationToStatement, write);
+        
         transformDecoratorsOfMembers(node, /*isStatic*/ false, write);
         transformDecoratorsOfMembers(node, /*isStatic*/ true, write);
         transformDecoratorsOfConstructor(node, write);
@@ -282,79 +277,47 @@ namespace ts.transform {
         else if (isTopLevelDefaultExport(node) && nodeIsDecorated(node)) {
             write(createExportDefaultStatement(getDeclarationName(node)));
         }
+        
+        currentClassLikeDeclaration = savedCurrentClassLikeDeclaration;
+        currentBaseTypeNode = savedCurrentBaseTypeNode;
     }
     
     function transformClassExpression(node: ClassExpression, write: (node: LeftHandSideExpression) => void) {
-        let baseTypeNode = visitAndGetClassExtendsHeritageClauseElement(node);
-        let classMembers: ClassElement[] = [];
-        let constructor = transformConstructor(node, baseTypeNode);
-        if (constructor) {
-            classMembers.push(constructor);
-        }
+        let savedCurrentClassLikeDeclaration = currentClassLikeDeclaration;
+        let savedCurrentBaseTypeNode = currentBaseTypeNode;
+        currentClassLikeDeclaration = node;
+        currentBaseTypeNode = getAndVisitClassExtendsHeritageClauseElement(node);
         
+        let classMembers: ClassElement[] = [];
+        emitNode(node, emitConstructor, classMembers);
         emitNodes(node.members, transformNode, classMembers);
 
-        let classExpr = createClassExpression2(getDeclarationName(node), baseTypeNode, classMembers);
+        let classExpr = createClassExpression2(getDeclarationName(node), currentBaseTypeNode, classMembers);
         let staticPropertyAssignments = getInitializedProperties(node, /*isStatic*/ true);
         if (staticPropertyAssignments) {
             let expressions: Expression[] = [];
             let tempVar = declareLocal();
-            let cacheExpr = createAssignmentExpression(tempVar, classExpr);
-            expressions.push(cacheExpr);
-            transformPropertyDeclarationsToExpressions(node, staticPropertyAssignments, expressions);
+            expressions.push(createAssignmentExpression(tempVar, classExpr));
+            emitNodes(staticPropertyAssignments, transformPropertyDeclarationToExpression, expressions);
             expressions.push(tempVar);
             write(createParenthesizedExpression(inlineExpressions(expressions)));
         }
         else {
             write(classExpr);
         }
+        
+        currentClassLikeDeclaration = savedCurrentClassLikeDeclaration;
+        currentBaseTypeNode = savedCurrentBaseTypeNode;
     }
 
-    function visitAndGetClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
-        let heritageClauses = visitNodes(node.heritageClauses, transformNode);
+    function getAndVisitClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+        let heritageClauses = visitNodes(node.heritageClauses, visitHeritageClause);
         let extendsClause = heritageClauses && firstOrUndefined(heritageClauses);
         let baseTypeNode = extendsClause && firstOrUndefined(extendsClause.types);
         return baseTypeNode;
     }
 
-    function isTopLevelExport(node: Node) {
-        return !!(node.flags & NodeFlags.Export) && isSourceFile(getParentNode());
-    }
-    
-    function isTopLevelDefaultExport(node: Node) {
-        return isTopLevelExport(node) && !!(node.flags & NodeFlags.Default);
-    }
-
-    function isTopLevelNonDefaultExport(node: Node) {
-        return isTopLevelExport(node) && !(node.flags & NodeFlags.Default);
-    }
-    
-    function isNamespaceLevelExport(node: Node) {
-        return !!(node.flags & NodeFlags.Export) && !isSourceFile(getParentNode());
-    }
-    
-    function getContainingModule(): ModuleDeclaration {
-        return findAncestorNode(isModuleDeclaration);
-    }
-    
-    function getContainingModuleName(): Identifier {
-        let container = findAncestorNode(isModuleDeclaration);
-        return container ? getGeneratedNameForNode(container) : createIdentifier("exports");
-    }
-    
-    function getModuleMemberName(node: Declaration): Expression {
-        let name = <Identifier>getDeclarationName(node);
-        Debug.assert(isIdentifier(name));
-
-        if (getCombinedNodeFlags(transform) & NodeFlags.Export) {
-            let container = getContainingModuleName();
-            let propExpr = createPropertyAccessExpression2(container, name);
-            return propExpr;
-        }
-        return name;
-    }
-    
-    function transformConstructor(node: ClassLikeDeclaration, baseTypeNode: ExpressionWithTypeArguments) {
+    function emitConstructor(node: ClassLikeDeclaration, write: (node: ClassElement) => void): void {
         // Check if we have a property assignment inside class declaration.
         // If there is a property assignment, we need to emit constructor whether users define it or not
         // If there is no property assignment, we can omit constructor if users do not define it
@@ -365,117 +328,92 @@ namespace ts.transform {
         // For target ES6 and above, if there is no property assignment
         // do not emit constructor in class declaration.
         if (!parameterPropertyAssignments && !instancePropertyAssignments) {
-            return constructor;
+            write(constructor);
+            return;
         }
         
         let parameters: ParameterDeclaration[] = [];
         if (constructor) {
             emitNodes(constructor.parameters, transformNode, parameters);
         }
-        else if (baseTypeNode) {
+        else if (currentBaseTypeNode) {
             parameters.push(createRestParameter(createIdentifier("args"), /*location*/ undefined, NodeFlags.GeneratedRest));
         }
         
-        let statements: Statement[] = [];
-        let savedCurrentBaseTypeNode = currentBaseTypeNode;
         let savedCurrentConstructor = currentConstructor;
         let savedCurrentParametersWithPropertyAssignments = currentParametersWithPropertyAssignments;
         let savedCurrentInstancePropertyAssignments = currentInstancePropertyAssignments;
         
-        emitNode(node, emitConstructorBody, statements, VisitorFlags.LexicalEnvironment, isStatementNode);
+        let statements = flatMapNode(node, emitConstructorBody, PipelineFlags.LexicalEnvironment)
+        write(createConstructor2(parameters, createBlock(statements), /*location*/ constructor));
         
-        currentBaseTypeNode = savedCurrentBaseTypeNode;
         currentConstructor = savedCurrentConstructor;
         currentParametersWithPropertyAssignments = savedCurrentParametersWithPropertyAssignments;
         currentInstancePropertyAssignments = savedCurrentInstancePropertyAssignments;
-        
-        return createConstructor2(parameters, createBlock(statements), /*location*/ constructor);
     }
     
     function emitConstructorBody(node: ClassLikeDeclaration, write: (node: Statement) => void) {
-        let baseTypeNode = currentBaseTypeNode;
-        let constructor = currentConstructor;
-        let parameterPropertyAssignments = currentParametersWithPropertyAssignments;
-        let instancePropertyAssignments = currentInstancePropertyAssignments;        
         let superCall: ExpressionStatement;
-        if (constructor) {
-            if (baseTypeNode) {
-                superCall = findInitialSuperCall(constructor);
+        if (currentConstructor) {
+            if (currentBaseTypeNode) {
+                superCall = findInitialSuperCall(currentConstructor);
                 if (superCall) {
                     write(superCall);
                 }
             }
             
-            if (parameterPropertyAssignments) {
-                for (let parameter of parameterPropertyAssignments) {
-                    let name = <Identifier>cloneNode(parameter.name);
-                    let thisExpr = createThisKeyword();
-                    let propExpr = createPropertyAccessExpression2(thisExpr, name);
-                    let assignExpr = createAssignmentExpression(propExpr, name);
-                    let assignStmt = createExpressionStatement(assignExpr);
-                    startOnNewLine(assignStmt);
-                    write(assignStmt);
-                }
-            }
+            pipeNodes(currentParametersWithPropertyAssignments, emitParameterPropertyAssignment, write);
         }
-        else if (baseTypeNode) {
-            let superExpr = createSuperKeyword();
-            let argsName = createIdentifier("args");
-            let spreadExpr = createSpreadElementExpression(argsName);
-            let callExpr = createCallExpression2(superExpr, [spreadExpr]);
-            let callStmt = createExpressionStatement(callExpr, /*location*/ undefined, NodeFlags.GeneratedSuper);
-            startOnNewLine(callStmt);
-            write(callStmt);
+        else if (currentBaseTypeNode) {
+            let callExpr = createCallExpression2(createSuperKeyword(), [createSpreadElementExpression(createIdentifier("args"))]);
+            write(startOnNewLine(createExpressionStatement(callExpr, /*location*/ undefined, NodeFlags.GeneratedSuper)));
         }
         
-        transformPropertyDeclarationsToStatements(node, instancePropertyAssignments, write);
+        pipeNodes(currentInstancePropertyAssignments, transformPropertyDeclarationToStatement, write);
         
-        if (constructor) {
-            let bodyStatements = constructor.body.statements;
-            pipeNodes(superCall ? bodyStatements.slice(1) : bodyStatements, transformNode, write);
+        if (currentConstructor) {
+            pipeNodes(skip(currentConstructor.body.statements, superCall ? 1 : 0), transformNode, write);
         }
     }
     
-    function transformHeritageClause(node: HeritageClause, write: (node: HeritageClause) => void) {
+    function emitParameterPropertyAssignment(node: ParameterDeclaration, write: (node: Statement) => void) {
+        let name = <Identifier>cloneNode(node.name);
+        let propExpr = createPropertyAccessExpression2(createThisKeyword(), name);
+        let assignExpr = createAssignmentExpression(propExpr, name);
+        write(startOnNewLine(createExpressionStatement(assignExpr)));
+    }
+    
+    function visitHeritageClause(node: HeritageClause, write: (node: HeritageClause) => void) {
         if (node.token === SyntaxKind.ExtendsKeyword) {
-            write(updateHeritageClause(node, visitNodes(node.types, transformNode)));
+            write(updateHeritageClause(node, take(visitNodes(node.types, visitExpressionWithTypeArguments), 1)));
         }
     }
 
-    function transformExpressionWithTypeArguments(node: ExpressionWithTypeArguments, write: (node: ExpressionWithTypeArguments) => void) {
+    function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments, write: (node: ExpressionWithTypeArguments) => void) {
         write(updateExpressionWithTypeArguments(node, visitNode(node.expression, transformNode), /*typeArguments*/ undefined));
     }
     
-    function transformPropertyDeclarationsToStatements(node: ClassLikeDeclaration, properties: PropertyDeclaration[], write: (node: Statement) => void) {
-        if (!properties) {
-            return;
-        }
-        
-        for (let property of properties) {
-            write(createExpressionStatement(transformPropertyDeclaration(node, property), /*location*/ property));
-        }
+    function transformPropertyDeclarationToStatement(node: PropertyDeclaration, write: (node: Statement) => void): void {
+        transformPropertyDeclarationToExpressionOrStatement(node, undefined, write);
     }
-    
-    function transformPropertyDeclarationsToExpressions(node: ClassLikeDeclaration, properties: PropertyDeclaration[], expressions: Expression[]) {
-        if (!properties) {
-            return;
-        }
 
-        for (let property of properties) {
-            let propertyAssignment = transformPropertyDeclaration(node, property, /*location*/ property);
-            expressions.push(propertyAssignment);
-        }
+    function transformPropertyDeclarationToExpression(node: PropertyDeclaration, write: (node: Expression) => void): void {
+        transformPropertyDeclarationToExpressionOrStatement(node, write, undefined);
     }
     
-    function transformPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, location?: TextRange): Expression {
-        let isStatic = (property.flags & NodeFlags.Static) !== 0;
-        let target = isStatic ? getDeclarationName(node) : createThisKeyword();        
-        let name = transformPropertyName(property);
-        let left = createMemberAccessForPropertyName(target, name, /*location*/ property.name);
-        let initializer = visitNode(property.initializer, transformNode);
+    function transformPropertyDeclarationToExpressionOrStatement(node: PropertyDeclaration, writeExpression: (node: Expression) => void, writeStatement: (node: Statement) => void): void {
+        let isStatic = (node.flags & NodeFlags.Static) !== 0;
+        let target = isStatic ? getDeclarationName(currentClassLikeDeclaration) : createThisKeyword();
+        let left = createMemberAccessForPropertyName(target, transformPropertyName(node), /*location*/ node.name);
+        let initializer = visitNode(node.initializer, transformNode);
         let assignExpr = createAssignmentExpression(left, initializer);
-        setTextRange(assignExpr, location);
-        return assignExpr;
+        setTextRange(assignExpr, node);
+        if (writeExpression) {
+            writeExpression(assignExpr);
+        }
+        else {
+            writeStatement(createExpressionStatement(assignExpr));
+        }
     }
 
     // emitter.ts:4074
@@ -707,10 +645,7 @@ namespace ts.transform {
     }
     
     function transformVariableStatement(node: VariableStatement, write: (node: Statement) => void) {
-        // TODO(rbuckton): transform namespace exports for a variable declaration list
-        // Debug.assert(isNamespaceLevelExport(node), "Should only reach here for exported variables." + node.declarationList.declarations[0].name);
-        // pipeNode(node.declarationList, write, transformVariableDeclarationListToExpressionStatement);
-        return accept(node, transformNode, write);
+        pipeNode(node.declarationList, transformVariableDeclarationListToExpressionStatement, write);
     }
     
     function transformVariableDeclarationListToExpressionStatement(node: VariableDeclarationList, write: (node: Statement) => void) {
@@ -752,21 +687,55 @@ namespace ts.transform {
     }
     
     function transformObjectBindingPatternToExpression(node: ObjectBindingPattern, write: (node: Expression) => void) {
-        Debug.fail("not implemented");
-        let properties: ObjectLiteralElement[] = [];
+        let properties = visitNodes<BindingElement, ObjectLiteralElement>(node.elements, transformBindingElementToObjectLiteralElement);
         write(createObjectLiteralExpression2(properties));
     }
+    
+    function transformBindingElementToObjectLiteralElement(node: BindingElement, write: (node: ObjectLiteralElement) => void) {
+        let propertyName = node.propertyName || <Identifier>node.name;
+        let name = node.name;
+        let expr = isBindingPattern(name)
+            ? visitNode<BindingPattern, Expression>(name, transformBindingPatternToExpression)
+            : getModuleMemberName(node);
 
+        let initializer = visitNode(node.initializer, transformNode);
+        if (initializer) {
+            expr = createAssignmentExpression(expr, initializer);
+        }
+
+        write(createPropertyAssignment(propertyName, expr));
+    }
+    
     function transformArrayBindingPatternToExpression(node: ArrayBindingPattern, write: (node: Expression) => void) {
-        Debug.fail("not implemented");
-        let elements: Expression[] = [];
+        let elements = visitNodes<BindingElement, Expression>(node.elements, transformBindingElementToExpression);
         write(createArrayLiteralExpression(elements));
     }
+    
+    function transformBindingElementToExpression(node: BindingElement, write: (node: Expression) => void) {
+        let name = node.name;
+        let expr = isBindingPattern(name)
+            ? visitNode<BindingPattern, Expression>(name, transformBindingPatternToExpression)
+            : getModuleMemberName(node);
 
+        let initializer = visitNode(node.initializer, transformNode);
+        if (initializer) {
+            expr = createAssignmentExpression(expr, initializer);
+        }
+        
+        if (node.dotDotDotToken) {
+            expr = createSpreadElementExpression(expr);
+        }
+        
+        write(expr);
+    }
+    
     function transformModuleDeclaration(node: ModuleDeclaration, write: (node: Statement) => void) {
         if (!shouldEmitModuleDeclaration(node)) {
             return;
         }
+        
+        let savedCurrentModuleDeclaration = currentModuleDeclaration;
+        currentModuleDeclaration = node;
         
         let location = node;
         if (!isModuleMergedWithClass(node)) {
@@ -784,7 +753,7 @@ namespace ts.transform {
         let body = node.body;
         let moduleBody: Block;
         if (isModuleBlock(body)) {
-            moduleBody = createBlock(visitNodes(body.statements, transformModuleElement));
+            moduleBody = createBlock(visitNodes(body.statements, transformModuleElement, PipelineFlags.LexicalEnvironment));
         }
         else {
             let inner = visitStatement(body, transformNode);
@@ -804,8 +773,9 @@ namespace ts.transform {
         
         let callExpr = createCallExpression2(parenExpr, [moduleParam]);
         let callStmt = createExpressionStatement(callExpr, location, NodeFlags.GeneratedNamespace);
-        callStmt.original = node;
-        write(callStmt);
+        write(setOriginalNode(callStmt, node));
+        
+        currentModuleDeclaration = savedCurrentModuleDeclaration;
     }
 
     function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
@@ -1381,5 +1351,42 @@ namespace ts.transform {
         let equalityExpr = createStrictEqualityExpression(typeOfExpr, functionLiteral);
         let conditionalExpr = createConditionalExpression2(equalityExpr, globalSymbolName, globalObjectName);
         return conditionalExpr;
+    }
+
+    function isTopLevelExport(node: Node) {
+        return !!(node.flags & NodeFlags.Export) && isSourceFile(getParentNode());
+    }
+    
+    function isTopLevelDefaultExport(node: Node) {
+        return isTopLevelExport(node) && !!(node.flags & NodeFlags.Default);
+    }
+
+    function isTopLevelNonDefaultExport(node: Node) {
+        return isTopLevelExport(node) && !(node.flags & NodeFlags.Default);
+    }
+    
+    function isNamespaceLevelExport(node: Node) {
+        return !!(node.flags & NodeFlags.Export) && !isSourceFile(getParentNode());
+    }
+    
+    function getContainingModule(): ModuleDeclaration {
+        return findAncestorNode(isModuleDeclaration);
+    }
+    
+    function getContainingModuleName(): Identifier {
+        let container = findAncestorNode(isModuleDeclaration);
+        return container ? getGeneratedNameForNode(container) : createIdentifier("exports");
+    }
+    
+    function getModuleMemberName(node: Declaration): Expression {
+        let name = <Identifier>getDeclarationName(node);
+        Debug.assert(isIdentifier(name));
+
+        if (getCombinedNodeFlags(transform) & NodeFlags.Export) {
+            let container = getContainingModuleName();
+            let propExpr = createPropertyAccessExpression2(container, name);
+            return propExpr;
+        }
+        return name;
     }
 }

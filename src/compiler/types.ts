@@ -892,6 +892,10 @@ namespace ts {
         type?: TypeNode;
         initializer?: Expression;
     }
+    
+    export interface PropertyLikeDeclaration extends Declaration {
+        name: PropertyName;
+    }
 
     export interface BindingPattern extends Node {
         elements: NodeArray<BindingElement>;

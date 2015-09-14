@@ -1,6 +1,6 @@
 /// <reference path="factory.ts" />
 /// <reference path="transform.generated.ts" />
-const FORCE_TRANSFORMS = false;
+const FORCE_TRANSFORMS = true;
 
 /* @internal */
 namespace ts {
@@ -16,6 +16,7 @@ namespace ts {
       * @param subtreeFlags Transform flags computed for this node's subtree
       */
     export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags) {
+        Debug.assert((subtreeFlags & TransformFlags.NodeExcludes) == 0, "Subtree includes a `ThisNode...` flag.");
         let transformFlags: TransformFlags;
 
         // Mark transformations needed for each node
@@ -260,11 +261,44 @@ namespace ts {
         return transform.runTransformationChain(statements, chain, _compilerOptions, _currentSourceFile, _resolver, _generatedNameSet, _nodeToGeneratedName);
     }
     
-    export const enum VisitorFlags {
+    export const enum PipelineFlags {
         LexicalEnvironment = 1 << 1,
         StatementOrBlock = 1 << 2,
         //ExpressionOrBlock = 1 << 3,
     }
+    
+    // interface Transformer {
+    //     getEmitResolver(): EmitResolver;
+    //     getCompilerOptions(): CompilerOptions;
+    //     makeUniqueName(baseName: string): string;
+    //     getGeneratedNameForNode(node: Node): Identifier;
+    //     nodeHasGeneratedName(node: Node): boolean;
+    //     createUniqueIdentifier(baseName: string): Identifier;
+    //     createTempVariable(loopVariable: boolean): Identifier;
+    //     declareLocal(baseName?: string): Identifier;
+    //     hoistVariableDeclaration(name: Identifier): void;
+    //     hoistFunctionDeclaration(func: FunctionDeclaration): void;
+    //     createParentNavigator(): ParentNavigator;
+    //     getParentNode(): Node;
+    //     getCurrentNode(): Node;
+    //     findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+    //     findAncestorNode(match: (node: Node) => boolean): Node;
+    //     getDeclarationName(node: DeclarationStatement): Identifier;
+    //     getDeclarationName(node: ClassExpression): Identifier;
+    //     getDeclarationName(node: Declaration): DeclarationName;
+    //     getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement): Expression;
+    //     pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void;
+    //     pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void;
+    //     emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void;
+    //     emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void;
+    //     visitNode<T extends Node>(input: T, pipeline: Pipeline<Node, Node>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): T;
+    //     visitNode<T extends Node>(input: T, pipeline: Pipeline<T, T>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): T;
+    //     visitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut;
+    //     visitNodes<T extends Node>(input: T[], pipeline: Pipeline<Node, Node>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): NodeArray<T>;
+    //     visitNodes<T extends Node>(input: T[], pipeline: Pipeline<T, T>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): NodeArray<T>;
+    //     visitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
+    //     accept<T extends Node>(node: T, pipeline: Pipeline<T, T>, write: PipelineOutput<T>): void;
+    // }
     
     export namespace transform {
         // Flags enum to track count of temp variables and a few dedicated names
@@ -467,6 +501,10 @@ namespace ts {
             return nodeStack.createParentNavigator();
         }
         
+        export function getRootNode(): SourceFile {
+            return currentSourceFile;
+        }
+        
         export function getCurrentNode(): Node {
             return nodeStack.getNode();
         }
@@ -666,7 +704,7 @@ namespace ts {
             return updatedNode;
         }
         
-        function readNodeArray(flags: VisitorFlags): NodeArray<Node> {
+        function readNodeArray(): NodeArray<Node> {
             if (updatedNodes) {
                 return createNodeArray(updatedNodes, /*location*/ <NodeArray<Node>>originalNodes);
             }
@@ -686,7 +724,7 @@ namespace ts {
           * This function also manages when new lexical environments are introduced, and tracks temporary 
           * variables and hoisted variable and function declarations.
           */
-        function pipeOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Visitor, output: (node: TOut) => void, flags: VisitorFlags): void {
+        function pipeOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Visitor, output: (node: TOut) => void, flags: PipelineFlags): void {
             if (!inputNode && !inputNodes) {
                 return;
             }
@@ -698,7 +736,7 @@ namespace ts {
             
             // If we are starting a new lexical environment, we need to reinitialize the lexical
             // environment state as well
-            if (flags & VisitorFlags.LexicalEnvironment) {
+            if (flags & PipelineFlags.LexicalEnvironment) {
                 savedTempFlags = tempFlags;
                 savedHoistedVariableDeclarations = hoistedVariableDeclarations;
                 savedHoistedFunctionDeclarations = hoistedFunctionDeclarations;
@@ -733,7 +771,7 @@ namespace ts {
             
             // If we established a new lexical environment, we need to write any hoisted variables or
             // function declarations to the end of the output.
-            if (flags & VisitorFlags.LexicalEnvironment) {
+            if (flags & PipelineFlags.LexicalEnvironment) {
                 if (hoistedVariableDeclarations) {
                     var stmt = createVariableStatement2(createVariableDeclarationList(hoistedVariableDeclarations));
                     output(<TOut><Node>stmt);
@@ -751,7 +789,7 @@ namespace ts {
             }
         }
 
-        function emitOne<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags: VisitorFlags, nodeTest: NodeTest<TOut>): TOut {
+        function emitOne<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags: PipelineFlags, nodeTest: NodeTest<TOut>): TOut {
             if (!input) {
                 return undefined;
             }
@@ -766,7 +804,7 @@ namespace ts {
             updatedNode = undefined;
             nodeTestCallback = nodeTest;
             writeNodeWithOrWithoutNodeTest = nodeTest ? writeNodeWithNodeTest : writeNodeWithoutNodeTest;
-            writeNodeFastOrSlow = flags & VisitorFlags.StatementOrBlock ? writeNodeFastOrSlow = writeStatementOrBlockSlow : writeNodeFastOrSlow = writeNodeSlow;
+            writeNodeFastOrSlow = flags & PipelineFlags.StatementOrBlock ? writeStatementOrBlockSlow : writeNodeSlow;
 
             // Pipe the input node into the output
             pipeOneOrMany<TIn, TOut>(input, undefined, pipeline, writeNode, flags);
@@ -783,7 +821,7 @@ namespace ts {
             return result;
         }
         
-        function emitOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags: VisitorFlags, nodeTest: (node: Node) => node is TOut): NodeArray<TOut> {
+        function emitOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags: PipelineFlags, nodeTest: (node: Node) => node is TOut): NodeArray<TOut> {
             // Exit early if we have nothing to do
             if (!inputNode && !inputNodes) {
                 return undefined;
@@ -809,7 +847,7 @@ namespace ts {
             pipeOneOrMany<TIn, TOut>(inputNode, inputNodes, pipeline, writeNode, flags);
             
             // Read the output array
-            output = <NodeArray<TOut>>readNodeArray(flags);
+            output = <NodeArray<TOut>>readNodeArray();
             
             // Restore previous environment
             offsetWritten = savedOffsetWritten;
@@ -863,7 +901,7 @@ namespace ts {
          * @param output The callback passed to `visitor` to write each visited node.
          * @param flags Flags that affect the pipeline.
          */
-        export function pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: VisitorFlags): void {
+        export function pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void {
             pipeOneOrMany(input, undefined, pipeline, output, flags); 
         }
         
@@ -874,7 +912,7 @@ namespace ts {
          * @param output The callback passed to `visitor` to write each visited node.
          * @param flags Flags that affect the pipeline.
          */
-        export function pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: VisitorFlags): void {
+        export function pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void {
             pipeOneOrMany(undefined, input, pipeline, output, flags);
         }
         
@@ -885,8 +923,12 @@ namespace ts {
          * @param output The destination node array to which to write the results from visiting each node.
          * @param flags Flags that affect the pipeline.
          */
-        export function emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
+        export function emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void {
             emitOneOrMany(input, undefined, pipeline, output, flags, nodeTest);
+        }
+        
+        export function flatMapNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
+            return emitOneOrMany(input, undefined, pipeline, [], flags, nodeTest);
         }
         
         /**
@@ -896,32 +938,32 @@ namespace ts {
          * @param output The destination node array to which to write the results from visiting each node.
          * @param flags Flags that affect the pipeline.
          */
-        export function emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
+        export function emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void {
             emitOneOrMany(undefined, input, pipeline, output, flags, nodeTest);
         }
         
-        export function visitNode<T extends Node>(node: T, visitor: Visitor, flags?: VisitorFlags): T;
-        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): TOut;
-        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): TOut {
+        export function visitNode<T extends Node>(node: T, visitor: Visitor, flags?: PipelineFlags): T;
+        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut;
+        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut {
             return emitOne(node, visitor, flags, nodeTest);
         }
     
-        export function visitStatement(node: Statement, visitor: Visitor, flags?: VisitorFlags) {
-            return emitOne<Statement, Statement>(node, visitor, flags | VisitorFlags.StatementOrBlock, undefined);
+        export function visitStatement(node: Statement, visitor: Visitor, flags?: PipelineFlags) {
+            return emitOne<Statement, Statement>(node, visitor, flags | PipelineFlags.StatementOrBlock, undefined);
         }
     
-        export function visitNodes<T extends Node>(nodes: T[], pipeline: Visitor, flags?: VisitorFlags): NodeArray<T>;
-        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
-        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
+        export function visitNodes<T extends Node>(nodes: T[], pipeline: Visitor, flags?: PipelineFlags): NodeArray<T>;
+        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
+        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
             return emitOneOrMany<TIn, TOut>(undefined, nodes, pipeline, undefined, flags, nodeTest);
         }
         
         export function visitNewLexicalEnvironment(node: LexicalEnvironmentBody, pipeline: Visitor): LexicalEnvironmentBody {
             if (isBlock(node)) {
-                return updateBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, VisitorFlags.LexicalEnvironment));
+                return updateBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, PipelineFlags.LexicalEnvironment));
             }
             else if (isModuleBlock(node)) {
-                return updateModuleBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, VisitorFlags.LexicalEnvironment));
+                return updateModuleBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, PipelineFlags.LexicalEnvironment));
             }
             else if (isExpressionNode(node)) {
                 return visitExpressionFunctionBodyInNewLexicalEnvironment(node, pipeline);

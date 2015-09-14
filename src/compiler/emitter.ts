@@ -512,7 +512,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return tokenEndPos;
                     }
                     else {
-                        emitTokenText(tokenKind, startPos, emitFn);
+                        return emitTokenText(tokenKind, startPos, emitFn);
                     }
                 }
 
@@ -799,7 +799,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write(tokenString);
                 }
-                return startPos + tokenString.length;
+                return positionIsSynthesized(startPos) ? -1 : startPos + tokenString.length;
             }
 
             function emitOptional(prefix: string, node: Node) {
@@ -5038,7 +5038,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
-                Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
+                // Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -5723,7 +5723,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
-                Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
+                // Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 // const enums are completely erased during compilation.
@@ -5845,7 +5845,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
+                // Debug.assert(!compilerOptions.experimentalTransforms, "This function should not be called when using '--experimentalTransforms'.");
                 
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 

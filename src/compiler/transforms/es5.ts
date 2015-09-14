@@ -2,7 +2,7 @@
 /*@internal*/
 namespace ts.transform {
     export function toES5(statements: NodeArray<Statement>) {
-        return visitNodes(statements, transformNode, VisitorFlags.LexicalEnvironment);
+        return visitNodes(statements, transformNode, PipelineFlags.LexicalEnvironment);
     }
     
     /**
@@ -41,7 +41,7 @@ namespace ts.transform {
             accept(node, transformNode, write);
         }
         else {
-            return write(node);
+            write(node);
         }
     }
 
@@ -153,7 +153,7 @@ namespace ts.transform {
         let body = createBlock([]);
 
         if (constructor) {
-            emitNode(constructor, transformConstructor, body.statements, VisitorFlags.LexicalEnvironment);
+            emitNode(constructor, transformConstructor, body.statements, PipelineFlags.LexicalEnvironment);
         }
         else if (baseTypeNode) {
             let superCall = createDefaultSuperCall();
@@ -402,7 +402,7 @@ namespace ts.transform {
     function transformMethodDeclaration(node: ClassLikeDeclaration, member: MethodDeclaration, write: (node: Statement) => void): void {
         let prefix = getClassMemberPrefix(node, member);
         let propExpr = getMemberAccessForPropertyName(node, member);
-        let funcExpr = rewriteFunctionExpression(member, /*name*/ undefined, /*location*/ undefined);
+        let funcExpr = transformFunctionLikeExpressionToFunctionExpression(member, /*name*/ undefined, /*location*/ undefined);
         let assignExpr = createAssignmentExpression(propExpr, funcExpr);
         let assignStmt = createExpressionStatement(assignExpr, /*location*/ member);
         startOnNewLine(assignStmt);
@@ -415,7 +415,7 @@ namespace ts.transform {
         let name = getExpressionForPropertyName(firstAccessor);
         let descriptorExpr = createObjectLiteralExpression2();
         if (accessors.getAccessor) {
-            let funcExpr = rewriteFunctionExpression(accessors.getAccessor, /*name*/ undefined, /*location*/ accessors.getAccessor);
+            let funcExpr = transformFunctionLikeExpressionToFunctionExpression(accessors.getAccessor, /*name*/ undefined, /*location*/ accessors.getAccessor);
             let getName = createIdentifier("get");
             let getProp = createPropertyAssignment(getName, funcExpr);
             startOnNewLine(getProp);
@@ -423,7 +423,7 @@ namespace ts.transform {
         }
         
         if (accessors.setAccessor) {
-            let funcExpr = rewriteFunctionExpression(accessors.setAccessor, /*name*/ undefined, /*location*/ accessors.setAccessor);
+            let funcExpr = transformFunctionLikeExpressionToFunctionExpression(accessors.setAccessor, /*name*/ undefined, /*location*/ accessors.setAccessor);
             let setName = createIdentifier("set");
             let setProp = createPropertyAssignment(setName, funcExpr);
             startOnNewLine(setProp);
@@ -447,32 +447,19 @@ namespace ts.transform {
     }
     
     function transformFunctionExpression(node: FunctionExpression, write: (node: Expression) => void): void {
-        write(rewriteFunctionExpression(node, node.name, /*location*/ node));
+        write(transformFunctionLikeExpressionToFunctionExpression(node, node.name, /*location*/ node));
     }
     
-    function rewriteFunctionExpression(node: FunctionLikeDeclaration, name: Identifier, location: TextRange): FunctionExpression {
+    function transformFunctionLikeExpressionToFunctionExpression(node: FunctionLikeDeclaration, name: Identifier, location: TextRange): FunctionExpression {
         let parameters = visitNodes(node.parameters, transformNode);
-        let body = createBlock([], node.body);
-        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.LexicalEnvironment);
-        return createFunctionExpression2(name, parameters, body, location);
+        let statements = flatMapNode(node, transformFunctionBody, PipelineFlags.LexicalEnvironment);
+        return createFunctionExpression2(name, parameters, createBlock(statements), location);
     }
 
     function transformFunctionDeclaration(node: FunctionDeclaration, write: (node: Statement) => void): void {
         let parameters = visitNodes(node.parameters, transformNode);
-        let body = createBlock([], node.body);
-        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.LexicalEnvironment);
-        write(createFunctionDeclaration2(node.name, parameters, body, /*location*/ node));
-    }
-    
-    function transformToFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: FunctionLikeDeclaration, name: Identifier, location: TextRange, 
-        createfn: (name: DeclarationName, parameters: ParameterDeclaration[], body: Block, location: TextRange) => T): T {
-
-        let parameters = visitNodes(node.parameters, transformNode);
-        let newBody = createBlock([], /*location*/ isBlock(node.body) ? node.body : undefined);
-        emitNode(node, transformFunctionBody, newBody.statements, VisitorFlags.LexicalEnvironment);
-        
-        let func = createfn(name, parameters, newBody, location);
-        return func;
+        let statements = flatMapNode(node, transformFunctionBody, PipelineFlags.LexicalEnvironment);
+        write(createFunctionDeclaration2(node.name, parameters, createBlock(statements), /*location*/ node));
     }
     
     function transformFunctionBody(node: FunctionLikeDeclaration, write: (node: Statement) => void) {
