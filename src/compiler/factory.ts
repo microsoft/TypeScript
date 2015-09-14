@@ -260,11 +260,14 @@ namespace ts {
         return createVariableStatement(undefined, undefined, declarationList, location, flags);
     }
 
-    export function createSimpleLetStatement(name: Identifier, initializer: Expression, location?: TextRange, exported?: boolean) {
+    export function createVariableStatement3(name: Identifier | BindingPattern, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
         let varDecl = createVariableDeclaration2(name, initializer);
-        let varDeclList = createVariableDeclarationList([varDecl], undefined, NodeFlags.Let);
-        let varStmt = createVariableStatement2(varDeclList, location, exported ? NodeFlags.Export : 0);
-        return varStmt;
+        let varDeclList = createVariableDeclarationList([varDecl], undefined, flags & (NodeFlags.Let | NodeFlags.Const));
+        return createVariableStatement2(varDeclList, location, flags & ~(NodeFlags.Let | NodeFlags.Const));
+    }
+
+    export function createLetStatement(name: Identifier, initializer: Expression, location?: TextRange, exported?: boolean) {
+        return createVariableStatement3(name, initializer, location, exported ? NodeFlags.Let | NodeFlags.Export : NodeFlags.Let);
     }
 
     export function createExportDefaultStatement(expression: Expression): ExportAssignment {

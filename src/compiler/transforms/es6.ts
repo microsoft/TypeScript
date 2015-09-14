@@ -4,19 +4,19 @@ namespace ts.transform {
     let resolver: EmitResolver;
     let compilerOptions: CompilerOptions;
     let languageVersion: ScriptTarget;
-    let currentLexicalEnvironment: SourceFile | FunctionLikeDeclaration | ModuleDeclaration
     let currentModuleDeclaration: ModuleDeclaration;
     let currentClassLikeDeclaration: ClassLikeDeclaration;
     let currentBaseTypeNode: ExpressionWithTypeArguments;
     let currentConstructor: ConstructorDeclaration;
     let currentParametersWithPropertyAssignments: ParameterDeclaration[];
     let currentInstancePropertyAssignments: PropertyDeclaration[];
+    let currentEnumLocalName: Identifier;
+    let currentParameterIndex: number;
     
     export function toES6(statements: NodeArray<Statement>) {
         resolver = getEmitResolver();
         compilerOptions = getCompilerOptions();
         languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        currentLexicalEnvironment = getRootNode();
         return visitNodes(statements, transformNode, PipelineFlags.LexicalEnvironment);
     }
     
@@ -251,11 +251,11 @@ namespace ts.transform {
             // If the class has been decorated, we need to emit the class as part of a `let` declaration
             // to avoid the pitfalls of the doubly-bound class name. 
             let classExpr = createClassExpression3(currentBaseTypeNode, classMembers);
-            let varStmt = createSimpleLetStatement(getDeclarationName(node), classExpr, /*location*/ node, isTopLevelNonDefaultExport(node));
+            let varStmt = createLetStatement(getDeclarationName(node), classExpr, /*location*/ node, isTopLevelNonDefaultExport(node));
             write(setOriginalNode(varStmt, node));
         }
         else {
-            let exportFlags = isNamespaceLevelExport(node) ? undefined : node.flags & (NodeFlags.Export | NodeFlags.Default);
+            let exportFlags = isTopLevelExport(node) ? node.flags & (NodeFlags.Export | NodeFlags.Default) : undefined;
             let classDecl = createClassDeclaration2(getDeclarationName(node), currentBaseTypeNode, classMembers, /*location*/ node, exportFlags);
             write(setOriginalNode(classDecl, node));
         }
@@ -626,9 +626,7 @@ namespace ts.transform {
             return callExpr;
         }
         else {
-            let returnStmt = createReturnStatement(callExpr);
-            let newBody = createBlock([returnStmt], /*location*/ body);
-            return newBody;
+            return createBlock([createReturnStatement(callExpr)], /*location*/ body);
         }
     }
     
@@ -654,6 +652,8 @@ namespace ts.transform {
         if (!node.initializer) {
             return;
         }
+        
+        transformBindingElementToExpressionWithParenthesisIfNeeded(node, write, /*parenthesizeObjectLiteralAssignment*/ true);
         
         let name = node.name;
         if (isBindingPattern(name)) {
@@ -686,27 +686,22 @@ namespace ts.transform {
         write(createObjectLiteralExpression2(properties));
     }
     
-    function transformBindingElementToObjectLiteralElement(node: BindingElement, write: (node: ObjectLiteralElement) => void) {
-        let propertyName = node.propertyName || <Identifier>node.name;
-        let name = node.name;
-        let expr = isBindingPattern(name)
-            ? visitNode<BindingPattern, Expression>(name, transformBindingPatternToExpression)
-            : getModuleMemberName(node);
-
-        let initializer = visitNode(node.initializer, transformNode);
-        if (initializer) {
-            expr = createAssignmentExpression(expr, initializer);
-        }
-
-        write(createPropertyAssignment(propertyName, expr));
-    }
-    
     function transformArrayBindingPatternToExpression(node: ArrayBindingPattern, write: (node: Expression) => void) {
         let elements = visitNodes<BindingElement, Expression>(node.elements, transformBindingElementToExpression);
         write(createArrayLiteralExpression(elements));
     }
     
+    function transformBindingElementToObjectLiteralElement(node: BindingElement, write: (node: ObjectLiteralElement) => void) {
+        let propertyName = node.propertyName || <Identifier>node.name;
+        let expr = visitNode<BindingElement, Expression>(node, transformBindingElementToExpression);
+        write(createPropertyAssignment(propertyName, expr));
+    }
+    
     function transformBindingElementToExpression(node: BindingElement, write: (node: Expression) => void) {
+        transformBindingElementToExpressionWithParenthesisIfNeeded(node, write, /*parenthesizeObjectLiteralAssignment*/ false);
+    }
+
+    function transformBindingElementToExpressionWithParenthesisIfNeeded(node: BindingElement, write: (node: Expression) => void, parenthesizeObjectLiteralAssignment?: boolean) {
         let name = node.name;
         let expr = isBindingPattern(name)
             ? visitNode<BindingPattern, Expression>(name, transformBindingPatternToExpression)
@@ -717,7 +712,10 @@ namespace ts.transform {
             expr = createAssignmentExpression(expr, initializer);
         }
         
-        if (node.dotDotDotToken) {
+        if (parenthesizeObjectLiteralAssignment && isObjectBindingPattern(name)) {
+            expr = createParenthesizedExpression(expr);
+        }
+        else if (node.dotDotDotToken) {
             expr = createSpreadElementExpression(expr);
         }
         
@@ -811,8 +809,6 @@ namespace ts.transform {
         }
     }
     
-    let currentEnumLocalName: Identifier;
-    
     function transformEnumDeclaration(node: EnumDeclaration, write: (node: Statement) => void) {
         if (!shouldEmitEnumDeclaration(node)) {
             // Const enum declarations may be elided.
@@ -824,11 +820,7 @@ namespace ts.transform {
         
         let location: TextRange = node;
         if (!isNamespaceLevelExport(node)) {
-            let exportFlags = isTopLevelExport(node) ? NodeFlags.Export : undefined;
-            let varDecl = createVariableDeclaration2(node.name, /*initializer*/ undefined, /*location*/ undefined, exportFlags);
-            let varDecls = createVariableDeclarationList([varDecl]);
-            let varStmt = createVariableStatement2(varDecls, location);
-            write(varStmt);
+            write(createVariableStatement3(node.name, /*initializer*/ undefined, location, isTopLevelExport(node) ? NodeFlags.Export : undefined));
             location = undefined;
         }
         
@@ -844,14 +836,10 @@ namespace ts.transform {
         let enumStorageInitExpr = createAssignmentExpression(moduleMemberName, enumStorageObjectExpr);
         let enumStorageExpr = createLogicalOrExpression(moduleMemberName, enumStorageInitExpr);
         let callExpr = createCallExpression2(parenExpr, [enumStorageExpr]);
-        let callStmt = createExpressionStatement(callExpr, location);
-        write(callStmt);
+        write(createExpressionStatement(callExpr, location));
         
         if (isNamespaceLevelExport(node)) {
-            let varDecl = createVariableDeclaration2(node.name, moduleMemberName);
-            let varDecls = createVariableDeclarationList([varDecl]);
-            let varStmt = createVariableStatement2(varDecls);
-            write(varStmt);
+            write(createVariableStatement3(node.name, moduleMemberName));
         }
 
         currentEnumLocalName = savedCurrentEnumLocalName;
@@ -864,8 +852,7 @@ namespace ts.transform {
         let enumValueAssignExpr = createAssignmentExpression(enumNameElemExpr, enumValueExpr);
         let enumValueElemExpr = createElementAccessExpression2(currentEnumLocalName, enumValueAssignExpr);
         let enumNameAssignExpr = createAssignmentExpression(enumValueElemExpr, enumNameExpr);
-        let enumMemberStmt = createExpressionStatement(enumNameAssignExpr, /*location*/ node);
-        write(enumMemberStmt);
+        write(createExpressionStatement(enumNameAssignExpr, /*location*/ node));
     }
     
     function getEnumMemberDeclarationValue(member: EnumMember): Expression {
@@ -947,24 +934,21 @@ namespace ts.transform {
         //
         
         let decoratorExpressions: Expression[] = [];
-        if (decorators) {
-            for (let decorator of decorators) {
-                decoratorExpressions.push(visitNode(decorator.expression, transformNode))
-            }
-        }
-        
-        if (constructor) {
-            appendDecoratorsOfParameters(constructor.parameters, decoratorExpressions);
-        }
+        emitNodes(decorators, transformDecoratorToExpression, decoratorExpressions);
+        emitNode(constructor, emitDecoratorsOfParameters, decoratorExpressions);
         
         if (compilerOptions.emitDecoratorMetadata) {
-            appendSerializedTypeMetadata(node, decoratorExpressions);
+            emitNode(node, emitSerializedTypeMetadata, decoratorExpressions);
         }
         
         let name = getDeclarationName(node);
         let callExpr = createDecorateHelperCall(decoratorExpressions, name);
         let statement = createExpressionStatement(callExpr);
         write(statement);
+    }
+    
+    function transformDecoratorToExpression(node: Decorator, write: (node: Expression) => void) {
+        return visitNode(node.expression, transformNode);
     }
     
     function transformDecoratorsOfMember(node: ClassLikeDeclaration, member: ClassElement, write: (node: Statement) => void) {
@@ -1032,20 +1016,10 @@ namespace ts.transform {
         //
 
         let decoratorExpressions: Expression[] = [];
-        if (decorators) {
-            for (let decorator of decorators) {
-                decoratorExpressions.push(visitNode(decorator.expression, transformNode))
-            }
-        }
-        
-        if (parameters) {
-            // TODO(rbuckton): switch to emitNode to maintain node stack
-            appendDecoratorsOfParameters(parameters, decoratorExpressions);
-        }
-        
+        emitNodes(decorators, transformDecoratorToExpression, decoratorExpressions);
+        emitNodes(parameters, emitDecoratorsOfParameter, decoratorExpressions);
         if (compilerOptions.emitDecoratorMetadata) {
-            // TODO(rbuckton): switch to emitNode to maintain node stack
-            appendSerializedTypeMetadata(node, decoratorExpressions);
+            emitNode(node, emitSerializedTypeMetadata, decoratorExpressions);
         }
         
         let prefix = getClassMemberPrefix(node, member);
@@ -1064,39 +1038,40 @@ namespace ts.transform {
         }
     }
     
-    function appendDecoratorsOfParameters(parameters: ParameterDeclaration[], expressions: Expression[]) {
-        // TODO(rbuckton): switch to emitNode to maintain node stack
-        for (let parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
-            let parameter = parameters[parameterIndex];
-            if (nodeIsDecorated(parameter)) {
-                for (let decorator of parameter.decorators) {
-                    let decoratorExpr = visitNode(decorator.expression, transformNode);
-                    let paramExpr = createParamHelperCall(parameterIndex, decoratorExpr);
-                    expressions.push(paramExpr);
-                }
-            }
-        }
+    function emitDecoratorsOfParameters(node: FunctionLikeDeclaration, write: (node: Expression) => void) {
+        pipeNodes(node.parameters, emitDecoratorsOfParameter, write);
     }
     
-    function appendSerializedTypeMetadata(node: Declaration, expressions: Expression[]) {
-        // TODO(rbuckton): switch to emitNode to maintain node stack
+    function emitDecoratorsOfParameter(node: ParameterDeclaration, write: (node: Expression) => void, offset?: number) {
+        let savedCurrentParameterIndex = currentParameterIndex;
+        currentParameterIndex = offset;
+        pipeNodes(node.decorators, emitDecoratorOfParameter, write);
+        currentParameterIndex = savedCurrentParameterIndex;
+    }
+    
+    function emitDecoratorOfParameter(node: Decorator, write: (node: Expression) => void) {
+        let decoratorExpr = visitNode(node.expression, transformNode);
+        write(createParamHelperCall(currentParameterIndex, decoratorExpr));
+    }
+    
+    function emitSerializedTypeMetadata(node: Declaration, write: (node: Expression) => void) {
         if (shouldAppendTypeMetadata(node)) {
             let typeExpr = serializeTypeOfNode(node);
             let metadataExpr = createMetadataHelperCall("design:type", createArrowFunction2([], typeExpr));
-            expressions.push(metadataExpr);
+            write(metadataExpr);
         }
         if (shouldAppendParamTypesMetadata(node)) {
             let paramTypesExpr = serializeParameterTypesOfNode(node);
             let metadataExpr = createMetadataHelperCall("design:paramtypes", createArrowFunction2([], paramTypesExpr));
-            expressions.push(metadataExpr);
+            write(metadataExpr);
         }
         if (shouldAppendReturnTypeMetadata(node)) {
             let returnTypeExpr = serializeReturnTypeOfNode(node);
             let metadataExpr = createMetadataHelperCall("design:returntype", createArrowFunction2([], returnTypeExpr));
-            expressions.push(metadataExpr);
+            write(metadataExpr);
         }
     }
-
+    
     function shouldAppendTypeMetadata(node: Declaration): boolean {
         // This method determines whether to emit the "design:type" metadata based on the node's kind.
         // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata

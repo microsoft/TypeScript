@@ -7,7 +7,7 @@ namespace ts {
     export type Visitor = (input: Node, output: (node: Node) => void) => void;
     export type LexicalEnvironmentBody = ModuleDeclaration | ModuleBlock | Block | Expression;
     export type PipelineOutput<TOut extends Node> = (node: TOut) => void;
-    export type Pipeline<TIn extends Node, TOut extends Node> = (input: TIn, output: PipelineOutput<TOut>) => void;
+    export type Pipeline<TIn extends Node, TOut extends Node> = (input: TIn, output: PipelineOutput<TOut>, offset?: number) => void;
     export type NodeTest<T extends Node> = (node: Node) => node is T;
         
     /**
@@ -724,7 +724,7 @@ namespace ts {
           * This function also manages when new lexical environments are introduced, and tracks temporary 
           * variables and hoisted variable and function declarations.
           */
-        function pipeOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Visitor, output: (node: TOut) => void, flags: PipelineFlags): void {
+        function pipeOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Pipeline<TIn, TOut>, output: (node: TOut) => void, flags: PipelineFlags): void {
             if (!inputNode && !inputNodes) {
                 return;
             }
@@ -760,9 +760,10 @@ namespace ts {
                 nodeStack.pushNode(/*node*/ undefined);
                 
                 // Visit each input node
+                let offset = 0;
                 for (let node of inputNodes) {
                     nodeStack.setNode(node);
-                    pipeline(node, output);
+                    pipeline(node, output, offset++);
                 }
                 
                 // For the perf reasons mentioned above, we pop the current node at the end of the loop.
