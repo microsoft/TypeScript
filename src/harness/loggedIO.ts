@@ -270,7 +270,7 @@ module Playback {
     }
 
     function findResultByPath<T>(wrapper: { resolvePath(s: string): string }, logArray: { path: string; result?: T }[], expectedPath: string, defaultValue?: T): T {
-        let normalizedName = ts.normalizeSlashes(expectedPath).toLowerCase();
+        let normalizedName = ts.normalizePath(expectedPath).toLowerCase();
         // Try to find the result through normal fileName
         for (let i = 0; i < logArray.length; i++) {
             if (ts.normalizeSlashes(logArray[i].path).toLowerCase() === normalizedName) {
@@ -286,6 +286,7 @@ module Playback {
                 }
             }
         }
+
         // If we got here, we didn't find a match
         if (defaultValue === undefined) {
             throw new Error("No matching result in log array for path: " + expectedPath);
