@@ -5,10 +5,10 @@
         "test.ts"
     ],
     "sourceMap": true,
-    "sourceRoot": "tests/cases/projects/outputdir_singleFile/src",
-    "resolveSourceRoot": true,
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "tests/cases/projects/outputdir_singleFile/src",
+    "resolveSourceRoot": true,
     "resolvedInputFiles": [
         "lib.d.ts",
         "test.ts"

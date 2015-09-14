@@ -7,10 +7,10 @@
     "out": "bin/outAndOutDirFile.js",
     "outDir": "outdir/outAndOutDirFolder",
     "sourceMap": true,
-    "sourceRoot": "tests/cases/projects/outputdir_mixed_subfolder/src",
-    "resolveSourceRoot": true,
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "tests/cases/projects/outputdir_mixed_subfolder/src",
+    "resolveSourceRoot": true,
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",

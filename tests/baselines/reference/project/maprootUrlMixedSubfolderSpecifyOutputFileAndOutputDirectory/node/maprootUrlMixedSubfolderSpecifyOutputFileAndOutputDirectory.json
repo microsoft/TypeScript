@@ -7,9 +7,9 @@
     "out": "bin/outAndOutDirFile.js",
     "outDir": "outdir/outAndOutDirFolder",
     "sourceMap": true,
-    "mapRoot": "http://www.typescriptlang.org/",
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "http://www.typescriptlang.org/",
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",

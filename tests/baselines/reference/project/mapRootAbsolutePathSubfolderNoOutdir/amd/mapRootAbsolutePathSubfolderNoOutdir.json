@@ -5,10 +5,10 @@
         "test.ts"
     ],
     "sourceMap": true,
-    "mapRoot": "tests/cases/projects/outputdir_subfolder/mapFiles",
-    "resolveMapRoot": true,
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "tests/cases/projects/outputdir_subfolder/mapFiles",
+    "resolveMapRoot": true,
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",

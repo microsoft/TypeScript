@@ -6,19 +6,11 @@ interface ProjectRunnerTestCase {
     scenario: string;
     projectRoot: string; // project where it lives - this also is the current directory when compiling
     inputFiles: string[]; // list of input files to be given to program
-    out?: string; // --out
-    outDir?: string; // --outDir
-    sourceMap?: boolean; // --map
-    mapRoot?: string; // --mapRoot
     resolveMapRoot?: boolean; // should we resolve this map root and give compiler the absolute disk path as map root?
-    sourceRoot?: string; // --sourceRoot
     resolveSourceRoot?: boolean; // should we resolve this source root and give compiler the absolute disk path as map root?
-    declaration?: boolean; // --d
     baselineCheck?: boolean; // Verify the baselines of output files, if this is false, we will write to output to the disk but there is no verification of baselines
     runTest?: boolean; // Run the resulting test
     bug?: string; // If there is any bug associated with this test case
-    noResolve?: boolean;
-    rootDir?: string; // --rootDir
 }
 
 interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
@@ -58,7 +50,7 @@ class ProjectRunner extends RunnerBase {
     }
 
     private runProjectTestCase(testCaseFileName: string) {
-        let testCase: ProjectRunnerTestCase;
+        let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
         let testFileText: string = null;
         try {
@@ -69,7 +61,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         try {
-            testCase = <ProjectRunnerTestCase>JSON.parse(testFileText);
+            testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText);
         }
         catch (e) {
             assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
@@ -155,18 +147,35 @@ class ProjectRunner extends RunnerBase {
             };
 
             function createCompilerOptions(): ts.CompilerOptions {
-                return {
-                    declaration: !!testCase.declaration,
-                    sourceMap: !!testCase.sourceMap,
-                    outFile: testCase.out,
-                    outDir: testCase.outDir,
+                // Set the special options that depend on other testcase options
+                let compilerOptions: ts.CompilerOptions = {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
                     moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
-                    noResolve: testCase.noResolve,
-                    rootDir: testCase.rootDir
                 };
+
+                // Set the values specified using json
+                let optionNameMap: ts.Map<ts.CommandLineOption> = {};
+                ts.forEach(ts.optionDeclarations, option => {
+                    optionNameMap[option.name] = option;
+                });
+                for (let name in testCase) {
+                    if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
+                        let option = optionNameMap[name];
+                        let optType = option.type;
+                        let value = <any>testCase[name];
+                        if (typeof optType !== "string") {
+                            let key = value.toLowerCase();
+                            if (ts.hasProperty(optType, key)) {
+                                value = optType[key];
+                            }
+                        }
+                        compilerOptions[option.name] = value;
+                    }
+                }
+                
+                return compilerOptions;
             }
 
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
@@ -342,26 +351,9 @@ class ProjectRunner extends RunnerBase {
                     let compilerResult: BatchCompileProjectTestCaseResult;
 
                     function getCompilerResolutionInfo() {
-                        let resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {
-                            scenario: testCase.scenario,
-                            projectRoot: testCase.projectRoot,
-                            inputFiles: testCase.inputFiles,
-                            out: testCase.out,
-                            outDir: testCase.outDir,
-                            sourceMap: testCase.sourceMap,
-                            mapRoot: testCase.mapRoot,
-                            resolveMapRoot: testCase.resolveMapRoot,
-                            sourceRoot: testCase.sourceRoot,
-                            resolveSourceRoot: testCase.resolveSourceRoot,
-                            declaration: testCase.declaration,
-                            baselineCheck: testCase.baselineCheck,
-                            runTest: testCase.runTest,
-                            bug: testCase.bug,
-                            rootDir: testCase.rootDir,
-                            resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName),
-                            emittedFiles: ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName)
-                        };
-
+                        let resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(testCase));
+                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName);
+                        resolutionInfo.emittedFiles = ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName);
                         return resolutionInfo;
                     }
 

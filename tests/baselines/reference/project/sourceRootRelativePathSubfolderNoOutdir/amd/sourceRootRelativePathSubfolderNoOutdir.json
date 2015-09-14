@@ -5,9 +5,9 @@
         "test.ts"
     ],
     "sourceMap": true,
-    "sourceRoot": "../src",
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "../src",
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",
