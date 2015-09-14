@@ -77,8 +77,10 @@ module RWC {
                     let tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
                     if (tsconfigFile) {
                         let tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
-                        let configParseResult = ts.parseConfigFile(tsconfigFileContents.content, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
+                        let parsedTsconfigFileContents = ts.parseConfigFileText(tsconfigFile.path, tsconfigFileContents.content);
+                        let configParseResult = ts.parseConfigFile(parsedTsconfigFileContents.config, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
+                        opts.options = ts.extend(opts.options, configParseResult.options);
                     }
 
                     // Load the files
