@@ -186,6 +186,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
+            /** If removeComments is true, no leading-comments needed to be emitted **/
+            let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
+
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 initializeEmitterWithSourceMaps();
             }
@@ -1292,8 +1295,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emit(node.name);
-                    write("=");
-                    emit(node.initializer);
+                    if (node.initializer) {
+                        write("=");
+                        emit(node.initializer);
+                    }
                 }
 
                 function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
@@ -2352,7 +2357,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
                             !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
-                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
+                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
+                            !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
                             emit(operand);
                             return;
                         }
@@ -3142,6 +3148,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             function emitExportSpecifierInSystemModule(specifier: ExportSpecifier): void {
                 Debug.assert(compilerOptions.module === ModuleKind.System);
+
+                if (!resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name) && !resolver.isValueAliasDeclaration(specifier) ) {
+                    return;
+                }
                 
                 writeLine();
                 emitStart(specifier.name);
@@ -3666,7 +3676,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
-                    return emitOnlyPinnedOrTripleSlashComments(node);
+                    return emitCommentsOnNotEmittedNode(node);
                 }
 
                 // TODO (yuisu) : we should not have special cases to condition emitting comments
@@ -4143,7 +4153,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
-                            return emitOnlyPinnedOrTripleSlashComments(member);
+                            return emitCommentsOnNotEmittedNode(member);
                         }
 
                         writeLine();
@@ -4210,7 +4220,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitMemberFunctionsForES6AndHigher(node: ClassLikeDeclaration) {
                 for (let member of node.members) {
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
-                        emitOnlyPinnedOrTripleSlashComments(member);
+                        emitCommentsOnNotEmittedNode(member);
                     }
                     else if (member.kind === SyntaxKind.MethodDeclaration ||
                         member.kind === SyntaxKind.GetAccessor ||
@@ -4267,7 +4277,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Emit the constructor overload pinned comments
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
-                        emitOnlyPinnedOrTripleSlashComments(member);
+                        emitCommentsOnNotEmittedNode(member);
                     }
                     // Check if there is any non-static property assignment
                     if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
@@ -5166,7 +5176,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-                emitOnlyPinnedOrTripleSlashComments(node);
+                emitCommentsOnNotEmittedNode(node);
             }
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
@@ -5288,7 +5298,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let shouldEmit = shouldEmitModuleDeclaration(node);
 
                 if (!shouldEmit) {
-                    return emitOnlyPinnedOrTripleSlashComments(node);
+                    return emitCommentsOnNotEmittedNode(node);
                 }
                 let hoistedInDeclarationScope = shouldHoistDeclarationInSystemJsModule(node);
                 let emitVarForModule = !hoistedInDeclarationScope && !isModuleMergedWithES6Class(node);
@@ -6089,7 +6099,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return;
                     }
 
-                    if (isInternalModuleImportEqualsDeclaration(node)) {
+                    if (isInternalModuleImportEqualsDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }
@@ -6718,7 +6728,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitNodeConsideringCommentsOption(node: Node, emitNodeConsideringSourcemap: (node: Node) => void): void {
                 if (node) {
                     if (node.flags & NodeFlags.Ambient) {
-                        return emitOnlyPinnedOrTripleSlashComments(node);
+                        return emitCommentsOnNotEmittedNode(node);
                     }
 
                     if (isSpecializedCommentHandling(node)) {
@@ -6985,22 +6995,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            /**
-             * Removes all but the pinned or triple slash comments.
-             * @param ranges The array to be filtered
-             * @param onlyPinnedOrTripleSlashComments whether the filtering should be performed.
-             */
-            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
-                // If we're removing comments, then we want to strip out all but the pinned or
-                // triple slash comments.
-                if (ranges && onlyPinnedOrTripleSlashComments) {
-                    ranges = filter(ranges, isPinnedOrTripleSlashComment);
-                    if (ranges.length === 0) {
-                        return undefined;
-                    }
-                }
+            function isPinnedComments(comment: CommentRange) {
+                return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+            }
 
-                return ranges;
+            /**
+             * Determine if the given comment is a triple-slash
+             *
+             * @return true if the comment is a triple-slash comment else false
+             **/
+            function isTripleSlashComment(comment: CommentRange) {
+                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+                // so that we don't end up computing comment string and doing match for all // comments
+                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                    comment.pos + 2 < comment.end &&
+                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
+                    let textSubStr = currentSourceFile.text.substring(comment.pos, comment.end);
+                    return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                        textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
+                        true : false;
+                }
+                return false;
             }
 
             function getLeadingCommentsToEmit(node: Node) {
@@ -7028,28 +7044,53 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitOnlyPinnedOrTripleSlashComments(node: Node) {
-                emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ true);
+            /**
+             * Emit comments associated with node that will not be emitted into JS file
+             */
+            function emitCommentsOnNotEmittedNode(node: Node) {
+                emitLeadingCommentsWorker(node, /*isEmittedNode:*/ false);
             }
 
             function emitLeadingComments(node: Node) {
-                return emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                return emitLeadingCommentsWorker(node, /*isEmittedNode:*/ true);
             }
 
-            function emitLeadingCommentsWorker(node: Node, onlyPinnedOrTripleSlashComments: boolean) {
-                // If the caller only wants pinned or triple slash comments, then always filter
-                // down to that set.  Otherwise, filter based on the current compiler options.
-                let leadingComments = filterComments(getLeadingCommentsToEmit(node), onlyPinnedOrTripleSlashComments);
+            function emitLeadingCommentsWorker(node: Node, isEmittedNode: boolean) {
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+            
+                let leadingComments: CommentRange[];
+                if (isEmittedNode) {
+                    leadingComments = getLeadingCommentsToEmit(node);
+                }
+                else {
+                    // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
+                    // unless it is a triple slash comment at the top of the file.
+                    // For Example:
+                    //      /// <reference-path ...>
+                    //      declare var x;
+                    //      /// <reference-path ...>
+                    //      interface F {}
+                    //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
+                    if (node.pos === 0) {
+                        leadingComments = filter(getLeadingCommentsToEmit(node), isTripleSlashComment);
+                    }
+                }
 
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator:*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 // Emit the trailing comments only if the parent's end doesn't match
-                let trailingComments = filterComments(getTrailingCommentsToEmit(node), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                let trailingComments = getTrailingCommentsToEmit(node);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
@@ -7061,13 +7102,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              *        ^ => pos; the function will emit "comment1" in the emitJS
              */
             function emitTrailingCommentsOfPosition(pos: number) {
-                let trailingComments = filterComments(getTrailingCommentRanges(currentSourceFile.text, pos), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments); 
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
+                let trailingComments = getTrailingCommentRanges(currentSourceFile.text, pos);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitLeadingCommentsOfPosition(pos: number) {
+            function emitLeadingCommentsOfPositionWorker(pos: number) {
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 let leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
@@ -7078,7 +7127,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
 
-                leadingComments = filterComments(leadingComments, compilerOptions.removeComments);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -7086,7 +7134,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitDetachedComments(node: TextRange) {
-                let leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                let leadingComments: CommentRange[];
+                if (compilerOptions.removeComments) {
+                    // removeComments is true, only reserve pinned comment at the top of file
+                    // For example:
+                    //      /*! Pinned Comment */
+                    //
+                    //      var x = 10;
+                    if (node.pos === 0) {
+                        leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments);
+                    }
+                }
+                else {
+                    // removeComments is false, just get detached as normal and bypass the process to filter comment
+                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                }
+
                 if (leadingComments) {
                     let detachedComments: CommentRange[] = [];
                     let lastComment: CommentRange;
@@ -7134,20 +7197,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let shebang = getShebang(currentSourceFile.text);
                 if (shebang) {
                     write(shebang);
-                }
-            }
-
-            function isPinnedOrTripleSlashComment(comment: CommentRange) {
-                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-                    return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-                }
-                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-                // so that we don't end up computing comment string and doing match for all // comments
-                else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
-                    comment.pos + 2 < comment.end &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
-                    currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
-                    return true;
                 }
             }
         }

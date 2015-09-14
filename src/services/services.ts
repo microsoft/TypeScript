@@ -802,7 +802,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
-        public resolvedModules: Map<string>;
+        public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
@@ -1022,7 +1022,7 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
          * host specific questions using 'getScriptSnapshot'.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     //
