@@ -7,12 +7,12 @@ namespace ts {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
     
-    export function createNode<T extends Node>(kind: SyntaxKind): T {
-        return factory.createNode<T>(kind);
-    }
+    // export function createNode<T extends Node>(kind: SyntaxKind): T {
+    //     return createNode<T>(kind);
+    // }
     
-    // @internal
-    export namespace factory {
+    // // @internal
+    // export namespace factory {
         export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {
             if (!node || flags === undefined) {
                 return node;
@@ -81,7 +81,7 @@ namespace ts {
         }
         
         export function cloneNodeArray<T extends Node>(array: NodeArray<T>): NodeArray<T> {
-            return array ? factory.createNodeArray(array.slice(0), /*location*/ array) : undefined;
+            return array ? createNodeArray(array.slice(0), /*location*/ array) : undefined;
         }
         
         export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): T {
@@ -124,20 +124,20 @@ namespace ts {
             return modifiers;
         }
         
-        export function createSourceFile(): SourceFile {
-            let node = <SourceFile>createNode(SyntaxKind.SourceFile);
-            return node;
-        }
+        // export function createSourceFileNode(): SourceFile {
+        //     let node = <SourceFile>createNode(SyntaxKind.SourceFile);
+        //     return node;
+        // }
         
-        export function updateSourceFile(node: SourceFile, statements: NodeArray<Statement>, endOfFileToken: Node): SourceFile {
-            if (statements !== node.statements || endOfFileToken !== node.endOfFileToken) {
-                let newNode = createSourceFile();
-                newNode.statements = statements;
-                newNode.endOfFileToken = endOfFileToken;
-                return updateFrom(node, newNode); 
-            }
-            return node;
-        }
+        // export function updateSourceFileNode(node: SourceFile, statements: NodeArray<Statement>, endOfFileToken: Node): SourceFile {
+        //     if (statements !== node.statements || endOfFileToken !== node.endOfFileToken) {
+        //         let newNode = createNode<SourceFile>(SyntaxKind.SourceFile);
+        //         newNode.statements = statements;
+        //         newNode.endOfFileToken = endOfFileToken;
+        //         return updateFrom(node, newNode); 
+        //     }
+        //     return node;
+        // }
         
         export function createNumericLiteral2(value: number, location?: TextRange, flags?: NodeFlags): LiteralExpression {
             let node = createNumericLiteral(String(value), location, flags);
@@ -320,6 +320,10 @@ namespace ts {
             return createFunctionExpression(undefined, undefined, asteriskToken, name, undefined, parameters, undefined, body, location, flags);
         }
         
+        export function createArrowFunction2(parameters: ParameterDeclaration[], body: Block | Expression, location?: TextRange, flags?: NodeFlags) {
+            return createArrowFunction(undefined, undefined, undefined, parameters, undefined, createNode(SyntaxKind.EqualsGreaterThanToken), body, location, flags);
+        }
+
         export function createGeneratorFunctionExpression(parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags) {
             return createFunctionExpression(undefined, undefined, createNode(SyntaxKind.AsteriskToken), undefined, undefined, parameters, undefined, body, location, flags);
         }
@@ -347,11 +351,11 @@ namespace ts {
         }
         
         export function createApplyCall(target: Expression, thisArg: Expression, _arguments: Expression, location?: TextRange, flags?: NodeFlags) {
-            return factory.createCallExpression2(createPropertyAccessExpression3(target, "apply"), [thisArg, _arguments], location, flags);
+            return createCallExpression2(createPropertyAccessExpression3(target, "apply"), [thisArg, _arguments], location, flags);
         }
 
         export function createExtendsHelperCall(name: Identifier) {
-            return factory.createCallExpression2(createIdentifier("__extends"), [name, createIdentifier("_super")]);
+            return createCallExpression2(createIdentifier("__extends"), [name, createIdentifier("_super")]);
         }
         
         export function createAwaiterHelperCall(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
@@ -390,7 +394,7 @@ namespace ts {
             value = ensureIdentifier(value);
             
             // <value> === void 0 ? <defaultValue> : <value>
-            return factory.createConditionalExpression2(factory.createStrictEqualityExpression(value, factory.createVoidZeroExpression()), defaultValue, value, location, flags);
+            return createConditionalExpression2(createStrictEqualityExpression(value, createVoidZeroExpression()), defaultValue, value, location, flags);
         }
 
         export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange, flags?: NodeFlags): MemberExpression {
@@ -404,7 +408,7 @@ namespace ts {
         export function inlineExpressions(expressions: Expression[]) {
             return reduceLeft(expressions, createCommaExpression);
         }
-    }
+    // }
 
     export function isDeclarationStatement(node: Node): node is DeclarationStatement {
         if (node) {

@@ -978,7 +978,7 @@ namespace ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
-            let node = factory.createNode(kind);
+            let node = ts.createNode(kind);
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }

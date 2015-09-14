@@ -756,7 +756,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             // Create a temporary variable with a unique unused name.
             function createTempVariable(flags: TempFlags): Identifier {
-                return factory.createIdentifier(makeTempVariableName(flags));
+                return createIdentifier(makeTempVariableName(flags));
             }
 
             function recordTempDeclaration(name: Identifier): void {
@@ -3124,7 +3124,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // Initialize LHS
                 // let v = _a[_i];
-                let rhsIterationValue = factory.createElementAccessExpression(rhsReference, counter);
+                let rhsIterationValue = createElementAccessExpression(rhsReference, counter);
                 emitStart(node.initializer);
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
@@ -3159,7 +3159,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     // Initializer is an expression. Emit the expression in the body, so that it's
                     // evaluated on every iteration.
-                    let assignmentExpression = factory.createBinaryExpression2(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue);
+                    let assignmentExpression = createBinaryExpression2(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue);
                     if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
@@ -3552,7 +3552,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             pushNode(p);
                             let propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                            let expr = factory.createPropertyOrElementAccessExpression(value, propName);
+                            let expr = createPropertyOrElementAccessExpression(value, propName);
                             emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, expr);
                             popNode();
                         }
@@ -3575,11 +3575,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         let e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, factory.createElementAccessExpression3(value, i));
+                                emitDestructuringAssignment(e, createElementAccessExpression3(value, i));
                             }
                             else if (i === elements.length - 1) {
                                 pushNode(e);
-                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, factory.createSliceCall(value, i));
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i));
                                 popNode();
                             }
                         }
@@ -3591,7 +3591,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     verifyStackBehavior(StackBehavior.ParentIsOnTopOfStack, target);
                     
                     if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
-                        value = factory.createDefaultValueCheck(value, (<BinaryExpression>target).right, ensureIdentifier);
+                        value = createDefaultValueCheck(value, (<BinaryExpression>target).right, ensureIdentifier);
                         target = (<BinaryExpression>target).left;
                     }
                     if (target.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -3637,11 +3637,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     
                     if (target.initializer) {
                         // Combine value and initializer
-                        value = value ? factory.createDefaultValueCheck(value, target.initializer, ensureIdentifier) : target.initializer;
+                        value = value ? createDefaultValueCheck(value, target.initializer, ensureIdentifier) : target.initializer;
                     }
                     else if (!value) {
                         // Use 'void 0' in absence of value and initializer
-                        value = factory.createVoidZeroExpression();
+                        value = createVoidZeroExpression();
                     }
                     
                     if (isBindingPattern(target.name)) {
@@ -3659,15 +3659,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 let propName = element.propertyName || <Identifier>element.name;
-                                emitBindingElement(element, factory.createPropertyOrElementAccessExpression(value, propName));
+                                emitBindingElement(element, createPropertyOrElementAccessExpression(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, factory.createElementAccessExpression3(value, i));
+                                    emitBindingElement(element, createElementAccessExpression3(value, i));
                                 }
                                 else if (i === elements.length - 1) {
-                                    emitBindingElement(element, factory.createSliceCall(value, i));
+                                    emitBindingElement(element, createSliceCall(value, i));
                                 }
                             }
                             popNode();
@@ -3711,7 +3711,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             let grandparent = nodeStack.getGrandparent();
                             if (grandparent.kind !== SyntaxKind.ForInStatement &&
                                 grandparent.kind !== SyntaxKind.ForOfStatement) {
-                                initializer = factory.createVoidZeroExpression();
+                                initializer = createVoidZeroExpression();
                             }
                         }
                     }

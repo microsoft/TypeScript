@@ -1,9 +1,15 @@
 /// <reference path="factory.ts" />
 /// <reference path="transform.generated.ts" />
-const FORCE_TRANSFORMS = true;
+const FORCE_TRANSFORMS = false;
 
 /* @internal */
 namespace ts {
+    export type Visitor = (input: Node, output: (node: Node) => void) => void;
+    export type LexicalEnvironmentBody = ModuleDeclaration | ModuleBlock | Block | Expression;
+    export type PipelineOutput<TOut extends Node> = (node: TOut) => void;
+    export type Pipeline<TIn extends Node, TOut extends Node> = (input: TIn, output: PipelineOutput<TOut>) => void;
+    export type NodeTest<T extends Node> = (node: Node) => node is T;
+        
     /**
       * Computes the transform flags for a node, given the transform flags of its subtree
       * @param node The node to analyze
@@ -254,15 +260,10 @@ namespace ts {
         return transform.runTransformationChain(statements, chain, _compilerOptions, _currentSourceFile, _resolver, _generatedNameSet, _nodeToGeneratedName);
     }
     
-    export type Visitor = (input: Node, output: (node: Node) => void) => void;
-    export type PipelineOutput<TOut extends Node> = (node: TOut) => void;
-    export type Pipeline<TIn extends Node, TOut extends Node> = (input: TIn, output: PipelineOutput<TOut>) => void;
-    export type NodeTest<T extends Node> = (node: Node) => node is T;
-    
-    
     export const enum VisitorFlags {
-        NewLexicalEnvironment = 1 << 1,
-        ReturnUndefinedIfEmpty = 1 << 3,
+        LexicalEnvironment = 1 << 1,
+        StatementOrBlock = 1 << 2,
+        //ExpressionOrBlock = 1 << 3,
     }
     
     export namespace transform {
@@ -290,20 +291,14 @@ namespace ts {
         let nodeStack: NodeStack;
         
         // single node transform
-        let updatedNode: Node;
-        let writeNodeFastOrSlow: (node: Node) => void;
-        
-        // single statement transform
-        let updatedStatement: Statement;
-        let updatedBlock: Block;
-        let writeStatementFastOrSlow: (node: Statement) => void;
-        
-        // multiple node transform
-        let originalNodes: Node[];
-        let updatedNodes: Node[];
+        let nodeTestCallback: (node: Node) => boolean;
         let offsetWritten: number;
-        let writeNodeToNodeArrayFastOrSlow: (node: Node) => void;
-        
+        let originalNodes: Node[];
+        let updatedNode: Node;
+        let updatedNodes: Node[];
+        let writeNodeWithOrWithoutNodeTest: (node: Node) => void;
+        let writeNodeFastOrSlow: (node: Node) => void;
+
         export function runTransformationChain(statements: NodeArray<Statement>, chain: (statements: NodeArray<Statement>) => NodeArray<Statement>, 
             _compilerOptions: CompilerOptions, _currentSourceFile: SourceFile, _resolver: EmitResolver, _generatedNameSet: Map<string>, _nodeToGeneratedName: string[]) {
             Debug.assert(!transformationRunning, "Transformation already running");
@@ -386,7 +381,7 @@ namespace ts {
     
         export function getGeneratedNameForNode(node: Node) {
             let id = getNodeId(node);
-            return nodeToGeneratedIdentifier[id] || (nodeToGeneratedIdentifier[id] = factory.createIdentifier(getGeneratedNameTextForNode(node, id)));
+            return nodeToGeneratedIdentifier[id] || (nodeToGeneratedIdentifier[id] = createIdentifier(getGeneratedNameTextForNode(node, id)));
         }
         
         export function nodeHasGeneratedName(node: Node) {
@@ -492,7 +487,7 @@ namespace ts {
         export function getDeclarationName<T extends DeclarationName>(node: Declaration): T | Identifier {
             let name = node.name;
             if (name) {
-                return nodeIsSynthesized(name) ? <T>name : factory.cloneNode(<T>name);
+                return nodeIsSynthesized(name) ? <T>name : cloneNode(<T>name);
             }
             else {
                 return getGeneratedNameForNode(node);
@@ -502,9 +497,9 @@ namespace ts {
         export function getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement) {
             let expression: Expression = getDeclarationName(node);
             if (!(member.flags & NodeFlags.Static)) {
-                expression = factory.createPropertyAccessExpression2(
+                expression = createPropertyAccessExpression2(
                     expression,
-                    factory.createIdentifier("prototype")
+                    createIdentifier("prototype")
                 );
             }
     
@@ -513,12 +508,12 @@ namespace ts {
     
         export function createUniqueIdentifier(baseName: string): Identifier {
             let name = makeUniqueName(baseName);
-            return factory.createIdentifier(name);
+            return createIdentifier(name);
         }
     
         export function createTempVariable(loopVariable: boolean): Identifier {
             let name = makeTempVariableName(loopVariable ? TempFlags._i : TempFlags.Auto);
-            return factory.createIdentifier(name);
+            return createIdentifier(name);
         }
     
         export function declareLocal(baseName?: string): Identifier {
@@ -534,7 +529,7 @@ namespace ts {
                 hoistedVariableDeclarations = [];
             }
     
-            hoistedVariableDeclarations.push(factory.createVariableDeclaration2(name));
+            hoistedVariableDeclarations.push(createVariableDeclaration2(name));
         }
     
         export function hoistFunctionDeclaration(func: FunctionDeclaration): void {
@@ -594,7 +589,7 @@ namespace ts {
             transformFlags |= aggregateTransformFlagsForThisNodeAndSubtree(child);
         }
         
-        function verifyNode<TOut extends Node>(node: Node, nodeTestCallback: (node: Node) => node is TOut): node is TOut {
+        function verifyNode<TOut extends Node>(node: Node): node is TOut {
             if (!nodeTestCallback(node)) {
                 Debug.fail("Incorrect node kind after visit");
                 return false;
@@ -602,28 +597,25 @@ namespace ts {
             return true;
         }
         
-        function writeNodeToPipeline<TOut extends Node>(node: Node, output: (node: TOut) => void, nodeTest: (node: Node) => node is TOut): void {
-            if (!node) {
-                return;
-            }
-            
-            if (verifyNode(node, nodeTest)) {
-                output(node);
-            }
-        }
-        
         /**
          * A function passed to a visitor callback that can be used to write a single node.
          * @param node The node to write
-         * @remarks This function forwards `node` on either the `writeOneNodeSlow` or 
-         * `writeOneNodeFast` functions by way of the `writeOneNode` variable. This is intended 
-         * as a performance optimization to avoid repetitive checks in a tight loop.
          */
         function writeNode(node: Node) {
             if (!node) {
                 return;
             }
     
+            writeNodeWithOrWithoutNodeTest(node);
+        }
+        
+        function writeNodeWithNodeTest(node: Node) {
+            if (verifyNode(node)) {
+                writeNodeWithoutNodeTest(node);
+            }
+        }
+        
+        function writeNodeWithoutNodeTest(node: Node) {
             aggregateTransformFlags(node);
             writeNodeFastOrSlow(node);
         }
@@ -637,52 +629,29 @@ namespace ts {
             Debug.fail("Node already written");
         }
         
-        function readNode(): Node {
-            return updatedNode;
-        }
-        
-        function writeStatement(node: Statement) {
-            if (!node) {
-                return;
-            }
-            
-            aggregateTransformFlags(node);
-            writeStatementFastOrSlow(node);
-        }
-        
-        function writeStatementSlow(node: Statement) {
-            if (!updatedStatement) {
-                updatedStatement = node;
+        function writeStatementOrBlockSlow(node: Statement) {
+            Debug.assert(isStatementNode(node));
+            if (!updatedNode) {
+                updatedNode = node;
             }
             else {
-                updatedBlock = factory.createBlock([updatedStatement, node]);
-                updatedStatement = undefined;
-                writeStatementFastOrSlow = writeStatementFast;
+                let previousNode = <Statement>updatedNode;
+                updatedNode = createBlock([]);
+                writeNodeFastOrSlow = writeStatementOrBlockFast;
+                writeNodeFastOrSlow(previousNode);
+                writeNodeFastOrSlow(node);
             }
         }
         
-        function writeStatementFast(node: Statement) {
-            updatedBlock.statements.push(node);
-        }
-        
-        function readStatement(): Statement {
-            return updatedBlock || updatedStatement;
-        }
-        
-        function writeNodeToNodeArray(node: Node) {
-            if (!node) {
-                return;
-            }
-            
-            aggregateTransformFlags(node);
-            writeNodeToNodeArrayFastOrSlow(node);
+        function writeStatementOrBlockFast(node: Statement) {
+            (<Block>updatedNode).statements.push(node);
         }
         
         function writeNodeToNodeArraySlow(node: Node) {
             if (offsetWritten === originalNodes.length || originalNodes[offsetWritten] !== node) {
                 updatedNodes = originalNodes.slice(0, offsetWritten);
                 updatedNodes.push(node);
-                writeNodeToNodeArrayFastOrSlow = writeNodeToNodeArrayFast;
+                writeNodeFastOrSlow = writeNodeToNodeArrayFast;
             }
             else {
                 offsetWritten++;
@@ -693,28 +662,23 @@ namespace ts {
             updatedNodes.push(node);
         }
         
+        function readNode(): Node {
+            return updatedNode;
+        }
+        
         function readNodeArray(flags: VisitorFlags): NodeArray<Node> {
             if (updatedNodes) {
-                return factory.createNodeArray(updatedNodes, /*location*/ <NodeArray<Node>>originalNodes);
+                return createNodeArray(updatedNodes, /*location*/ <NodeArray<Node>>originalNodes);
             }
             else if (offsetWritten !== originalNodes.length) {
-                if (offsetWritten === 0 && (flags & VisitorFlags.ReturnUndefinedIfEmpty)) {
-                    return undefined;
-                }
-                else {
-                    return factory.createNodeArray(originalNodes.slice(0, offsetWritten), /*location*/ <NodeArray<Node>>originalNodes);
-                }
+                return createNodeArray(originalNodes.slice(0, offsetWritten), /*location*/ <NodeArray<Node>>originalNodes);
             }
             else {
-                return factory.createNodeArray(originalNodes);
+                return createNodeArray(originalNodes);
             }
         }
         
-        function addNodeTestToPipeline<TOut extends Node>(output: (node: TOut) => void, nodeTest: (node: Node) => node is TOut): (node: TOut) => void {
-            return (node: Node) => writeNodeToPipeline<TOut>(node, output, nodeTest);
-        }
-        
-       /**
+        /**
           * Pipes an input node (or nodes) into an output callback by passing it through a visitor callback.
           * @remarks
           * The primary responsibility of `pipeOneOrMany` is to execute the `visitor` callback for each
@@ -722,7 +686,7 @@ namespace ts {
           * This function also manages when new lexical environments are introduced, and tracks temporary 
           * variables and hoisted variable and function declarations.
           */
-        function pipeOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Visitor, output: (node: TOut) => void, flags: VisitorFlags, nodeTest: (node: Node) => node is TOut): void {
+        function pipeOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Visitor, output: (node: TOut) => void, flags: VisitorFlags): void {
             if (!inputNode && !inputNodes) {
                 return;
             }
@@ -734,7 +698,7 @@ namespace ts {
             
             // If we are starting a new lexical environment, we need to reinitialize the lexical
             // environment state as well
-            if (flags & VisitorFlags.NewLexicalEnvironment) {
+            if (flags & VisitorFlags.LexicalEnvironment) {
                 savedTempFlags = tempFlags;
                 savedHoistedVariableDeclarations = hoistedVariableDeclarations;
                 savedHoistedFunctionDeclarations = hoistedFunctionDeclarations;
@@ -742,11 +706,6 @@ namespace ts {
                 tempFlags = 0;
                 hoistedVariableDeclarations = undefined;
                 hoistedFunctionDeclarations = undefined;
-            }
-            
-            // If a node test was supplied, we need to wrap the output with an assertion
-            if (nodeTest) {
-                output = addNodeTestToPipeline(output, nodeTest);
             }
             
             if (inputNode) {
@@ -774,9 +733,9 @@ namespace ts {
             
             // If we established a new lexical environment, we need to write any hoisted variables or
             // function declarations to the end of the output.
-            if (flags & VisitorFlags.NewLexicalEnvironment) {
+            if (flags & VisitorFlags.LexicalEnvironment) {
                 if (hoistedVariableDeclarations) {
-                    var stmt = factory.createVariableStatement2(factory.createVariableDeclarationList(hoistedVariableDeclarations));
+                    var stmt = createVariableStatement2(createVariableDeclarationList(hoistedVariableDeclarations));
                     output(<TOut><Node>stmt);
                 }
                 else if (hoistedFunctionDeclarations) {
@@ -792,156 +751,76 @@ namespace ts {
             }
         }
 
-        function emitOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags: VisitorFlags, nodeTest: (node: Node) => node is TOut): TOut[] {
+        function emitOne<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags: VisitorFlags, nodeTest: NodeTest<TOut>): TOut {
+            if (!input) {
+                return undefined;
+            }
+            
+            // Preserve the current environment on the call stack as we descend into the tree
+            let savedUpdatedNode = updatedNode;
+            let savedNodeTestCallback = nodeTestCallback;
+            let savedWriteNodeWithOrWithoutNodeTest = writeNodeWithOrWithoutNodeTest;
+            let savedWriteNodeFastOrSlow = writeNodeFastOrSlow;
+            
+            // Establish the new environment
+            updatedNode = undefined;
+            nodeTestCallback = nodeTest;
+            writeNodeWithOrWithoutNodeTest = nodeTest ? writeNodeWithNodeTest : writeNodeWithoutNodeTest;
+            writeNodeFastOrSlow = flags & VisitorFlags.StatementOrBlock ? writeNodeFastOrSlow = writeStatementOrBlockSlow : writeNodeFastOrSlow = writeNodeSlow;
+
+            // Pipe the input node into the output
+            pipeOneOrMany<TIn, TOut>(input, undefined, pipeline, writeNode, flags);
+            
+            // Read the result node
+            let result = <TOut>readNode();
+            
+            // Restore the previous environment
+            updatedNode = savedUpdatedNode;
+            nodeTestCallback = savedNodeTestCallback;
+            writeNodeWithOrWithoutNodeTest = savedWriteNodeWithOrWithoutNodeTest;
+            writeNodeFastOrSlow = savedWriteNodeFastOrSlow;
+
+            return result;
+        }
+        
+        function emitOneOrMany<TIn extends Node, TOut extends Node>(inputNode: TIn, inputNodes: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags: VisitorFlags, nodeTest: (node: Node) => node is TOut): NodeArray<TOut> {
             // Exit early if we have nothing to do
             if (!inputNode && !inputNodes) {
                 return undefined;
             }
             
             // Preserve the current environment on the call stack as we descend into the tree
+            let savedOffsetWritten = offsetWritten;
             let savedOriginalNodes = originalNodes;
             let savedUpdatedNodes = updatedNodes;
-            let savedOffsetWritten = offsetWritten;
-            let savedWriteNodeToNodeArrayFastOrSlow = writeNodeToNodeArrayFastOrSlow;
+            let savedNodeTestCallback = nodeTestCallback;
+            let savedWriteNodeWithOrWithoutNodeTest = writeNodeWithOrWithoutNodeTest;
+            let savedWriteNodeFastOrSlow = writeNodeFastOrSlow;
             
             // Establish the new environment
-            originalNodes = undefined;
+            offsetWritten = 0;
+            originalNodes = inputNodes;
             updatedNodes = output;
-            offsetWritten = 0;
-            writeNodeToNodeArrayFastOrSlow = writeNodeToNodeArrayFast;
+            nodeTestCallback = nodeTest;
+            writeNodeWithOrWithoutNodeTest = nodeTest ? writeNodeWithNodeTest : writeNodeWithoutNodeTest;
+            writeNodeFastOrSlow = output ? writeNodeToNodeArrayFast : writeNodeToNodeArraySlow;
             
-            pipeOneOrMany<TIn, TOut>(inputNode, inputNodes, pipeline, writeNodeToNodeArray, flags, nodeTest);
+            // Pipe the input nodes to the output array through a pipeline
+            pipeOneOrMany<TIn, TOut>(inputNode, inputNodes, pipeline, writeNode, flags);
+            
+            // Read the output array
+            output = <NodeArray<TOut>>readNodeArray(flags);
             
             // Restore previous environment
+            offsetWritten = savedOffsetWritten;
             originalNodes = savedOriginalNodes;
             updatedNodes = savedUpdatedNodes;
-            offsetWritten = savedOffsetWritten;
-            writeNodeToNodeArrayFastOrSlow = savedWriteNodeToNodeArrayFastOrSlow;
+            nodeTestCallback = savedNodeTestCallback;
+            writeNodeFastOrSlow = savedWriteNodeFastOrSlow;
+            writeNodeWithOrWithoutNodeTest = savedWriteNodeWithOrWithoutNodeTest;
             
-            return output;
-        }
-        
-        /**
-        * Pipelines the results of visiting a single input node to an output callback function.
-        * @param input The source node to visit.
-        * @param pipeline The callback to execute as we visit each node in the source.
-        * @param output The callback passed to `visitor` to write each visited node.
-        * @param flags Flags that affect the pipeline.
-        */
-        export function pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
-            pipeOneOrMany(input, undefined, pipeline, output, flags, nodeTest); 
-        }
-        
-        /**
-        * Pipelines the results of visiting each node from an input source to an output callback function.
-        * @param input The source nodes to visit.
-        * @param pipeline The callback to execute as we visit each node in the source.
-        * @param output The callback passed to `visitor` to write each visited node.
-        * @param flags Flags that affect the pipeline.
-        */
-        export function pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
-            pipeOneOrMany(undefined, input, pipeline, output, flags, nodeTest);
-        }
-        
-        /**
-        * Writes the result from visiting a single input node to an output node array.
-        * @param input The source node to visit.
-        * @param pipeline The callback to execute as we visit each node in the source.
-        * @param output The destination node array to which to write the results from visiting each node.
-        * @param flags Flags that affect the pipeline.
-        */
-        export function emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
-            emitOneOrMany(input, undefined, pipeline, output, flags, nodeTest);
-        }
-        
-        /**
-        * Writes the result from visiting each node from an input source to an output node array.
-        * @param input The source nodes to visit.
-        * @param pipeline The callback to execute as we visit each node in the source.
-        * @param output The destination node array to which to write the results from visiting each node.
-        * @param flags Flags that affect the pipeline.
-        */
-        export function emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
-            emitOneOrMany(undefined, input, pipeline, output, flags, nodeTest);
-        }
-        
-        export function visitNode<T extends Node>(node: T, visitor: Visitor, flags?: VisitorFlags): T;
-        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Visitor, flags?: VisitorFlags, nodeTest?: (node: Node) => node is TOut): TOut;
-        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Visitor, flags?: VisitorFlags, nodeTest?: (node: Node) => node is TOut): TOut {
-            if (!node) {
-                return undefined;
-            }
-            
-            let savedUpdatedNode = updatedNode;
-            let savedWriteOneNode = writeNodeFastOrSlow;
-            updatedNode = undefined;
-            writeNodeFastOrSlow = writeNodeSlow;
-            
-            pipeNode<TIn, TOut>(node, visitor, writeNode, flags, nodeTest);
-            
-            let visited = <TOut>readNode();
-            updatedNode = savedUpdatedNode;
-            writeNodeFastOrSlow = savedWriteOneNode;
-            
-            return visited;
-        }
-    
-        export function visitStatement(node: Statement, visitor: Visitor, flags?: VisitorFlags) {
-            if (!node) {
-                return node;
-            }
-            
-            let savedUpdatedStatement = updatedStatement;
-            let savedUpdatedBlock = updatedBlock;
-            let savedWriteOneStatement = writeStatementFastOrSlow;
-            
-            updatedStatement = undefined;
-            updatedBlock = undefined;
-            writeStatementFastOrSlow = writeStatementSlow;
-    
-            pipeNode<Statement, Statement>(node, visitor, writeStatement, flags, isStatementNode);
-    
-            let visited = readStatement();
-            updatedStatement = savedUpdatedStatement;
-            updatedBlock = savedUpdatedBlock;
-            writeStatementFastOrSlow = savedWriteOneStatement;
-            
-            return visited;
-        }
-    
-        export function visitNodes<T extends Node>(nodes: T[], visitor: Visitor, flags?: VisitorFlags): NodeArray<T>;
-        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], visitor: Visitor, flags?: VisitorFlags): NodeArray<TOut>;
-        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], visitor: Visitor, flags?: VisitorFlags, nodeTest?: (node: Node) => node is TOut): NodeArray<TOut> {
-            // Exit early if we have nothing to do
-            if (!nodes) {
-                return undefined;
-            }
-            
-            // Preserve the current environment on the call stack as we descend into the tree
-            let savedOriginalNodes = originalNodes;
-            let savedUpdatedNodes = updatedNodes;
-            let savedOffsetWritten = offsetWritten;
-            let savedWriteNodeToNodeArrayFastOrSlow = writeNodeToNodeArrayFastOrSlow;
-    
-            // Establish the new environment
-            originalNodes = nodes;
-            updatedNodes = undefined;
-            offsetWritten = 0;
-            writeNodeToNodeArrayFastOrSlow = writeNodeToNodeArraySlow;
-            
-            // Pipe each node from input into output
-            pipeNodes<TIn, TOut>(nodes, visitor, writeNodeToNodeArray, flags, nodeTest);
-            
-            let visited = readNodeArray(flags);
-    
-            // Restore previous environment
-            originalNodes = savedOriginalNodes;
-            updatedNodes = savedUpdatedNodes;
-            offsetWritten = savedOffsetWritten;
-            writeNodeToNodeArrayFastOrSlow = savedWriteNodeToNodeArrayFastOrSlow;
-    
-            return <NodeArray<TOut>>visited;
-            
+            return createNodeArray(output);
+
             // let updatedNodes: T[];
             // //let cacheOffset = 0;
             // for (var i = 0; i < nodes.length; i++) {
@@ -977,49 +856,101 @@ namespace ts {
             // }
         }
         
-        export function visitNewLexicalEnvironment(node: ModuleDeclaration | ModuleBlock | Block | Expression, visitor: (input: Node, write: (node: Node) => void) => void): ModuleDeclaration | ModuleBlock | Block | Expression {
-            switch (node.kind) {
-                case SyntaxKind.Block:
-                    return factory.updateBlock(
-                        <Block>node,
-                        visitNodes((<Block>node).statements, visitor, VisitorFlags.NewLexicalEnvironment)
-                    );
-                    
-                case SyntaxKind.ModuleBlock:
-                    return factory.updateModuleBlock(
-                        <ModuleBlock>node,
-                        visitNodes((<ModuleBlock>node).statements, visitor, VisitorFlags.NewLexicalEnvironment)
-                    );
-                
-                default:
-                    if (isExpressionNode(node)) {
-                        return visitExpressionFunctionBodyInNewLexicalEnvironment(node, visitor);
-                    }
-                    else {
-                        return visitNode(node, visitor);
-                    }
+        /**
+         * Pipelines the results of visiting a single input node to an output callback function.
+         * @param input The source node to visit.
+         * @param pipeline The callback to execute as we visit each node in the source.
+         * @param output The callback passed to `visitor` to write each visited node.
+         * @param flags Flags that affect the pipeline.
+         */
+        export function pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: VisitorFlags): void {
+            pipeOneOrMany(input, undefined, pipeline, output, flags); 
+        }
+        
+        /**
+         * Pipelines the results of visiting each node from an input source to an output callback function.
+         * @param input The source nodes to visit.
+         * @param pipeline The callback to execute as we visit each node in the source.
+         * @param output The callback passed to `visitor` to write each visited node.
+         * @param flags Flags that affect the pipeline.
+         */
+        export function pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: VisitorFlags): void {
+            pipeOneOrMany(undefined, input, pipeline, output, flags);
+        }
+        
+        /**
+         * Writes the result from visiting a single input node to an output node array.
+         * @param input The source node to visit.
+         * @param pipeline The callback to execute as we visit each node in the source.
+         * @param output The destination node array to which to write the results from visiting each node.
+         * @param flags Flags that affect the pipeline.
+         */
+        export function emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
+            emitOneOrMany(input, undefined, pipeline, output, flags, nodeTest);
+        }
+        
+        /**
+         * Writes the result from visiting each node from an input source to an output node array.
+         * @param input The source nodes to visit.
+         * @param pipeline The callback to execute as we visit each node in the source.
+         * @param output The destination node array to which to write the results from visiting each node.
+         * @param flags Flags that affect the pipeline.
+         */
+        export function emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): void {
+            emitOneOrMany(undefined, input, pipeline, output, flags, nodeTest);
+        }
+        
+        export function visitNode<T extends Node>(node: T, visitor: Visitor, flags?: VisitorFlags): T;
+        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): TOut;
+        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): TOut {
+            return emitOne(node, visitor, flags, nodeTest);
+        }
+    
+        export function visitStatement(node: Statement, visitor: Visitor, flags?: VisitorFlags) {
+            return emitOne<Statement, Statement>(node, visitor, flags | VisitorFlags.StatementOrBlock, undefined);
+        }
+    
+        export function visitNodes<T extends Node>(nodes: T[], pipeline: Visitor, flags?: VisitorFlags): NodeArray<T>;
+        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
+        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: VisitorFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
+            return emitOneOrMany<TIn, TOut>(undefined, nodes, pipeline, undefined, flags, nodeTest);
+        }
+        
+        export function visitNewLexicalEnvironment(node: LexicalEnvironmentBody, pipeline: Visitor): LexicalEnvironmentBody {
+            if (isBlock(node)) {
+                return updateBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, VisitorFlags.LexicalEnvironment));
+            }
+            else if (isModuleBlock(node)) {
+                return updateModuleBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, VisitorFlags.LexicalEnvironment));
+            }
+            else if (isExpressionNode(node)) {
+                return visitExpressionFunctionBodyInNewLexicalEnvironment(node, pipeline);
+            }
+            else {
+                return visitNode(node, pipeline);
             }
         }
         
-        function visitExpressionFunctionBodyInNewLexicalEnvironment(node: Expression, visitor: (input: Node, write: (node: Node) => void) => void): Expression | Block {
+        function visitExpressionFunctionBodyInNewLexicalEnvironment(node: Expression, pipeline: Pipeline<Expression, Expression>): Expression | Block {
             let savedTempFlags = tempFlags;
             let savedHoistedVariableDeclarations = hoistedVariableDeclarations;
             let savedHoistedFunctionDeclarations = hoistedFunctionDeclarations;
+            
             tempFlags = 0;
             hoistedVariableDeclarations = undefined;
             hoistedFunctionDeclarations = undefined;
     
-            let visited = visitNode(node, visitor);
+            let visited = visitNode(node, pipeline);
             let result: Block | Expression;
             if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
-                let block = factory.createBlock([]);
+                let block = createBlock([]);
                 if (visited) {
-                    let returnStmt = factory.createReturnStatement(visited);
+                    let returnStmt = createReturnStatement(visited);
                     block.statements.push(returnStmt);
                 }
                 
                 if (hoistedVariableDeclarations) {
-                    block.statements.push(factory.createVariableStatement2(factory.createVariableDeclarationList(hoistedVariableDeclarations)));
+                    block.statements.push(createVariableStatement2(createVariableDeclarationList(hoistedVariableDeclarations)));
                 }
                 
                 if (hoistedFunctionDeclarations) {

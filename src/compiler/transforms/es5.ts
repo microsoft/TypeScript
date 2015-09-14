@@ -2,7 +2,7 @@
 /*@internal*/
 namespace ts.transform {
     export function toES5(statements: NodeArray<Statement>) {
-        return visitNodes(statements, transformNode, VisitorFlags.NewLexicalEnvironment);
+        return visitNodes(statements, transformNode, VisitorFlags.LexicalEnvironment);
     }
     
     /**
@@ -101,9 +101,9 @@ namespace ts.transform {
         let name = getDeclarationName(node);
         let classInitExpr = transformClassLikeDeclaration(node, name);
         let baseTypeNode = getClassExtendsHeritageClauseElement(node);
-        let varDecl = factory.createVariableDeclaration2(name, classInitExpr);
-        let varDecls = factory.createVariableDeclarationList([varDecl]);
-        let varStmt = factory.createVariableStatement2(varDecls, /*location*/ node);
+        let varDecl = createVariableDeclaration2(name, classInitExpr);
+        let varDecls = createVariableDeclarationList([varDecl]);
+        let varStmt = createVariableStatement2(varDecls, /*location*/ node);
         return write(varStmt);
     } 
     
@@ -114,15 +114,15 @@ namespace ts.transform {
 
     function transformClassLikeDeclaration(node: ClassLikeDeclaration, name: Identifier): LeftHandSideExpression {
         let baseTypeNode = getClassExtendsHeritageClauseElement(node);
-        let classBody = factory.createBlock([]);
+        let classBody = createBlock([]);
         emitNode(node, transformClassBody, classBody.statements);
         
         let superExpr = baseTypeNode ? visitNode(baseTypeNode.expression, transformNode) : undefined;
-        let superName = baseTypeNode ? factory.createIdentifier("_super") : undefined;
-        let superParam = baseTypeNode ? factory.createParameter2(superName) : undefined;
-        let classDecl = factory.createFunctionExpression2(/*name*/ undefined, baseTypeNode ? [superParam] : [], classBody);
-        let parenExpr = factory.createParenthesizedExpression(classDecl);
-        let callExpr = factory.createCallExpression2(parenExpr, baseTypeNode ? [superExpr] : undefined);
+        let superName = baseTypeNode ? createIdentifier("_super") : undefined;
+        let superParam = baseTypeNode ? createParameter2(superName) : undefined;
+        let classDecl = createFunctionExpression2(/*name*/ undefined, baseTypeNode ? [superParam] : [], classBody);
+        let parenExpr = createParenthesizedExpression(classDecl);
+        let callExpr = createCallExpression2(parenExpr, baseTypeNode ? [superExpr] : undefined);
         return callExpr;
     }
     
@@ -133,7 +133,7 @@ namespace ts.transform {
         emitConstructor(node, name, baseTypeNode, write);
         emitMemberFunctions(node, write);
 
-        let returnStmt = factory.createReturnStatement(name);
+        let returnStmt = createReturnStatement(name);
         write(returnStmt);
     }
     
@@ -142,25 +142,25 @@ namespace ts.transform {
             return;
         }
         
-        let extendsExpr = factory.createExtendsHelperCall(name);
-        let extendsStmt = factory.createExpressionStatement(extendsExpr);
+        let extendsExpr = createExtendsHelperCall(name);
+        let extendsStmt = createExpressionStatement(extendsExpr);
         write(extendsStmt);
     }
     
     function emitConstructor(node: ClassLikeDeclaration, name: Identifier, baseTypeNode: ExpressionWithTypeArguments, write: (node: Statement) => void) {
         let constructor = getFirstConstructorWithBody(node);
         let parameters: ParameterDeclaration[] = constructor ? visitNodes(constructor.parameters, transformNode) : [];
-        let body = factory.createBlock([]);
+        let body = createBlock([]);
 
         if (constructor) {
-            emitNode(constructor, transformConstructor, body.statements, VisitorFlags.NewLexicalEnvironment);
+            emitNode(constructor, transformConstructor, body.statements, VisitorFlags.LexicalEnvironment);
         }
         else if (baseTypeNode) {
             let superCall = createDefaultSuperCall();
             body.statements.push(superCall);
         }
 
-        let constructorFunc = factory.createFunctionDeclaration2(name, parameters, body);
+        let constructorFunc = createFunctionDeclaration2(name, parameters, body);
         write(constructorFunc);
     }
     
@@ -173,14 +173,14 @@ namespace ts.transform {
     
     function transformParameter(node: ParameterDeclaration, write: (node: ParameterDeclaration) => void) {
         if (isBindingPattern(node.name)) {
-            write(factory.createParameter2(
+            write(createParameter2(
                 getGeneratedNameForNode(node),
                 /*initializer*/ undefined,
                 /*location*/ node
             ));
         }
         else if (node.initializer) {
-            write(factory.createParameter2(
+            write(createParameter2(
                 node.name,
                 /*initializer*/ undefined,
                 /*location*/ node
@@ -223,18 +223,18 @@ namespace ts.transform {
         // of an initializer, we must emit that expression to preserve side effects.
         let hasBindingElements = name.elements.length > 0;
         if (hasBindingElements) {
-            let varDecls = factory.createVariableDeclarationList([]);
+            let varDecls = createVariableDeclarationList([]);
             transformBindingElement(parameter, tempName, varDecls.declarations, /*assignments*/ undefined);
             
-            let varStmt = factory.createVariableStatement2(varDecls);
-            factory.startOnNewLine(varStmt);
+            let varStmt = createVariableStatement2(varDecls);
+            startOnNewLine(varStmt);
             write(varStmt);
         }
         else if (initializer) {
             let initExpr = visitNode(initializer, transformNode);
-            let assignExpr = factory.createAssignmentExpression(tempName, initExpr);
-            let assignStmt = factory.createExpressionStatement(assignExpr);
-            factory.startOnNewLine(assignStmt);
+            let assignExpr = createAssignmentExpression(tempName, initExpr);
+            let assignStmt = createExpressionStatement(assignExpr);
+            startOnNewLine(assignStmt);
             write(assignStmt);
         }
     }
@@ -247,7 +247,7 @@ namespace ts.transform {
         }
         else if (!value) {
             // Use 'void 0' in absence of value and initializer
-            value = factory.createVoidZeroExpression();
+            value = createVoidZeroExpression();
         }
         
         let name = target.name;
@@ -263,15 +263,15 @@ namespace ts.transform {
                 if (name.kind === SyntaxKind.ObjectBindingPattern) {
                     // Rewrite element to a declaration with an initializer that fetches property
                     let propName = element.propertyName || <Identifier>element.name;
-                    transformBindingElement(element, factory.createPropertyOrElementAccessExpression(value, propName), declarations, assignments);
+                    transformBindingElement(element, createPropertyOrElementAccessExpression(value, propName), declarations, assignments);
                 }
                 else if (element.kind !== SyntaxKind.OmittedExpression) {
                     if (!element.dotDotDotToken) {
                         // Rewrite element to a declaration that accesses array element at index i
-                        transformBindingElement(element, factory.createElementAccessExpression3(value, i), declarations, assignments);
+                        transformBindingElement(element, createElementAccessExpression3(value, i), declarations, assignments);
                     }
                     else if (i === elements.length - 1) {
-                        transformBindingElement(element, factory.createSliceCall(value, i), declarations, assignments);
+                        transformBindingElement(element, createSliceCall(value, i), declarations, assignments);
                     }
                 }
             }
@@ -282,11 +282,11 @@ namespace ts.transform {
     }
     
     function appendAssignment(left: Identifier, right: Expression, declarations: VariableDeclaration[], assignments: Expression[]): void {
-        let varDecl = factory.createVariableDeclaration2(left, assignments ? undefined : right);
+        let varDecl = createVariableDeclaration2(left, assignments ? undefined : right);
         declarations.push(varDecl);
         
         if (assignments) {
-            let assignExpr = factory.createAssignmentExpression(left, right);
+            let assignExpr = createAssignmentExpression(left, right);
             assignments.push(assignExpr);
         }
     }
@@ -304,20 +304,20 @@ namespace ts.transform {
     
     function createDefaultValueCheck(value: Expression, defaultValue: Expression, declarations: VariableDeclaration[], assignments: Expression[]) {
         value = ensureIdentifier(value, declarations, assignments);
-        let equalityExpr = factory.createStrictEqualityExpression(value, factory.createVoidZeroExpression());
-        let conditionalExpr = factory.createConditionalExpression2(equalityExpr, defaultValue, value);
+        let equalityExpr = createStrictEqualityExpression(value, createVoidZeroExpression());
+        let conditionalExpr = createConditionalExpression2(equalityExpr, defaultValue, value);
         return conditionalExpr;
     }
     
     function emitDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, write: (node: Statement) => void): void {
-        name = factory.cloneNode(name);
-        let equalityExpr = factory.createStrictEqualityExpression(name, factory.createVoidZeroExpression());
+        name = cloneNode(name);
+        let equalityExpr = createStrictEqualityExpression(name, createVoidZeroExpression());
         let initExpr = visitNode(initializer, transformNode);
-        let assignExpr = factory.createAssignmentExpression(name, initExpr);
-        let assignStmt = factory.createExpressionStatement(assignExpr);
-        let trueStmt = factory.createBlock([assignStmt]);
-        let ifStmt = factory.createIfStatement(equalityExpr, trueStmt);
-        factory.startOnNewLine(ifStmt);
+        let assignExpr = createAssignmentExpression(name, initExpr);
+        let assignStmt = createExpressionStatement(assignExpr);
+        let trueStmt = createBlock([assignStmt]);
+        let ifStmt = createIfStatement(equalityExpr, trueStmt);
+        startOnNewLine(ifStmt);
         write(ifStmt);
     }
     
@@ -334,31 +334,31 @@ namespace ts.transform {
         let restIndex = node.parameters.length - 1;
         let _i = createTempVariable(/*loopVariable*/ true);
         let name = <Identifier>getDeclarationName(restParam);
-        let arrayExpr = factory.createArrayLiteralExpression([]);
-        let paramVarDecl = factory.createVariableDeclaration2(name, arrayExpr);
-        let paramVarDecls = factory.createVariableDeclarationList([paramVarDecl]);
-        let paramVarStmt = factory.createVariableStatement2(paramVarDecls);
-        factory.startOnNewLine(paramVarStmt);
+        let arrayExpr = createArrayLiteralExpression([]);
+        let paramVarDecl = createVariableDeclaration2(name, arrayExpr);
+        let paramVarDecls = createVariableDeclarationList([paramVarDecl]);
+        let paramVarStmt = createVariableStatement2(paramVarDecls);
+        startOnNewLine(paramVarStmt);
         write(paramVarStmt);
         
-        let restIndexExpr = factory.createNumericLiteral2(restIndex);
-        let initializerVarDecl = factory.createVariableDeclaration2(_i, restIndexExpr);
-        let initializerVarDecls = factory.createVariableDeclarationList([initializerVarDecl]);
-        let argumentsName = factory.createIdentifier("arguments");
-        let lengthName = factory.createIdentifier("length");
-        let argumentsLengthExpr = factory.createPropertyAccessExpression2(argumentsName, lengthName);
-        let conditionExpr = factory.createBinaryExpression2(_i, SyntaxKind.LessThanToken, argumentsLengthExpr);
-        let incrementerExpr = factory.createPostfixUnaryExpression(_i, SyntaxKind.PlusPlusToken);
-        let arrayOffsetExpr = restIndex === 0 ? _i : factory.createBinaryExpression2(_i, SyntaxKind.MinusToken, restIndexExpr);
-        let arrayElementExpr = factory.createElementAccessExpression2(name, arrayOffsetExpr);
-        let argumentsElementExpr = factory.createElementAccessExpression2(argumentsName, _i);
-        let assignExpr = factory.createAssignmentExpression(arrayElementExpr, argumentsElementExpr);
-        let assignStmt = factory.createExpressionStatement(assignExpr);
-        factory.startOnNewLine(assignStmt);
+        let restIndexExpr = createNumericLiteral2(restIndex);
+        let initializerVarDecl = createVariableDeclaration2(_i, restIndexExpr);
+        let initializerVarDecls = createVariableDeclarationList([initializerVarDecl]);
+        let argumentsName = createIdentifier("arguments");
+        let lengthName = createIdentifier("length");
+        let argumentsLengthExpr = createPropertyAccessExpression2(argumentsName, lengthName);
+        let conditionExpr = createBinaryExpression2(_i, SyntaxKind.LessThanToken, argumentsLengthExpr);
+        let incrementerExpr = createPostfixUnaryExpression(_i, SyntaxKind.PlusPlusToken);
+        let arrayOffsetExpr = restIndex === 0 ? _i : createBinaryExpression2(_i, SyntaxKind.MinusToken, restIndexExpr);
+        let arrayElementExpr = createElementAccessExpression2(name, arrayOffsetExpr);
+        let argumentsElementExpr = createElementAccessExpression2(argumentsName, _i);
+        let assignExpr = createAssignmentExpression(arrayElementExpr, argumentsElementExpr);
+        let assignStmt = createExpressionStatement(assignExpr);
+        startOnNewLine(assignStmt);
 
-        let forBody  = factory.createBlock([assignStmt]);
-        let forStmt = factory.createForStatement(initializerVarDecls, conditionExpr, incrementerExpr, forBody);
-        factory.startOnNewLine(forStmt);
+        let forBody  = createBlock([assignStmt]);
+        let forStmt = createForStatement(initializerVarDecls, conditionExpr, incrementerExpr, forBody);
+        startOnNewLine(forStmt);
         write(forStmt);
     }
     
@@ -367,12 +367,12 @@ namespace ts.transform {
             return;
         }
         
-        let thisName = factory.createIdentifier("_this");
-        let thisExpr = factory.createThisKeyword();
-        let varDecl = factory.createVariableDeclaration2(thisName, thisExpr);
-        let varDecls = factory.createVariableDeclarationList([varDecl]);
-        let varStmt = factory.createVariableStatement2(varDecls);
-        factory.startOnNewLine(varStmt);
+        let thisName = createIdentifier("_this");
+        let thisExpr = createThisKeyword();
+        let varDecl = createVariableDeclaration2(thisName, thisExpr);
+        let varDecls = createVariableDeclarationList([varDecl]);
+        let varStmt = createVariableStatement2(varDecls);
+        startOnNewLine(varStmt);
         write(varStmt);
     }
     
@@ -394,8 +394,8 @@ namespace ts.transform {
     }
     
     function transformSemicolonClassElement(member: SemicolonClassElement, write: (node: Statement) => void): void {
-        let stmt = factory.createEmptyStatement();
-        factory.startOnNewLine(stmt);
+        let stmt = createEmptyStatement();
+        startOnNewLine(stmt);
         write(stmt);
     }
     
@@ -403,9 +403,9 @@ namespace ts.transform {
         let prefix = getClassMemberPrefix(node, member);
         let propExpr = getMemberAccessForPropertyName(node, member);
         let funcExpr = rewriteFunctionExpression(member, /*name*/ undefined, /*location*/ undefined);
-        let assignExpr = factory.createAssignmentExpression(propExpr, funcExpr);
-        let assignStmt = factory.createExpressionStatement(assignExpr, /*location*/ member);
-        factory.startOnNewLine(assignStmt);
+        let assignExpr = createAssignmentExpression(propExpr, funcExpr);
+        let assignStmt = createExpressionStatement(assignExpr, /*location*/ member);
+        startOnNewLine(assignStmt);
         write(assignStmt);
     }
     
@@ -413,36 +413,36 @@ namespace ts.transform {
         let firstAccessor = accessors.firstAccessor;
         let prefix = getClassMemberPrefix(node, firstAccessor);
         let name = getExpressionForPropertyName(firstAccessor);
-        let descriptorExpr = factory.createObjectLiteralExpression2();
+        let descriptorExpr = createObjectLiteralExpression2();
         if (accessors.getAccessor) {
             let funcExpr = rewriteFunctionExpression(accessors.getAccessor, /*name*/ undefined, /*location*/ accessors.getAccessor);
-            let getName = factory.createIdentifier("get");
-            let getProp = factory.createPropertyAssignment(getName, funcExpr);
-            factory.startOnNewLine(getProp);
+            let getName = createIdentifier("get");
+            let getProp = createPropertyAssignment(getName, funcExpr);
+            startOnNewLine(getProp);
             descriptorExpr.properties.push(getProp);
         }
         
         if (accessors.setAccessor) {
             let funcExpr = rewriteFunctionExpression(accessors.setAccessor, /*name*/ undefined, /*location*/ accessors.setAccessor);
-            let setName = factory.createIdentifier("set");
-            let setProp = factory.createPropertyAssignment(setName, funcExpr);
-            factory.startOnNewLine(setProp);
+            let setName = createIdentifier("set");
+            let setProp = createPropertyAssignment(setName, funcExpr);
+            startOnNewLine(setProp);
             descriptorExpr.properties.push(setProp);
         }
         
-        let trueExpr = factory.createTrueKeyword();
-        let enumerableName = factory.createIdentifier("enumerable");
-        let enumerableProp = factory.createPropertyAssignment(enumerableName, trueExpr)
-        factory.startOnNewLine(enumerableProp);
+        let trueExpr = createTrueKeyword();
+        let enumerableName = createIdentifier("enumerable");
+        let enumerableProp = createPropertyAssignment(enumerableName, trueExpr)
+        startOnNewLine(enumerableProp);
         descriptorExpr.properties.push(enumerableProp);
         
-        let configurableName = factory.createIdentifier("configurable");
-        let configurableProp = factory.createPropertyAssignment(configurableName, trueExpr);
-        factory.startOnNewLine(configurableProp);
+        let configurableName = createIdentifier("configurable");
+        let configurableProp = createPropertyAssignment(configurableName, trueExpr);
+        startOnNewLine(configurableProp);
         descriptorExpr.properties.push(configurableProp);
         
-        let definePropertyExpr = factory.createDefinePropertyCall(prefix, name, descriptorExpr);
-        let definePropertyStmt = factory.createExpressionStatement(definePropertyExpr);
+        let definePropertyExpr = createDefinePropertyCall(prefix, name, descriptorExpr);
+        let definePropertyStmt = createExpressionStatement(definePropertyExpr);
         write(definePropertyStmt);
     }
     
@@ -452,24 +452,24 @@ namespace ts.transform {
     
     function rewriteFunctionExpression(node: FunctionLikeDeclaration, name: Identifier, location: TextRange): FunctionExpression {
         let parameters = visitNodes(node.parameters, transformNode);
-        let body = factory.createBlock([], node.body);
-        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.NewLexicalEnvironment);
-        return factory.createFunctionExpression2(name, parameters, body, location);
+        let body = createBlock([], node.body);
+        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.LexicalEnvironment);
+        return createFunctionExpression2(name, parameters, body, location);
     }
 
     function transformFunctionDeclaration(node: FunctionDeclaration, write: (node: Statement) => void): void {
         let parameters = visitNodes(node.parameters, transformNode);
-        let body = factory.createBlock([], node.body);
-        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.NewLexicalEnvironment);
-        write(factory.createFunctionDeclaration2(node.name, parameters, body, /*location*/ node));
+        let body = createBlock([], node.body);
+        emitNode(node, transformFunctionBody, body.statements, VisitorFlags.LexicalEnvironment);
+        write(createFunctionDeclaration2(node.name, parameters, body, /*location*/ node));
     }
     
     function transformToFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: FunctionLikeDeclaration, name: Identifier, location: TextRange, 
         createfn: (name: DeclarationName, parameters: ParameterDeclaration[], body: Block, location: TextRange) => T): T {
 
         let parameters = visitNodes(node.parameters, transformNode);
-        let newBody = factory.createBlock([], /*location*/ isBlock(node.body) ? node.body : undefined);
-        emitNode(node, transformFunctionBody, newBody.statements, VisitorFlags.NewLexicalEnvironment);
+        let newBody = createBlock([], /*location*/ isBlock(node.body) ? node.body : undefined);
+        emitNode(node, transformFunctionBody, newBody.statements, VisitorFlags.LexicalEnvironment);
         
         let func = createfn(name, parameters, newBody, location);
         return func;
@@ -487,9 +487,9 @@ namespace ts.transform {
         else {
             let expr = visitNode(body, transformNode);
             if (expr) {
-                let returnStmt = factory.createReturnStatement(expr);
+                let returnStmt = createReturnStatement(expr);
                 if (!childNodeStartPositionIsOnSameLine(node, body)) {
-                    factory.startOnNewLine(returnStmt);
+                    startOnNewLine(returnStmt);
                 }
 
                 write(returnStmt);
@@ -500,13 +500,13 @@ namespace ts.transform {
     function getExpressionForPropertyName(member: ClassElement): Expression {
         let memberName = <PropertyName>member.name;
         if (isIdentifier(memberName)) {
-            return factory.createStringLiteral(memberName.text);
+            return createStringLiteral(memberName.text);
         }
         else if (isComputedPropertyName(memberName)) {
             return visitNode(memberName.expression, transformNode);
         }
         else {
-            return factory.cloneNode(memberName);
+            return cloneNode(memberName);
         }
     }
     
@@ -514,21 +514,21 @@ namespace ts.transform {
         let target = getClassMemberPrefix(node, member);
         let memberName = <PropertyName>member.name;
         if (isIdentifier(memberName)) {
-            return factory.createPropertyAccessExpression2(target, factory.cloneNode(memberName));
+            return createPropertyAccessExpression2(target, cloneNode(memberName));
         }
         else if (isComputedPropertyName(memberName)) {
             let expression = visitNode(memberName.expression, transformNode);
-            return factory.createElementAccessExpression2(target, expression);
+            return createElementAccessExpression2(target, expression);
         }
         else {
-            return factory.createElementAccessExpression2(target, factory.cloneNode(memberName));
+            return createElementAccessExpression2(target, cloneNode(memberName));
         }
     }
     
     function transformThisKeyword(node: LeftHandSideExpression): LeftHandSideExpression {
         let container = getThisContainer(transform, /*includeArrowFunctions*/ true);
         if (isArrowFunction(container)) {
-            let thisName = factory.createIdentifier("_this");
+            let thisName = createIdentifier("_this");
             return thisName;
         }
 
@@ -541,12 +541,12 @@ namespace ts.transform {
     }
     
     function createDefaultSuperCall() {
-        let superName = factory.createIdentifier("_super");
-        let thisExpr = factory.createThisKeyword();
-        let argumentsName = factory.createIdentifier("arguments");
-        let applyExpr = factory.createApplyCall(superName, thisExpr, argumentsName);
-        let statement = factory.createExpressionStatement(applyExpr);
-        factory.startOnNewLine(statement);
+        let superName = createIdentifier("_super");
+        let thisExpr = createThisKeyword();
+        let argumentsName = createIdentifier("arguments");
+        let applyExpr = createApplyCall(superName, thisExpr, argumentsName);
+        let statement = createExpressionStatement(applyExpr);
+        startOnNewLine(statement);
         return statement;
     }
 }

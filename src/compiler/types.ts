@@ -776,6 +776,7 @@ namespace ts {
     }
 
     export interface SignatureDeclaration extends Declaration {
+        name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
         type?: TypeNode;
@@ -1383,6 +1384,7 @@ namespace ts {
     // @kind(SyntaxKind.MissingDeclaration)
     // @factoryhidden("name", true)
     export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+        name?: Identifier;
     }
 
     // @kind(SyntaxKind.Block)
@@ -1542,11 +1544,12 @@ namespace ts {
 
     export interface ClassElement extends Declaration {
         _classElementBrand: any;
+        name?: PropertyName;
     }
     
     export interface TypeElement extends Declaration {
         _typeElementBrand: any;
-
+        name?: PropertyName;
         // @factoryparam
         questionToken?: Node;
     }
@@ -1828,7 +1831,7 @@ namespace ts {
     }
 
     // Source files are declarations when they are external modules.
-    // @kind(SyntaxKind.SourceFile, { create: false, update: false })
+    // @kind(SyntaxKind.SourceFile, { create: "createSourceFileNode", update: "updateSourceFileNode" })
     // @factoryhidden("decorators")
     // @factoryhidden("modifiers")
     // @factoryhidden("name")

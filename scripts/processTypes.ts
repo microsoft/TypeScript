@@ -87,9 +87,9 @@ const enum FactoryHiddenState {
 }
 
 interface KindOptions {
-    create: boolean;
-    update: boolean;
-    test: boolean;
+    create: boolean | string;
+    update: boolean | string;
+    test: boolean | string;
 }
 
 const columnWrap = 150;
@@ -408,15 +408,15 @@ function generateFactory(outputFile: string) {
     writer.writeLine();
     writer.write(`namespace ts {`);
     writer.writeLine();
-    writer.increaseIndent();
-    writer.write(`export namespace factory {`);
-    writer.writeLine();
+    // writer.increaseIndent();
+    // writer.write(`export namespace factory {`);
+    // writer.writeLine();
     writer.increaseIndent();
     writeCreateAndUpdateFunctions();
     writeCloneFunction();
-    writer.decreaseIndent();
-    writer.write(`}`);
-    writer.writeLine();
+    // writer.decreaseIndent();
+    // writer.write(`}`);
+    // writer.writeLine();
     writeIsNodeFunctions();
     writer.decreaseIndent();
     writer.write(`}`);
@@ -447,13 +447,15 @@ function generateFactory(outputFile: string) {
         if (!syntaxNode.options.create) {
             return;
         }
+        
+        let createFunctionName = getCreateFunctionName(syntaxNode);
 
         // Skip the create function for this node if it is already defined in factory.ts
-        if (resolveQualifiedName(factorySourceFile, `ts.factory.create${syntaxNode.kindName}`, SymbolFlags.Function)) {
+        if (resolveQualifiedName(factorySourceFile, `ts.${createFunctionName}`, SymbolFlags.Function)) {
             return;
         }
         
-        writer.write(`export function create${syntaxNode.kindName}(`);
+        writer.write(`export function ${createFunctionName}(`);
         
         for (let member of syntaxNode.members) {
             let type = 
@@ -523,6 +525,98 @@ function generateFactory(outputFile: string) {
         writer.writeLine();
     }
     
+    function writeUpdateFunction(syntaxNode: SyntaxNode) {
+        if (!syntaxNode.options.update || !hasChildNodes(syntaxNode)) {
+            return;
+        }
+        
+        let createFunctionName = getCreateFunctionName(syntaxNode);
+        let updateFunctionName = getUpdateFunctionName(syntaxNode);
+
+        // Skip the update function for this node if it is defined in factory.ts
+        if (resolveQualifiedName(factorySourceFile, `ts.${updateFunctionName}`, SymbolFlags.Function)) {
+            return;
+        }
+        
+        writer.write(`export function ${updateFunctionName}(node: ${syntaxNode.typeName}`);
+    
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            let member = syntaxNode.members[i];
+            if (member.isFactoryParam) {
+                continue;
+            }
+            
+        
+            let type = 
+                member.isNodeArray ? `Array<${member.elementTypeName}>` :
+                member.isModifiersArray ? `Array<Node>` :
+                member.typeName;
+
+            writer.write(`, ${member.paramName}: ${type}`);
+        }
+        
+        writer.write(`): ${syntaxNode.typeName} {`);
+        writer.writeLine();
+        
+        writer.increaseIndent();
+        
+        writer.write(`if (`);
+        let first = true;
+        for (let member of syntaxNode.members) {
+            if (member.isFactoryParam) {
+                continue;
+            }
+            
+            if (first) {
+                first = false;
+            }
+            else {
+                writer.write(` || `);
+            }
+            
+            writer.write(`${member.paramName} !== node.${member.propertyName}`);
+        }
+    
+
+        writer.write(`) {`);
+        writer.writeLine();
+    
+        writer.increaseIndent();
+        
+        writer.write(`let newNode = ${createFunctionName}(`);
+        
+        for (let i = 0; i < syntaxNode.members.length; ++i) {
+            if (i > 0) {
+                writer.write(`, `);
+            }
+            
+            let member = syntaxNode.members[i];
+            if (member.isFactoryParam) {
+                writer.write(`node.${member.propertyName}`);
+            }
+            else {
+                writer.write(member.paramName);
+            }
+        }
+    
+        writer.write(`);`);
+        writer.writeLine();
+        
+        writer.write(`return updateFrom(node, newNode);`);
+        writer.writeLine();
+        
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+        
+        writer.write(`return node;`);
+        writer.writeLine();
+    
+        writer.decreaseIndent();
+        writer.write(`}`);
+        writer.writeLine();
+    }
+
     function writeIsNodeFunction(syntaxNode: SyntaxNode) {
         if (syntaxNode.typeName === "Node") {
             return;
@@ -647,11 +741,13 @@ function generateFactory(outputFile: string) {
                 continue;
             }
             
+            let createFunctionName = getCreateFunctionName(syntaxNode);
+            
             writer.write(`case SyntaxKind.${syntaxNode.kindName}:`);
             writer.writeLine();
             writer.increaseIndent();
             
-            writer.write(`return factory.create${syntaxNode.kindName}(`);
+            writer.write(`return ${createFunctionName}(`);
             for (let member of syntaxNode.members) {
                 writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}, `);
             }
@@ -671,94 +767,6 @@ function generateFactory(outputFile: string) {
         writer.writeLine();
     }
     
-    function writeUpdateFunction(syntaxNode: SyntaxNode) {
-        if (!syntaxNode.options.update || !hasChildNodes(syntaxNode)) {
-            return;
-        }
-
-        // Skip the update function for this node if it is defined in factory.ts
-        if (resolveQualifiedName(factorySourceFile, `ts.factory.update${syntaxNode.kindName}`, SymbolFlags.Function)) {
-            return;
-        }
-        
-        writer.write(`export function update${syntaxNode.kindName}(node: ${syntaxNode.typeName}`);
-    
-        for (let i = 0; i < syntaxNode.members.length; ++i) {
-            let member = syntaxNode.members[i];
-            if (member.isFactoryParam) {
-                continue;
-            }
-            
-        
-            let type = 
-                member.isNodeArray ? `Array<${member.elementTypeName}>` :
-                member.isModifiersArray ? `Array<Node>` :
-                member.typeName;
-
-            writer.write(`, ${member.paramName}: ${type}`);
-        }
-        
-        writer.write(`): ${syntaxNode.typeName} {`);
-        writer.writeLine();
-        
-        writer.increaseIndent();
-        
-        writer.write(`if (`);
-        let first = true;
-        for (let member of syntaxNode.members) {
-            if (member.isFactoryParam) {
-                continue;
-            }
-            
-            if (first) {
-                first = false;
-            }
-            else {
-                writer.write(` || `);
-            }
-            
-            writer.write(`${member.paramName} !== node.${member.propertyName}`);
-        }
-    
-
-        writer.write(`) {`);
-        writer.writeLine();
-    
-        writer.increaseIndent();
-        
-        writer.write(`let newNode = create${syntaxNode.kindName}(`);
-        
-        for (let i = 0; i < syntaxNode.members.length; ++i) {
-            if (i > 0) {
-                writer.write(`, `);
-            }
-            
-            let member = syntaxNode.members[i];
-            if (member.isFactoryParam) {
-                writer.write(`node.${member.propertyName}`);
-            }
-            else {
-                writer.write(member.paramName);
-            }
-        }
-    
-        writer.write(`);`);
-        writer.writeLine();
-        
-        writer.write(`return updateFrom(node, newNode);`);
-        writer.writeLine();
-        
-        writer.decreaseIndent();
-        writer.write(`}`);
-        writer.writeLine();
-        
-        writer.write(`return node;`);
-        writer.writeLine();
-    
-        writer.decreaseIndent();
-        writer.write(`}`);
-        writer.writeLine();
-    }
 }
 
 function generateTransform(outputFile: string) {
@@ -802,7 +810,7 @@ function generateTransform(outputFile: string) {
         writer.increaseIndent();
         
         for (let syntaxNode of syntaxNodes) {
-            if (!hasChildNodes(syntaxNode)) {
+            if (!hasChildNodes(syntaxNode) || syntaxNode.kindName === "SourceFile") {
                 continue;
             }
             
@@ -810,7 +818,9 @@ function generateTransform(outputFile: string) {
             writer.writeLine();
             writer.increaseIndent();
             
-            writer.write(`return write(factory.update${syntaxNode.kindName}(`);
+            let updateFunctionName = getUpdateFunctionName(syntaxNode);
+            
+            writer.write(`return write(${updateFunctionName}(`);
             writer.writeLine();
             writer.increaseIndent();
             writer.write(`<${syntaxNode.typeName}>node`);
@@ -1275,19 +1285,21 @@ function getDescendantSyntaxKindSymbolsForTypeSymbol(typeSymbol: Symbol): Symbol
         }
     }
     
-    let decl = typeSymbol.declarations[0];
-    if (isTypeAliasDeclaration(decl)) {
-        let superTypes = getSuperTypeSymbols(typeSymbol);
-        for (let typeSymbol of superTypes) {
-            let kindSymbols = getDescendantSyntaxKindSymbolsForTypeSymbol(typeSymbol);
-            for (let kindSymbol of kindSymbols) {
-                if (descendantSyntaxKindSymbols.indexOf(kindSymbol) === -1) {
-                    descendantSyntaxKindSymbols.push(kindSymbol);
+    if (!findFirstAnnotation(typeSymbol, KindAnnotation.match)) {
+        let decl = typeSymbol.declarations[0];
+        if (isTypeAliasDeclaration(decl)) {
+            let superTypes = getSuperTypeSymbols(typeSymbol);
+            for (let typeSymbol of superTypes) {
+                let kindSymbols = getDescendantSyntaxKindSymbolsForTypeSymbol(typeSymbol);
+                for (let kindSymbol of kindSymbols) {
+                    if (descendantSyntaxKindSymbols.indexOf(kindSymbol) === -1) {
+                        descendantSyntaxKindSymbols.push(kindSymbol);
+                    }
                 }
             }
         }
     }
-    
+        
     return descendantSyntaxKindSymbolsForTypeSymbol[getSymbolId(typeSymbol)] = descendantSyntaxKindSymbols;
 }
 
@@ -1755,6 +1767,16 @@ function getFactoryOrder(symbol: Symbol, inherited?: boolean): string[] {
 
 function startsNewLexicalEnvironment(symbol: Symbol): boolean {
     return !!findFirstAnnotation(symbol, NewLexicalEnvironmentAnnotation.match);
+}
+
+function getCreateFunctionName(syntaxNode: SyntaxNode) {
+    let create = syntaxNode.options.create; 
+    return typeof create === "string" ? create : `create${syntaxNode.kindName}`;
+}
+
+function getUpdateFunctionName(syntaxNode: SyntaxNode) {
+    let update = syntaxNode.options.update; 
+    return typeof update === "string" ? update : `update${syntaxNode.kindName}`;
 }
 
 // Main entry point
