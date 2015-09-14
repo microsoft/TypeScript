@@ -1,3 +1,5 @@
+// @declaration: true
+
 class B {
     constructor(public x: number) { }
 }
@@ -42,5 +44,5 @@ module Generic {
 let sig: new(x: number) => any;
 sig = B;
 sig = C;
-sig = D; // error - non-public to public
-sig = E; // error - non-public to public
+sig = D; // error - private to public
+sig = E; // error - protected to public

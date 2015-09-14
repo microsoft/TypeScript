@@ -1,3 +1,5 @@
+// @declaration: true
+
 class A {
 	private constructor(a: string) // only private access
 	private constructor() { 
@@ -47,3 +49,24 @@ class C {
 var t1 = new A(""); // error - A is private
 var t2 = new B(); // error - B is protected 
 var t3 = new C();
+
+// check Derived super call of a protected Base 
+class Base {
+    protected constructor() {
+    }
+}
+
+class Derived extends Base {
+    protected constructor() {
+        super();
+    }
+}
+
+class SuperDerived extends Derived {
+	private constructor(){
+		super();
+	}
+}
+
+var baseCtor = Base;
+baseCtor = Derived;
