@@ -274,6 +274,14 @@ var __define = (this && this.__define) || (function() {
                     exportFunctionForFile = undefined;
                     currentSourceFile = undefined;
                     writeLine();
+                    write("return {")
+                    writeLine();
+                    increaseIndent();
+                    write("setters: [],");
+                    writeLine();
+                    write("execute: function() {");
+                    writeLine();
+                    increaseIndent();
                     write(`${exportStarName}(`);
                 }
             }
@@ -297,6 +305,12 @@ var __define = (this && this.__define) || (function() {
                 },
                 [ModuleKind.System]() {
                     write(");");
+                    writeLine();
+                    decreaseIndent();
+                    write("}");
+                    writeLine();
+                    decreaseIndent();
+                    write("};");
                     decreaseIndent();
                     writeLine();
                     write("});");
