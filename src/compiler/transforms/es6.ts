@@ -125,11 +125,6 @@ namespace ts.transform {
                 // reordered to the start of the member list in `transformClassDeclaration`.
                 return;
                 
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                // TypeScript interfaces and type aliases are elided.
-                return;
-                
             case SyntaxKind.ClassDeclaration:
                 // This is a class declaration with TypeScript syntax extensions.
                 //
