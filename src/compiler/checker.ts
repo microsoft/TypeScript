@@ -8726,16 +8726,24 @@ namespace ts {
             
             function checkConstructorVisibility(signature: Signature, node: NewExpression) {
                 let constructor = result.declaration;                
-                if (!constructor || !node.expression) return;
-                // if constructor is public, we dont need to check visibility
-                if (constructor.flags & NodeFlags.Public) return;
+                if (!constructor || !node.expression) {
+                    return;
+                }
+                // if constructor is public, we don't need to check visibility
+                if (constructor.flags & NodeFlags.Public) {
+                    return;
+                }
                 
                 let expressionType = checkExpression(node.expression);
                 expressionType = getApparentType(expressionType);
-                if (expressionType === unknownType) return;
+                if (expressionType === unknownType) {
+                    return;
+                }
                 
                 let declaration = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
-                if (!declaration) return;
+                if (!declaration) {
+                    return;
+                }
                 
                 // Get the declaring and enclosing class instance types
                 let enclosingClassDeclaration = getContainingClass(node);
@@ -15065,7 +15073,7 @@ namespace ts {
                                     let signatures = getSignaturesOfType(baseType, SignatureKind.Construct);
                                     for (let signature of signatures) {
                                         let constuctor = signature.declaration;
-                                        if (constuctor && constuctor.flags & NodeFlags.Private) {
+                                        if (constuctor && (constuctor.flags & NodeFlags.Private)) {
                                             return grammarErrorOnFirstToken(expression, Diagnostics.Cannot_extend_private_class_0, (<Identifier>expression).text);
                                         }
                                     }
