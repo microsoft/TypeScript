@@ -5151,13 +5151,23 @@ namespace ts {
                             let targetVisibility = targetSig.declaration.modifiers ? targetSig.declaration.modifiers.flags : 0;
                             if (sourceVisibility !== targetVisibility && (!((sourceVisibility | targetVisibility) & NodeFlags.Public))) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Cannot_assign_a_non_public_constructor_type_to_a_public_constructor_type);
+                                    reportError(Diagnostics.Cannot_assign_a_0_constructor_to_a_1_constructor, visibilityToText(sourceVisibility), visibilityToText(targetVisibility));  
                                 }
                                 return Ternary.False;
                             }
                         }
                     }
                     return Ternary.True;
+                    
+                    function visibilityToText(flag: NodeFlags) {
+                        if (flag === NodeFlags.Private) {
+                            return "private";    
+                        }
+                        if (flag === NodeFlags.Protected) {
+                            return "protected";    
+                        }
+                        return "public";
+                    }
                 }
             }
 

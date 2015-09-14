@@ -1709,7 +1709,7 @@
         "category": "Error",
         "code": 2655
     },
-    "Cannot assign a non-public constructor type to a public constructor type.": {
+    "Cannot assign a {0} constructor to a {1} constructor.": {
         "category": "Error",
         "code": 2656
     },
