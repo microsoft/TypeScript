@@ -425,6 +425,9 @@ module Harness {
         listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
         getMemoryUsage?(): number;
+        args(): string[];
+        getExecutingFilePath(): string;
+        exit(exitCode?: number): void;
     }
     export var IO: IO;
     
@@ -446,7 +449,10 @@ module Harness {
             } else {
                 fso = {};
             }
-
+            
+            export const args = () => ts.sys.args;
+            export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
+            export const exit = (exitCode: number) => ts.sys.exit(exitCode);
             export const resolvePath = (path: string) => ts.sys.resolvePath(path);
             export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
             export const newLine = () => harnessNewLine;
@@ -517,6 +523,9 @@ module Harness {
             export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
             export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => ts.sys.useCaseSensitiveFileNames;
+            export const args = () => ts.sys.args;
+            export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
+            export const exit = (exitCode: number) => ts.sys.exit(exitCode);
 
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
@@ -589,6 +598,10 @@ module Harness {
             export const newLine = () => harnessNewLine;
             export const useCaseSensitiveFileNames = () => false;
             export const getCurrentDirectory = () => "";
+            export const args = () => <string[]>[];
+            export const getExecutingFilePath = () => "";
+            export const exit = (exitCode: number) => {};
+            
             let supportsCodePage = () => false;
 
             module Http {
@@ -1195,8 +1208,8 @@ module Harness {
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: ts.Diagnostic[]) {
             diagnostics.sort(ts.compareDiagnostics);
             let outputLines: string[] = [];
-            // Count up all the errors we find so we don't miss any
-            let totalErrorsReported = 0;
+            // Count up all errors that were found in files other than lib.d.ts so we don't miss any
+            let totalErrorsReportedInNonLibraryFiles = 0;
 
             function outputErrorText(error: ts.Diagnostic) {
                 let message = ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine());
@@ -1207,8 +1220,15 @@ module Harness {
                     .filter(s => s.length > 0)
                     .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
                 errLines.forEach(e => outputLines.push(e));
-
-                totalErrorsReported++;
+                
+                // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
+                // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers) 
+                // then they will be added twice thus triggering 'total errors' assertion with condition
+                // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
+                 
+                if (!error.file || !isLibraryFile(error.file.fileName)) {
+                    totalErrorsReportedInNonLibraryFiles++;
+                }
             }
 
             // Report global errors
@@ -1293,7 +1313,7 @@ module Harness {
             });
 
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
+            assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
 
             return minimalDiagnosticsToString(diagnostics) +
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
@@ -1432,7 +1452,6 @@ module Harness {
         let optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         function extractCompilerSettings(content: string): CompilerSettings {
-
             let opts: CompilerSettings = {};
 
             let match: RegExpExecArray;
@@ -1660,11 +1679,11 @@ module Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(): { unitName: string, content: string } {
-        let libFile = Harness.userSpecifiedRoot + Harness.libFolder + "/" + "lib.d.ts";
+    export function getDefaultLibraryFile(io: Harness.IO): { unitName: string, content: string } {
+        let libFile = Harness.userSpecifiedRoot + Harness.libFolder + "lib.d.ts";
         return {
             unitName: libFile,
-            content: IO.readFile(libFile)
+            content: io.readFile(libFile)
         };
     }
 

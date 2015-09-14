@@ -1866,7 +1866,7 @@ namespace ts {
         let sourceMapText: string;
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
-            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            getSourceFile: (fileName, target) => fileName === normalizeSlashes(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 if (fileExtensionIs(name, ".map")) {
                     Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
@@ -3589,10 +3589,11 @@ namespace ts {
                             containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                             isFunction(containingNodeKind) ||
                             containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D<T, |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                            containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
-
+                            containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
+                                                                                                          
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
 
@@ -3619,8 +3620,9 @@ namespace ts {
 
                     case SyntaxKind.LessThanToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
                             isFunction(containingNodeKind);
 
                     case SyntaxKind.StaticKeyword:
@@ -4181,6 +4183,7 @@ namespace ts {
                 displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
+                writeTypeParametersOfSymbol(symbol, sourceFile);
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
@@ -4221,16 +4224,29 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                    let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
-                    if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
-                        displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                    let container = getContainingFunction(location);
+                    if (container) {
+                        let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                        let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
+                        if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
+                            displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                            displayParts.push(spacePart());
+                        }
+                        else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
+                            addFullSymbolName(signatureDeclaration.symbol);
+                        }
+                        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    }
+                    else {
+                        // Type  aliash type parameter
+                        // For example
+                        //      type list<T> = T[];  // Both T will go through same code path
+                        let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                        displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
+                        addFullSymbolName(declaration.symbol);
+                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
-                    else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
-                        addFullSymbolName(signatureDeclaration.symbol);
-                    }
-                    addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -4464,10 +4480,19 @@ namespace ts {
                 // and in either case the symbol has a construct signature definition, i.e. class
                 if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
                     if (symbol.flags & SymbolFlags.Class) {
-                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
-                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
+                        // Find the first class-like declaration and try to get the construct signature.
+                        for (let declaration of symbol.getDeclarations()) {
+                            if (isClassLike(declaration)) {
+                                return tryAddSignature(declaration.members,
+                                                       /*selectConstructors*/ true,
+                                                       symbolKind,
+                                                       symbolName,
+                                                       containerName,
+                                                       result);
+                            }
+                        }
 
-                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                        Debug.fail("Expected declaration to have at least one class-like declaration");
                     }
                 }
                 return false;
@@ -5860,6 +5885,7 @@ namespace ts {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
+                            case SyntaxKind.ClassExpression:
                             case SyntaxKind.ClassDeclaration:
                                 // Make sure the container belongs to the same class
                                 // and has the appropriate static modifier from the original container.
