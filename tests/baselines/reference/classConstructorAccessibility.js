@@ -1,4 +1,5 @@
 //// [classConstructorAccessibility.ts]
+
 class B {
     constructor(public x: number) { }
 }
@@ -43,8 +44,8 @@ module Generic {
 let sig: new(x: number) => any;
 sig = B;
 sig = C;
-sig = D; // error - non-public to public
-sig = E; // error - non-public to public
+sig = D; // error - private to public
+sig = E; // error - protected to public
 
 //// [classConstructorAccessibility.js]
 var B = (function () {
@@ -104,5 +105,31 @@ var Generic;
 var sig;
 sig = B;
 sig = C;
-sig = D; // error - non-public to public
-sig = E; // error - non-public to public
+sig = D; // error - private to public
+sig = E; // error - protected to public
+
+
+//// [classConstructorAccessibility.d.ts]
+declare class B {
+    x: number;
+    constructor(x: number);
+}
+declare class C {
+    x: number;
+    constructor(x: number);
+}
+declare class D {
+    x: number;
+    constructor(x);
+}
+declare class E {
+    x: number;
+    constructor(x: number);
+}
+declare var b: B;
+declare var c: C;
+declare var d: D;
+declare var e: E;
+declare module Generic {
+}
+declare let sig: new (x: number) => any;

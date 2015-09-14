@@ -1,10 +1,11 @@
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(16,21): error TS2653: Cannot extend private class 'A'.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(18,12): error TS2655: Constructor '(a: string): A' is private and only accessible within class 'A'.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(47,10): error TS2655: Constructor '(a: string): A' is private and only accessible within class 'A'.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(48,10): error TS2654: Constructor '(): B' is protected and only accessible within class 'B' and its subclasses.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(17,21): error TS2653: Cannot extend private class 'A'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(19,12): error TS2655: Constructor '(a: string): A' is private and only accessible within class 'A'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(48,10): error TS2655: Constructor '(a: string): A' is private and only accessible within class 'A'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(49,10): error TS2654: Constructor '(): B' is protected and only accessible within class 'B' and its subclasses.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts (4 errors) ====
+    
     class A {
     	private constructor(a: string) // only private access
     	private constructor() { 
@@ -62,3 +63,24 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
              ~~~~~~~
 !!! error TS2654: Constructor '(): B' is protected and only accessible within class 'B' and its subclasses.
     var t3 = new C();
+    
+    // check Derived super call of a protected Base 
+    class Base {
+        protected constructor() {
+        }
+    }
+    
+    class Derived extends Base {
+        protected constructor() {
+            super();
+        }
+    }
+    
+    class SuperDerived extends Derived {
+    	private constructor(){
+    		super();
+    	}
+    }
+    
+    var baseCtor = Base;
+    baseCtor = Derived;

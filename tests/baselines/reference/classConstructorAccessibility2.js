@@ -1,4 +1,5 @@
 //// [classConstructorAccessibility2.ts]
+
 class A {
 	private constructor(a: string) // only private access
 	private constructor() { 
@@ -48,6 +49,27 @@ class C {
 var t1 = new A(""); // error - A is private
 var t2 = new B(); // error - B is protected 
 var t3 = new C();
+
+// check Derived super call of a protected Base 
+class Base {
+    protected constructor() {
+    }
+}
+
+class Derived extends Base {
+    protected constructor() {
+        super();
+    }
+}
+
+class SuperDerived extends Derived {
+	private constructor(){
+		super();
+	}
+}
+
+var baseCtor = Base;
+baseCtor = Derived;
 
 //// [classConstructorAccessibility2.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -106,3 +128,60 @@ var C = (function () {
 var t1 = new A(""); // error - A is private
 var t2 = new B(); // error - B is protected 
 var t3 = new C();
+// check Derived super call of a protected Base 
+var Base = (function () {
+    function Base() {
+    }
+    return Base;
+})();
+var Derived = (function (_super) {
+    __extends(Derived, _super);
+    function Derived() {
+        _super.call(this);
+    }
+    return Derived;
+})(Base);
+var SuperDerived = (function (_super) {
+    __extends(SuperDerived, _super);
+    function SuperDerived() {
+        _super.call(this);
+    }
+    return SuperDerived;
+})(Derived);
+var baseCtor = Base;
+baseCtor = Derived;
+
+
+//// [classConstructorAccessibility2.d.ts]
+declare class A {
+    constructor(a);
+    static method(): void;
+    method(): void;
+}
+declare class A_ext extends A {
+    method(): void;
+}
+declare class B {
+    constructor();
+    method(): void;
+}
+declare class B_ext extends B {
+    method(): void;
+}
+declare class C {
+    constructor();
+    methodA(): void;
+}
+declare var t1: A;
+declare var t2: B;
+declare var t3: C;
+declare class Base {
+    constructor();
+}
+declare class Derived extends Base {
+    constructor();
+}
+declare class SuperDerived extends Derived {
+    constructor();
+}
+declare var baseCtor: typeof Base;
