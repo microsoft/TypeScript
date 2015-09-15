@@ -695,6 +695,7 @@ namespace ts {
     // @kind(SyntaxKind.Constructor)
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: FunctionBody;
+        hasSeenSuperBeforeThis: boolean;  // TODDO (yuisu): comment
     }
 
     // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
