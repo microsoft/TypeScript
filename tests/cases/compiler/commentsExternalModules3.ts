@@ -1,7 +1,7 @@
-//@module: commonjs
+// @module: commonjs
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 // @Filename: commentsExternalModules2_0.ts
 /** Module comment*/
@@ -56,7 +56,7 @@ var myvar2 = new m4.m2.c();
 
 // @Filename: commentsExternalModules_1.ts
 /**This is on import declaration*/
-import extMod = require("commentsExternalModules2_0"); // trailing comment 1
+import extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 extMod.m1.fooExport();
 export var newVar = new extMod.m1.m2.c();
 extMod.m4.fooExport();

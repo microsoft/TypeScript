@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 const enum Foo {
     X = 100,
     Y = 0.5,

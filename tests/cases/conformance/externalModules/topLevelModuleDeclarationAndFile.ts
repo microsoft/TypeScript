@@ -1,5 +1,5 @@
 // @module: commonjs
-// @Filename: vs/foo_0.ts
+// @Filename: vs/foo_0/index.ts
 export var x: number = 42;
 
 // @Filename: foo_1.ts

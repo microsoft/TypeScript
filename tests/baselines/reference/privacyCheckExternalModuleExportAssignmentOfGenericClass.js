@@ -7,7 +7,7 @@ class Foo<A> {
 }
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts]
-import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 export = Bar;
 interface Bar {
     foo: Foo<number>;
@@ -31,7 +31,7 @@ declare class Foo<A> {
     constructor(a: A);
 }
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.d.ts]
-import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 export = Bar;
 interface Bar {
     foo: Foo<number>;

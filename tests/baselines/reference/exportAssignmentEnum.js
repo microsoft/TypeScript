@@ -10,7 +10,7 @@ enum E {
 export = E;
 
 //// [exportAssignmentEnum_B.ts]
-import EnumE = require("exportAssignmentEnum_A");
+import EnumE = require("./exportAssignmentEnum_A");
 
 var a = EnumE.A;
 var b = EnumE.B;
@@ -25,7 +25,7 @@ var E;
 })(E || (E = {}));
 module.exports = E;
 //// [exportAssignmentEnum_B.js]
-var EnumE = require("exportAssignmentEnum_A");
+var EnumE = require("./exportAssignmentEnum_A");
 var a = EnumE.A;
 var b = EnumE.B;
 var c = EnumE.C;
