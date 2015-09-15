@@ -125,7 +125,7 @@ module FourSlash {
     // List of allowed metadata names
     let fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
 
-    function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
+    function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
         let settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
         Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
         return settings;

@@ -949,7 +949,7 @@ module Harness {
             };
         }
 
-        interface HarnesOptions {
+        interface HarnessOptions {
             useCaseSensitiveFileNames?: boolean;
             includeBuiltFile?: string;
             baselineFile?: string;
@@ -977,10 +977,13 @@ module Harness {
             return ts.lookUp(optionsIndex, name.toLowerCase());
         }
 
-        export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnesOptions): void {
+        export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
             for (let name in settings) {
                 if (settings.hasOwnProperty(name)) {
                     let value = settings[name];
+                    if (value === undefined) {
+                        throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
+                    }
                     let option = getCommandLineOption(name);
                     if (option) {
                         switch (option.type) {
@@ -993,17 +996,17 @@ module Harness {
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
                                 let map = <ts.Map<number>>option.type;
-                                let key = (value).toLowerCase();
+                                let key = value.toLowerCase();
                                 if (ts.hasProperty(map, key)) {
                                     options[option.name] = map[key];
                                 }
                                 else {
-                                    throw new Error(`Unkown value '${value}' for compiler option '${name}'.`);
+                                    throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                                 }
                         }
                     }
                     else {
-                        throw new Error(`Unkown compiler option '${name}'.`);
+                        throw new Error(`Unknown compiler option '${name}'.`);
                     }
                 }
             }
@@ -1062,7 +1065,7 @@ module Harness {
                 otherFiles: { unitName: string; content: string }[],
                 onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
-                options?: ts.CompilerOptions & HarnesOptions,
+                options?: ts.CompilerOptions & HarnessOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
                 currentDirectory?: string) {
 
