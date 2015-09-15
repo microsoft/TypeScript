@@ -627,7 +627,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
+    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
     },
@@ -2102,7 +2102,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
         "category": "Message",
         "code": 6016
     },
@@ -2186,7 +2186,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
         "category": "Error",
         "code": 6046
     },

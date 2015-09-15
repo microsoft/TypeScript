@@ -12,10 +12,11 @@ export class A
 }
 
 //// [es6ModuleWithModuleGenTargetCommonjs.js]
-export class A {
+class A {
     constructor() {
     }
     B() {
         return 42;
     }
 }
+exports.A = A;
