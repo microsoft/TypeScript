@@ -1,12 +1,9 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates03.ts(20,1): error TS2322: Type '(x: any) => x is B' is not assignable to type '(x: any) => x is A'.
   Type predicate 'x is B' is not assignable to 'x is A'.
     Type 'B' is not assignable to type 'A'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates03.ts(21,1): error TS2322: Type '(x: any) => x is A' is not assignable to type '(x: any) => x is B'.
-  Type predicate 'x is A' is not assignable to 'x is B'.
-    Type 'A' is not assignable to type 'B'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates03.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates03.ts (1 errors) ====
     
     interface A {
         a?;
@@ -32,7 +29,3 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Type predicate 'x is B' is not assignable to 'x is A'.
 !!! error TS2322:     Type 'B' is not assignable to type 'A'.
     myIsAny = myIsA;
-    ~~~~~~~
-!!! error TS2322: Type '(x: any) => x is A' is not assignable to type '(x: any) => x is B'.
-!!! error TS2322:   Type predicate 'x is A' is not assignable to 'x is B'.
-!!! error TS2322:     Type 'A' is not assignable to type 'B'.

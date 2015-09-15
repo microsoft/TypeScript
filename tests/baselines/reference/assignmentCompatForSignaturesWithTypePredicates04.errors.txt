@@ -1,12 +1,9 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates04.ts(25,1): error TS2322: Type '(x: any) => x is E' is not assignable to type '(x: any) => x is number'.
-  Type predicate 'x is E' is not assignable to 'x is number'.
-    Type 'E' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates04.ts(26,1): error TS2322: Type '(x: any) => x is number' is not assignable to type '(x: any) => x is E'.
   Type predicate 'x is number' is not assignable to 'x is E'.
     Type 'number' is not assignable to type 'E'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates04.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates04.ts (1 errors) ====
     
     enum E {
         A = 1,
@@ -32,10 +29,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     let myIsB = isB;
     
     myIsA = myIsB;
-    ~~~~~
-!!! error TS2322: Type '(x: any) => x is E' is not assignable to type '(x: any) => x is number'.
-!!! error TS2322:   Type predicate 'x is E' is not assignable to 'x is number'.
-!!! error TS2322:     Type 'E' is not assignable to type 'number'.
     myIsB = myIsA;
     ~~~~~
 !!! error TS2322: Type '(x: any) => x is number' is not assignable to type '(x: any) => x is E'.

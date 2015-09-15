@@ -1,20 +1,11 @@
-tests/cases/conformance/functions/overloadsWithTypePredicates03.ts(2,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/conformance/functions/overloadsWithTypePredicates03.ts(3,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/conformance/functions/overloadsWithTypePredicates03.ts(4,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/functions/overloadsWithTypePredicates03.ts(5,10): error TS2394: Overload signature is not compatible with function implementation.
 
 
-==== tests/cases/conformance/functions/overloadsWithTypePredicates03.ts (4 errors) ====
+==== tests/cases/conformance/functions/overloadsWithTypePredicates03.ts (1 errors) ====
     
     function is(x: any, type: "number"): x is number;
-             ~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function is(x: any, type: "string"): x is string;
-             ~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function is(x: any, type: "boolean"): x is boolean;
-             ~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function is(x: any, type: string): x is (number | boolean | string);
              ~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
