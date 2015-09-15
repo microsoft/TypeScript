@@ -1208,9 +1208,11 @@ declare namespace ts {
         UnionOrIntersection = 49152,
         StructuredType = 130048,
     }
+    type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
         flags: TypeFlags;
         symbol?: Symbol;
+        pattern?: DestructuringPattern;
     }
     interface StringLiteralType extends Type {
         text: string;
@@ -1237,7 +1239,6 @@ declare namespace ts {
     }
     interface TupleType extends ObjectType {
         elementTypes: Type[];
-        baseArrayType: TypeReference;
     }
     interface UnionOrIntersectionType extends Type {
         types: Type[];
@@ -1532,7 +1533,7 @@ declare namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    function readConfigFile(fileName: string): {
+    function readConfigFile(fileName: string, readFile: (path: string) => string): {
         config?: any;
         error?: Diagnostic;
     };
