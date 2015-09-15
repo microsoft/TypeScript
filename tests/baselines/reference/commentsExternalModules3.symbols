@@ -1,6 +1,6 @@
 === tests/cases/compiler/commentsExternalModules_1.ts ===
 /**This is on import declaration*/
-import extMod = require("commentsExternalModules2_0"); // trailing comment 1
+import extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 >extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
 
 extMod.m1.fooExport();

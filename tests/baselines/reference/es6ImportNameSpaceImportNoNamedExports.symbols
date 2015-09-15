@@ -7,6 +7,6 @@ export = a;
 >a : Symbol(a, Decl(es6ImportNameSpaceImportNoNamedExports_0.ts, 1, 3))
 
 === tests/cases/compiler/es6ImportNameSpaceImportNoNamedExports_1.ts ===
-import * as nameSpaceBinding from "es6ImportNameSpaceImportNoNamedExports_0"; // error
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportNoNamedExports_0"; // error
 >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportNoNamedExports_1.ts, 0, 6))
 

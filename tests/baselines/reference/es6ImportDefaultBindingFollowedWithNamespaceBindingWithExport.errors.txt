@@ -7,7 +7,7 @@ tests/cases/compiler/client.ts(1,15): error TS1192: Module '"tests/cases/compile
     export var a = 10;
     
 ==== tests/cases/compiler/client.ts (2 errors) ====
-    export import defaultBinding, * as nameSpaceBinding  from "server";
+    export import defaultBinding, * as nameSpaceBinding  from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                   ~~~~~~~~~~~~~~

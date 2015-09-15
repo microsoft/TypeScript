@@ -8,8 +8,8 @@ class D { }
 export = D;
 
 //// [typeofExternalModules_core.ts]
-import ext = require('typeofExternalModules_external');
-import exp = require('typeofExternalModules_exportAssign');
+import ext = require('./typeofExternalModules_external');
+import exp = require('./typeofExternalModules_exportAssign');
 
 var y1: typeof ext = ext;
 y1 = exp;
@@ -31,8 +31,8 @@ var D = (function () {
 })();
 module.exports = D;
 //// [typeofExternalModules_core.js]
-var ext = require('typeofExternalModules_external');
-var exp = require('typeofExternalModules_exportAssign');
+var ext = require('./typeofExternalModules_external');
+var exp = require('./typeofExternalModules_exportAssign');
 var y1 = ext;
 y1 = exp;
 var y2 = exp;

@@ -7,7 +7,7 @@ class TesterB {
 export = TesterB;
 
 //// [unusedImportDeclaration_testerA.ts]
-import B = require("unusedImportDeclaration_testerB");
+import B = require("./unusedImportDeclaration_testerB");
 var thingy: B = {
     me: "A"
 };

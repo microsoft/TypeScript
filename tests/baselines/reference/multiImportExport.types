@@ -12,11 +12,11 @@ var addr = new Drawing.Math.Adder();
 >Adder : typeof Adder
 
 === tests/cases/compiler/Drawing.ts ===
-export import Math = require('Math/Math')
+export import Math = require('./Math/Math')
 >Math : { Adder: typeof Adder; }
 
 === tests/cases/compiler/Math/Math.ts ===
-import Adder = require('Math/Adder');
+import Adder = require('./Adder');
 >Adder : typeof Adder
 
 var Math = {
