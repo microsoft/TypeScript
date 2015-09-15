@@ -174,7 +174,7 @@ describe('PreProcessFile:', function () {
                })  
         });
 
-        it("Correctly handeles export import declarations", function () {
+        it("Correctly handles export import declarations", function () {
             test("export import a = require(\"m1\");",
                 true,
                 {
