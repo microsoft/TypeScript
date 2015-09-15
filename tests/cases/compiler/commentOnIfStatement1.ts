@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 
 // Test
 if (true) {

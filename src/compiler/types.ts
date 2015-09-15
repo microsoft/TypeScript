@@ -1286,7 +1286,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<string>;
+        /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
     }
 
@@ -1361,6 +1361,7 @@ namespace ts {
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
 
+        /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1716,6 +1717,7 @@ namespace ts {
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        bindingElement?: BindingElement;    // Binding element associated with property symbol
     }
 
     /* @internal */
@@ -1813,11 +1815,14 @@ namespace ts {
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
+    export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+
     // Properties common to all types
     export interface Type {
-        flags: TypeFlags;               // Flags
-        /* @internal */ id: number;     // Unique ID
-        symbol?: Symbol;                // Symbol associated with type (if any)
+        flags: TypeFlags;                // Flags
+        /* @internal */ id: number;      // Unique ID
+        symbol?: Symbol;                 // Symbol associated with type (if any)
+        pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
     }
 
     /* @internal */
@@ -1866,8 +1871,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];          // Element types
-        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
+        elementTypes: Type[];           // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -2275,11 +2279,20 @@ namespace ts {
     
     export interface ResolvedModule {
         resolvedFileName: string;
+        /*
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+         * - be a .d.ts file 
+         * - use top level imports\exports
+         * - don't use tripleslash references
+         */
+        isExternalLibraryImport?: boolean;
+    }
+    
+    export interface ResolvedModuleWithFailedLookupLocations {
+        resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
     }
     
-    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
-
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
@@ -2297,7 +2310,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
          * 'throw new Error("NotImplemented")'  
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     export interface TextSpan {
@@ -2328,5 +2341,7 @@ namespace ts {
         // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
+        
+        /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
     }
 }

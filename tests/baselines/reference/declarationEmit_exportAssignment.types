@@ -10,7 +10,7 @@ export interface Buzz { }
 >Buzz : Buzz
 
 === tests/cases/compiler/index.ts ===
-import {foo} from "utils";
+import {foo} from "./utils";
 >foo : () => void
 
 export = foo;

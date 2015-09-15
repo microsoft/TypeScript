@@ -27,7 +27,7 @@ var { b2: { b21 } = { b21: "string" }  } = { b2: { b21: "world" } };
 >{ b21: "string" } : { b21: string; }
 >b21 : string
 >"string" : string
->{ b2: { b21: "world" } } : { b2: { b21: string; }; }
+>{ b2: { b21: "world" } } : { b2?: { b21: string; }; }
 >b2 : { b21: string; }
 >{ b21: "world" } : { b21: string; }
 >b21 : string

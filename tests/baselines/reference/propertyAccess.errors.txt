@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(45,14): error TS2339: Property 'qqq' does not exist on type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(80,10): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(117,10): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,12): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(80,10): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(117,10): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,12): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
 
 
 ==== tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts (4 errors) ====
@@ -88,7 +88,7 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,12): er
     // Bracket notation property access using value of other type on type with numeric index signature and no string index signature
     var ll = numIndex[someObject]; // Error
              ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
     
     // Bracket notation property access using string value on type with string index signature and no numeric index signature
     var mm = strIndex['N'];
@@ -127,7 +127,7 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,12): er
     // Bracket notation property access using values of other types on type with no index signatures
     var uu = noIndex[someObject]; // Error
              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
     
     // Bracket notation property access using numeric value on type with numeric index signature and string index signature
     var vv = noIndex[32];
@@ -152,7 +152,7 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,12): er
     // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
     var zzzz = bothIndex[someObject]; // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
     
     var x1 = numIndex[stringOrNumber];
     var x1: any;

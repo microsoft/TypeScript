@@ -28,6 +28,31 @@ declare var a;
 ><any>23.0 : any
 >23.0 : number
 
+(<any>1); 
+>(<any>1) : any
+><any>1 : any
+>1 : number
+
+(<any>1.);
+>(<any>1.) : any
+><any>1. : any
+>1. : number
+
+(<any>1.0);
+>(<any>1.0) : any
+><any>1.0 : any
+>1.0 : number
+
+(<any>12e+34);
+>(<any>12e+34) : any
+><any>12e+34 : any
+>12e+34 : number
+
+(<any>0xff);
+>(<any>0xff) : any
+><any>0xff : any
+>0xff : number
+
 (<any>/regexp/g); 
 >(<any>/regexp/g) : any
 ><any>/regexp/g : any
@@ -104,6 +129,47 @@ declare var A;
 >A : any
 
 // should keep the parentheses in emit
+(<any>1).foo;
+>(<any>1).foo : any
+>(<any>1) : any
+><any>1 : any
+>1 : number
+>foo : any
+
+(<any>1.).foo;
+>(<any>1.).foo : any
+>(<any>1.) : any
+><any>1. : any
+>1. : number
+>foo : any
+
+(<any>1.0).foo;
+>(<any>1.0).foo : any
+>(<any>1.0) : any
+><any>1.0 : any
+>1.0 : number
+>foo : any
+
+(<any>12e+34).foo;
+>(<any>12e+34).foo : any
+>(<any>12e+34) : any
+><any>12e+34 : any
+>12e+34 : number
+>foo : any
+
+(<any>0xff).foo;
+>(<any>0xff).foo : any
+>(<any>0xff) : any
+><any>0xff : any
+>0xff : number
+>foo : any
+
+(<any>(1.0)); 
+>(<any>(1.0)) : any
+><any>(1.0) : any
+>(1.0) : number
+>1.0 : number
+
 (<any>new A).foo; 
 >(<any>new A).foo : any
 >(<any>new A) : any

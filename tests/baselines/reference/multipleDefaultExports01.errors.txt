@@ -24,7 +24,7 @@ tests/cases/conformance/es6/modules/m2.ts(3,1): error TS2348: Value of type 'typ
 !!! error TS2300: Duplicate identifier 'default'.
     
 ==== tests/cases/conformance/es6/modules/m2.ts (1 errors) ====
-    import Entity from "m1"
+    import Entity from "./m1"
     
     Entity();
     ~~~~~~~~

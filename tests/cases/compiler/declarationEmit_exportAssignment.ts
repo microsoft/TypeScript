@@ -8,5 +8,5 @@ export function bar() { }
 export interface Buzz { }
 
 // @filename: index.ts
-import {foo} from "utils";
+import {foo} from "./utils";
 export = foo;

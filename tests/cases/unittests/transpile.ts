@@ -64,8 +64,8 @@ module ts {
             let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
             assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
             
-            let expectedSourceMapFileName = removeFileExtension(transpileOptions.fileName) + ".js.map";
-            let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;           
+            let expectedSourceMapFileName = removeFileExtension(getBaseFileName(normalizeSlashes(transpileOptions.fileName))) + ".js.map";
+            let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
                         
             if (testSettings.expectedOutput !== undefined) {
                 assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);    
@@ -269,6 +269,10 @@ var x = 0;`,
                     }, 
                     expectedOutput: output
                 });
+        });
+
+        it("Supports backslashes in file name", () => {
+            test("var x", { expectedOutput: "var x;\r\n", options: { fileName: "a\\b.ts" }});
         });
     });
 }
