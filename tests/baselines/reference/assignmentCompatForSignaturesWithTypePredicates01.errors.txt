@@ -1,0 +1,39 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates01.ts(21,1): error TS2322: Type '(x: any) => x is B' is not assignable to type '(x: any) => x is A'.
+  Type predicate 'x is B' is not assignable to 'x is A'.
+    Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates01.ts(22,1): error TS2322: Type '(x: any) => x is A' is not assignable to type '(x: any) => x is B'.
+  Type predicate 'x is A' is not assignable to 'x is B'.
+    Type 'A' is not assignable to type 'B'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates01.ts (2 errors) ====
+    
+    class A {
+        private a;
+    }
+    
+    class B extends A {
+        private b;
+    }
+    
+    function isA(x: any): x is A {
+        return x instanceof A;
+    }
+    
+    function isB(x: any): x is B {
+        return x instanceof B;
+    }
+    
+    let myIsA = isA;
+    let myIsB = isB;
+    
+    myIsA = myIsB;
+    ~~~~~
+!!! error TS2322: Type '(x: any) => x is B' is not assignable to type '(x: any) => x is A'.
+!!! error TS2322:   Type predicate 'x is B' is not assignable to 'x is A'.
+!!! error TS2322:     Type 'B' is not assignable to type 'A'.
+    myIsB = myIsA;
+    ~~~~~
+!!! error TS2322: Type '(x: any) => x is A' is not assignable to type '(x: any) => x is B'.
+!!! error TS2322:   Type predicate 'x is A' is not assignable to 'x is B'.
+!!! error TS2322:     Type 'A' is not assignable to type 'B'.

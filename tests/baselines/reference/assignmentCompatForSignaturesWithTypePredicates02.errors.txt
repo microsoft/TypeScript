@@ -1,0 +1,38 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates02.ts(11,25): error TS2304: Cannot find name 'B'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates02.ts(17,1): error TS2322: Type '(x: any) => x is any' is not assignable to type '(x: any) => x is A'.
+  Type predicate 'x is any' is not assignable to 'x is A'.
+    Type 'any' is not assignable to type 'A'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates02.ts(18,1): error TS2322: Type '(x: any) => x is A' is not assignable to type '(x: any) => x is any'.
+  Type predicate 'x is A' is not assignable to 'x is any'.
+    Type 'A' is not assignable to type 'any'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatForSignaturesWithTypePredicates02.ts (3 errors) ====
+    
+    class A {
+        private a;
+    }
+    
+    function isA(x: any): x is A {
+        return x instanceof A;
+    }
+    
+    function isAny(x: any): x is any {
+        return x instanceof B;
+                            ~
+!!! error TS2304: Cannot find name 'B'.
+    }
+    
+    let myIsA = isA;
+    let myIsAny = isAny;
+    
+    myIsA = myIsAny;
+    ~~~~~
+!!! error TS2322: Type '(x: any) => x is any' is not assignable to type '(x: any) => x is A'.
+!!! error TS2322:   Type predicate 'x is any' is not assignable to 'x is A'.
+!!! error TS2322:     Type 'any' is not assignable to type 'A'.
+    myIsAny = myIsA;
+    ~~~~~~~
+!!! error TS2322: Type '(x: any) => x is A' is not assignable to type '(x: any) => x is any'.
+!!! error TS2322:   Type predicate 'x is A' is not assignable to 'x is any'.
+!!! error TS2322:     Type 'A' is not assignable to type 'any'.
