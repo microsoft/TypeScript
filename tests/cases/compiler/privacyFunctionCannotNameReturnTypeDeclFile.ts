@@ -36,7 +36,7 @@ export module SpecializedWidget {
 
 // @Filename:privacyFunctionReturnTypeDeclFile_exporter.ts
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
-import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
+import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -52,7 +52,7 @@ export function createExportedWidget4() {
 }
 
 // @Filename:privacyFunctionReturnTypeDeclFile_consumer.ts
-import exporter = require("privacyFunctionReturnTypeDeclFile_exporter");
+import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 export class publicClassWithWithPrivateParmeterTypes {
     static myPublicStaticMethod() { // Error
         return exporter.createExportedWidget1();

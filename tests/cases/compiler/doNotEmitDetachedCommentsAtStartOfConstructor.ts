@@ -1,4 +1,4 @@
-﻿// @comments: false
+﻿// @removeComments: true
 class A {
     constructor() {
         // Single Line Comment

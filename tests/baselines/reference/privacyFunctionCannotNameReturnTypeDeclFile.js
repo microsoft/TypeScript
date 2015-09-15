@@ -36,7 +36,7 @@ export module SpecializedWidget {
 
 //// [privacyFunctionReturnTypeDeclFile_exporter.ts]
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
-import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
+import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -52,7 +52,7 @@ export function createExportedWidget4() {
 }
 
 //// [privacyFunctionReturnTypeDeclFile_consumer.ts]
-import exporter = require("privacyFunctionReturnTypeDeclFile_exporter");
+import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 export class publicClassWithWithPrivateParmeterTypes {
     static myPublicStaticMethod() { // Error
         return exporter.createExportedWidget1();
@@ -192,7 +192,7 @@ var SpecializedWidget;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
-var Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
+var Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -211,7 +211,7 @@ function createExportedWidget4() {
 }
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionReturnTypeDeclFile_consumer.js]
-var exporter = require("privacyFunctionReturnTypeDeclFile_exporter");
+var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = (function () {
     function publicClassWithWithPrivateParmeterTypes() {
     }
@@ -374,7 +374,7 @@ export declare module SpecializedWidget {
 }
 //// [privacyFunctionReturnTypeDeclFile_exporter.d.ts]
 /// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
-import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
+import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;

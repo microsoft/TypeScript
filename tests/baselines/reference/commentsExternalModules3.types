@@ -1,6 +1,6 @@
 === tests/cases/compiler/commentsExternalModules_1.ts ===
 /**This is on import declaration*/
-import extMod = require("commentsExternalModules2_0"); // trailing comment 1
+import extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 >extMod : typeof extMod
 
 extMod.m1.fooExport();
