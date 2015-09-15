@@ -779,7 +779,7 @@ function generateTransform(outputFile: string) {
     writer.writeLine();
     writer.write(`/* @internal */`);
     writer.writeLine();
-    writer.write(`namespace ts.transform {`);
+    writer.write(`namespace ts {`);
     writer.writeLine();
     writer.increaseIndent();
     writeAcceptFunction();
@@ -790,7 +790,7 @@ function generateTransform(outputFile: string) {
     sys.writeFile(outputFile, writer.getText());
     
     function writeAcceptFunction() {
-        writer.write(`export function accept(node: Node, visitor: (input: Node, write: (node: Node) => void) => void, write: (node: Node) => void): void {`);
+        writer.write(`export function accept(transformer: Transformer, node: Node, pipeline: Pipeline<Node, Node>, write: PipelineOutput<Node>): void {`);
         writer.writeLine();
         writer.increaseIndent();
     
@@ -803,6 +803,9 @@ function generateTransform(outputFile: string) {
         
         writer.decreaseIndent();
         writer.write(`}`);
+        writer.writeLine();
+        
+        writer.write(`let { visitNode, visitNodes } = transformer;`);
         writer.writeLine();
         
         writer.write(`switch (node.kind) {`);
@@ -821,7 +824,6 @@ function generateTransform(outputFile: string) {
             let updateFunctionName = getUpdateFunctionName(syntaxNode);
             
             writer.write(`return write(${updateFunctionName}(`);
-            writer.writeLine();
             writer.increaseIndent();
             writer.write(`<${syntaxNode.typeName}>node`);
             
@@ -837,13 +839,27 @@ function generateTransform(outputFile: string) {
                     writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}`);
                 }
                 else {
+                    let isStatement = member.typeName === "Statement";
                     let visitorFunction =
                         member.visitorFunction ? member.visitorFunction :
-                        member.isNodeArray || member.isModifiersArray ? `<NodeArray<${member.elementTypeName}>>visitNodes` :
-                        member.startsNewLexicalEnvironment ? `<${member.typeName}>visitNewLexicalEnvironment` :
-                        `<${member.typeName}>visitNode`;
+                        member.isNodeArray || member.isModifiersArray ? `visitNodes` :
+                        `visitNode`;
                         
-                    writer.write(`${visitorFunction}((<${syntaxNode.typeName}>node).${member.propertyName}, visitor)`);
+                    writer.write(`${visitorFunction}(`);
+                    if (member.visitorFunction) {
+                        writer.write(`transformer, `);
+                    }
+                    
+                    writer.write(`(<${syntaxNode.typeName}>node).${member.propertyName}, pipeline`);
+                    
+                    if (isStatement) {
+                        writer.write(`, PipelineFlags.StatementOrBlock`);
+                    }
+                    else if (member.startsNewLexicalEnvironment) {
+                        writer.write(`, PipelineFlags.LexicalEnvironment`);
+                    }
+                    
+                    writer.write(`)`);
                 }
             }
             

@@ -9,6 +9,7 @@ namespace ts {
     export type PipelineOutput<TOut extends Node> = (node: TOut) => void;
     export type Pipeline<TIn extends Node, TOut extends Node> = (input: TIn, output: PipelineOutput<TOut>, offset?: number) => void;
     export type NodeTest<T extends Node> = (node: Node) => node is T;
+    export type TransformationChain = (transformer: Transformer, statements: NodeArray<Statement>) => NodeArray<Statement>;
         
     /**
       * Computes the transform flags for a node, given the transform flags of its subtree
@@ -256,7 +257,7 @@ namespace ts {
         return node.transformFlags = subtreeFlags;
     }
 
-    export function runTransformationChain(statements: NodeArray<Statement>, chain: (statements: NodeArray<Statement>) => NodeArray<Statement>, 
+    export function runTransformationChain(statements: NodeArray<Statement>, chain: TransformationChain, 
         _compilerOptions: CompilerOptions, _currentSourceFile: SourceFile, _resolver: EmitResolver, _generatedNameSet: Map<string>, _nodeToGeneratedName: string[]) {
         return transform.runTransformationChain(statements, chain, _compilerOptions, _currentSourceFile, _resolver, _generatedNameSet, _nodeToGeneratedName);
     }
@@ -264,43 +265,44 @@ namespace ts {
     export const enum PipelineFlags {
         LexicalEnvironment = 1 << 1,
         StatementOrBlock = 1 << 2,
-        //ExpressionOrBlock = 1 << 3,
+        ExpressionOrBlock = 1 << 3,
     }
     
-    // interface Transformer {
-    //     getEmitResolver(): EmitResolver;
-    //     getCompilerOptions(): CompilerOptions;
-    //     makeUniqueName(baseName: string): string;
-    //     getGeneratedNameForNode(node: Node): Identifier;
-    //     nodeHasGeneratedName(node: Node): boolean;
-    //     createUniqueIdentifier(baseName: string): Identifier;
-    //     createTempVariable(loopVariable: boolean): Identifier;
-    //     declareLocal(baseName?: string): Identifier;
-    //     hoistVariableDeclaration(name: Identifier): void;
-    //     hoistFunctionDeclaration(func: FunctionDeclaration): void;
-    //     createParentNavigator(): ParentNavigator;
-    //     getParentNode(): Node;
-    //     getCurrentNode(): Node;
-    //     findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
-    //     findAncestorNode(match: (node: Node) => boolean): Node;
-    //     getDeclarationName(node: DeclarationStatement): Identifier;
-    //     getDeclarationName(node: ClassExpression): Identifier;
-    //     getDeclarationName(node: Declaration): DeclarationName;
-    //     getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement): Expression;
-    //     pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void;
-    //     pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void;
-    //     emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void;
-    //     emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void;
-    //     visitNode<T extends Node>(input: T, pipeline: Pipeline<Node, Node>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): T;
-    //     visitNode<T extends Node>(input: T, pipeline: Pipeline<T, T>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): T;
-    //     visitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut;
-    //     visitNodes<T extends Node>(input: T[], pipeline: Pipeline<Node, Node>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): NodeArray<T>;
-    //     visitNodes<T extends Node>(input: T[], pipeline: Pipeline<T, T>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): NodeArray<T>;
-    //     visitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
-    //     accept<T extends Node>(node: T, pipeline: Pipeline<T, T>, write: PipelineOutput<T>): void;
-    // }
+    export interface Transformer {
+        getEmitResolver(): EmitResolver;
+        getCompilerOptions(): CompilerOptions;
+        makeUniqueName(baseName: string): string;
+        getGeneratedNameForNode(node: Node): Identifier;
+        nodeHasGeneratedName(node: Node): boolean;
+        createUniqueIdentifier(baseName: string): Identifier;
+        createTempVariable(loopVariable: boolean): Identifier;
+        declareLocal(baseName?: string): Identifier;
+        hoistVariableDeclaration(name: Identifier): void;
+        hoistFunctionDeclaration(func: FunctionDeclaration): void;
+        createParentNavigator(): ParentNavigator;
+        getRootNode(): SourceFile;
+        getParentNode(): Node;
+        getCurrentNode(): Node;
+        findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        findAncestorNode(match: (node: Node) => boolean): Node;
+        getDeclarationName(node: DeclarationStatement): Identifier;
+        getDeclarationName(node: ClassLikeDeclaration): Identifier;
+        getDeclarationName(node: Declaration): DeclarationName;
+        getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement): Expression;
+        pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void;
+        pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void;
+        emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void;
+        emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void;
+        visitNode<T extends Node>(input: T, pipeline: Pipeline<Node, Node>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): T;
+        visitNode<T extends Node>(input: T, pipeline: Pipeline<T, T>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): T;
+        visitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut;
+        visitNodes<T extends Node>(input: T[], pipeline: Pipeline<Node, Node>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): NodeArray<T>;
+        visitNodes<T extends Node>(input: T[], pipeline: Pipeline<T, T>, flags?: PipelineFlags, nodeTest?: NodeTest<T>): NodeArray<T>;
+        visitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
+        accept<T extends Node>(node: T, pipeline: Pipeline<T, T>, write: PipelineOutput<T>): void;
+    }
     
-    export namespace transform {
+    namespace transform {
         // Flags enum to track count of temp variables and a few dedicated names
         const enum TempFlags {
             Auto      = 0x00000000,  // No preferred name
@@ -333,14 +335,46 @@ namespace ts {
         let writeNodeWithOrWithoutNodeTest: (node: Node) => void;
         let writeNodeFastOrSlow: (node: Node) => void;
 
-        export function runTransformationChain(statements: NodeArray<Statement>, chain: (statements: NodeArray<Statement>) => NodeArray<Statement>, 
+        export function runTransformationChain(statements: NodeArray<Statement>, chain: TransformationChain, 
             _compilerOptions: CompilerOptions, _currentSourceFile: SourceFile, _resolver: EmitResolver, _generatedNameSet: Map<string>, _nodeToGeneratedName: string[]) {
             Debug.assert(!transformationRunning, "Transformation already running");
+            
             initializeTransformation(_compilerOptions, _currentSourceFile, _resolver, _generatedNameSet, _nodeToGeneratedName);
-            let result = chain(statements);
+            
+            let transformer: Transformer = {
+                getEmitResolver,
+                getCompilerOptions,
+                makeUniqueName,
+                getGeneratedNameForNode,
+                nodeHasGeneratedName,
+                createUniqueIdentifier,
+                createTempVariable,
+                declareLocal,
+                hoistVariableDeclaration,
+                hoistFunctionDeclaration,
+                createParentNavigator,
+                getRootNode,
+                getParentNode,
+                getCurrentNode,
+                findAncestorNode,
+                getDeclarationName,
+                getClassMemberPrefix,
+                pipeNode,
+                pipeNodes,
+                emitNode,
+                emitNodes,
+                visitNode,
+                visitNodes,
+                accept(node: Node, pipeline: Pipeline<Node, Node>, write: PipelineOutput<Node>) {
+                    ts.accept(transformer, node, pipeline, write);
+                }
+            };
+
+            let result = chain(transformer, statements);
             cleanupTransformation();
             return result;
         }
+        
         
         function initializeTransformation(_compilerOptions: CompilerOptions, _currentSourceFile: SourceFile, _resolver: EmitResolver, _generatedNameSet: Map<string>, 
             _nodeToGeneratedName: string[]) {
@@ -398,7 +432,7 @@ namespace ts {
         // in global scope. The name is formed by adding an '_n' suffix to the specified base name,
         // where n is a positive integer. Note that names generated by makeTempVariableName and
         // makeUniqueName are guaranteed to never conflict.
-        export function makeUniqueName(baseName: string): string {
+        function makeUniqueName(baseName: string): string {
             // Find the first unique 'name_n', where n is a positive number
             if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
                 baseName += "_";
@@ -413,12 +447,12 @@ namespace ts {
             }
         }
     
-        export function getGeneratedNameForNode(node: Node) {
+        function getGeneratedNameForNode(node: Node) {
             let id = getNodeId(node);
             return nodeToGeneratedIdentifier[id] || (nodeToGeneratedIdentifier[id] = createIdentifier(getGeneratedNameTextForNode(node, id)));
         }
         
-        export function nodeHasGeneratedName(node: Node) {
+        function nodeHasGeneratedName(node: Node) {
             let id = getNodeId(node);
             return nodeToGeneratedName[id] !== undefined;
         }
@@ -513,16 +547,16 @@ namespace ts {
             return nodeStack.getParent();
         }
         
-        export function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
-        export function findAncestorNode(match: (node: Node) => boolean): Node;
-        export function findAncestorNode(match: (node: Node) => boolean) {
+        function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        function findAncestorNode(match: (node: Node) => boolean): Node;
+        function findAncestorNode(match: (node: Node) => boolean) {
             return nodeStack.findAncestorNode(match);
         }
         
-        export function getDeclarationName(node: DeclarationStatement): Identifier;
-        export function getDeclarationName(node: ClassLikeDeclaration): Identifier;
-        export function getDeclarationName(node: Declaration): DeclarationName;
-        export function getDeclarationName<T extends DeclarationName>(node: Declaration): T | Identifier {
+        function getDeclarationName(node: DeclarationStatement): Identifier;
+        function getDeclarationName(node: ClassLikeDeclaration): Identifier;
+        function getDeclarationName(node: Declaration): DeclarationName;
+        function getDeclarationName<T extends DeclarationName>(node: Declaration): T | Identifier {
             let name = node.name;
             if (name) {
                 return nodeIsSynthesized(name) ? <T>name : cloneNode(<T>name);
@@ -532,7 +566,7 @@ namespace ts {
             }
         }
     
-        export function getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement) {
+        function getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement) {
             let expression: Expression = getDeclarationName(node);
             if (!(member.flags & NodeFlags.Static)) {
                 expression = createPropertyAccessExpression2(
@@ -544,17 +578,17 @@ namespace ts {
             return expression;
         }
     
-        export function createUniqueIdentifier(baseName: string): Identifier {
+        function createUniqueIdentifier(baseName: string): Identifier {
             let name = makeUniqueName(baseName);
             return createIdentifier(name);
         }
     
-        export function createTempVariable(loopVariable: boolean): Identifier {
+        function createTempVariable(loopVariable: boolean): Identifier {
             let name = makeTempVariableName(loopVariable ? TempFlags._i : TempFlags.Auto);
             return createIdentifier(name);
         }
     
-        export function declareLocal(baseName?: string): Identifier {
+        function declareLocal(baseName?: string): Identifier {
             let local = baseName
                 ? createUniqueIdentifier(baseName)
                 : createTempVariable(/*loopVariable*/ false);
@@ -562,7 +596,7 @@ namespace ts {
             return local;
         }
     
-        export function hoistVariableDeclaration(name: Identifier): void {
+        function hoistVariableDeclaration(name: Identifier): void {
             if (!hoistedVariableDeclarations) {
                 hoistedVariableDeclarations = [];
             }
@@ -570,7 +604,7 @@ namespace ts {
             hoistedVariableDeclarations.push(createVariableDeclaration2(name));
         }
     
-        export function hoistFunctionDeclaration(func: FunctionDeclaration): void {
+        function hoistFunctionDeclaration(func: FunctionDeclaration): void {
             if (!hoistedFunctionDeclarations) {
                 hoistedFunctionDeclarations = [];
             }
@@ -578,17 +612,6 @@ namespace ts {
             hoistedFunctionDeclarations.push(func);
         }
     
-        export function childNodeStartPositionIsOnSameLine(parent: Node, child: Node) {
-            if (nodeIsSynthesized(child)) {
-                return !(<SynthesizedNode>child).startsOnNewLine;
-            }
-            if (nodeIsSynthesized(parent)) {
-                return false;
-            }
-            return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, parent.pos)) ===
-                getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, child.pos));
-        }
-        
         function aggregateTransformFlags(node: Node) {
             if (!node) {
                 return;
@@ -667,13 +690,43 @@ namespace ts {
             Debug.fail("Node already written");
         }
         
-        function writeStatementOrBlockSlow(node: Statement) {
+        function writeExpressionOrBlockSlow(node: Node) {
+            if (!updatedNode) {
+                if (isExpressionNode(node)) {
+                    updatedNode = node;
+                }
+                else {
+                    updatedNode = createBlock([]);
+                    writeNodeFastOrSlow = writeExpressionOrBlockFast;
+                    writeNodeFastOrSlow(node);
+                }
+            }
+            else {
+                let previousNode = updatedNode;
+                updatedNode = createBlock([]);
+                writeNodeFastOrSlow = writeExpressionOrBlockFast;
+                writeNodeFastOrSlow(previousNode);
+                writeNodeFastOrSlow(node);
+            }
+        }
+        
+        function writeExpressionOrBlockFast(node: Node) {
+            if (isExpressionNode(node)) {
+                (<Block>updatedNode).statements.push(createReturnStatement(node));
+            }
+            else {
+                Debug.assert(isStatementNode(node));
+                (<Block>updatedNode).statements.push(<Statement>node);
+            }
+        }
+        
+        function writeStatementOrBlockSlow(node: Node) {
             Debug.assert(isStatementNode(node));
             if (!updatedNode) {
                 updatedNode = node;
             }
             else {
-                let previousNode = <Statement>updatedNode;
+                let previousNode = updatedNode;
                 updatedNode = createBlock([]);
                 writeNodeFastOrSlow = writeStatementOrBlockFast;
                 writeNodeFastOrSlow(previousNode);
@@ -681,8 +734,9 @@ namespace ts {
             }
         }
         
-        function writeStatementOrBlockFast(node: Statement) {
-            (<Block>updatedNode).statements.push(node);
+        function writeStatementOrBlockFast(node: Node) {
+            Debug.assert(isStatementNode(node));
+            (<Block>updatedNode).statements.push(<Statement>node);
         }
         
         function writeNodeToNodeArraySlow(node: Node) {
@@ -789,12 +843,23 @@ namespace ts {
                 hoistedFunctionDeclarations = savedHoistedFunctionDeclarations;
             }
         }
-
-        function emitOne<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags: PipelineFlags, nodeTest: NodeTest<TOut>): TOut {
-            if (!input) {
-                return undefined;
+        
+        function emitOneWithLexicalEnvironment<TOut extends Node>(input: Node, pipeline: Pipeline<Node, Node>, flags: PipelineFlags, nodeTest: NodeTest<TOut>): Node {
+            if (isBlock(input)) {
+                return updateBlock(input, visitNodes(input.statements, pipeline, flags));
             }
-            
+            else if (isModuleBlock(input)) {
+                return updateModuleBlock(input, visitNodes(input.statements, pipeline, flags));
+            }
+            else if (isExpression(input)) {
+                return emitOne<Node, TOut>(input, pipeline, flags | PipelineFlags.ExpressionOrBlock, nodeTest);
+            }
+            else {
+                return emitOne<Node, TOut>(input, pipeline, flags, nodeTest);
+            }
+        }
+        
+        function emitOne<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags: PipelineFlags, nodeTest: NodeTest<TOut>): TOut {
             // Preserve the current environment on the call stack as we descend into the tree
             let savedUpdatedNode = updatedNode;
             let savedNodeTestCallback = nodeTestCallback;
@@ -805,7 +870,11 @@ namespace ts {
             updatedNode = undefined;
             nodeTestCallback = nodeTest;
             writeNodeWithOrWithoutNodeTest = nodeTest ? writeNodeWithNodeTest : writeNodeWithoutNodeTest;
-            writeNodeFastOrSlow = flags & PipelineFlags.StatementOrBlock ? writeStatementOrBlockSlow : writeNodeSlow;
+            writeNodeFastOrSlow = flags & PipelineFlags.StatementOrBlock 
+                ? writeStatementOrBlockSlow 
+                : flags & PipelineFlags.ExpressionOrBlock 
+                    ? writeExpressionOrBlockSlow 
+                    : writeNodeSlow;
 
             // Pipe the input node into the output
             pipeOneOrMany<TIn, TOut>(input, undefined, pipeline, writeNode, flags);
@@ -902,7 +971,7 @@ namespace ts {
          * @param output The callback passed to `visitor` to write each visited node.
          * @param flags Flags that affect the pipeline.
          */
-        export function pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void {
+        function pipeNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void {
             pipeOneOrMany(input, undefined, pipeline, output, flags); 
         }
         
@@ -913,7 +982,7 @@ namespace ts {
          * @param output The callback passed to `visitor` to write each visited node.
          * @param flags Flags that affect the pipeline.
          */
-        export function pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void {
+        function pipeNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: PipelineOutput<TOut>, flags?: PipelineFlags): void {
             pipeOneOrMany(undefined, input, pipeline, output, flags);
         }
         
@@ -924,12 +993,8 @@ namespace ts {
          * @param output The destination node array to which to write the results from visiting each node.
          * @param flags Flags that affect the pipeline.
          */
-        export function emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void {
+        function emitNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void {
             emitOneOrMany(input, undefined, pipeline, output, flags, nodeTest);
-        }
-        
-        export function flatMapNode<TIn extends Node, TOut extends Node>(input: TIn, pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
-            return emitOneOrMany(input, undefined, pipeline, [], flags, nodeTest);
         }
         
         /**
@@ -939,77 +1004,26 @@ namespace ts {
          * @param output The destination node array to which to write the results from visiting each node.
          * @param flags Flags that affect the pipeline.
          */
-        export function emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void {
+        function emitNodes<TIn extends Node, TOut extends Node>(input: TIn[], pipeline: Pipeline<TIn, TOut>, output: TOut[], flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): void {
             emitOneOrMany(undefined, input, pipeline, output, flags, nodeTest);
         }
         
-        export function visitNode<T extends Node>(node: T, visitor: Visitor, flags?: PipelineFlags): T;
-        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut;
-        export function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut {
-            return emitOne(node, visitor, flags, nodeTest);
-        }
-    
-        export function visitStatement(node: Statement, visitor: Visitor, flags?: PipelineFlags) {
-            return emitOne<Statement, Statement>(node, visitor, flags | PipelineFlags.StatementOrBlock, undefined);
-        }
-    
-        export function visitNodes<T extends Node>(nodes: T[], pipeline: Visitor, flags?: PipelineFlags): NodeArray<T>;
-        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
-        export function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
-            return emitOneOrMany<TIn, TOut>(undefined, nodes, pipeline, undefined, flags, nodeTest);
-        }
-        
-        export function visitNewLexicalEnvironment(node: LexicalEnvironmentBody, pipeline: Visitor): LexicalEnvironmentBody {
-            if (isBlock(node)) {
-                return updateBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, PipelineFlags.LexicalEnvironment));
+        function visitNode<T extends Node>(node: T, visitor: Visitor, flags?: PipelineFlags): T;
+        function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut;
+        function visitNode<TIn extends Node, TOut extends Node>(node: TIn, visitor: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): TOut {
+            if (!node) {
+                return undefined;
             }
-            else if (isModuleBlock(node)) {
-                return updateModuleBlock(node, visitNodes<Statement, Statement>(node.statements, pipeline, PipelineFlags.LexicalEnvironment));
-            }
-            else if (isExpressionNode(node)) {
-                return visitExpressionFunctionBodyInNewLexicalEnvironment(node, pipeline);
-            }
-            else {
-                return visitNode(node, pipeline);
-            }
-        }
-        
-        function visitExpressionFunctionBodyInNewLexicalEnvironment(node: Expression, pipeline: Pipeline<Expression, Expression>): Expression | Block {
-            let savedTempFlags = tempFlags;
-            let savedHoistedVariableDeclarations = hoistedVariableDeclarations;
-            let savedHoistedFunctionDeclarations = hoistedFunctionDeclarations;
             
-            tempFlags = 0;
-            hoistedVariableDeclarations = undefined;
-            hoistedFunctionDeclarations = undefined;
+            return flags & PipelineFlags.LexicalEnvironment 
+                ? <TOut>emitOneWithLexicalEnvironment(node, visitor, flags, nodeTest) 
+                : emitOne(node, visitor, flags, nodeTest);
+        }
     
-            let visited = visitNode(node, pipeline);
-            let result: Block | Expression;
-            if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
-                let block = createBlock([]);
-                if (visited) {
-                    let returnStmt = createReturnStatement(visited);
-                    block.statements.push(returnStmt);
-                }
-                
-                if (hoistedVariableDeclarations) {
-                    block.statements.push(createVariableStatement2(createVariableDeclarationList(hoistedVariableDeclarations)));
-                }
-                
-                if (hoistedFunctionDeclarations) {
-                    block.statements.push(...hoistedFunctionDeclarations);
-                }
-                
-                result = block;
-            }
-            else {
-                result = visited;
-            }
-    
-            tempFlags = savedTempFlags;
-            hoistedVariableDeclarations = savedHoistedVariableDeclarations;
-            hoistedFunctionDeclarations = savedHoistedFunctionDeclarations;
-            return result;
+        function visitNodes<T extends Node>(nodes: T[], pipeline: Visitor, flags?: PipelineFlags): NodeArray<T>;
+        function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut>;
+        function visitNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], pipeline: Pipeline<TIn, TOut>, flags?: PipelineFlags, nodeTest?: NodeTest<TOut>): NodeArray<TOut> {
+            return emitOneOrMany<TIn, TOut>(undefined, nodes, pipeline, undefined, flags, nodeTest);
         }
     }
 }

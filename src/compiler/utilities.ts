@@ -1707,6 +1707,17 @@ namespace ts {
         return pos === -1;
     }
 
+    export function childNodeStartPositionIsOnSameLine(sourceFile: SourceFile, parent: Node, child: Node) {
+        if (nodeIsSynthesized(child)) {
+            return !(<SynthesizedNode>child).startsOnNewLine;
+        }
+        if (nodeIsSynthesized(parent)) {
+            return false;
+        }
+        return getLineOfLocalPosition(sourceFile, skipTrivia(sourceFile.text, parent.pos)) ===
+            getLineOfLocalPosition(sourceFile, skipTrivia(sourceFile.text, child.pos));
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};

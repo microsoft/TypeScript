@@ -2,693 +2,566 @@
 /// <reference path="factory.ts" />
 /// <reference path="transform.ts" />
 /* @internal */
-namespace ts.transform {
-    export function accept(node: Node, visitor: (input: Node, write: (node: Node) => void) => void, write: (node: Node) => void): void {
+namespace ts {
+    export function accept(transformer: Transformer, node: Node, pipeline: Pipeline<Node, Node>, write: PipelineOutput<Node>): void {
         if (!node) {
             return;
         }
+        let { visitNode, visitNodes } = transformer;
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
-                return write(updateQualifiedName(
-                    <QualifiedName>node, 
-                    <EntityName>visitNode((<QualifiedName>node).left, visitor), 
-                    <Identifier>visitNode((<QualifiedName>node).right, visitor)));
+                return write(updateQualifiedName(<QualifiedName>node, 
+                    visitNode((<QualifiedName>node).left, pipeline), 
+                    visitNode((<QualifiedName>node).right, pipeline)));
             case SyntaxKind.ComputedPropertyName:
-                return write(updateComputedPropertyName(
-                    <ComputedPropertyName>node, 
-                    <Expression>visitNode((<ComputedPropertyName>node).expression, visitor)));
+                return write(updateComputedPropertyName(<ComputedPropertyName>node, 
+                    visitNode((<ComputedPropertyName>node).expression, pipeline)));
             case SyntaxKind.TypeParameter:
-                return write(updateTypeParameter(
-                    <TypeParameterDeclaration>node, 
-                    <Identifier>visitNode((<TypeParameterDeclaration>node).name, visitor), 
-                    <TypeNode>visitNode((<TypeParameterDeclaration>node).constraint, visitor), 
-                    <Expression>visitNode((<TypeParameterDeclaration>node).expression, visitor)));
+                return write(updateTypeParameter(<TypeParameterDeclaration>node, 
+                    visitNode((<TypeParameterDeclaration>node).name, pipeline), 
+                    visitNode((<TypeParameterDeclaration>node).constraint, pipeline), 
+                    visitNode((<TypeParameterDeclaration>node).expression, pipeline)));
             case SyntaxKind.Parameter:
-                return write(updateParameter(
-                    <ParameterDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ParameterDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ParameterDeclaration>node).modifiers, visitor), 
-                    <BindingPattern | Identifier>visitNode((<ParameterDeclaration>node).name, visitor), 
+                return write(updateParameter(<ParameterDeclaration>node, 
+                    visitNodes((<ParameterDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ParameterDeclaration>node).modifiers, pipeline), 
+                    visitNode((<ParameterDeclaration>node).name, pipeline), 
                     (<ParameterDeclaration>node).questionToken, 
-                    <TypeNode>visitNode((<ParameterDeclaration>node).type, visitor), 
-                    <Expression>visitNode((<ParameterDeclaration>node).initializer, visitor)));
+                    visitNode((<ParameterDeclaration>node).type, pipeline), 
+                    visitNode((<ParameterDeclaration>node).initializer, pipeline)));
             case SyntaxKind.Decorator:
-                return write(updateDecorator(
-                    <Decorator>node, 
-                    <LeftHandSideExpression>visitNode((<Decorator>node).expression, visitor)));
+                return write(updateDecorator(<Decorator>node, 
+                    visitNode((<Decorator>node).expression, pipeline)));
             case SyntaxKind.PropertySignature:
-                return write(updatePropertySignature(
-                    <PropertySignature>node, 
-                    <NodeArray<Decorator>>visitNodes((<PropertySignature>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<PropertySignature>node).modifiers, visitor), 
-                    <PropertyName>visitNode((<PropertySignature>node).name, visitor), 
-                    <TypeNode>visitNode((<PropertySignature>node).type, visitor)));
+                return write(updatePropertySignature(<PropertySignature>node, 
+                    visitNodes((<PropertySignature>node).decorators, pipeline), 
+                    visitNodes((<PropertySignature>node).modifiers, pipeline), 
+                    visitNode((<PropertySignature>node).name, pipeline), 
+                    visitNode((<PropertySignature>node).type, pipeline)));
             case SyntaxKind.PropertyDeclaration:
-                return write(updatePropertyDeclaration(
-                    <PropertyDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<PropertyDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<PropertyDeclaration>node).modifiers, visitor), 
-                    <PropertyName>visitNode((<PropertyDeclaration>node).name, visitor), 
-                    <TypeNode>visitNode((<PropertyDeclaration>node).type, visitor), 
-                    <Expression>visitNode((<PropertyDeclaration>node).initializer, visitor)));
+                return write(updatePropertyDeclaration(<PropertyDeclaration>node, 
+                    visitNodes((<PropertyDeclaration>node).decorators, pipeline), 
+                    visitNodes((<PropertyDeclaration>node).modifiers, pipeline), 
+                    visitNode((<PropertyDeclaration>node).name, pipeline), 
+                    visitNode((<PropertyDeclaration>node).type, pipeline), 
+                    visitNode((<PropertyDeclaration>node).initializer, pipeline)));
             case SyntaxKind.MethodSignature:
-                return write(updateMethodSignature(
-                    <MethodSignature>node, 
-                    <NodeArray<Decorator>>visitNodes((<MethodSignature>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<MethodSignature>node).modifiers, visitor), 
-                    <PropertyName>visitNode((<MethodSignature>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<MethodSignature>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<MethodSignature>node).parameters, visitor), 
-                    <TypeNode>visitNode((<MethodSignature>node).type, visitor)));
+                return write(updateMethodSignature(<MethodSignature>node, 
+                    visitNodes((<MethodSignature>node).decorators, pipeline), 
+                    visitNodes((<MethodSignature>node).modifiers, pipeline), 
+                    visitNode((<MethodSignature>node).name, pipeline), 
+                    visitNodes((<MethodSignature>node).typeParameters, pipeline), 
+                    visitNodes((<MethodSignature>node).parameters, pipeline), 
+                    visitNode((<MethodSignature>node).type, pipeline)));
             case SyntaxKind.MethodDeclaration:
-                return write(updateMethodDeclaration(
-                    <MethodDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<MethodDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<MethodDeclaration>node).modifiers, visitor), 
-                    <PropertyName>visitNode((<MethodDeclaration>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<MethodDeclaration>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<MethodDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<MethodDeclaration>node).type, visitor), 
-                    <Block>visitNewLexicalEnvironment((<MethodDeclaration>node).body, visitor)));
+                return write(updateMethodDeclaration(<MethodDeclaration>node, 
+                    visitNodes((<MethodDeclaration>node).decorators, pipeline), 
+                    visitNodes((<MethodDeclaration>node).modifiers, pipeline), 
+                    visitNode((<MethodDeclaration>node).name, pipeline), 
+                    visitNodes((<MethodDeclaration>node).typeParameters, pipeline), 
+                    visitNodes((<MethodDeclaration>node).parameters, pipeline), 
+                    visitNode((<MethodDeclaration>node).type, pipeline), 
+                    visitNode((<MethodDeclaration>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.Constructor:
-                return write(updateConstructor(
-                    <ConstructorDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ConstructorDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ConstructorDeclaration>node).modifiers, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<ConstructorDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<ConstructorDeclaration>node).type, visitor), 
-                    <Block>visitNewLexicalEnvironment((<ConstructorDeclaration>node).body, visitor)));
+                return write(updateConstructor(<ConstructorDeclaration>node, 
+                    visitNodes((<ConstructorDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ConstructorDeclaration>node).modifiers, pipeline), 
+                    visitNodes((<ConstructorDeclaration>node).parameters, pipeline), 
+                    visitNode((<ConstructorDeclaration>node).type, pipeline), 
+                    visitNode((<ConstructorDeclaration>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.GetAccessor:
-                return write(updateGetAccessor(
-                    <GetAccessorDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<GetAccessorDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<GetAccessorDeclaration>node).modifiers, visitor), 
-                    <PropertyName>visitNode((<GetAccessorDeclaration>node).name, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<GetAccessorDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<GetAccessorDeclaration>node).type, visitor), 
-                    <Block>visitNewLexicalEnvironment((<GetAccessorDeclaration>node).body, visitor)));
+                return write(updateGetAccessor(<GetAccessorDeclaration>node, 
+                    visitNodes((<GetAccessorDeclaration>node).decorators, pipeline), 
+                    visitNodes((<GetAccessorDeclaration>node).modifiers, pipeline), 
+                    visitNode((<GetAccessorDeclaration>node).name, pipeline), 
+                    visitNodes((<GetAccessorDeclaration>node).parameters, pipeline), 
+                    visitNode((<GetAccessorDeclaration>node).type, pipeline), 
+                    visitNode((<GetAccessorDeclaration>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.SetAccessor:
-                return write(updateSetAccessor(
-                    <SetAccessorDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<SetAccessorDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<SetAccessorDeclaration>node).modifiers, visitor), 
-                    <PropertyName>visitNode((<SetAccessorDeclaration>node).name, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<SetAccessorDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<SetAccessorDeclaration>node).type, visitor), 
-                    <Block>visitNewLexicalEnvironment((<SetAccessorDeclaration>node).body, visitor)));
+                return write(updateSetAccessor(<SetAccessorDeclaration>node, 
+                    visitNodes((<SetAccessorDeclaration>node).decorators, pipeline), 
+                    visitNodes((<SetAccessorDeclaration>node).modifiers, pipeline), 
+                    visitNode((<SetAccessorDeclaration>node).name, pipeline), 
+                    visitNodes((<SetAccessorDeclaration>node).parameters, pipeline), 
+                    visitNode((<SetAccessorDeclaration>node).type, pipeline), 
+                    visitNode((<SetAccessorDeclaration>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.CallSignature:
-                return write(updateCallSignature(
-                    <CallSignatureDeclaration>node, 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<CallSignatureDeclaration>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<CallSignatureDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<CallSignatureDeclaration>node).type, visitor)));
+                return write(updateCallSignature(<CallSignatureDeclaration>node, 
+                    visitNodes((<CallSignatureDeclaration>node).typeParameters, pipeline), 
+                    visitNodes((<CallSignatureDeclaration>node).parameters, pipeline), 
+                    visitNode((<CallSignatureDeclaration>node).type, pipeline)));
             case SyntaxKind.ConstructSignature:
-                return write(updateConstructSignature(
-                    <ConstructSignatureDeclaration>node, 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<ConstructSignatureDeclaration>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<ConstructSignatureDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<ConstructSignatureDeclaration>node).type, visitor)));
+                return write(updateConstructSignature(<ConstructSignatureDeclaration>node, 
+                    visitNodes((<ConstructSignatureDeclaration>node).typeParameters, pipeline), 
+                    visitNodes((<ConstructSignatureDeclaration>node).parameters, pipeline), 
+                    visitNode((<ConstructSignatureDeclaration>node).type, pipeline)));
             case SyntaxKind.IndexSignature:
-                return write(updateIndexSignature(
-                    <IndexSignatureDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<IndexSignatureDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<IndexSignatureDeclaration>node).modifiers, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<IndexSignatureDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<IndexSignatureDeclaration>node).type, visitor)));
+                return write(updateIndexSignature(<IndexSignatureDeclaration>node, 
+                    visitNodes((<IndexSignatureDeclaration>node).decorators, pipeline), 
+                    visitNodes((<IndexSignatureDeclaration>node).modifiers, pipeline), 
+                    visitNodes((<IndexSignatureDeclaration>node).parameters, pipeline), 
+                    visitNode((<IndexSignatureDeclaration>node).type, pipeline)));
             case SyntaxKind.TypePredicate:
-                return write(updateTypePredicate(
-                    <TypePredicateNode>node, 
-                    <Identifier>visitNode((<TypePredicateNode>node).parameterName, visitor), 
-                    <TypeNode>visitNode((<TypePredicateNode>node).type, visitor)));
+                return write(updateTypePredicate(<TypePredicateNode>node, 
+                    visitNode((<TypePredicateNode>node).parameterName, pipeline), 
+                    visitNode((<TypePredicateNode>node).type, pipeline)));
             case SyntaxKind.TypeReference:
-                return write(updateTypeReference(
-                    <TypeReferenceNode>node, 
-                    <EntityName>visitNode((<TypeReferenceNode>node).typeName, visitor), 
-                    <NodeArray<TypeNode>>visitNodes((<TypeReferenceNode>node).typeArguments, visitor)));
+                return write(updateTypeReference(<TypeReferenceNode>node, 
+                    visitNode((<TypeReferenceNode>node).typeName, pipeline), 
+                    visitNodes((<TypeReferenceNode>node).typeArguments, pipeline)));
             case SyntaxKind.FunctionType:
-                return write(updateFunctionType(
-                    <FunctionTypeNode>node, 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<FunctionTypeNode>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<FunctionTypeNode>node).parameters, visitor), 
-                    <TypeNode>visitNode((<FunctionTypeNode>node).type, visitor)));
+                return write(updateFunctionType(<FunctionTypeNode>node, 
+                    visitNodes((<FunctionTypeNode>node).typeParameters, pipeline), 
+                    visitNodes((<FunctionTypeNode>node).parameters, pipeline), 
+                    visitNode((<FunctionTypeNode>node).type, pipeline)));
             case SyntaxKind.ConstructorType:
-                return write(updateConstructorType(
-                    <ConstructorTypeNode>node, 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<ConstructorTypeNode>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<ConstructorTypeNode>node).parameters, visitor), 
-                    <TypeNode>visitNode((<ConstructorTypeNode>node).type, visitor)));
+                return write(updateConstructorType(<ConstructorTypeNode>node, 
+                    visitNodes((<ConstructorTypeNode>node).typeParameters, pipeline), 
+                    visitNodes((<ConstructorTypeNode>node).parameters, pipeline), 
+                    visitNode((<ConstructorTypeNode>node).type, pipeline)));
             case SyntaxKind.TypeQuery:
-                return write(updateTypeQuery(
-                    <TypeQueryNode>node, 
-                    <EntityName>visitNode((<TypeQueryNode>node).exprName, visitor)));
+                return write(updateTypeQuery(<TypeQueryNode>node, 
+                    visitNode((<TypeQueryNode>node).exprName, pipeline)));
             case SyntaxKind.TypeLiteral:
-                return write(updateTypeLiteral(
-                    <TypeLiteralNode>node, 
-                    <NodeArray<TypeElement>>visitNodes((<TypeLiteralNode>node).members, visitor)));
+                return write(updateTypeLiteral(<TypeLiteralNode>node, 
+                    visitNodes((<TypeLiteralNode>node).members, pipeline)));
             case SyntaxKind.ArrayType:
-                return write(updateArrayType(
-                    <ArrayTypeNode>node, 
-                    <TypeNode>visitNode((<ArrayTypeNode>node).elementType, visitor)));
+                return write(updateArrayType(<ArrayTypeNode>node, 
+                    visitNode((<ArrayTypeNode>node).elementType, pipeline)));
             case SyntaxKind.TupleType:
-                return write(updateTupleType(
-                    <TupleTypeNode>node, 
-                    <NodeArray<TypeNode>>visitNodes((<TupleTypeNode>node).elementTypes, visitor)));
+                return write(updateTupleType(<TupleTypeNode>node, 
+                    visitNodes((<TupleTypeNode>node).elementTypes, pipeline)));
             case SyntaxKind.UnionType:
-                return write(updateUnionType(
-                    <UnionTypeNode>node, 
-                    <NodeArray<TypeNode>>visitNodes((<UnionTypeNode>node).types, visitor)));
+                return write(updateUnionType(<UnionTypeNode>node, 
+                    visitNodes((<UnionTypeNode>node).types, pipeline)));
             case SyntaxKind.IntersectionType:
-                return write(updateIntersectionType(
-                    <IntersectionTypeNode>node, 
-                    <NodeArray<TypeNode>>visitNodes((<IntersectionTypeNode>node).types, visitor)));
+                return write(updateIntersectionType(<IntersectionTypeNode>node, 
+                    visitNodes((<IntersectionTypeNode>node).types, pipeline)));
             case SyntaxKind.ParenthesizedType:
-                return write(updateParenthesizedType(
-                    <ParenthesizedTypeNode>node, 
-                    <TypeNode>visitNode((<ParenthesizedTypeNode>node).type, visitor)));
+                return write(updateParenthesizedType(<ParenthesizedTypeNode>node, 
+                    visitNode((<ParenthesizedTypeNode>node).type, pipeline)));
             case SyntaxKind.ObjectBindingPattern:
-                return write(updateObjectBindingPattern(
-                    <ObjectBindingPattern>node, 
-                    <NodeArray<BindingElement>>visitNodes((<ObjectBindingPattern>node).elements, visitor)));
+                return write(updateObjectBindingPattern(<ObjectBindingPattern>node, 
+                    visitNodes((<ObjectBindingPattern>node).elements, pipeline)));
             case SyntaxKind.ArrayBindingPattern:
-                return write(updateArrayBindingPattern(
-                    <ArrayBindingPattern>node, 
-                    <NodeArray<BindingElement>>visitNodes((<ArrayBindingPattern>node).elements, visitor)));
+                return write(updateArrayBindingPattern(<ArrayBindingPattern>node, 
+                    visitNodes((<ArrayBindingPattern>node).elements, pipeline)));
             case SyntaxKind.BindingElement:
-                return write(updateBindingElement(
-                    <BindingElement>node, 
-                    <NodeArray<Decorator>>visitNodes((<BindingElement>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<BindingElement>node).modifiers, visitor), 
-                    <Identifier>visitNode((<BindingElement>node).propertyName, visitor), 
-                    <BindingPattern | Identifier>visitNode((<BindingElement>node).name, visitor), 
-                    <Expression>visitNode((<BindingElement>node).initializer, visitor)));
+                return write(updateBindingElement(<BindingElement>node, 
+                    visitNodes((<BindingElement>node).decorators, pipeline), 
+                    visitNodes((<BindingElement>node).modifiers, pipeline), 
+                    visitNode((<BindingElement>node).propertyName, pipeline), 
+                    visitNode((<BindingElement>node).name, pipeline), 
+                    visitNode((<BindingElement>node).initializer, pipeline)));
             case SyntaxKind.ArrayLiteralExpression:
-                return write(updateArrayLiteralExpression(
-                    <ArrayLiteralExpression>node, 
-                    <NodeArray<Expression>>visitNodes((<ArrayLiteralExpression>node).elements, visitor)));
+                return write(updateArrayLiteralExpression(<ArrayLiteralExpression>node, 
+                    visitNodes((<ArrayLiteralExpression>node).elements, pipeline)));
             case SyntaxKind.ObjectLiteralExpression:
-                return write(updateObjectLiteralExpression(
-                    <ObjectLiteralExpression>node, 
-                    <NodeArray<Decorator>>visitNodes((<ObjectLiteralExpression>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ObjectLiteralExpression>node).modifiers, visitor), 
-                    <NodeArray<ObjectLiteralElement>>visitNodes((<ObjectLiteralExpression>node).properties, visitor)));
+                return write(updateObjectLiteralExpression(<ObjectLiteralExpression>node, 
+                    visitNodes((<ObjectLiteralExpression>node).decorators, pipeline), 
+                    visitNodes((<ObjectLiteralExpression>node).modifiers, pipeline), 
+                    visitNodes((<ObjectLiteralExpression>node).properties, pipeline)));
             case SyntaxKind.PropertyAccessExpression:
-                return write(updatePropertyAccessExpression(
-                    <PropertyAccessExpression>node, 
-                    <LeftHandSideExpression>visitNode((<PropertyAccessExpression>node).expression, visitor), 
-                    <Identifier>visitNode((<PropertyAccessExpression>node).name, visitor)));
+                return write(updatePropertyAccessExpression(<PropertyAccessExpression>node, 
+                    visitNode((<PropertyAccessExpression>node).expression, pipeline), 
+                    visitNode((<PropertyAccessExpression>node).name, pipeline)));
             case SyntaxKind.ElementAccessExpression:
-                return write(updateElementAccessExpression(
-                    <ElementAccessExpression>node, 
-                    <LeftHandSideExpression>visitNode((<ElementAccessExpression>node).expression, visitor), 
-                    <Expression>visitNode((<ElementAccessExpression>node).argumentExpression, visitor)));
+                return write(updateElementAccessExpression(<ElementAccessExpression>node, 
+                    visitNode((<ElementAccessExpression>node).expression, pipeline), 
+                    visitNode((<ElementAccessExpression>node).argumentExpression, pipeline)));
             case SyntaxKind.CallExpression:
-                return write(updateCallExpression(
-                    <CallExpression>node, 
-                    <LeftHandSideExpression>visitNode((<CallExpression>node).expression, visitor), 
-                    <NodeArray<TypeNode>>visitNodes((<CallExpression>node).typeArguments, visitor), 
-                    <NodeArray<Expression>>visitNodes((<CallExpression>node).arguments, visitor)));
+                return write(updateCallExpression(<CallExpression>node, 
+                    visitNode((<CallExpression>node).expression, pipeline), 
+                    visitNodes((<CallExpression>node).typeArguments, pipeline), 
+                    visitNodes((<CallExpression>node).arguments, pipeline)));
             case SyntaxKind.NewExpression:
-                return write(updateNewExpression(
-                    <NewExpression>node, 
-                    <LeftHandSideExpression>visitNode((<NewExpression>node).expression, visitor), 
-                    <NodeArray<TypeNode>>visitNodes((<NewExpression>node).typeArguments, visitor), 
-                    <NodeArray<Expression>>visitNodes((<NewExpression>node).arguments, visitor)));
+                return write(updateNewExpression(<NewExpression>node, 
+                    visitNode((<NewExpression>node).expression, pipeline), 
+                    visitNodes((<NewExpression>node).typeArguments, pipeline), 
+                    visitNodes((<NewExpression>node).arguments, pipeline)));
             case SyntaxKind.TaggedTemplateExpression:
-                return write(updateTaggedTemplateExpression(
-                    <TaggedTemplateExpression>node, 
-                    <LeftHandSideExpression>visitNode((<TaggedTemplateExpression>node).tag, visitor), 
-                    <LiteralExpression | TemplateExpression>visitNode((<TaggedTemplateExpression>node).template, visitor)));
+                return write(updateTaggedTemplateExpression(<TaggedTemplateExpression>node, 
+                    visitNode((<TaggedTemplateExpression>node).tag, pipeline), 
+                    visitNode((<TaggedTemplateExpression>node).template, pipeline)));
             case SyntaxKind.TypeAssertionExpression:
-                return write(updateTypeAssertionExpression(
-                    <TypeAssertion>node, 
-                    <TypeNode>visitNode((<TypeAssertion>node).type, visitor), 
-                    <UnaryExpression>visitNode((<TypeAssertion>node).expression, visitor)));
+                return write(updateTypeAssertionExpression(<TypeAssertion>node, 
+                    visitNode((<TypeAssertion>node).type, pipeline), 
+                    visitNode((<TypeAssertion>node).expression, pipeline)));
             case SyntaxKind.ParenthesizedExpression:
-                return write(updateParenthesizedExpression(
-                    <ParenthesizedExpression>node, 
-                    <Expression>visitNode((<ParenthesizedExpression>node).expression, visitor)));
+                return write(updateParenthesizedExpression(<ParenthesizedExpression>node, 
+                    visitNode((<ParenthesizedExpression>node).expression, pipeline)));
             case SyntaxKind.FunctionExpression:
-                return write(updateFunctionExpression(
-                    <FunctionExpression>node, 
-                    <NodeArray<Decorator>>visitNodes((<FunctionExpression>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<FunctionExpression>node).modifiers, visitor), 
-                    <Identifier>visitNode((<FunctionExpression>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<FunctionExpression>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<FunctionExpression>node).parameters, visitor), 
-                    <TypeNode>visitNode((<FunctionExpression>node).type, visitor), 
-                    <Block | Expression>visitNewLexicalEnvironment((<FunctionExpression>node).body, visitor)));
+                return write(updateFunctionExpression(<FunctionExpression>node, 
+                    visitNodes((<FunctionExpression>node).decorators, pipeline), 
+                    visitNodes((<FunctionExpression>node).modifiers, pipeline), 
+                    visitNode((<FunctionExpression>node).name, pipeline), 
+                    visitNodes((<FunctionExpression>node).typeParameters, pipeline), 
+                    visitNodes((<FunctionExpression>node).parameters, pipeline), 
+                    visitNode((<FunctionExpression>node).type, pipeline), 
+                    visitNode((<FunctionExpression>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.ArrowFunction:
-                return write(updateArrowFunction(
-                    <ArrowFunction>node, 
-                    <NodeArray<Decorator>>visitNodes((<ArrowFunction>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ArrowFunction>node).modifiers, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<ArrowFunction>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<ArrowFunction>node).parameters, visitor), 
-                    <TypeNode>visitNode((<ArrowFunction>node).type, visitor), 
-                    <Block | Expression>visitNewLexicalEnvironment((<ArrowFunction>node).body, visitor)));
+                return write(updateArrowFunction(<ArrowFunction>node, 
+                    visitNodes((<ArrowFunction>node).decorators, pipeline), 
+                    visitNodes((<ArrowFunction>node).modifiers, pipeline), 
+                    visitNodes((<ArrowFunction>node).typeParameters, pipeline), 
+                    visitNodes((<ArrowFunction>node).parameters, pipeline), 
+                    visitNode((<ArrowFunction>node).type, pipeline), 
+                    visitNode((<ArrowFunction>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.DeleteExpression:
-                return write(updateDeleteExpression(
-                    <DeleteExpression>node, 
-                    <UnaryExpression>visitNode((<DeleteExpression>node).expression, visitor)));
+                return write(updateDeleteExpression(<DeleteExpression>node, 
+                    visitNode((<DeleteExpression>node).expression, pipeline)));
             case SyntaxKind.TypeOfExpression:
-                return write(updateTypeOfExpression(
-                    <TypeOfExpression>node, 
-                    <UnaryExpression>visitNode((<TypeOfExpression>node).expression, visitor)));
+                return write(updateTypeOfExpression(<TypeOfExpression>node, 
+                    visitNode((<TypeOfExpression>node).expression, pipeline)));
             case SyntaxKind.VoidExpression:
-                return write(updateVoidExpression(
-                    <VoidExpression>node, 
-                    <UnaryExpression>visitNode((<VoidExpression>node).expression, visitor)));
+                return write(updateVoidExpression(<VoidExpression>node, 
+                    visitNode((<VoidExpression>node).expression, pipeline)));
             case SyntaxKind.AwaitExpression:
-                return write(updateAwaitExpression(
-                    <AwaitExpression>node, 
-                    <UnaryExpression>visitNode((<AwaitExpression>node).expression, visitor)));
+                return write(updateAwaitExpression(<AwaitExpression>node, 
+                    visitNode((<AwaitExpression>node).expression, pipeline)));
             case SyntaxKind.PrefixUnaryExpression:
-                return write(updatePrefixUnaryExpression(
-                    <PrefixUnaryExpression>node, 
-                    <UnaryExpression>visitNode((<PrefixUnaryExpression>node).operand, visitor)));
+                return write(updatePrefixUnaryExpression(<PrefixUnaryExpression>node, 
+                    visitNode((<PrefixUnaryExpression>node).operand, pipeline)));
             case SyntaxKind.PostfixUnaryExpression:
-                return write(updatePostfixUnaryExpression(
-                    <PostfixUnaryExpression>node, 
-                    <LeftHandSideExpression>visitNode((<PostfixUnaryExpression>node).operand, visitor)));
+                return write(updatePostfixUnaryExpression(<PostfixUnaryExpression>node, 
+                    visitNode((<PostfixUnaryExpression>node).operand, pipeline)));
             case SyntaxKind.BinaryExpression:
-                return write(updateBinaryExpression(
-                    <BinaryExpression>node, 
-                    <Expression>visitNode((<BinaryExpression>node).left, visitor), 
-                    <Expression>visitNode((<BinaryExpression>node).right, visitor)));
+                return write(updateBinaryExpression(<BinaryExpression>node, 
+                    visitNode((<BinaryExpression>node).left, pipeline), 
+                    visitNode((<BinaryExpression>node).right, pipeline)));
             case SyntaxKind.ConditionalExpression:
-                return write(updateConditionalExpression(
-                    <ConditionalExpression>node, 
-                    <Expression>visitNode((<ConditionalExpression>node).condition, visitor), 
-                    <Expression>visitNode((<ConditionalExpression>node).whenTrue, visitor), 
-                    <Expression>visitNode((<ConditionalExpression>node).whenFalse, visitor)));
+                return write(updateConditionalExpression(<ConditionalExpression>node, 
+                    visitNode((<ConditionalExpression>node).condition, pipeline), 
+                    visitNode((<ConditionalExpression>node).whenTrue, pipeline), 
+                    visitNode((<ConditionalExpression>node).whenFalse, pipeline)));
             case SyntaxKind.TemplateExpression:
-                return write(updateTemplateExpression(
-                    <TemplateExpression>node, 
-                    <LiteralExpression>visitNode((<TemplateExpression>node).head, visitor), 
-                    <NodeArray<TemplateSpan>>visitNodes((<TemplateExpression>node).templateSpans, visitor)));
+                return write(updateTemplateExpression(<TemplateExpression>node, 
+                    visitNode((<TemplateExpression>node).head, pipeline), 
+                    visitNodes((<TemplateExpression>node).templateSpans, pipeline)));
             case SyntaxKind.YieldExpression:
-                return write(updateYieldExpression(
-                    <YieldExpression>node, 
-                    <Expression>visitNode((<YieldExpression>node).expression, visitor)));
+                return write(updateYieldExpression(<YieldExpression>node, 
+                    visitNode((<YieldExpression>node).expression, pipeline)));
             case SyntaxKind.SpreadElementExpression:
-                return write(updateSpreadElementExpression(
-                    <SpreadElementExpression>node, 
-                    <Expression>visitNode((<SpreadElementExpression>node).expression, visitor)));
+                return write(updateSpreadElementExpression(<SpreadElementExpression>node, 
+                    visitNode((<SpreadElementExpression>node).expression, pipeline)));
             case SyntaxKind.ClassExpression:
-                return write(updateClassExpression(
-                    <ClassExpression>node, 
-                    <NodeArray<Decorator>>visitNodes((<ClassExpression>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ClassExpression>node).modifiers, visitor), 
-                    <Identifier>visitNode((<ClassExpression>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<ClassExpression>node).typeParameters, visitor), 
-                    <NodeArray<HeritageClause>>visitNodes((<ClassExpression>node).heritageClauses, visitor), 
-                    <NodeArray<ClassElement>>visitNodes((<ClassExpression>node).members, visitor)));
+                return write(updateClassExpression(<ClassExpression>node, 
+                    visitNodes((<ClassExpression>node).decorators, pipeline), 
+                    visitNodes((<ClassExpression>node).modifiers, pipeline), 
+                    visitNode((<ClassExpression>node).name, pipeline), 
+                    visitNodes((<ClassExpression>node).typeParameters, pipeline), 
+                    visitNodes((<ClassExpression>node).heritageClauses, pipeline), 
+                    visitNodes((<ClassExpression>node).members, pipeline)));
             case SyntaxKind.ExpressionWithTypeArguments:
-                return write(updateExpressionWithTypeArguments(
-                    <ExpressionWithTypeArguments>node, 
-                    <LeftHandSideExpression>visitNode((<ExpressionWithTypeArguments>node).expression, visitor), 
-                    <NodeArray<TypeNode>>visitNodes((<ExpressionWithTypeArguments>node).typeArguments, visitor)));
+                return write(updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, 
+                    visitNode((<ExpressionWithTypeArguments>node).expression, pipeline), 
+                    visitNodes((<ExpressionWithTypeArguments>node).typeArguments, pipeline)));
             case SyntaxKind.AsExpression:
-                return write(updateAsExpression(
-                    <AsExpression>node, 
-                    <Expression>visitNode((<AsExpression>node).expression, visitor), 
-                    <TypeNode>visitNode((<AsExpression>node).type, visitor)));
+                return write(updateAsExpression(<AsExpression>node, 
+                    visitNode((<AsExpression>node).expression, pipeline), 
+                    visitNode((<AsExpression>node).type, pipeline)));
             case SyntaxKind.TemplateSpan:
-                return write(updateTemplateSpan(
-                    <TemplateSpan>node, 
-                    <Expression>visitNode((<TemplateSpan>node).expression, visitor), 
-                    <LiteralExpression>visitNode((<TemplateSpan>node).literal, visitor)));
+                return write(updateTemplateSpan(<TemplateSpan>node, 
+                    visitNode((<TemplateSpan>node).expression, pipeline), 
+                    visitNode((<TemplateSpan>node).literal, pipeline)));
             case SyntaxKind.Block:
-                return write(updateBlock(
-                    <Block>node, 
-                    <NodeArray<Statement>>visitNodes((<Block>node).statements, visitor)));
+                return write(updateBlock(<Block>node, 
+                    visitNodes((<Block>node).statements, pipeline)));
             case SyntaxKind.VariableStatement:
-                return write(updateVariableStatement(
-                    <VariableStatement>node, 
-                    <NodeArray<Decorator>>visitNodes((<VariableStatement>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<VariableStatement>node).modifiers, visitor), 
-                    <VariableDeclarationList>visitNode((<VariableStatement>node).declarationList, visitor)));
+                return write(updateVariableStatement(<VariableStatement>node, 
+                    visitNodes((<VariableStatement>node).decorators, pipeline), 
+                    visitNodes((<VariableStatement>node).modifiers, pipeline), 
+                    visitNode((<VariableStatement>node).declarationList, pipeline)));
             case SyntaxKind.ExpressionStatement:
-                return write(updateExpressionStatement(
-                    <ExpressionStatement>node, 
-                    <Expression>visitNode((<ExpressionStatement>node).expression, visitor)));
+                return write(updateExpressionStatement(<ExpressionStatement>node, 
+                    visitNode((<ExpressionStatement>node).expression, pipeline)));
             case SyntaxKind.IfStatement:
-                return write(updateIfStatement(
-                    <IfStatement>node, 
-                    <Expression>visitNode((<IfStatement>node).expression, visitor), 
-                    visitStatement((<IfStatement>node).thenStatement, visitor), 
-                    visitStatement((<IfStatement>node).elseStatement, visitor)));
+                return write(updateIfStatement(<IfStatement>node, 
+                    visitNode((<IfStatement>node).expression, pipeline), 
+                    visitNode((<IfStatement>node).thenStatement, pipeline, PipelineFlags.StatementOrBlock), 
+                    visitNode((<IfStatement>node).elseStatement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.DoStatement:
-                return write(updateDoStatement(
-                    <DoStatement>node, 
-                    visitStatement((<DoStatement>node).statement, visitor), 
-                    <Expression>visitNode((<DoStatement>node).expression, visitor)));
+                return write(updateDoStatement(<DoStatement>node, 
+                    visitNode((<DoStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock), 
+                    visitNode((<DoStatement>node).expression, pipeline)));
             case SyntaxKind.WhileStatement:
-                return write(updateWhileStatement(
-                    <WhileStatement>node, 
-                    <Expression>visitNode((<WhileStatement>node).expression, visitor), 
-                    visitStatement((<WhileStatement>node).statement, visitor)));
+                return write(updateWhileStatement(<WhileStatement>node, 
+                    visitNode((<WhileStatement>node).expression, pipeline), 
+                    visitNode((<WhileStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.ForStatement:
-                return write(updateForStatement(
-                    <ForStatement>node, 
-                    <Expression | VariableDeclarationList>visitNode((<ForStatement>node).initializer, visitor), 
-                    <Expression>visitNode((<ForStatement>node).condition, visitor), 
-                    <Expression>visitNode((<ForStatement>node).incrementor, visitor), 
-                    visitStatement((<ForStatement>node).statement, visitor)));
+                return write(updateForStatement(<ForStatement>node, 
+                    visitNode((<ForStatement>node).initializer, pipeline), 
+                    visitNode((<ForStatement>node).condition, pipeline), 
+                    visitNode((<ForStatement>node).incrementor, pipeline), 
+                    visitNode((<ForStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.ForInStatement:
-                return write(updateForInStatement(
-                    <ForInStatement>node, 
-                    <Expression | VariableDeclarationList>visitNode((<ForInStatement>node).initializer, visitor), 
-                    <Expression>visitNode((<ForInStatement>node).expression, visitor), 
-                    visitStatement((<ForInStatement>node).statement, visitor)));
+                return write(updateForInStatement(<ForInStatement>node, 
+                    visitNode((<ForInStatement>node).initializer, pipeline), 
+                    visitNode((<ForInStatement>node).expression, pipeline), 
+                    visitNode((<ForInStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.ForOfStatement:
-                return write(updateForOfStatement(
-                    <ForOfStatement>node, 
-                    <Expression | VariableDeclarationList>visitNode((<ForOfStatement>node).initializer, visitor), 
-                    <Expression>visitNode((<ForOfStatement>node).expression, visitor), 
-                    visitStatement((<ForOfStatement>node).statement, visitor)));
+                return write(updateForOfStatement(<ForOfStatement>node, 
+                    visitNode((<ForOfStatement>node).initializer, pipeline), 
+                    visitNode((<ForOfStatement>node).expression, pipeline), 
+                    visitNode((<ForOfStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.ContinueStatement:
-                return write(updateContinueStatement(
-                    <ContinueStatement>node, 
-                    <Identifier>visitNode((<ContinueStatement>node).label, visitor)));
+                return write(updateContinueStatement(<ContinueStatement>node, 
+                    visitNode((<ContinueStatement>node).label, pipeline)));
             case SyntaxKind.BreakStatement:
-                return write(updateBreakStatement(
-                    <BreakStatement>node, 
-                    <Identifier>visitNode((<BreakStatement>node).label, visitor)));
+                return write(updateBreakStatement(<BreakStatement>node, 
+                    visitNode((<BreakStatement>node).label, pipeline)));
             case SyntaxKind.ReturnStatement:
-                return write(updateReturnStatement(
-                    <ReturnStatement>node, 
-                    <Expression>visitNode((<ReturnStatement>node).expression, visitor)));
+                return write(updateReturnStatement(<ReturnStatement>node, 
+                    visitNode((<ReturnStatement>node).expression, pipeline)));
             case SyntaxKind.WithStatement:
-                return write(updateWithStatement(
-                    <WithStatement>node, 
-                    <Expression>visitNode((<WithStatement>node).expression, visitor), 
-                    visitStatement((<WithStatement>node).statement, visitor)));
+                return write(updateWithStatement(<WithStatement>node, 
+                    visitNode((<WithStatement>node).expression, pipeline), 
+                    visitNode((<WithStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.SwitchStatement:
-                return write(updateSwitchStatement(
-                    <SwitchStatement>node, 
-                    <Expression>visitNode((<SwitchStatement>node).expression, visitor), 
-                    <CaseBlock>visitNode((<SwitchStatement>node).caseBlock, visitor)));
+                return write(updateSwitchStatement(<SwitchStatement>node, 
+                    visitNode((<SwitchStatement>node).expression, pipeline), 
+                    visitNode((<SwitchStatement>node).caseBlock, pipeline)));
             case SyntaxKind.LabeledStatement:
-                return write(updateLabeledStatement(
-                    <LabeledStatement>node, 
-                    <Identifier>visitNode((<LabeledStatement>node).label, visitor), 
-                    visitStatement((<LabeledStatement>node).statement, visitor)));
+                return write(updateLabeledStatement(<LabeledStatement>node, 
+                    visitNode((<LabeledStatement>node).label, pipeline), 
+                    visitNode((<LabeledStatement>node).statement, pipeline, PipelineFlags.StatementOrBlock)));
             case SyntaxKind.ThrowStatement:
-                return write(updateThrowStatement(
-                    <ThrowStatement>node, 
-                    <Expression>visitNode((<ThrowStatement>node).expression, visitor)));
+                return write(updateThrowStatement(<ThrowStatement>node, 
+                    visitNode((<ThrowStatement>node).expression, pipeline)));
             case SyntaxKind.TryStatement:
-                return write(updateTryStatement(
-                    <TryStatement>node, 
-                    <Block>visitNode((<TryStatement>node).tryBlock, visitor), 
-                    <CatchClause>visitNode((<TryStatement>node).catchClause, visitor), 
-                    <Block>visitNode((<TryStatement>node).finallyBlock, visitor)));
+                return write(updateTryStatement(<TryStatement>node, 
+                    visitNode((<TryStatement>node).tryBlock, pipeline), 
+                    visitNode((<TryStatement>node).catchClause, pipeline), 
+                    visitNode((<TryStatement>node).finallyBlock, pipeline)));
             case SyntaxKind.VariableDeclaration:
-                return write(updateVariableDeclaration(
-                    <VariableDeclaration>node, 
-                    <BindingPattern | Identifier>visitNode((<VariableDeclaration>node).name, visitor), 
-                    <TypeNode>visitNode((<VariableDeclaration>node).type, visitor), 
-                    <Expression>visitNode((<VariableDeclaration>node).initializer, visitor)));
+                return write(updateVariableDeclaration(<VariableDeclaration>node, 
+                    visitNode((<VariableDeclaration>node).name, pipeline), 
+                    visitNode((<VariableDeclaration>node).type, pipeline), 
+                    visitNode((<VariableDeclaration>node).initializer, pipeline)));
             case SyntaxKind.VariableDeclarationList:
-                return write(updateVariableDeclarationList(
-                    <VariableDeclarationList>node, 
-                    <NodeArray<VariableDeclaration>>visitNodes((<VariableDeclarationList>node).declarations, visitor)));
+                return write(updateVariableDeclarationList(<VariableDeclarationList>node, 
+                    visitNodes((<VariableDeclarationList>node).declarations, pipeline)));
             case SyntaxKind.FunctionDeclaration:
-                return write(updateFunctionDeclaration(
-                    <FunctionDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<FunctionDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<FunctionDeclaration>node).modifiers, visitor), 
-                    <Identifier>visitNode((<FunctionDeclaration>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<FunctionDeclaration>node).typeParameters, visitor), 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<FunctionDeclaration>node).parameters, visitor), 
-                    <TypeNode>visitNode((<FunctionDeclaration>node).type, visitor), 
-                    <Block>visitNewLexicalEnvironment((<FunctionDeclaration>node).body, visitor)));
+                return write(updateFunctionDeclaration(<FunctionDeclaration>node, 
+                    visitNodes((<FunctionDeclaration>node).decorators, pipeline), 
+                    visitNodes((<FunctionDeclaration>node).modifiers, pipeline), 
+                    visitNode((<FunctionDeclaration>node).name, pipeline), 
+                    visitNodes((<FunctionDeclaration>node).typeParameters, pipeline), 
+                    visitNodes((<FunctionDeclaration>node).parameters, pipeline), 
+                    visitNode((<FunctionDeclaration>node).type, pipeline), 
+                    visitNode((<FunctionDeclaration>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.ClassDeclaration:
-                return write(updateClassDeclaration(
-                    <ClassDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ClassDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ClassDeclaration>node).modifiers, visitor), 
-                    <Identifier>visitNode((<ClassDeclaration>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<ClassDeclaration>node).typeParameters, visitor), 
-                    <NodeArray<HeritageClause>>visitNodes((<ClassDeclaration>node).heritageClauses, visitor), 
-                    <NodeArray<ClassElement>>visitNodes((<ClassDeclaration>node).members, visitor)));
+                return write(updateClassDeclaration(<ClassDeclaration>node, 
+                    visitNodes((<ClassDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ClassDeclaration>node).modifiers, pipeline), 
+                    visitNode((<ClassDeclaration>node).name, pipeline), 
+                    visitNodes((<ClassDeclaration>node).typeParameters, pipeline), 
+                    visitNodes((<ClassDeclaration>node).heritageClauses, pipeline), 
+                    visitNodes((<ClassDeclaration>node).members, pipeline)));
             case SyntaxKind.InterfaceDeclaration:
-                return write(updateInterfaceDeclaration(
-                    <InterfaceDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<InterfaceDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<InterfaceDeclaration>node).modifiers, visitor), 
-                    <Identifier>visitNode((<InterfaceDeclaration>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<InterfaceDeclaration>node).typeParameters, visitor), 
-                    <NodeArray<HeritageClause>>visitNodes((<InterfaceDeclaration>node).heritageClauses, visitor), 
-                    <NodeArray<TypeElement>>visitNodes((<InterfaceDeclaration>node).members, visitor)));
+                return write(updateInterfaceDeclaration(<InterfaceDeclaration>node, 
+                    visitNodes((<InterfaceDeclaration>node).decorators, pipeline), 
+                    visitNodes((<InterfaceDeclaration>node).modifiers, pipeline), 
+                    visitNode((<InterfaceDeclaration>node).name, pipeline), 
+                    visitNodes((<InterfaceDeclaration>node).typeParameters, pipeline), 
+                    visitNodes((<InterfaceDeclaration>node).heritageClauses, pipeline), 
+                    visitNodes((<InterfaceDeclaration>node).members, pipeline)));
             case SyntaxKind.TypeAliasDeclaration:
-                return write(updateTypeAliasDeclaration(
-                    <TypeAliasDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<TypeAliasDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<TypeAliasDeclaration>node).modifiers, visitor), 
-                    <Identifier>visitNode((<TypeAliasDeclaration>node).name, visitor), 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<TypeAliasDeclaration>node).typeParameters, visitor), 
-                    <TypeNode>visitNode((<TypeAliasDeclaration>node).type, visitor)));
+                return write(updateTypeAliasDeclaration(<TypeAliasDeclaration>node, 
+                    visitNodes((<TypeAliasDeclaration>node).decorators, pipeline), 
+                    visitNodes((<TypeAliasDeclaration>node).modifiers, pipeline), 
+                    visitNode((<TypeAliasDeclaration>node).name, pipeline), 
+                    visitNodes((<TypeAliasDeclaration>node).typeParameters, pipeline), 
+                    visitNode((<TypeAliasDeclaration>node).type, pipeline)));
             case SyntaxKind.EnumDeclaration:
-                return write(updateEnumDeclaration(
-                    <EnumDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<EnumDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<EnumDeclaration>node).modifiers, visitor), 
-                    <Identifier>visitNode((<EnumDeclaration>node).name, visitor), 
-                    <NodeArray<EnumMember>>visitNodes((<EnumDeclaration>node).members, visitor)));
+                return write(updateEnumDeclaration(<EnumDeclaration>node, 
+                    visitNodes((<EnumDeclaration>node).decorators, pipeline), 
+                    visitNodes((<EnumDeclaration>node).modifiers, pipeline), 
+                    visitNode((<EnumDeclaration>node).name, pipeline), 
+                    visitNodes((<EnumDeclaration>node).members, pipeline)));
             case SyntaxKind.ModuleDeclaration:
-                return write(updateModuleDeclaration(
-                    <ModuleDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ModuleDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ModuleDeclaration>node).modifiers, visitor), 
-                    <Identifier | LiteralExpression>visitNode((<ModuleDeclaration>node).name, visitor), 
-                    <ModuleBlock | ModuleDeclaration>visitNewLexicalEnvironment((<ModuleDeclaration>node).body, visitor)));
+                return write(updateModuleDeclaration(<ModuleDeclaration>node, 
+                    visitNodes((<ModuleDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ModuleDeclaration>node).modifiers, pipeline), 
+                    visitNode((<ModuleDeclaration>node).name, pipeline), 
+                    visitNode((<ModuleDeclaration>node).body, pipeline, PipelineFlags.LexicalEnvironment)));
             case SyntaxKind.ModuleBlock:
-                return write(updateModuleBlock(
-                    <ModuleBlock>node, 
-                    <NodeArray<Statement>>visitNodes((<ModuleBlock>node).statements, visitor)));
+                return write(updateModuleBlock(<ModuleBlock>node, 
+                    visitNodes((<ModuleBlock>node).statements, pipeline)));
             case SyntaxKind.CaseBlock:
-                return write(updateCaseBlock(
-                    <CaseBlock>node, 
-                    <NodeArray<CaseOrDefaultClause>>visitNodes((<CaseBlock>node).clauses, visitor)));
+                return write(updateCaseBlock(<CaseBlock>node, 
+                    visitNodes((<CaseBlock>node).clauses, pipeline)));
             case SyntaxKind.ImportEqualsDeclaration:
-                return write(updateImportEqualsDeclaration(
-                    <ImportEqualsDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ImportEqualsDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ImportEqualsDeclaration>node).modifiers, visitor), 
-                    <Identifier>visitNode((<ImportEqualsDeclaration>node).name, visitor), 
-                    <EntityName | ExternalModuleReference>visitNode((<ImportEqualsDeclaration>node).moduleReference, visitor)));
+                return write(updateImportEqualsDeclaration(<ImportEqualsDeclaration>node, 
+                    visitNodes((<ImportEqualsDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ImportEqualsDeclaration>node).modifiers, pipeline), 
+                    visitNode((<ImportEqualsDeclaration>node).name, pipeline), 
+                    visitNode((<ImportEqualsDeclaration>node).moduleReference, pipeline)));
             case SyntaxKind.ImportDeclaration:
-                return write(updateImportDeclaration(
-                    <ImportDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ImportDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ImportDeclaration>node).modifiers, visitor), 
-                    <ImportClause>visitNode((<ImportDeclaration>node).importClause, visitor), 
-                    <Expression>visitNode((<ImportDeclaration>node).moduleSpecifier, visitor)));
+                return write(updateImportDeclaration(<ImportDeclaration>node, 
+                    visitNodes((<ImportDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ImportDeclaration>node).modifiers, pipeline), 
+                    visitNode((<ImportDeclaration>node).importClause, pipeline), 
+                    visitNode((<ImportDeclaration>node).moduleSpecifier, pipeline)));
             case SyntaxKind.ImportClause:
-                return write(updateImportClause(
-                    <ImportClause>node, 
-                    <Identifier>visitNode((<ImportClause>node).name, visitor), 
-                    <NamedImports | NamespaceImport>visitNode((<ImportClause>node).namedBindings, visitor)));
+                return write(updateImportClause(<ImportClause>node, 
+                    visitNode((<ImportClause>node).name, pipeline), 
+                    visitNode((<ImportClause>node).namedBindings, pipeline)));
             case SyntaxKind.NamespaceImport:
-                return write(updateNamespaceImport(
-                    <NamespaceImport>node, 
-                    <Identifier>visitNode((<NamespaceImport>node).name, visitor)));
+                return write(updateNamespaceImport(<NamespaceImport>node, 
+                    visitNode((<NamespaceImport>node).name, pipeline)));
             case SyntaxKind.NamedImports:
-                return write(updateNamedImports(
-                    <NamedImports>node, 
-                    <NodeArray<ImportOrExportSpecifier>>visitNodes((<NamedImports>node).elements, visitor)));
+                return write(updateNamedImports(<NamedImports>node, 
+                    visitNodes((<NamedImports>node).elements, pipeline)));
             case SyntaxKind.ImportSpecifier:
-                return write(updateImportSpecifier(
-                    <ImportSpecifier>node, 
-                    <Identifier>visitNode((<ImportSpecifier>node).propertyName, visitor), 
-                    <Identifier>visitNode((<ImportSpecifier>node).name, visitor)));
+                return write(updateImportSpecifier(<ImportSpecifier>node, 
+                    visitNode((<ImportSpecifier>node).propertyName, pipeline), 
+                    visitNode((<ImportSpecifier>node).name, pipeline)));
             case SyntaxKind.ExportAssignment:
-                return write(updateExportAssignment(
-                    <ExportAssignment>node, 
-                    <NodeArray<Decorator>>visitNodes((<ExportAssignment>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ExportAssignment>node).modifiers, visitor), 
-                    <Expression>visitNode((<ExportAssignment>node).expression, visitor)));
+                return write(updateExportAssignment(<ExportAssignment>node, 
+                    visitNodes((<ExportAssignment>node).decorators, pipeline), 
+                    visitNodes((<ExportAssignment>node).modifiers, pipeline), 
+                    visitNode((<ExportAssignment>node).expression, pipeline)));
             case SyntaxKind.ExportDeclaration:
-                return write(updateExportDeclaration(
-                    <ExportDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<ExportDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<ExportDeclaration>node).modifiers, visitor), 
-                    <NamedExports>visitNode((<ExportDeclaration>node).exportClause, visitor), 
-                    <Expression>visitNode((<ExportDeclaration>node).moduleSpecifier, visitor)));
+                return write(updateExportDeclaration(<ExportDeclaration>node, 
+                    visitNodes((<ExportDeclaration>node).decorators, pipeline), 
+                    visitNodes((<ExportDeclaration>node).modifiers, pipeline), 
+                    visitNode((<ExportDeclaration>node).exportClause, pipeline), 
+                    visitNode((<ExportDeclaration>node).moduleSpecifier, pipeline)));
             case SyntaxKind.NamedExports:
-                return write(updateNamedExports(
-                    <NamedExports>node, 
-                    <NodeArray<ImportOrExportSpecifier>>visitNodes((<NamedExports>node).elements, visitor)));
+                return write(updateNamedExports(<NamedExports>node, 
+                    visitNodes((<NamedExports>node).elements, pipeline)));
             case SyntaxKind.ExportSpecifier:
-                return write(updateExportSpecifier(
-                    <ExportSpecifier>node, 
-                    <Identifier>visitNode((<ExportSpecifier>node).propertyName, visitor), 
-                    <Identifier>visitNode((<ExportSpecifier>node).name, visitor)));
+                return write(updateExportSpecifier(<ExportSpecifier>node, 
+                    visitNode((<ExportSpecifier>node).propertyName, pipeline), 
+                    visitNode((<ExportSpecifier>node).name, pipeline)));
             case SyntaxKind.MissingDeclaration:
-                return write(updateMissingDeclaration(
-                    <MissingDeclaration>node, 
-                    <NodeArray<Decorator>>visitNodes((<MissingDeclaration>node).decorators, visitor), 
-                    <NodeArray<Modifier>>visitNodes((<MissingDeclaration>node).modifiers, visitor)));
+                return write(updateMissingDeclaration(<MissingDeclaration>node, 
+                    visitNodes((<MissingDeclaration>node).decorators, pipeline), 
+                    visitNodes((<MissingDeclaration>node).modifiers, pipeline)));
             case SyntaxKind.ExternalModuleReference:
-                return write(updateExternalModuleReference(
-                    <ExternalModuleReference>node, 
-                    <Expression>visitNode((<ExternalModuleReference>node).expression, visitor)));
+                return write(updateExternalModuleReference(<ExternalModuleReference>node, 
+                    visitNode((<ExternalModuleReference>node).expression, pipeline)));
             case SyntaxKind.JsxElement:
-                return write(updateJsxElement(
-                    <JsxElement>node, 
-                    <JsxOpeningElement>visitNode((<JsxElement>node).openingElement, visitor), 
-                    <NodeArray<JsxChild>>visitNodes((<JsxElement>node).children, visitor), 
-                    <JsxClosingElement>visitNode((<JsxElement>node).closingElement, visitor)));
+                return write(updateJsxElement(<JsxElement>node, 
+                    visitNode((<JsxElement>node).openingElement, pipeline), 
+                    visitNodes((<JsxElement>node).children, pipeline), 
+                    visitNode((<JsxElement>node).closingElement, pipeline)));
             case SyntaxKind.JsxSelfClosingElement:
-                return write(updateJsxSelfClosingElement(
-                    <JsxSelfClosingElement>node, 
-                    <EntityName>visitNode((<JsxSelfClosingElement>node).tagName, visitor), 
-                    <NodeArray<JsxAttribute | JsxSpreadAttribute>>visitNodes((<JsxSelfClosingElement>node).attributes, visitor)));
+                return write(updateJsxSelfClosingElement(<JsxSelfClosingElement>node, 
+                    visitNode((<JsxSelfClosingElement>node).tagName, pipeline), 
+                    visitNodes((<JsxSelfClosingElement>node).attributes, pipeline)));
             case SyntaxKind.JsxOpeningElement:
-                return write(updateJsxOpeningElement(
-                    <JsxOpeningElement>node, 
-                    <EntityName>visitNode((<JsxOpeningElement>node).tagName, visitor), 
-                    <NodeArray<JsxAttribute | JsxSpreadAttribute>>visitNodes((<JsxOpeningElement>node).attributes, visitor)));
+                return write(updateJsxOpeningElement(<JsxOpeningElement>node, 
+                    visitNode((<JsxOpeningElement>node).tagName, pipeline), 
+                    visitNodes((<JsxOpeningElement>node).attributes, pipeline)));
             case SyntaxKind.JsxClosingElement:
-                return write(updateJsxClosingElement(
-                    <JsxClosingElement>node, 
-                    <EntityName>visitNode((<JsxClosingElement>node).tagName, visitor)));
+                return write(updateJsxClosingElement(<JsxClosingElement>node, 
+                    visitNode((<JsxClosingElement>node).tagName, pipeline)));
             case SyntaxKind.JsxAttribute:
-                return write(updateJsxAttribute(
-                    <JsxAttribute>node, 
-                    <Identifier>visitNode((<JsxAttribute>node).name, visitor), 
-                    <Expression>visitNode((<JsxAttribute>node).initializer, visitor)));
+                return write(updateJsxAttribute(<JsxAttribute>node, 
+                    visitNode((<JsxAttribute>node).name, pipeline), 
+                    visitNode((<JsxAttribute>node).initializer, pipeline)));
             case SyntaxKind.JsxSpreadAttribute:
-                return write(updateJsxSpreadAttribute(
-                    <JsxSpreadAttribute>node, 
-                    <Expression>visitNode((<JsxSpreadAttribute>node).expression, visitor)));
+                return write(updateJsxSpreadAttribute(<JsxSpreadAttribute>node, 
+                    visitNode((<JsxSpreadAttribute>node).expression, pipeline)));
             case SyntaxKind.JsxExpression:
-                return write(updateJsxExpression(
-                    <JsxExpression>node, 
-                    <Expression>visitNode((<JsxExpression>node).expression, visitor)));
+                return write(updateJsxExpression(<JsxExpression>node, 
+                    visitNode((<JsxExpression>node).expression, pipeline)));
             case SyntaxKind.CaseClause:
-                return write(updateCaseClause(
-                    <CaseClause>node, 
-                    <Expression>visitNode((<CaseClause>node).expression, visitor), 
-                    <NodeArray<Statement>>visitNodes((<CaseClause>node).statements, visitor)));
+                return write(updateCaseClause(<CaseClause>node, 
+                    visitNode((<CaseClause>node).expression, pipeline), 
+                    visitNodes((<CaseClause>node).statements, pipeline)));
             case SyntaxKind.DefaultClause:
-                return write(updateDefaultClause(
-                    <DefaultClause>node, 
-                    <NodeArray<Statement>>visitNodes((<DefaultClause>node).statements, visitor)));
+                return write(updateDefaultClause(<DefaultClause>node, 
+                    visitNodes((<DefaultClause>node).statements, pipeline)));
             case SyntaxKind.HeritageClause:
-                return write(updateHeritageClause(
-                    <HeritageClause>node, 
-                    <NodeArray<ExpressionWithTypeArguments>>visitNodes((<HeritageClause>node).types, visitor)));
+                return write(updateHeritageClause(<HeritageClause>node, 
+                    visitNodes((<HeritageClause>node).types, pipeline)));
             case SyntaxKind.CatchClause:
-                return write(updateCatchClause(
-                    <CatchClause>node, 
-                    <VariableDeclaration>visitNode((<CatchClause>node).variableDeclaration, visitor), 
-                    <Block>visitNode((<CatchClause>node).block, visitor)));
+                return write(updateCatchClause(<CatchClause>node, 
+                    visitNode((<CatchClause>node).variableDeclaration, pipeline), 
+                    visitNode((<CatchClause>node).block, pipeline)));
             case SyntaxKind.PropertyAssignment:
-                return write(updatePropertyAssignment(
-                    <PropertyAssignment>node, 
-                    <PropertyName>visitNode((<PropertyAssignment>node).name, visitor), 
-                    <Expression>visitNode((<PropertyAssignment>node).initializer, visitor)));
+                return write(updatePropertyAssignment(<PropertyAssignment>node, 
+                    visitNode((<PropertyAssignment>node).name, pipeline), 
+                    visitNode((<PropertyAssignment>node).initializer, pipeline)));
             case SyntaxKind.ShorthandPropertyAssignment:
-                return write(updateShorthandPropertyAssignment(
-                    <ShorthandPropertyAssignment>node, 
-                    <Identifier>visitNode((<ShorthandPropertyAssignment>node).name, visitor)));
+                return write(updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, 
+                    visitNode((<ShorthandPropertyAssignment>node).name, pipeline)));
             case SyntaxKind.EnumMember:
-                return write(updateEnumMember(
-                    <EnumMember>node, 
-                    <DeclarationName>visitNode((<EnumMember>node).name, visitor), 
-                    <Expression>visitNode((<EnumMember>node).initializer, visitor)));
+                return write(updateEnumMember(<EnumMember>node, 
+                    visitNode((<EnumMember>node).name, pipeline), 
+                    visitNode((<EnumMember>node).initializer, pipeline)));
             case SyntaxKind.JSDocTypeExpression:
-                return write(updateJSDocTypeExpression(
-                    <JSDocTypeExpression>node, 
-                    <JSDocType>visitNode((<JSDocTypeExpression>node).type, visitor)));
+                return write(updateJSDocTypeExpression(<JSDocTypeExpression>node, 
+                    visitNode((<JSDocTypeExpression>node).type, pipeline)));
             case SyntaxKind.JSDocArrayType:
-                return write(updateJSDocArrayType(
-                    <JSDocArrayType>node, 
-                    <JSDocType>visitNode((<JSDocArrayType>node).elementType, visitor)));
+                return write(updateJSDocArrayType(<JSDocArrayType>node, 
+                    visitNode((<JSDocArrayType>node).elementType, pipeline)));
             case SyntaxKind.JSDocUnionType:
-                return write(updateJSDocUnionType(
-                    <JSDocUnionType>node, 
-                    <NodeArray<JSDocType>>visitNodes((<JSDocUnionType>node).types, visitor)));
+                return write(updateJSDocUnionType(<JSDocUnionType>node, 
+                    visitNodes((<JSDocUnionType>node).types, pipeline)));
             case SyntaxKind.JSDocTupleType:
-                return write(updateJSDocTupleType(
-                    <JSDocTupleType>node, 
-                    <NodeArray<JSDocType>>visitNodes((<JSDocTupleType>node).types, visitor)));
+                return write(updateJSDocTupleType(<JSDocTupleType>node, 
+                    visitNodes((<JSDocTupleType>node).types, pipeline)));
             case SyntaxKind.JSDocNullableType:
-                return write(updateJSDocNullableType(
-                    <JSDocNullableType>node, 
-                    <JSDocType>visitNode((<JSDocNullableType>node).type, visitor)));
+                return write(updateJSDocNullableType(<JSDocNullableType>node, 
+                    visitNode((<JSDocNullableType>node).type, pipeline)));
             case SyntaxKind.JSDocNonNullableType:
-                return write(updateJSDocNonNullableType(
-                    <JSDocNonNullableType>node, 
-                    <JSDocType>visitNode((<JSDocNonNullableType>node).type, visitor)));
+                return write(updateJSDocNonNullableType(<JSDocNonNullableType>node, 
+                    visitNode((<JSDocNonNullableType>node).type, pipeline)));
             case SyntaxKind.JSDocRecordType:
-                return write(updateJSDocRecordType(
-                    <JSDocRecordType>node, 
-                    <NodeArray<JSDocRecordMember>>visitNodes((<JSDocRecordType>node).members, visitor)));
+                return write(updateJSDocRecordType(<JSDocRecordType>node, 
+                    visitNodes((<JSDocRecordType>node).members, pipeline)));
             case SyntaxKind.JSDocRecordMember:
-                return write(updateJSDocRecordMember(
-                    <JSDocRecordMember>node, 
-                    <Identifier | LiteralExpression>visitNode((<JSDocRecordMember>node).name, visitor), 
-                    <JSDocType>visitNode((<JSDocRecordMember>node).type, visitor)));
+                return write(updateJSDocRecordMember(<JSDocRecordMember>node, 
+                    visitNode((<JSDocRecordMember>node).name, pipeline), 
+                    visitNode((<JSDocRecordMember>node).type, pipeline)));
             case SyntaxKind.JSDocTypeReference:
-                return write(updateJSDocTypeReference(
-                    <JSDocTypeReference>node, 
-                    <EntityName>visitNode((<JSDocTypeReference>node).name, visitor), 
-                    <NodeArray<JSDocType>>visitNodes((<JSDocTypeReference>node).typeArguments, visitor)));
+                return write(updateJSDocTypeReference(<JSDocTypeReference>node, 
+                    visitNode((<JSDocTypeReference>node).name, pipeline), 
+                    visitNodes((<JSDocTypeReference>node).typeArguments, pipeline)));
             case SyntaxKind.JSDocOptionalType:
-                return write(updateJSDocOptionalType(
-                    <JSDocOptionalType>node, 
-                    <JSDocType>visitNode((<JSDocOptionalType>node).type, visitor)));
+                return write(updateJSDocOptionalType(<JSDocOptionalType>node, 
+                    visitNode((<JSDocOptionalType>node).type, pipeline)));
             case SyntaxKind.JSDocFunctionType:
-                return write(updateJSDocFunctionType(
-                    <JSDocFunctionType>node, 
-                    <NodeArray<ParameterDeclaration>>visitNodes((<JSDocFunctionType>node).parameters, visitor), 
-                    <JSDocType>visitNode((<JSDocFunctionType>node).type, visitor)));
+                return write(updateJSDocFunctionType(<JSDocFunctionType>node, 
+                    visitNodes((<JSDocFunctionType>node).parameters, pipeline), 
+                    visitNode((<JSDocFunctionType>node).type, pipeline)));
             case SyntaxKind.JSDocVariadicType:
-                return write(updateJSDocVariadicType(
-                    <JSDocVariadicType>node, 
-                    <JSDocType>visitNode((<JSDocVariadicType>node).type, visitor)));
+                return write(updateJSDocVariadicType(<JSDocVariadicType>node, 
+                    visitNode((<JSDocVariadicType>node).type, pipeline)));
             case SyntaxKind.JSDocConstructorType:
-                return write(updateJSDocConstructorType(
-                    <JSDocConstructorType>node, 
-                    <JSDocType>visitNode((<JSDocConstructorType>node).type, visitor)));
+                return write(updateJSDocConstructorType(<JSDocConstructorType>node, 
+                    visitNode((<JSDocConstructorType>node).type, pipeline)));
             case SyntaxKind.JSDocThisType:
-                return write(updateJSDocThisType(
-                    <JSDocThisType>node, 
-                    <JSDocType>visitNode((<JSDocThisType>node).type, visitor)));
+                return write(updateJSDocThisType(<JSDocThisType>node, 
+                    visitNode((<JSDocThisType>node).type, pipeline)));
             case SyntaxKind.JSDocComment:
-                return write(updateJSDocComment(
-                    <JSDocComment>node, 
-                    <NodeArray<JSDocTag>>visitNodes((<JSDocComment>node).tags, visitor)));
+                return write(updateJSDocComment(<JSDocComment>node, 
+                    visitNodes((<JSDocComment>node).tags, pipeline)));
             case SyntaxKind.JSDocTag:
-                return write(updateJSDocTag(
-                    <JSDocTag>node, 
-                    <Identifier>visitNode((<JSDocTag>node).tagName, visitor)));
+                return write(updateJSDocTag(<JSDocTag>node, 
+                    visitNode((<JSDocTag>node).tagName, pipeline)));
             case SyntaxKind.JSDocParameterTag:
-                return write(updateJSDocParameterTag(
-                    <JSDocParameterTag>node, 
-                    <Identifier>visitNode((<JSDocParameterTag>node).preParameterName, visitor), 
-                    <JSDocTypeExpression>visitNode((<JSDocParameterTag>node).typeExpression, visitor), 
-                    <Identifier>visitNode((<JSDocParameterTag>node).postParameterName, visitor), 
-                    <Identifier>visitNode((<JSDocParameterTag>node).tagName, visitor)));
+                return write(updateJSDocParameterTag(<JSDocParameterTag>node, 
+                    visitNode((<JSDocParameterTag>node).preParameterName, pipeline), 
+                    visitNode((<JSDocParameterTag>node).typeExpression, pipeline), 
+                    visitNode((<JSDocParameterTag>node).postParameterName, pipeline), 
+                    visitNode((<JSDocParameterTag>node).tagName, pipeline)));
             case SyntaxKind.JSDocReturnTag:
-                return write(updateJSDocReturnTag(
-                    <JSDocReturnTag>node, 
-                    <JSDocTypeExpression>visitNode((<JSDocReturnTag>node).typeExpression, visitor), 
-                    <Identifier>visitNode((<JSDocReturnTag>node).tagName, visitor)));
+                return write(updateJSDocReturnTag(<JSDocReturnTag>node, 
+                    visitNode((<JSDocReturnTag>node).typeExpression, pipeline), 
+                    visitNode((<JSDocReturnTag>node).tagName, pipeline)));
             case SyntaxKind.JSDocTypeTag:
-                return write(updateJSDocTypeTag(
-                    <JSDocTypeTag>node, 
-                    <JSDocTypeExpression>visitNode((<JSDocTypeTag>node).typeExpression, visitor), 
-                    <Identifier>visitNode((<JSDocTypeTag>node).tagName, visitor)));
+                return write(updateJSDocTypeTag(<JSDocTypeTag>node, 
+                    visitNode((<JSDocTypeTag>node).typeExpression, pipeline), 
+                    visitNode((<JSDocTypeTag>node).tagName, pipeline)));
             case SyntaxKind.JSDocTemplateTag:
-                return write(updateJSDocTemplateTag(
-                    <JSDocTemplateTag>node, 
-                    <NodeArray<TypeParameterDeclaration>>visitNodes((<JSDocTemplateTag>node).typeParameters, visitor), 
-                    <Identifier>visitNode((<JSDocTemplateTag>node).tagName, visitor)));
+                return write(updateJSDocTemplateTag(<JSDocTemplateTag>node, 
+                    visitNodes((<JSDocTemplateTag>node).typeParameters, pipeline), 
+                    visitNode((<JSDocTemplateTag>node).tagName, pipeline)));
             default:
                 return write(node);
         }

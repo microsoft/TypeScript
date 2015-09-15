@@ -1411,16 +1411,11 @@ namespace ts {
     // @kind(SyntaxKind.IfStatement)
     export interface IfStatement extends Statement {
         expression: Expression;
-        
-        // @visitor("visitStatement")
         thenStatement: Statement;
-        
-        // @visitor("visitStatement")
         elseStatement?: Statement;
     }
 
     export interface IterationStatement extends Statement {
-        // @visitor("visitStatement")
         statement: Statement;
     }
 
@@ -1472,8 +1467,6 @@ namespace ts {
     // @kind(SyntaxKind.WithStatement)
     export interface WithStatement extends Statement {
         expression: Expression;
-        
-        // @visitor("visitStatement")
         statement: Statement;
     }
 
@@ -1504,8 +1497,6 @@ namespace ts {
     // @kind(SyntaxKind.LabeledStatement)
     export interface LabeledStatement extends Statement {
         label: Identifier;
-        
-        // @visitor("visitStatement")
         statement: Statement;
     }
 
