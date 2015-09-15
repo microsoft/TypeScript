@@ -108,7 +108,7 @@ namespace ts {
         let hasExplicitReturn: boolean;
         let currentReachabilityState: Reachability;
         let labelStack: Reachability[];
-        let labels: Map<number>;
+        let labelIndexMap: Map<number>;
         let implicitLabels: number[];
         
         // If this file is an external module, then it is automatically in strict-mode according to
@@ -373,13 +373,13 @@ namespace ts {
             if (saveState) {
                 savedReachabilityState = currentReachabilityState;
                 savedLabelStack = labelStack;
-                savedLabels = labels;
+                savedLabels = labelIndexMap;
                 savedImplicitLabels = implicitLabels;
                 savedHasExplicitReturn = hasExplicitReturn;
                 
                 currentReachabilityState = Reachability.Reachable;
                 hasExplicitReturn = false;
-                labelStack = labels = implicitLabels = undefined;
+                labelStack = labelIndexMap = implicitLabels = undefined;
             }
 
             if (!bindReachableStatement(node)) {
@@ -397,17 +397,21 @@ namespace ts {
                 hasExplicitReturn = savedHasExplicitReturn;
                 currentReachabilityState = savedReachabilityState;
                 labelStack = savedLabelStack;
-                labels = savedLabels;
+                labelIndexMap = savedLabels;
                 implicitLabels = savedImplicitLabels;
             }
         }
 
+        /**
+         * Returns true if node and its subnodes were successfully traversed.
+         * Returning false means that node was not examined and caller needs to dive into the node himself. 
+         */
         function bindReachableStatement(n: Node): boolean {
             if (checkUnreachable(n)) {
                 return false;
             }
 
-            switch(n.kind) {
+            switch (n.kind) {
                 case SyntaxKind.WhileStatement:
                     return bindWhileStatement(<WhileStatement>n);
                 case SyntaxKind.DoStatement:
@@ -460,7 +464,7 @@ namespace ts {
 
             const postDoLabel = pushImplicitLabel();
             bind(n.statement);
-            var postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : preDoState;
+            const postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : preDoState;
             popImplicitLabel(postDoLabel, postDoState);
 
             // bind expressions (don't affect reachability)
@@ -505,7 +509,11 @@ namespace ts {
         }
 
         function bindIfStatement(n: IfStatement): boolean {
+            // denotes reachability state when entering 'thenStatement' part of the if statement: 
+            // i.e. if condition is false then thenStatement is unreachable
             const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
+            // denotes reachability state when entering 'elseStatement':
+            // i.e. if condition is true then elseStatement is unreachable
             const ifFalseState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : currentReachabilityState;
 
             currentReachabilityState = ifTrueState;
@@ -585,7 +593,7 @@ namespace ts {
             const hasDefault = forEach(n.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
 
             // post switch state is unreachable if switch is exaustive (has a default case ) and does not have fallthrough from the last case
-            var postSwitchState = hasDefault && currentReachabilityState !== Reachability.Reachable ? Reachability.Unreachable : preSwitchState;
+            const postSwitchState = hasDefault && currentReachabilityState !== Reachability.Reachable ? Reachability.Unreachable : preSwitchState;
 
             popImplicitLabel(postSwitchLabel, postSwitchState);
 
@@ -595,7 +603,7 @@ namespace ts {
         function bindCaseBlock(n: CaseBlock): boolean {
             const startState = currentReachabilityState;
 
-            for(let clause of n.clauses) {
+            for (let clause of n.clauses) {
                 currentReachabilityState = startState;
                 bind(clause);
                 if (clause.statements.length && currentReachabilityState === Reachability.Reachable && options.noFallthroughCasesInSwitch) {
@@ -610,7 +618,7 @@ namespace ts {
             // call bind on label (don't affect reachability)
             bind(n.label);
 
-            var ok = pushNamedLabel(n.label);
+            const ok = pushNamedLabel(n.label);
             bind(n.statement);
             if (ok) {
                 popNamedLabel(n.label, currentReachabilityState);
@@ -1347,10 +1355,10 @@ namespace ts {
         function pushNamedLabel(name: Identifier): boolean {
             initializeReachabilityStateIfNecessary();
             
-            if (hasProperty(labels, name.text)) {
+            if (hasProperty(labelIndexMap, name.text)) {
                 return false;
             }
-            labels[name.text] = labelStack.push(Reachability.Unintialized) - 1;
+            labelIndexMap[name.text] = labelStack.push(Reachability.Unintialized) - 1;
             return true;
         }
         
@@ -1365,11 +1373,11 @@ namespace ts {
         function popNamedLabel(label: Identifier, outerState: Reachability): void {
             initializeReachabilityStateIfNecessary();
             
-            let index = labels[label.text];
+            let index = labelIndexMap[label.text];
             Debug.assert(index !== undefined);
             Debug.assert(labelStack.length == index + 1);
             
-            labels[label.text] = undefined;
+            labelIndexMap[label.text] = undefined;
             
             setCurrentStateAtLabel(labelStack.pop(), outerState, label);
         }
@@ -1400,7 +1408,7 @@ namespace ts {
         function jumpToLabel(label: Identifier, outerState: Reachability): void {
             initializeReachabilityStateIfNecessary();
             
-            const index = label ? labels[label.text] : lastOrUndefined(implicitLabels);
+            const index = label ? labelIndexMap[label.text] : lastOrUndefined(implicitLabels);
             if (index === undefined) {
                 // reference to unknown label or
                 // break/continue used outside of loops
@@ -1411,12 +1419,16 @@ namespace ts {
         }
 
         function checkUnreachable(node: Node): boolean {
-            switch(currentReachabilityState) {
+            switch (currentReachabilityState) {
                 case Reachability.Unreachable:
                     const reportError =
+                        // report error on all statements
                         isStatement(node) ||
+                        // report error on class declarations
                         node.kind === SyntaxKind.ClassDeclaration ||
-                        node.kind === SyntaxKind.ModuleDeclaration ||
+                        // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                        (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
+                        // report error on regular enums and const enums if preserveConstEnums is set
                         (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
 
                     if (reportError) {
@@ -1424,7 +1436,7 @@ namespace ts {
                         
                         // unreachable code is reported if
                         // - user has explicitly asked about it AND
-                        // - statement is in ambient context (statements in ambient context is already an error so we shoult not report extras) AND
+                        // - statement is in not ambient context (statements in ambient context is already an error so we shoult not report extras) AND
                         //   - node is not variable statement OR
                         //   - node is block scoped variable statement OR
                         //   - node is not block scoped variable statement and at least one variable declaration has initializer
@@ -1448,14 +1460,19 @@ namespace ts {
                 default:
                     return false;
             }
+
+            function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
+                const instanceState = getModuleInstanceState(node);
+                return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && options.preserveConstEnums);
+            }
         }
 
         function initializeReachabilityStateIfNecessary(): void {
-            if (labels) {
+            if (labelIndexMap) {
                 return;
             }
             currentReachabilityState = Reachability.Reachable;
-            labels = {};
+            labelIndexMap = {};
             labelStack = [];
             implicitLabels = [];
         }
