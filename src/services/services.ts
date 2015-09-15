@@ -802,7 +802,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
-        public resolvedModules: Map<string>;
+        public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
@@ -1022,7 +1022,7 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
          * host specific questions using 'getScriptSnapshot'.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     //
@@ -1866,7 +1866,7 @@ namespace ts {
         let sourceMapText: string;
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
-            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            getSourceFile: (fileName, target) => fileName === normalizeSlashes(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 if (fileExtensionIs(name, ".map")) {
                     Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
@@ -2152,6 +2152,7 @@ namespace ts {
             //
             //    export * from "mod"
             //    export {a as b} from "mod"
+            //    export import i = require("mod")
 
             while (token !== SyntaxKind.EndOfFileToken) {
                 if (token === SyntaxKind.DeclareKeyword) {
@@ -2273,6 +2274,25 @@ namespace ts {
                             if (token === SyntaxKind.StringLiteral) {
                                 // export * from "mod"
                                 recordModuleName();
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.ImportKeyword) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.EqualsToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.RequireKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.OpenParenToken) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            //  export import i = require("mod");
+                                            recordModuleName();
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -3042,7 +3062,8 @@ namespace ts {
                     switch (tag.kind) {
                         case SyntaxKind.JSDocTypeTag:
                         case SyntaxKind.JSDocParameterTag:
-                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag>tag;
+                        case SyntaxKind.JSDocReturnTag:
+                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
                             if (tagWithExpression.typeExpression) {
                                 insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
                             }
@@ -3588,10 +3609,11 @@ namespace ts {
                             containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                             isFunction(containingNodeKind) ||
                             containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D<T, |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                            containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
-
+                            containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
+                                                                                                          
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
 
@@ -3618,8 +3640,9 @@ namespace ts {
 
                     case SyntaxKind.LessThanToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
                             isFunction(containingNodeKind);
 
                     case SyntaxKind.StaticKeyword:
@@ -4180,6 +4203,7 @@ namespace ts {
                 displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
+                writeTypeParametersOfSymbol(symbol, sourceFile);
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
@@ -4220,8 +4244,9 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let signatureDeclaration = <SignatureDeclaration>getTypeParameterOwner(getDeclarationOfKind(symbol, SyntaxKind.TypeParameter));
-                    if (signatureDeclaration) {
+                    let container = getContainingFunction(location);
+                    if (container) {
+                        let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
                         let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
                         if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -4231,6 +4256,16 @@ namespace ts {
                             addFullSymbolName(signatureDeclaration.symbol);
                         }
                         addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    }
+                    else {
+                        // Type  aliash type parameter
+                        // For example
+                        //      type list<T> = T[];  // Both T will go through same code path
+                        let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                        displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
+                        displayParts.push(spacePart());
+                        addFullSymbolName(declaration.symbol);
+                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
                 }
             }
@@ -4465,10 +4500,19 @@ namespace ts {
                 // and in either case the symbol has a construct signature definition, i.e. class
                 if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
                     if (symbol.flags & SymbolFlags.Class) {
-                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
-                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
+                        // Find the first class-like declaration and try to get the construct signature.
+                        for (let declaration of symbol.getDeclarations()) {
+                            if (isClassLike(declaration)) {
+                                return tryAddSignature(declaration.members,
+                                                       /*selectConstructors*/ true,
+                                                       symbolKind,
+                                                       symbolName,
+                                                       containerName,
+                                                       result);
+                            }
+                        }
 
-                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                        Debug.fail("Expected declaration to have at least one class-like declaration");
                     }
                 }
                 return false;

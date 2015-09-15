@@ -1065,6 +1065,10 @@ namespace ts {
             else {
                 let bindingName = node.name ? node.name.text : "__class";
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
+                // Add name of class expression into the map for semantic classifier
+                if (node.name) {
+                    classifiableNames[node.name.text] = node.name.text;
+                }
             }
 
             let symbol = node.symbol;

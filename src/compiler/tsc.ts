@@ -159,6 +159,11 @@ namespace ts {
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
+        if (commandLine.options.init) {
+            writeConfigFile(commandLine.options, commandLine.fileNames);
+            return sys.exit(ExitStatus.Success);
+        }
+
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
@@ -487,6 +492,70 @@ namespace ts {
 
         function makePadding(paddingLength: number): string {
             return Array(paddingLength + 1).join(" ");
+        }
+    }
+
+    function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
+        let currentDirectory = sys.getCurrentDirectory();
+        let file = combinePaths(currentDirectory, 'tsconfig.json');
+        if (sys.fileExists(file)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+        }
+        else {
+            let compilerOptions = extend(options, defaultInitCompilerOptions);
+            let configurations: any = {
+                compilerOptions: serializeCompilerOptions(compilerOptions),
+                exclude: ["node_modules"]
+            };
+
+            if (fileNames && fileNames.length) {
+                // only set the files property if we have at least one file
+                configurations.files = fileNames;
+            }
+
+            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+        }
+
+        return;
+
+        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
+            let result: Map<string|number|boolean> = {};
+            let optionsNameMap = getOptionNameMap().optionNameMap;
+
+            for (let name in options) {
+                if (hasProperty(options, name)) {
+                    let value = options[name];
+                    switch (name) {
+                        case "init":
+                        case "watch":
+                        case "version":
+                        case "help":
+                        case "project":
+                            break;
+                        default:
+                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            if (optionDefinition) {
+                                if (typeof optionDefinition.type === "string") {
+                                    // string, number or boolean
+                                    result[name] = value;
+                                }
+                                else {
+                                    // Enum
+                                    let typeMap = <Map<number>>optionDefinition.type;
+                                    for (let key in typeMap) {
+                                        if (hasProperty(typeMap, key)) {
+                                            if (typeMap[key] === value)
+                                                result[name] = key;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

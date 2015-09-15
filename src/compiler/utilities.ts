@@ -99,20 +99,20 @@ namespace ts {
         return true;
     }    
    
-    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+    export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
 
-    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
-        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
-    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = {};
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
+        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
@@ -611,11 +611,11 @@ namespace ts {
         return false;
     }
 
-    export function isAccessor(node: Node): boolean {
+    export function isAccessor(node: Node): node is AccessorDeclaration {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node): boolean {
+    export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
@@ -978,6 +978,7 @@ namespace ts {
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
+                    case SyntaxKind.JsxExpression:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -1578,11 +1579,22 @@ namespace ts {
             add,
             getGlobalDiagnostics,
             getDiagnostics,
-            getModificationCount
+            getModificationCount,
+            reattachFileDiagnostics
         };
 
         function getModificationCount() {
             return modificationCount;
+        }
+        
+        function reattachFileDiagnostics(newFile: SourceFile): void {
+            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+                return;
+            }
+            
+            for (let diagnostic of fileDiagnostics[newFile.fileName]) {
+                diagnostic.file = newFile;
+            }
         }
 
         function add(diagnostic: Diagnostic): void {
@@ -1838,7 +1850,7 @@ namespace ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
                 return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");

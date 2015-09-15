@@ -143,7 +143,8 @@ var harnessSources = harnessCoreSources.concat([
     "convertToBase64.ts",
     "transpile.ts",
     "reuseProgramStructure.ts",
-    "cachingInServerLSHost.ts"
+    "cachingInServerLSHost.ts",
+    "moduleResolution.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -393,6 +394,7 @@ var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
+var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
 
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
@@ -409,11 +411,19 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
 
                 prependFile(copyright, standaloneDefinitionsFile);
 
-                // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
+                // Stanalone/web definition file using global 'ts' namespace
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-                definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
-                fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
+
+                // Official node package definition file, pointed to by 'typings' in package.json
+                // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
+                var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
+                fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
+
+                // Node package definition file to be distributed without the package. Created by replacing 
+                // 'ts' namespace with '"typescript"' as a module.
+                var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
+                fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 
 

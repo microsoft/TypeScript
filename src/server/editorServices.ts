@@ -79,7 +79,7 @@ namespace ts.server {
         }
     }
     
-    interface TimestampedResolvedModule extends ResolvedModule {
+    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations {
         lastCheckTime: number; 
     }
     
@@ -99,11 +99,11 @@ namespace ts.server {
             }
         }
         
-        resolveModuleNames(moduleNames: string[], containingFile: string): string[] {
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
             let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
             
             let newResolutions: Map<TimestampedResolvedModule> = {};
-            let resolvedFileNames: string[] = [];
+            let resolvedModules: ResolvedModule[] = [];
             
             let compilerOptions = this.getCompilationSettings();
                         
@@ -119,25 +119,25 @@ namespace ts.server {
                     else {
                         resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[moduleName] = resolution;                                                
+                        newResolutions[moduleName] = resolution;
                     }
                 }
                 
                 ts.Debug.assert(resolution !== undefined);
                 
-                resolvedFileNames.push(resolution.resolvedFileName);                
+                resolvedModules.push(resolution.resolvedModule);
             }
             
             // replace old results with a new one
             this.resolvedModuleNames.set(containingFile, newResolutions);
-            return resolvedFileNames;
+            return resolvedModules;
             
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
                 if (!resolution) {
                     return false;
                 }
                 
-                if (resolution.resolvedFileName) {
+                if (resolution.resolvedModule) {
                     // TODO: consider checking failedLookupLocations  
                     // TODO: use lastCheckTime to track expiration for module name resolution 
                     return true;
@@ -1120,13 +1120,15 @@ namespace ts.server {
                         else {
                             // if the root file was opened by client, it would belong to either 
                             // openFileRoots or openFileReferenced.
-                            if (this.openFileRoots.indexOf(info) >= 0) {
-                                this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                            if (info.isOpen) {
+                                if (this.openFileRoots.indexOf(info) >= 0) {
+                                    this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                }
+                                if (this.openFilesReferenced.indexOf(info) >= 0) {
+                                    this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                                }
+                                this.openFileRootsConfigured.push(info);
                             }
-                            if (this.openFilesReferenced.indexOf(info) >= 0) {
-                                this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
-                            }
-                            this.openFileRootsConfigured.push(info);
                         }
                         project.addRoot(info);
                     }

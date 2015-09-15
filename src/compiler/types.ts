@@ -1286,7 +1286,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<string>;
+        /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
     }
 
@@ -1361,6 +1361,7 @@ namespace ts {
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
 
+        /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1413,6 +1414,7 @@ namespace ts {
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
@@ -1553,8 +1555,8 @@ namespace ts {
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
-    
-    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
+
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator
       * metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
@@ -1954,6 +1956,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
                                     // The identity mapper and regular instantiation mappers do not need it.
@@ -2010,7 +2013,12 @@ namespace ts {
         Error,
         Message,
     }
-
+    
+    export const enum ModuleResolutionKind {
+        Classic  = 1,
+        NodeJs  = 2
+    }
+    
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2018,6 +2026,7 @@ namespace ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
@@ -2034,6 +2043,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
+        outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;
@@ -2041,6 +2051,7 @@ namespace ts {
         rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
@@ -2049,6 +2060,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        moduleResolution?: ModuleResolutionKind
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2103,16 +2115,29 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOption {
+    interface CommandLineOptionBase {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
-        error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
         experimental?: boolean;
     }
+
+    /* @internal */
+    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
+        type: string;                   // "string" | "number" | "boolean"
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
+        type: Map<number>;             // an object literal mapping named values to actual values
+        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -2260,11 +2285,20 @@ namespace ts {
     
     export interface ResolvedModule {
         resolvedFileName: string;
+        /*
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+         * - be a .d.ts file 
+         * - use top level imports\exports
+         * - don't use tripleslash references
+         */
+        isExternalLibraryImport?: boolean;
+    }
+    
+    export interface ResolvedModuleWithFailedLookupLocations {
+        resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
     }
     
-    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
-
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
@@ -2282,7 +2316,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
          * 'throw new Error("NotImplemented")'  
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     export interface TextSpan {
@@ -2313,5 +2347,7 @@ namespace ts {
         // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
+        
+        /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
     }
 }
