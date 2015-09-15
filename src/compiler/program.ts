@@ -14,10 +14,10 @@ namespace ts {
     
     export const version = "1.6.0";
 
-    export function findConfigFile(searchPath: string): string {
+    export function findConfigFile(searchPath: string, moduleResolutionHost: ModuleResolutionHost): string {
         let fileName = "tsconfig.json";
         while (true) {
-            if (sys.fileExists(fileName)) {
+            if (moduleResolutionHost.fileExists(fileName)) {
                 return fileName;
             }
             let parentPath = getDirectoryPath(searchPath);

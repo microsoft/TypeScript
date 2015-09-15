@@ -25,14 +25,14 @@ interface BatchCompileProjectTestCaseEmittedFile extends Harness.Compiler.Genera
 
 interface CompileProjectFilesResult {
     moduleKind: ts.ModuleKind;
-    program: ts.Program;
+    program?: ts.Program;
+    compilerOptions?: ts.CompilerOptions,
     errors: ts.Diagnostic[];
-    sourceMapData: ts.SourceMapData[];
+    sourceMapData?: ts.SourceMapData[];
 }
 
 interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
-    outputFiles: BatchCompileProjectTestCaseEmittedFile[];
-    nonSubfolderDiskFiles: number;
+    outputFiles?: BatchCompileProjectTestCaseEmittedFile[];
 }
 
 class ProjectRunner extends RunnerBase {
@@ -119,9 +119,10 @@ class ProjectRunner extends RunnerBase {
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: () => string[],
             getSourceFileText: (fileName: string) => string,
-            writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
+            writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void,
+            compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
 
-            let program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
+            let program = ts.createProgram(getInputFiles(), compilerOptions, createCompilerHost());
             let errors = ts.getPreEmitDiagnostics(program);
 
             let emitResult = program.emit();
@@ -145,38 +146,6 @@ class ProjectRunner extends RunnerBase {
                 errors,
                 sourceMapData
             };
-
-            function createCompilerOptions(): ts.CompilerOptions {
-                // Set the special options that depend on other testcase options
-                let compilerOptions: ts.CompilerOptions = {
-                    mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
-                    sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
-                    module: moduleKind,
-                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
-                };
-
-                // Set the values specified using json
-                let optionNameMap: ts.Map<ts.CommandLineOption> = {};
-                ts.forEach(ts.optionDeclarations, option => {
-                    optionNameMap[option.name] = option;
-                });
-                for (let name in testCase) {
-                    if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
-                        let option = optionNameMap[name];
-                        let optType = option.type;
-                        let value = <any>testCase[name];
-                        if (typeof optType !== "string") {
-                            let key = value.toLowerCase();
-                            if (ts.hasProperty(optType, key)) {
-                                value = optType[key];
-                            }
-                        }
-                        compilerOptions[option.name] = value;
-                    }
-                }
-                
-                return compilerOptions;
-            }
 
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
@@ -212,23 +181,99 @@ class ProjectRunner extends RunnerBase {
             let nonSubfolderDiskFiles = 0;
 
             let outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
+            let compilerOptions = createCompilerOptions();
+            let inputFiles = testCase.inputFiles;
+            let configFileName: string;
+            if (compilerOptions.project) {
+                // Parse project
+                configFileName = ts.normalizePath(ts.combinePaths(compilerOptions.project, "tsconfig.json"));
+                assert(!inputFiles || inputFiles.length === 0, "cannot specify input files and project option together");
+            }
+            else if (!inputFiles || inputFiles.length === 0) {
+                configFileName = ts.findConfigFile("", { fileExists, readFile: getSourceFileText });
+            }
 
-            let projectCompilerResult = compileProjectFiles(moduleKind, () => testCase.inputFiles, getSourceFileText, writeFile);
+            if (configFileName) {
+                let result = ts.readConfigFile(configFileName, getSourceFileText);
+                if (result.error) {
+                    return {
+                        moduleKind,
+                        errors: [result.error]
+                    };
+                }
+
+                let configObject = result.config;
+                let configParseResult = ts.parseConfigFile(configObject, { fileExists, readFile: getSourceFileText, readDirectory }, ts.getDirectoryPath(configFileName));
+                if (configParseResult.errors.length > 0) {
+                    return {
+                        moduleKind,
+                        errors: configParseResult.errors
+                    };
+                }
+                inputFiles = configParseResult.fileNames;
+                compilerOptions = ts.extend(compilerOptions, configParseResult.options);
+            }
+
+            let projectCompilerResult = compileProjectFiles(moduleKind, () => inputFiles, getSourceFileText, writeFile, compilerOptions);
             return {
                 moduleKind,
                 program: projectCompilerResult.program,
+                compilerOptions,
                 sourceMapData: projectCompilerResult.sourceMapData,
                 outputFiles,
                 errors: projectCompilerResult.errors,
-                nonSubfolderDiskFiles,
             };
+
+            function createCompilerOptions(): ts.CompilerOptions {
+                // Set the special options that depend on other testcase options
+                let compilerOptions: ts.CompilerOptions = {
+                    mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
+                    sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
+                    module: moduleKind,
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
+                };
+
+                // Set the values specified using json
+                let optionNameMap: ts.Map<ts.CommandLineOption> = {};
+                ts.forEach(ts.optionDeclarations, option => {
+                    optionNameMap[option.name] = option;
+                });
+                for (let name in testCase) {
+                    if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
+                        let option = optionNameMap[name];
+                        let optType = option.type;
+                        let value = <any>testCase[name];
+                        if (typeof optType !== "string") {
+                            let key = value.toLowerCase();
+                            if (ts.hasProperty(optType, key)) {
+                                value = optType[key];
+                            }
+                        }
+                        compilerOptions[option.name] = value;
+                    }
+                }
+
+                return compilerOptions;
+            }
+            
+            function getFileNameInTheProjectTest(fileName: string): string {
+                return ts.isRootedDiskPath(fileName)
+                    ? fileName
+                    : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
+            }
+
+            function readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
+                return Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude);
+            }
+
+            function fileExists(fileName: string): boolean {
+                return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
+            }
 
             function getSourceFileText(fileName: string): string {
                 let text: string = undefined;
                 try {
-                    text = Harness.IO.readFile(ts.isRootedDiskPath(fileName)
-                        ? fileName
-                        : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
+                    text = Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
                 }
                 catch (e) {
                     // text doesn't get defined.
@@ -288,6 +333,9 @@ class ProjectRunner extends RunnerBase {
 
         function compileCompileDTsFiles(compilerResult: BatchCompileProjectTestCaseResult) {
             let allInputFiles: { emittedFileName: string; code: string; }[] = [];
+            if (!compilerResult.program) {
+                return;
+            }
             let compilerOptions = compilerResult.program.getCompilerOptions();
 
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
@@ -317,7 +365,8 @@ class ProjectRunner extends RunnerBase {
                 }
             });
 
-            return compileProjectFiles(compilerResult.moduleKind, getInputFiles, getSourceFileText, writeFile);
+            // Dont allow config files since we are compiling existing source options
+            return compileProjectFiles(compilerResult.moduleKind, getInputFiles, getSourceFileText, writeFile, compilerResult.compilerOptions);
 
             function findOutpuDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
@@ -352,7 +401,7 @@ class ProjectRunner extends RunnerBase {
 
                     function getCompilerResolutionInfo() {
                         let resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(testCase));
-                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName);
+                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program ? compilerResult.program.getSourceFiles() : undefined, inputFile => inputFile.fileName);
                         resolutionInfo.emittedFiles = ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName);
                         return resolutionInfo;
                     }
@@ -409,7 +458,7 @@ class ProjectRunner extends RunnerBase {
                     it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             let dTsCompileResult = compileCompileDTsFiles(compilerResult);
-                            if (dTsCompileResult.errors.length) {
+                            if (dTsCompileResult && dTsCompileResult.errors.length) {
                                 Harness.Baseline.runBaseline("Errors in generated Dts files for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
                                     return getErrorsBaseline(dTsCompileResult);
                                 });
