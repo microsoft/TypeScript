@@ -1,4 +1,4 @@
-﻿// @comments: false
+﻿// @removeComments: true
 function foo1() {
     // Single line comment
 
