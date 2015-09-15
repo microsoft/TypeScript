@@ -619,6 +619,7 @@ namespace ts {
 
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
+        hasSeenSuperBeforeThis: boolean;  // TODDO (yuisu): comment
     }
 
     // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.

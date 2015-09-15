@@ -6422,6 +6422,11 @@ namespace ts {
                     // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     break;
                 case SyntaxKind.Constructor:
+                    // TODO(yuisu): Comments
+                    if ((<ConstructorDeclaration>container).hasSeenSuperBeforeThis === undefined) {
+                        (<ConstructorDeclaration>container).hasSeenSuperBeforeThis = false;
+                    }
+
                     if (isInConstructorArgumentInitializer(node, container)) {
                         error(node, Diagnostics.this_cannot_be_referenced_in_constructor_arguments);
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
@@ -9034,6 +9039,10 @@ namespace ts {
 
             let signature = getResolvedSignature(node);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                let containgFunction = getContainingFunction(node.expression);
+                if (containgFunction && containgFunction.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>containgFunction).hasSeenSuperBeforeThis === undefined) {
+                    (<ConstructorDeclaration>containgFunction).hasSeenSuperBeforeThis = true;
+                }
                 return voidType;
             }
             if (node.kind === SyntaxKind.NewExpression) {
@@ -10560,11 +10569,15 @@ namespace ts {
                         }
                         if (!superCallStatement) {
                             error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
-                        } 
+                        }
                         else {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
+                    }
+                    else if (!node.hasSeenSuperBeforeThis) {
+                        // TODO: comment
+                        error(node, Diagnostics.super_has_to_be_called_before_this_accessing);
                     }
                 }
                 else if (baseConstructorType !== nullType) {
