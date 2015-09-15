@@ -1,4 +1,4 @@
-tests/cases/conformance/types/members/typesWithPrivateConstructor.ts(7,9): error TS2655: Constructor '(): C' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/typesWithPrivateConstructor.ts(7,9): error TS2655: Constructor of type '(): C' is private and only accessible within class 'C'.
 tests/cases/conformance/types/members/typesWithPrivateConstructor.ts(8,5): error TS2322: Type 'Function' is not assignable to type '() => void'.
 tests/cases/conformance/types/members/typesWithPrivateConstructor.ts(15,10): error TS2346: Supplied parameters do not match any signature of call target.
 
@@ -12,7 +12,7 @@ tests/cases/conformance/types/members/typesWithPrivateConstructor.ts(15,10): err
     
     var c = new C();
             ~~~~~~~
-!!! error TS2655: Constructor '(): C' is private and only accessible within class 'C'.
+!!! error TS2655: Constructor of type '(): C' is private and only accessible within class 'C'.
     var r: () => void = c.constructor;
         ~
 !!! error TS2322: Type 'Function' is not assignable to type '() => void'.

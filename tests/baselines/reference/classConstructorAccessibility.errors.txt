@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(20,9): error TS2655: Constructor '(x: number): D' is private and only accessible within class 'D'.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(21,9): error TS2654: Constructor '(x: number): E' is protected and only accessible within class 'E' and its subclasses.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(38,13): error TS2655: Constructor '(x: number): D<number>' is private and only accessible within class 'D<T>'.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(39,13): error TS2654: Constructor '(x: number): E<number>' is protected and only accessible within class 'E<T>' and its subclasses.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(20,9): error TS2655: Constructor of type '(x: number): D' is private and only accessible within class 'D'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(21,9): error TS2654: Constructor of type '(x: number): E' is protected and only accessible within class 'E' and its subclasses.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(38,13): error TS2655: Constructor of type '(x: number): D<number>' is private and only accessible within class 'D<T>'.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(39,13): error TS2654: Constructor of type '(x: number): E<number>' is protected and only accessible within class 'E<T>' and its subclasses.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(46,1): error TS2322: Type 'typeof D' is not assignable to type 'new (x: number) => any'.
   Cannot assign a private constructor to a public constructor.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts(47,1): error TS2322: Type 'typeof E' is not assignable to type 'new (x: number) => any'.
@@ -30,10 +30,10 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     var c = new C(1);
     var d = new D(1); // error - D is private
             ~~~~~~~~
-!!! error TS2655: Constructor '(x: number): D' is private and only accessible within class 'D'.
+!!! error TS2655: Constructor of type '(x: number): D' is private and only accessible within class 'D'.
     var e = new E(1); // error - E is protected
             ~~~~~~~~
-!!! error TS2654: Constructor '(x: number): E' is protected and only accessible within class 'E' and its subclasses.
+!!! error TS2654: Constructor of type '(x: number): E' is protected and only accessible within class 'E' and its subclasses.
     
     module Generic {
         class C<T> {
@@ -52,10 +52,10 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
         var c = new C(1);
         var d = new D(1); // error - D is private
                 ~~~~~~~~
-!!! error TS2655: Constructor '(x: number): D<number>' is private and only accessible within class 'D<T>'.
+!!! error TS2655: Constructor of type '(x: number): D<number>' is private and only accessible within class 'D<T>'.
         var e = new E(1); // error - E is protected
                 ~~~~~~~~
-!!! error TS2654: Constructor '(x: number): E<number>' is protected and only accessible within class 'E<T>' and its subclasses.
+!!! error TS2654: Constructor of type '(x: number): E<number>' is protected and only accessible within class 'E<T>' and its subclasses.
     }
     
     // make sure signatures are covered.
