@@ -7240,6 +7240,22 @@ namespace ts {
             let container = getThisContainer(node, /* includeArrowFunctions */ true);
             let needToCaptureLexicalThis = false;
 
+
+            if (container.kind === SyntaxKind.Constructor) {
+                // Keep track of whether we have seen "super" before encounter "this" so that
+                // we can report appropriate error later in checkConstructorDeclaration
+                // We have to do the check here to make sure we won't give false error when
+                // "this" is used in arrow functions
+                // For example:
+                //      constructor() {
+                //          (()=>this);  // No Error
+                //          super();
+                //      }
+                if ((<ConstructorDeclaration>container).hasSeenSuperBeforeThis === undefined) {
+                    (<ConstructorDeclaration>container).hasSeenSuperBeforeThis = false;
+                }
+            }
+
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
@@ -11769,8 +11785,25 @@ namespace ts {
                 const containingClassSymbol = getSymbolOfNode(containingClassDecl);
                 const containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
                 const baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
+                const statements = (<Block>node.body).statements;
+                let superCallStatement: ExpressionStatement;
+                let isSuperCallFirstStatment: boolean;
 
-                if (containsSuperCall(node.body)) {
+                for (const statement of statements) {
+                    if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                        superCallStatement = <ExpressionStatement>statement;
+                        if (isSuperCallFirstStatment === undefined) {
+                            isSuperCallFirstStatment = true;
+                        }
+                    }
+                    else if (isSuperCallFirstStatment === undefined && !isPrologueDirective(statement)) {
+                        isSuperCallFirstStatment = false;
+                    }
+                }
+
+                // The main different between looping through each statement in constructor and calling containsSuperCall is that,
+                // containsSuperCall will consider "super" inside computed-property for inner class declaration
+                if (superCallStatement || containsSuperCall(node.body)) {
                     if (baseConstructorType === nullType) {
                         error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
@@ -11787,24 +11820,17 @@ namespace ts {
                     // Skip past any prologue directives to find the first statement
                     // to ensure that it was a super call.
                     if (superCallShouldBeFirst) {
-                        const statements = (<Block>node.body).statements;
-                        let superCallStatement: ExpressionStatement;
-                        for (const statement of statements) {
-                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
-                                superCallStatement = <ExpressionStatement>statement;
-                                break;
-                            }
-                            if (!isPrologueDirective(statement)) {
-                                break;
-                            }
-                        }
-                        if (!superCallStatement) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
+                        if (!isSuperCallFirstStatment) {
+                            error(superCallStatement, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
                         }
                         else {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
+                    }
+                    else if (!node.hasSeenSuperBeforeThis) {
+                        // In ES6, super inside constructor of class-declaration has to precede "this" accessing
+                        error(superCallStatement, Diagnostics.super_has_to_be_called_before_this_accessing);
                     }
                 }
                 else if (baseConstructorType !== nullType) {
