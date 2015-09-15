@@ -14254,7 +14254,10 @@ namespace ts {
                 let symbols: Symbol[] = [];
                 let name = symbol.name;
                 forEach(getSymbolLinks(symbol).containingType.types, t => {
-                    symbols.push(getPropertyOfType(t, name));
+                    let symbol = getPropertyOfType(t, name);
+                    if (symbol) {
+                        symbols.push(symbol);
+                    }
                 });
                 return symbols;
             }
