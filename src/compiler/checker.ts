@@ -965,7 +965,7 @@ namespace ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) {
+            if (moduleName === undefined) {
                 return;
             }
             let isRelative = isExternalModuleNameRelative(moduleName);
