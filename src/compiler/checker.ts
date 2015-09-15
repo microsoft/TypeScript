@@ -5200,7 +5200,7 @@ namespace ts {
                     let hasDifferentParameterIndex = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
                     let hasDifferentTypes: boolean;
                     if (hasDifferentParameterIndex ||
-                        (hasDifferentTypes = !isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type))) {
+                        (hasDifferentTypes = !isTypeSubtypeOf(source.typePredicate.type, target.typePredicate.type))) {
 
                         if (reportErrors) {
                             let sourceParamText = source.typePredicate.parameterName;
@@ -5234,7 +5234,9 @@ namespace ts {
                 }
 
                 let targetReturnType = getReturnTypeOfSignature(target);
-                if (targetReturnType === voidType) return result;
+                if (targetReturnType === voidType) {
+                    return result;
+                }
                 let sourceReturnType = getReturnTypeOfSignature(source);
 
                 return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
