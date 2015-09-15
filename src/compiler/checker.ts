@@ -8762,13 +8762,13 @@ namespace ts {
                 if (constructor.flags & NodeFlags.Private) {
                     // A private constructor is only accessible in the declaring class
                     if (declaringClass !== enclosingClass) {
-                        reportError(Diagnostics.Constructor_0_is_private_and_only_accessible_within_class_1, signatureToString(result), typeToString(declaringClass));
+                        reportError(Diagnostics.Constructor_of_type_0_is_private_and_only_accessible_within_class_1, signatureToString(result), typeToString(declaringClass));
                     }
                 }                    
                 else if (constructor.flags & NodeFlags.Protected) {
                     // A protected constructor is only accessible in the declaring class and classes derived from it
                     if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
-                        reportError(Diagnostics.Constructor_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, signatureToString(result), typeToString(declaringClass));
+                        reportError(Diagnostics.Constructor_of_type_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, signatureToString(result), typeToString(declaringClass));
                     }
                 }
             }

@@ -1701,11 +1701,11 @@
         "category": "Error",
         "code": 2653
     },
-    "Constructor '{0}' is protected and only accessible within class '{1}' and its subclasses.": {
+    "Constructor of type '{0}' is protected and only accessible within class '{1}' and its subclasses.": {
         "category": "Error",
         "code": 2654
     },
-    "Constructor '{0}' is private and only accessible within class '{1}'.": {
+    "Constructor of type '{0}' is private and only accessible within class '{1}'.": {
         "category": "Error",
         "code": 2655
     },
