@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/externalModules/topLevelModuleDeclarationAndFile.ts] ////
 
-//// [foo_0.ts]
+//// [index.ts]
 export var x: number = 42;
 
 //// [foo_1.ts]
@@ -17,8 +17,6 @@ var z2 = foo.y() + 10; // Should resolve
 
 
 //// [foo_1.js]
-//// [foo_0.js]
-exports.x = 42;
 //// [foo_2.js]
 /// <reference path="foo_1.ts"/>
 var foo = require("vs/foo_0");
