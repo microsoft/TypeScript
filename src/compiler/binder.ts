@@ -406,37 +406,37 @@ namespace ts {
          * Returns true if node and its subnodes were successfully traversed.
          * Returning false means that node was not examined and caller needs to dive into the node himself. 
          */
-        function bindReachableStatement(n: Node): boolean {
-            if (checkUnreachable(n)) {
+        function bindReachableStatement(node: Node): boolean {
+            if (checkUnreachable(node)) {
                 return false;
             }
 
-            switch (n.kind) {
+            switch (node.kind) {
                 case SyntaxKind.WhileStatement:
-                    return bindWhileStatement(<WhileStatement>n);
+                    return bindWhileStatement(<WhileStatement>node);
                 case SyntaxKind.DoStatement:
-                    return bindDoStatement(<DoStatement>n);
+                    return bindDoStatement(<DoStatement>node);
                 case SyntaxKind.ForStatement:
-                    return bindForStatement(<ForStatement>n);
+                    return bindForStatement(<ForStatement>node);
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    return bindForInOrForOfStatement(<ForInStatement | ForOfStatement>n);
+                    return bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
                 case SyntaxKind.IfStatement:
-                    return bindIfStatement(<IfStatement>n);
+                    return bindIfStatement(<IfStatement>node);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ThrowStatement:
-                    return bindReturnOrThrow(<ReturnStatement | ThrowStatement>n);
+                    return bindReturnOrThrow(<ReturnStatement | ThrowStatement>node);
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
-                    return bindBreakOrContinueStatement(<BreakOrContinueStatement>n);
+                    return bindBreakOrContinueStatement(<BreakOrContinueStatement>node);
                 case SyntaxKind.TryStatement:
-                    return bindTryStatement(<TryStatement>n);
+                    return bindTryStatement(<TryStatement>node);
                 case SyntaxKind.SwitchStatement:
-                    return bindSwitchStatement(<SwitchStatement>n);
+                    return bindSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.CaseBlock:
-                    return bindCaseBlock(<CaseBlock>n);
+                    return bindCaseBlock(<CaseBlock>node);
                 case SyntaxKind.LabeledStatement:
-                    return bindLabeledStatement(<LabeledStatement>n);
+                    return bindLabeledStatement(<LabeledStatement>node);
                 default:
                     return false;
             }
@@ -1436,7 +1436,8 @@ namespace ts {
                         
                         // unreachable code is reported if
                         // - user has explicitly asked about it AND
-                        // - statement is in not ambient context (statements in ambient context is already an error so we shoult not report extras) AND
+                        // - statement is in not ambient context (statements in ambient context is already an error 
+                        //   so we should not report extras) AND
                         //   - node is not variable statement OR
                         //   - node is block scoped variable statement OR
                         //   - node is not block scoped variable statement and at least one variable declaration has initializer
