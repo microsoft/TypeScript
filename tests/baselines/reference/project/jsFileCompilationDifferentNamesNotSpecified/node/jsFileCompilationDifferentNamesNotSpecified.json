@@ -1,0 +1,16 @@
+{
+    "scenario": "Verify when different named .ts and .js file exists in the folder and tsconfig.json doesnt specify anyt files",
+    "projectRoot": "tests/cases/projects/jsFileCompilation",
+    "baselineCheck": true,
+    "declaration": true,
+    "project": "DifferentNamesNotSpecified",
+    "resolvedInputFiles": [
+        "lib.d.ts",
+        "DifferentNamesNotSpecified/a.ts",
+        "DifferentNamesNotSpecified/b.js"
+    ],
+    "emittedFiles": [
+        "test.js",
+        "test.d.ts"
+    ]
+}
