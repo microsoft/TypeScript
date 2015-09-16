@@ -13379,9 +13379,9 @@ namespace ts {
                     }
                 }
                 else {
-                    if (languageVersion >= ScriptTarget.ES6 && !isInAmbientContext(node)) {
+                    if (compilerOptions.module === ModuleKind.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
-                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
                 }
             }
@@ -13456,9 +13456,9 @@ namespace ts {
             checkExternalModuleExports(<SourceFile | ModuleDeclaration>container);
 
             if (node.isExportEquals && !isInAmbientContext(node)) {
-                if (languageVersion >= ScriptTarget.ES6) {
-                    // export assignment is deprecated in es6 or above
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+                if (compilerOptions.module === ModuleKind.ES6) {
+                    // export assignment is not supported in es6 modules
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
                 else if (compilerOptions.module === ModuleKind.System) {
                     // system modules does not support export assignment
