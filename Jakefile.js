@@ -434,7 +434,7 @@ file(factoryGeneratedTs, [processTypesJs, typesTs, factoryTs, transformTs, utili
 file(transformGeneratedTs, [factoryGeneratedTs]);
 
 desc("Generates a TypeScript file that contains factory methods to create each Syntax Node.")
-task("generate-factory", [factoryGeneratedTs, transformGeneratedTs]);
+task("generate-factory", [/*factoryGeneratedTs, transformGeneratedTs*/]);
 
 
 // Publish nightly
@@ -490,6 +490,7 @@ var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
+var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
 
 compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), {
     prefixes: [copyright],
@@ -506,11 +507,19 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
 
     prependFile(copyright, standaloneDefinitionsFile);
 
-    // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
+    // Stanalone/web definition file using global 'ts' namespace
     jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
     var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-    definitionFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
-    fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
+
+    // Official node package definition file, pointed to by 'typings' in package.json
+    // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
+    var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
+    fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
+
+    // Node package definition file to be distributed without the package. Created by replacing 
+    // 'ts' namespace with '"typescript"' as a module.
+    var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
+    fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
 });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
@@ -695,9 +704,10 @@ function deleteTemporaryProjectOutput() {
 }
 
 var testTimeout = 20000;
-desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.");
+desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
 task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
+    var debug = process.env.debug || process.env.d;
     var host = "mocha";
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -720,7 +730,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     var reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+    var cmd = host + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
     console.log(cmd);
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});

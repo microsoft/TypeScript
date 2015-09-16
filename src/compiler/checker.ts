@@ -965,7 +965,7 @@ namespace ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) {
+            if (moduleName === undefined) {
                 return;
             }
             let isRelative = isExternalModuleNameRelative(moduleName);
@@ -976,8 +976,8 @@ namespace ts {
                 }
             }
 
-            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral.text);
-            let sourceFile = fileName && host.getSourceFile(fileName);
+            let resolvedModule = getResolvedModule(getSourceFile(location), moduleReferenceLiteral.text);
+            let sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
@@ -2325,8 +2325,8 @@ namespace ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 type = getTypeOfPropertyOfType(parentType, name.text) ||
-                isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                getIndexTypeOfType(parentType, IndexKind.String);
+                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                    getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
@@ -2413,7 +2413,7 @@ namespace ts {
 
             // If the declaration specifies a binding pattern, use the type implied by the binding pattern
             if (isBindingPattern(declaration.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
+                return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false);
             }
 
             // No type specified and nothing can be inferred
@@ -2423,48 +2423,47 @@ namespace ts {
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
         // pattern. Otherwise, it is the type any.
-        function getTypeFromBindingElement(element: BindingElement): Type {
+        function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean): Type {
             if (element.initializer) {
                 return getWidenedType(checkExpressionCached(element.initializer));
             }
             if (isBindingPattern(element.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>element.name);
+                return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType);
             }
             return anyType;
         }
 
         // Return the type implied by an object binding pattern
-        function getTypeFromObjectBindingPattern(pattern: BindingPattern): Type {
+        function getTypeFromObjectBindingPattern(pattern: BindingPattern, includePatternInType: boolean): Type {
             let members: SymbolTable = {};
             forEach(pattern.elements, e => {
                 let flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
                 let name = e.propertyName || <Identifier>e.name;
                 let symbol = <TransientSymbol>createSymbol(flags, name.text);
-                symbol.type = getTypeFromBindingElement(e);
+                symbol.type = getTypeFromBindingElement(e, includePatternInType);
+                symbol.bindingElement = e;
                 members[symbol.name] = symbol;
             });
-            return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+            let result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+            if (includePatternInType) {
+                result.pattern = pattern;
+            }
+            return result;
         }
 
         // Return the type implied by an array binding pattern
-        function getTypeFromArrayBindingPattern(pattern: BindingPattern): Type {
-            let hasSpreadElement: boolean = false;
-            let elementTypes: Type[] = [];
-            forEach(pattern.elements, e => {
-                elementTypes.push(e.kind === SyntaxKind.OmittedExpression || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
-                if (e.dotDotDotToken) {
-                    hasSpreadElement = true;
-                }
-            });
-            if (!elementTypes.length) {
+        function getTypeFromArrayBindingPattern(pattern: BindingPattern, includePatternInType: boolean): Type {
+            let elements = pattern.elements;
+            if (elements.length === 0 || elements[elements.length - 1].dotDotDotToken) {
                 return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
             }
-            else if (hasSpreadElement) {
-                let unionOfElements = getUnionType(elementTypes);
-                return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
-            }
-
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
+            let elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e, includePatternInType));
+            if (includePatternInType) {
+                let result = createNewTupleType(elementTypes);
+                result.pattern = pattern;
+                return result;
+            }
             return createTupleType(elementTypes);
         }
 
@@ -2475,10 +2474,10 @@ namespace ts {
         // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
         // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
         // the parameter.
-        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
+        function getTypeFromBindingPattern(pattern: BindingPattern, includePatternInType?: boolean): Type {
             return pattern.kind === SyntaxKind.ObjectBindingPattern
-                ? getTypeFromObjectBindingPattern(pattern)
-                : getTypeFromArrayBindingPattern(pattern);
+                ? getTypeFromObjectBindingPattern(pattern, includePatternInType)
+                : getTypeFromArrayBindingPattern(pattern, includePatternInType);
         }
 
         // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
@@ -3133,7 +3132,7 @@ namespace ts {
         }
 
         function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreReturnTypes: boolean): Signature {
-            for (let s of signatureList)  {
+            for (let s of signatureList) {
                 if (compareSignatures(s, signature, partialMatch, ignoreReturnTypes, compareTypes)) {
                     return s;
                 }
@@ -4020,7 +4019,7 @@ namespace ts {
           */
         function createTypedPropertyDescriptorType(propertyType: Type): Type {
             let globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyObjectType
+            return globalTypedPropertyDescriptorType !== emptyGenericType
                 ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType])
                 : emptyObjectType;
         }
@@ -4054,11 +4053,12 @@ namespace ts {
 
         function createTupleType(elementTypes: Type[]) {
             let id = getTypeListId(elementTypes);
-            let type = tupleTypes[id];
-            if (!type) {
-                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple | getPropagatingFlagsOfTypes(elementTypes));
-                type.elementTypes = elementTypes;
-            }
+            return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes));
+        }
+
+        function createNewTupleType(elementTypes: Type[]) {
+            let type = <TupleType>createObjectType(TypeFlags.Tuple | getPropagatingFlagsOfTypes(elementTypes));
+            type.elementTypes = elementTypes;
             return type;
         }
 
@@ -4555,7 +4555,7 @@ namespace ts {
          * @param target The right-hand-side of the relation.
          * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', or 'subTypeRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
-         * @param errorNode The node upon which all errors will be reported, if defined.
+         * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
          */
@@ -4647,7 +4647,9 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    source = getRegularTypeOfObjectLiteral(source);
+                    if (target.flags & TypeFlags.UnionOrIntersection) {
+                        source = getRegularTypeOfObjectLiteral(source);
+                    }
                 }
 
                 let saveErrorInfo = errorInfo;
@@ -4774,7 +4776,13 @@ namespace ts {
                 for (let prop of getPropertiesOfObjectType(source)) {
                     if (!isKnownProperty(target, prop.name)) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(prop), typeToString(target));
+                            // We know *exactly* where things went wrong when comparing the types.
+                            // Use this property as the error node as this will be more helpful in
+                            // reasoning about what went wrong.
+                            errorNode = prop.valueDeclaration
+                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                        symbolToString(prop),
+                                        typeToString(target));
                         }
                         return true;
                     }
@@ -5112,8 +5120,8 @@ namespace ts {
                 function abstractSignatureRelatedTo(source: Type, sourceSig: Signature, target: Type, targetSig: Signature) {
                     if (sourceSig && targetSig) {
 
-                        let sourceDecl = source.symbol && getDeclarationOfKind(source.symbol, SyntaxKind.ClassDeclaration);
-                        let targetDecl = target.symbol && getDeclarationOfKind(target.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceDecl = source.symbol && getClassLikeDeclarationOfSymbol(source.symbol);
+                        let targetDecl = target.symbol && getClassLikeDeclarationOfSymbol(target.symbol);
 
                         if (!sourceDecl) {
                             // If the source object isn't itself a class declaration, it can be freely assigned, regardless
@@ -5127,8 +5135,8 @@ namespace ts {
                         let sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
                         let targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
 
-                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getDeclarationOfKind(sourceReturnType.symbol, SyntaxKind.ClassDeclaration);
-                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getDeclarationOfKind(targetReturnType.symbol, SyntaxKind.ClassDeclaration);
+                        let sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getClassLikeDeclarationOfSymbol(sourceReturnType.symbol);
+                        let targetReturnDecl = targetReturnType && targetReturnType.symbol && getClassLikeDeclarationOfSymbol(targetReturnType.symbol);
                         let sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
                         let targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
 
@@ -5512,6 +5520,7 @@ namespace ts {
                     regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
                     regularType.stringIndexType = (<ResolvedType>type).stringIndexType;
                     regularType.numberIndexType = (<ResolvedType>type).numberIndexType;
+                    (<FreshObjectLiteralType>type).regularType = regularType;
                 }
                 return regularType;
             }
@@ -6614,7 +6623,7 @@ namespace ts {
                     }
                 }
                 if (isBindingPattern(declaration.name)) {
-                    return getTypeFromBindingPattern(<BindingPattern>declaration.name);
+                    return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ true);
                 }
             }
             return undefined;
@@ -7010,11 +7019,13 @@ namespace ts {
             return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
         }
 
+        function hasDefaultValue(node: BindingElement | Expression): boolean {
+            return (node.kind === SyntaxKind.BindingElement && !!(<BindingElement>node).initializer) ||
+                (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
+        }
+
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             let elements = node.elements;
-            if (!elements.length) {
-                return createArrayType(undefinedType);
-            }
             let hasSpreadElement = false;
             let elementTypes: Type[] = [];
             let inDestructuringPattern = isAssignmentTarget(node);
@@ -7046,12 +7057,39 @@ namespace ts {
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
             }
             if (!hasSpreadElement) {
+                // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
+                // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
+                if (inDestructuringPattern && elementTypes.length) {
+                    let type = createNewTupleType(elementTypes);
+                    type.pattern = node;
+                    return type;
+                }
                 let contextualType = getContextualType(node);
-                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || inDestructuringPattern) {
-                    return createTupleType(elementTypes);
+                if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
+                    let pattern = contextualType.pattern;
+                    // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
+                    // tuple type with the corresponding binding or assignment element types to make the lengths equal.
+                    if (pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
+                        let patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
+                        for (let i = elementTypes.length; i < patternElements.length; i++) {
+                            let patternElement = patternElements[i];
+                            if (hasDefaultValue(patternElement)) {
+                                elementTypes.push((<TupleType>contextualType).elementTypes[i]);
+                            }
+                            else {
+                                if (patternElement.kind !== SyntaxKind.OmittedExpression) {
+                                    error(patternElement, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                                }
+                                elementTypes.push(unknownType);
+                            }
+                        }
+                    }
+                    if (elementTypes.length) {
+                        return createTupleType(elementTypes);
+                    }
                 }
             }
-            return createArrayType(getUnionType(elementTypes));
+            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : undefinedType)
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -7118,6 +7156,9 @@ namespace ts {
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
+            let contextualTypeHasPattern = contextualType && contextualType.pattern &&
+                (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
+            let inDestructuringPattern = isAssignmentTarget(node);
             let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
@@ -7138,6 +7179,25 @@ namespace ts {
                     }
                     typeFlags |= type.flags;
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    if (inDestructuringPattern) {
+                        // If object literal is an assignment pattern and if the assignment pattern specifies a default value
+                        // for the property, make the property optional.
+                        if (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) {
+                            prop.flags |= SymbolFlags.Optional;
+                        }
+                    }
+                    else if (contextualTypeHasPattern) {
+                        // If object literal is contextually typed by the implied type of a binding pattern, and if the
+                        // binding pattern specifies a default value for the property, make the property optional.
+                        let impliedProp = getPropertyOfType(contextualType, member.name);
+                        if (impliedProp) {
+                            prop.flags |= impliedProp.flags & SymbolFlags.Optional;
+                        }
+                        else if (!compilerOptions.suppressExcessPropertyErrors) {
+                            error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                symbolToString(member), typeToString(contextualType));
+                        }
+                    }
                     prop.declarations = member.declarations;
                     prop.parent = member.parent;
                     if (member.valueDeclaration) {
@@ -7164,11 +7224,29 @@ namespace ts {
                 propertiesArray.push(member);
             }
 
+            // If object literal is contextually typed by the implied type of a binding pattern, augment the result
+            // type with those properties for which the binding pattern specifies a default value.
+            if (contextualTypeHasPattern) {
+                for (let prop of getPropertiesOfType(contextualType)) {
+                    if (!hasProperty(propertiesTable, prop.name)) {
+                        if (!(prop.flags & SymbolFlags.Optional)) {
+                            error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
+                                Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                        }
+                        propertiesTable[prop.name] = prop;
+                        propertiesArray.push(prop);
+                    }
+                }
+            }
+
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
             let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
             let freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
+            if (inDestructuringPattern) {
+                result.pattern = node;
+            }
             return result;
 
             function getIndexType(kind: IndexKind) {
@@ -8880,7 +8958,7 @@ namespace ts {
             // Note, only class declarations can be declared abstract.
             // In the case of a merged class-module or class-interface declaration,
             // only the class declaration node will have the Abstract flag set.
-            let valueDecl = expressionType.symbol && getDeclarationOfKind(expressionType.symbol, SyntaxKind.ClassDeclaration);
+            let valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
                 return resolveErrorCall(node);
@@ -9133,7 +9211,7 @@ namespace ts {
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
             let globalPromiseType = getGlobalPromiseType();
-            if (globalPromiseType !== emptyObjectType) {
+            if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType);
                 return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
@@ -12632,6 +12710,10 @@ namespace ts {
             return s.flags & SymbolFlags.Instantiated ? getSymbolLinks(s).target : s;
         }
 
+        function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration {
+            return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
+        }
+
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: ObjectType): void {
 
             // TypeScript 1.0 spec (April 2014): 8.2.3
@@ -12669,14 +12751,20 @@ namespace ts {
                     if (derived === base) {
                         // derived class inherits base without override/redeclaration
 
-                        let derivedClassDecl = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+                        let derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol);
 
                         // It is an error to inherit an abstract member without implementing it or being declared abstract.
                         // If there is no declaration for the derived class (as in the case of class expressions),
                         // then the class cannot be declared abstract.
-                        if ( baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
-                            error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
-                                typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                        if (baseDeclarationFlags & NodeFlags.Abstract && (!derivedClassDecl || !(derivedClassDecl.flags & NodeFlags.Abstract))) {
+                            if (derivedClassDecl.kind === SyntaxKind.ClassExpression) {
+                                error(derivedClassDecl, Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1,
+                                    symbolToString(baseProperty), typeToString(baseType));
+                            }
+                            else {
+                                error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                                    typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                            }
                         }
                     }
                     else {
@@ -14173,7 +14261,10 @@ namespace ts {
                 let symbols: Symbol[] = [];
                 let name = symbol.name;
                 forEach(getSymbolLinks(symbol).containingType.types, t => {
-                    symbols.push(getPropertyOfType(t, name));
+                    let symbol = getPropertyOfType(t, name);
+                    if (symbol) {
+                        symbols.push(symbol);
+                    }
                 });
                 return symbols;
             }
@@ -14605,7 +14696,7 @@ namespace ts {
 
         function createInstantiatedPromiseLikeType(): ObjectType {
             let promiseLikeType = getGlobalPromiseLikeType();
-            if (promiseLikeType !== emptyObjectType) {
+            if (promiseLikeType !== emptyGenericType) {
                 return createTypeReference(<GenericType>promiseLikeType, [anyType]);
             }
 

@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 // @target: ES5
 
 var v = {

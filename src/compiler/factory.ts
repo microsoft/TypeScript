@@ -390,10 +390,10 @@ namespace ts {
         return createCallExpression2(createPropertyAccessExpression3(createIdentifier("Object"), "getOwnPropertyDescriptor"), [target, memberName]);
     }
 
-    export function createDefaultValueCheck(value: Expression, defaultValue: Expression, ensureIdentifier: (value: Expression) => Expression, location?: TextRange, flags?: NodeFlags): Expression {
+    export function createDefaultValueCheck(value: Expression, defaultValue: Expression, ensureIdentifier: (value: Expression, reuseIdentifierExpressions: boolean) => Expression, location?: TextRange, flags?: NodeFlags): Expression {
         // The value expression will be evaluated twice, so for anything but a simple identifier
         // we need to generate a temporary variable
-        value = ensureIdentifier(value);
+        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
             
         // <value> === void 0 ? <defaultValue> : <value>
         return createConditionalExpression2(createStrictEqualityExpression(value, createVoidZeroExpression()), defaultValue, value, location, flags);

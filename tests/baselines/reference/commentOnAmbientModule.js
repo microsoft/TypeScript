@@ -1,7 +1,12 @@
 //// [tests/cases/compiler/commentOnAmbientModule.ts] ////
 
 //// [a.ts]
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare module C {
     function foo();
 }
@@ -20,6 +25,9 @@ declare module E {
 }
 
 //// [a.js]
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
 //// [b.js]
 ///<reference path="a.ts"/>

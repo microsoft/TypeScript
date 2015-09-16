@@ -216,7 +216,7 @@ namespace ts {
             if (!cachedProgram) {
                 if (configFileName) {
 
-                    let result = readConfigFile(configFileName);
+                    let result = readConfigFile(configFileName, sys.readFile);
                     if (result.error) {
                         reportDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);

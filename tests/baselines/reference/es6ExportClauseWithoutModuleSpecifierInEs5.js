@@ -14,11 +14,11 @@ export module uninstantiated {
 }
 
 //// [client.ts]
-export { c } from "server";
-export { c as c2 } from "server";
-export { i, m as instantiatedModule } from "server";
-export { uninstantiated } from "server";
-export { x } from "server";
+export { c } from "./server";
+export { c as c2 } from "./server";
+export { i, m as instantiatedModule } from "./server";
+export { uninstantiated } from "./server";
+export { x } from "./server";
 
 //// [server.js]
 var c = (function () {
@@ -33,13 +33,13 @@ var m;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
 //// [client.js]
-var server_1 = require("server");
+var server_1 = require("./server");
 exports.c = server_1.c;
-var server_2 = require("server");
+var server_2 = require("./server");
 exports.c2 = server_2.c;
-var server_3 = require("server");
+var server_3 = require("./server");
 exports.instantiatedModule = server_3.m;
-var server_4 = require("server");
+var server_4 = require("./server");
 exports.x = server_4.x;
 
 
@@ -55,8 +55,8 @@ export declare var x: number;
 export declare module uninstantiated {
 }
 //// [client.d.ts]
-export { c } from "server";
-export { c as c2 } from "server";
-export { i, m as instantiatedModule } from "server";
-export { uninstantiated } from "server";
-export { x } from "server";
+export { c } from "./server";
+export { c as c2 } from "./server";
+export { i, m as instantiatedModule } from "./server";
+export { uninstantiated } from "./server";
+export { x } from "./server";

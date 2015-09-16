@@ -206,6 +206,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
+            /** If removeComments is true, no leading-comments needed to be emitted **/
+            let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
+
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 initializeEmitterWithSourceMaps();
             }
@@ -1401,8 +1404,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                     
                     emit(node.name);
-                    write("=");
-                    emit(node.initializer);
+                    if (node.initializer) {
+                        write("=");
+                        emit(node.initializer);
+                    }
                 }
 
                 function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
@@ -2541,7 +2546,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
                             !(operand.kind === SyntaxKind.CallExpression && parentNode.kind === SyntaxKind.NewExpression) &&
-                            !(operand.kind === SyntaxKind.FunctionExpression && parentNode.kind === SyntaxKind.CallExpression)) {
+                            !(operand.kind === SyntaxKind.FunctionExpression && parentNode.kind === SyntaxKind.CallExpression) &&
+                            !(operand.kind === SyntaxKind.NumericLiteral && parentNode.kind === SyntaxKind.PropertyAccessExpression)) {
                             emit(operand);
                             return;
                         }
@@ -3450,6 +3456,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitExportSpecifierInSystemModule(specifier: ExportSpecifier): void {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, specifier);
                 Debug.assert(compilerOptions.module === ModuleKind.System);
+
+                if (!resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name) && !resolver.isValueAliasDeclaration(specifier) ) {
+                    return;
+                }
                 
                 writeLine();
                 emitStart(specifier.name);
@@ -3523,18 +3533,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function ensureIdentifier(expr: Expression): Expression {
+                /**
+                 * Ensures that there exists a declared identifier whose value holds the given expression.
+                 * This function is useful to ensure that the expression's value can be read from in subsequent expressions.
+                 * Unless 'reuseIdentifierExpressions' is false, 'expr' will be returned if it is just an identifier.
+                 *
+                 * @param expr the expression whose value needs to be bound.
+                 * @param reuseIdentifierExpressions true if identifier expressions can simply be returned;
+                 *                                   false if it is necessary to always emit an identifier.
+                 */
+                function ensureIdentifier(expr: Expression, reuseIdentifierExpressions: boolean): Expression {
                     verifyStackBehavior(StackBehavior.Unspecified);
                     
-                    if (expr.kind !== SyntaxKind.Identifier) {
-                        let identifier = createTempVariable(TempFlags.Auto);
-                        if (!canDefineTempVariablesInPlace) {
-                            recordTempDeclaration(identifier);
-                        }
-                        emitAssignment(identifier, expr, /*isTempVariable*/ true);
-                        expr = identifier;
+                    if (expr.kind === SyntaxKind.Identifier && reuseIdentifierExpressions) {
+                        return expr;
                     }
-                    return expr;
+
+                    let identifier = createTempVariable(TempFlags.Auto);
+                    if (!canDefineTempVariablesInPlace) {
+                        recordTempDeclaration(identifier);
+                    }
+                    emitAssignment(identifier, expr, /*isTempVariable*/ true);
+                    return identifier;
                 }
 
                 function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
@@ -3544,7 +3564,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (properties.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = ensureIdentifier(value);
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                     }
                     
                     pushNode(target);
@@ -3567,7 +3587,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (elements.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = ensureIdentifier(value);
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                     }
                     
                     pushNode(target);
@@ -3622,7 +3642,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (parentNode.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
-                        value = ensureIdentifier(value);
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                         emitDestructuringAssignment(target, value);
                         write(", ");
                         emit(value);
@@ -3632,7 +3652,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function emitBindingElement(target: BindingElement, value: Expression) {
+                function emitBindingElement(target: BindingElement | VariableDeclaration, value: Expression) {
                     verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, target);
                     
                     if (target.initializer) {
@@ -3645,15 +3665,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     
                     if (isBindingPattern(target.name)) {
-                        let pattern = <BindingPattern>target.name;
-                        let elements = pattern.elements;
-                        if (elements.length !== 1) {
-                            // For anything but a single element destructuring we need to generate a temporary
-                            // to ensure value is evaluated exactly once.
-                            value = ensureIdentifier(value);
+                        const pattern = <BindingPattern>target.name;
+                        const elements = pattern.elements;
+                        const numElements = elements.length;
+
+                        if (numElements !== 1) {
+                            // For anything other than a single-element destructuring we need to generate a temporary
+                            // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+                            // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+                            // so in that case, we'll intentionally create that temporary.
+                            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0);
                         }
                         pushNode(pattern);
-                        for (let i = 0; i < elements.length; i++) {
+                        for (let i = 0; i < numElements; i++) {
                             let element = elements[i];
                             pushNode(element);
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
@@ -3666,7 +3690,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     // Rewrite element to a declaration that accesses array element at index i
                                     emitBindingElement(element, createElementAccessExpression3(value, i));
                                 }
-                                else if (i === elements.length - 1) {
+                                else if (i === numElements - 1) {
                                     emitBindingElement(element, createSliceCall(value, i));
                                 }
                             }
@@ -4014,8 +4038,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
                 if (nodeIsMissing(node.body)) {
-                    emitOnlyPinnedOrTripleSlashComments(node);
-                    return;
+                    return emitCommentsOnNotEmittedNode(node);
                 }
 
                 // TODO (yuisu) : we should not have special cases to condition emitting comments
@@ -4548,7 +4571,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
                             pushNode(member);
-                            emitOnlyPinnedOrTripleSlashComments(member);
+                            return emitCommentsOnNotEmittedNode(member);
                             popNode();
                             return;
                         }
@@ -4622,7 +4645,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else if (member.kind === SyntaxKind.MissingDeclaration) {
-                        emitOnlyPinnedOrTripleSlashComments(member);
+                        emitCommentsOnNotEmittedNode(member);
                     }
                 });
             }
@@ -4633,10 +4656,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 for (let member of node.members) {
                     pushNode(member);
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
-                        emitOnlyPinnedOrTripleSlashComments(member);
+                        emitCommentsOnNotEmittedNode(member);
                     }
                     else if (member.kind === SyntaxKind.MissingDeclaration) {
-                        emitOnlyPinnedOrTripleSlashComments(member);
+                        emitCommentsOnNotEmittedNode(member);
                     }
                     else if (member.kind === SyntaxKind.MethodDeclaration ||
                         member.kind === SyntaxKind.GetAccessor ||
@@ -4699,7 +4722,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 forEach(node.members, member => {
                     pushNode(member);
                     if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
-                        emitOnlyPinnedOrTripleSlashComments(member);
+                        emitCommentsOnNotEmittedNode(member);
                     }
                     // Check if there is any non-static property assignment
                     if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
@@ -5468,67 +5491,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSerializedTypeNode(node: TypeNode) {
                 verifyStackBehavior(StackBehavior.ParentIsOnTopOfStack, node);
                 
-                if (!node) {
-                    return;
+                if (node) {
+
+                    switch (node.kind) {
+                        case SyntaxKind.VoidKeyword:
+                            write("void 0");
+                            return;
+
+                        case SyntaxKind.ParenthesizedType:
+                            pushNode(node);
+                            emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
+                            popNode();
+                            return;
+
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                            write("Function");
+                            return;
+
+                        case SyntaxKind.ArrayType:
+                        case SyntaxKind.TupleType:
+                            write("Array");
+                            return;
+
+                        case SyntaxKind.TypePredicate:
+                        case SyntaxKind.BooleanKeyword:
+                            write("Boolean");
+                            return;
+
+                        case SyntaxKind.StringKeyword:
+                        case SyntaxKind.StringLiteral:
+                            write("String");
+                            return;
+
+                        case SyntaxKind.NumberKeyword:
+                            write("Number");
+                            return;
+
+                        case SyntaxKind.SymbolKeyword:
+                            write("Symbol");
+                            return;
+
+                        case SyntaxKind.TypeReference:
+                            pushNode(node);
+                            emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
+                            popNode();
+                            return;
+
+                        case SyntaxKind.TypeQuery:
+                        case SyntaxKind.TypeLiteral:
+                        case SyntaxKind.UnionType:
+                        case SyntaxKind.IntersectionType:
+                        case SyntaxKind.AnyKeyword:
+                            break;
+
+                        default:
+                            Debug.fail("Cannot serialize unexpected type node.");
+                            break;
+                    }
                 }
-                
-                switch (node.kind) {
-                    case SyntaxKind.VoidKeyword:
-                        write("void 0");
-                        return;
-
-                    case SyntaxKind.ParenthesizedType:
-                        pushNode(node);
-                        emitSerializedTypeNode((<ParenthesizedTypeNode>node).type);
-                        popNode();
-                        return;
-
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                        write("Function");
-                        return;
-
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                        write("Array");
-                        return;
-
-                    case SyntaxKind.TypePredicate:
-                    case SyntaxKind.BooleanKeyword:
-                        write("Boolean");
-                        return;
-
-                    case SyntaxKind.StringKeyword:
-                    case SyntaxKind.StringLiteral:
-                        write("String");
-                        return;
-
-                    case SyntaxKind.NumberKeyword:
-                        write("Number");
-                        return;
-
-                    case SyntaxKind.SymbolKeyword:
-                        write("Symbol");
-                        return;
-
-                    case SyntaxKind.TypeReference:
-                        pushNode(node);
-                        emitSerializedTypeReferenceNode(<TypeReferenceNode>node);
-                        popNode();
-                        return;
-
-                    case SyntaxKind.TypeQuery:
-                    case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.IntersectionType:
-                    case SyntaxKind.AnyKeyword:
-                        break;
-
-                    default:
-                        Debug.fail("Cannot serialize unexpected type node.");
-                        break;
-                }
-
                 write("Object");
             }
 
@@ -5712,7 +5733,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                emitOnlyPinnedOrTripleSlashComments(node);
+                emitCommentsOnNotEmittedNode(node);
             }
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
@@ -5853,8 +5874,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let shouldEmit = shouldEmitModuleDeclaration(node);
 
                 if (!shouldEmit) {
-                    emitOnlyPinnedOrTripleSlashComments(node);
-                    return;
+                    return emitCommentsOnNotEmittedNode(node);
                 }
                 
                 let hoistedInDeclarationScope = shouldHoistDeclarationInSystemJsModule(node);
@@ -6749,7 +6769,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             && (<VariableDeclaration | BindingElement>node).name.kind === SyntaxKind.Identifier;
                 }
                 
-                return isInternalModuleImportEqualsDeclaration(node);
+                return isInternalModuleImportEqualsDeclaration(node) && resolver.isValueAliasDeclaration(node);
             }
 
             function shouldHoistVariable(node: VariableDeclaration | VariableDeclarationList | BindingElement, checkIfSourceFileLevelDecl: boolean): boolean {
@@ -7441,7 +7461,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     verifyStackBehavior(StackBehavior.ParentIsOnTopOfStack, node);
                     
                     if (node.flags & NodeFlags.Ambient || isMissingDeclaration(node)) {
-                        return visitNodeWithPushStackBehavior(node, emitOnlyPinnedOrTripleSlashComments);
+                        return emitCommentsOnNotEmittedNode(node);
                     }
 
                     if (isSpecializedCommentHandling(node)) {
@@ -7729,24 +7749,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            /**
-             * Removes all but the pinned or triple slash comments.
-             * @param ranges The array to be filtered
-             * @param onlyPinnedOrTripleSlashComments whether the filtering should be performed.
-             */
-            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
-                verifyStackBehavior(StackBehavior.Unspecified);
-                
-                // If we're removing comments, then we want to strip out all but the pinned or
-                // triple slash comments.
-                if (ranges && onlyPinnedOrTripleSlashComments) {
-                    ranges = filter(ranges, isPinnedOrTripleSlashComment);
-                    if (ranges.length === 0) {
-                        return undefined;
-                    }
-                }
+            function isPinnedComments(comment: CommentRange) {
+                return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+            }
 
-                return ranges;
+            /**
+             * Determine if the given comment is a triple-slash
+             *
+             * @return true if the comment is a triple-slash comment else false
+             **/
+            function isTripleSlashComment(comment: CommentRange) {
+                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+                // so that we don't end up computing comment string and doing match for all // comments
+                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                    comment.pos + 2 < comment.end &&
+                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
+                    let textSubStr = currentSourceFile.text.substring(comment.pos, comment.end);
+                    return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                        textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
+                        true : false;
+                }
+                return false;
             }
 
             function getLeadingCommentsToEmit(node: Node) {
@@ -7780,36 +7804,59 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitOnlyPinnedOrTripleSlashComments(node: Node) {
+            /**
+             * Emit comments associated with node that will not be emitted into JS file
+             */
+            function emitCommentsOnNotEmittedNode(node: Node) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ true);
+                emitLeadingCommentsWorker(node, /*isEmittedNode:*/ false);
             }
 
             function emitLeadingComments(node: Node) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
                 
-                return emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                return emitLeadingCommentsWorker(node, /*isEmittedNode:*/ true);
             }
 
-            function emitLeadingCommentsWorker(node: Node, onlyPinnedOrTripleSlashComments: boolean) {
+            function emitLeadingCommentsWorker(node: Node, isEmittedNode: boolean) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
-                
-                // If the caller only wants pinned or triple slash comments, then always filter
-                // down to that set.  Otherwise, filter based on the current compiler options.
-                let leadingComments = filterComments(getLeadingCommentsToEmit(node), onlyPinnedOrTripleSlashComments);
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+            
+                let leadingComments: CommentRange[];
+                if (isEmittedNode) {
+                    leadingComments = getLeadingCommentsToEmit(node);
+                }
+                else {
+                    // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
+                    // unless it is a triple slash comment at the top of the file.
+                    // For Example:
+                    //      /// <reference-path ...>
+                    //      declare var x;
+                    //      /// <reference-path ...>
+                    //      interface F {}
+                    //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
+                    if (node.pos === 0) {
+                        leadingComments = filter(getLeadingCommentsToEmit(node), isTripleSlashComment);
+                    }
+                }
 
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator:*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
                 verifyStackBehavior(StackBehavior.NodeIsOnTopOfStack, node);
-                
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 // Emit the trailing comments only if the parent's end doesn't match
-                let trailingComments = filterComments(getTrailingCommentsToEmit(node), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                let trailingComments = getTrailingCommentsToEmit(node);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
@@ -7821,15 +7868,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              *        ^ => pos; the function will emit "comment1" in the emitJS
              */
             function emitTrailingCommentsOfPosition(pos: number) {
-                let trailingComments = filterComments(getTrailingCommentRanges(currentSourceFile.text, pos), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments); 
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
+                let trailingComments = getTrailingCommentRanges(currentSourceFile.text, pos);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitLeadingCommentsOfPosition(pos: number) {
+            function emitLeadingCommentsOfPositionWorker(pos: number) {
                 verifyStackBehavior(StackBehavior.Unspecified);
-                
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+
                 let leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
@@ -7840,7 +7894,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
 
-                leadingComments = filterComments(leadingComments, compilerOptions.removeComments);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -7849,8 +7902,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitDetachedComments(node: TextRange) {
                 verifyStackBehavior(StackBehavior.Unspecified);
-                
-                let leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                let leadingComments: CommentRange[];
+                if (compilerOptions.removeComments) {
+                    // removeComments is true, only reserve pinned comment at the top of file
+                    // For example:
+                    //      /*! Pinned Comment */
+                    //
+                    //      var x = 10;
+                    if (node.pos === 0) {
+                        leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments);
+                    }
+                }
+                else {
+                    // removeComments is false, just get detached as normal and bypass the process to filter comment
+                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                }
+
                 if (leadingComments) {
                     let detachedComments: CommentRange[] = [];
                     let lastComment: CommentRange;
@@ -7898,22 +7965,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let shebang = getShebang(currentSourceFile.text);
                 if (shebang) {
                     write(shebang);
-                }
-            }
-
-            function isPinnedOrTripleSlashComment(comment: CommentRange) {
-                verifyStackBehavior(StackBehavior.Unspecified);
-                
-                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-                    return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-                }
-                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-                // so that we don't end up computing comment string and doing match for all // comments
-                else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
-                    comment.pos + 2 < comment.end &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
-                    currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
-                    return true;
                 }
             }
             
