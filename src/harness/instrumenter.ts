@@ -3,11 +3,15 @@ var fs: any = require('fs');
 var path: any = require('path');
 
 function instrumentForRecording(fn: string, tscPath: string) {
-    instrument(tscPath, 'ts.sys = Playback.wrapSystem(ts.sys); ts.sys.startRecord("' + fn + '");', 'ts.sys.endRecord();');
+    instrument(tscPath, `
+ts.sys = Playback.wrapSystem(ts.sys);
+ts.sys.startRecord("${ fn }");`, `ts.sys.endRecord();`);
 }
 
 function instrumentForReplay(logFilename: string, tscPath: string) {
-    instrument(tscPath, 'ts.sys = Playback.wrapSystem(ts.sys); ts.sys.startReplay("' + logFilename + '");');
+    instrument(tscPath, `
+ts.sys = Playback.wrapSystem(ts.sys);
+ts.sys.startReplay("${ logFilename }");`);
 }
 
 function instrument(tscPath: string, prepareCode: string, cleanupCode: string = '') {

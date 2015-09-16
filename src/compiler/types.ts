@@ -2117,16 +2117,29 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOption {
+    export interface CommandLineOptionBase {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
-        error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
         experimental?: boolean;
     }
+
+    /* @internal */
+    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
+        type: string;                   // "string" | "number" | "boolean"
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
+        type: Map<number>;             // an object literal mapping named values to actual values
+        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
 
     /* @internal */
     export const enum CharacterCodes {
