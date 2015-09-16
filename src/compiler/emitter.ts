@@ -206,11 +206,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     increaseIndent();
                     write("return ");
                 },
-                [ModuleKind.System]() { //TODO: handle external deps with system
+                [ModuleKind.System]() {
                     exportFunctionForFile = makeUniqueName("exports");
                     let deps: string[] = [];
                     forEachKey(bundleDependenciesMap, name => {deps.push(`"${name}"`);});
-                    console.log(deps);
                     writeLine();
                     write(`System.register([${deps.join(", ")}], function(${exportFunctionForFile}) {`);
                     writeLine();
@@ -391,23 +390,23 @@ var __define = (this && this.__define) || (function() {
             switch(part) {
                 case "":
                 case ".":
-                break;
+                    break;
                 case "..":
-                if (result.length <= 1) {
-                    if (result[0] === "..") {
-                        result.push("..");
-                        break;
+                    if (result.length <= 1) {
+                        if (result[0] === "..") {
+                            result.push("..");
+                            break;
+                        }
+                        else if (result[0] === "." || result[0] === "") {
+                            result[0] = "..";
+                            break;
+                        }
                     }
-                    else if (result[0] === "." || result[0] === "") {
-                        result[0] = "..";
-                        break;
-                    }
-                }
-                result.pop();
-                break;
+                    result.pop();
+                    break;
                 default:
-                result.push(part);
-                break;
+                    result.push(part);
+                    break;
             }
         });
         if (result[0] === "") result.shift();
