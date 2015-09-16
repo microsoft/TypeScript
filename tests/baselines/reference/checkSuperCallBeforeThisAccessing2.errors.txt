@@ -1,0 +1,16 @@
+tests/cases/compiler/checkSuperCallBeforeThisAccessing2.ts(6,9): error TS17006: 'super' has to be called before 'this' accessing.
+
+
+==== tests/cases/compiler/checkSuperCallBeforeThisAccessing2.ts (1 errors) ====
+    class Based { }
+    class Derived extends Based {
+        public x: number;
+        constructor() {
+            this.x = 100;
+            super();
+            ~~~~~~~~
+!!! error TS17006: 'super' has to be called before 'this' accessing.
+            this.x = 10;
+            var that = this;
+        }
+    }

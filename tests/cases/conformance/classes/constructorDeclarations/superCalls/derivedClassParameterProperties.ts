@@ -46,7 +46,7 @@ class Derived6 extends Base {
     constructor(y: string) {
         this.a = 1;
         var b = 2;
-        super(); // ok
+        super(); // error: "super" has to be called before "this" accessing
     }
 }
 
