@@ -140,6 +140,34 @@ namespace ts {
         }
         return result;
     }
+    
+    export function pairwiseMap<T, U>(map: Map<T>, f: (key: string, value: T) => U): U[] {
+        let result: U[];
+        if (map) {
+            result = [];
+            for (let k in map) {
+                result.push(f(k, map[k]));
+            }
+        }
+        return result;
+    }
+    
+    export function flatten<T>(array: T[][]): T[] {
+        if (array) {
+            return [].concat(...array);
+        }
+        return;
+    }
+    
+    export function keys(map: Map<any>): string[] {
+        let result: string[] = [];
+        if (map) {
+            for (let k in map) {
+                result.push(k);
+            }
+        }
+        return result;
+    }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;

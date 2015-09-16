@@ -62,73 +62,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
     });
 };`;
 
-        const defineHelper = `
-var __define = (this && this.__define) || (function() {
-    var cache = {},
-    id = 0,
-    idMap = {},
-    builtinRequire = typeof require === "function" ? require : function() {},
-    normalizeSlashes = function(path) { return path.replace("\\\\", "/"); },
-    forEach = function(array, callback) {
-        for (var i = 0, len = array.length; i < len; i++) {
-            callback(array[i], i);
-        }
-    },
-    resolvePath = function(base, name) {
-        var result = normalizeSlashes(base).split("/");
-        result.pop();
-        forEach(normalizeSlashes(name).split("/"), function(part, index) {
-            switch(part) {
-                case "":
-                case ".":
-                break;
-                case "..":
-                if (result.length <= 1) {
-                    if (result[0] === "..") {
-                        result.push("..");
-                        break;
-                    }
-                    else if (result[0] === "." || result[0] === "") {
-                        result[0] = "..";
-                        break;
-                    }
-                }
-                result.pop();
-                break;
-                default:
-                result.push(part);
-                break;
-            }
-        });
-        if (result[0] === "") result.shift();
-        return "/"+result.join("/");
-    },
-    resolveRequire = function(name, from) {
-        var resolved = resolvePath(from || "/", name);
-        if (typeof cache[resolved] === "function") {
-            cache[resolved]();
-        }
-        return (cache[resolved] ? cache[resolved].exports : builtinRequire(name));
-    },
-    define = function (declaredName, factory) {
-        idMap[++id] = declaredName;
-        var module = {
-            id: id,
-            exports: {}
-        };
-        var require = function(name) {
-            if (typeof name === "number") return resolveRequire(idMap[name]);
-            return resolveRequire(name, declaredName);
-        };
-        cache[declaredName] = function() {
-            cache[declaredName] = module;
-            factory(require, module.exports, module);
-        };
-    };
-    define.require = resolveRequire;
-    return define;
-})();`;
-
         const umdHelper = `(function (deps, factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -244,32 +177,50 @@ var __define = (this && this.__define) || (function() {
 
             /** Called once the emit of the node is done */
             let emitEnd = function (node: Node) { };
+            
+            let bundleDependenciesMap: {[key: string]: string};
 
             /** Called to build the opening part of a bundled module wrapper */
             let emitBundleWrapperStart: Map<() => void>  = {
                 [ModuleKind.CommonJS]() {
                     write("module.exports = ");
                 },
-                [ModuleKind.AMD]() { //TODO: handle external deps with amd better
-                    write("define([\"require\"], function(require){");
+                [ModuleKind.AMD]() {
+                    write("define([\"require\"");
+                    forEachKey(bundleDependenciesMap, name => write(`, "${name}"`));
+                    write("], function(require");
+                    forEachValue(bundleDependenciesMap, name => write(`, ${name}`));
+                    write("){");
                     writeLine();
                     increaseIndent();
                     write("return ");
                 },
                 [ModuleKind.UMD]() {
                     writeLines(umdHelper);
-                    write("[\"require\"], function(require){");
+                    write("[\"require\"");
+                    forEachKey(bundleDependenciesMap, name => write(`, "${name}"`));
+                    write("], function(require");
+                    forEachValue(bundleDependenciesMap, name => write(`, ${name}`));
+                    write("){");
                     writeLine();
                     increaseIndent();
                     write("return ");
                 },
                 [ModuleKind.System]() { //TODO: handle external deps with system
-                    currentSourceFile = <any>{identifiers: []};
                     exportFunctionForFile = makeUniqueName("exports");
+                    let deps: string[] = [];
+                    forEachKey(bundleDependenciesMap, name => {deps.push(`"${name}"`);});
+                    console.log(deps);
                     writeLine();
-                    write(`System.register([], function(${exportFunctionForFile}) {`);
+                    write(`System.register([${deps.join(", ")}], function(${exportFunctionForFile}) {`);
                     writeLine();
                     increaseIndent();
+                    let idents: string[] = [];
+                    forEachValue(bundleDependenciesMap, name => {idents.push(name);});
+                    forEach(idents, id => {
+                        write(`var ${id};`);
+                        writeLine();
+                    });
                     let exportStarName = emitExportStarFunction(/*localNames*/undefined);
                     exportFunctionForFile = undefined;
                     currentSourceFile = undefined;
@@ -277,7 +228,11 @@ var __define = (this && this.__define) || (function() {
                     write("return {")
                     writeLine();
                     increaseIndent();
-                    write("setters: [],");
+                    let setters = map(idents, id => `function(m) {
+    ${id} = m;
+}`);
+                    writeLines("setters: ["+setters.join(","+newLine));
+                    write("],");
                     writeLine();
                     write("execute: function() {");
                     writeLine();
@@ -350,11 +305,12 @@ var __define = (this && this.__define) || (function() {
             else {
                 let originalKind = compilerOptions.module;
                 if (compilerOptions.bundle) {
+                    buildBundleDependenciesMap();
                     compilerOptions.module = ModuleKind.CommonJS;
                     emitBundleWrapperStart[originalKind]();
                     write("(function() {");
                     increaseIndent();
-                    writeLines(defineHelper);
+                    writeDefineHelper();
                     forEach(host.getSourceFiles(), emitEmitHelpers);
                     writeLine();
                 }
@@ -400,6 +356,94 @@ var __define = (this && this.__define) || (function() {
                 decreaseIndent();
                 writeLine();
                 write("});");
+            }
+
+            function buildBundleDependenciesMap(): void {
+                let identifiers = deduplicate(flatten(map(host.getSourceFiles(), file => keys(file.identifiers))));
+                let identifiersMap: Map<string> = {};
+                forEach(identifiers, name => identifiersMap[name] = escapeIdentifier(name));
+                currentSourceFile = <any>{identifiers: identifiersMap}; // Enables bundlewide makeUniqueName
+                let deps = deduplicate(filter(flatten(map(host.getSourceFiles(), file => pairwiseMap(file.resolvedModules, (importName, resolvedModule) => (!resolvedModule || resolvedModule.isExternalLibraryImport) ? importName : undefined))), name => !!name));
+                let depsIdentifiers = map(deps, name => makeUniqueName(escapeIdentifier(makeIdentifierFromModuleName(name))));
+                bundleDependenciesMap = {};
+                forEach(deps, (name, index) => {
+                    bundleDependenciesMap[name] = depsIdentifiers[index];
+                });
+            }
+            
+            function writeDefineHelper(): void {
+                writeLines(`
+var __define = (this && this.__define) || (function() {
+    var cache = {},
+    id = 0,
+    idMap = {},
+    builtinRequire = typeof require === "function" ? require : function() {},
+    normalizeSlashes = function(path) { return path.replace("\\\\", "/"); },
+    forEach = function(array, callback) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            callback(array[i], i);
+        }
+    },
+    resolvePath = function(base, name) {
+        var result = normalizeSlashes(base).split("/");
+        result.pop();
+        forEach(normalizeSlashes(name).split("/"), function(part, index) {
+            switch(part) {
+                case "":
+                case ".":
+                break;
+                case "..":
+                if (result.length <= 1) {
+                    if (result[0] === "..") {
+                        result.push("..");
+                        break;
+                    }
+                    else if (result[0] === "." || result[0] === "") {
+                        result[0] = "..";
+                        break;
+                    }
+                }
+                result.pop();
+                break;
+                default:
+                result.push(part);
+                break;
+            }
+        });
+        if (result[0] === "") result.shift();
+        return "/"+result.join("/");
+    },
+    initializeAndGet = function(resolved) {
+        if (typeof cache[resolved] === "function") {
+            cache[resolved]();
+        }
+        return (cache[resolved] && cache[resolved].exports);
+    },
+    resolveRequire = function(name, from) {`);
+                forEachKey(bundleDependenciesMap, name => {
+                    writeLines(`        if (name === "${name}") return ${bundleDependenciesMap[name]};`);
+                });
+                writeLines(`        var resolved = resolvePath(from || "/", name);
+        return (initializeAndGet(resolved) || builtinRequire(name));
+    },
+    define = function (declaredName, factory) {
+        idMap[++id] = declaredName;
+        var module = {
+            id: id,
+            exports: {}
+        };
+        var require = function(name) {
+            if (typeof name === "number") return initializeAndGet(idMap[name]);
+            return resolveRequire(name, declaredName);
+        };
+        cache[declaredName] = function() {
+            cache[declaredName] = module;
+            factory(require, module.exports, module);
+        };
+    };
+    define.require = resolveRequire;
+    return define;
+})();`);
             }
 
             function isUniqueName(name: string): boolean {
