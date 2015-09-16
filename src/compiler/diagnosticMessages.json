@@ -627,10 +627,6 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
-        "category": "Error",
-        "code": 1204
-    },
     "Decorators are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1205
@@ -2102,7 +2098,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -2186,7 +2182,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
