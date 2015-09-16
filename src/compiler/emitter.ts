@@ -377,7 +377,7 @@ var __define = (this && this.__define) || (function() {
     var cache = {},
     id = 0,
     idMap = {},
-    builtinRequire = typeof require === "function" ? require : function() {},
+    builtinRequire = typeof require === "function" ? require : function(name) { throw new Error("Could not find module named \""+name+"\"."); },
     normalizeSlashes = function(path) { return path.replace("\\\\", "/"); },
     forEach = function(array, callback) {
         for (var i = 0, len = array.length; i < len; i++) {
