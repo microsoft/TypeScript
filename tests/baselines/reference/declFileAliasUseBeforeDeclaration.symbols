@@ -5,7 +5,7 @@ export function bar(a: foo.Foo) { }
 >foo : Symbol(foo, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 35))
 >Foo : Symbol(foo.Foo, Decl(declFileAliasUseBeforeDeclaration_foo.ts, 0, 0))
 
-import foo = require("declFileAliasUseBeforeDeclaration_foo");
+import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 >foo : Symbol(foo, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 35))
 
 === tests/cases/compiler/declFileAliasUseBeforeDeclaration_foo.ts ===

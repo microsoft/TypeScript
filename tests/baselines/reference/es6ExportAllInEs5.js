@@ -14,7 +14,7 @@ export module uninstantiated {
 }
 
 //// [client.ts]
-export * from "server";
+export * from "./server";
 
 //// [server.js]
 var c = (function () {
@@ -32,7 +32,7 @@ exports.x = 10;
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(require("server"));
+__export(require("./server"));
 
 
 //// [server.d.ts]
@@ -47,4 +47,4 @@ export declare var x: number;
 export declare module uninstantiated {
 }
 //// [client.d.ts]
-export * from "server";
+export * from "./server";

@@ -6,7 +6,7 @@ export class someClass {
 }
 
 //// [aliasAssignments_1.ts]
-import moduleA = require("aliasAssignments_moduleA");
+import moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error
 var y = 1;
@@ -21,7 +21,7 @@ var someClass = (function () {
 })();
 exports.someClass = someClass;
 //// [aliasAssignments_1.js]
-var moduleA = require("aliasAssignments_moduleA");
+var moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error
 var y = 1;

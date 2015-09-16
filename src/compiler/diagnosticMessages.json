@@ -1713,6 +1713,10 @@
         "category": "Error",
         "code": 2655
     },
+    "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
+        "category": "Error",
+        "code": 2656
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2250,6 +2254,11 @@
         "category": "Error",
         "code": 6062
     },
+    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
+        "category": "Error",
+        "code": 6063
+    },
+
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
@@ -2274,7 +2283,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
+    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },

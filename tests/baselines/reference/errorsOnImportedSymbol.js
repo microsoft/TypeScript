@@ -9,7 +9,7 @@ interface Sammy {
 export = Sammy;
 
 //// [errorsOnImportedSymbol_1.ts]
-import Sammy = require("errorsOnImportedSymbol_0");
+import Sammy = require("./errorsOnImportedSymbol_0");
 var x = new Sammy.Sammy();
 var y = Sammy.Sammy(); 
 
