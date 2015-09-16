@@ -2061,7 +2061,8 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
-        moduleResolution?: ModuleResolutionKind
+        moduleResolution?: ModuleResolutionKind;
+        consumeJsFiles?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

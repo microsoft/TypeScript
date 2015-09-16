@@ -6,8 +6,7 @@
     "project": "DifferentNamesNotSpecified",
     "resolvedInputFiles": [
         "lib.d.ts",
-        "DifferentNamesNotSpecified/a.ts",
-        "DifferentNamesNotSpecified/b.js"
+        "DifferentNamesNotSpecified/a.ts"
     ],
     "emittedFiles": [
         "test.js",

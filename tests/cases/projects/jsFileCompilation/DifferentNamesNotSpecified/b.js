@@ -1,1 +1,1 @@
-var test2 = 10; // Should get compiled
+var test2 = 10; // Shouldnt get compiled

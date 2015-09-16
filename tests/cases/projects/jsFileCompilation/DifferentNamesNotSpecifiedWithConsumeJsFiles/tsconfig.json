@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "out": "test.js",
+    "consumeJsFiles":  true
+  }
+}

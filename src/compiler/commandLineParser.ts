@@ -245,6 +245,10 @@ namespace ts {
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        },
+        {
+            name: "consumeJsFiles",
+            type: "boolean",
         }
     ];
 
@@ -414,8 +418,9 @@ namespace ts {
     export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
 
+        let options = getCompilerOptions();
         return {
-            options: getCompilerOptions(),
+            options,
             fileNames: getFileNames(),
             errors
         };
@@ -474,7 +479,10 @@ namespace ts {
             }
             else {
                 let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude)).concat(host.readDirectory(basePath, ".js", exclude));
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                if (options.consumeJsFiles) {
+                    sysFiles = sysFiles.concat(host.readDirectory(basePath, ".js", exclude));
+                }
                 for (let i = 0; i < sysFiles.length; i++) {
                     let name = sysFiles[i];
                     if (fileExtensionIs(name, ".js")) {
