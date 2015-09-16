@@ -1,8 +1,9 @@
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(8,9): error TS17006: 'super' has to be called before 'this' accessing.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(14,15): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(20,21): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts (2 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts (3 errors) ====
     class Base {
         x: string;
         constructor(a) { }
@@ -11,6 +12,8 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class Derived extends Base {
         constructor() {
             super(this); // ok
+            ~~~~~~~~~~~~
+!!! error TS17006: 'super' has to be called before 'this' accessing.
         }
     }
     

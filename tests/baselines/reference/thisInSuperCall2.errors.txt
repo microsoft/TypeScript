@@ -1,7 +1,8 @@
+tests/cases/compiler/thisInSuperCall2.ts(8,9): error TS17006: 'super' has to be called before 'this' accessing.
 tests/cases/compiler/thisInSuperCall2.ts(16,15): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/compiler/thisInSuperCall2.ts (1 errors) ====
+==== tests/cases/compiler/thisInSuperCall2.ts (2 errors) ====
     class Base { 
         constructor(a: any) {}
     }
@@ -9,7 +10,9 @@ tests/cases/compiler/thisInSuperCall2.ts(16,15): error TS2332: 'this' cannot be 
     class Foo extends Base {
         public x: number;
         constructor() {
-            super(this); // no error
+            super(this); // error: "super" has to be called before "this" accessing
+            ~~~~~~~~~~~~
+!!! error TS17006: 'super' has to be called before 'this' accessing.
         }
     }
     
