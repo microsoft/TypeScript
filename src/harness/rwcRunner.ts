@@ -84,9 +84,9 @@ module RWC {
                     }
 
                     // Load the files
-                    ts.forEach(fileNames, fileName => {
+                    for (let fileName of fileNames) {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
-                    });
+                    }
 
                     // Add files to compilation
                     let isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
