@@ -474,7 +474,7 @@ namespace ts {
             }
             else {
                 let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude)).concat(host.readDirectory(basePath, ".js", exclude));
                 for (let i = 0; i < sysFiles.length; i++) {
                     let name = sysFiles[i];
                     if (fileExtensionIs(name, ".js")) {

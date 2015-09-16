@@ -263,7 +263,13 @@ class ProjectRunner extends RunnerBase {
             }
 
             function readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-                return Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude);
+                let harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude);
+                let result: string[] = [];
+                for (let i = 0; i < harnessReadDirectoryResult.length; i++) {
+                    result[i] = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, harnessReadDirectoryResult[i],
+                        getCurrentDirectory(), Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+                }
+                return result;
             }
 
             function fileExists(fileName: string): boolean {
