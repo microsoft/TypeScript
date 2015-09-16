@@ -2116,7 +2116,7 @@ namespace ts {
     }
 
     /* @internal */
-    interface CommandLineOptionBase {
+    export interface CommandLineOptionBase {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         isFilePath?: boolean;               // True if option value is a path or fileName
