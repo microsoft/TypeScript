@@ -611,6 +611,7 @@ namespace ts {
         enum_declarations_can_only_be_used_in_a_ts_file: { code: 8015, category: DiagnosticCategory.Error, key: "'enum declarations' can only be used in a .ts file." },
         type_assertion_expressions_can_only_be_used_in_a_ts_file: { code: 8016, category: DiagnosticCategory.Error, key: "'type assertion expressions' can only be used in a .ts file." },
         decorators_can_only_be_used_in_a_ts_file: { code: 8017, category: DiagnosticCategory.Error, key: "'decorators' can only be used in a .ts file." },
+        js_file_cannot_be_referenced_in_ts_file_when_emitting_declarations: { code: 8018, category: DiagnosticCategory.Error, key: ".js file cannot be referenced in .ts file when emitting declarations." },
         Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses: { code: 9002, category: DiagnosticCategory.Error, key: "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses." },
         class_expressions_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "'class' expressions are not currently supported." },
         JSX_attributes_must_only_be_assigned_a_non_empty_expression: { code: 17000, category: DiagnosticCategory.Error, key: "JSX attributes must only be assigned a non-empty 'expression'." },

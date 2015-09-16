@@ -68,16 +68,22 @@ namespace ts {
             if (!compilerOptions.noResolve) {
                 let addedGlobalFileReference = false;
                 forEach(root.referencedFiles, fileReference => {
-                    let referencedFile = tryResolveScriptReference(host, root, fileReference);
+                    if (isJavaScript(fileReference.fileName)) {
+                        reportedDeclarationError = true;
+                        diagnostics.push(createFileDiagnostic(root, fileReference.pos, fileReference.end - fileReference.pos, Diagnostics.js_file_cannot_be_referenced_in_ts_file_when_emitting_declarations));
+                    }
+                    else {
+                        let referencedFile = tryResolveScriptReference(host, root, fileReference);
 
-                    // All the references that are not going to be part of same file
-                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
+                        // All the references that are not going to be part of same file
+                        if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
+                            shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
+                            !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
 
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                            addedGlobalFileReference = true;
+                            writeReferencePath(referencedFile);
+                            if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                                addedGlobalFileReference = true;
+                            }
                         }
                     }
                 });
@@ -108,14 +114,20 @@ namespace ts {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {
-                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+                            if (isJavaScript(fileReference.fileName)) {
+                                reportedDeclarationError = true;
+                                diagnostics.push(createFileDiagnostic(sourceFile, fileReference.pos, fileReference.end - fileReference.pos, Diagnostics.js_file_cannot_be_referenced_in_ts_file_when_emitting_declarations));
+                            }
+                            else {
+                                let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+                                // If the reference file is a declaration file or an external module, emit that reference
+                                if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                    !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
+                                    writeReferencePath(referencedFile);
+                                    emittedReferencedFiles.push(referencedFile);
+                                }
                             }
                         });
                     }
