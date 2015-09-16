@@ -1778,7 +1778,7 @@ namespace ts {
     }
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile)) {
+        if (!isDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
             if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non supported extension file

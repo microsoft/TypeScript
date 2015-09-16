@@ -1,8 +1,6 @@
-error TS5054: Could not write file 'tests/cases/compiler/a.js' which is one of the input files.
 tests/cases/compiler/a.js(1,15): error TS8010: 'types' can only be used in a .ts file.
 
 
-!!! error TS5054: Could not write file 'tests/cases/compiler/a.js' which is one of the input files.
 ==== tests/cases/compiler/a.js (1 errors) ====
     function F(): number { }
                   ~~~~~~

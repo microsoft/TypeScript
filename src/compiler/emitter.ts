@@ -88,7 +88,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
-            else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
+            else if (!isDeclarationFile(targetSourceFile) &&
+                !isJavaScript(targetSourceFile.fileName) &&
+                (compilerOptions.outFile || compilerOptions.out)) {
                 emitFile(compilerOptions.outFile || compilerOptions.out);
             }
         }
@@ -199,7 +201,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if (!isJavaScript(sourceFile.fileName) && !isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
                 });

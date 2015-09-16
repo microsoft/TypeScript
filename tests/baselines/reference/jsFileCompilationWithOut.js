@@ -15,5 +15,3 @@ var c = (function () {
     }
     return c;
 })();
-function foo() {
-}

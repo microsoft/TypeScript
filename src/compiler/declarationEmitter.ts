@@ -104,7 +104,7 @@ namespace ts {
             // Emit references corresponding to this file
             let emittedReferencedFiles: SourceFile[] = [];
             forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {

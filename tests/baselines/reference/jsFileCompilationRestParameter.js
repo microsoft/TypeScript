@@ -2,4 +2,3 @@
 function foo(...a) { }
 
 //// [b.js]
-function foo(...a) { }
