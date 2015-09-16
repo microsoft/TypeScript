@@ -243,7 +243,8 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic
             },
-            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
             name: "noUnusedLabels",
@@ -347,7 +348,7 @@ namespace ts {
                                     options[opt.name] = map[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                 }
                         }
                     }
@@ -460,7 +461,7 @@ namespace ts {
                                     value = optType[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                     value = 0;
                                 }
                             }

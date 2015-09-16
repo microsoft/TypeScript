@@ -2250,6 +2250,11 @@
         "category": "Error",
         "code": 6062
     },
+    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
+        "category": "Error",
+        "code": 6063
+    },
+
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
@@ -2274,7 +2279,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
+    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },
