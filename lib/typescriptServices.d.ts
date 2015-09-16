@@ -566,7 +566,7 @@ declare namespace ts {
         asteriskToken?: Node;
         expression?: Expression;
     }
-    interface BinaryExpression extends Expression {
+    interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -619,7 +619,7 @@ declare namespace ts {
         expression: LeftHandSideExpression;
         argumentExpression?: Expression;
     }
-    interface CallExpression extends LeftHandSideExpression {
+    interface CallExpression extends LeftHandSideExpression, Declaration {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
