@@ -1,10 +1,10 @@
 === tests/cases/compiler/arrayOfExportedClass_1.ts ===
 ///<reference path='arrayOfExportedClass_0.ts'/>
-import Car = require('arrayOfExportedClass_0');
+import Car = require('./arrayOfExportedClass_0');
 >Car : Symbol(Car, Decl(arrayOfExportedClass_1.ts, 0, 0))
 
 class Road {
->Road : Symbol(Road, Decl(arrayOfExportedClass_1.ts, 1, 47))
+>Road : Symbol(Road, Decl(arrayOfExportedClass_1.ts, 1, 49))
 
     public cars: Car[];
 >cars : Symbol(cars, Decl(arrayOfExportedClass_1.ts, 3, 12))
@@ -17,14 +17,14 @@ class Road {
 
         this.cars = cars;
 >this.cars : Symbol(cars, Decl(arrayOfExportedClass_1.ts, 3, 12))
->this : Symbol(Road, Decl(arrayOfExportedClass_1.ts, 1, 47))
+>this : Symbol(Road, Decl(arrayOfExportedClass_1.ts, 1, 49))
 >cars : Symbol(cars, Decl(arrayOfExportedClass_1.ts, 3, 12))
 >cars : Symbol(cars, Decl(arrayOfExportedClass_1.ts, 7, 19))
     }
 }
 
 export = Road;
->Road : Symbol(Road, Decl(arrayOfExportedClass_1.ts, 1, 47))
+>Road : Symbol(Road, Decl(arrayOfExportedClass_1.ts, 1, 49))
 
 === tests/cases/compiler/arrayOfExportedClass_0.ts ===
 class Car {

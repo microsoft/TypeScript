@@ -173,6 +173,20 @@ describe('PreProcessFile:', function () {
                    isLibFile: false
                })  
         });
+
+        it("Correctly handles export import declarations", function () {
+            test("export import a = require(\"m1\");",
+                true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "m1", pos: 26, end: 28 }
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                })
+        });
+
     });
 });
 

@@ -16,7 +16,7 @@ tests/cases/compiler/f2.ts(41,13): error TS2339: Property 'blah' does not exist 
 ==== tests/cases/compiler/f2.ts (10 errors) ====
     
     // all mutations below are illegal and should be fixed
-    import * as stuff from 'f1';
+    import * as stuff from './f1';
     
     var n = 'baz';
     
