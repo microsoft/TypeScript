@@ -1,5 +1,5 @@
 {
-  "scenario": "Verify when same named .ts and .js file exists in the folder but no file is specified in tsconfig.json",
+  "scenario": "Verify when same named .d.ts and .js file exists in the folder but no file is specified in tsconfig.json",
   "projectRoot": "tests/cases/projects/jsFileCompilation",
   "baselineCheck": true,
   "declaration": true,
