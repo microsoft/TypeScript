@@ -723,7 +723,7 @@ namespace ts {
      */
     export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
 
-    export const supportedJsExtensions = supportedExtensions.concat(".js");
+    export const supportedJsExtensions = supportedExtensions.concat(".js", ".jsx");
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
