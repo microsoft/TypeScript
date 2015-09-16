@@ -5197,10 +5197,10 @@ namespace ts {
                 }
 
                 if (source.typePredicate && target.typePredicate) {
-                    let hasDifferentParameterIndex = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
-                    let hasDifferentTypes: boolean;
-                    if (hasDifferentParameterIndex ||
-                        (hasDifferentTypes = !isTypeSubtypeOf(source.typePredicate.type, target.typePredicate.type))) {
+                    let parametersHaveDifferentIndexes = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
+                    let typesAreNotSubtypes: boolean;
+                    if (parametersHaveDifferentIndexes ||
+                        (typesAreNotSubtypes = !isTypeSubtypeOf(source.typePredicate.type, target.typePredicate.type))) {
 
                         if (reportErrors) {
                             let sourceParamText = source.typePredicate.parameterName;
@@ -5208,12 +5208,12 @@ namespace ts {
                             let sourceTypeText = typeToString(source.typePredicate.type);
                             let targetTypeText = typeToString(target.typePredicate.type);
 
-                            if (hasDifferentParameterIndex) {
+                            if (parametersHaveDifferentIndexes) {
                                 reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1,
                                     sourceParamText,
                                     targetParamText);
                             }
-                            else if (hasDifferentTypes) {
+                            else if (typesAreNotSubtypes) {
                                 reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
                                     sourceTypeText,
                                     targetTypeText);
