@@ -1,15 +1,5 @@
 node_modules/
 built/*
-tests/cases/*.js
-tests/cases/*/*.js
-tests/cases/*/*/*.js
-tests/cases/*/*/*/*.js
-tests/cases/*/*/*/*/*.js
-tests/cases/*.js.map
-tests/cases/*/*.js.map
-tests/cases/*/*/*.js.map
-tests/cases/*/*/*/*.js.map
-tests/cases/*/*/*/*/*.js.map
 tests/cases/rwc/*
 tests/cases/test262/*
 tests/cases/perf/*
