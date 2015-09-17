@@ -24,9 +24,9 @@ class NextLineWalker extends Lint.RuleWalker {
             const elseKeyword = getFirstChildOfKind(node, ts.SyntaxKind.ElseKeyword);
             if (this.hasOption(OPTION_ELSE) && !!elseKeyword) {
                 const thenStatementEndLoc = sourceFile.getLineAndCharacterOfPosition(thenStatement.getEnd());
-                const elseKeywordLoc = sourceFile.getLineAndCharacterOfPosition(elseKeyword.getStart());
+                const elseKeywordLoc = sourceFile.getLineAndCharacterOfPosition(elseKeyword.getStart(sourceFile));
                 if (thenStatementEndLoc.line !== (elseKeywordLoc.line - 1)) {
-                    const failure = this.createFailure(elseKeyword.getStart(), elseKeyword.getWidth(), Rule.ELSE_FAILURE_STRING);
+                    const failure = this.createFailure(elseKeyword.getStart(sourceFile), elseKeyword.getWidth(sourceFile), Rule.ELSE_FAILURE_STRING);
                     this.addFailure(failure);
                 }
             }
@@ -40,17 +40,15 @@ class NextLineWalker extends Lint.RuleWalker {
         const catchClause = node.catchClause;
 
         // "visit" try block
-        const tryKeyword = node.getChildAt(0);
         const tryBlock = node.tryBlock;
-        const tryOpeningBrace = tryBlock.getChildAt(0);
 
         if (this.hasOption(OPTION_CATCH) && !!catchClause) {
-            const tryClosingBrace = node.tryBlock.getChildAt(node.tryBlock.getChildCount() - 1);
-            const catchKeyword = catchClause.getChildAt(0);
+            const tryClosingBrace = tryBlock.getLastToken(sourceFile);
+            const catchKeyword = catchClause.getFirstToken(sourceFile);
             const tryClosingBraceLoc = sourceFile.getLineAndCharacterOfPosition(tryClosingBrace.getEnd());
-            const catchKeywordLoc = sourceFile.getLineAndCharacterOfPosition(catchKeyword.getStart());
+            const catchKeywordLoc = sourceFile.getLineAndCharacterOfPosition(catchKeyword.getStart(sourceFile));
             if (tryClosingBraceLoc.line !== (catchKeywordLoc.line - 1)) {
-                const failure = this.createFailure(catchKeyword.getStart(), catchKeyword.getWidth(), Rule.CATCH_FAILURE_STRING);
+                const failure = this.createFailure(catchKeyword.getStart(sourceFile), catchKeyword.getWidth(sourceFile), Rule.CATCH_FAILURE_STRING);
                 this.addFailure(failure);
             }
         }

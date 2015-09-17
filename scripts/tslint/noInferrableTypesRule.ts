@@ -27,8 +27,14 @@ class InferrableTypeWalker extends Lint.RuleWalker {
                         }
                     break;
                     case ts.SyntaxKind.StringKeyword:
-                        if (e.initializer.kind === ts.SyntaxKind.StringLiteral || e.initializer.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
-                            failure = 'string';
+                        switch (e.initializer.kind) {
+                            case ts.SyntaxKind.StringLiteral:
+                            case ts.SyntaxKind.NoSubstitutionTemplateLiteral:
+                            case ts.SyntaxKind.TemplateExpression:
+                                failure = 'string';
+                                break;
+                            default:
+                                break;
                         }
                     break;
                 }
