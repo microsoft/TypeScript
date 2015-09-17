@@ -1,3 +1,4 @@
+// @target: es6
 // @module: commonjs
 // @outFile: bundleCommonjs_bundle.js
 // @bundle: bundleCommonjs_file1
@@ -7,11 +8,11 @@ export class Foo {
 	static CONSTANT = "Foo";
 }
 
-export default function assert(value: boolean) {
+export function assert(value: boolean) {
 	if (!value) throw new Error("Assertion failed!");
 }
 
 
 // @Filename: bundleCommonjs_file1.ts
-import {Foo, default as assert} from "./bundleCommonjs_file0";
+import {Foo, assert} from "./bundleCommonjs_file0";
 assert(Foo.CONSTANT === "Foo");
