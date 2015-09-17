@@ -1,29 +1,41 @@
-var fs = require("fs");
-var path = require("path");
-var child_process = require('child_process');
+import * as fs from "fs";
+import * as path from "path";
+import * as child_process from "child_process";
 
-var tscRoot = path.join(__dirname, "..\\");
-var tscPath = path.join(tscRoot, "built", "instrumented", "tsc.js");
-var rwcTestPath = path.join(tscRoot, "tests", "cases", "rwc", "dt");
-var definitelyTypedRoot = process.argv[2];
+interface Map<T> {
+    [key: string]: T;
+}
+
+declare const __dirname: string;
+declare const process: {
+    argv: string[];
+    env: Map<string>
+}
+
+const tscRoot = path.join(__dirname, "..\\");
+const tscPath = path.join(tscRoot, "built", "instrumented", "tsc.js");
+const rwcTestPath = path.join(tscRoot, "tests", "cases", "rwc", "dt");
+const definitelyTypedRoot = process.argv[2];
 
 function fileExtensionIs(path: string, extension: string): boolean {
-    var pathLen = path.length;
-    var extLen = extension.length;
+    const pathLen = path.length;
+    const extLen = extension.length;
     return pathLen > extLen && path.substr(pathLen - extLen, extLen).toLocaleLowerCase() === extension.toLocaleLowerCase();
 }
 
-function copyFileSync(source, destination) {
-    var text = fs.readFileSync(source);
+function copyFileSync(source: string, destination: string) {
+    let text = fs.readFileSync(source);
     fs.writeFileSync(destination, text);
 }
 
 function importDefinitelyTypedTest(testCaseName: string, testFiles: string[], responseFile: string ) {
-    var cmd = "node " + tscPath + " --module commonjs " + testFiles.join(" ");
-    if (responseFile) cmd += " @" + responseFile;
+    let cmd = "node " + tscPath + " --module commonjs " + testFiles.join(" ");
+    if (responseFile) {
+        cmd += " @" + responseFile;
+    }
 
-    var testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1); 
-    var testDirectoryPath = path.join(process.env["temp"], testDirectoryName);
+    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1); 
+    let testDirectoryPath = path.join(process.env["temp"], testDirectoryName);
     if (fs.existsSync(testDirectoryPath)) {
         throw new Error("Could not create test directory");
     }
@@ -47,8 +59,8 @@ function importDefinitelyTypedTest(testCaseName: string, testFiles: string[], re
             }
 
             // copy generated file to output location
-            var outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
-            var testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
+            let outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
+            let testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
             copyFileSync(outputFilePath, testCasePath);
 
             //console.log("output generated at: " + outputFilePath);
@@ -65,28 +77,32 @@ function importDefinitelyTypedTest(testCaseName: string, testFiles: string[], re
             //console.log("\r\n");
 
         })
-        .on('error', function (error) {
+        .on('error', (error: any) => {
             console.log("==> error " + JSON.stringify(error));
             console.log("\r\n");
         });
 }
 
 function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
-    fs.readdir(definitelyTypedRoot, (err, subDirectorys) => {
-        if (err) throw err;
+    fs.readdir(definitelyTypedRoot, (err, subDirectories) => {
+        if (err) {
+            throw err;
+        }
 
-        subDirectorys
+        subDirectories
             .filter(d => ["_infrastructure", "node_modules", ".git"].indexOf(d) < 0)
             .filter(i => i.indexOf("sipml") >=0 )
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
-                var directoryPath = path.join(definitelyTypedRoot, d);
+                let directoryPath = path.join(definitelyTypedRoot, d);
                 fs.readdir(directoryPath, function (err, files) {
-                    if (err) throw err;
+                    if (err) {
+                        throw err;
+                    }
 
-                    var tsFiles = [];
-                    var testFiles = [];
-                    var paramFile;
+                    let tsFiles: string[] = [];
+                    let testFiles: string[] = [];
+                    let paramFile: string;
 
                     files
                         .map(f => path.join(directoryPath, f))
@@ -99,7 +115,7 @@ function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
 
                     if (testFiles.length === 0) {
                         // no test files but multiple d.ts's, e.g. winjs
-                        var regexp = new RegExp(d + "(([-][0-9])|([\.]d[\.]ts))");
+                        let regexp = new RegExp(d + "(([-][0-9])|([\.]d[\.]ts))");
                         if (tsFiles.length > 1 && tsFiles.every(t => fileExtensionIs(t, ".d.ts") && regexp.test(t))) {
                             tsFiles.forEach(filename => {
                                 importDefinitelyTypedTest(path.basename(filename, ".d.ts"), [filename], paramFile);
