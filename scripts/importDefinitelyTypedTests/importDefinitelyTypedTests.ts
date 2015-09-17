@@ -2,22 +2,37 @@ import * as fs from "fs";
 import * as path from "path";
 import * as child_process from "child_process";
 
+
 interface Map<T> {
     [key: string]: T;
 }
 
-declare const __dirname: string;
-declare const process: {
+declare var process: {
     argv: string[];
-    env: Map<string>
+    env: Map<string>;
+    exit(exitCode?: number): void;
 }
 
-const tscRoot = path.join(__dirname, "..\\");
-const tscPath = path.join(tscRoot, "built", "instrumented", "tsc.js");
-const rwcTestPath = path.join(tscRoot, "tests", "cases", "rwc", "dt");
-const definitelyTypedRoot = process.argv[2];
+main();
+function main() {
+    const [, progName, tscRoot, definitelyTypedRoot] = process.argv;
+    if (process.argv.length !== 4) {
+        if (process.argv.length < 2) {
+            throw "Expected at least 2 argv elements."
+        }
+        console.log("Usage:")
+        console.log(`    node ${path.relative(__dirname, progName)} [TypeScript Repo Root] [DefinitelyTyped Repo Root]`);
+        return;
+    }
 
-importDefinitelyTypedTests(definitelyTypedRoot);
+    const tscPath = path.resolve(tscRoot, "built", "local", "tsc.js");
+    const rwcTestPath = path.resolve(tscRoot, "tests", "cases", "rwc", "dt");
+    const resolvedDefinitelyTypedRoot = path.resolve(definitelyTypedRoot);
+
+    console.log(`Resolved TypeScript Repo Root: '${tscRoot}'.`);
+    console.log(`Resolved DefinitelyTyped Repo Root: '${definitelyTypedRoot}'.`);
+    importDefinitelyTypedTests(tscPath, rwcTestPath, resolvedDefinitelyTypedRoot);
+}
 
 function filePathEndsWith(path: string, endingString: string): boolean {
     const pathLen = path.length;
@@ -27,10 +42,10 @@ function filePathEndsWith(path: string, endingString: string): boolean {
 
 function copyFileSync(source: string, destination: string) {
     let text = fs.readFileSync(source);
-    fs.writeFileSync(destination, text);
+    fs.writeFileSync(destination, text, {});
 }
 
-function importDefinitelyTypedTest(testCaseName: string, testFiles: string[], responseFile: string ) {
+function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string ) {
     let cmd = "node " + tscPath + " --module commonjs " + testFiles.join(" ");
     if (responseFile) {
         cmd += " @" + responseFile;
@@ -85,7 +100,7 @@ function importDefinitelyTypedTest(testCaseName: string, testFiles: string[], re
         });
 }
 
-function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
+function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, definitelyTypedRoot: string): void {
     fs.readdir(definitelyTypedRoot, (err, subDirectories) => {
         if (err) {
             throw err;
@@ -124,16 +139,16 @@ function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
                         let regexp = new RegExp(d + "(([-][0-9])|([\.]d[\.]ts))");
                         if (tsFiles.length > 1 && tsFiles.every(t => filePathEndsWith(t, ".d.ts") && regexp.test(t))) {
                             for (const fileName of tsFiles) {
-                                importDefinitelyTypedTest(path.basename(fileName, ".d.ts"), [fileName], paramFile);
+                                importDefinitelyTypedTest(tscPath, rwcTestPath, path.basename(fileName, ".d.ts"), [fileName], paramFile);
                             }
                         }
                         else {
-                           importDefinitelyTypedTest(d, tsFiles, paramFile);
+                           importDefinitelyTypedTest(tscPath, rwcTestPath, d, tsFiles, paramFile);
                         }
                     }
                     else {
                         for (const fileName of tsFiles) {
-                            importDefinitelyTypedTest(path.basename(fileName, "-tests.ts"), [fileName], paramFile);
+                            importDefinitelyTypedTest(tscPath, rwcTestPath, path.basename(fileName, "-tests.ts"), [fileName], paramFile);
                         }
                     }
                 });
