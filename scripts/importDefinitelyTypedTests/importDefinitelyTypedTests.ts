@@ -17,10 +17,12 @@ const tscPath = path.join(tscRoot, "built", "instrumented", "tsc.js");
 const rwcTestPath = path.join(tscRoot, "tests", "cases", "rwc", "dt");
 const definitelyTypedRoot = process.argv[2];
 
-function fileExtensionIs(path: string, extension: string): boolean {
+importDefinitelyTypedTests(definitelyTypedRoot);
+
+function filePathEndsWith(path: string, endingString: string): boolean {
     const pathLen = path.length;
-    const extLen = extension.length;
-    return pathLen > extLen && path.substr(pathLen - extLen, extLen).toLocaleLowerCase() === extension.toLocaleLowerCase();
+    const extLen = endingString.length;
+    return pathLen > extLen && path.substr(pathLen - extLen, extLen).toLocaleLowerCase() === endingString.toLocaleLowerCase();
 }
 
 function copyFileSync(source: string, destination: string) {
@@ -94,7 +96,7 @@ function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
             .filter(i => i.indexOf("sipml") >=0 )
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
-                let directoryPath = path.join(definitelyTypedRoot, d);
+                const directoryPath = path.join(definitelyTypedRoot, d);
                 fs.readdir(directoryPath, function (err, files) {
                     if (err) {
                         throw err;
@@ -104,35 +106,37 @@ function importDefinitelyTypedTests(definitelyTypedRoot: string): void {
                     let testFiles: string[] = [];
                     let paramFile: string;
 
-                    files
-                        .map(f => path.join(directoryPath, f))
-                        .forEach(f => {
-                            if (fileExtensionIs(f, ".ts")) tsFiles.push(f);
-                            else if (fileExtensionIs(f, ".tscparams")) paramFile = f;
+                    for (const filePath of files.map(f => path.join(directoryPath, f))) {
+                        if (filePathEndsWith(filePath, ".ts")) {
+                            tsFiles.push(filePath);
 
-                            if (fileExtensionIs(f, "-tests.ts")) testFiles.push(f);
-                        });
+                            if (filePathEndsWith(filePath, "-tests.ts")) {
+                                testFiles.push(filePath);
+                            }
+                        }
+                        else if (filePathEndsWith(filePath, ".tscparams")) {
+                            paramFile = filePath;
+                        }
+                    }
 
                     if (testFiles.length === 0) {
                         // no test files but multiple d.ts's, e.g. winjs
                         let regexp = new RegExp(d + "(([-][0-9])|([\.]d[\.]ts))");
-                        if (tsFiles.length > 1 && tsFiles.every(t => fileExtensionIs(t, ".d.ts") && regexp.test(t))) {
-                            tsFiles.forEach(filename => {
-                                importDefinitelyTypedTest(path.basename(filename, ".d.ts"), [filename], paramFile);
-                            });
+                        if (tsFiles.length > 1 && tsFiles.every(t => filePathEndsWith(t, ".d.ts") && regexp.test(t))) {
+                            for (const fileName of tsFiles) {
+                                importDefinitelyTypedTest(path.basename(fileName, ".d.ts"), [fileName], paramFile);
+                            }
                         }
                         else {
                            importDefinitelyTypedTest(d, tsFiles, paramFile);
                         }
                     }
                     else {
-                        testFiles.forEach(filename => {
-                            importDefinitelyTypedTest(path.basename(filename, "-tests.ts"), [filename], paramFile);
-                        });
+                        for (const fileName of tsFiles) {
+                            importDefinitelyTypedTest(path.basename(fileName, "-tests.ts"), [fileName], paramFile);
+                        }
                     }
                 });
             })
     });
 }
-
-importDefinitelyTypedTests(definitelyTypedRoot);
