@@ -68,7 +68,10 @@ if (testConfigFile !== "") {
                 case "fourslash-shims":
                     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
                     break;
-                case "fourslash-server":
+                case 'fourslash-shims-pp':
+                    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
+                    break;
+                case 'fourslash-server':
                     runners.push(new FourSlashRunner(FourSlashTestType.Server));
                     break;
                 case "fourslash-generated":
@@ -98,10 +101,9 @@ if (runners.length === 0) {
     // language services
     runners.push(new FourSlashRunner(FourSlashTestType.Native));
     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
     runners.push(new FourSlashRunner(FourSlashTestType.Server));
     // runners.push(new GeneratedFourslashRunner());
 }
-
-ts.sys.newLine = "\r\n";
 
 runTests(runners);

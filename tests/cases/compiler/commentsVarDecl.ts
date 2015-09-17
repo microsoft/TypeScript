@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 /** Variable comments*/
 var myVariable = 10; // This trailing Comment1

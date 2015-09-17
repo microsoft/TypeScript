@@ -28,13 +28,13 @@ export class C2 implements I2 {
 }
 
 === tests/cases/compiler/client.ts ===
-import { C, I, C2 } from "server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 >C : Symbol(C, Decl(client.ts, 0, 8))
 >I : Symbol(I, Decl(client.ts, 0, 11))
 >C2 : Symbol(C2, Decl(client.ts, 0, 14))
 
 export type cValInterface = I;
->cValInterface : Symbol(cValInterface, Decl(client.ts, 0, 34))
+>cValInterface : Symbol(cValInterface, Decl(client.ts, 0, 36))
 >I : Symbol(I, Decl(client.ts, 0, 11))
 
 export var cVal = new C();

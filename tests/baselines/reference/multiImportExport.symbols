@@ -11,11 +11,11 @@ var addr = new Drawing.Math.Adder();
 >Adder : Symbol(Adder, Decl(Math.ts, 2, 12))
 
 === tests/cases/compiler/Drawing.ts ===
-export import Math = require('Math/Math')
+export import Math = require('./Math/Math')
 >Math : Symbol(Math, Decl(Drawing.ts, 0, 0))
 
 === tests/cases/compiler/Math/Math.ts ===
-import Adder = require('Math/Adder');
+import Adder = require('./Adder');
 >Adder : Symbol(Adder, Decl(Math.ts, 0, 0))
 
 var Math = {

@@ -17,7 +17,8 @@ namespace ts.formatting {
         Scan,
         RescanGreaterThanToken,
         RescanSlashToken,
-        RescanTemplateToken
+        RescanTemplateToken,
+        RescanJsxIdentifier
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
@@ -108,6 +109,20 @@ namespace ts.formatting {
 
             return false;
         }
+        
+        function shouldRescanJsxIdentifier(node: Node): boolean {
+            if (node.parent) {
+                switch(node.parent.kind) {
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxClosingElement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return node.kind === SyntaxKind.Identifier;
+                }
+            }
+            
+            return false;
+        }
 
         function shouldRescanSlashToken(container: Node): boolean {
             return container.kind === SyntaxKind.RegularExpressionLiteral;
@@ -141,7 +156,9 @@ namespace ts.formatting {
                     ? ScanAction.RescanSlashToken 
                     : shouldRescanTemplateToken(n)
                         ? ScanAction.RescanTemplateToken
-                        : ScanAction.Scan
+                        : shouldRescanJsxIdentifier(n)
+                            ? ScanAction.RescanJsxIdentifier 
+                            : ScanAction.Scan
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
                 // readTokenInfo was called before with the same expected scan action.
@@ -175,6 +192,10 @@ namespace ts.formatting {
             else if (expectedScanAction === ScanAction.RescanTemplateToken && currentToken === SyntaxKind.CloseBraceToken) {
                 currentToken = scanner.reScanTemplateToken();
                 lastScanAction = ScanAction.RescanTemplateToken;
+            }
+            else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
+                currentToken = scanner.scanJsxIdentifier();
+                lastScanAction = ScanAction.RescanJsxIdentifier;
             }
             else {
                 lastScanAction = ScanAction.Scan;

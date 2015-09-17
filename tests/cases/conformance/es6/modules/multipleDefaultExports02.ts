@@ -11,6 +11,6 @@ export default function bar() {
 }
 
 // @filename: m2.ts
-import Entity from "m1"
+import Entity from "./m1"
 
 Entity();

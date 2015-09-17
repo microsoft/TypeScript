@@ -331,31 +331,31 @@ interface String {
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A String object or string literal that represents the regular expression
-      * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
+      * @param searchValue A string that represents the regular expression.
+      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: string, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A String object or string literal that represents the regular expression
-      * @param replaceValue A function that returns the replacement text.
+      * @param searchValue A string that represents the regular expression.
+      * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
+      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
+      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: RegExp, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replaceValue A function that returns the replacement text.
+      * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.
@@ -986,14 +986,14 @@ interface JSON {
       * @param replacer A function that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer: (key: string, value: any) => any, space: any): string;
+    stringify(value: any, replacer: (key: string, value: any) => any, space: string | number): string;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
       * @param replacer Array that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer: any[], space: any): string;
+    stringify(value: any, replacer: any[], space: string | number): string;
 }
 /**
   * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
@@ -1198,9 +1198,11 @@ interface PromiseLike<T> {
     then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
 }
 
-/////////////////////////////
-/// IE10 ECMAScript Extensions
-/////////////////////////////
+interface ArrayLike<T> {
+    length: number;
+    [n: number]: T;
+}
+
 
 /**
   * Represents a raw buffer of binary data, which is used to store data for the 
@@ -1253,14 +1255,14 @@ interface DataView {
       * no alignment constraint; multi-byte values may be fetched from any offset. 
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
-    getFloat32(byteOffset: number, littleEndian: boolean): number;
+    getFloat32(byteOffset: number, littleEndian?: boolean): number;
 
     /**
       * Gets the Float64 value at the specified byte offset from the start of the view. There is
       * no alignment constraint; multi-byte values may be fetched from any offset. 
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
-    getFloat64(byteOffset: number, littleEndian: boolean): number;
+    getFloat64(byteOffset: number, littleEndian?: boolean): number;
 
     /**
       * Gets the Int8 value at the specified byte offset from the start of the view. There is 
@@ -1274,13 +1276,13 @@ interface DataView {
       * no alignment constraint; multi-byte values may be fetched from any offset. 
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
-    getInt16(byteOffset: number, littleEndian: boolean): number;
+    getInt16(byteOffset: number, littleEndian?: boolean): number;
     /**
       * Gets the Int32 value at the specified byte offset from the start of the view. There is 
       * no alignment constraint; multi-byte values may be fetched from any offset. 
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
-    getInt32(byteOffset: number, littleEndian: boolean): number;
+    getInt32(byteOffset: number, littleEndian?: boolean): number;
 
     /**
       * Gets the Uint8 value at the specified byte offset from the start of the view. There is 
@@ -1294,14 +1296,14 @@ interface DataView {
       * no alignment constraint; multi-byte values may be fetched from any offset. 
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
-    getUint16(byteOffset: number, littleEndian: boolean): number;
+    getUint16(byteOffset: number, littleEndian?: boolean): number;
 
     /**
       * Gets the Uint32 value at the specified byte offset from the start of the view. There is 
       * no alignment constraint; multi-byte values may be fetched from any offset. 
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
-    getUint32(byteOffset: number, littleEndian: boolean): number;
+    getUint32(byteOffset: number, littleEndian?: boolean): number;
 
     /**
       * Stores an Float32 value at the specified byte offset from the start of the view. 
@@ -1310,7 +1312,7 @@ interface DataView {
       * @param littleEndian If false or undefined, a big-endian value should be written, 
       * otherwise a little-endian value should be written.
       */
-    setFloat32(byteOffset: number, value: number, littleEndian: boolean): void;
+    setFloat32(byteOffset: number, value: number, littleEndian?: boolean): void;
 
     /**
       * Stores an Float64 value at the specified byte offset from the start of the view. 
@@ -1319,7 +1321,7 @@ interface DataView {
       * @param littleEndian If false or undefined, a big-endian value should be written, 
       * otherwise a little-endian value should be written.
       */
-    setFloat64(byteOffset: number, value: number, littleEndian: boolean): void;
+    setFloat64(byteOffset: number, value: number, littleEndian?: boolean): void;
 
     /**
       * Stores an Int8 value at the specified byte offset from the start of the view. 
@@ -1335,7 +1337,7 @@ interface DataView {
       * @param littleEndian If false or undefined, a big-endian value should be written, 
       * otherwise a little-endian value should be written.
       */
-    setInt16(byteOffset: number, value: number, littleEndian: boolean): void;
+    setInt16(byteOffset: number, value: number, littleEndian?: boolean): void;
 
     /**
       * Stores an Int32 value at the specified byte offset from the start of the view. 
@@ -1344,7 +1346,7 @@ interface DataView {
       * @param littleEndian If false or undefined, a big-endian value should be written, 
       * otherwise a little-endian value should be written.
       */
-    setInt32(byteOffset: number, value: number, littleEndian: boolean): void;
+    setInt32(byteOffset: number, value: number, littleEndian?: boolean): void;
 
     /**
       * Stores an Uint8 value at the specified byte offset from the start of the view. 
@@ -1360,7 +1362,7 @@ interface DataView {
       * @param littleEndian If false or undefined, a big-endian value should be written, 
       * otherwise a little-endian value should be written.
       */
-    setUint16(byteOffset: number, value: number, littleEndian: boolean): void;
+    setUint16(byteOffset: number, value: number, littleEndian?: boolean): void;
 
     /**
       * Stores an Uint32 value at the specified byte offset from the start of the view. 
@@ -1369,7 +1371,7 @@ interface DataView {
       * @param littleEndian If false or undefined, a big-endian value should be written, 
       * otherwise a little-endian value should be written.
       */
-    setUint32(byteOffset: number, value: number, littleEndian: boolean): void;
+    setUint32(byteOffset: number, value: number, littleEndian?: boolean): void;
 }
 
 interface DataViewConstructor {
@@ -1576,7 +1578,7 @@ interface Int8Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Int8Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -1625,8 +1627,7 @@ interface Int8Array {
 interface Int8ArrayConstructor {
     prototype: Int8Array;
     new (length: number): Int8Array;
-    new (array: Int8Array): Int8Array;
-    new (array: number[]): Int8Array;
+    new (array: ArrayLike<number>): Int8Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array;
 
     /**
@@ -1639,6 +1640,15 @@ interface Int8ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Int8Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
+
 }
 declare var Int8Array: Int8ArrayConstructor;
 
@@ -1841,7 +1851,7 @@ interface Uint8Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint8Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -1891,8 +1901,7 @@ interface Uint8Array {
 interface Uint8ArrayConstructor {
     prototype: Uint8Array;
     new (length: number): Uint8Array;
-    new (array: Uint8Array): Uint8Array;
-    new (array: number[]): Uint8Array;
+    new (array: ArrayLike<number>): Uint8Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array;
 
     /**
@@ -1905,8 +1914,290 @@ interface Uint8ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Uint8Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+
 }
 declare var Uint8Array: Uint8ArrayConstructor;
+
+/**
+  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. 
+  * If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Uint8ClampedArray {
+    /**
+      * The size in bytes of each element in the array. 
+      */
+    BYTES_PER_ELEMENT: number;
+
+    /**
+      * The ArrayBuffer instance referenced by the array. 
+      */
+    buffer: ArrayBuffer;
+
+    /**
+      * The length in bytes of the array.
+      */
+    byteLength: number;
+
+    /**
+      * The offset in bytes of the array.
+      */
+    byteOffset: number;
+
+    /** 
+      * Returns the this object after copying a section of the array identified by start and end
+      * to the same array starting at position target
+      * @param target If target is negative, it is treated as length+target where length is the 
+      * length of the array. 
+      * @param start If start is negative, it is treated as length+start. If end is negative, it 
+      * is treated as length+end.
+      * @param end If not specified, length of the this object is used as its default value. 
+      */
+    copyWithin(target: number, start: number, end?: number): Uint8ClampedArray;
+
+    /**
+      * Determines whether all the members of an array satisfy the specified test.
+      * @param callbackfn A function that accepts up to three arguments. The every method calls 
+      * the callbackfn function for each element in array1 until the callbackfn returns false, 
+      * or until the end of the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+      * If thisArg is omitted, undefined is used as the this value.
+      */
+    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+
+    /**
+        * Returns the this object after filling the section identified by start and end with value
+        * @param value value to fill array section with
+        * @param start index to start filling the array at. If start is negative, it is treated as 
+        * length+start where length is the length of the array. 
+        * @param end index to stop filling the array at. If end is negative, it is treated as 
+        * length+end.
+        */
+    fill(value: number, start?: number, end?: number): Uint8ClampedArray;
+
+    /**
+      * Returns the elements of an array that meet the condition specified in a callback function. 
+      * @param callbackfn A function that accepts up to three arguments. The filter method calls 
+      * the callbackfn function one time for each element in the array. 
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
+      * If thisArg is omitted, undefined is used as the this value.
+      */
+    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): Uint8ClampedArray;
+
+    /** 
+      * Returns the value of the first element in the array where predicate is true, and undefined 
+      * otherwise.
+      * @param predicate find calls predicate once for each element of the array, in ascending 
+      * order, until it finds one where predicate returns true. If such an element is found, find 
+      * immediately returns that element value. Otherwise, find returns undefined.
+      * @param thisArg If provided, it will be used as the this value for each invocation of 
+      * predicate. If it is not provided, undefined is used instead.
+      */
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+
+    /** 
+      * Returns the index of the first element in the array where predicate is true, and undefined 
+      * otherwise.
+      * @param predicate find calls predicate once for each element of the array, in ascending 
+      * order, until it finds one where predicate returns true. If such an element is found, find 
+      * immediately returns that element value. Otherwise, find returns undefined.
+      * @param thisArg If provided, it will be used as the this value for each invocation of 
+      * predicate. If it is not provided, undefined is used instead.
+      */
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+
+    /**
+      * Performs the specified action for each element in an array.
+      * @param callbackfn  A function that accepts up to three arguments. forEach calls the 
+      * callbackfn function one time for each element in the array. 
+      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. 
+      * If thisArg is omitted, undefined is used as the this value.
+      */
+    forEach(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => void, thisArg?: any): void;
+
+    /**
+      * Returns the index of the first occurrence of a value in an array.
+      * @param searchElement The value to locate in the array.
+      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+      *  search starts at index 0.
+      */
+    indexOf(searchElement: number, fromIndex?: number): number;
+
+    /**
+      * Adds all the elements of an array separated by the specified separator string.
+      * @param separator A string used to separate one element of an array from the next in the 
+      * resulting String. If omitted, the array elements are separated with a comma.
+      */
+    join(separator?: string): string;
+
+    /**
+      * Returns the index of the last occurrence of a value in an array.
+      * @param searchElement The value to locate in the array.
+      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the 
+      * search starts at index 0.
+      */
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+
+    /**
+      * The length of the array.
+      */
+    length: number;
+
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that 
+      * contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the 
+      * callbackfn function one time for each element in the array. 
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
+      * If thisArg is omitted, undefined is used as the this value.
+      */
+    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+
+    /**
+      * Calls the specified callback function for all the elements in an array. The return value of 
+      * the callback function is the accumulated result, and is provided as an argument in the next 
+      * call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the 
+      * callbackfn function one time for each element in the array.
+      * @param initialValue If initialValue is specified, it is used as the initial value to start 
+      * the accumulation. The first call to the callbackfn function provides this value as an argument
+      * instead of an array value.
+      */
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue?: number): number;
+
+    /**
+      * Calls the specified callback function for all the elements in an array. The return value of 
+      * the callback function is the accumulated result, and is provided as an argument in the next 
+      * call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the 
+      * callbackfn function one time for each element in the array.
+      * @param initialValue If initialValue is specified, it is used as the initial value to start 
+      * the accumulation. The first call to the callbackfn function provides this value as an argument 
+      * instead of an array value.
+      */
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
+
+    /** 
+      * Calls the specified callback function for all the elements in an array, in descending order. 
+      * The return value of the callback function is the accumulated result, and is provided as an 
+      * argument in the next call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls 
+      * the callbackfn function one time for each element in the array. 
+      * @param initialValue If initialValue is specified, it is used as the initial value to start 
+      * the accumulation. The first call to the callbackfn function provides this value as an 
+      * argument instead of an array value.
+      */
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue?: number): number;
+
+    /** 
+      * Calls the specified callback function for all the elements in an array, in descending order. 
+      * The return value of the callback function is the accumulated result, and is provided as an 
+      * argument in the next call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+      * the callbackfn function one time for each element in the array. 
+      * @param initialValue If initialValue is specified, it is used as the initial value to start 
+      * the accumulation. The first call to the callbackfn function provides this value as an argument
+      * instead of an array value.
+      */
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
+
+    /**
+      * Reverses the elements in an Array. 
+      */
+    reverse(): Uint8ClampedArray;
+
+    /**
+      * Sets a value or an array of values.
+      * @param index The index of the location to set.
+      * @param value The value to set.
+      */
+    set(index: number, value: number): void;
+
+    /**
+      * Sets a value or an array of values.
+      * @param array A typed or untyped array of values to set.
+      * @param offset The index in the current array at which the values are to be written.
+      */
+    set(array: Uint8ClampedArray, offset?: number): void;
+
+    /** 
+      * Returns a section of an array.
+      * @param start The beginning of the specified portion of the array.
+      * @param end The end of the specified portion of the array.
+      */
+    slice(start?: number, end?: number): Uint8ClampedArray;
+
+    /**
+      * Determines whether the specified callback function returns true for any element of an array.
+      * @param callbackfn A function that accepts up to three arguments. The some method calls the 
+      * callbackfn function for each element in array1 until the callbackfn returns true, or until 
+      * the end of the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
+      * If thisArg is omitted, undefined is used as the this value.
+      */
+    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+
+    /**
+      * Sorts an array.
+      * @param compareFn The name of the function used to determine the order of the elements. If 
+      * omitted, the elements are sorted in ascending, ASCII character order.
+      */
+    sort(compareFn?: (a: number, b: number) => number): Uint8ClampedArray;
+
+    /**
+      * Gets a new Uint8ClampedArray view of the ArrayBuffer store for this array, referencing the elements
+      * at begin, inclusive, up to end, exclusive. 
+      * @param begin The index of the beginning of the array.
+      * @param end The index of the end of the array.
+      */
+    subarray(begin: number, end?: number): Uint8ClampedArray;
+
+    /**
+      * Converts a number to a string by using the current locale. 
+      */
+    toLocaleString(): string;
+
+    /**
+      * Returns a string representation of an array.
+      */
+    toString(): string;
+
+    [index: number]: number;
+}
+
+interface Uint8ClampedArrayConstructor {
+    prototype: Uint8ClampedArray;
+    new (length: number): Uint8ClampedArray;
+    new (array: ArrayLike<number>): Uint8ClampedArray;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
+
+    /**
+      * The size in bytes of each element in the array. 
+      */
+    BYTES_PER_ELEMENT: number;
+
+    /**
+      * Returns a new array from a set of elements.
+      * @param items A set of elements to include in the new array object.
+      */
+    of(...items: number[]): Uint8ClampedArray;
+
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+}
+declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
 /**
   * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the 
@@ -2107,7 +2398,7 @@ interface Int16Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Int16Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -2157,8 +2448,7 @@ interface Int16Array {
 interface Int16ArrayConstructor {
     prototype: Int16Array;
     new (length: number): Int16Array;
-    new (array: Int16Array): Int16Array;
-    new (array: number[]): Int16Array;
+    new (array: ArrayLike<number>): Int16Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array;
 
     /**
@@ -2171,6 +2461,15 @@ interface Int16ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Int16Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+
 }
 declare var Int16Array: Int16ArrayConstructor;
 
@@ -2373,7 +2672,7 @@ interface Uint16Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint16Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -2423,8 +2722,7 @@ interface Uint16Array {
 interface Uint16ArrayConstructor {
     prototype: Uint16Array;
     new (length: number): Uint16Array;
-    new (array: Uint16Array): Uint16Array;
-    new (array: number[]): Uint16Array;
+    new (array: ArrayLike<number>): Uint16Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array;
 
     /**
@@ -2437,6 +2735,15 @@ interface Uint16ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Uint16Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+
 }
 declare var Uint16Array: Uint16ArrayConstructor;
 /**
@@ -2638,7 +2945,7 @@ interface Int32Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Int32Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -2688,8 +2995,7 @@ interface Int32Array {
 interface Int32ArrayConstructor {
     prototype: Int32Array;
     new (length: number): Int32Array;
-    new (array: Int32Array): Int32Array;
-    new (array: number[]): Int32Array;
+    new (array: ArrayLike<number>): Int32Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array;
 
     /**
@@ -2702,6 +3008,14 @@ interface Int32ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Int32Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
 }
 declare var Int32Array: Int32ArrayConstructor;
 
@@ -2904,7 +3218,7 @@ interface Uint32Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint32Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -2954,8 +3268,7 @@ interface Uint32Array {
 interface Uint32ArrayConstructor {
     prototype: Uint32Array;
     new (length: number): Uint32Array;
-    new (array: Uint32Array): Uint32Array;
-    new (array: number[]): Uint32Array;
+    new (array: ArrayLike<number>): Uint32Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array;
 
     /**
@@ -2968,6 +3281,14 @@ interface Uint32ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Uint32Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
 }
 declare var Uint32Array: Uint32ArrayConstructor;
 
@@ -3170,7 +3491,7 @@ interface Float32Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Float32Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -3220,8 +3541,7 @@ interface Float32Array {
 interface Float32ArrayConstructor {
     prototype: Float32Array;
     new (length: number): Float32Array;
-    new (array: Float32Array): Float32Array;
-    new (array: number[]): Float32Array;
+    new (array: ArrayLike<number>): Float32Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array;
 
     /**
@@ -3234,6 +3554,15 @@ interface Float32ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Float32Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+
 }
 declare var Float32Array: Float32ArrayConstructor;
 
@@ -3436,7 +3765,7 @@ interface Float64Array {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Float64Array, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /** 
       * Returns a section of an array.
@@ -3486,8 +3815,7 @@ interface Float64Array {
 interface Float64ArrayConstructor {
     prototype: Float64Array;
     new (length: number): Float64Array;
-    new (array: Float64Array): Float64Array;
-    new (array: number[]): Float64Array;
+    new (array: ArrayLike<number>): Float64Array;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array;
 
     /**
@@ -3500,8 +3828,17 @@ interface Float64ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Float64Array;
+    
+    /**
+      * Creates an array from an array-like or iterable object.
+      * @param arrayLike An array-like or iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
+    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
 }
-declare var Float64Array: Float64ArrayConstructor;/////////////////////////////
+declare var Float64Array: Float64ArrayConstructor;
+/////////////////////////////
 /// ECMAScript Internationalization API 
 /////////////////////////////
 
@@ -3591,6 +3928,7 @@ declare module Intl {
         timeZoneName?: string;
         formatMatcher?: string;
         hour12?: boolean;
+        timeZone?: string;
     }
 
     interface ResolvedDateTimeFormatOptions {
@@ -3660,18 +3998,45 @@ interface Number {
 
 interface Date {
     /**
-      * Converts a date to a string by using the current or specified locale.  
+      * Converts a date and time to a string by using the current or specified locale.  
       * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
     toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    /**
+      * Converts a date to a string by using the current or specified locale.  
+      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
 
+    /**
+      * Converts a time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
+    
+    /**
+      * Converts a date and time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    
     /**
       * Converts a date to a string by using the current or specified locale.  
       * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+
+    /**
+      * Converts a time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
 }
 
 
@@ -6135,7 +6500,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param features Contains a list of items separated by commas. Each item consists of an option and a value, separated by an equals sign (for example, "fullscreen=yes, toolbar=yes"). The following values are supported.
       * @param replace Specifies whether the existing entry for the document is replaced in the history list.
       */
-    open(url?: string, name?: string, features?: string, replace?: boolean): Document | Window;
+    open(url?: string, name?: string, features?: string, replace?: boolean): Document;
     /** 
       * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
       * @param commandId Specifies a command identifier.
@@ -6592,6 +6957,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitMatchesSelector(selectors: string): boolean;
     webkitRequestFullScreen(): void;
     webkitRequestFullscreen(): void;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -6706,7 +7072,7 @@ interface File extends Blob {
 
 declare var File: {
     prototype: File;
-    new(): File;
+    new (parts: (ArrayBuffer | ArrayBufferView | Blob | string)[], filename: string, properties?: FilePropertyBag): File;
 }
 
 interface FileList {
@@ -7579,7 +7945,6 @@ interface HTMLElement extends Element {
     contains(child: HTMLElement): boolean;
     dragDrop(): boolean;
     focus(): void;
-    getElementsByClassName(classNames: string): NodeListOf<Element>;
     insertAdjacentElement(position: string, insertedElement: Element): Element;
     insertAdjacentHTML(where: string, html: string): void;
     insertAdjacentText(where: string, text: string): void;
@@ -10541,7 +10906,7 @@ interface IDBDatabase extends EventTarget {
     createObjectStore(name: string, optionalParameters?: any): IDBObjectStore;
     deleteObjectStore(name: string): void;
     transaction(storeNames: any, mode?: string): IDBTransaction;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -10662,7 +11027,7 @@ interface IDBTransaction extends EventTarget {
     READ_ONLY: string;
     READ_WRITE: string;
     VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -10692,10 +11057,13 @@ interface ImageData {
     width: number;
 }
 
-declare var ImageData: {
+interface ImageDataConstructor {
     prototype: ImageData;
-    new(): ImageData;
+    new(width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
+
+declare var ImageData: ImageDataConstructor; 
 
 interface KeyboardEvent extends UIEvent {
     altKey: boolean;
@@ -11379,7 +11747,7 @@ interface MessageEvent extends Event {
 
 declare var MessageEvent: {
     prototype: MessageEvent;
-    new(): MessageEvent;
+    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
 }
 
 interface MessagePort extends EventTarget {
@@ -12121,7 +12489,7 @@ interface ProgressEvent extends Event {
 
 declare var ProgressEvent: {
     prototype: ProgressEvent;
-    new(): ProgressEvent;
+    new(type: string, eventInitDict?: ProgressEventInit): ProgressEvent;
 }
 
 interface Range {
@@ -15638,7 +16006,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onvolumechange: (ev: Event) => any;
     onwaiting: (ev: Event) => any;
     opener: Window;
-    orientation: string;
+    orientation: string | number;
     outerHeight: number;
     outerWidth: number;
     pageXOffset: number;
@@ -15845,7 +16213,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     LOADING: number;
     OPENED: number;
     UNSENT: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -16115,7 +16483,7 @@ interface MSBaseReader {
     DONE: number;
     EMPTY: number;
     LOADING: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -16271,7 +16639,7 @@ interface XMLHttpRequestEventTarget {
     onloadstart: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
     ontimeout: (ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -16293,11 +16661,31 @@ interface BlobPropertyBag {
     endings?: string;
 }
 
+interface FilePropertyBag {
+    type?: string;
+    lastModified?: number;
+}
+
 interface EventListenerObject {
     handleEvent(evt: Event): void;
 }
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+
+interface MessageEventInit extends EventInit {
+    data?: any;
+    origin?: string;
+    lastEventId?: string;
+    channel?: string;
+    source?: any;
+    ports?: MessagePort[];
+}
+
+interface ProgressEventInit extends EventInit {
+    lengthComputable?: boolean;
+    loaded?: number;
+    total?: number;
+}
 
 interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?:Error): void;
@@ -16453,7 +16841,7 @@ declare var onunload: (ev: Event) => any;
 declare var onvolumechange: (ev: Event) => any;
 declare var onwaiting: (ev: Event) => any;
 declare var opener: Window;
-declare var orientation: string;
+declare var orientation: string | number;
 declare var outerHeight: number;
 declare var outerWidth: number;
 declare var pageXOffset: number;

@@ -74,7 +74,7 @@ namespace ts {
         // If the current node is a container that also container that also contains locals.  Examples:
         //
         //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals   = IsContainer | HasLocals
+        IsContainerWithLocals = IsContainer | HasLocals
     }
 
     export function bindSourceFile(file: SourceFile) {
@@ -973,6 +973,10 @@ namespace ts {
             else {
                 let bindingName = node.name ? node.name.text : "__class";
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
+                // Add name of class expression into the map for semantic classifier
+                if (node.name) {
+                    classifiableNames[node.name.text] = node.name.text;
+                }
             }
 
             let symbol = node.symbol;

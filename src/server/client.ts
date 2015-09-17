@@ -183,7 +183,7 @@ namespace ts.server {
 
             return {
                 configFileName: response.body.configFileName,
-                fileNameList: response.body.fileNameList
+                fileNames: response.body.fileNames
             };
         }
         
@@ -561,6 +561,10 @@ namespace ts.server {
         }
 
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            throw new Error("Not Implemented Yet."); 
+        }
+        
+        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             throw new Error("Not Implemented Yet."); 
         }
 

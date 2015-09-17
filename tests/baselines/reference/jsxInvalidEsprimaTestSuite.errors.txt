@@ -62,10 +62,8 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(24,15): error TS1003:
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(25,7): error TS1005: '...' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(25,7): error TS2304: Cannot find name 'props'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(27,17): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(27,18): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,10): error TS2304: Cannot find name 'props'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,28): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,29): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,7): error TS1109: Expression expected.
@@ -73,7 +71,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002: Expected corresponding JSX closing tag for 'a'.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (73 errors) ====
+==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (71 errors) ====
     declare var React: any;
     
     </>;
@@ -229,15 +227,11 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
     <div>stuff</div {...props}>;
                     ~
 !!! error TS1005: '>' expected.
-                     ~~~
-!!! error TS1109: Expression expected.
     <div {...props}>stuff</div {...props}>;
              ~~~~~
 !!! error TS2304: Cannot find name 'props'.
                                ~
 !!! error TS1005: '>' expected.
-                                ~~~
-!!! error TS1109: Expression expected.
     
     <a>></a>;
     <a> ></a>;

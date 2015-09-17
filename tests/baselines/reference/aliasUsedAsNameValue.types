@@ -1,10 +1,10 @@
 === tests/cases/compiler/aliasUsedAsNameValue_2.ts ===
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />
-import mod = require("aliasUsedAsNameValue_0");
+import mod = require("./aliasUsedAsNameValue_0");
 >mod : typeof mod
 
-import b = require("aliasUsedAsNameValue_1");
+import b = require("./aliasUsedAsNameValue_1");
 >b : typeof b
  
 export var a = function () {

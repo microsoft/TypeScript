@@ -86,6 +86,7 @@ namespace ts.server {
         export const Format = "format";
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
+        export const GeterrForProject = "geterrForProject";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
@@ -99,6 +100,7 @@ namespace ts.server {
         export const SignatureHelp = "signatureHelp";
         export const TypeDefinition = "typeDefinition";
         export const ProjectInfo = "projectInfo";
+        export const ReloadProjects = "reloadProjects";
         export const Unknown = "unknown";
     }
 
@@ -225,6 +227,10 @@ namespace ts.server {
             this.syntacticCheck(file, project);
             this.semanticCheck(file, project);
         }
+        
+        private reloadProjects() {
+            this.projectService.reloadProjects();
+        }
 
         private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
             setTimeout(() => {
@@ -235,7 +241,7 @@ namespace ts.server {
         }
 
         private updateErrorCheck(checkList: PendingErrorCheck[], seq: number,
-            matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200) {
+            matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200, requireOpen = true) {
             if (followMs > ms) {
                 followMs = ms;
             }
@@ -250,7 +256,7 @@ namespace ts.server {
             var checkOne = () => {
                 if (matchSeq(seq)) {
                     var checkSpec = checkList[index++];
-                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, true)) {
+                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
@@ -389,7 +395,7 @@ namespace ts.server {
             }
 
             if (needFileNameList) {
-                projectInfo.fileNameList = project.getFileNameList();
+                projectInfo.fileNames = project.getFileNames();
             }
 
             return projectInfo;
@@ -873,7 +879,53 @@ namespace ts.server {
             }));
         }
 
-        public exit() {
+        getDiagnosticsForProject(delay: number, fileName: string) {
+            let { configFileName, fileNames: fileNamesInProject } = this.getProjectInfo(fileName, true);
+            // No need to analyze lib.d.ts
+            fileNamesInProject = fileNamesInProject.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+
+            // Sort the file name list to make the recently touched files come first
+            let highPriorityFiles: string[] = [];
+            let mediumPriorityFiles: string[] = [];
+            let lowPriorityFiles: string[] = [];
+            let veryLowPriorityFiles: string[] = [];
+            let normalizedFileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(normalizedFileName);
+            for (let fileNameInProject of fileNamesInProject) {
+                if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
+                    highPriorityFiles.push(fileNameInProject);
+                else {
+                    let info = this.projectService.getScriptInfo(fileNameInProject);
+                    if (!info.isOpen) {
+                        if (fileNameInProject.indexOf(".d.ts") > 0)
+                            veryLowPriorityFiles.push(fileNameInProject);
+                        else
+                            lowPriorityFiles.push(fileNameInProject);
+                    }
+                    else
+                        mediumPriorityFiles.push(fileNameInProject);
+                }
+            }
+
+            fileNamesInProject = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
+
+            if (fileNamesInProject.length > 0) {
+                let checkList = fileNamesInProject.map<PendingErrorCheck>((fileName: string) => {
+                    let normalizedFileName = ts.normalizePath(fileName);
+                    return { fileName: normalizedFileName, project };
+                });
+                // Project level error analysis runs on background files too, therefore
+                // doesn't require the file to be opened
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
+            }
+        }
+
+        getCanonicalFileName(fileName: string) {
+            let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            return ts.normalizePath(name);
+        }
+
+        exit() {
         }
 
         private handlers : Map<(request: protocol.Request) => {response?: any, responseRequired?: boolean}> = {
@@ -931,6 +983,10 @@ namespace ts.server {
                 var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                 return {response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false};
             },
+            [CommandNames.GeterrForProject]: (request: protocol.Request) => {
+                let { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
+                return {response: this.getDiagnosticsForProject(delay, file), responseRequired: false};
+            },
             [CommandNames.Change]: (request: protocol.Request) => {
                 var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                 this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
@@ -982,6 +1038,10 @@ namespace ts.server {
                 var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
                 return {response: this.getProjectInfo(file, needFileNameList), responseRequired: true};
             },
+            [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
+                this.reloadProjects();
+                return {responseRequired: false};
+            }
         };
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => {response?: any, responseRequired: boolean}) {
             if (this.handlers[command]) {

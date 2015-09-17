@@ -6,6 +6,11 @@ namespace ts {
         (message: DiagnosticMessage, length: number): void;
     }
 
+    /* @internal */
+    export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.Identifier;
+    }
+
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -319,14 +324,21 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * We assume the first line starts at position 0 and 'position' is non-negative.
+     */
     export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found,
-            // the binary search returns the negative value of the next line start
+            // the binary search returns the 2's-complement of the next line start
             // e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
-            // then the search will return -2
+            // then the search will return -2.
+            //
+            // We want the index of the previous line start, so we subtract 1.
+            // Review 2's-complement if this is confusing.
             lineNumber = ~lineNumber - 1;
+            Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
         }
         return {
             line: lineNumber,
@@ -465,7 +477,7 @@ namespace ts {
                       break;
 
                   case CharacterCodes.hash:
-                      if (isShebangTrivia(text, pos)) {
+                      if (pos === 0 && isShebangTrivia(text, pos)) {
                           pos = scanShebangTrivia(text, pos);
                           continue;
                       }
@@ -552,13 +564,17 @@ namespace ts {
         return pos;
     }
 
-    // Extract comments from the given source text starting at the given position. If trailing is
-    // false, whitespace is skipped until the first line break and comments between that location
-    // and the next token are returned.If trailing is true, comments occurring between the given
-    // position and the next line break are returned.The return value is an array containing a
-    // TextRange for each comment. Single-line comment ranges include the beginning '//' characters
-    // but not the ending line break. Multi - line comment ranges include the beginning '/* and
-    // ending '*/' characters.The return value is undefined if no comments were found.
+    /**
+     * Extract comments from text prefixing the token closest following `pos`. 
+     * The return value is an array containing a TextRange for each comment.
+     * Single-line comment ranges include the beginning '//' characters but not the ending line break.
+     * Multi - line comment ranges include the beginning '/* and ending '<asterisk>/' characters.
+     * The return value is undefined if no comments were found.
+     * @param trailing 
+     * If false, whitespace is skipped until the first line break and comments between that location
+     * and the next token are returned.
+     * If true, comments occurring between the given position and the next line break are returned.
+     */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
@@ -661,7 +677,6 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    /* @internal */
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
@@ -1580,7 +1595,7 @@ namespace ts {
         // Scans a JSX identifier; these differ from normal identifiers in that
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
-            if (token === SyntaxKind.Identifier) {
+            if (tokenIsIdentifierOrKeyword(token)) {
                 let firstCharPosition = pos;
                 while (pos < end) {
                     let ch = text.charCodeAt(pos);

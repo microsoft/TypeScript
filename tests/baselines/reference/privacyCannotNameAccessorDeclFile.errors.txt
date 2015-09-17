@@ -9,7 +9,7 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
 
 
 ==== tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts (8 errors) ====
-    import exporter = require("privacyCannotNameAccessorDeclFile_exporter");
+    import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod() { // Error
                    ~~~~~~~~~~~~~~~~~~~~
@@ -144,7 +144,7 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
     
 ==== tests/cases/compiler/privacyCannotNameAccessorDeclFile_exporter.ts (0 errors) ====
     ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
-    import Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
+    import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
     import Widgets1 = require("GlobalWidgets");
     export function createExportedWidget1() {
         return Widgets.createWidget1();

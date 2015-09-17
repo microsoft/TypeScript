@@ -29,13 +29,13 @@ module FourSlash {
         fileName: string;
         version: number;
         // File-specific options (name/value pairs)
-        fileOptions: { [index: string]: string; };
+        fileOptions: Harness.TestCaseParser.CompilerSettings;
     }
 
     // Represents a set of parsed source files and options
     export interface FourSlashData {
         // Global options (name/value pairs)
-        globalOptions: { [index: string]: string; };
+        globalOptions: Harness.TestCaseParser.CompilerSettings;
 
         files: FourSlashFile[];
 
@@ -117,70 +117,17 @@ module FourSlash {
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
     let metadataOptionNames = {
         baselineFile: "BaselineFile",
-        declaration: "declaration",
         emitThisFile: "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
         fileName: "Filename",
-        mapRoot: "mapRoot",
-        module: "module",
-        out: "out",
-        outDir: "outDir",
-        sourceMap: "sourceMap",
-        sourceRoot: "sourceRoot",
-        allowNonTsExtensions: "allowNonTsExtensions",
         resolveReference: "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
     let fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
-    let globalMetadataNames = [metadataOptionNames.allowNonTsExtensions, metadataOptionNames.baselineFile, metadataOptionNames.declaration,
-        metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out,
-        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot];
 
-    function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
+    function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
         let settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
-        // Convert all property in globalOptions into ts.CompilationSettings
-        for (let prop in globalOptions) {
-            if (globalOptions.hasOwnProperty(prop)) {
-                switch (prop) {
-                    case metadataOptionNames.allowNonTsExtensions:
-                        settings.allowNonTsExtensions = globalOptions[prop] === "true";
-                        break;
-                    case metadataOptionNames.declaration:
-                        settings.declaration = globalOptions[prop] === "true";
-                        break;
-                    case metadataOptionNames.mapRoot:
-                        settings.mapRoot = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.module:
-                        // create appropriate external module target for CompilationSettings
-                        switch (globalOptions[prop]) {
-                            case "AMD":
-                                settings.module = ts.ModuleKind.AMD;
-                                break;
-                            case "CommonJS":
-                                settings.module = ts.ModuleKind.CommonJS;
-                                break;
-                            default:
-                                ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
-                                settings.module = ts.ModuleKind.None;
-                                break;
-                        }
-                        break;
-                    case metadataOptionNames.out:
-                        settings.out = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.outDir:
-                        settings.outDir = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.sourceMap:
-                        settings.sourceMap = globalOptions[prop] === "true";
-                        break;
-                    case metadataOptionNames.sourceRoot:
-                        settings.sourceRoot = globalOptions[prop];
-                        break;
-                }
-            }
-        }
+        Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
         return settings;
     }
 
@@ -285,7 +232,9 @@ module FourSlash {
                 case FourSlashTestType.Native:
                     return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
+                case FourSlashTestType.ShimsWithPreprocess:
+                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
                 case FourSlashTestType.Server:
                     return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
                 default:
@@ -356,7 +305,7 @@ module FourSlash {
             this.formatCodeOptions = {
                 IndentSize: 4,
                 TabSize: 4,
-                NewLineCharacter: ts.sys.newLine,
+                NewLineCharacter: Harness.IO.newLine(),
                 ConvertTabsToSpaces: true,
                 InsertSpaceAfterCommaDelimiter: true,
                 InsertSpaceAfterSemicolonInForStatements: true,
@@ -364,6 +313,7 @@ module FourSlash {
                 InsertSpaceAfterKeywordsInControlFlowStatements: true,
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -533,7 +483,7 @@ module FourSlash {
             errors.forEach(function (error: ts.Diagnostic) {
                 Harness.IO.log("  minChar: " + error.start +
                     ", limChar: " + (error.start + error.length) +
-                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, ts.sys.newLine) + "\n");
+                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine()) + "\n");
             });
         }
 
@@ -1244,21 +1194,21 @@ module FourSlash {
                     emitFiles.forEach(emitFile => {
                         let emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
                         // Print emitOutputStatus in readable format
-                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + ts.sys.newLine;
+                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
 
                         if (emitOutput.emitSkipped) {
-                            resultString += "Diagnostics:" + ts.sys.newLine;
+                            resultString += "Diagnostics:" + Harness.IO.newLine();
                             let diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (let i = 0, n = diagnostics.length; i < n; i++) {
-                                resultString += "  " + diagnostics[0].messageText + ts.sys.newLine;
+                                resultString += "  " + diagnostics[0].messageText + Harness.IO.newLine();
                             }
                         }
 
                         emitOutput.outputFiles.forEach((outputFile, idx, array) => {
-                            let fileName = "FileName : " + outputFile.name + ts.sys.newLine;
+                            let fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + fileName + outputFile.text;
                         });
-                        resultString += ts.sys.newLine;
+                        resultString += Harness.IO.newLine();
                     });
 
                     return resultString;
@@ -1295,7 +1245,7 @@ module FourSlash {
                     Harness.IO.log(
                         "start: " + err.start +
                         ", length: " + err.length +
-                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine));
+                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, Harness.IO.newLine()));
                 });
             }
         }
@@ -1869,9 +1819,9 @@ module FourSlash {
             }
 
             function jsonMismatchString() {
-                return ts.sys.newLine +
-                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k, v) => v, 2) + "'" + ts.sys.newLine +
-                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                return Harness.IO.newLine() +
+                    "expected: '" + Harness.IO.newLine() + JSON.stringify(expected, (k, v) => v, 2) + "'" + Harness.IO.newLine() +
+                    "actual:   '" + Harness.IO.newLine() + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -1883,7 +1833,7 @@ module FourSlash {
                     );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNameList.map( file => {
+                    actual.fileNames.map( file => {
                         return file.replace(this.basePath + "/", "");
                         }).join(",")
                     );
@@ -1937,6 +1887,32 @@ module FourSlash {
 
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
+                }
+            }
+        }
+
+        public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
+            const name = "verifyDocCommentTemplate";
+            let actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+
+            if (expected === undefined) {
+                if (actual) {
+                    this.raiseError(name + ' failed - expected no template but got {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '}');
+                }
+
+                return;
+            }
+            else {
+                if (actual === undefined) {
+                    this.raiseError(name + ' failed - expected the template {newText: \"' + actual.newText + '\" caretOffset: ' + actual.caretOffset + '} but got nothing instead');
+                }
+
+                if (actual.newText !== expected.newText) {
+                    this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
+                }
+
+                if (actual.caretOffset !== expected.caretOffset) {
+                    this.raiseError(name + ' failed - expected caretOffset: ' + expected.caretOffset + ',\nactual caretOffset:' + actual.caretOffset);
                 }
             }
         }
@@ -2354,7 +2330,7 @@ module FourSlash {
         let host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined }],
             (fn, contents) => fourslashJsOutput = contents,
             ts.ScriptTarget.Latest,
-            ts.sys.useCaseSensitiveFileNames);
+            Harness.IO.useCaseSensitiveFileNames());
 
         let program = ts.createProgram([Harness.Compiler.fourslashFileName], { noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
@@ -2376,16 +2352,16 @@ module FourSlash {
             ],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
-            ts.sys.useCaseSensitiveFileNames);
+            Harness.IO.useCaseSensitiveFileNames());
 
-        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { outFile: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
         let sourceFile = host.getSourceFile(fileName, ts.ScriptTarget.ES3);
 
         let diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
         if (diagnostics.length > 0) {
             throw new Error(`Error compiling ${fileName}: ` +
-                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join("\r\n"));
+                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, Harness.IO.newLine())).join("\r\n"));
         }
 
         program.emit(sourceFile);
@@ -2466,12 +2442,16 @@ module FourSlash {
                 // Comment line, check for global/file @options and record them
                 let match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    let globalMetadataNamesIndex = globalMetadataNames.indexOf(match[1]);
                     let fileMetadataNamesIndex = fileMetadataNames.indexOf(match[1]);
-                    if (globalMetadataNamesIndex === -1) {
-                        if (fileMetadataNamesIndex === -1) {
-                            throw new Error(`Unrecognized metadata name "${match[1]}". Available global metadata names are: ${globalMetadataNames.join(", ")}; file metadata names are: ${fileMetadataNames.join(", ")}`);
-                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
+                    if (fileMetadataNamesIndex === -1) {
+                        // Check if the match is already existed in the global options
+                        if (globalOptions[match[1]] !== undefined) {
+                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        }
+                        globalOptions[match[1]] = match[2];
+                    }
+                    else {
+                        if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
                             // Found an @FileName directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
                                 let file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
@@ -2492,12 +2472,6 @@ module FourSlash {
                             // Add other fileMetadata flag
                             currentFileOptions[match[1]] = match[2];
                         }
-                    } else {
-                        // Check if the match is already existed in the global options
-                        if (globalOptions[match[1]] !== undefined) {
-                            throw new Error("Global Option : '" + match[1] + "' is already existed");
-                        }
-                        globalOptions[match[1]] = match[2];
                     }
                 }
             // TODO: should be '==='?

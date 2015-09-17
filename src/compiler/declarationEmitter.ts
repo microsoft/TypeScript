@@ -586,6 +586,9 @@ namespace ts {
                 if (isSupportedExpressionWithTypeArguments(node)) {
                     emitType(node);
                 }
+                else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
+                    write("null");
+                }
                 else {
                     resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 }

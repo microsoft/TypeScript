@@ -1,0 +1,46 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures3.ts ===
+function f1(s: string) { }
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures3.ts, 0, 0))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 0, 12))
+
+function f2(s?: string) { }
+>f2 : Symbol(f2, Decl(unionTypeCallSignatures3.ts, 0, 26))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 1, 12))
+
+function f3(...s: string[]) { }
+>f3 : Symbol(f3, Decl(unionTypeCallSignatures3.ts, 1, 27))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 2, 12))
+
+function f4(s: string, s2?: string) { }
+>f4 : Symbol(f4, Decl(unionTypeCallSignatures3.ts, 2, 31))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 3, 12))
+>s2 : Symbol(s2, Decl(unionTypeCallSignatures3.ts, 3, 22))
+
+function f5(s?: string, n?: number) { }
+>f5 : Symbol(f5, Decl(unionTypeCallSignatures3.ts, 3, 39))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 4, 12))
+>n : Symbol(n, Decl(unionTypeCallSignatures3.ts, 4, 23))
+
+function f6(s?: string, ...n: number[]) { }
+>f6 : Symbol(f6, Decl(unionTypeCallSignatures3.ts, 4, 39))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 5, 12))
+>n : Symbol(n, Decl(unionTypeCallSignatures3.ts, 5, 23))
+
+function f7(s: string, ...sRest: string[]) { }
+>f7 : Symbol(f7, Decl(unionTypeCallSignatures3.ts, 5, 43))
+>s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 6, 12))
+>sRest : Symbol(sRest, Decl(unionTypeCallSignatures3.ts, 6, 22))
+
+var fUnion: typeof f1 | typeof f2 | typeof f3 | typeof f4 | typeof f5 | typeof f6 | typeof f7;
+>fUnion : Symbol(fUnion, Decl(unionTypeCallSignatures3.ts, 8, 3))
+>f1 : Symbol(f1, Decl(unionTypeCallSignatures3.ts, 0, 0))
+>f2 : Symbol(f2, Decl(unionTypeCallSignatures3.ts, 0, 26))
+>f3 : Symbol(f3, Decl(unionTypeCallSignatures3.ts, 1, 27))
+>f4 : Symbol(f4, Decl(unionTypeCallSignatures3.ts, 2, 31))
+>f5 : Symbol(f5, Decl(unionTypeCallSignatures3.ts, 3, 39))
+>f6 : Symbol(f6, Decl(unionTypeCallSignatures3.ts, 4, 39))
+>f7 : Symbol(f7, Decl(unionTypeCallSignatures3.ts, 5, 43))
+
+fUnion(""); // All constituents can be called by passing a single string.
+>fUnion : Symbol(fUnion, Decl(unionTypeCallSignatures3.ts, 8, 3))
+

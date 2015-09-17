@@ -7,4 +7,4 @@ var a = 10;
 export = a;
 
 // @filename: es6ImportDefaultBindingInEs5_1.ts
-import defaultBinding from "es6ImportDefaultBindingInEs5_0";
+import defaultBinding from "./es6ImportDefaultBindingInEs5_0";

@@ -16,6 +16,6 @@ export class C2 implements I2 {
 }
 
 // @filename: client.ts
-import { C, I, C2 } from "server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 export type cValInterface = I;
 export var cVal = new C();
