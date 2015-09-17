@@ -1,6 +1,3 @@
-declare var require: any, process: any;
-declare var __dirname: any;
-
 var fs = require("fs");
 var path = require("path");
 var child_process = require('child_process');
