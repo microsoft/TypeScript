@@ -1517,9 +1517,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
                             var name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
                             var identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
-                            if (languageVersion == ScriptTarget.ES3 && identifier === "default") {
+                            if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
                                 write(`["default"]`);
-                            } else {
+                            }
+                            else {
                                 write(".");
                                 write(identifier);
                             }
