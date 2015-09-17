@@ -343,10 +343,6 @@ namespace ts {
         let classifiableNames: Map<string>;
 
         let skipDefaultLib = options.noLib;
-        
-        if (options.target >= ScriptTarget.ES6 && !options.module) { // Preserve old ES6 module behavior
-            options.module = ModuleKind.ES6;
-        }
 
         let start = new Date().getTime();
 
