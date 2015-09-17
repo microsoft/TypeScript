@@ -453,6 +453,7 @@ namespace ts.server {
         setProjectOptions(projectOptions: ProjectOptions) {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
         }

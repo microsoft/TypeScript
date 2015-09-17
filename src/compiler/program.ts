@@ -74,7 +74,7 @@ namespace ts {
             return tryLoad(".d.ts");
         }
         else {
-            return forEach(supportedExtensions, tryLoad);
+            return forEach(supportedJsExtensions, tryLoad);
         }
         
         function tryLoad(ext: string): string {
