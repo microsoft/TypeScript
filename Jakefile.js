@@ -386,6 +386,27 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     exec(cmd);
 });
 
+var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
+file(scriptsTsdJson);
+
+task("tsd-scripts", [scriptsTsdJson], function () {
+    var cmd = "tsd --config " + scriptsTsdJson + " install";
+    console.log(cmd)
+    exec(cmd);
+}, { async: true })
+
+var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
+var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
+var importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");
+
+file(importDefinitelyTypedTestsJs);
+file(importDefinitelyTypedTestsTs, ["tsd-scripts", importDefinitelyTypedTestsJs])
+task("importDefinitelyTyped", importDefinitelyTypedTestsTs, function () {
+    var cmd = "node " +  importDefinitelyTypedTestsJs + " ./ ../DefinitelyTyped";
+    console.log(cmd);
+    exec(cmd);
+}, { async: true })
+
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
