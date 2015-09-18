@@ -5,8 +5,8 @@ const OPTION_CATCH = "check-catch";
 const OPTION_ELSE = "check-else";
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static CATCH_FAILURE_STRING = "'catch' should be on the line following the previous block's ending curly brace";
-    public static ELSE_FAILURE_STRING = "'else' should be on the line following the previous block's ending curly brace";
+    public static CATCH_FAILURE_STRING = "'catch' should not be on the same line as the preceeding block's curly brace";
+    public static ELSE_FAILURE_STRING = "'else' should not be on the same line as the preceeding block's curly brace";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NextLineWalker(sourceFile, this.getOptions()));
@@ -25,7 +25,7 @@ class NextLineWalker extends Lint.RuleWalker {
             if (this.hasOption(OPTION_ELSE) && !!elseKeyword) {
                 const thenStatementEndLoc = sourceFile.getLineAndCharacterOfPosition(thenStatement.getEnd());
                 const elseKeywordLoc = sourceFile.getLineAndCharacterOfPosition(elseKeyword.getStart(sourceFile));
-                if (thenStatementEndLoc.line !== (elseKeywordLoc.line - 1)) {
+                if (thenStatementEndLoc.line === elseKeywordLoc.line) {
                     const failure = this.createFailure(elseKeyword.getStart(sourceFile), elseKeyword.getWidth(sourceFile), Rule.ELSE_FAILURE_STRING);
                     this.addFailure(failure);
                 }
@@ -47,7 +47,7 @@ class NextLineWalker extends Lint.RuleWalker {
             const catchKeyword = catchClause.getFirstToken(sourceFile);
             const tryClosingBraceLoc = sourceFile.getLineAndCharacterOfPosition(tryClosingBrace.getEnd());
             const catchKeywordLoc = sourceFile.getLineAndCharacterOfPosition(catchKeyword.getStart(sourceFile));
-            if (tryClosingBraceLoc.line !== (catchKeywordLoc.line - 1)) {
+            if (tryClosingBraceLoc.line === catchKeywordLoc.line) {
                 const failure = this.createFailure(catchKeyword.getStart(sourceFile), catchKeyword.getWidth(sourceFile), Rule.CATCH_FAILURE_STRING);
                 this.addFailure(failure);
             }
