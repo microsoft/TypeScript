@@ -32,8 +32,8 @@
                     "location": 3,
                     "message": 4
                 },
-				"watchedTaskBeginsRegExp": "^\\*\\*\\*Lint failure\\*\\*\\*$",
-				"watchedTaskEndsRegExp": "^\\*\\*\\* Total \\d+ failures\\.$"
+                "watchedTaskBeginsRegExp": "^\\*\\*\\*Lint failure\\*\\*\\*$",
+                "watchedTaskEndsRegExp": "^\\*\\*\\* Total \\d+ failures\\.$"
             },
             "showOutput": "always",
             "isWatching": true
