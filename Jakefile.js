@@ -780,17 +780,36 @@ task("update-sublime", ["local", serverFile], function() {
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
 });
 
+var tslintRuleDir = "scripts/tslint";
+var tslintRules = ([
+    "nextLineRule",
+    "noInferrableTypesRule",
+    "noNullRule",
+    "booleanTriviaRule"
+]);
+var tslintRulesFiles = tslintRules.map(function(p) {
+    return path.join(tslintRuleDir, p + ".ts");
+});
+var tslintRulesOutFiles = tslintRules.map(function(p) {
+    return path.join(builtLocalDirectory, "tslint", p + ".js");
+});
+desc("Compiles tslint rules to js");
+task("build-rules", tslintRulesOutFiles);
+tslintRulesFiles.forEach(function(ruleFile, i) {
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ true, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+});
+
 // if the codebase were free of linter errors we could make jake runtests
 // run this task automatically
 desc("Runs tslint on the compiler sources");
-task("lint", [], function() {
+task("lint", ["build-rules"], function() {
     function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
     function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
 
     var lintTargets = compilerSources.concat(harnessCoreSources);
     for (var i in lintTargets) {
         var f = lintTargets[i];
-        var cmd = 'tslint -c tslint.json ' + f;
+        var cmd = 'tslint --rules-dir built/local/tslint -c tslint.json ' + f;
         exec(cmd, success(f), failure(f));
     }
 }, { async: true });
