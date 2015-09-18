@@ -26,11 +26,12 @@ function main() {
     }
 
     const tscPath = path.resolve(tscRoot, "built", "local", "tsc.js");
-    const rwcTestPath = path.resolve(tscRoot, "tests", "cases", "rwc", "dt");
+    const rwcTestPath = path.resolve(tscRoot, "internal", "cases", "rwc");
     const resolvedDefinitelyTypedRoot = path.resolve(definitelyTypedRoot);
 
-    console.log(`Resolved TypeScript Repo Root: '${tscRoot}'.`);
-    console.log(`Resolved DefinitelyTyped Repo Root: '${definitelyTypedRoot}'.`);
+    console.log(`Resolved TypeScript Compiler Path: '${tscPath}'.`);
+    console.log(`Resolved TypeScript RWC Path: '${rwcTestPath}'.`);
+    console.log(`Resolved DefinitelyTyped Repo Root: '${resolvedDefinitelyTypedRoot}'.`);
     importDefinitelyTypedTests(tscPath, rwcTestPath, resolvedDefinitelyTypedRoot);
 }
 
@@ -42,7 +43,7 @@ function filePathEndsWith(path: string, endingString: string): boolean {
 
 function copyFileSync(source: string, destination: string) {
     let text = fs.readFileSync(source);
-    fs.writeFileSync(destination, text, {});
+    fs.writeFileSync(destination, text);
 }
 
 function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string ) {
@@ -108,7 +109,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
 
         subDirectories
             .filter(d => ["_infrastructure", "node_modules", ".git"].indexOf(d) < 0)
-            .filter(i => i.indexOf("sipml") >=0 )
+            // .filter(i => i.indexOf("sipml") >= 0 ) // Uncomment when you want to test :)
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
                 const directoryPath = path.join(definitelyTypedRoot, d);
