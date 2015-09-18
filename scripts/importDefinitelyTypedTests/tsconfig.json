@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es3",
+        "target": "ES5",
         "noImplicitAny": true,
         "outDir": "./",
         "rootDir": ".",
