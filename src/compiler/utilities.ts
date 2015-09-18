@@ -660,7 +660,7 @@ namespace ts {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
-    export function isObjectLiteralMethod(node: Node) {
+    export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
