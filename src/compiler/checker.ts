@@ -123,7 +123,10 @@ namespace ts {
         let anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
         let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
 
-        let globals: SymbolTable = {};
+        let globalScope: Scope = {
+            symbols: {},
+            scopeKind: ScopeKind.Global
+        };
 
         let globalESSymbolConstructorSymbol: Symbol;
 
@@ -575,7 +578,7 @@ namespace ts {
             }
 
             if (!result) {
-                result = getSymbol(globals, name, meaning);
+                result = getSymbol(globalScope.symbols, name, meaning);
             }
 
             if (!result) {
@@ -970,7 +973,7 @@ namespace ts {
             }
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                let symbol = getSymbol(globalScope.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
                     return symbol;
                 }
@@ -1195,7 +1198,7 @@ namespace ts {
                 }
             }
 
-            return callback(globals);
+            return callback(globalScope.symbols);
         }
 
         function getQualifiedLeftMeaning(rightMeaning: SymbolFlags) {
@@ -13913,7 +13916,7 @@ namespace ts {
                     location = location.parent;
                 }
 
-                copySymbols(globals, meaning);
+                copySymbols(globalScope.symbols, meaning);
             }
 
             /**
@@ -14525,7 +14528,7 @@ namespace ts {
         }
 
         function hasGlobalName(name: string): boolean {
-            return hasProperty(globals, name);
+            return hasProperty(globalScope.symbols, name);
         }
 
         function getReferencedValueSymbol(reference: Identifier): Symbol {
@@ -14615,7 +14618,7 @@ namespace ts {
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
-                    mergeSymbolTable(globals, file.locals);
+                    mergeSymbolTable(globalScope.symbols, file.locals);
                 }
             });
 
@@ -14623,7 +14626,7 @@ namespace ts {
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
-            globals[undefinedSymbol.name] = undefinedSymbol;
+            globalScope.symbols[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");

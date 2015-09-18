@@ -1233,7 +1233,7 @@ namespace ts {
     }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration {
+    export interface SourceFile extends Declaration, ChildScope {
         statements: NodeArray<Statement>;
         endOfFileToken: Node;
 
@@ -1286,6 +1286,24 @@ namespace ts {
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
+    }
+
+    export const enum ScopeKind {
+        Global = 1,
+        Child = 2
+    }
+
+    export interface Scope {
+        scopeKind: ScopeKind;
+        /* @internal */ symbols?: SymbolTable;           // Locals associated with node (initialized by binding)
+    }
+
+    export interface ChildScope {
+        parentScope: Scope
+    }
+
+    export interface PackageScope extends Scope {
+        entrypoint: SourceFile;
     }
 
     export interface ScriptReferenceHost {
