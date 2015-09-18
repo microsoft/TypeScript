@@ -6574,8 +6574,8 @@ namespace ts {
 
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
-            if (isFunctionExpressionOrArrowFunction(parameter.parent)) {
-                let func = <FunctionExpression>parameter.parent;
+            let func = parameter.parent;
+            if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
                 if (isContextSensitive(func)) {
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
