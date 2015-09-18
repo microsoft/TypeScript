@@ -107,9 +107,12 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
             throw err;
         }
 
+        // When you just want to test the script out on one or two files,
+        // just add a line like the following:
+        //
+        //   .filter(d => d.indexOf("sipml") >= 0 )
         subDirectories
             .filter(d => ["_infrastructure", "node_modules", ".git"].indexOf(d) < 0)
-            // .filter(i => i.indexOf("sipml") >= 0 ) // Uncomment when you want to test :)
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
                 const directoryPath = path.join(definitelyTypedRoot, d);
@@ -137,7 +140,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
 
                     if (testFiles.length === 0) {
                         // no test files but multiple d.ts's, e.g. winjs
-                        let regexp = new RegExp(d + "(([-][0-9])|([\.]d[\.]ts))");
+                        const regexp = new RegExp(d + "(([-][0-9])|([\.]d[\.]ts))");
                         if (tsFiles.length > 1 && tsFiles.every(t => filePathEndsWith(t, ".d.ts") && regexp.test(t))) {
                             for (const fileName of tsFiles) {
                                 importDefinitelyTypedTest(tscPath, rwcTestPath, path.basename(fileName, ".d.ts"), [fileName], paramFile);
