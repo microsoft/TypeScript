@@ -3121,7 +3121,13 @@ namespace ts {
             let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
             node.operator = token;
             nextToken();
-            node.operand = parseUnaryExpressionOrHigher();
+            let tryParseUnaryExpression = parseUnaryExpressionOrHigher();
+            if (token === SyntaxKind.AsteriskAsteriskToken) {
+                node.operand = <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), tryParseUnaryExpression);
+            }
+            else {
+                node.operand = tryParseUnaryExpression; 
+            }
             return finishNode(node);
         }
 
