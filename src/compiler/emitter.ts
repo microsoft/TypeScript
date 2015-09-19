@@ -217,6 +217,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
+                    !resolver.hasPackageInternalName(currentSourceFile, name) &&
                     !hasProperty(currentSourceFile.identifiers, name) &&
                     !hasProperty(generatedNameSet, name);
             }

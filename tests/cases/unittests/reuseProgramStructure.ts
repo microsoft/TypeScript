@@ -180,7 +180,7 @@ module ts {
                         const actual = file.resolvedModules[id];
                         assert.isTrue(actual !== undefined);
                         assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                        assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'shouldBeProperExternalModule': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+                        assert.isTrue(expected.packageRoot === actual.packageRoot, `'shouldBeProperExternalModule': expected '${expected.packageRoot}' to be equal to '${actual.packageRoot}'`);
                     }
                     else {
                         assert.isTrue(file.resolvedModules[id] === undefined);

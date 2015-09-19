@@ -124,8 +124,7 @@ namespace ts {
         let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
 
         let globalScope: Scope = {
-            symbols: {},
-            scopeKind: ScopeKind.Global
+            symbols: {}
         };
 
         let globalESSymbolConstructorSymbol: Symbol;
@@ -426,6 +425,12 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
+                        if ((<SourceFile>location).package) {
+                            if (hasProperty((<SourceFile>location).package.symbols, name)) {
+                                result = (<SourceFile>location).package.symbols[name];
+                                break loop;
+                            }
+                        }
                         if (!isExternalModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         let moduleExports = getSymbolOfNode(location).exports;
@@ -973,7 +978,9 @@ namespace ts {
             }
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                let symbol = getSymbol(globalScope.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                let file = getSourceFileOfNode(location);
+                let symbol = getSymbol(file.package ? file.package.symbols : globalScope.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                if (moduleName === "internal") debugger;
                 if (symbol) {
                     return symbol;
                 }
@@ -1181,6 +1188,11 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
+                        if ((<SourceFile>location).package) {
+                            if (result = callback((<SourceFile>location).package.symbols)) {
+                                return result;
+                            }
+                        }
                         if (!isExternalModule(<SourceFile>location)) {
                             break;
                         }
@@ -13874,6 +13886,9 @@ namespace ts {
 
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
+                            if ((<SourceFile>location).package) {
+                                copySymbols((<SourceFile>location).package.symbols, meaning);
+                            }
                             if (!isExternalModule(<SourceFile>location)) {
                                 break;
                             }
@@ -14531,6 +14546,10 @@ namespace ts {
             return hasProperty(globalScope.symbols, name);
         }
 
+        function hasPackageInternalName(file: SourceFile, name: string): boolean {
+            return file.package && hasProperty(file.package.symbols, name);
+        }
+
         function getReferencedValueSymbol(reference: Identifier): Symbol {
             return getNodeLinks(reference).resolvedSymbol ||
                 resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
@@ -14590,6 +14609,7 @@ namespace ts {
                 isNestedRedeclaration,
                 isValueAliasDeclaration,
                 hasGlobalName,
+                hasPackageInternalName,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
                 isTopLevelValueImportEqualsWithEntityName,
@@ -14615,10 +14635,22 @@ namespace ts {
                 bindSourceFile(file);
             });
 
-            // Initialize global symbol table
+            let packages: Map<PackageDescriptor> = {};
+
+            // Initialize package/global symbol table(s)
             forEach(host.getSourceFiles(), file => {
+                if (file.fileName === 'tests/cases/compiler/node_modules/a/ref.d.ts') debugger;
                 if (!isExternalModule(file)) {
-                    mergeSymbolTable(globalScope.symbols, file.locals);
+                    if (file.package) {
+                        if (!packages[file.package.packageFile]) {
+                            packages[file.package.packageFile] = file.package;
+                        }
+                        file.package = packages[file.package.packageFile]; // Dedupe packages
+                        console.log(file.package.packageFile, Object.keys(file.locals));
+                        mergeSymbolTable(file.package.symbols, file.locals);
+                    } else {
+                        mergeSymbolTable(globalScope.symbols, file.locals);
+                    }
                 }
             });
 
@@ -14673,6 +14705,10 @@ namespace ts {
             }
 
             anyArrayType = createArrayType(anyType);
+
+            forEachValue(packages, package => { // Once all packages are merged and global scope is setup, merge global scope into each package
+                mergeSymbolTable(package.symbols, globalScope.symbols);
+            });
         }
 
         function createInstantiatedPromiseLikeType(): ObjectType {

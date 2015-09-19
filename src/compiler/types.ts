@@ -1231,9 +1231,13 @@ namespace ts {
         postParameterName?: Identifier;
         isBracketed: boolean;
     }
+    
+    export interface PackageDescriptor extends Scope {
+        packageFile: string;
+    }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration, ChildScope {
+    export interface SourceFile extends Declaration {
         statements: NodeArray<Statement>;
         endOfFileToken: Node;
 
@@ -1244,6 +1248,9 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+
+        /* @internal */
+        package?: PackageDescriptor;
         
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
@@ -1288,22 +1295,8 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
     }
 
-    export const enum ScopeKind {
-        Global = 1,
-        Child = 2
-    }
-
     export interface Scope {
-        scopeKind: ScopeKind;
-        /* @internal */ symbols?: SymbolTable;           // Locals associated with node (initialized by binding)
-    }
-
-    export interface ChildScope {
-        parentScope: Scope
-    }
-
-    export interface PackageScope extends Scope {
-        entrypoint: SourceFile;
+        symbols: SymbolTable;           // Locals associated with node (initialized by binding)
     }
 
     export interface ScriptReferenceHost {
@@ -1596,6 +1589,7 @@ namespace ts {
     /* @internal */
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
+        hasPackageInternalName(node:SourceFile, name: string): boolean;
         getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedNestedRedeclaration(node: Identifier): Declaration;
@@ -2308,9 +2302,8 @@ namespace ts {
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
          * - be a .d.ts file 
          * - use top level imports\exports
-         * - don't use tripleslash references
          */
-        isExternalLibraryImport?: boolean;
+        packageRoot?: string;
     }
     
     export interface ResolvedModuleWithFailedLookupLocations {
