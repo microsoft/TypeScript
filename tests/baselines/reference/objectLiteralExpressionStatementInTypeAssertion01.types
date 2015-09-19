@@ -1,0 +1,121 @@
+=== tests/cases/conformance/statements/expressionStatements/objectLiteralExpressionStatementInTypeAssertion01.ts ===
+
+<any>{ a: 10, b: 20 };
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+(<any>{ a: 10, b: 20 });
+>(<any>{ a: 10, b: 20 }) : any
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+({ a: 10, b: 20 } as any);
+>({ a: 10, b: 20 } as any) : any
+>{ a: 10, b: 20 } as any : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+((<any>{ a: 10, b: 20 } as any));
+>((<any>{ a: 10, b: 20 } as any)) : any
+>(<any>{ a: 10, b: 20 } as any) : any
+><any>{ a: 10, b: 20 } as any : any
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+
+function f() {
+>f : () => void
+
+    <any>{ a: 10, b: 20 };
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+    (<any>{ a: 10, b: 20 });
+>(<any>{ a: 10, b: 20 }) : any
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+    ({ a: 10, b: 20 } as any);
+>({ a: 10, b: 20 } as any) : any
+>{ a: 10, b: 20 } as any : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+    ((<any>{ a: 10, b: 20 } as any));
+>((<any>{ a: 10, b: 20 } as any)) : any
+>(<any>{ a: 10, b: 20 } as any) : any
+><any>{ a: 10, b: 20 } as any : any
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+}
+
+namespace n {
+>n : typeof n
+
+    <any>{ a: 10, b: 20 };
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+    (<any>{ a: 10, b: 20 });
+>(<any>{ a: 10, b: 20 }) : any
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+    ({ a: 10, b: 20 } as any);
+>({ a: 10, b: 20 } as any) : any
+>{ a: 10, b: 20 } as any : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+
+    ((<any>{ a: 10, b: 20 } as any));
+>((<any>{ a: 10, b: 20 } as any)) : any
+>(<any>{ a: 10, b: 20 } as any) : any
+><any>{ a: 10, b: 20 } as any : any
+><any>{ a: 10, b: 20 } : any
+>{ a: 10, b: 20 } : { a: number; b: number; }
+>a : number
+>10 : number
+>b : number
+>20 : number
+}
