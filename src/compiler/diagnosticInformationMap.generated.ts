@@ -567,6 +567,8 @@ namespace ts {
         Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix: { code: 6060, category: DiagnosticCategory.Message, key: "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix)." },
         NEWLINE: { code: 6061, category: DiagnosticCategory.Message, key: "NEWLINE" },
         Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6062, category: DiagnosticCategory.Error, key: "Argument for '--newLine' option must be 'CRLF' or 'LF'." },
+        Specify_diagnostic_printing_style_Colon_simple_default_or_pretty: { code: 6063, category: DiagnosticCategory.Message, key: "Specify diagnostic printing style: 'simple' (default) or 'pretty'." },
+        Argument_for_diagnosticStyle_must_be_simple_or_pretty: { code: 6064, category: DiagnosticCategory.Error, key: "Argument for '--diagnosticStyle' must be 'simple' or 'pretty'." },
         Specify_JSX_code_generation_Colon_preserve_or_react: { code: 6080, category: DiagnosticCategory.Message, key: "Specify JSX code generation: 'preserve' or 'react'" },
         Argument_for_jsx_must_be_preserve_or_react: { code: 6081, category: DiagnosticCategory.Message, key: "Argument for '--jsx' must be 'preserve' or 'react'." },
         Option_experimentalDecorators_must_also_be_specified_when_option_emitDecoratorMetadata_is_specified: { code: 6064, category: DiagnosticCategory.Error, key: "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified." },

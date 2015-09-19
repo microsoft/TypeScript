@@ -6,9 +6,11 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
-    const reportDiagnostic = sys.writesToTty && sys.writesToTty() ?
-            reportDiagnosticWithColorAndContext :
-            reportDiagnosticSimply;
+    export interface CompilerOptions {
+        diagnosticStyle?: DiagnosticStyle;
+    }
+
+    let reportDiagnostic = reportDiagnosticSimply;
 
     function reportDiagnostics(diagnostics: Diagnostic[]): void {
         for (let diagnostic of diagnostics) {
@@ -221,7 +223,7 @@ namespace ts {
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
-                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
@@ -235,7 +237,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
         }
 
@@ -247,12 +249,12 @@ namespace ts {
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
-                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
@@ -270,7 +272,7 @@ namespace ts {
         // Firefox has Object.prototype.watch
         if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
             if (!sys.watchFile) {
-                reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
@@ -288,7 +290,7 @@ namespace ts {
 
                     let result = readConfigFile(configFileName);
                     if (result.error) {
-                        reportDiagnosticSimply(result.error);
+                        reportDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
 
@@ -310,6 +312,10 @@ namespace ts {
                 compilerHost.getSourceFile = getSourceFile;
             }
 
+            if (compilerOptions.diagnosticStyle === DiagnosticStyle.Pretty) {
+                reportDiagnostic = reportDiagnosticWithColorAndContext;
+            }
+
             let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
             if (!compilerOptions.watch) {
@@ -317,7 +323,7 @@ namespace ts {
             }
 
             setCachedProgram(compileResult.program);
-            reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -379,7 +385,7 @@ namespace ts {
 
         function recompile() {
             timerHandle = undefined;
-            reportDiagnosticSimply(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
     }

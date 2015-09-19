@@ -2094,6 +2094,12 @@ namespace ts {
         JSX
     }
 
+    /* @internal */
+    export const enum DiagnosticStyle {
+        Simple,
+        Pretty,
+    }
+
     export interface ParsedCommandLine {
         options: CompilerOptions;
         fileNames: string[];

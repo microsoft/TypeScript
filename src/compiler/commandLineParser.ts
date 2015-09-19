@@ -21,6 +21,17 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "diagnosticStyle",
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Specify_diagnostic_printing_style_Colon_simple_default_or_pretty,
+            type: {
+                "simple": DiagnosticStyle.Simple,
+                "pretty": DiagnosticStyle.Pretty,
+            },
+            error: Diagnostics.Argument_for_diagnosticStyle_must_be_simple_or_pretty,
+            experimental: true,
+        },
+        {
             name: "emitBOM",
             type: "boolean"
         },

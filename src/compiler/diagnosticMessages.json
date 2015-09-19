@@ -2258,6 +2258,15 @@
         "category": "Error",
         "code": 6062
     },
+    "Specify diagnostic printing style: 'simple' (default) or 'pretty'.": {
+        "category": "Message",
+        "code": 6063
+    },
+    "Argument for '--diagnosticStyle' must be 'simple' or 'pretty'.": {
+        "category": "Error",
+        "code": 6064
+    },
+
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
