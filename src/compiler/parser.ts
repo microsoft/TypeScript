@@ -3015,7 +3015,11 @@ namespace ts {
                 let newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
-                if (newPrecedence <= precedence) {
+                if (token === SyntaxKind.AsteriskAsteriskToken && newPrecedence < precedence) {
+                    // ** operator is right-assocative
+                    break;
+                }
+                else if (token !== SyntaxKind.AsteriskAsteriskToken && newPrecedence <= precedence) {
                     break;
                 }
 
@@ -3089,6 +3093,8 @@ namespace ts {
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
                     return 10;
+                case SyntaxKind.AsteriskAsteriskToken:
+                    return 11;
             }
 
             // -1 is lower than all other precedences.  Returning it will cause binary expression

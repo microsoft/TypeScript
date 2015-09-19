@@ -2522,12 +2522,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitNodeWithoutSourceMap(node.left);
                         write(`", `);
                     }
-                    emit(node.left);
-                    let indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
-                    write(tokenToString(node.operatorToken.kind));
-                    let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
-                    emit(node.right);
-                    decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
+
+                    if (languageVersion < ScriptTarget.ES7 && node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken) {
+                        write("Math.pow(");
+                        emit(node.left);
+                        write(", ");
+                        emit(node.right);
+                        write(")");
+                    }
+                    else {
+                        emit(node.left);
+                        let indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
+                        write(tokenToString(node.operatorToken.kind));
+                        let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
+                        emit(node.right);
+                        decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
+                    }
+
                     if (exportChanged) {
                         write(")");
                     }

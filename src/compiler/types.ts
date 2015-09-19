@@ -64,6 +64,7 @@ namespace ts {
         PlusToken,
         MinusToken,
         AsteriskToken,
+        AsteriskAsteriskToken,
         SlashToken,
         PercentToken,
         PlusPlusToken,
@@ -86,6 +87,7 @@ namespace ts {
         PlusEqualsToken,
         MinusEqualsToken,
         AsteriskEqualsToken,
+        AsteriskAsteriskEqualsToken,
         SlashEqualsToken,
         PercentEqualsToken,
         LessThanLessThanEqualsToken,
@@ -702,13 +704,15 @@ namespace ts {
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
+    export type UnaryOrBinaryExpression = UnaryExpression | BinaryExpression;
+
     export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
 
     export interface PrefixUnaryExpression extends UnaryExpression {
         operator: SyntaxKind;
-        operand: UnaryExpression;
+        operand: UnaryOrBinaryExpression;
     }
 
     export interface PostfixUnaryExpression extends PostfixExpression {
@@ -733,19 +737,19 @@ namespace ts {
     }
 
     export interface DeleteExpression extends UnaryExpression {
-        expression: UnaryExpression;
+        expression: UnaryOrBinaryExpression;
     }
 
     export interface TypeOfExpression extends UnaryExpression {
-        expression: UnaryExpression;
+        expression: UnaryOrBinaryExpression;
     }
 
     export interface VoidExpression extends UnaryExpression {
-        expression: UnaryExpression;
+        expression: UnaryOrBinaryExpression;
     }
 
     export interface AwaitExpression extends UnaryExpression {
-        expression: UnaryExpression;
+        expression: UnaryOrBinaryExpression;
     }
 
     export interface YieldExpression extends Expression {
@@ -852,7 +856,7 @@ namespace ts {
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
-        expression: UnaryExpression;
+        expression: UnaryOrBinaryExpression;
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
@@ -2101,6 +2105,7 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES7 = 3,
         Latest = ES6,
     }
 
