@@ -180,10 +180,17 @@ namespace ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
+
+            let fileOrDirectory = normalizePath(commandLine.options.project);
+            if (!fileOrDirectory || sys.directoryExists(fileOrDirectory)) {
+                configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
+            }
+            else {
+                configFileName = fileOrDirectory;
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
