@@ -804,7 +804,7 @@ namespace ts {
         function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
             let lastError = lastOrUndefined(parseDiagnostics);
-            if (!lastError || start !== lastError.start) {
+            if ((!lastError || start !== lastError.start) && (contextFlags & ParserContextFlags.NoError) === 0) {
                 parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
             }
 
@@ -1026,6 +1026,7 @@ namespace ts {
             }
 
             let result = createNode(kind, scanner.getStartPos());
+            result.flags |= NodeFlags.Missing;
             (<Identifier>result).text = "";
             return finishNode(result);
         }
@@ -1814,7 +1815,14 @@ namespace ts {
             return entity;
         }
 
-        function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
+        function parseEntityNameNoError(allowReservedWords: boolean): EntityName {
+            contextFlags |= ParserContextFlags.NoError;
+            let entity = parseEntityName(allowReservedWords);
+            contextFlags &= ~ParserContextFlags.NoError;
+            return entity;
+        }
+
+        function parseRightSideOfDot(allowReservedWords: boolean): Identifier {
             // Technically a keyword is valid here as all identifiers and keywords are identifier names.
             // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
@@ -1844,8 +1852,7 @@ namespace ts {
                     return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken*/ true, Diagnostics.Identifier_expected);
                 }
             }
-
-            return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
+            return allowReservedWords ? parseIdentifierName() : parseIdentifier();
         }
 
         function parseTemplateExpression(): TemplateExpression {
@@ -1922,20 +1929,60 @@ namespace ts {
         // TYPES
 
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
-            let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+            let typeName = parseEntityNameNoError(/*allowReservedWords*/ false);
+
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                 nextToken();
-                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
-                node.parameterName = <Identifier>typeName;
-                node.type = parseType();
-                return finishNode(node);
+                let pnode = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                pnode.parameterName = <Identifier>typeName;
+                pnode.type = parseType();
+                return finishNode(pnode);
             }
+
             let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
-            node.typeName = typeName;
-            if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
-                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            if (typeName.flags & NodeFlags.Missing) {
+                errorOnInvalidTypeReference(typeName);
+            } else {
+                node.typeName = typeName;
+                if (token === SyntaxKind.LessThanToken && !scanner.hasPrecedingLineBreak()) {
+                    node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+                }
+            }
+            if ((<QualifiedName>typeName).right && ((<QualifiedName>typeName).right.flags & NodeFlags.Missing)) {
+                errorOnQualifiedTypeIdentifier()
             }
             return finishNode(node);
+        }
+
+        function errorOnInvalidTypeReference(node: Identifier | QualifiedName): void {
+            let needsParentheses = true;
+            if (isStartOfFunctionType()) {
+                parseFunctionOrConstructorType(SyntaxKind.FunctionType);
+            }
+            else if (token === SyntaxKind.NewKeyword) {
+                parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
+            } else {
+                needsParentheses = false;
+            }
+            if (needsParentheses) {
+                let hint = "(" + sourceFile.text.substring(node.pos, scanner.getStartPos()).trim() + ")";
+                parseErrorAtPosition(node.pos, scanner.getStartPos() - node.pos, Diagnostics.Invalid_type_To_avoid_ambiguity_add_parentheses_Colon_0, hint);
+            } else {
+                parseErrorAtCurrentToken(Diagnostics.Type_expected);
+            }
+        }
+
+        function errorOnQualifiedTypeIdentifier(): void {
+            if (scanner.isReservedWord()) {
+                parseErrorAtCurrentToken(Diagnostics.Identifier_expected_reserved_word_0_not_allowed_here, tokenToString(token));
+            }
+            else {
+                if (scanner.hasPrecedingLineBreak()) {
+                    parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                } else {
+                    parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+                }
+            }
         }
 
         function parseTypeQuery(): TypeQueryNode {

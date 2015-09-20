@@ -380,6 +380,7 @@ namespace ts {
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
         ContainsThis =      0x00080000,  // Interface contains references to "this"
+        Missing =           0x00100000,  // Node which is invalid/missing
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
