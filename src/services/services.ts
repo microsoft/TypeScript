@@ -802,7 +802,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
-        public resolvedModules: Map<string>;
+        public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
@@ -1022,7 +1022,7 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
          * host specific questions using 'getScriptSnapshot'.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     //
@@ -2152,6 +2152,7 @@ namespace ts {
             //
             //    export * from "mod"
             //    export {a as b} from "mod"
+            //    export import i = require("mod")
 
             while (token !== SyntaxKind.EndOfFileToken) {
                 if (token === SyntaxKind.DeclareKeyword) {
@@ -2273,6 +2274,25 @@ namespace ts {
                             if (token === SyntaxKind.StringLiteral) {
                                 // export * from "mod"
                                 recordModuleName();
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.ImportKeyword) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.EqualsToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.RequireKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.OpenParenToken) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            //  export import i = require("mod");
+                                            recordModuleName();
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

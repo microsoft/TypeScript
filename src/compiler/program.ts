@@ -12,7 +12,7 @@ namespace ts {
     
     let emptyArray: any[] = [];
     
-    export const version = "1.6.0";
+    export const version = "1.7.0";
 
     export function findConfigFile(searchPath: string): string {
         let fileName = "tsconfig.json";
@@ -36,7 +36,7 @@ namespace ts {
         return normalizePath(referencedFileName);
     }
     
-    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         let moduleResolution = compilerOptions.moduleResolution !== undefined 
             ? compilerOptions.moduleResolution
             : compilerOptions.module === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
@@ -47,7 +47,7 @@ namespace ts {
         }
     }
     
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModule {
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         let containingDirectory = getDirectoryPath(containingFile);        
 
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
@@ -56,11 +56,13 @@ namespace ts {
             let resolvedFileName = loadNodeModuleFromFile(candidate, /* loadOnlyDts */ false, failedLookupLocations, host);
             
             if (resolvedFileName) {
-                return { resolvedFileName, failedLookupLocations };
+                return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
             
             resolvedFileName = loadNodeModuleFromDirectory(candidate, /* loadOnlyDts */ false, failedLookupLocations, host);
-            return { resolvedFileName, failedLookupLocations };
+            return resolvedFileName
+                ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
+                : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
             return loadModuleFromNodeModules(moduleName, containingDirectory, host);
@@ -117,7 +119,7 @@ namespace ts {
         return loadNodeModuleFromFile(combinePaths(candidate, "index"), loadOnlyDts, failedLookupLocation, host);
     }
     
-    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModule {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         let failedLookupLocations: string[] = []; 
         directory = normalizeSlashes(directory);
         while (true) {
@@ -127,12 +129,12 @@ namespace ts {
                 let candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
                 let result = loadNodeModuleFromFile(candidate, /* loadOnlyDts */ true, failedLookupLocations, host);
                 if (result) {
-                    return { resolvedFileName: result, failedLookupLocations };
+                    return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
                 
                 result = loadNodeModuleFromDirectory(candidate, /* loadOnlyDts */ true, failedLookupLocations, host);
                 if (result) {
-                    return { resolvedFileName: result, failedLookupLocations };
+                    return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
             }
             
@@ -144,47 +146,19 @@ namespace ts {
             directory = parentPath;
         }
         
-        return { resolvedFileName: undefined, failedLookupLocations };
-    }
-    
-    export function baseUrlModuleNameResolver(moduleName: string, containingFile: string, baseUrl: string, host: ModuleResolutionHost): ResolvedModule {
-        Debug.assert(baseUrl !== undefined);
-        
-        let normalizedModuleName = normalizeSlashes(moduleName);         
-        let basePart = useBaseUrl(moduleName) ? baseUrl : getDirectoryPath(containingFile);        
-        let candidate = normalizePath(combinePaths(basePart, moduleName));
-        
-        let failedLookupLocations: string[] = [];
-        
-        return forEach(supportedExtensions, ext => tryLoadFile(candidate + ext)) || { resolvedFileName: undefined, failedLookupLocations }; 
-        
-        function tryLoadFile(location: string): ResolvedModule {
-            if (host.fileExists(location)) {
-                return { resolvedFileName: location, failedLookupLocations }; 
-            }
-            else {
-                failedLookupLocations.push(location);
-                return undefined;
-            }
-        }
+        return { resolvedModule: undefined, failedLookupLocations };
     }
     
     function nameStartsWithDotSlashOrDotDotSlash(name: string) {
         let i = name.lastIndexOf("./", 1);
         return i === 0 || (i === 1 && name.charCodeAt(0) === CharacterCodes.dot);
     }
-    
-    function useBaseUrl(moduleName: string): boolean {
-        // path is not rooted
-        // module name does not start with './' or '../'
-        return getRootLength(moduleName) === 0 && !nameStartsWithDotSlashOrDotDotSlash(moduleName);
-    }
 
-    export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModule {
+    export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         
         // module names that contain '!' are used to reference resources and are not resolved to actual files on disk
         if (moduleName.indexOf('!') != -1) {
-            return { resolvedFileName: undefined, failedLookupLocations: [] };
+            return { resolvedModule: undefined, failedLookupLocations: [] };
         }
         
         let searchPath = getDirectoryPath(containingFile);
@@ -222,7 +196,9 @@ namespace ts {
             searchPath = parentPath;
         }
 
-        return { resolvedFileName: referencedSourceFile, failedLookupLocations };
+        return referencedSourceFile
+            ? { resolvedModule: { resolvedFileName: referencedSourceFile  }, failedLookupLocations }
+            : { resolvedModule: undefined, failedLookupLocations };
     }
 
     /* @internal */
@@ -372,9 +348,9 @@ namespace ts {
 
         host = host || createCompilerHost(options);
         
-        const resolveModuleNamesWorker =
-            host.resolveModuleNames || 
-            ((moduleNames, containingFile) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedFileName));
+        const resolveModuleNamesWorker = host.resolveModuleNames
+            ? ((moduleNames: string[], containingFile: string) => host.resolveModuleNames(moduleNames, containingFile))
+            : ((moduleNames: string[], containingFile: string) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedModule));
 
         let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
         
@@ -494,10 +470,17 @@ namespace ts {
                         let resolutions = resolveModuleNamesWorker(moduleNames, newSourceFile.fileName);
                         // ensure that module resolution results are still correct
                         for (let i = 0; i < moduleNames.length; ++i) {
-                            let oldResolution = getResolvedModuleFileName(oldSourceFile, moduleNames[i]);
-                            if (oldResolution !== resolutions[i]) {
+                            let newResolution = resolutions[i];
+                            let oldResolution = getResolvedModule(oldSourceFile, moduleNames[i]);
+                            let resolutionChanged = oldResolution
+                                ? !newResolution || 
+                                  oldResolution.resolvedFileName !== newResolution.resolvedFileName ||
+                                  !!oldResolution.isExternalLibraryImport !== !!newResolution.isExternalLibraryImport
+                                : newResolution;
+                                
+                            if (resolutionChanged) {
                                 return false;
-                            }                            
+                            }
                         }
                     }
                     // pass the cache of module resolutions from the old source file
@@ -874,9 +857,23 @@ namespace ts {
                 let resolutions = resolveModuleNamesWorker(moduleNames, file.fileName);
                 for (let i = 0; i < file.imports.length; ++i) {
                     let resolution = resolutions[i];
-                    setResolvedModuleName(file, moduleNames[i], resolution);
+                    setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        findModuleSourceFile(resolution, file.imports[i]);
+                        const importedFile = findModuleSourceFile(resolution.resolvedFileName, file.imports[i]);
+                        if (importedFile && resolution.isExternalLibraryImport) {
+                            if (!isExternalModule(importedFile)) {
+                                let start = getTokenPosOfNode(file.imports[i], file)
+                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
+                            }
+                            else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
+                                let start = getTokenPosOfNode(file.imports[i], file)
+                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_can_only_be_in_d_ts_files_Please_contact_the_package_author_to_update_the_package_definition));
+                            }
+                            else if (importedFile.referencedFiles.length) {
+                                let firstRef = importedFile.referencedFiles[0];
+                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
+                            }
+                        }
                     }
                 }
             }

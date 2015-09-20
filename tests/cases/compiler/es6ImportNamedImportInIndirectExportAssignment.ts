@@ -8,6 +8,6 @@ export module a {
 }
 
 // @filename: es6ImportNamedImportInIndirectExportAssignment_1.ts
-import { a } from "es6ImportNamedImportInIndirectExportAssignment_0";
+import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
 import x = a;
 export = x;

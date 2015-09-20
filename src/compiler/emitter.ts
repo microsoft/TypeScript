@@ -3148,6 +3148,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             
             function emitExportSpecifierInSystemModule(specifier: ExportSpecifier): void {
                 Debug.assert(compilerOptions.module === ModuleKind.System);
+
+                if (!resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name) && !resolver.isValueAliasDeclaration(specifier) ) {
+                    return;
+                }
                 
                 writeLine();
                 emitStart(specifier.name);
@@ -3216,22 +3220,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function ensureIdentifier(expr: Expression): Expression {
-                    if (expr.kind !== SyntaxKind.Identifier) {
-                        let identifier = createTempVariable(TempFlags.Auto);
-                        if (!canDefineTempVariablesInPlace) {
-                            recordTempDeclaration(identifier);
-                        }
-                        emitAssignment(identifier, expr);
-                        expr = identifier;
+                /**
+                 * Ensures that there exists a declared identifier whose value holds the given expression.
+                 * This function is useful to ensure that the expression's value can be read from in subsequent expressions.
+                 * Unless 'reuseIdentifierExpressions' is false, 'expr' will be returned if it is just an identifier.
+                 *
+                 * @param expr the expression whose value needs to be bound.
+                 * @param reuseIdentifierExpressions true if identifier expressions can simply be returned;
+                 *                                   false if it is necessary to always emit an identifier.
+                 */
+                function ensureIdentifier(expr: Expression, reuseIdentifierExpressions: boolean): Expression {
+                    if (expr.kind === SyntaxKind.Identifier && reuseIdentifierExpressions) {
+                        return expr;
                     }
-                    return expr;
+
+                    let identifier = createTempVariable(TempFlags.Auto);
+                    if (!canDefineTempVariablesInPlace) {
+                        recordTempDeclaration(identifier);
+                    }
+                    emitAssignment(identifier, expr);
+                    return identifier;
                 }
 
                 function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
                     // The value expression will be evaluated twice, so for anything but a simple identifier
                     // we need to generate a temporary variable
-                    value = ensureIdentifier(value);
+                    value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     let equals = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
@@ -3282,7 +3296,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (properties.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = ensureIdentifier(value);
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                     }
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
@@ -3297,7 +3311,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (elements.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = ensureIdentifier(value);
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                     }
                     for (let i = 0; i < elements.length; i++) {
                         let e = elements[i];
@@ -3342,7 +3356,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
-                        value = ensureIdentifier(value);
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
                         emitDestructuringAssignment(target, value);
                         write(", ");
                         emit(value);
@@ -3352,7 +3366,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function emitBindingElement(target: BindingElement, value: Expression) {
+                function emitBindingElement(target: BindingElement | VariableDeclaration, value: Expression) {
                     if (target.initializer) {
                         // Combine value and initializer
                         value = value ? createDefaultValueCheck(value, target.initializer) : target.initializer;
@@ -3362,14 +3376,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         value = createVoidZero();
                     }
                     if (isBindingPattern(target.name)) {
-                        let pattern = <BindingPattern>target.name;
-                        let elements = pattern.elements;
-                        if (elements.length !== 1) {
-                            // For anything but a single element destructuring we need to generate a temporary
-                            // to ensure value is evaluated exactly once.
-                            value = ensureIdentifier(value);
+                        const pattern = <BindingPattern>target.name;
+                        const elements = pattern.elements;
+                        const numElements = elements.length;
+
+                        if (numElements !== 1) {
+                            // For anything other than a single-element destructuring we need to generate a temporary
+                            // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+                            // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+                            // so in that case, we'll intentionally create that temporary.
+                            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0);
                         }
-                        for (let i = 0; i < elements.length; i++) {
+
+                        for (let i = 0; i < numElements; i++) {
                             let element = elements[i];
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
@@ -3381,7 +3400,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     // Rewrite element to a declaration that accesses array element at index i
                                     emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
-                                else if (i === elements.length - 1) {
+                                else if (i === numElements - 1) {
                                     emitBindingElement(element, createSliceCall(value, i));
                                 }
                             }
@@ -6095,7 +6114,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return;
                     }
 
-                    if (isInternalModuleImportEqualsDeclaration(node)) {
+                    if (isInternalModuleImportEqualsDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }

@@ -1,4 +1,4 @@
-//@module: commonjs
-// @comments: true
+// @module: commonjs
+// @removeComments: false
 /* not copyright */
 import foo = require('./foo');

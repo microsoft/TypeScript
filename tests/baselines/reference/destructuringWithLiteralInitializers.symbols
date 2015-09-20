@@ -1,0 +1,194 @@
+=== tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers.ts ===
+// (arg: { x: any, y: any }) => void
+function f1({ x, y }) { }
+>f1 : Symbol(f1, Decl(destructuringWithLiteralInitializers.ts, 0, 0))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 1, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 1, 16))
+
+f1({ x: 1, y: 1 });
+>f1 : Symbol(f1, Decl(destructuringWithLiteralInitializers.ts, 0, 0))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 2, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 2, 10))
+
+// (arg: { x: any, y?: number }) => void
+function f2({ x, y = 0 }) { }
+>f2 : Symbol(f2, Decl(destructuringWithLiteralInitializers.ts, 2, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 5, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 5, 16))
+
+f2({ x: 1 });
+>f2 : Symbol(f2, Decl(destructuringWithLiteralInitializers.ts, 2, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 6, 4))
+
+f2({ x: 1, y: 1 });
+>f2 : Symbol(f2, Decl(destructuringWithLiteralInitializers.ts, 2, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 7, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 7, 10))
+
+// (arg: { x?: number, y?: number }) => void
+function f3({ x = 0, y = 0 }) { }
+>f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 10, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 10, 20))
+
+f3({});
+>f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
+
+f3({ x: 1 });
+>f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 12, 4))
+
+f3({ y: 1 });
+>f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 13, 4))
+
+f3({ x: 1, y: 1 });
+>f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 14, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 14, 10))
+
+// (arg?: { x: number, y: number }) => void
+function f4({ x, y } = { x: 0, y: 0 }) { }
+>f4 : Symbol(f4, Decl(destructuringWithLiteralInitializers.ts, 14, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 17, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 17, 16))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 17, 24))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 17, 30))
+
+f4();
+>f4 : Symbol(f4, Decl(destructuringWithLiteralInitializers.ts, 14, 19))
+
+f4({ x: 1, y: 1 });
+>f4 : Symbol(f4, Decl(destructuringWithLiteralInitializers.ts, 14, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 19, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 19, 10))
+
+// (arg?: { x: number, y?: number }) => void
+function f5({ x, y = 0 } = { x: 0 }) { }
+>f5 : Symbol(f5, Decl(destructuringWithLiteralInitializers.ts, 19, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 22, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 22, 16))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 22, 28))
+
+f5();
+>f5 : Symbol(f5, Decl(destructuringWithLiteralInitializers.ts, 19, 19))
+
+f5({ x: 1 });
+>f5 : Symbol(f5, Decl(destructuringWithLiteralInitializers.ts, 19, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 24, 4))
+
+f5({ x: 1, y: 1 });
+>f5 : Symbol(f5, Decl(destructuringWithLiteralInitializers.ts, 19, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 25, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 25, 10))
+
+// (arg?: { x?: number, y?: number }) => void
+function f6({ x = 0, y = 0 } = {}) { }
+>f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 28, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 28, 20))
+
+f6();
+>f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
+
+f6({});
+>f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
+
+f6({ x: 1 });
+>f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 31, 4))
+
+f6({ y: 1 });
+>f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 32, 4))
+
+f6({ x: 1, y: 1 });
+>f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 33, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 33, 10))
+
+// (arg?: { a: { x?: number, y?: number } }) => void
+function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
+>f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
+>a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 36, 39))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 36, 18))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 36, 25))
+>a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 36, 39))
+
+f7();
+>f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
+
+f7({ a: {} });
+>f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
+>a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 38, 4))
+
+f7({ a: { x: 1 } });
+>f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
+>a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 39, 4))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 39, 9))
+
+f7({ a: { y: 1 } });
+>f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
+>a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 40, 4))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 40, 9))
+
+f7({ a: { x: 1, y: 1 } });
+>f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
+>a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 41, 4))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 41, 9))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 41, 15))
+
+// (arg: [any, any]) => void
+function g1([x, y]) { }
+>g1 : Symbol(g1, Decl(destructuringWithLiteralInitializers.ts, 41, 26))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 44, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 44, 15))
+
+g1([1, 1]);
+>g1 : Symbol(g1, Decl(destructuringWithLiteralInitializers.ts, 41, 26))
+
+// (arg: [number, number]) => void
+function g2([x = 0, y = 0]) { }
+>g2 : Symbol(g2, Decl(destructuringWithLiteralInitializers.ts, 45, 11))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 48, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 48, 19))
+
+g2([1, 1]);
+>g2 : Symbol(g2, Decl(destructuringWithLiteralInitializers.ts, 45, 11))
+
+// (arg?: [number, number]) => void
+function g3([x, y] = [0, 0]) { }
+>g3 : Symbol(g3, Decl(destructuringWithLiteralInitializers.ts, 49, 11))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 52, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 52, 15))
+
+g3();
+>g3 : Symbol(g3, Decl(destructuringWithLiteralInitializers.ts, 49, 11))
+
+g3([1, 1]);
+>g3 : Symbol(g3, Decl(destructuringWithLiteralInitializers.ts, 49, 11))
+
+// (arg?: [number, number]) => void
+function g4([x, y = 0] = [0]) { }
+>g4 : Symbol(g4, Decl(destructuringWithLiteralInitializers.ts, 54, 11))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 57, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 57, 15))
+
+g4();
+>g4 : Symbol(g4, Decl(destructuringWithLiteralInitializers.ts, 54, 11))
+
+g4([1, 1]);
+>g4 : Symbol(g4, Decl(destructuringWithLiteralInitializers.ts, 54, 11))
+
+// (arg?: [number, number]) => void
+function g5([x = 0, y = 0] = []) { }
+>g5 : Symbol(g5, Decl(destructuringWithLiteralInitializers.ts, 59, 11))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 62, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 62, 19))
+
+g5();
+>g5 : Symbol(g5, Decl(destructuringWithLiteralInitializers.ts, 59, 11))
+
+g5([1, 1]);
+>g5 : Symbol(g5, Decl(destructuringWithLiteralInitializers.ts, 59, 11))
+

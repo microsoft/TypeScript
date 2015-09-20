@@ -6,8 +6,8 @@ export var a = 10;
 export var x = a;
 
 //// [es6ImportNamedImport_1.ts]
-import { a1 } from "es6ImportNamedImportNoExportMember_0";
-import { x1 as x } from "es6ImportNamedImportNoExportMember_0";
+import { a1 } from "./es6ImportNamedImportNoExportMember_0";
+import { x1 as x } from "./es6ImportNamedImportNoExportMember_0";
 
 //// [es6ImportNamedImportNoExportMember_0.js]
 exports.a = 10;
