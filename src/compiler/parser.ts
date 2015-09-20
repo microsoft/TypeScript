@@ -1942,14 +1942,15 @@ namespace ts {
             let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
             if (typeName.flags & NodeFlags.Missing) {
                 errorOnInvalidTypeReference(typeName);
-            } else {
+            }
+            else {
                 node.typeName = typeName;
                 if (token === SyntaxKind.LessThanToken && !scanner.hasPrecedingLineBreak()) {
                     node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
                 }
             }
             if ((<QualifiedName>typeName).right && ((<QualifiedName>typeName).right.flags & NodeFlags.Missing)) {
-                errorOnQualifiedTypeIdentifier()
+                errorOnInvalidTypeQualifiedName()
             }
             return finishNode(node);
         }
@@ -1961,25 +1962,28 @@ namespace ts {
             }
             else if (token === SyntaxKind.NewKeyword) {
                 parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
-            } else {
+            }
+            else {
                 needsParentheses = false;
             }
             if (needsParentheses) {
                 let hint = "(" + sourceFile.text.substring(node.pos, scanner.getStartPos()).trim() + ")";
                 parseErrorAtPosition(node.pos, scanner.getStartPos() - node.pos, Diagnostics.Invalid_type_To_avoid_ambiguity_add_parentheses_Colon_0, hint);
-            } else {
+            }
+            else {
                 parseErrorAtCurrentToken(Diagnostics.Type_expected);
             }
         }
 
-        function errorOnQualifiedTypeIdentifier(): void {
+        function errorOnInvalidTypeQualifiedName(): void {
             if (scanner.isReservedWord()) {
                 parseErrorAtCurrentToken(Diagnostics.Identifier_expected_reserved_word_0_not_allowed_here, tokenToString(token));
             }
             else {
                 if (scanner.hasPrecedingLineBreak()) {
                     parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                } else {
+                }
+                else {
                     parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                 }
             }
