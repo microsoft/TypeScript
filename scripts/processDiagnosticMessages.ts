@@ -37,21 +37,28 @@ function main(): void {
 
 function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosticMessageTable) {
     const originalMessageForCode: string[] = [];
+    let numConflicts = 0;
     
     for (const currentMessage of messages) {
         const code = diagnosticTable[currentMessage].code;
 
         if (code in originalMessageForCode) {
             const originalMessage = originalMessageForCode[code];
-            ts.sys.write("\x1b[93m"); // High intensity yellow.
-            ts.sys.write("Warning");
+            ts.sys.write("\x1b[91m"); // High intensity red.
+            ts.sys.write("Error");
             ts.sys.write("\x1b[0m");  // Reset formatting.
             ts.sys.write(`: Diagnostic code '${code}' conflicts between "${originalMessage}" and "${currentMessage}".`);
             ts.sys.write(ts.sys.newLine + ts.sys.newLine);
+
+            numConflicts++;
         }
         else {
             originalMessageForCode[code] = currentMessage;
         }
+    }
+
+    if (numConflicts > 0) {
+        throw new Error(`Found ${numConflicts} conflict(s) in diagnostic codes.`);
     }
 }
 
