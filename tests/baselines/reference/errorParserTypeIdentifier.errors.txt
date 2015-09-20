@@ -1,0 +1,66 @@
+tests/cases/compiler/errorParserTypeIdentifier.ts(3,26): error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new() => void)'
+tests/cases/compiler/errorParserTypeIdentifier.ts(5,16): error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new () => void)'
+tests/cases/compiler/errorParserTypeIdentifier.ts(7,16): error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new () => void)'
+tests/cases/compiler/errorParserTypeIdentifier.ts(8,16): error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new () => void | number)'
+tests/cases/compiler/errorParserTypeIdentifier.ts(9,16): error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(<T>(...) => void | void)'
+tests/cases/compiler/errorParserTypeIdentifier.ts(9,24): error TS1003: Identifier expected.
+tests/cases/compiler/errorParserTypeIdentifier.ts(12,8): error TS2503: Cannot find namespace 'TypeModule1'.
+tests/cases/compiler/errorParserTypeIdentifier.ts(12,20): error TS1003: Identifier expected.
+tests/cases/compiler/errorParserTypeIdentifier.ts(17,8): error TS2503: Cannot find namespace 'x'.
+tests/cases/compiler/errorParserTypeIdentifier.ts(17,10): error TS17007: Identifier expected, reserved word 'void' not allowed here.
+tests/cases/compiler/errorParserTypeIdentifier.ts(17,14): error TS1109: Expression expected.
+tests/cases/compiler/errorParserTypeIdentifier.ts(18,13): error TS1110: Type expected.
+tests/cases/compiler/errorParserTypeIdentifier.ts(20,1): error TS2304: Cannot find name 'Foo'.
+tests/cases/compiler/errorParserTypeIdentifier.ts(20,8): error TS1110: Type expected.
+
+
+==== tests/cases/compiler/errorParserTypeIdentifier.ts (14 errors) ====
+    
+    // Union or intersection ambiguity
+    function test(x: string | new() => void) { }
+                             ~~~~~~~~~~~~~~
+!!! error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new() => void)'
+    
+    let a: string | new () => void;
+                   ~~~~~~~~~~~~~~~
+!!! error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new () => void)'
+    let b: string | (new () => void);
+    let c: string | new () => void /* not part of error */
+                   ~~~~~~~~~~~~~~~
+!!! error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new () => void)'
+    let d: string | new () => void | number;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(new () => void | number)'
+    let e: string | <T>(...) => void | void;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17006: Invalid type. To avoid ambiguity, add parentheses: '(<T>(...) => void | void)'
+                           ~
+!!! error TS1003: Identifier expected.
+    
+    // Missing identifier or keyword
+    let f: TypeModule1.
+           ~~~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'TypeModule1'.
+                       
+!!! error TS1003: Identifier expected.
+    
+    module TypeModule2 {
+    }
+    
+    let g: x.void;
+           ~
+!!! error TS2503: Cannot find namespace 'x'.
+             ~~~~
+!!! error TS17007: Identifier expected, reserved word 'void' not allowed here.
+                 ~
+!!! error TS1109: Expression expected.
+    let h = (a: ) => {
+                ~
+!!! error TS1110: Type expected.
+    }
+    Foo<a, , b>();
+    ~~~
+!!! error TS2304: Cannot find name 'Foo'.
+           ~
+!!! error TS1110: Type expected.
+    
