@@ -38,6 +38,7 @@ namespace ts {
         let Signature = objectAllocator.getSignatureConstructor();
 
         let typeCount = 0;
+        let symbolCount = 0;
 
         let emptyArray: any[] = [];
         let emptySymbols: SymbolTable = {};
@@ -53,7 +54,7 @@ namespace ts {
         let checker: TypeChecker = {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount"),
+            getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
@@ -242,6 +243,7 @@ namespace ts {
         }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
+            symbolCount++;
             return new Symbol(flags, name);
         }
 
@@ -1602,6 +1604,9 @@ namespace ts {
                             ? "any"
                             : (<IntrinsicType>type).intrinsicName);
                     }
+                    else if (type.flags & TypeFlags.ThisType) {
+                        writer.writeKeyword("this");
+                    }
                     else if (type.flags & TypeFlags.Reference) {
                         writeTypeReference(<TypeReference>type, flags);
                     }
@@ -1645,11 +1650,10 @@ namespace ts {
                     }
                 }
 
-                function writeSymbolTypeReference(symbol: Symbol, typeArguments: Type[], pos: number, end: number) {
-                    // Unnamed function expressions, arrow functions, and unnamed class expressions have reserved names that
-                    // we don't want to display
-                    if (!isReservedMemberName(symbol.name)) {
-                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                function writeSymbolTypeReference(symbol: Symbol, typeArguments: Type[], pos: number, end: number, flags: TypeFormatFlags) {
+                    // Unnamed function expressions and arrow functions have reserved names that we don't want to display
+                    if (symbol.flags & SymbolFlags.Class || !isReservedMemberName(symbol.name)) {
+                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
                     }
                     if (pos < end) {
                         writePunctuation(writer, SyntaxKind.LessThanToken);
@@ -1664,7 +1668,7 @@ namespace ts {
                 }
 
                 function writeTypeReference(type: TypeReference, flags: TypeFormatFlags) {
-                    let typeArguments = type.typeArguments;
+                    let typeArguments = type.typeArguments || emptyArray;
                     if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
                         writeType(typeArguments[0], TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
@@ -1688,12 +1692,13 @@ namespace ts {
                                 // When type parameters are their own type arguments for the whole group (i.e. we have
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    writeSymbolTypeReference(parent, typeArguments, start, i);
+                                    writeSymbolTypeReference(parent, typeArguments, start, i, flags);
                                     writePunctuation(writer, SyntaxKind.DotToken);
                                 }
                             }
                         }
-                        writeSymbolTypeReference(type.symbol, typeArguments, i, typeArguments.length);
+                        let typeParameterCount = (type.target.typeParameters || emptyArray).length;
+                        writeSymbolTypeReference(type.symbol, typeArguments, i, typeParameterCount, flags);
                     }
                 }
 
@@ -2882,6 +2887,28 @@ namespace ts {
             }
         }
 
+        function interfaceReferencesThisType(symbol: Symbol): boolean {
+            for (let declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                    if (declaration.flags & NodeFlags.ContainsThis) {
+                        return true;
+                    }
+                    let baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
+                    if (baseTypeNodes) {
+                        for (let node of baseTypeNodes) {
+                            if (isSupportedExpressionWithTypeArguments(node)) {
+                                let baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
+                                if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
             let links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -2889,7 +2916,7 @@ namespace ts {
                 let type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
                 let outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
                 let localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                if (outerTypeParameters || localTypeParameters) {
+                if (outerTypeParameters || localTypeParameters || kind === TypeFlags.Class || interfaceReferencesThisType(symbol)) {
                     type.flags |= TypeFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -2898,6 +2925,9 @@ namespace ts {
                     (<GenericType>type).instantiations[getTypeListId(type.typeParameters)] = <GenericType>type;
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
+                    type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
+                    type.thisType.symbol = symbol;
+                    type.thisType.constraint = getTypeWithThisArgument(type);
                 }
             }
             return <InterfaceType>links.declaredType;
@@ -2982,6 +3012,76 @@ namespace ts {
             return unknownType;
         }
 
+        // A type reference is considered independent if each type argument is considered independent.
+        function isIndependentTypeReference(node: TypeReferenceNode): boolean {
+            if (node.typeArguments) {
+                for (let typeNode of node.typeArguments) {
+                    if (!isIndependentType(typeNode)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        // A type is considered independent if it is a built-in type keyword, an array with an element type that is
+        // considered independent, or a type reference that is considered independent.
+        function isIndependentType(node: TypeNode): boolean {
+            switch (node.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.StringLiteral:
+                    return true;
+                case SyntaxKind.ArrayType:
+                    return isIndependentType((<ArrayTypeNode>node).elementType);
+                case SyntaxKind.TypeReference:
+                    return isIndependentTypeReference(<TypeReferenceNode>node);
+            }
+            return false;
+        }
+
+        // A variable-like declaration is considered independent (free of this references) if it has a type annotation
+        // that specifies an independent type, or if it has no type annotation and no initializer (and thus of type any).
+        function isIndependentVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
+            return node.type && isIndependentType(node.type) || !node.type && !node.initializer;
+        }
+
+        // A function-like declaration is considered independent (free of this references) if it has a return type
+        // annotation that is considered independent and if each parameter is considered independent.
+        function isIndependentFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
+            if (node.kind !== SyntaxKind.Constructor && (!node.type || !isIndependentType(node.type))) {
+                return false;
+            }
+            for (let parameter of node.parameters) {
+                if (!isIndependentVariableLikeDeclaration(parameter)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function isIndependentSymbol(symbol: Symbol): boolean {
+            if (symbol.declarations && symbol.declarations.length === 1) {
+                let declaration = symbol.declarations[0];
+                if (declaration) {
+                    switch (declaration.kind) {
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.PropertySignature:
+                            return isIndependentVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                            return isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
+                    }
+                }
+            }
+            return false;
+        }
+
         function createSymbolTable(symbols: Symbol[]): SymbolTable {
             let result: SymbolTable = {};
             for (let symbol of symbols) {
@@ -2990,10 +3090,12 @@ namespace ts {
             return result;
         }
 
-        function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper): SymbolTable {
+        // The mappingThisOnly flag indicates that the only type parameter being mapped is "this". When the flag is true,
+        // we check symbols to see if we can quickly conclude they are free of "this" references, thus needing no instantiation.
+        function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             let result: SymbolTable = {};
             for (let symbol of symbols) {
-                result[symbol.name] = instantiateSymbol(symbol, mapper);
+                result[symbol.name] = mappingThisOnly && isIndependentSymbol(symbol) ? symbol : instantiateSymbol(symbol, mapper);
             }
             return result;
         }
@@ -3026,44 +3128,57 @@ namespace ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
-        function resolveClassOrInterfaceMembers(type: InterfaceType): void {
-            let target = resolveDeclaredMembers(type);
-            let members = target.symbol.members;
-            let callSignatures = target.declaredCallSignatures;
-            let constructSignatures = target.declaredConstructSignatures;
-            let stringIndexType = target.declaredStringIndexType;
-            let numberIndexType = target.declaredNumberIndexType;
-            let baseTypes = getBaseTypes(target);
+        function getTypeWithThisArgument(type: ObjectType, thisArgument?: Type) {
+            if (type.flags & TypeFlags.Reference) {
+                return createTypeReference((<TypeReference>type).target,
+                    concatenate((<TypeReference>type).typeArguments, [thisArgument || (<TypeReference>type).target.thisType]));
+            }
+            return type;
+        }
+
+        function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
+            let mapper = identityMapper;
+            let members = source.symbol.members;
+            let callSignatures = source.declaredCallSignatures;
+            let constructSignatures = source.declaredConstructSignatures;
+            let stringIndexType = source.declaredStringIndexType;
+            let numberIndexType = source.declaredNumberIndexType;
+            if (!rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
+                mapper = createTypeMapper(typeParameters, typeArguments);
+                members = createInstantiatedSymbolTable(source.declaredProperties, mapper, /*mappingThisOnly*/ typeParameters.length === 1);
+                callSignatures = instantiateList(source.declaredCallSignatures, mapper, instantiateSignature);
+                constructSignatures = instantiateList(source.declaredConstructSignatures, mapper, instantiateSignature);
+                stringIndexType = source.declaredStringIndexType ? instantiateType(source.declaredStringIndexType, mapper) : undefined;
+                numberIndexType = source.declaredNumberIndexType ? instantiateType(source.declaredNumberIndexType, mapper) : undefined;
+            }
+            let baseTypes = getBaseTypes(source);
             if (baseTypes.length) {
-                members = createSymbolTable(target.declaredProperties);
+                if (members === source.symbol.members) {
+                    members = createSymbolTable(source.declaredProperties);
+                }
+                let thisArgument = lastOrUndefined(typeArguments);
                 for (let baseType of baseTypes) {
-                    addInheritedMembers(members, getPropertiesOfObjectType(baseType));
-                    callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
-                    constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
-                    stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
-                    numberIndexType = numberIndexType || getIndexTypeOfType(baseType, IndexKind.Number);
+                    let instantiatedBaseType = thisArgument ? getTypeWithThisArgument(instantiateType(baseType, mapper), thisArgument) : baseType;
+                    addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
+                    callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
+                    constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
+                    stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
+                    numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
                 }
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
+        function resolveClassOrInterfaceMembers(type: InterfaceType): void {
+            resolveObjectTypeMembers(type, resolveDeclaredMembers(type), emptyArray, emptyArray);
+        }
+
         function resolveTypeReferenceMembers(type: TypeReference): void {
-            let target = resolveDeclaredMembers(type.target);
-            let mapper = createTypeMapper(target.typeParameters, type.typeArguments);
-            let members = createInstantiatedSymbolTable(target.declaredProperties, mapper);
-            let callSignatures = instantiateList(target.declaredCallSignatures, mapper, instantiateSignature);
-            let constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
-            let stringIndexType = target.declaredStringIndexType ? instantiateType(target.declaredStringIndexType, mapper) : undefined;
-            let numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
-            forEach(getBaseTypes(target), baseType => {
-                let instantiatedBaseType = instantiateType(baseType, mapper);
-                addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
-                callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
-                constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
-                numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
-            });
-            setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+            let source = resolveDeclaredMembers(type.target);
+            let typeParameters = concatenate(source.typeParameters, [source.thisType]);
+            let typeArguments = type.typeArguments && type.typeArguments.length === typeParameters.length ?
+                type.typeArguments : concatenate(type.typeArguments, [type]);
+            resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
@@ -3277,7 +3392,10 @@ namespace ts {
 
         function resolveStructuredTypeMembers(type: ObjectType): ResolvedType {
             if (!(<ResolvedType>type).members) {
-                if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                if (type.flags & TypeFlags.Reference) {
+                    resolveTypeReferenceMembers(<TypeReference>type);
+                }
+                else if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
                     resolveClassOrInterfaceMembers(<InterfaceType>type);
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
@@ -3291,9 +3409,6 @@ namespace ts {
                 }
                 else if (type.flags & TypeFlags.Intersection) {
                     resolveIntersectionTypeMembers(<IntersectionType>type);
-                }
-                else {
-                    resolveTypeReferenceMembers(<TypeReference>type);
                 }
             }
             return <ResolvedType>type;
@@ -3760,22 +3875,24 @@ namespace ts {
         }
 
         function getTypeListId(types: Type[]) {
-            switch (types.length) {
-                case 1:
-                    return "" + types[0].id;
-                case 2:
-                    return types[0].id + "," + types[1].id;
-                default:
-                    let result = "";
-                    for (let i = 0; i < types.length; i++) {
-                        if (i > 0) {
-                            result += ",";
+            if (types) {
+                switch (types.length) {
+                    case 1:
+                        return "" + types[0].id;
+                    case 2:
+                        return types[0].id + "," + types[1].id;
+                    default:
+                        let result = "";
+                        for (let i = 0; i < types.length; i++) {
+                            if (i > 0) {
+                                result += ",";
+                            }
+                            result += types[i].id;
                         }
-
-                        result += types[i].id;
-                    }
-                    return result;
+                        return result;
+                }
             }
+            return "";
         }
 
         // This function is used to propagate certain flags when creating new object type references and union types.
@@ -3794,7 +3911,7 @@ namespace ts {
             let id = getTypeListId(typeArguments);
             let type = target.instantiations[id];
             if (!type) {
-                let flags = TypeFlags.Reference | getPropagatingFlagsOfTypes(typeArguments);
+                let flags = TypeFlags.Reference | (typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0);
                 type = target.instantiations[id] = <TypeReference>createObjectType(flags, target.symbol);
                 type.target = target;
                 type.typeArguments = typeArguments;
@@ -3853,8 +3970,8 @@ namespace ts {
 
         // Get type from reference to class or interface
         function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
-            let type = getDeclaredTypeOfSymbol(symbol);
-            let typeParameters = (<InterfaceType>type).localTypeParameters;
+            let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+            let typeParameters = type.localTypeParameters;
             if (typeParameters) {
                 if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
@@ -3863,8 +3980,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                return createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
-                    map(node.typeArguments, getTypeFromTypeNode)));
+                return createTypeReference(<GenericType>type, concatenate(type.outerTypeParameters, map(node.typeArguments, getTypeFromTypeNode)));
             }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
@@ -4222,6 +4338,26 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getThisType(node: TypeNode): Type {
+            let container = getThisContainer(node, /*includeArrowFunctions*/ false);
+            let parent = container && container.parent;
+            if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
+                if (!(container.flags & NodeFlags.Static)) {
+                    return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
+                }
+            }
+            error(node, Diagnostics.this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
+            return unknownType;
+        }
+
+        function getTypeFromThisTypeNode(node: TypeNode): Type {
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getThisType(node);
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -4236,6 +4372,8 @@ namespace ts {
                     return esSymbolType;
                 case SyntaxKind.VoidKeyword:
                     return voidType;
+                case SyntaxKind.ThisKeyword:
+                    return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteral:
                     return getTypeFromStringLiteral(<StringLiteral>node);
                 case SyntaxKind.TypeReference:
@@ -4690,7 +4828,7 @@ namespace ts {
                 else {
                     if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
-                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
+                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, reportErrors)) {
                             return result;
                         }
                     }
@@ -4721,7 +4859,7 @@ namespace ts {
                 if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
                     if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if all type arguments are identical
-                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, /*reportErrors*/ false)) {
+                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, /*reportErrors*/ false)) {
                             return result;
                         }
                     }
@@ -4843,9 +4981,26 @@ namespace ts {
                 return result;
             }
 
-            function typesRelatedTo(sources: Type[], targets: Type[], reportErrors: boolean): Ternary {
+            //function typesRelatedTo(sources: Type[], targets: Type[], reportErrors: boolean): Ternary {
+            //    let result = Ternary.True;
+            //    for (let i = 0, len = sources.length; i < len; i++) {
+            //        let related = isRelatedTo(sources[i], targets[i], reportErrors);
+            //        if (!related) {
+            //            return Ternary.False;
+            //        }
+            //        result &= related;
+            //    }
+            //    return result;
+            //}
+
+            function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, reportErrors: boolean): Ternary {
+                let sources = source.typeArguments || emptyArray;
+                let targets = target.typeArguments || emptyArray;
+                if (sources.length !== targets.length && relation === identityRelation) {
+                    return Ternary.False;
+                }
                 let result = Ternary.True;
-                for (let i = 0, len = sources.length; i < len; i++) {
+                for (let i = 0; i < targets.length; i++) {
                     let related = isRelatedTo(sources[i], targets[i], reportErrors);
                     if (!related) {
                         return Ternary.False;
@@ -5744,9 +5899,10 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
-                    let sourceTypes = (<TypeReference>source).typeArguments;
-                    let targetTypes = (<TypeReference>target).typeArguments;
-                    for (let i = 0; i < sourceTypes.length; i++) {
+                    let sourceTypes = (<TypeReference>source).typeArguments || emptyArray;
+                    let targetTypes = (<TypeReference>target).typeArguments || emptyArray;
+                    let count = sourceTypes.length < targetTypes.length ? sourceTypes.length : targetTypes.length;
+                    for (let i = 0; i < count; i++) {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
@@ -6448,7 +6604,7 @@ namespace ts {
 
             if (isClassLike(container.parent)) {
                 let symbol = getSymbolOfNode(container.parent);
-                return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
+                return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
             }
             return anyType;
         }
@@ -7835,7 +7991,7 @@ namespace ts {
             let prop = getPropertyOfType(apparentType, right.text);
             if (!prop) {
                 if (right.text) {
-                    error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type));
+                    error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type.flags & TypeFlags.ThisType ? apparentType : type));
                 }
                 return unknownType;
             }
@@ -7843,7 +7999,7 @@ namespace ts {
             getNodeLinks(node).resolvedSymbol = prop;
 
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                checkClassPropertyAccess(node, left, type, prop);
+                checkClassPropertyAccess(node, left, apparentType, prop);
             }
             return getTypeOfSymbol(prop);
         }
@@ -12633,6 +12789,7 @@ namespace ts {
             checkExportsOnMergedDeclarations(node);
             let symbol = getSymbolOfNode(node);
             let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+            let typeWithThis = getTypeWithThisArgument(type);
             let staticType = <ObjectType>getTypeOfSymbol(symbol);
 
             let baseTypeNode = getClassExtendsHeritageClauseElement(node);
@@ -12651,7 +12808,7 @@ namespace ts {
                             }
                         }
                     }
-                    checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
@@ -12671,7 +12828,7 @@ namespace ts {
 
             let implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
             if (implementedTypeNodes) {
-                forEach(implementedTypeNodes, typeRefNode => {
+                for (let typeRefNode of implementedTypeNodes) {
                     if (!isSupportedExpressionWithTypeArguments(typeRefNode)) {
                         error(typeRefNode.expression, Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
@@ -12681,14 +12838,14 @@ namespace ts {
                         if (t !== unknownType) {
                             let declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                checkTypeAssignableTo(type, t, node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
                             }
                         }
                     }
-                });
+                }
             }
 
             if (produceDiagnostics) {
@@ -12848,7 +13005,7 @@ namespace ts {
             let ok = true;
 
             for (let base of baseTypes) {
-                let properties = getPropertiesOfObjectType(base);
+                let properties = getPropertiesOfObjectType(getTypeWithThisArgument(base, type.thisType));
                 for (let prop of properties) {
                     if (!hasProperty(seen, prop.name)) {
                         seen[prop.name] = { prop: prop, containingType: base };
@@ -12893,11 +13050,12 @@ namespace ts {
                 // Only check this symbol once
                 if (node === firstInterfaceDecl) {
                     let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+                    let typeWithThis = getTypeWithThisArgument(type);
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
-                        forEach(getBaseTypes(type), baseType => {
-                            checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
-                        });
+                        for (let baseType of getBaseTypes(type)) {
+                            checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                        }
                         checkIndexConstraints(type);
                     }
                 }

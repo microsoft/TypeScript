@@ -467,13 +467,12 @@ namespace ts {
                 else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
                     node = node.parent;
                 }
-            // fall through
-            case SyntaxKind.QualifiedName:
-            case SyntaxKind.PropertyAccessExpression:
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
-
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;

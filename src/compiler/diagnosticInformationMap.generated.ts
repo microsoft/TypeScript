@@ -416,6 +416,7 @@ namespace ts {
         yield_expressions_cannot_be_used_in_a_parameter_initializer: { code: 2523, category: DiagnosticCategory.Error, key: "'yield' expressions cannot be used in a parameter initializer." },
         await_expressions_cannot_be_used_in_a_parameter_initializer: { code: 2524, category: DiagnosticCategory.Error, key: "'await' expressions cannot be used in a parameter initializer." },
         Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value: { code: 2525, category: DiagnosticCategory.Error, key: "Initializer provides no value for this binding element and the binding element has no default value." },
+        this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface: { code: 2526, category: DiagnosticCategory.Error, key: "'this' type is available only in a non-static member of a class or interface." },
         JSX_element_attributes_type_0_must_be_an_object_type: { code: 2600, category: DiagnosticCategory.Error, key: "JSX element attributes type '{0}' must be an object type." },
         The_return_type_of_a_JSX_element_constructor_must_return_an_object_type: { code: 2601, category: DiagnosticCategory.Error, key: "The return type of a JSX element constructor must return an object type." },
         JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist: { code: 2602, category: DiagnosticCategory.Error, key: "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist." },

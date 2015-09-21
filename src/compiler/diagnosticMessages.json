@@ -1653,6 +1653,10 @@
         "category": "Error",
         "code": 2525
     },
+    "'this' type is available only in a non-static member of a class or interface.": {
+        "category": "Error",
+        "code": 2526
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600
