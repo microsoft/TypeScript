@@ -2523,7 +2523,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`", `);
                     }
 
-                    if (languageVersion < ScriptTarget.ES7 && node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken) {
+                    if (languageVersion < ScriptTarget.ES7 &&
+                        (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken)) {
+                        if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                            emit(node.left);
+                            write(" = ");
+                        }
                         write("Math.pow(");
                         emit(node.left);
                         write(", ");
