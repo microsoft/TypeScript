@@ -1,0 +1,248 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperatorInTemplateString1.ts ===
+var t1 = 10;
+>t1 : number
+>10 : number
+
+var t2 = 10;
+>t2 : number
+>10 : number
+
+var s;
+>s : any
+
+`Exp: ${t1 ** t2} abc`;
+>`Exp: ${t1 ** t2} abc` : string
+>t1 ** t2 : number
+>t1 : number
+>t2 : number
+
+`Exp: ${t1 ** t2 ** t1} abc`;
+>`Exp: ${t1 ** t2 ** t1} abc` : string
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${t1 + t2 ** t1} abc`;
+>`Exp: ${t1 + t2 ** t1} abc` : string
+>t1 + t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${t1 - t2 ** t1} abc`;
+>`Exp: ${t1 - t2 ** t1} abc` : string
+>t1 - t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${t1 ** t2 + t1} abc`;
+>`Exp: ${t1 ** t2 + t1} abc` : string
+>t1 ** t2 + t1 : number
+>t1 ** t2 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${t1 ** t2 - t1} abc`;
+>`Exp: ${t1 ** t2 - t1} abc` : string
+>t1 ** t2 - t1 : number
+>t1 ** t2 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${t1 + t2 ** t2 + t1} abc`;
+>`Exp: ${t1 + t2 ** t2 + t1} abc` : string
+>t1 + t2 ** t2 + t1 : number
+>t1 + t2 ** t2 : number
+>t1 : number
+>t2 ** t2 : number
+>t2 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${t1 - t2 ** t2 - t1} abc`;
+>`Exp: ${t1 - t2 ** t2 - t1} abc` : string
+>t1 - t2 ** t2 - t1 : number
+>t1 - t2 ** t2 : number
+>t1 : number
+>t2 ** t2 : number
+>t2 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${-t1 ** t2 - t1} abc`;
+>`Exp: ${-t1 ** t2 - t1} abc` : string
+>-t1 ** t2 - t1 : number
+>-t1 ** t2 : number
+>t1 ** t2 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${+t1 ** t2 - t1} abc`;
+>`Exp: ${+t1 ** t2 - t1} abc` : string
+>+t1 ** t2 - t1 : number
+>+t1 ** t2 : number
+>t1 ** t2 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${-++t1 ** t2 - t1} abc`;
+>`Exp: ${-++t1 ** t2 - t1} abc` : string
+>-++t1 ** t2 - t1 : number
+>-++t1 ** t2 : number
+>++t1 ** t2 : number
+>++t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${+--t1 ** t2 - t1} abc`;
+>`Exp: ${+--t1 ** t2 - t1} abc` : string
+>+--t1 ** t2 - t1 : number
+>+--t1 ** t2 : number
+>--t1 ** t2 : number
+>--t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${-t1++ ** t2 - t1} abc`;
+>`Exp: ${-t1++ ** t2 - t1} abc` : string
+>-t1++ ** t2 - t1 : number
+>-t1++ ** t2 : number
+>t1++ ** t2 : number
+>t1++ : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${-t1-- ** t2 - t1} abc`;
+>`Exp: ${-t1-- ** t2 - t1} abc` : string
+>-t1-- ** t2 - t1 : number
+>-t1-- ** t2 : number
+>t1-- ** t2 : number
+>t1-- : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${+t1++ ** t2 - t1} abc`;
+>`Exp: ${+t1++ ** t2 - t1} abc` : string
+>+t1++ ** t2 - t1 : number
+>+t1++ ** t2 : number
+>t1++ ** t2 : number
+>t1++ : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${+t1-- ** t2 - t1} abc`;
+>`Exp: ${+t1-- ** t2 - t1} abc` : string
+>+t1-- ** t2 - t1 : number
+>+t1-- ** t2 : number
+>t1-- ** t2 : number
+>t1-- : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${typeof t1 ** t2 ** t1} abc`;
+>`Exp: ${typeof t1 ** t2 ** t1} abc` : string
+>typeof t1 ** t2 ** t1 : string
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${typeof t1 ** t2 + t1} abc`;
+>`Exp: ${typeof t1 ** t2 + t1} abc` : string
+>typeof t1 ** t2 + t1 : string
+>typeof t1 ** t2 : string
+>t1 ** t2 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${typeof t1 ** (t2 - t1)} abc`;
+>`Exp: ${typeof t1 ** (t2 - t1)} abc` : string
+>typeof t1 ** (t2 - t1) : string
+>t1 ** (t2 - t1) : number
+>t1 : number
+>(t2 - t1) : number
+>t2 - t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${1 + typeof t1 ** t2 ** t1} abc`;
+>`Exp: ${1 + typeof t1 ** t2 ** t1} abc` : string
+>1 + typeof t1 ** t2 ** t1 : string
+>1 : number
+>typeof t1 ** t2 ** t1 : string
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${2 + typeof t1 ** t2 ** ++t1} abc`;
+>`Exp: ${2 + typeof t1 ** t2 ** ++t1} abc` : string
+>2 + typeof t1 ** t2 ** ++t1 : string
+>2 : number
+>typeof t1 ** t2 ** ++t1 : string
+>t1 ** t2 ** ++t1 : number
+>t1 : number
+>t2 ** ++t1 : number
+>t2 : number
+>++t1 : number
+>t1 : number
+
+`Exp: ${3 + typeof t1 ** t2 ** --t1} abc`;
+>`Exp: ${3 + typeof t1 ** t2 ** --t1} abc` : string
+>3 + typeof t1 ** t2 ** --t1 : string
+>3 : number
+>typeof t1 ** t2 ** --t1 : string
+>t1 ** t2 ** --t1 : number
+>t1 : number
+>t2 ** --t1 : number
+>t2 : number
+>--t1 : number
+>t1 : number
+
+`Exp: ${!t1 ** t2 ** t1} abc`;
+>`Exp: ${!t1 ** t2 ** t1} abc` : string
+>!t1 ** t2 ** t1 : boolean
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+`Exp: ${!t1 ** t2 ** ++t1} abc`;
+>`Exp: ${!t1 ** t2 ** ++t1} abc` : string
+>!t1 ** t2 ** ++t1 : boolean
+>t1 ** t2 ** ++t1 : number
+>t1 : number
+>t2 ** ++t1 : number
+>t2 : number
+>++t1 : number
+>t1 : number
+
+`Exp: ${!t1 ** t2 ** --t1} abc`;
+>`Exp: ${!t1 ** t2 ** --t1} abc` : string
+>!t1 ** t2 ** --t1 : boolean
+>t1 ** t2 ** --t1 : number
+>t1 : number
+>t2 ** --t1 : number
+>t2 : number
+>--t1 : number
+>t1 : number
+
