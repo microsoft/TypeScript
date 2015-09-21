@@ -864,11 +864,11 @@ function lintWatchFile(filename) {
                     console.log("***Lint failure***");
                     for (var i = 0; i < result.failures.length; i++) {
                         var failure = result.failures[i];
-                        var s = failure.startPosition.lineAndCharacter;
-                        var e = failure.endPosition.lineAndCharacter;
-                        console.log("warning "+filename+" ("+(s.line+1)+","+(s.character+1)+","+(e.line+1)+","+(e.character+1)+"): "+failure.failure);
+                        var start = failure.startPosition.lineAndCharacter;
+                        var end = failure.endPosition.lineAndCharacter;
+                        console.log("warning " + filename + " (" + (start.line + 1) + "," + (start.character + 1) + "," + (end.line + 1) + "," + (end.character + 1) + "): " + failure.failure);
                     }
-                    console.log("*** Total "+result.failureCount+" failures.");
+                    console.log("*** Total " + result.failureCount + " failures.");
                 }
             });
         }
@@ -877,8 +877,8 @@ function lintWatchFile(filename) {
 
 desc("Watches files for changes to rerun a lint pass");
 task("lint-server", ["build-rules"], function() {
-    console.log('Watching ./src for changes to linted files');
-    for (var i=0; i<lintTargets.length; i++) {
+    console.log("Watching ./src for changes to linted files");
+    for (var i = 0; i < lintTargets.length; i++) {
         lintWatchFile(lintTargets[i]);
     }
 });
