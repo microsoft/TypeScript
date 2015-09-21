@@ -1,4 +1,6 @@
-﻿var comp: number;
+﻿// @target:es5
+
+var comp: number;
 
 comp **= 1;
 comp **= comp ** comp;

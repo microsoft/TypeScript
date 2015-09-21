@@ -4,8 +4,26 @@ var temp = 10;
 
 ++temp ** 3;
 --temp ** 3;
-3 ** ++temp;
-3 ** --temp;
+temp++ ** 3;
+temp-- ** 3;
+--temp + temp ** 3;
+--temp - temp ** 3;
+--temp * temp ** 3;
+--temp / temp ** 3;
+--temp % temp ** 3;
+-++temp ** 3;
++--temp ** 3;
+
+temp-- ** 3;
+temp++ ** 3;
+-temp++ ** 3;
++temp-- ** 3;
+
+temp-- + temp ** 3;
+temp-- - temp ** 3;
+temp-- * temp ** 3;
+temp-- / temp ** 3;
+temp-- % temp ** 3;
 
 --temp + 2 ** 3;
 --temp - 2 ** 3;
@@ -17,7 +35,32 @@ var temp = 10;
 ++temp - 2 ** 3;
 ++temp * 2 ** 3;
 ++temp / 2 ** 3;
-++temp % 2 ** 3;
+
+3 ** ++temp;
+3 ** --temp;
+3 ** temp++;
+3 ** temp--;
+-3 ** temp++;
+-3 ** temp--;
+-3 ** ++temp;
+-3 ** --temp;
++3 ** temp++;
++3 ** temp--;
++3 ** ++temp;
++3 ** --temp
+
+3 ** ++temp ** 2;
+3 ** --temp ** 2;
+3 ** temp++ ** 2;
+3 ** temp-- ** 2;
+-3 ** temp++ ** 2;
+-3 ** temp-- ** 2;
+-3 ** ++temp ** 2;
+-3 ** --temp ** 2;
++3 ** temp++ ** 2;
++3 ** temp-- ** 2;
++3 ** ++temp ** 2;
++3 ** --temp ** 2;
 
 3 ** ++temp + 2;
 3 ** ++temp - 2;

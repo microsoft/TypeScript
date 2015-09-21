@@ -3,25 +3,41 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(8,5): err
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(11,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(14,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(17,5): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(24,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(25,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(26,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(27,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(34,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(35,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(36,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(37,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(44,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(45,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(24,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(24,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(25,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(25,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(26,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(26,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(27,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(27,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(34,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(34,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(35,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(35,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(36,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(36,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(37,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(37,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(44,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(44,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(45,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(45,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,6): error TS1109: Expression expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,4): error TS1005: ';' expected.
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,6): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/operators/incrementAndDecrement.ts (21 errors) ====
+==== tests/cases/conformance/expressions/operators/incrementAndDecrement.ts (37 errors) ====
     enum E { A, B, C };
     var x = 4;
     var e = E.B;
@@ -56,17 +72,25 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,3): er
     ++x;
     --x;
     ++x++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --x--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     ++x--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --x++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     
     // Pre and postfix++ on enum
     e++;
@@ -74,17 +98,25 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,3): er
     ++e;
     --e;
     ++e++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --e--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     ++e--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --e++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     
     // Pre and postfix++ on value of type 'any'
     a++;
@@ -92,17 +124,25 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,3): er
     ++a;
     --a;
     ++a++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --a--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     ++a--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --a++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     
     
     // Pre and postfix++ on other types
@@ -111,17 +151,25 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,3): er
     ++w; // Error
     --w; // Error
     ++w++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --w--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     ++w--; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     --w++; // Error
-      ~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+       ~~
+!!! error TS1005: ';' expected.
+         ~
+!!! error TS1109: Expression expected.
     
     
     
