@@ -3121,13 +3121,8 @@ namespace ts {
             let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
             node.operator = token;
             nextToken();
-            let tryParseUnaryExpression = parseUnaryExpressionOrHigher();
-            if (token === SyntaxKind.AsteriskAsteriskToken) {
-                node.operand = <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), tryParseUnaryExpression);
-            }
-            else {
-                node.operand = tryParseUnaryExpression; 
-            }
+            node.operand = parseUnaryExpressionOrHigher();
+
             return finishNode(node);
         }
 
@@ -3172,7 +3167,21 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseUnaryExpressionOrHigher(): UnaryExpression {
+        /**
+         *  Parse UnaryExpression or higher:
+         *  In ES7 grammar,
+         *      UnaryExpression:
+         *          1) IncrementExpression[?yield]
+         *          2) delete UnaryExpression[?yield]
+         *          3) void UnaryExpression[?yield]
+         *          4) typeof UnaryExpression[?yield]
+         *          5) + UnaryExpression[?yield]
+         *          6) - UnaryExpression[?yield]
+         *          7) ~ UnaryExpression[?yield]
+         *          8) ! UnaryExpression[?yield]
+         *          9) IncrementExpression[?yield] ** UnaryExpression[?yield]
+         */
+        function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
             if (isAwaitExpression()) {
                 return parseAwaitExpression();
             }
@@ -3182,8 +3191,6 @@ namespace ts {
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
                 case SyntaxKind.ExclamationToken:
-                case SyntaxKind.PlusPlusToken:
-                case SyntaxKind.MinusMinusToken:
                     return parsePrefixUnaryExpression();
                 case SyntaxKind.DeleteKeyword:
                     return parseDeleteExpression();
@@ -3193,6 +3200,9 @@ namespace ts {
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
+                        // This is modified UnaryExpression grammar in TypeScript
+                        //  UnaryExpression (modified):
+                        //      < type > UnaryExpression
                         return parseTypeAssertion();
                     }
                     if (lookAhead(nextTokenIsIdentifierOrKeyword)) {
@@ -3200,23 +3210,45 @@ namespace ts {
                     }
                     // Fall through
                 default:
-                    return parsePostfixExpressionOrHigher();
+                    let tryParseUnaryExpression = parseIncrementExpression();
+                    return token === SyntaxKind.AsteriskAsteriskToken ?
+                        <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), tryParseUnaryExpression) :
+                        tryParseUnaryExpression;
             }
         }
 
-        function parsePostfixExpressionOrHigher(): PostfixExpression {
-            let expression = parseLeftHandSideExpressionOrHigher();
-
-            Debug.assert(isLeftHandSideExpression(expression));
-            if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
-                node.operand = expression;
+        /**
+         * Parse ES7 IncrementExpression. The IncrementExpression is used instead of ES6's PostFixExpression.
+         *
+         * IncrementExpression[yield]:
+         *      1) LeftHandSideExpression[?yield]
+         *      2) LeftHandSideExpression[?yield] [[no LineTerminator here]]++
+         *      3) LeftHandSideExpression[?yield] [[no LineTerminator here]]--
+         *      4) ++LeftHandSideExpression[?yield]
+         *      5) --LeftHandSideExpression[?yield]
+         */
+        function parseIncrementExpression(): IncrementExpression {
+            if (token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) {
+                let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
                 node.operator = token;
                 nextToken();
+                node.operand = parseLeftHandSideExpressionOrHigher();
                 return finishNode(node);
             }
+            else {
+                let expression = parseLeftHandSideExpressionOrHigher();
 
-            return expression;
+                Debug.assert(isLeftHandSideExpression(expression));
+                if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
+                    let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
+                    node.operand = expression;
+                    node.operator = token;
+                    nextToken();
+                    return finishNode(node);
+                }
+
+                return expression;
+            }
         }
 
         function parseLeftHandSideExpressionOrHigher(): LeftHandSideExpression {

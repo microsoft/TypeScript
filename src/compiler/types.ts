@@ -710,6 +710,8 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
+    export interface IncrementExpression extends UnaryExpression { }
+
     export interface PrefixUnaryExpression extends UnaryExpression {
         operator: SyntaxKind;
         operand: UnaryOrBinaryExpression;
