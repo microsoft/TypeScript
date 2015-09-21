@@ -1,10 +1,28 @@
 ﻿var t1 = 10;
 var t2 = 10;
-console.log(`${t1 ** t2}`)
-console.log(`${t1 ** t2 ** t1}`)
-console.log(`${t1 + t2 ** t1}`)
-console.log(`${t1 - t2 ** t1}`)
-console.log(`${t1 ** t2 + t1}`)
-console.log(`${t1 ** t2 - t1}`)
-console.log(`${t1 + t2 ** t2 + t1}`)
-console.log(`${t1 - t2 ** t2 - t1}`)
+var s;
+`Exp: ${t1 ** t2} abc`;
+`Exp: ${t1 ** t2 ** t1} abc`;
+`Exp: ${t1 + t2 ** t1} abc`;
+`Exp: ${t1 - t2 ** t1} abc`;
+`Exp: ${t1 ** t2 + t1} abc`;
+`Exp: ${t1 ** t2 - t1} abc`;
+`Exp: ${t1 + t2 ** t2 + t1} abc`;
+`Exp: ${t1 - t2 ** t2 - t1} abc`;
+`Exp: ${-t1 ** t2 - t1} abc`;
+`Exp: ${+t1 ** t2 - t1} abc`;
+`Exp: ${-++t1 ** t2 - t1} abc`;
+`Exp: ${+--t1 ** t2 - t1} abc`;
+`Exp: ${-t1++ ** t2 - t1} abc`;
+`Exp: ${-t1-- ** t2 - t1} abc`;
+`Exp: ${+t1++ ** t2 - t1} abc`;
+`Exp: ${+t1-- ** t2 - t1} abc`;
+`Exp: ${typeof t1 ** t2 ** t1} abc`;
+`Exp: ${typeof t1 ** t2 + t1} abc`;
+`Exp: ${typeof t1 ** (t2 - t1)} abc`;
+`Exp: ${1 + typeof t1 ** t2 ** t1} abc`;
+`Exp: ${2 + typeof t1 ** t2 ** ++t1} abc`;
+`Exp: ${3 + typeof t1 ** t2 ** --t1} abc`;
+`Exp: ${!t1 ** t2 ** t1} abc`;
+`Exp: ${!t1 ** t2 ** ++t1} abc`;
+`Exp: ${!t1 ** t2 ** --t1} abc`;
