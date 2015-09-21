@@ -482,8 +482,8 @@ verify.quickInfoIs("(method) c.prop1(a: number): number (+1 overload)", "");
 goTo.marker('46');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
-goTo.marker('46q');
-verify.quickInfoIs("(method) c.prop1(b: string): number (+1 overload)", "");
+//goTo.marker('46q');
+//verify.quickInfoIs("(method) c.prop1(b: string): number (+1 overload)", "");
 
 goTo.marker('47');
 verify.currentSignatureHelpDocCommentIs("prop2 1");
@@ -494,8 +494,8 @@ verify.quickInfoIs("(method) c.prop2(a: number): number (+1 overload)", "prop2 1
 goTo.marker('48');
 verify.currentSignatureHelpDocCommentIs("");
 verify.currentParameterHelpArgumentDocCommentIs("");
-goTo.marker('48q');
-verify.quickInfoIs("(method) c.prop2(b: string): number (+1 overload)", "");
+//goTo.marker('48q');
+//verify.quickInfoIs("(method) c.prop2(b: string): number (+1 overload)", "");
 
 goTo.marker('49');
 verify.currentSignatureHelpDocCommentIs("");
@@ -506,8 +506,8 @@ verify.quickInfoIs("(method) c.prop3(a: number): number (+1 overload)", "");
 goTo.marker('50');
 verify.currentSignatureHelpDocCommentIs("prop3 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
-goTo.marker('50q');
-verify.quickInfoIs("(method) c.prop3(b: string): number (+1 overload)", "prop3 2");
+//goTo.marker('50q');
+//verify.quickInfoIs("(method) c.prop3(b: string): number (+1 overload)", "prop3 2");
 
 goTo.marker('51');
 verify.currentSignatureHelpDocCommentIs("prop4 1");
@@ -518,8 +518,8 @@ verify.quickInfoIs("(method) c.prop4(a: number): number (+1 overload)", "prop4 1
 goTo.marker('52');
 verify.currentSignatureHelpDocCommentIs("prop4 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
-goTo.marker('52q');
-verify.quickInfoIs("(method) c.prop4(b: string): number (+1 overload)", "prop4 2");
+//goTo.marker('52q');
+//verify.quickInfoIs("(method) c.prop4(b: string): number (+1 overload)", "prop4 2");
 
 goTo.marker('53');
 verify.currentSignatureHelpDocCommentIs("prop5 1");
@@ -530,8 +530,8 @@ verify.quickInfoIs("(method) c.prop5(a: number): number (+1 overload)", "prop5 1
 goTo.marker('54');
 verify.currentSignatureHelpDocCommentIs("prop5 2");
 verify.currentParameterHelpArgumentDocCommentIs("");
-goTo.marker('54q');
-verify.quickInfoIs("(method) c.prop5(b: string): number (+1 overload)", "prop5 2");
+//goTo.marker('54q');
+//verify.quickInfoIs("(method) c.prop5(b: string): number (+1 overload)", "prop5 2");
 
 goTo.marker('55');
 verify.currentSignatureHelpDocCommentIs("");

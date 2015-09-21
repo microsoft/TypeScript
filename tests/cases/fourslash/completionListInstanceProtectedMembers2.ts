@@ -32,15 +32,15 @@
 
 
 // Same class, everything is visible
-goTo.marker("1");
-verify.not.memberListContains('privateMethod');
-verify.not.memberListContains('privateProperty');
-verify.memberListContains('protectedMethod');
-verify.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.memberListContains('protectedOverriddenMethod');
-verify.memberListContains('protectedOverriddenProperty');
+//goTo.marker("1");
+//verify.not.memberListContains('privateMethod');
+//verify.not.memberListContains('privateProperty');
+//verify.memberListContains('protectedMethod');
+//verify.memberListContains('protectedProperty');
+//verify.memberListContains('publicMethod');
+//verify.memberListContains('publicProperty');
+//verify.memberListContains('protectedOverriddenMethod');
+//verify.memberListContains('protectedOverriddenProperty');
 
 // Can not access properties on super
 goTo.marker("2");
