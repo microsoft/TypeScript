@@ -704,8 +704,6 @@ namespace ts {
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
-    export type UnaryOrBinaryExpression = UnaryExpression | BinaryExpression;
-
     export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
@@ -714,7 +712,7 @@ namespace ts {
 
     export interface PrefixUnaryExpression extends UnaryExpression {
         operator: SyntaxKind;
-        operand: UnaryOrBinaryExpression;
+        operand: UnaryExpression | BinaryExpression;
     }
 
     export interface PostfixUnaryExpression extends PostfixExpression {
@@ -739,19 +737,19 @@ namespace ts {
     }
 
     export interface DeleteExpression extends UnaryExpression {
-        expression: UnaryOrBinaryExpression;
+        expression: UnaryExpression | BinaryExpression;
     }
 
     export interface TypeOfExpression extends UnaryExpression {
-        expression: UnaryOrBinaryExpression;
+        expression: UnaryExpression | BinaryExpression;
     }
 
     export interface VoidExpression extends UnaryExpression {
-        expression: UnaryOrBinaryExpression;
+        expression: UnaryExpression | BinaryExpression;
     }
 
     export interface AwaitExpression extends UnaryExpression {
-        expression: UnaryOrBinaryExpression;
+        expression: UnaryExpression | BinaryExpression;
     }
 
     export interface YieldExpression extends Expression {
@@ -858,7 +856,7 @@ namespace ts {
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
-        expression: UnaryOrBinaryExpression;
+        expression: UnaryExpression | BinaryExpression;
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
