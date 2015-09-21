@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectLiteralMethodDeclaration01.ts ===
+
+interface A {
+>A : Symbol(A, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 0))
+
+    numProp: number;
+>numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+}
+
+interface B  {
+>B : Symbol(B, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 3, 1))
+
+    strProp: string;
+>strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 7, 1))
+
+    method1(arg: A): void;
+>method1 : Symbol(method1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 9, 15))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 10, 12))
+>A : Symbol(A, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 0))
+
+    method2(arg: B): void;
+>method2 : Symbol(method2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 10, 26))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 11, 12))
+>B : Symbol(B, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 3, 1))
+}
+
+function getFoo1(): Foo {
+>getFoo1 : Symbol(getFoo1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 12, 1))
+>Foo : Symbol(Foo, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 7, 1))
+
+    return {
+        method1(arg) {
+>method1 : Symbol(method1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 15, 12))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 16, 16))
+
+            arg.numProp = 10;
+>arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 16, 16))
+>numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+
+        },
+        method2(arg) {
+>method2 : Symbol(method2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 18, 10))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 19, 16))
+
+            arg.strProp = "hello";
+>arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 19, 16))
+>strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+        }
+    }
+}
+
+function getFoo2(): Foo {
+>getFoo2 : Symbol(getFoo2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 23, 1))
+>Foo : Symbol(Foo, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 7, 1))
+
+    return {
+        method1: (arg) => {
+>method1 : Symbol(method1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 26, 12))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 27, 18))
+
+            arg.numProp = 10;
+>arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 27, 18))
+>numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+
+        },
+        method2: (arg) => {
+>method2 : Symbol(method2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 29, 10))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 30, 18))
+
+            arg.strProp = "hello";
+>arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 30, 18))
+>strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+        }
+    }
+}
+
+function getFoo3(): Foo {
+>getFoo3 : Symbol(getFoo3, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 34, 1))
+>Foo : Symbol(Foo, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 7, 1))
+
+    return {
+        method1: function (arg) {
+>method1 : Symbol(method1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 37, 12))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 38, 27))
+
+            arg.numProp = 10;
+>arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 38, 27))
+>numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 1, 13))
+
+        },
+        method2: function (arg) {
+>method2 : Symbol(method2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 40, 10))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 41, 27))
+
+            arg.strProp = "hello";
+>arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 41, 27))
+>strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 5, 14))
+        }
+    }
+}
