@@ -1,0 +1,19 @@
+tests/cases/compiler/b.ts(2,20): error TS2307: Cannot find module 'internal'.
+
+
+==== tests/cases/compiler/b.ts (1 errors) ====
+    import y = require("a");
+    import z = require("internal"); // should error
+                       ~~~~~~~~~~
+!!! error TS2307: Cannot find module 'internal'.
+==== tests/cases/compiler/node_modules/a/ref.d.ts (0 errors) ====
+    
+    declare module "internal" {
+    	export var foo: void;
+    }
+    
+==== tests/cases/compiler/node_modules/a/index.d.ts (0 errors) ====
+    /// <reference path="ref.d.ts"/>
+    export * from "internal";
+    
+    

@@ -980,7 +980,6 @@ namespace ts {
             if (!isRelative) {
                 let file = getSourceFileOfNode(location);
                 let symbol = getSymbol(file.package ? file.package.symbols : globalScope.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
-                if (moduleName === "internal") debugger;
                 if (symbol) {
                     return symbol;
                 }
@@ -14639,14 +14638,12 @@ namespace ts {
 
             // Initialize package/global symbol table(s)
             forEach(host.getSourceFiles(), file => {
-                if (file.fileName === 'tests/cases/compiler/node_modules/a/ref.d.ts') debugger;
                 if (!isExternalModule(file)) {
                     if (file.package) {
                         if (!packages[file.package.packageFile]) {
                             packages[file.package.packageFile] = file.package;
                         }
                         file.package = packages[file.package.packageFile]; // Dedupe packages
-                        console.log(file.package.packageFile, Object.keys(file.locals));
                         mergeSymbolTable(file.package.symbols, file.locals);
                     } else {
                         mergeSymbolTable(globalScope.symbols, file.locals);

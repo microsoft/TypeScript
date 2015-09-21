@@ -918,7 +918,6 @@ module Harness {
 
             function getSourceFile(fn: string, languageVersion: ts.ScriptTarget) {
                 fn = ts.normalizePath(fn);
-                if (fn === 'tests/cases/compiler/node_modules/ref.d.ts') debugger;
                 if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                     return filemap[getCanonicalFileName(fn)];
                 }

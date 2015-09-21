@@ -740,7 +740,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd, refFile && refFile.package)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -750,13 +750,13 @@ namespace ts {
                 }
             }
             else {
-                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd, refFile && refFile.package);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd, refFile && refFile.package))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -777,7 +777,6 @@ namespace ts {
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, package?: PackageDescriptor): SourceFile {
             let canonicalName = host.getCanonicalFileName(normalizeSlashes(fileName));
-            if (canonicalName === 'tests/cases/compiler/node_modules/ref.d.ts') debugger;
             if (filesByName.contains(canonicalName)) {
                 // We've already looked for this file, use cached result
                 return getSourceFileFromCache(fileName, canonicalName, /*useAbsolutePath*/ false);
